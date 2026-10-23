@@ -192,7 +192,12 @@ def _card(card: CardView) -> dict[str, object]:
 
 def card_out(view: TaskView) -> Card:
     """The card of a task."""
-    return Card.model_validate(_card(view.card))
+    return card_view_out(view.card)
+
+
+def card_view_out(card: CardView) -> Card:
+    """A card as a board shows it."""
+    return Card.model_validate(_card(card))
 
 
 def item_out(view: TaskView) -> TaskItem:

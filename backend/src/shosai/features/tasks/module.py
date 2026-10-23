@@ -3,8 +3,9 @@
 Step 1 published the contract, the events and the domain; step 2 added the tables in each
 home, the shareable `task` with its parent and named-reader rules (TK-D2), and the handler
 of a person's data; step 3a the one task API (`/v1/tasks*`) and the task reader, step 3b
-a task's checklist and comments, and step 3c its attachments and cover through files' held
-objects. Boards, the action items from meetings, Leo's tools and Jira join in later steps.
+a task's checklist and comments, step 3c its attachments and cover through files' held
+objects, and step 4 boards with their columns and cards. Stickers, time, the action items
+from meetings, Leo's tools and Jira join in later steps.
 """
 
 from collections.abc import AsyncIterator
@@ -15,12 +16,18 @@ from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.tasks.application.account_data import ACCOUNT_DATA, TasksAccountData
 from shosai.features.tasks.application.attachment_releases import AttachmentReleases
 from shosai.features.tasks.application.attachments import Attachments
+from shosai.features.tasks.application.board_reads import BoardReads
+from shosai.features.tasks.application.boards import BoardWrites
+from shosai.features.tasks.application.cards import Cards
+from shosai.features.tasks.application.columns import Columns
 from shosai.features.tasks.application.comments import Comments
 from shosai.features.tasks.application.subtasks import Subtasks
 from shosai.features.tasks.application.task_edits import TaskEdits
 from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import TaskWrites
 from shosai.features.tasks.channels.http.attachments import build_attachments_router
+from shosai.features.tasks.channels.http.board_parts import build_board_parts_router
+from shosai.features.tasks.channels.http.boards import build_boards_router
 from shosai.features.tasks.channels.http.tasks import build_tasks_router
 from shosai.features.tasks.channels.http.threads import build_threads_router
 from shosai.features.tasks.channels.tasks import PERIODIC_JOBS, task_handlers
@@ -61,11 +68,16 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     writes = TaskWrites(transactions, ports, (services.outbox, services.effects))
     edits = TaskEdits(transactions, ports, services.outbox)
     threads = (Subtasks(transactions, ports), Comments(transactions, ports, services.effects))
+    boards = (BoardReads(transactions, ports), BoardWrites(transactions, ports, services.outbox))
     yield FeatureParts(
         http_routers=(
             build_tasks_router((reads, writes, edits), ports),
             build_threads_router(threads, ports),
             build_attachments_router(Attachments(transactions, ports), ports),
+            build_boards_router(boards, ports),
+            build_board_parts_router(
+                (Columns(transactions), Cards(transactions, ports, (writes, edits))), ports
+            ),
         ),
         task_handlers=task_handlers(AttachmentReleases(transactions, ports)),
         periodic_jobs=PERIODIC_JOBS,

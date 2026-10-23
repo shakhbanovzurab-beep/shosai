@@ -14,6 +14,7 @@ from uuid import UUID
 
 from sqlalchemy import (
     BigInteger,
+    Boolean,
     CheckConstraint,
     DateTime,
     ForeignKey,
@@ -23,6 +24,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     Uuid,
+    false,
     func,
     text,
 )
@@ -35,6 +37,7 @@ ICONS: Final = (
     "'dumbbell', 'rocket', 'book'"
 )
 KINDS: Final = "'todo', 'in_progress', 'done'"
+COLORS: Final = "'gray', 'red', 'orange', 'amber', 'green', 'teal', 'blue', 'violet', 'pink'"
 # Ключ порядка — цифры base-62 без нуля в конце; длиннее 48 знаков колонку перераскладывают.
 RANK_FORMAT: Final = "rank ~ '^[0-9A-Za-z]*[1-9A-Za-z]$' AND length(rank) <= 128"
 
@@ -67,6 +70,7 @@ class BoardColumnRecord(ModelBase):
         CheckConstraint("length(title) BETWEEN 1 AND 60", name="title_length"),
         CheckConstraint(f"kind IN ({KINDS})", name="kind_known"),
         CheckConstraint("position BETWEEN 0 AND 19", name="position_range"),
+        CheckConstraint(f"color IS NULL OR color IN ({COLORS})", name="color_known"),
         UniqueConstraint(
             "board_id",
             "position",
@@ -85,6 +89,9 @@ class BoardColumnRecord(ModelBase):
     title: Mapped[str] = mapped_column(Text)
     kind: Mapped[str] = mapped_column(Text)
     position: Mapped[int] = mapped_column(Integer)
+    # Вид человека на свою доску (шаг 4, ревизия `b7d1f3a9c524`).
+    color: Mapped[str | None] = mapped_column(Text)
+    collapsed: Mapped[bool] = mapped_column(Boolean, server_default=false())
 
 
 class TaskPlacementRecord(ModelBase):

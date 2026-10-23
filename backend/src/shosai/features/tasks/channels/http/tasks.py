@@ -21,12 +21,8 @@ from shosai.core.pagination.page import Page, PageRequest, page_parameters
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal, bearer_principal
 from shosai.features.tasks.application.task_edits import TaskEdits
-from shosai.features.tasks.application.task_reads import (
-    StatusFilter,
-    TaskQuery,
-    TaskReads,
-    TaskSort,
-)
+from shosai.features.tasks.application.task_query import StatusFilter, TaskQuery, TaskSort
+from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import NewTask, TaskWrites
 from shosai.features.tasks.channels.http.detail_models import TaskDetail, TaskItem, TodayOut
 from shosai.features.tasks.channels.http.shapes import (

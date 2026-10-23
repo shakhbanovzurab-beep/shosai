@@ -34,12 +34,19 @@ from shosai.features.notes.contracts import MEETING_FINDINGS, MEETING_READER
 from shosai.features.notes.infrastructure.meeting_records import MEETING_RESOURCE
 from shosai.features.notes.module import NOTES
 from shosai.features.tasks.application.attachments import Attachments
+from shosai.features.tasks.application.board_reads import BoardReads
+from shosai.features.tasks.application.boards import BoardWrites
+from shosai.features.tasks.application.cards import Cards
+from shosai.features.tasks.application.columns import Columns
 from shosai.features.tasks.application.comments import Comments
+from shosai.features.tasks.application.placements import CardSpot, place
 from shosai.features.tasks.application.subtasks import Subtasks
 from shosai.features.tasks.application.task_edits import TaskEdits
 from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import TaskWrites
 from shosai.features.tasks.channels.http.attachments import build_attachments_router
+from shosai.features.tasks.channels.http.board_parts import build_board_parts_router
+from shosai.features.tasks.channels.http.boards import build_boards_router
 from shosai.features.tasks.channels.http.tasks import build_tasks_router
 from shosai.features.tasks.channels.http.threads import build_threads_router
 from shosai.features.tasks.infrastructure.board_records import (
@@ -185,6 +192,15 @@ class TaskBench:
                 )
             )
 
+    async def place_in(
+        self, owner: uuid.UUID, task_id: uuid.UUID, at: tuple[uuid.UUID, uuid.UUID]
+    ) -> None:
+        """Put the task at the end of the board's column, as a card move would."""
+        board_id, column_id = at
+        async with self.homes.transactions.begin(TenancyScope(HOME, owner)) as session:
+            spot = CardSpot(board_id, column_id, 10_000)
+            await place(session, owner, task_id, spot, datetime.now(UTC))
+
     async def revision(self, owner: uuid.UUID, board_id: uuid.UUID) -> int:
         """The board's revision, read as its owner."""
         scope = TenancyScope(HOME, owner)
@@ -251,6 +267,13 @@ async def task_bench(
             build_tasks_router(services, ports),
             build_threads_router(threads, ports),
             build_attachments_router(Attachments(transactions, ports), ports),
+            build_boards_router(
+                (BoardReads(transactions, ports), BoardWrites(transactions, ports, OUTBOX)), ports
+            ),
+            build_board_parts_router(
+                (Columns(transactions), Cards(transactions, ports, (services[1], services[2]))),
+                ports,
+            ),
         )
         async with client_of(build_probe_app(extra=routers).app) as http:
             connection = run_slot.claimed.connections[HOME]

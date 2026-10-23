@@ -2300,6 +2300,242 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/boards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Boards
+         * @description The person's boards and the incoming work waiting for a board.
+         */
+        get: operations["list_boards_v1_boards_get"];
+        put?: never;
+        /**
+         * Create Board
+         * @description A board from a template, its columns named in the request's language.
+         */
+        post: operations["create_board_v1_boards_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/boards/incoming": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Choose Incoming
+         * @description Choose the board incoming work lands on, or none.
+         */
+        put: operations["choose_incoming_v1_boards_incoming_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/boards/jira/available": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Jira Boards
+         * @description The Jira boards the person may sync: none until Jira is connected (steps 12, 13).
+         */
+        get: operations["jira_boards_v1_boards_jira_available_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/boards/jira": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Connect Jira Board
+         * @description Sync a Jira board: Jira must be connected first (steps 12, 13).
+         */
+        post: operations["connect_jira_board_v1_boards_jira_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/boards/{board_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Board
+         * @description The board with its columns and cards.
+         */
+        get: operations["read_board_v1_boards__board_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Board
+         * @description Delete the board and the hand-made tasks on it (TK-D6).
+         */
+        delete: operations["delete_board_v1_boards__board_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Change Board
+         * @description Rename the board or change its icon.
+         */
+        patch: operations["change_board_v1_boards__board_id__patch"];
+        trace?: never;
+    };
+    "/v1/boards/{board_id}/layout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Lay Out Board
+         * @description Reorder and rename the columns and the cards the board shows.
+         */
+        put: operations["lay_out_board_v1_boards__board_id__layout_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/boards/{board_id}/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sync Board
+         * @description Take the latest from Jira now; an app board has nothing to sync.
+         */
+        post: operations["sync_board_v1_boards__board_id__sync_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/boards/{board_id}/columns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Column
+         * @description Add a column at its position; 20 at most.
+         */
+        post: operations["create_column_v1_boards__board_id__columns_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/boards/{board_id}/columns/{column_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Column
+         * @description Remove a column; its cards go to the next column of its kind.
+         */
+        delete: operations["delete_column_v1_boards__board_id__columns__column_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Change Column
+         * @description Rename, recolour, collapse or move a column.
+         */
+        patch: operations["change_column_v1_boards__board_id__columns__column_id__patch"];
+        trace?: never;
+    };
+    "/v1/boards/{board_id}/cards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Card
+         * @description Put a new card, or a copy of one, where it is asked.
+         */
+        post: operations["create_card_v1_boards__board_id__cards_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/boards/{board_id}/cards/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Change Card
+         * @description Move or edit a card; another kind of column sets the task's status.
+         */
+        patch: operations["change_card_v1_boards__board_id__cards__task_id__patch"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2540,6 +2776,100 @@ export interface components {
          */
         Audience: "individual" | "team" | "enterprise";
         /**
+         * AutomationsOut
+         * @description What the stopwatch does by itself on the board.
+         */
+        AutomationsOut: {
+            /** Start On Arrival */
+            start_on_arrival: boolean;
+            /** Restart On Move */
+            restart_on_move: boolean;
+            /** Stop On Done */
+            stop_on_done: boolean;
+        };
+        /**
+         * BoardCreateBody
+         * @description A new board from a template.
+         */
+        BoardCreateBody: {
+            /** Name */
+            name: string;
+            icon: components["schemas"]["BoardIcon"];
+            template: components["schemas"]["BoardTemplate"];
+        };
+        /**
+         * BoardDetailOut
+         * @description A board as its screen shows it.
+         */
+        BoardDetailOut: {
+            board: components["schemas"]["BoardSummaryOut"];
+            /** Stickers */
+            stickers: (components["schemas"]["StopwatchStickerOut"] | components["schemas"]["SystemStickerOut"])[];
+            /** Columns */
+            columns: components["schemas"]["ColumnOut"][];
+            /** Revision */
+            revision: number;
+            /**
+             * Server Now
+             * Format: date-time
+             */
+            server_now: string;
+        };
+        /**
+         * BoardIcon
+         * @description The ten icons the cabinet offers for a board.
+         * @enum {string}
+         */
+        BoardIcon: "briefcase" | "home" | "user" | "heart" | "graduation-cap" | "plane" | "shopping-cart" | "dumbbell" | "rocket" | "book";
+        /**
+         * BoardPatchBody
+         * @description A board renamed or with another icon.
+         */
+        BoardPatchBody: {
+            /** Name */
+            name?: string | null;
+            icon?: components["schemas"]["BoardIcon"] | null;
+        };
+        /**
+         * BoardSummaryOut
+         * @description A board in the person's list.
+         */
+        BoardSummaryOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            icon: components["schemas"]["BoardIcon"];
+            jira?: components["schemas"]["JiraLinkOut"] | null;
+            /** Incoming */
+            incoming: boolean;
+            /** Task Count */
+            task_count: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * BoardTemplate
+         * @description How a new board starts.
+         * @enum {string}
+         */
+        BoardTemplate: "simple" | "project";
+        /**
+         * BoardsOut
+         * @description The person's boards.
+         */
+        BoardsOut: {
+            /** Items */
+            items: components["schemas"]["BoardSummaryOut"][];
+            incoming: components["schemas"]["IncomingOut"];
+        };
+        /**
          * CapabilitiesBody
          * @description The extras a plan switches on.
          */
@@ -2563,6 +2893,93 @@ export interface components {
              * @default false
              */
             frontier_models: boolean;
+        };
+        /**
+         * Card
+         * @description A card: what a board shows of a task.
+         */
+        Card: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            status: components["schemas"]["TaskStatus"];
+            priority: components["schemas"]["Priority"] | null;
+            /** Starts On */
+            starts_on: string | null;
+            /** Due On */
+            due_on: string | null;
+            assignee: components["schemas"]["AssigneeOut"] | null;
+            cover?: components["schemas"]["CoverOut"] | null;
+            /** Values */
+            values?: {
+                [key: string]: components["schemas"]["StickerValue"];
+            };
+            /**
+             * Subtasks Done
+             * @default 0
+             */
+            subtasks_done: number;
+            /**
+             * Subtasks Total
+             * @default 0
+             */
+            subtasks_total: number;
+            /**
+             * Comment Count
+             * @default 0
+             */
+            comment_count: number;
+            /**
+             * Attachment Count
+             * @default 0
+             */
+            attachment_count: number;
+            /** Recurring */
+            recurring: boolean;
+            /** Leo Fields */
+            leo_fields: components["schemas"]["LeoField"][];
+            space: components["schemas"]["SpaceOut"] | null;
+            jira?: components["schemas"]["JiraOut"] | null;
+            source_chat?: components["schemas"]["ChatLineOut"] | null;
+            /** Can Delete */
+            can_delete: boolean;
+            stopwatch?: components["schemas"]["StopwatchOut"] | null;
+            timer?: components["schemas"]["TimerOut"] | null;
+            time_tracking?: components["schemas"]["TimeTrackingOut"] | null;
+        };
+        /**
+         * CardCreateBody
+         * @description A new card, or a copy of a card of the board.
+         */
+        CardCreateBody: {
+            /** Title */
+            title: string;
+            /**
+             * Column Id
+             * Format: uuid
+             */
+            column_id: string;
+            /** Position */
+            position: number;
+            /** Copy Of */
+            copy_of?: string | null;
+        };
+        /**
+         * CardPatchBody
+         * @description A card's change; a move sends the column and the position together.
+         */
+        CardPatchBody: {
+            /** Title */
+            title?: string | null;
+            priority?: components["schemas"]["Priority"] | null;
+            /** Column Id */
+            column_id?: string | null;
+            /** Position */
+            position?: number | null;
         };
         /**
          * ChallengeRequest
@@ -2615,6 +3032,73 @@ export interface components {
             /** Chat Title */
             chat_title: string;
             message: components["schemas"]["ChatMessageOut"];
+        };
+        /**
+         * Color
+         * @description A colour of the palette the cabinet maps to Tailwind's, light and dark.
+         * @enum {string}
+         */
+        Color: "gray" | "red" | "orange" | "amber" | "green" | "teal" | "blue" | "violet" | "pink";
+        /**
+         * ColumnCreateBody
+         * @description A new column.
+         */
+        ColumnCreateBody: {
+            /** Title */
+            title: string;
+            kind: components["schemas"]["TaskStatus"];
+            /** Position */
+            position: number;
+            color?: components["schemas"]["Color"] | null;
+        };
+        /**
+         * ColumnHeadOut
+         * @description A column of a board.
+         */
+        ColumnHeadOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            kind: components["schemas"]["TaskStatus"];
+            color: components["schemas"]["Color"] | null;
+            /** Collapsed */
+            collapsed: boolean;
+        };
+        /**
+         * ColumnOut
+         * @description A column with its cards in order.
+         */
+        ColumnOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            kind: components["schemas"]["TaskStatus"];
+            color: components["schemas"]["Color"] | null;
+            /** Collapsed */
+            collapsed: boolean;
+            /** Cards */
+            cards: components["schemas"]["Card"][];
+        };
+        /**
+         * ColumnPatchBody
+         * @description A column's change; `color: null` removes the colour.
+         */
+        ColumnPatchBody: {
+            /** Title */
+            title?: string | null;
+            color?: components["schemas"]["Color"] | null;
+            /** Collapsed */
+            collapsed?: boolean | null;
+            /** Position */
+            position?: number | null;
         };
         /**
          * CommentAuthorOut
@@ -3456,6 +3940,24 @@ export interface components {
             run_id: string;
         };
         /**
+         * IncomingBody
+         * @description The board incoming work lands on, or none.
+         */
+        IncomingBody: {
+            /** Board Id */
+            board_id: string | null;
+        };
+        /**
+         * IncomingOut
+         * @description The board incoming work lands on, and how much waits while there is none.
+         */
+        IncomingOut: {
+            /** Board Id */
+            board_id: string | null;
+            /** Open */
+            open: number;
+        };
+        /**
          * IndexStage
          * @description How far knowledge got with a file Leo uses (the cabinet's `IndexStatus`).
          * @enum {string}
@@ -3470,6 +3972,76 @@ export interface components {
             loc: (string | number)[];
             /** Type */
             type: string;
+        };
+        /**
+         * JiraAvailableOut
+         * @description The Jira boards the person's connection sees; none without a connection.
+         */
+        JiraAvailableOut: {
+            /** Connected */
+            connected: boolean;
+            /** Account */
+            account: string | null;
+            /** Items */
+            items: components["schemas"]["JiraBoardOut"][];
+        };
+        /**
+         * JiraBoardOut
+         * @description A Jira board the person's connection sees.
+         */
+        JiraBoardOut: {
+            /** Site */
+            site: string;
+            /** Board Id */
+            board_id: number;
+            /** Name */
+            name: string;
+            /** Project Key */
+            project_key: string;
+            /** Project Name */
+            project_name: string;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "kanban" | "scrum";
+            /** Synced Board Id */
+            synced_board_id: string | null;
+        };
+        /**
+         * JiraConnectBody
+         * @description A Jira board to sync.
+         */
+        JiraConnectBody: {
+            /** Site */
+            site: string;
+            /** Board Id */
+            board_id: number;
+        };
+        /**
+         * JiraLinkOut
+         * @description Where a synced board comes from in Jira, and how its sync goes.
+         */
+        JiraLinkOut: {
+            /** Site */
+            site: string;
+            /** Project Key */
+            project_key: string;
+            /** Board Id */
+            board_id: number;
+            /** Board Name */
+            board_name: string;
+            /** Board Url */
+            board_url: string;
+            /**
+             * Sync Status
+             * @enum {string}
+             */
+            sync_status: "syncing" | "synced" | "error";
+            /** Sync Error */
+            sync_error: string | null;
+            /** Last Synced At */
+            last_synced_at: string | null;
         };
         /**
          * JiraOut
@@ -3489,6 +4061,29 @@ export interface components {
          * @enum {string}
          */
         JobStage: "uploading" | "transcribing" | "enhancing" | "ready" | "failed";
+        /**
+         * LayoutBody
+         * @description The whole layout of a board.
+         */
+        LayoutBody: {
+            /** Columns */
+            columns: components["schemas"]["LayoutColumnBody"][];
+        };
+        /**
+         * LayoutColumnBody
+         * @description A column of the new layout with its cards in order.
+         */
+        LayoutColumnBody: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /** Task Ids */
+            task_ids: string[];
+        };
         /**
          * LeoField
          * @description A field Leo filled from a meeting and the person has not changed since (KG-D10).
@@ -5325,6 +5920,21 @@ export interface components {
             };
         };
         /**
+         * StopwatchStickerOut
+         * @description The stopwatch field, with its automations.
+         */
+        StopwatchStickerOut: {
+            id: components["schemas"]["SystemSticker"];
+            kind: components["schemas"]["SystemSticker"];
+            /** Name */
+            name?: null;
+            /** States */
+            states?: components["schemas"]["StickerStateOut"][];
+            /** Visible */
+            visible: boolean;
+            automations: components["schemas"]["AutomationsOut"];
+        };
+        /**
          * StorageOut
          * @description What the person holds against what the plan allows; a null limit is unlimited.
          */
@@ -5404,6 +6014,26 @@ export interface components {
             done?: boolean | null;
             /** Position */
             position?: number | null;
+        };
+        /**
+         * SystemSticker
+         * @description A field every board has: the task's own data, in the board's order.
+         * @enum {string}
+         */
+        SystemSticker: "assignee" | "due" | "priority" | "recurrence" | "stopwatch" | "timer" | "time_tracking";
+        /**
+         * SystemStickerOut
+         * @description A system field of the board and whether its cards show it.
+         */
+        SystemStickerOut: {
+            id: components["schemas"]["SystemSticker"];
+            kind: components["schemas"]["SystemSticker"];
+            /** Name */
+            name?: null;
+            /** States */
+            states?: components["schemas"]["StickerStateOut"][];
+            /** Visible */
+            visible: boolean;
         };
         /**
          * TariffDTO
@@ -11104,6 +11734,525 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_boards_v1_boards_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_board_v1_boards_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "accept-language"?: string | null;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardSummaryOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    choose_incoming_v1_boards_incoming_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IncomingBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    jira_boards_v1_boards_jira_available_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JiraAvailableOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    connect_jira_board_v1_boards_jira_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JiraConnectBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardSummaryOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_board_v1_boards__board_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardDetailOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_board_v1_boards__board_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_board_v1_boards__board_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardSummaryOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    lay_out_board_v1_boards__board_id__layout_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LayoutBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    sync_board_v1_boards__board_id__sync_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardSummaryOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_column_v1_boards__board_id__columns_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ColumnCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ColumnHeadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_column_v1_boards__board_id__columns__column_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+                column_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_column_v1_boards__board_id__columns__column_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+                column_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ColumnPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ColumnHeadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_card_v1_boards__board_id__cards_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CardCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Card"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_card_v1_boards__board_id__cards__task_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CardPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Card"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

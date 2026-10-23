@@ -89,13 +89,15 @@ class TaskEdits:
         scope = await self._scoping.space_of(principal, task_id)
         async with self._transactions.begin(scope) as session:
             record = await locked_task(session, self._ports, principal.user_id, task_id)
-            await self._apply(session, principal.user_id, record, edit)
+            await self.apply(session, principal.user_id, record, edit)
             view = await self._reads.view(session, principal.user_id, task_id)
         return await self._reads.signed(principal, view)
 
-    async def _apply(
+    async def apply(
         self, session: AsyncSession, viewer: UUID, record: TaskRecord, edit: Edit
     ) -> None:
+        """The change on the locked row, in the caller's transaction of the task's scope: its
+        rules, its next recurring task, its events and what it touches."""
         _refuse_misfits(record, edit)
         now = self._clock()
         today = now.astimezone(await zone_of(session, self._ports, viewer)).date()

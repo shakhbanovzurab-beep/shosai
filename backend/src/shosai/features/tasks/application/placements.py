@@ -5,6 +5,7 @@ ordered and no two cards share a place. A card's key lies between its neighbours
 grows past its bound the column gets evenly spaced keys again, in the same transaction.
 """
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
@@ -12,7 +13,7 @@ from uuid import UUID
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from shosai.features.tasks.domain.ranks import needs_rebalance, rank_at, spaced_ranks
+from shosai.features.tasks.domain.ranks import needs_rebalance, rank_at, rank_between, spaced_ranks
 from shosai.features.tasks.domain.tasks import TaskStatus
 from shosai.features.tasks.infrastructure.board_records import (
     BoardColumnRecord,
@@ -107,3 +108,58 @@ async def _respace(session: AsyncSession, spot: CardSpot, order: list[UUID]) -> 
             )
             .values(rank=key)
         )
+
+
+async def put_on_top(
+    session: AsyncSession, viewer: UUID, spot: CardSpot, task_ids: Sequence[UUID], now: datetime
+) -> None:
+    """Put the tasks on top of the column, the first of them topmost, in one pass: keys
+    above the column's first card, the column spaced again when they grow too long."""
+    if not task_ids:
+        return
+    moving = set(task_ids)
+    cards = await column_cards(session, spot.board_id, spot.column_id)
+    others = [card for card in cards if card[0] not in moving]
+    keys: dict[UUID, str] = {}
+    above = others[0][1] if others else None
+    for task_id in reversed(task_ids):
+        above = keys[task_id] = rank_between(None, above)
+    if any(needs_rebalance(key) for key in keys.values()):
+        order = [*task_ids, *(task for task, _ in others)]
+        keys = dict(zip(order, spaced_ranks(len(order)), strict=True))
+        for task_id, key in keys.items():
+            if task_id not in moving:
+                await _set_rank(session, spot, task_id, key)
+    for task_id in task_ids:
+        await _put(session, viewer, task_id, spot, (keys[task_id], now))
+    await session.flush()
+
+
+async def _put(
+    session: AsyncSession, viewer: UUID, task_id: UUID, spot: CardSpot, at: tuple[str, datetime]
+) -> None:
+    rank, now = at
+    placed = await session.get(TaskPlacementRecord, (viewer, task_id))
+    if placed is None:
+        session.add(
+            TaskPlacementRecord(
+                user_id=viewer, task_id=task_id, board_id=spot.board_id,
+                column_id=spot.column_id, rank=rank, placed_at=now,
+            )
+        )  # fmt: skip
+        return
+    placed.board_id, placed.column_id, placed.rank, placed.placed_at = (
+        spot.board_id, spot.column_id, rank, now,
+    )  # fmt: skip
+
+
+async def _set_rank(session: AsyncSession, spot: CardSpot, task_id: UUID, key: str) -> None:
+    await session.execute(
+        update(TaskPlacementRecord)
+        .where(
+            TaskPlacementRecord.board_id == spot.board_id,
+            TaskPlacementRecord.column_id == spot.column_id,
+            TaskPlacementRecord.task_id == task_id,
+        )
+        .values(rank=key)
+    )

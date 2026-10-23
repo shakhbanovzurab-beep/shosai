@@ -150,7 +150,7 @@ class TaskWrites:
         async with self._transactions.begin(scope_in(principal, draft.workspace_id)) as session:
             await self._admit(session, principal, clean)
             if client_key is None:
-                task_id = await self._make(session, principal, clean)
+                task_id = await self.make(session, principal, clean)
             else:
                 effect = EffectKey(
                     TASK_CREATES,
@@ -158,11 +158,11 @@ class TaskWrites:
                     fingerprint_of(print_of(clean)),
                 )
 
-                async def make() -> TaskMade:
-                    return TaskMade(task_id=await self._make(session, principal, clean))
+                async def first() -> TaskMade:
+                    return TaskMade(task_id=await self.make(session, principal, clean))
 
                 task_id = (
-                    await self._effects.once(session, effect, TaskMade, make)
+                    await self._effects.once(session, effect, TaskMade, first)
                 ).outcome.task_id
             view = await self._reads.view(session, principal.user_id, task_id)
         return await self._reads.signed(principal, view)
@@ -177,7 +177,9 @@ class TaskWrites:
         await self._scoping.check_member(session, draft.workspace_id, draft.assignee.user_id)
         await self._scoping.check_project(session, draft.workspace_id, draft.project_id)
 
-    async def _make(self, session: AsyncSession, principal: Principal, draft: NewTask) -> UUID:
+    async def make(self, session: AsyncSession, principal: Principal, draft: NewTask) -> UUID:
+        """A new task of an admitted, checked draft, with its events, in the caller's
+        transaction of the draft's space."""
         now = self._clock()
         zone = await zone_of(session, self._ports, principal.user_id)
         try:

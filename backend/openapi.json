@@ -8990,6 +8990,963 @@
           }
         }
       }
+    },
+    "/v1/boards": {
+      "get": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "List Boards",
+        "description": "The person's boards and the incoming work waiting for a board.",
+        "operationId": "list_boards_v1_boards_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardsOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Create Board",
+        "description": "A board from a template, its columns named in the request's language.",
+        "operationId": "create_board_v1_boards_post",
+        "parameters": [
+          {
+            "name": "accept-language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Accept-Language"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoardCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardSummaryOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/incoming": {
+      "put": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Choose Incoming",
+        "description": "Choose the board incoming work lands on, or none.",
+        "operationId": "choose_incoming_v1_boards_incoming_put",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IncomingBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardsOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/jira/available": {
+      "get": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Jira Boards",
+        "description": "The Jira boards the person may sync: none until Jira is connected (steps 12, 13).",
+        "operationId": "jira_boards_v1_boards_jira_available_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JiraAvailableOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/jira": {
+      "post": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Connect Jira Board",
+        "description": "Sync a Jira board: Jira must be connected first (steps 12, 13).",
+        "operationId": "connect_jira_board_v1_boards_jira_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JiraConnectBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardSummaryOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{board_id}": {
+      "get": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Read Board",
+        "description": "The board with its columns and cards.",
+        "operationId": "read_board_v1_boards__board_id__get",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardDetailOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Change Board",
+        "description": "Rename the board or change its icon.",
+        "operationId": "change_board_v1_boards__board_id__patch",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoardPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardSummaryOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Delete Board",
+        "description": "Delete the board and the hand-made tasks on it (TK-D6).",
+        "operationId": "delete_board_v1_boards__board_id__delete",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{board_id}/layout": {
+      "put": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Lay Out Board",
+        "description": "Reorder and rename the columns and the cards the board shows.",
+        "operationId": "lay_out_board_v1_boards__board_id__layout_put",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LayoutBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{board_id}/sync": {
+      "post": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Sync Board",
+        "description": "Take the latest from Jira now; an app board has nothing to sync.",
+        "operationId": "sync_board_v1_boards__board_id__sync_post",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardSummaryOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{board_id}/columns": {
+      "post": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Create Column",
+        "description": "Add a column at its position; 20 at most.",
+        "operationId": "create_column_v1_boards__board_id__columns_post",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColumnCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColumnHeadOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{board_id}/columns/{column_id}": {
+      "patch": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Change Column",
+        "description": "Rename, recolour, collapse or move a column.",
+        "operationId": "change_column_v1_boards__board_id__columns__column_id__patch",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "column_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Column Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColumnPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColumnHeadOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Delete Column",
+        "description": "Remove a column; its cards go to the next column of its kind.",
+        "operationId": "delete_column_v1_boards__board_id__columns__column_id__delete",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "column_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Column Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{board_id}/cards": {
+      "post": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Create Card",
+        "description": "Put a new card, or a copy of one, where it is asked.",
+        "operationId": "create_card_v1_boards__board_id__cards_post",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Card"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{board_id}/cards/{task_id}": {
+      "patch": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Change Card",
+        "description": "Move or edit a card; another kind of column sets the task's status.",
+        "operationId": "change_card_v1_boards__board_id__cards__task_id__patch",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Card"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -9520,6 +10477,226 @@
         "title": "Audience",
         "description": "Who a plan is for: the Upgrade page's tabs."
       },
+      "AutomationsOut": {
+        "properties": {
+          "start_on_arrival": {
+            "type": "boolean",
+            "title": "Start On Arrival"
+          },
+          "restart_on_move": {
+            "type": "boolean",
+            "title": "Restart On Move"
+          },
+          "stop_on_done": {
+            "type": "boolean",
+            "title": "Stop On Done"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_on_arrival",
+          "restart_on_move",
+          "stop_on_done"
+        ],
+        "title": "AutomationsOut",
+        "description": "What the stopwatch does by itself on the board."
+      },
+      "BoardCreateBody": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/BoardIcon"
+          },
+          "template": {
+            "$ref": "#/components/schemas/BoardTemplate"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "icon",
+          "template"
+        ],
+        "title": "BoardCreateBody",
+        "description": "A new board from a template."
+      },
+      "BoardDetailOut": {
+        "properties": {
+          "board": {
+            "$ref": "#/components/schemas/BoardSummaryOut"
+          },
+          "stickers": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/StopwatchStickerOut"
+                },
+                {
+                  "$ref": "#/components/schemas/SystemStickerOut"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Stickers"
+          },
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/ColumnOut"
+            },
+            "type": "array",
+            "title": "Columns"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "server_now": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Server Now"
+          }
+        },
+        "type": "object",
+        "required": [
+          "board",
+          "stickers",
+          "columns",
+          "revision",
+          "server_now"
+        ],
+        "title": "BoardDetailOut",
+        "description": "A board as its screen shows it."
+      },
+      "BoardIcon": {
+        "type": "string",
+        "enum": [
+          "briefcase",
+          "home",
+          "user",
+          "heart",
+          "graduation-cap",
+          "plane",
+          "shopping-cart",
+          "dumbbell",
+          "rocket",
+          "book"
+        ],
+        "title": "BoardIcon",
+        "description": "The ten icons the cabinet offers for a board."
+      },
+      "BoardPatchBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BoardIcon"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "BoardPatchBody",
+        "description": "A board renamed or with another icon."
+      },
+      "BoardSummaryOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/BoardIcon"
+          },
+          "jira": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JiraLinkOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "incoming": {
+            "type": "boolean",
+            "title": "Incoming"
+          },
+          "task_count": {
+            "type": "integer",
+            "title": "Task Count"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "icon",
+          "incoming",
+          "task_count",
+          "created_at"
+        ],
+        "title": "BoardSummaryOut",
+        "description": "A board in the person's list."
+      },
+      "BoardTemplate": {
+        "type": "string",
+        "enum": [
+          "simple",
+          "project"
+        ],
+        "title": "BoardTemplate",
+        "description": "How a new board starts."
+      },
+      "BoardsOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/BoardSummaryOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "incoming": {
+            "$ref": "#/components/schemas/IncomingOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "incoming"
+        ],
+        "title": "BoardsOut",
+        "description": "The person's boards."
+      },
       "CapabilitiesBody": {
         "properties": {
           "shared_workspace": {
@@ -9569,6 +10746,286 @@
         ],
         "title": "CapabilitiesBody",
         "description": "The extras a plan switches on."
+      },
+      "Card": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Priority"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "starts_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts On"
+          },
+          "due_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due On"
+          },
+          "assignee": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AssigneeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cover": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CoverOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "values": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/StickerValue"
+            },
+            "type": "object",
+            "title": "Values"
+          },
+          "subtasks_done": {
+            "type": "integer",
+            "title": "Subtasks Done",
+            "default": 0
+          },
+          "subtasks_total": {
+            "type": "integer",
+            "title": "Subtasks Total",
+            "default": 0
+          },
+          "comment_count": {
+            "type": "integer",
+            "title": "Comment Count",
+            "default": 0
+          },
+          "attachment_count": {
+            "type": "integer",
+            "title": "Attachment Count",
+            "default": 0
+          },
+          "recurring": {
+            "type": "boolean",
+            "title": "Recurring"
+          },
+          "leo_fields": {
+            "items": {
+              "$ref": "#/components/schemas/LeoField"
+            },
+            "type": "array",
+            "title": "Leo Fields"
+          },
+          "space": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SpaceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "jira": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JiraOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_chat": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatLineOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "can_delete": {
+            "type": "boolean",
+            "title": "Can Delete"
+          },
+          "stopwatch": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StopwatchOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimerOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "time_tracking": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeTrackingOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "status",
+          "priority",
+          "starts_on",
+          "due_on",
+          "assignee",
+          "recurring",
+          "leo_fields",
+          "space",
+          "can_delete"
+        ],
+        "title": "Card",
+        "description": "A card: what a board shows of a task."
+      },
+      "CardCreateBody": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "column_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Column Id"
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Position"
+          },
+          "copy_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Copy Of"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title",
+          "column_id",
+          "position"
+        ],
+        "title": "CardCreateBody",
+        "description": "A new card, or a copy of a card of the board."
+      },
+      "CardPatchBody": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Priority"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "column_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Column Id"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CardPatchBody",
+        "description": "A card's change; a move sends the column and the position together."
       },
       "ChallengeRequest": {
         "properties": {
@@ -9695,6 +11152,197 @@
         ],
         "title": "ChatSourceOut",
         "description": "The team chat a task was made from (TK-D13)."
+      },
+      "Color": {
+        "type": "string",
+        "enum": [
+          "gray",
+          "red",
+          "orange",
+          "amber",
+          "green",
+          "teal",
+          "blue",
+          "violet",
+          "pink"
+        ],
+        "title": "Color",
+        "description": "A colour of the palette the cabinet maps to Tailwind's, light and dark."
+      },
+      "ColumnCreateBody": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Position"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Color"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title",
+          "kind",
+          "position"
+        ],
+        "title": "ColumnCreateBody",
+        "description": "A new column."
+      },
+      "ColumnHeadOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Color"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "collapsed": {
+            "type": "boolean",
+            "title": "Collapsed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "color",
+          "collapsed"
+        ],
+        "title": "ColumnHeadOut",
+        "description": "A column of a board."
+      },
+      "ColumnOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Color"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "collapsed": {
+            "type": "boolean",
+            "title": "Collapsed"
+          },
+          "cards": {
+            "items": {
+              "$ref": "#/components/schemas/Card"
+            },
+            "type": "array",
+            "title": "Cards"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "color",
+          "collapsed",
+          "cards"
+        ],
+        "title": "ColumnOut",
+        "description": "A column with its cards in order."
+      },
+      "ColumnPatchBody": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Color"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "collapsed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collapsed"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ColumnPatchBody",
+        "description": "A column's change; `color: null` removes the colour."
       },
       "CommentAuthorOut": {
         "properties": {
@@ -11500,6 +13148,56 @@
         "title": "ImportStarted",
         "description": "The meeting an upload became and the run that transcribes it."
       },
+      "IncomingBody": {
+        "properties": {
+          "board_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Board Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "board_id"
+        ],
+        "title": "IncomingBody",
+        "description": "The board incoming work lands on, or none."
+      },
+      "IncomingOut": {
+        "properties": {
+          "board_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Board Id"
+          },
+          "open": {
+            "type": "integer",
+            "title": "Open"
+          }
+        },
+        "type": "object",
+        "required": [
+          "board_id",
+          "open"
+        ],
+        "title": "IncomingOut",
+        "description": "The board incoming work lands on, and how much waits while there is none."
+      },
       "IndexStage": {
         "type": "string",
         "enum": [
@@ -11542,6 +13240,188 @@
         "title": "InvalidField",
         "description": "Where a request failed validation and why; the submitted value is never echoed."
       },
+      "JiraAvailableOut": {
+        "properties": {
+          "connected": {
+            "type": "boolean",
+            "title": "Connected"
+          },
+          "account": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/JiraBoardOut"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "connected",
+          "account",
+          "items"
+        ],
+        "title": "JiraAvailableOut",
+        "description": "The Jira boards the person's connection sees; none without a connection."
+      },
+      "JiraBoardOut": {
+        "properties": {
+          "site": {
+            "type": "string",
+            "title": "Site"
+          },
+          "board_id": {
+            "type": "integer",
+            "title": "Board Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "project_key": {
+            "type": "string",
+            "title": "Project Key"
+          },
+          "project_name": {
+            "type": "string",
+            "title": "Project Name"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "kanban",
+              "scrum"
+            ],
+            "title": "Type"
+          },
+          "synced_board_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Synced Board Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "site",
+          "board_id",
+          "name",
+          "project_key",
+          "project_name",
+          "type",
+          "synced_board_id"
+        ],
+        "title": "JiraBoardOut",
+        "description": "A Jira board the person's connection sees."
+      },
+      "JiraConnectBody": {
+        "properties": {
+          "site": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Site"
+          },
+          "board_id": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Board Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "site",
+          "board_id"
+        ],
+        "title": "JiraConnectBody",
+        "description": "A Jira board to sync."
+      },
+      "JiraLinkOut": {
+        "properties": {
+          "site": {
+            "type": "string",
+            "title": "Site"
+          },
+          "project_key": {
+            "type": "string",
+            "title": "Project Key"
+          },
+          "board_id": {
+            "type": "integer",
+            "title": "Board Id"
+          },
+          "board_name": {
+            "type": "string",
+            "title": "Board Name"
+          },
+          "board_url": {
+            "type": "string",
+            "title": "Board Url"
+          },
+          "sync_status": {
+            "type": "string",
+            "enum": [
+              "syncing",
+              "synced",
+              "error"
+            ],
+            "title": "Sync Status"
+          },
+          "sync_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sync Error"
+          },
+          "last_synced_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Synced At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "site",
+          "project_key",
+          "board_id",
+          "board_name",
+          "board_url",
+          "sync_status",
+          "sync_error",
+          "last_synced_at"
+        ],
+        "title": "JiraLinkOut",
+        "description": "Where a synced board comes from in Jira, and how its sync goes."
+      },
       "JiraOut": {
         "properties": {
           "key": {
@@ -11577,6 +13457,55 @@
         ],
         "title": "JobStage",
         "description": "An import job's stage, as the shipped clients decode it."
+      },
+      "LayoutBody": {
+        "properties": {
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/LayoutColumnBody"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Columns"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "columns"
+        ],
+        "title": "LayoutBody",
+        "description": "The whole layout of a board."
+      },
+      "LayoutColumnBody": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "task_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Task Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "task_ids"
+        ],
+        "title": "LayoutColumnBody",
+        "description": "A column of the new layout with its cards in order."
       },
       "LeoField": {
         "type": "string",
@@ -16298,6 +18227,43 @@
         "title": "StopwatchOut",
         "description": "The stopwatch: closed time, per column, and since when it runs, if it runs."
       },
+      "StopwatchStickerOut": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/SystemSticker"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/SystemSticker"
+          },
+          "name": {
+            "type": "null",
+            "title": "Name"
+          },
+          "states": {
+            "items": {
+              "$ref": "#/components/schemas/StickerStateOut"
+            },
+            "type": "array",
+            "title": "States"
+          },
+          "visible": {
+            "type": "boolean",
+            "title": "Visible"
+          },
+          "automations": {
+            "$ref": "#/components/schemas/AutomationsOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "visible",
+          "automations"
+        ],
+        "title": "StopwatchStickerOut",
+        "description": "The stopwatch field, with its automations."
+      },
       "StorageOut": {
         "properties": {
           "used_bytes": {
@@ -16552,6 +18518,53 @@
         "type": "object",
         "title": "SubtaskPatchBody",
         "description": "A change of a line by field presence; none of its fields is cleared."
+      },
+      "SystemSticker": {
+        "type": "string",
+        "enum": [
+          "assignee",
+          "due",
+          "priority",
+          "recurrence",
+          "stopwatch",
+          "timer",
+          "time_tracking"
+        ],
+        "title": "SystemSticker",
+        "description": "A field every board has: the task's own data, in the board's order."
+      },
+      "SystemStickerOut": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/SystemSticker"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/SystemSticker"
+          },
+          "name": {
+            "type": "null",
+            "title": "Name"
+          },
+          "states": {
+            "items": {
+              "$ref": "#/components/schemas/StickerStateOut"
+            },
+            "type": "array",
+            "title": "States"
+          },
+          "visible": {
+            "type": "boolean",
+            "title": "Visible"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "visible"
+        ],
+        "title": "SystemStickerOut",
+        "description": "A system field of the board and whether its cards show it."
       },
       "TariffDTO": {
         "properties": {

@@ -69,15 +69,16 @@ async def next_of(
     record.recurrence = None
     if made is None:
         return None
-    await _copy_checklist(session, record, task_id, now)
+    await copy_checklist(session, record, task_id, now)
     await _place_like(session, record.id, task_id, viewer, now)
     return await session.get(TaskRecord, task_id)
 
 
-async def _copy_checklist(
+async def copy_checklist(
     session: AsyncSession, done: TaskRecord, task_id: UUID, now: datetime
 ) -> None:
-    """The done task's lines, in their order and unticked, on the next task."""
+    """The source task's lines, in their order and unticked, on another task: a recurring
+    task's next one, or a card's copy."""
     lines = await session.execute(
         select(TaskSubtaskRecord.title, TaskSubtaskRecord.rank).where(
             TaskSubtaskRecord.task_id == done.id

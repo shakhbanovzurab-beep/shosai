@@ -17,7 +17,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.files.contracts.held_objects import HELD_OBJECTS
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER
 from shosai.features.tasks.application.task_parts import AttachmentView, PersonRef
-from shosai.features.tasks.application.views import TaskView
+from shosai.features.tasks.application.views import CardView, TaskView
 from shosai.features.tasks.infrastructure.attachment_records import TaskAttachmentRecord
 
 ATTACHMENTS = TaskAttachmentRecord
@@ -83,3 +83,21 @@ def _previewed(view: TaskView, urls: Mapping[UUID, str]) -> TaskView:
         for attachment in view.attachments
     )
     return replace(view, card=card, attachments=attachments)
+
+
+async def with_cover_previews(
+    ports: PortDirectory, scope: TenancyScope, cards: Sequence[CardView]
+) -> list[CardView]:
+    """The cards with their covers' preview links, signed after the reader's transaction."""
+    held = {card.cover.held_object_id for card in cards if card.cover is not None}
+    if not held:
+        return list(cards)
+    urls = await ports.get(HELD_OBJECTS).previews(scope, held)
+    return [
+        card
+        if card.cover is None
+        else replace(
+            card, cover=replace(card.cover, preview_url=urls.get(card.cover.held_object_id))
+        )
+        for card in cards
+    ]
