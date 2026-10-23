@@ -5,9 +5,9 @@ import type { ReactNode } from "react";
 import { useTranslations } from "use-intl";
 
 import { ShosaiMark } from "@/components/shosai-mark";
+import { ShosaiName } from "@/components/shosai-name";
 import { useSidebar } from "@/components/ui/sidebar";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
-import { APP_CONFIG } from "@/config/app-config";
 import { Link } from "@/lib/navigation";
 
 import { SidebarToggleButton } from "./sidebar-toggle-button";
@@ -20,6 +20,14 @@ type SidebarBrandProps = {
   /** The mark the collapsed rail shows instead of the logo, e.g. the workspace's. */
   mark?: ReactNode;
 };
+
+/**
+ * Название Shosai в строке логотипа — начертанием знака, как на странице входа. Размер — в той же пропорции к
+ * логотипу: там при логотипе 32 px шрифт 28 px, здесь при 24 px — 21 px.
+ */
+export function SidebarBrandName() {
+  return <ShosaiName className="text-[1.3125rem]" />;
+}
 
 /**
  * Logo row with the sidebar toggle at its right, like ChatGPT. In the collapsed icon rail the logo
@@ -59,7 +67,7 @@ export function SidebarBrand({ homeUrl, switcher, mark }: SidebarBrandProps) {
           <SidebarMenuButton asChild className="min-w-0 flex-1">
             <Link prefetch={false} href={homeUrl}>
               <ShosaiMark className="size-6!" />
-              <span className="font-semibold text-base">{APP_CONFIG.name}</span>
+              <SidebarBrandName />
             </Link>
           </SidebarMenuButton>
         )}

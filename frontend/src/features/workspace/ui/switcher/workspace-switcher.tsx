@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import { Check, ChevronsUpDown, RotateCw } from "lucide-react";
 import { useTranslations } from "use-intl";
 
@@ -44,11 +46,11 @@ const OptionText = ({ title, detail }: { title: string; detail: string }) => (
 function TriggerLabel({
   current,
   loading,
-  appName,
+  brand,
 }: {
   current: WorkspaceSummary | null;
   loading: boolean;
-  appName: string;
+  brand: ReactNode;
 }) {
   if (current)
     return (
@@ -69,7 +71,7 @@ function TriggerLabel({
   return (
     <>
       <PersonalTile />
-      <span className="truncate font-semibold text-base">{appName}</span>
+      {brand}
     </>
   );
 }
@@ -77,8 +79,9 @@ function TriggerLabel({
 /**
  * Personal or one of the account's workspaces, top left as in every team product. The current
  * context is always visible; every other one is a single choice away, and so is starting a new one.
+ * `brand` — название приложения рядом с логотипом в личном пространстве; его начертание задаёт оболочка.
  */
-export function WorkspaceSwitcher({ slug, appName }: { slug: string | null; appName: string }) {
+export function WorkspaceSwitcher({ slug, brand }: { slug: string | null; brand: ReactNode }) {
   const t = useTranslations("workspace");
   const workspaces = useWorkspaces();
   const list = workspaces.status === "ready" ? workspaces.data.workspaces : [];
@@ -88,11 +91,7 @@ export function WorkspaceSwitcher({ slug, appName }: { slug: string | null; appN
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <SidebarMenuButton className="min-w-0 flex-1 data-[state=open]:bg-sidebar-accent">
-          <TriggerLabel
-            current={current}
-            loading={slug !== null && workspaces.status === "loading"}
-            appName={appName}
-          />
+          <TriggerLabel current={current} loading={slug !== null && workspaces.status === "loading"} brand={brand} />
           <span className="sr-only">{t("switcher.hint")}</span>
           <ChevronsUpDown className="ms-auto text-sidebar-foreground/60" aria-hidden="true" />
         </SidebarMenuButton>

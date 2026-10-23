@@ -7,7 +7,6 @@ import { useTranslations } from "use-intl";
 import { useDirection } from "@/components/ui/direction";
 import { Sidebar } from "@/components/ui/sidebar-panel";
 import { SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar-sections";
-import { APP_CONFIG } from "@/config/app-config";
 import { AdminMenu } from "@/features/admin-sign-in/ui/admin-menu";
 import { useSidebarPreferences } from "@/features/preferences/model/preferences-provider";
 import { workspacePath, workspaceSlugFromPath } from "@/features/workspace/domain/paths";
@@ -21,7 +20,7 @@ import { adminSidebarItems } from "../admin-navigation";
 import { type NavGroup, userPanelItems, workspaceSidebarItems } from "../navigation";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
-import { SidebarBrand } from "./sidebar-brand";
+import { SidebarBrand, SidebarBrandName } from "./sidebar-brand";
 import { SidebarSearch } from "./sidebar-search";
 
 type SidebarPartsProps = {
@@ -79,7 +78,7 @@ function UserPanelParts() {
             ]
           : [workspaceList]
       }
-      switcher={<WorkspaceSwitcher slug={slug} appName={APP_CONFIG.name} />}
+      switcher={<WorkspaceSwitcher slug={slug} brand={<SidebarBrandName />} />}
       mark={<ScopeMark slug={slug} />}
       footer={<NavUser />}
     />
