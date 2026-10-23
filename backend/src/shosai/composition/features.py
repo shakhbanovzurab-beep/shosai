@@ -15,6 +15,7 @@ from shosai.core.config.gate import ProductionCheck
 from shosai.core.config.sections import SettingsSection
 from shosai.core.events.domain_event import DomainEvent
 from shosai.core.features import FeatureModule
+from shosai.features.agent.module import AGENT
 from shosai.features.alerting.module import ALERTING
 from shosai.features.billing.module import BILLING
 from shosai.features.files.module import FILES
@@ -30,6 +31,7 @@ FEATURES: tuple[FeatureModule, ...] = (
     FILES,
     NOTES,
     TASKS,
+    AGENT,
     ALERTING,
 )
 

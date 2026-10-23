@@ -5,7 +5,8 @@ the effect to those targets only, so the preview and the execution cannot diverg
 §8.1, audit A8). A `Preview` is an i18n key with parameters: the server writes it, never
 the model. A `ToolResult` is the output model or a `ToolError` whose code the model can
 explain; the error's text is the code's registered English text, never a slice's prose,
-so everything a model reads from a failed tool is in the model-facing test.
+so everything a model reads from a failed tool is in the model-facing test. A result also
+names its sources and the artifacts it hands over (`core.agent_tools.sources`, ADR 0068).
 """
 
 from collections.abc import Mapping
@@ -14,6 +15,8 @@ from enum import StrEnum
 from typing import Final
 
 from pydantic import BaseModel, JsonValue
+
+from shosai.core.agent_tools.sources import ArtifactRef, SourceRef
 
 type PreviewParam = str | int | float | bool | None
 type ErrorParam = str | int | bool
@@ -71,14 +74,23 @@ class ToolError:
 
 @dataclass(frozen=True, slots=True)
 class ToolResult[O: BaseModel]:
-    """The output of a call, or its error; exactly one of them."""
+    """The output of a call, or its error; exactly one of them.
+
+    An output may name the sources it rests on and the artifacts it hands over; an error
+    has neither.
+    """
 
     output: O | None = None
     error: ToolError | None = None
+    sources: tuple[SourceRef, ...] = ()
+    artifacts: tuple[ArtifactRef, ...] = ()
 
     def __post_init__(self) -> None:
         if (self.output is None) == (self.error is None):
             message = "результат инструмента — либо данные, либо ошибка"
+            raise ValueError(message)
+        if self.error is not None and (self.sources or self.artifacts):
+            message = "у ошибки инструмента нет источников и артефактов"
             raise ValueError(message)
 
     @classmethod

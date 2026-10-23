@@ -7,7 +7,9 @@ query domains it invalidates, and the provenance of the untrusted text its resul
 (Leo §7.4), which the agent wraps the result with and raises the run's taint by. It holds
 no code: the slice binds handlers to it when it is built (`bindings`). A slice declares its
 specs on its `FeatureModule`, so the model-facing English test reads every description and
-schema without starting anything.
+schema without starting anything. A spec also names the one argument a step line shows
+(`step_detail`) and, for a write, the wording of the preview keys it returns (`previews`,
+ADR 0068): the person's words, never the model's.
 
 Rules are checked when a spec is built: a malformed spec stops composition, not a turn.
 The input model forbids extra fields: an argument the schema lacks is one the model made up.
@@ -23,6 +25,8 @@ from enum import StrEnum
 from typing import Any, Final
 
 from pydantic import BaseModel, JsonValue
+
+from shosai.core.agent_tools.previews import PreviewWording
 
 TOOL_NAME: Final = re.compile(r"[a-z][a-z0-9_]*\.[a-z][a-z0-9_]*")
 GATE_NAME: Final = re.compile(r"[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)*")
@@ -96,6 +100,10 @@ class ToolSpec[I: BaseModel, O: BaseModel]:
     invalidates: tuple[str, ...] = field(default_factory=tuple)
     # Метка недоверенного текста в результате; None — только слова и данные самого человека.
     provenance: Provenance | None = None
+    # Аргумент, который показывает строка шага («Поиск встреч: бюджет»); None — без детали.
+    step_detail: str | None = None
+    # Формулировки ключей превью записи на 16 языках: по ним агент рисует карточку.
+    previews: tuple[PreviewWording, ...] = ()
 
     def __post_init__(self) -> None:
         for problem in _problems(self):
@@ -109,7 +117,7 @@ class ToolSpec[I: BaseModel, O: BaseModel]:
 
 def _problems(spec: ToolSpec[Any, Any]) -> list[str]:
     """What is wrong with a spec, in Russian for the engineer."""
-    problems = [*_naming_problems(spec), *_effect_problems(spec)]
+    problems = [*_naming_problems(spec), *_effect_problems(spec), *_card_problems(spec)]
     if not 0 < spec.result_budget <= MAX_RESULT_BUDGET:
         problems.append(f"бюджет результата — от 1 до {MAX_RESULT_BUDGET} токенов")
     if not timedelta(0) < spec.timeout <= LONGEST_TIMEOUT:
@@ -144,4 +152,17 @@ def _effect_problems(spec: ToolSpec[Any, Any]) -> list[str]:
         problems.append("egress-инструмент всегда metered")
     if spec.invalidates and spec.effect is not ToolEffect.WRITE:
         problems.append("invalidates есть только у записи: чтение данных клиента не меняет")
+    return problems
+
+
+def _card_problems(spec: ToolSpec[Any, Any]) -> list[str]:
+    problems: list[str] = []
+    if spec.step_detail is not None and spec.step_detail not in spec.input.model_fields:
+        problems.append("step_detail — имя поля модели входа")
+    if spec.previews and spec.effect is not ToolEffect.WRITE:
+        problems.append("формулировки превью есть только у записи")
+    keys = [wording.key for wording in spec.previews]
+    prefix = f"agent.{spec.name.split('.', 1)[0]}."
+    if len(set(keys)) != len(keys) or not all(key.startswith(prefix) for key in keys):
+        problems.append(f"ключи превью разные и начинаются с {prefix}")
     return problems
