@@ -9,6 +9,7 @@ import pytest
 from shosai.core.kernel.homes import Home
 from shosai.features.tasks.infrastructure.task_records import TASK_RESOURCE
 from shosai.features.workspaces.contracts import Viewer
+from tests.features.tasks.board_helpers import code_of
 from tests.features.tasks.task_bench import PARENTS, TaskBench, task_columns
 from tests.harness.run_slot import RunSlot
 from tests.support.access_model import MemberRow, ResourceRow, WorkspaceRow, World
@@ -117,6 +118,20 @@ async def test_a_list_pages_by_due_day_with_no_day_last_and_filters_what_it_show
     assert {uuid.UUID(str(i["id"])) for i in everything} == set(ordered)
     assert {uuid.UUID(str(i["id"])) for i in open_only} == set(ordered[:3])
     assert [i["title"] for i in found] == ["Отчёт без срока"]
+
+
+async def test_a_page_out_of_bounds_is_refused_before_the_list_is_read(
+    task_bench: TaskBench,
+) -> None:
+    me = uuid.uuid4()
+    queries = ["limit=0", "limit=201", f"cursor={'x' * 513}", "cursor=nonsense", "limit=200"]
+
+    answers = [await task_bench.call(me, "GET", f"/v1/tasks?{query}") for query in queries]
+
+    assert [(a.status_code, code_of(a) if a.status_code != 200 else "") for a in answers] == [
+        (422, "validation_error"), (422, "validation_error"), (422, "validation_error"),
+        (422, "invalid_cursor"), (200, ""),
+    ]  # fmt: skip
 
 
 async def test_a_workspace_task_is_made_assigned_and_deleted_by_the_rules(

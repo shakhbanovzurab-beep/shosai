@@ -17,7 +17,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Query, Response
 from pydantic import BaseModel, Field
 
-from shosai.core.pagination.page import Page, PageRequest, page_parameters
+from shosai.core.pagination.cursor import CURSOR_MAX_LENGTH
+from shosai.core.pagination.page import Page, PageRequest
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal, bearer_principal
 from shosai.features.tasks.application.task_edits import TaskEdits
@@ -38,11 +39,11 @@ from shosai.features.tasks.channels.http.shapes import (
 )
 from shosai.features.tasks.domain.tasks import Assignee
 
-LIST_PAGE = Depends(page_parameters(default=50, maximum=200))
 
-
+# Страница входит в модель: FastAPI раскрывает модель параметров запроса в OpenAPI, только
+# когда она — единственный параметр запроса маршрута, иначе кабинет получает объект `params`.
 class TaskListParams(BaseModel):
-    """What a list of tasks holds and its order."""
+    """What a list of tasks holds, its order and its page."""
 
     workspace_id: UUID | None = None
     personal: bool = False
@@ -53,6 +54,12 @@ class TaskListParams(BaseModel):
     due_before: date | None = None
     q: str | None = Field(default=None, min_length=1, max_length=200)
     sort: TaskSort = TaskSort.DUE
+    limit: int = Field(default=50, ge=1, le=200, description="Items per page, at most the maximum.")
+    cursor: str | None = Field(
+        default=None,
+        max_length=CURSOR_MAX_LENGTH,
+        description="The next_cursor of the previous page; absent for the first page.",
+    )
 
 
 def assignee_of(raw: str | None) -> str | UUID | None:
@@ -75,9 +82,7 @@ def build_tasks_router(
 
     @router.get("")
     async def list_tasks(
-        principal: person,
-        page: Annotated[PageRequest, LIST_PAGE],
-        params: Annotated[TaskListParams, Query()],
+        principal: person, params: Annotated[TaskListParams, Query()]
     ) -> Page[TaskItem]:
         """A page of the tasks the person may read, by due day (no day last) or newest change."""
         query = TaskQuery(
@@ -86,6 +91,7 @@ def build_tasks_router(
             meeting_id=params.meeting_id, project_id=params.project_id,
             due_before=params.due_before, text=params.q, sort=params.sort,
         )  # fmt: skip
+        page = PageRequest(limit=params.limit, cursor=params.cursor)
         found = await reads.page(principal, query, page)
         return Page(items=[item_out(view) for view in found.items], next_cursor=found.next_cursor)
 

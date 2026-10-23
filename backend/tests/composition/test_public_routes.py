@@ -17,6 +17,7 @@ import json
 from collections.abc import AsyncIterator, Mapping, Sequence
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Any
 
 import pytest
 import pytest_asyncio
@@ -157,6 +158,30 @@ def test_the_openapi_document_matches_the_api_app(
         f"OpenAPI api-приложения изменился; перепишите {OPENAPI_DOCUMENT.name} опцией "
         "--update-openapi, затем в frontend/ выполните npm run api:types и закоммитьте оба файла"
     )
+
+
+def is_object(schema: dict[str, Any], schemas: dict[str, Any]) -> bool:
+    """Whether a schema, with its references and alternatives followed, is an object."""
+    if "$ref" in schema:
+        return is_object(schemas[schema["$ref"].rsplit("/", 1)[1]], schemas)
+    variants: list[dict[str, Any]] = schema.get("anyOf", [])
+    return schema.get("type") == "object" or any(is_object(v, schemas) for v in variants)
+
+
+def test_every_query_parameter_is_a_value_of_the_url(composed_apps: dict[str, FastAPI]) -> None:
+    document = composed_apps["api"].openapi()
+    schemas = document["components"]["schemas"]
+    # FastAPI раскрывает модель параметров запроса в документе, только когда она — единственный
+    # параметр запроса маршрута; иначе в документе объект, и кабинет шлёт `params[status]=…`.
+    objects = [
+        f"{method.upper()} {path} {parameter['name']}"
+        for path, operations in document["paths"].items()
+        for method, operation in operations.items()
+        for parameter in operation.get("parameters", [])
+        if parameter["in"] == "query" and is_object(parameter["schema"], schemas)
+    ]
+
+    assert objects == []
 
 
 def test_every_schema_keeps_its_own_name_in_the_openapi_document(

@@ -6695,32 +6695,6 @@ export interface components {
             completed_at: string | null;
         };
         /**
-         * TaskListParams
-         * @description What a list of tasks holds and its order.
-         */
-        TaskListParams: {
-            /** Workspace Id */
-            workspace_id?: string | null;
-            /**
-             * Personal
-             * @default false
-             */
-            personal: boolean;
-            /** Assignee */
-            assignee?: string | null;
-            status?: components["schemas"]["StatusFilter"] | null;
-            /** Meeting Id */
-            meeting_id?: string | null;
-            /** Project Id */
-            project_id?: string | null;
-            /** Due Before */
-            due_before?: string | null;
-            /** Q */
-            q?: string | null;
-            /** @default due */
-            sort: components["schemas"]["TaskSort"];
-        };
-        /**
          * TaskPatchBody
          * @description A change of a task by field presence: a field left out stays, `null` clears it.
          */
@@ -11592,8 +11566,16 @@ export interface operations {
     };
     list_tasks_v1_tasks_get: {
         parameters: {
-            query: {
-                params: components["schemas"]["TaskListParams"];
+            query?: {
+                workspace_id?: string | null;
+                personal?: boolean;
+                assignee?: string | null;
+                status?: components["schemas"]["StatusFilter"] | null;
+                meeting_id?: string | null;
+                project_id?: string | null;
+                due_before?: string | null;
+                q?: string | null;
+                sort?: components["schemas"]["TaskSort"];
                 /** @description Items per page, at most the maximum. */
                 limit?: number;
                 /** @description The next_cursor of the previous page; absent for the first page. */
