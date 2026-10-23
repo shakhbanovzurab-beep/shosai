@@ -6,12 +6,6 @@
   "greeting": "{period, select, morning {Buongiorno, {name}.} afternoon {Buon pomeriggio, {name}.} other {Buonasera, {name}.}}",
   "greetingAnyTime": "Ciao, {name}.",
   "sidePanel": "Calendario, concentrazione e note",
-  "tasks": {
-    "heading": "Oggi",
-    "progress": "{done, number} di {total, number} completate",
-    "newTask": "Nuova attività",
-    "addTask": "Aggiungi attività"
-  },
   "projects": {
     "heading": "Progetti",
     "status": {

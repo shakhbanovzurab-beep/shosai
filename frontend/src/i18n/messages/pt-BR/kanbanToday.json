@@ -1,0 +1,9 @@
+{
+  "heading": "Hoje",
+  "progress": "{done, number} de {total, number} concluídas",
+  "newTask": "Nova tarefa",
+  "addTask": "Adicionar tarefa",
+  "empty": "Nada para hoje.",
+  "loadFailed": "Não foi possível carregar as tarefas de hoje.",
+  "markedDone": "Marcada como concluída"
+}

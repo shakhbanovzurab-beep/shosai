@@ -6,12 +6,6 @@
   "greeting": "{period, select, morning {Chào buổi sáng, {name}.} afternoon {Chào buổi chiều, {name}.} other {Chào buổi tối, {name}.}}",
   "greetingAnyTime": "Chào {name}.",
   "sidePanel": "Lịch, tập trung và ghi chú",
-  "tasks": {
-    "heading": "Hôm nay",
-    "progress": "Đã xong {done, number} trên {total, number}",
-    "newTask": "Công việc mới",
-    "addTask": "Thêm công việc"
-  },
   "projects": {
     "heading": "Dự án",
     "status": {

@@ -1,0 +1,9 @@
+{
+  "heading": "Hôm nay",
+  "progress": "Đã xong {done, number} trên {total, number}",
+  "newTask": "Công việc mới",
+  "addTask": "Thêm công việc",
+  "empty": "Hôm nay không có việc gì.",
+  "loadFailed": "Không thể tải công việc hôm nay.",
+  "markedDone": "Đã đánh dấu hoàn thành"
+}

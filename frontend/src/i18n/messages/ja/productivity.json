@@ -6,12 +6,6 @@
   "greeting": "{period, select, morning {おはようございます、{name} さん。} afternoon {こんにちは、{name} さん。} other {こんばんは、{name} さん。}}",
   "greetingAnyTime": "こんにちは、{name} さん。",
   "sidePanel": "カレンダー、集中、ノート",
-  "tasks": {
-    "heading": "今日",
-    "progress": "{total, number} 件中 {done, number} 件完了",
-    "newTask": "新しいタスク",
-    "addTask": "タスクを追加"
-  },
   "projects": {
     "heading": "プロジェクト",
     "status": {

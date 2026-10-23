@@ -6,12 +6,6 @@
   "greeting": "{period, select, morning {Selamat pagi, {name}.} afternoon {Selamat siang, {name}.} other {Selamat malam, {name}.}}",
   "greetingAnyTime": "Halo, {name}.",
   "sidePanel": "Kalender, fokus, dan catatan",
-  "tasks": {
-    "heading": "Hari ini",
-    "progress": "{done, number} dari {total, number} selesai",
-    "newTask": "Tugas baru",
-    "addTask": "Tambahkan tugas"
-  },
   "projects": {
     "heading": "Proyek",
     "status": {

@@ -1,0 +1,9 @@
+{
+  "heading": "今天",
+  "progress": "已完成 {done, number} / {total, number}",
+  "newTask": "新任務",
+  "addTask": "新增任務",
+  "empty": "今天沒有待辦任務。",
+  "loadFailed": "無法載入今天的任務。",
+  "markedDone": "已標示為完成"
+}

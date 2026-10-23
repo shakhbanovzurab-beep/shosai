@@ -1,0 +1,9 @@
+{
+  "heading": "오늘",
+  "progress": "{total, number}개 중 {done, number}개 완료",
+  "newTask": "새 작업",
+  "addTask": "작업 추가",
+  "empty": "오늘 할 작업이 없어요.",
+  "loadFailed": "오늘 작업을 불러오지 못했어요.",
+  "markedDone": "완료로 표시했어요"
+}

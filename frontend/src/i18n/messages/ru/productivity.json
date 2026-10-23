@@ -6,12 +6,6 @@
   "greeting": "{period, select, morning {Доброе утро, {name}.} afternoon {Добрый день, {name}.} other {Добрый вечер, {name}.}}",
   "greetingAnyTime": "Здравствуйте, {name}.",
   "sidePanel": "Календарь, фокус и заметки",
-  "tasks": {
-    "heading": "Сегодня",
-    "progress": "Выполнено {done, number} из {total, number}",
-    "newTask": "Новая задача",
-    "addTask": "Добавить задачу"
-  },
   "projects": {
     "heading": "Проекты",
     "status": {

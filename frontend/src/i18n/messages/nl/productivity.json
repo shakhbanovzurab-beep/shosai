@@ -6,12 +6,6 @@
   "greeting": "{period, select, morning {Goedemorgen, {name}.} afternoon {Goedemiddag, {name}.} other {Goedenavond, {name}.}}",
   "greetingAnyTime": "Hallo, {name}.",
   "sidePanel": "Agenda, focus en notities",
-  "tasks": {
-    "heading": "Vandaag",
-    "progress": "{done, number} van {total, number} afgerond",
-    "newTask": "Nieuwe taak",
-    "addTask": "Taak toevoegen"
-  },
   "projects": {
     "heading": "Projecten",
     "status": {

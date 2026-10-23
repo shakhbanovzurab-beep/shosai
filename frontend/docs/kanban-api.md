@@ -49,6 +49,8 @@ no data; run the API and `npm run dev:api`.
 
 | Method   | Path                                                     | Body                                      | Response            |
 | -------- | -------------------------------------------------------- | ----------------------------------------- | ------------------- |
+| `GET`    | `/v1/tasks/today?day`                                    | —                                         | `{items}`           |
+| `POST`   | `/v1/tasks`                                              | `TaskCreate`, optional `Idempotency-Key`  | `201 TaskDetail`    |
 | `GET`    | `/v1/tasks/{id}`                                         | —                                         | `TaskDetail`        |
 | `PATCH`  | `/v1/tasks/{id}`                                         | `TaskPatch` (field presence, `null` clears)| `TaskDetail`        |
 | `DELETE` | `/v1/tasks/{id}`                                         | —                                         | `204`               |
@@ -66,6 +68,10 @@ no data; run the API and `npm run dev:api`.
 | `PUT`    | `/v1/tasks/{id}/values/{sticker_id}`                     | `{state_id}` \| `{number}` \| `{text}`    | the value           |
 | `DELETE` | `/v1/tasks/{id}/values/{sticker_id}`                     | —                                         | `204`               |
 
+- Today (`kanban/ui/today/`, composed by the home screen; tasks TK-D11) reads `GET /v1/tasks/today` with the
+  person's day in their profile zone: their open personal tasks due on or before it and those done on it, ≤ 200
+  rows. A task added there is a personal task due that day; ticking one shows a toast with Undo that puts its status
+  back, except for a recurring task, whose next one already exists.
 - `starts_on` needs `due_on` and is not after it (`range_invalid`). A recurrence on a task without a due day gives
   it the first date from today. Marking a recurring task done creates the next one, due on the schedule's next
   date after the original due day, skipping past dates (KG-D5).

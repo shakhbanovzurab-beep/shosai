@@ -24,6 +24,7 @@ import type kanbanBoards from "./messages/en/kanbanBoards.json";
 import type kanbanFields from "./messages/en/kanbanFields.json";
 import type kanbanFilters from "./messages/en/kanbanFilters.json";
 import type kanbanPanel from "./messages/en/kanbanPanel.json";
+import type kanbanToday from "./messages/en/kanbanToday.json";
 import type knowledgeBase from "./messages/en/knowledgeBase.json";
 import type knowledgeBaseApi from "./messages/en/knowledgeBaseApi.json";
 import type knowledgeBaseSources from "./messages/en/knowledgeBaseSources.json";
@@ -105,6 +106,7 @@ export type Messages = {
   kanbanFields: typeof kanbanFields;
   kanbanFilters: typeof kanbanFilters;
   kanbanPanel: typeof kanbanPanel;
+  kanbanToday: typeof kanbanToday;
   knowledgeBase: typeof knowledgeBase;
   knowledgeBaseApi: typeof knowledgeBaseApi;
   knowledgeBaseSources: typeof knowledgeBaseSources;

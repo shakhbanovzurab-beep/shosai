@@ -1,0 +1,9 @@
+{
+  "heading": "Hari ini",
+  "progress": "{done, number} dari {total, number} selesai",
+  "newTask": "Tugas baru",
+  "addTask": "Tambahkan tugas",
+  "empty": "Tidak ada tugas untuk hari ini.",
+  "loadFailed": "Tidak dapat memuat tugas hari ini.",
+  "markedDone": "Ditandai selesai"
+}

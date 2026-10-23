@@ -31,6 +31,7 @@ export const NAMESPACES = [
   "kanbanFields",
   "kanbanFilters",
   "kanbanPanel",
+  "kanbanToday",
   "knowledgeBase",
   "knowledgeBaseApi",
   "knowledgeBaseSources",

@@ -1,0 +1,9 @@
+{
+  "heading": "Today",
+  "progress": "{done, number} of {total, number} done",
+  "newTask": "New task",
+  "addTask": "Add task",
+  "empty": "Nothing due today.",
+  "loadFailed": "Couldn’t load today’s tasks.",
+  "markedDone": "Marked as done"
+}

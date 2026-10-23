@@ -1,0 +1,9 @@
+{
+  "heading": "आज",
+  "progress": "{total, number} में से {done, number} पूरे",
+  "newTask": "नया टास्क",
+  "addTask": "टास्क जोड़ें",
+  "empty": "आज के लिए कुछ भी नहीं है।",
+  "loadFailed": "आज के टास्क लोड नहीं किए जा सके।",
+  "markedDone": "पूरा हुआ के रूप में मार्क किया गया"
+}

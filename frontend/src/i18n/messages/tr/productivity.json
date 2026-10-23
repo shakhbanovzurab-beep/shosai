@@ -6,12 +6,6 @@
   "greeting": "{period, select, morning {Günaydın, {name}.} afternoon {İyi günler, {name}.} other {İyi akşamlar, {name}.}}",
   "greetingAnyTime": "Merhaba, {name}.",
   "sidePanel": "Takvim, odak ve notlar",
-  "tasks": {
-    "heading": "Bugün",
-    "progress": "{done, number} / {total, number} tamamlandı",
-    "newTask": "Yeni görev",
-    "addTask": "Görev ekle"
-  },
   "projects": {
     "heading": "Projeler",
     "status": {

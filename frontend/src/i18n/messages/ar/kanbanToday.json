@@ -1,0 +1,9 @@
+{
+  "heading": "اليوم",
+  "progress": "تم إنجاز {done, number} من {total, number}",
+  "newTask": "مهمة جديدة",
+  "addTask": "إضافة مهمة",
+  "empty": "لا توجد مهام لليوم.",
+  "loadFailed": "تعذر تحميل مهام اليوم.",
+  "markedDone": "تم التمييز كمكتملة"
+}

@@ -54,6 +54,14 @@ export type TaskSource = Schemas["SourceOut"];
 /** Задача в панели: карточка, описание, источник, чек-лист, вложения и момент ответа сервера (ADR 0061). */
 export type TaskDetail = Schemas["TaskDetail"];
 
+/** Строка списка Today (TK-D11): ровно то, что показывает виджет; панель и ответ создания тоже её несут. */
+export type TodayTask = Pick<
+  Schemas["TaskItem"],
+  "id" | "title" | "status" | "starts_on" | "due_on" | "recurring" | "leo_fields"
+>;
+export type TodayList = Schemas["TodayOut"];
+export type TaskCreate = Schemas["TaskCreateBody"];
+
 /** Изменение по присутствию поля: `null` очищает. */
 export type TaskPatch = Schemas["TaskPatchBody"];
 export type TasksDelete = Schemas["TasksDeleteBody"];

@@ -13,9 +13,11 @@ import type {
   Subtask,
   SubtaskCreate,
   SubtaskPatch,
+  TaskCreate,
   TaskDetail,
   TaskPatch,
   TasksDelete,
+  TodayList,
 } from "../domain/tasks-contract";
 
 /* Задачи на `/v1/tasks*` (план tasks §3.3, TK-D12): поля, значения, подзадачи, комментарии и вложения. */
@@ -29,6 +31,11 @@ const attachment = (id: string, attachmentId: string) => ({
 });
 
 export const tasksApi = {
+  /** День — профильный день человека (ADR 0058), "2026-10-23". */
+  today: (day: string): Promise<TodayList> => dataOf(apiClient.GET("/v1/tasks/today", { params: { query: { day } } })),
+  /** Повтор с тем же ключом отвечает той же задачей, поэтому повторная отправка не создаёт вторую. */
+  create: (body: TaskCreate, idempotencyKey: string): Promise<TaskDetail> =>
+    dataOf(apiClient.POST("/v1/tasks", { params: { header: { "Idempotency-Key": idempotencyKey } }, body })),
   get: (id: string): Promise<TaskDetail> => dataOf(apiClient.GET("/v1/tasks/{task_id}", task(id))),
   patch: (id: string, body: TaskPatch): Promise<TaskDetail> =>
     dataOf(apiClient.PATCH("/v1/tasks/{task_id}", { ...task(id), body })),

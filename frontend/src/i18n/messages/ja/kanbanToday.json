@@ -1,0 +1,9 @@
+{
+  "heading": "今日",
+  "progress": "{total, number} 件中 {done, number} 件完了",
+  "newTask": "新しいタスク",
+  "addTask": "タスクを追加",
+  "empty": "今日が期限のタスクはありません。",
+  "loadFailed": "今日のタスクを読み込めませんでした。",
+  "markedDone": "完了にしました"
+}

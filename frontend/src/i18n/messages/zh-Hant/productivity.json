@@ -6,12 +6,6 @@
   "greeting": "{period, select, morning {早安，{name}。} afternoon {午安，{name}。} other {晚安，{name}。}}",
   "greetingAnyTime": "你好，{name}。",
   "sidePanel": "行事曆、專注和筆記",
-  "tasks": {
-    "heading": "今天",
-    "progress": "已完成 {done, number} / {total, number}",
-    "newTask": "新任務",
-    "addTask": "新增任務"
-  },
   "projects": {
     "heading": "專案",
     "status": {

@@ -1,0 +1,9 @@
+{
+  "heading": "Bugün",
+  "progress": "{done, number} / {total, number} tamamlandı",
+  "newTask": "Yeni görev",
+  "addTask": "Görev ekle",
+  "empty": "Bugün için bir şey yok.",
+  "loadFailed": "Bugünün görevleri yüklenemedi.",
+  "markedDone": "Tamamlandı olarak işaretlendi"
+}

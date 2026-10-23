@@ -1,0 +1,9 @@
+{
+  "heading": "Vandaag",
+  "progress": "{done, number} van {total, number} afgerond",
+  "newTask": "Nieuwe taak",
+  "addTask": "Taak toevoegen",
+  "empty": "Niets voor vandaag.",
+  "loadFailed": "Kan de taken van vandaag niet laden.",
+  "markedDone": "Gemarkeerd als afgerond"
+}

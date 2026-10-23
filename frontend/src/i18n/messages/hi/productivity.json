@@ -6,12 +6,6 @@
   "greeting": "{period, select, morning {सुप्रभात, {name}!} afternoon {नमस्ते, {name}!} other {शुभ संध्या, {name}!}}",
   "greetingAnyTime": "नमस्ते, {name}!",
   "sidePanel": "कैलेंडर, फ़ोकस और नोट",
-  "tasks": {
-    "heading": "आज",
-    "progress": "{total, number} में से {done, number} पूरे",
-    "newTask": "नया टास्क",
-    "addTask": "टास्क जोड़ें"
-  },
   "projects": {
     "heading": "प्रोजेक्ट",
     "status": {
