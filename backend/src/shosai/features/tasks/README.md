@@ -30,6 +30,10 @@ The one place a person's work is tracked (SM-3): a task written by hand, an acti
 - `boards`, `board_columns`, `task_placements`, `task_settings` — personal (user isolation): a card sits in a column of its own board; column positions and card ranks are unique at commit; a column has a colour (one of nine) or none and is collapsed or not (`b7d1f3a9c524`).
 - `application/account_data.py` — a person's personal tasks with their checklists, comments and stopwatch spans, sets, boards, columns, placements and settings are exported, copied (placements of personal tasks only) and erased; a workspace's tasks stay with it.
 
+## Workspaces' lifecycle (step 6)
+
+`channels/subscriptions.py` follows workspaces' events (`application/workspace_lifecycle.py`): `tasks.follow_departure` on `workspaces.member.removed` unassigns the departed member's open tasks of the workspace, passes the tasks they own — with the rows hanging on them — to the standing owner the event names (a warning and nothing passed without one), removes their places of the workspace's tasks and raises their boards' revisions; it runs as the departed person in that workspace (`EventSubscription.scope`, ADR 0067) and leaves a member who is active again as they are. `tasks.forget_project` on `workspaces.project.deleted` clears the project from its tasks. A deleted workspace leaves nothing to read; its rows go with the workspace data in step 17.
+
 ## Locks
 
 A write takes the reader's board before its task (`scoping.lock_boards_of`, ADR 0066): a card's move locks its board, then the task; a change of the task raises that board's revision, so it locks the board first too and the two never wait on each other in a circle. A new write that locks a task goes through `scoping.locked_task`.

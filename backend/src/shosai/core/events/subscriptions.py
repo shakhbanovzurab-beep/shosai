@@ -52,13 +52,19 @@ class ReceivedEvent[E: DomainEvent]:
 
 
 type EventHandler[E: DomainEvent] = Callable[[AsyncSession, ReceivedEvent[E]], Awaitable[None]]
+# Чьи строки пишет эффект: человек и компания из самого события, в доме события.
+type ScopeOfEvent[E: DomainEvent] = Callable[[E, TenancyScope], TenancyScope]
 
 
 @dataclass(frozen=True, slots=True)
 class EventSubscription[E: DomainEvent]:
-    """A consumer of one event type: its stable name, queue, deadline, handler and home.
+    """A consumer of one event type: its stable name, queue, deadline, handler, home, scope.
 
     `home` is where the effect and its delivery mark live; None means the event's home.
+    `scope` names, from the event, the person and company whose rows the effect writes —
+    a departed member and the workspace they left — when they are not the event's own:
+    row-level security then admits exactly those rows, in the delivery's one transaction.
+    None keeps the event's scope.
     """
 
     consumer: str
@@ -67,6 +73,7 @@ class EventSubscription[E: DomainEvent]:
     deadline: timedelta
     handle: EventHandler[E]
     home: Home | None = None
+    scope: ScopeOfEvent[E] | None = None
 
     def __post_init__(self) -> None:
         if len(self.consumer) > CONSUMER_NAME_MAX_LENGTH or not CONSUMER_NAME.fullmatch(
@@ -78,11 +85,14 @@ class EventSubscription[E: DomainEvent]:
             )
             raise ValueError(message)
 
-    def effect_scope(self, event_scope: TenancyScope) -> TenancyScope:
-        """The scope of the delivery's transaction: the event's, moved to the effect's home."""
-        if self.home is None:
-            return event_scope
-        return replace(event_scope, home=self.home)
+    def effect_scope(self, received: ReceivedEvent[E]) -> TenancyScope:
+        """The scope of the delivery's transaction: the event's, or the one `scope` names from
+        it, moved to the effect's home."""
+        scope = received.scope if self.scope is None else self.scope(received.event, received.scope)
+        if scope.home is not received.scope.home:
+            message = "область эффекта называет человека и компанию, а дом — только `home`"
+            raise ValueError(message)
+        return scope if self.home is None else replace(scope, home=self.home)
 
     @property
     def task_name(self) -> str:

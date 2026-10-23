@@ -372,7 +372,7 @@
 - **Events:**
   - written as `outbox_messages` in the transaction of the effect;
   - the relay enqueues one task per subscriber; a tick per home every 5 s drains in passes of 100 while each pass claims a full batch, within a 15 s budget;
-  - the subscriber writes `processed_events (consumer, event_id)` in its own transaction, so redelivery is harmless; a subscription may name the home of its effect (the EU home for the directory and platform tables, [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md)), and then mark and effect commit together there;
+  - the subscriber writes `processed_events (consumer, event_id)` in its own transaction, so redelivery is harmless; a subscription may name the home of its effect (the EU home for the directory and platform tables, [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md)), and then mark and effect commit together there; it may also name, from the event, the person and company whose rows its effect writes — a departed member in the workspace they left — so row-level security admits exactly those rows in the same transaction, never the sweep role, which only reads ([ADR 0067](../adr/0067-a-delivery-runs-in-the-scope-its-event-names.md));
   - events carry no personal data.
 - **Delayed actions (errands):** a row with `run_at`; the scheduler enqueues due rows (`FOR UPDATE SKIP LOCKED`) and records the run.
 - **Proactive time triggers:** `proactive_triggers` rows with `run_at`, enqueued by the scheduler the same way. Otherwise Leo's initiative starts from outbox events and user-state transitions, never from scans over all users ([ADR 0027](../adr/0027-leo-event-driven-proactivity.md)).

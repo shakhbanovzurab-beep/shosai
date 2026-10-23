@@ -39,6 +39,7 @@ from shosai.features.tasks.channels.http.stickers import (
 )
 from shosai.features.tasks.channels.http.tasks import build_tasks_router
 from shosai.features.tasks.channels.http.threads import build_threads_router
+from shosai.features.tasks.channels.subscriptions import subscriptions
 from shosai.features.tasks.channels.tasks import PERIODIC_JOBS, task_handlers
 from shosai.features.tasks.contracts import TASK_READER
 from shosai.features.tasks.contracts.events import (
@@ -99,6 +100,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             build_clocks_router(Clocks(transactions, ports), ports),
         ),
         task_handlers=task_handlers(AttachmentReleases(transactions, ports)),
+        subscriptions=subscriptions(ports),
         periodic_jobs=PERIODIC_JOBS,
         provides=(
             ACCOUNT_DATA_HANDLERS.bind(TasksAccountData(transactions, ports)),

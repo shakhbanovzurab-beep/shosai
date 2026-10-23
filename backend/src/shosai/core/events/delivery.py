@@ -111,7 +111,7 @@ def delivery_handler[E: DomainEvent](
 
     async def deliver(payload: EventDeliveryPayload) -> None:
         received = received_event(subscription, payload)
-        async with transactions.begin(subscription.effect_scope(received.scope)) as session:
+        async with transactions.begin(subscription.effect_scope(received)) as session:
             if not await mark_processed(session, subscription.consumer, received.event_id):
                 metrics.count_duplicate(subscription.consumer)
                 log.info(
