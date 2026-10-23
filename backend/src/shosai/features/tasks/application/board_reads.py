@@ -56,7 +56,8 @@ CARD_COLUMNS: Final = (
     TaskRecord.id, TaskRecord.user_id, TaskRecord.org_id, TaskRecord.title, TaskRecord.status,
     TaskRecord.priority, TaskRecord.starts_on, TaskRecord.due_on, TaskRecord.assignee_user_id,
     TaskRecord.assignee_name, TaskRecord.recurrence, TaskRecord.leo_fields, TaskRecord.source,
-    TaskRecord.cover_attachment_id, TaskRecord.stopwatch_since, TaskRecord.stopwatch_total_ms,
+    TaskRecord.cover_attachment_id, TaskRecord.source_chat_messenger, TaskRecord.source_chat_title,
+    TaskRecord.stopwatch_since, TaskRecord.stopwatch_total_ms,
     TaskRecord.stopwatch_by_column, TaskRecord.timer_length_ms, TaskRecord.timer_ends_at,
     TaskRecord.timer_paused_left_ms, TaskRecord.plan_minutes, TaskRecord.fact_minutes,
 )  # fmt: skip

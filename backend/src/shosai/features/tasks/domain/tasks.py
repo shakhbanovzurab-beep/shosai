@@ -44,6 +44,7 @@ class TaskSource(StrEnum):
     HUB = "hub"
     MAIL = "mail"
     JIRA = "jira"
+    CHAT = "chat"
 
 
 class CreatedBy(StrEnum):

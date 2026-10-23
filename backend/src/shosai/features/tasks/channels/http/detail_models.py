@@ -12,7 +12,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 
-from shosai.features.tasks.channels.http.card_models import Card, Messenger, StickerValue
+from shosai.features.tasks.channels.http.card_models import Card, StickerValue
+from shosai.features.tasks.domain.chat_source import Messenger
 from shosai.features.tasks.domain.recurrence import Weekday
 from shosai.features.tasks.domain.tasks import TaskSource
 

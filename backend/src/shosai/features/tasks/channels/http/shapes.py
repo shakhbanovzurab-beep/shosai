@@ -14,7 +14,7 @@ from shosai.features.tasks.application.task_edits import Edit
 from shosai.features.tasks.application.task_parts import AttachmentView
 from shosai.features.tasks.application.views import CardView, TaskView
 from shosai.features.tasks.channels.http.card_models import AssigneeOut, Card, CoverOut, SpaceOut
-from shosai.features.tasks.channels.http.clock_shapes import clocks_out
+from shosai.features.tasks.channels.http.clock_shapes import chat_source_out, clocks_out
 from shosai.features.tasks.channels.http.detail_models import (
     AttachmentOut,
     DayRule,
@@ -191,6 +191,9 @@ def _card(card: CardView) -> dict[str, object]:
         if card.cover is None
         else CoverOut(attachment_id=card.cover.attachment_id, preview_url=card.cover.preview_url),
         **clocks_out(card.clocks),
+        "source_chat": None
+        if card.source_chat is None
+        else {"messenger": card.source_chat.messenger, "chat_title": card.source_chat.chat_title},
     }
 
 
@@ -230,6 +233,7 @@ def detail_out(view: TaskView) -> TaskDetail:
         finding=None
         if finding is None
         else SourceFindingOut(quote=finding.quote, start_ms=finding.start_ms),
+        chat=chat_source_out(view.chat),
     )
     placement = view.placement
     return TaskDetail.model_validate(

@@ -46,11 +46,13 @@ from shosai.features.tasks.application.task_events import NEW, deleted_of, event
 from shosai.features.tasks.application.task_reads import TaskReads, zone_of
 from shosai.features.tasks.application.views import TaskView, context_of, may_delete
 from shosai.features.tasks.domain.changes import Schedule, TaskChange, schedule_after
+from shosai.features.tasks.domain.chat_source import ChatOrigin, checked_origin
 from shosai.features.tasks.domain.recurrence import Recurrence, recurrence_json
 from shosai.features.tasks.domain.tasks import (
     Assignee,
     CreatedBy,
     Priority,
+    TaskRule,
     TaskRuleError,
     TaskSource,
     TaskStatus,
@@ -67,7 +69,8 @@ TASK_CREATES: Final = EffectScope("tasks.task_create", timedelta(hours=24))
 
 @dataclass(frozen=True, slots=True)
 class NewTask:
-    """A task a person makes by hand."""
+    """A task a person makes by hand — or Leo from a team chat's message, which only the
+    server's paths name (`chat`; TK-D13): a workspace's task, made by Leo."""
 
     title: str
     description: str = ""
@@ -79,6 +82,7 @@ class NewTask:
     workspace_id: UUID | None = None
     assignee: Assignee = field(default_factory=Assignee)
     project_id: UUID | None = None
+    chat: ChatOrigin | None = None
 
 
 class TaskMade(BaseModel):
@@ -189,6 +193,7 @@ class TaskWrites:
                 TaskChange(),
                 now.astimezone(zone).date(),
             )
+            chat = _chat_of(draft)
         except TaskRuleError as error:
             raise rule_failure(error) from error
         record = TaskRecord(
@@ -207,11 +212,12 @@ class TaskWrites:
             assignee_user_id=draft.assignee.user_id,
             assignee_name=draft.assignee.name,
             project_id=draft.project_id,
-            source=TaskSource.MANUAL.value,
-            created_by=CreatedBy.PERSON.value,
+            source=(TaskSource.MANUAL if chat is None else TaskSource.CHAT).value,
+            created_by=(CreatedBy.PERSON if chat is None else CreatedBy.LEO).value,
             leo_fields=[],
             created_at=now,
             updated_at=now,
+            **_chat_columns(chat),
         )
         session.add(record)
         await session.flush()
@@ -253,3 +259,25 @@ class TaskWrites:
         await self._releases.owner(scope_in(principal, None))
         if org_id is not None:
             await self._releases.owner(scope_in(principal, org_id))
+
+
+def _chat_of(draft: NewTask) -> ChatOrigin | None:
+    """The draft's chat source, checked; only a workspace's task comes from a chat."""
+    if draft.chat is None:
+        return None
+    if draft.workspace_id is None:
+        raise TaskRuleError(TaskRule.INVALID)
+    return checked_origin(draft.chat)
+
+
+def _chat_columns(chat: ChatOrigin | None) -> dict[str, object]:
+    """The task row's columns of its chat source."""
+    if chat is None:
+        return {}
+    return {
+        "source_chat_connection_id": chat.connection_id,
+        "source_chat_messenger": chat.messenger.value,
+        "source_chat_title": chat.chat_title,
+        "source_chat_message_url": chat.message_url,
+        "source_chat_message_at": chat.message_at,
+    }

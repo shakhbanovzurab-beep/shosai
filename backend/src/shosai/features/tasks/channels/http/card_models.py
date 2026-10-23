@@ -8,19 +8,12 @@ The panel's shapes are in `detail_models`.
 """
 
 from datetime import date, datetime
-from enum import StrEnum
 from uuid import UUID
 
 from pydantic import BaseModel, Field
 
+from shosai.features.tasks.domain.chat_source import Messenger
 from shosai.features.tasks.domain.tasks import LeoField, Priority, TaskStatus
-
-
-class Messenger(StrEnum):
-    """A messenger a team chat lives in."""
-
-    TELEGRAM = "telegram"
-    SLACK = "slack"
 
 
 class AssigneeOut(BaseModel):

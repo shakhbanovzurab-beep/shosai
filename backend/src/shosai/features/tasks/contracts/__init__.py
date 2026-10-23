@@ -2,8 +2,9 @@
 
 Tasks is the one store of a person's work (SM-3). Notes shows a meeting's action items as
 its tasks and ticks them from the shipped desktop clients through `MeetingTasks`;
-proactive, hubs and Leo read tasks through `TaskReader`; hubs and mail hand work over
-through `TaskIntake`, and hubs picks the board its work goes to through `BoardReader`.
+proactive, hubs and Leo read tasks through `TaskReader`; hubs, mail and chats hand work
+over through `TaskIntake` — a chat's with its `ChatOrigin` (TK-D13) — and hubs picks the
+board its work goes to through `BoardReader`.
 Every read runs inside workspaces' access policy, so a task the viewer may not read is
 absent (inv-14). The events are in `contracts.events`.
 """
@@ -19,6 +20,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.kernel.errors import AppError
 from shosai.core.ports.keys import PortKey
+from shosai.features.tasks.domain.chat_source import ChatOrigin, Messenger
 from shosai.features.tasks.domain.tasks import Assignee, Priority, TaskSource, TaskStatus
 from shosai.features.workspaces.contracts import Viewer
 
@@ -31,9 +33,11 @@ __all__ = [
     "BoardFacts",
     "BoardNotFoundError",
     "BoardReader",
+    "ChatOrigin",
     "Handover",
     "MeetingTask",
     "MeetingTasks",
+    "Messenger",
     "Priority",
     "TaskDraft",
     "TaskFacts",

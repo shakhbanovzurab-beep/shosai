@@ -15567,7 +15567,7 @@
           "slack"
         ],
         "title": "Messenger",
-        "description": "A messenger a team chat lives in."
+        "description": "A messenger a team chat lives in (chats §1.1)."
       },
       "ModelTier": {
         "type": "string",
@@ -20996,7 +20996,8 @@
           "meeting",
           "hub",
           "mail",
-          "jira"
+          "jira",
+          "chat"
         ],
         "title": "TaskSource",
         "description": "Where a task came from."

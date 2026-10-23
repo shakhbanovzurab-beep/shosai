@@ -150,6 +150,8 @@ async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
     assert str(own).encode() in exported["task_comments.jsonl"]
     assert str(shared).encode() not in exported["task_subtasks.jsonl"]
     assert str(own).encode() in exported["task_clock_spans.jsonl"]
+    # Источник из чата — столбцы задачи: выгружаются вместе с ней (§3.10).
+    assert b'"source_chat_title"' in exported["tasks.jsonl"]
     assert str(shared).encode() not in exported["task_clock_spans.jsonl"]
     assert str(own).encode() in exported["tasks.jsonl"]
     assert str(shared).encode() not in exported["tasks.jsonl"]

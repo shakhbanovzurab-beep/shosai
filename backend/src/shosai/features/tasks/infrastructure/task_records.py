@@ -1,7 +1,7 @@
 """Tasks and the sets of meetings' tasks in each home (tasks plan §3.4, §3.8).
 
-Revisions `b3d9e5a7c142`, `c8e4a1f6b293`, `a4c6e8b2d397` (the cover) and `d9f2b4c6e813` (the
-timer, plan and fact).
+Revisions `b3d9e5a7c142`, `c8e4a1f6b293`, `a4c6e8b2d397` (the cover), `d9f2b4c6e813` (the
+time fields) and `e2b4d6f8a135` (the chat source).
 
 `tasks` is the shareable resource `task`: `user_id`, `org_id` and `access` as workspaces'
 access policy reads them, its assignee the named reader and its meeting the parent, so a
@@ -41,7 +41,18 @@ from shosai.features.tasks.domain.clocks import TIMER_MAX_MS, TIMER_MIN_MS, TRAC
 
 STATUSES: Final = "'todo', 'in_progress', 'done'"
 PRIORITIES: Final = "'high', 'medium', 'low'"
-SOURCES: Final = "'manual', 'meeting', 'hub', 'mail', 'jira'"
+SOURCES: Final = "'manual', 'meeting', 'hub', 'mail', 'jira', 'chat'"
+MESSENGERS: Final = "'telegram', 'slack'"
+# Источник из чата (TK-D13): чат и момент сообщения — ровно у задачи из чата, она — задача
+# пространства, сделанная Лео; подключение и ссылка — только у неё.
+CHAT_SOURCE: Final = (
+    "(source = 'chat') = (source_chat_messenger IS NOT NULL)"
+    " AND (source = 'chat') = (source_chat_title IS NOT NULL)"
+    " AND (source = 'chat') = (source_chat_message_at IS NOT NULL)"
+    " AND (source = 'chat' OR (source_chat_connection_id IS NULL"
+    " AND source_chat_message_url IS NULL))"
+    " AND (source <> 'chat' OR (org_id IS NOT NULL AND created_by = 'leo'))"
+)
 CREATORS: Final = "'person', 'leo', 'meeting', 'sync'"
 OPEN: Final = "status <> 'done'"
 # Снятое расписание — SQL NULL, не JSON null (ревизия `d9f2b4c6e813`).
@@ -85,6 +96,19 @@ class TaskRecord(ModelBase):
             "source_finding_id IS NULL OR source_meeting_id IS NOT NULL", name="finding_of_meeting"
         ),
         CheckConstraint(f"created_by IN ({CREATORS})", name="creator_known"),
+        CheckConstraint(CHAT_SOURCE, name="chat_source"),
+        CheckConstraint(
+            f"source_chat_messenger IS NULL OR source_chat_messenger IN ({MESSENGERS})",
+            name="chat_messenger_known",
+        ),
+        CheckConstraint(
+            "source_chat_title IS NULL OR length(source_chat_title) BETWEEN 1 AND 255",
+            name="chat_title_length",
+        ),
+        CheckConstraint(
+            "source_chat_message_url IS NULL OR length(source_chat_message_url) <= 2048",
+            name="chat_link_length",
+        ),
         CheckConstraint("version >= 1", name="version_positive"),
         CheckConstraint(
             "starts_on IS NULL OR (due_on IS NOT NULL AND starts_on <= due_on)", name="range"
@@ -193,6 +217,12 @@ class TaskRecord(ModelBase):
     # Встреча — мягкая ссылка: задача, которую тронули, остаётся и после встречи.
     source_meeting_id: Mapped[UUID | None] = mapped_column(Uuid)
     source_finding_id: Mapped[UUID | None] = mapped_column(Uuid)
+    # Чат — мягкая ссылка на подключение chats: при отключении она уходит, строка остаётся.
+    source_chat_connection_id: Mapped[UUID | None] = mapped_column(Uuid)
+    source_chat_messenger: Mapped[str | None] = mapped_column(Text)
+    source_chat_title: Mapped[str | None] = mapped_column(Text)
+    source_chat_message_url: Mapped[str | None] = mapped_column(Text)
+    source_chat_message_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     cover_attachment_id: Mapped[UUID | None] = mapped_column(Uuid)
     # Время задачи (шаг 4a, ревизия `d9f2b4c6e813`): сводка отрезков `task_clock_spans`,
     # пишется вместе с ними под блокировкой задачи, — и таймер, план и факт.

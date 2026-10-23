@@ -1,4 +1,5 @@
-"""A task's time fields as the contract's shapes (`domain/time-contract.ts`; §3.9)."""
+"""A task's time fields and its chat source as the contract's shapes (`domain/time-contract.ts`,
+`domain/tasks-contract.ts`; §3.9, §3.10)."""
 
 from datetime import datetime
 
@@ -9,6 +10,8 @@ from shosai.features.tasks.channels.http.card_models import (
     TimerOut,
     TimeTrackingOut,
 )
+from shosai.features.tasks.channels.http.detail_models import ChatMessageOut, ChatSourceOut
+from shosai.features.tasks.domain.chat_source import ChatOrigin
 from shosai.features.tasks.domain.clocks import TaskClocks
 
 
@@ -49,3 +52,15 @@ def clocks_out(clocks: TaskClocks) -> dict[str, object]:
 def clocks_reply(clocks: TaskClocks, server_now: datetime) -> ClocksReply:
     """A clock's action's answer."""
     return ClocksReply.model_validate({**clocks_out(clocks), "server_now": server_now})
+
+
+def chat_source_out(origin: ChatOrigin | None) -> ChatSourceOut | None:
+    """The chat and the message a task was made from."""
+    if origin is None:
+        return None
+    return ChatSourceOut(
+        connection_id=origin.connection_id,
+        messenger=origin.messenger,
+        chat_title=origin.chat_title,
+        message=ChatMessageOut(url=origin.message_url, sent_at=origin.message_at),
+    )

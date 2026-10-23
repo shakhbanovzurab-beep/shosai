@@ -118,6 +118,10 @@ class CardFacts(ClockFacts, Protocol):
     def source(self) -> str: ...
     @property
     def cover_attachment_id(self) -> UUID | None: ...
+    @property
+    def source_chat_messenger(self) -> str | None: ...
+    @property
+    def source_chat_title(self) -> str | None: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -138,6 +142,8 @@ class CardRecord:
     leo_fields: list[str]
     source: str
     cover_attachment_id: UUID | None
+    source_chat_messenger: str | None
+    source_chat_title: str | None
     stopwatch_since: datetime | None
     stopwatch_total_ms: int | None
     stopwatch_by_column: dict[str, int] | None

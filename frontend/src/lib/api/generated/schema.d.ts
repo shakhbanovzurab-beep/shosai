@@ -4736,7 +4736,7 @@ export interface components {
         };
         /**
          * Messenger
-         * @description A messenger a team chat lives in.
+         * @description A messenger a team chat lives in (chats §1.1).
          * @enum {string}
          */
         Messenger: "telegram" | "slack";
@@ -6760,7 +6760,7 @@ export interface components {
          * @description Where a task came from.
          * @enum {string}
          */
-        TaskSource: "manual" | "meeting" | "hub" | "mail" | "jira";
+        TaskSource: "manual" | "meeting" | "hub" | "mail" | "jira" | "chat";
         /**
          * TaskStatus
          * @description Where a task stands; a board's column of the same kind shows it.
