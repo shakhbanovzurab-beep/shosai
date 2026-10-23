@@ -1,10 +1,11 @@
 """A recurring task's next one, made when it is marked done (KG-D5; tasks plan §3.8).
 
-The next task copies its words, priority, who does it, its project and its checklist
-unticked — not its comments — takes the schedule over and is due on the schedule's first
-date after the original due day, not before the completer's today; a range keeps its
-length. It goes to the top of the first to-do column of the board the completed task sits
-on for the completer. One completed task makes at most one next one — the unique link to it
+The next task copies its words, priority, who does it, its project, its plan and its
+checklist unticked — not its comments, fact, timer or stopwatch (§3.9) — takes the schedule
+over and is due on the schedule's first date after the original due day, not before the
+completer's today; a range keeps its length. It goes to the top of the first to-do column of
+the board the completed task sits on for the completer, its stopwatch started if that board
+starts it on arrival. One completed task makes at most one next one — the unique link to it
 holds that under a repeat or a redelivery.
 """
 
@@ -17,6 +18,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.kernel.ids import new_id
+from shosai.features.tasks.application import clock_rules
 from shosai.features.tasks.application.placements import CardSpot, first_column_of, place
 from shosai.features.tasks.domain.recurrence import next_due, recurrence_of, shifted_start
 from shosai.features.tasks.domain.tasks import TaskStatus
@@ -57,6 +59,7 @@ async def next_of(
             source_meeting_id=record.source_meeting_id,
             created_by=record.created_by,
             recurred_from_id=record.id,
+            plan_minutes=record.plan_minutes,
             created_at=now,
             updated_at=now,
         )
@@ -70,8 +73,11 @@ async def next_of(
     if made is None:
         return None
     await copy_checklist(session, record, task_id, now)
-    await _place_like(session, record.id, task_id, viewer, now)
-    return await session.get(TaskRecord, task_id)
+    spot = await _place_like(session, record.id, task_id, viewer, now)
+    following = await session.get(TaskRecord, task_id)
+    if following is not None and spot is not None:
+        await clock_rules.arrived(session, following, spot, now)
+    return following
 
 
 async def copy_checklist(
@@ -95,15 +101,18 @@ async def copy_checklist(
 
 async def _place_like(
     session: AsyncSession, done_id: UUID, task_id: UUID, viewer: UUID, now: datetime
-) -> None:
-    """Top of the first to-do column of the board the done task sits on for the completer."""
+) -> tuple[UUID, UUID] | None:
+    """Top of the first to-do column of the board the done task sits on for the completer;
+    the board and column, or None when it sits on none."""
     board_id = await session.scalar(
         select(TaskPlacementRecord.board_id).where(
             TaskPlacementRecord.user_id == viewer, TaskPlacementRecord.task_id == done_id
         )
     )
     if board_id is None:
-        return
+        return None
     column_id = await first_column_of(session, board_id, TaskStatus.TODO)
-    if column_id is not None:
-        await place(session, viewer, task_id, CardSpot(board_id, column_id, 0), now)
+    if column_id is None:
+        return None
+    await place(session, viewer, task_id, CardSpot(board_id, column_id, 0), now)
+    return board_id, column_id

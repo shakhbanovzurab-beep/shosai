@@ -61,7 +61,8 @@ class BoardsView:
 
 @dataclass(frozen=True, slots=True)
 class PlacedCard:
-    """A card of a board as its read finds it: the task, its column, counts and cover."""
+    """A card of a board as its read finds it: the task, its column, counts, cover and
+    values."""
 
     task: CardRecord
     column_id: UUID

@@ -1,16 +1,16 @@
 """Tasks' handler of a person's data: personal tasks, boards, stickers and what hangs on them.
 
 The person's rows are their personal tasks with their checklists, comments, attachments
-(files keeps the attachments' bytes, ADR 0064) and values, the sets of their personal
-meetings, their boards with columns and stickers, where tasks sit on them, their own
-stickers and their settings. A workspace's task stays with the workspace, whoever made it
-(nfr-16): it is neither exported nor erased with the person, and the workspace passes it to
-a successor when the member goes (step 6); the person's stickers' values on it stay as
-lines of its description when the stickers go (§3.15). The person's placements of a
-workspace's tasks are their own rows: exported and erased with them, never copied to
-another home, where those tasks are not. Erasing deletes boards, personal tasks and
-stickers, and what hangs on them goes by the database's cascades; the attachments' held
-objects then go back to files, so nothing of them remains; a repeat deletes nothing more.
+(files keeps the attachments' bytes, ADR 0064), values and stopwatch spans, the sets of
+their personal meetings, their boards with columns and stickers, where tasks sit on them,
+their own stickers and their settings. A workspace's task stays with the workspace, whoever
+made it (nfr-16): it is neither exported nor erased with the person, and the workspace
+passes it to a successor when the member goes (step 6); the person's stickers' values on it
+stay as lines of its description when the stickers go (§3.15). The person's placements of a
+workspace's tasks are their own rows: exported and erased with them, never copied to another
+home, where those tasks are not. Erasing deletes boards, personal tasks and stickers, and
+what hangs on them goes by the database's cascades; the attachments' held objects then go
+back to files, so nothing of them remains; a repeat deletes nothing more.
 """
 
 from collections.abc import AsyncIterator, Callable, Mapping
@@ -46,6 +46,7 @@ from shosai.features.tasks.infrastructure.board_records import (
     TaskPlacementRecord,
     TaskSettingsRecord,
 )
+from shosai.features.tasks.infrastructure.clock_records import TaskClockSpanRecord
 from shosai.features.tasks.infrastructure.sticker_records import (
     BoardStickerRecord,
     StickerRecord,
@@ -76,6 +77,7 @@ MODELS: Final = (
     StickerStateRecord,
     BoardStickerRecord,
     TaskStickerValueRecord,
+    TaskClockSpanRecord,
 )
 PERSONAL_MODELS: Final = (
     BoardRecord,
@@ -95,6 +97,7 @@ SPACED_MODELS: Final = (
     StickerRecord,
     StickerStateRecord,
     TaskStickerValueRecord,
+    TaskClockSpanRecord,
 )
 # Очередь возврата объектов хранит одни идентификаторы и пустеет сама за такт (ADR 0064).
 ACCOUNT_DATA: Final = AccountDataSpec(
@@ -136,6 +139,7 @@ type Spaced = (
     | type[StickerRecord]
     | type[StickerStateRecord]
     | type[TaskStickerValueRecord]
+    | type[TaskClockSpanRecord]
 )
 
 
@@ -160,6 +164,7 @@ NARROWED: Final[Mapping[type[ModelBase], Callable[[UUID], ColumnElement[bool]]]]
     StickerRecord: _of_personal_tasks(StickerRecord),
     StickerStateRecord: _of_personal_tasks(StickerStateRecord),
     TaskStickerValueRecord: _of_personal_tasks(TaskStickerValueRecord),
+    TaskClockSpanRecord: _of_personal_tasks(TaskClockSpanRecord),
 }
 
 

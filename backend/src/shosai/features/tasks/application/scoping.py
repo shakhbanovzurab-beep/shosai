@@ -102,12 +102,33 @@ class Scoping:
             raise invalid()
 
 
+async def lock_boards_of(session: AsyncSession, viewer: UUID, task_ids: Collection[UUID]) -> None:
+    """Lock the reader's boards where these tasks sit, before the tasks' rows.
+
+    Every write takes a board before its tasks — a card's move takes its board, then the
+    task; a change of the task raises that board's revision — so the two never wait on each
+    other in a circle. Boards go in the order of their ids.
+    """
+    boards = select(TaskPlacementRecord.board_id).where(
+        TaskPlacementRecord.user_id == viewer, TaskPlacementRecord.task_id.in_(list(task_ids))
+    )
+    await session.execute(
+        select(BoardRecord.id)
+        .where(BoardRecord.id.in_(boards))
+        .order_by(BoardRecord.id)
+        .with_for_update()
+    )
+
+
 async def locked_task(
     session: AsyncSession, ports: PortDirectory, viewer: UUID, task_id: UUID, *, lock: bool = True
 ) -> TaskRecord:
-    """The task the viewer may read, its row locked for the write unless told not to; 404."""
+    """The task the viewer may read, its row locked for the write unless told not to — after
+    the reader's board it sits on (`lock_boards_of`); 404."""
     readable = ports.get(ACCESS_POLICY).readable(TASK_RESOURCE, Viewer(viewer))
     statement = select(TaskRecord).where(TaskRecord.id == task_id, readable)
+    if lock:
+        await lock_boards_of(session, viewer, [task_id])
     record = await session.scalar(statement.with_for_update() if lock else statement)
     if record is None:
         raise TaskNotFoundError

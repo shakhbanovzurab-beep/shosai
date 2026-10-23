@@ -36,6 +36,7 @@ from shosai.features.identity.contracts import Principal
 from shosai.features.tasks.application.attachment_releases import AttachmentReleases
 from shosai.features.tasks.application.scoping import (
     Scoping,
+    lock_boards_of,
     raise_revisions,
     rule_failure,
     scope_in,
@@ -228,10 +229,12 @@ class TaskWrites:
         readable = self._ports.get(ACCESS_POLICY).readable(TASK_RESOURCE, Viewer(principal.user_id))
         now = self._clock()
         async with self._transactions.begin(scope_in(principal, org_id)) as session:
+            await lock_boards_of(session, principal.user_id, task_ids)
             rows = (
                 await session.scalars(
                     select(TaskRecord)
                     .where(TaskRecord.id.in_(list(task_ids)), readable)
+                    .order_by(TaskRecord.id)
                     .with_for_update()
                 )
             ).all()

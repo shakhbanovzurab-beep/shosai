@@ -4,7 +4,9 @@ Whoever may read a task may change it (TK-D2). A field left out stays and `null`
 without a due day there is no start, a start is not after the due day, a schedule set on a
 task without a due day gives it the first date from today. A member does only a workspace's
 task and is an active member of it; a name as written goes only on a personal task. A field
-the person sets loses Leo's mark on it. Marking a recurring task done makes its next one.
+the person sets loses Leo's mark on it. Marking a recurring task done makes its next one. A
+status changed without a move works the stopwatch on the changer's board as the move its
+next read makes (§3.9); plan and fact are minutes, and a Jira task has neither.
 The change touches the meeting's set of the task, raises the revision of the reader's board
 where it sits, and publishes its events — all in the change's transaction.
 """
@@ -23,6 +25,7 @@ from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.errors import AppError
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal
+from shosai.features.tasks.application import clock_rules
 from shosai.features.tasks.application.recurring import next_of
 from shosai.features.tasks.application.scoping import (
     Scoping,
@@ -65,6 +68,8 @@ class Edit:
     # Что прислали об исполнителе: имя — только личной задаче, участника — задаче пространства.
     sent_assignee_id: bool = False
     sent_assignee_name: bool = False
+    # Карточку переносят следом (`Cards.change`): секундомер ведёт сам перенос.
+    moving: bool = False
 
 
 class TaskEdits:
@@ -109,10 +114,13 @@ class TaskEdits:
         if not isinstance(edit.cover, Unset):
             await _set_cover(session, record, edit.cover)
         before = before_of(record)
+        status = TaskStatus(record.status)
         _write(record, change, days)
         leo = tuple(LeoField(field) for field in record.leo_fields)
         record.leo_fields = [field.value for field in leo_fields_after(leo, change)]
         made = await self._status(session, viewer, record, change, (today, now))
+        if record.status != status.value and not edit.moving:
+            await clock_rules.status_changed(session, viewer, record, status, now)
         record.version += 1
         record.updated_at = now
         await session.flush()
@@ -147,11 +155,15 @@ class TaskEdits:
 
 
 def _refuse_misfits(record: TaskRecord, edit: Edit) -> None:
-    """A member only on a workspace's task, a name only on a personal one."""
+    """A member only on a workspace's task, a name only on a personal one; no plan or fact on
+    a Jira task (KG-D8)."""
     if (record.org_id is None and edit.sent_assignee_id) or (
         record.org_id is not None and edit.sent_assignee_name
     ):
         raise invalid()
+    tracked = {"plan_minutes", "fact_minutes"} & edit.change.present()
+    if tracked and record.source == TaskSource.JIRA.value:
+        raise AppError("jira_unsupported", HTTPStatus.CONFLICT)
 
 
 async def _set_cover(session: AsyncSession, record: TaskRecord, cover: UUID | None) -> None:
@@ -200,5 +212,9 @@ def _write(record: TaskRecord, change: TaskChange, days: Schedule) -> None:
         )
     if not isinstance(change.project_id, Unset):
         record.project_id = change.project_id
+    if not isinstance(change.plan_minutes, Unset):
+        record.plan_minutes = change.plan_minutes
+    if not isinstance(change.fact_minutes, Unset):
+        record.fact_minutes = change.fact_minutes
     record.starts_on, record.due_on = days.starts_on, days.due_on
     record.recurrence = recurrence_json(days.recurrence) if days.recurrence else None

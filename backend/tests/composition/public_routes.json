@@ -23,6 +23,7 @@
     "DELETE /v1/tasks/{task_id}/attachments/{attachment_id}",
     "DELETE /v1/tasks/{task_id}/comments/{comment_id}",
     "DELETE /v1/tasks/{task_id}/subtasks/{subtask_id}",
+    "DELETE /v1/tasks/{task_id}/timer",
     "DELETE /v1/tasks/{task_id}/values/{sticker_id}",
     "GET /email/{name}",
     "GET /v1/admin/plans",
@@ -156,7 +157,12 @@
     "POST /v1/tasks/delete",
     "POST /v1/tasks/{task_id}/attachments",
     "POST /v1/tasks/{task_id}/comments",
+    "POST /v1/tasks/{task_id}/stopwatch/reset",
+    "POST /v1/tasks/{task_id}/stopwatch/start",
+    "POST /v1/tasks/{task_id}/stopwatch/stop",
     "POST /v1/tasks/{task_id}/subtasks",
+    "POST /v1/tasks/{task_id}/timer/pause",
+    "POST /v1/tasks/{task_id}/timer/resume",
     "POST /v1/unsubscribe",
     "PUT /v1/boards/incoming",
     "PUT /v1/boards/{board_id}/layout",
@@ -167,6 +173,7 @@
     "PUT /v1/notes/templates/{template_id}",
     "PUT /v1/notes/{meeting_id}/my-notes",
     "PUT /v1/notes/{meeting_id}/share-link",
+    "PUT /v1/tasks/{task_id}/timer",
     "PUT /v1/tasks/{task_id}/values/{sticker_id}"
   ],
   "ws": [

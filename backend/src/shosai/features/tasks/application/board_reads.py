@@ -3,15 +3,15 @@
 A board shows its open cards and those done within 30 days (TK-D5) that its person may
 still read; the count of a board is the same set. A read first sets the board right
 (`landing`), under the board's lock, so the cards come in their settled order. The cards'
-names, spaces, counts and covers are read once for the whole board, and the covers' preview
-links are signed after the read's transaction closes.
+names, spaces, counts, covers, values and time fields are read once for the whole board, and
+the covers' preview links are signed after the read's transaction closes.
 """
 
 from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import replace
 from datetime import UTC, datetime
-from typing import Final
+from typing import Any, Final
 from uuid import UUID
 
 from sqlalchemy import ColumnElement, func, select
@@ -56,7 +56,9 @@ CARD_COLUMNS: Final = (
     TaskRecord.id, TaskRecord.user_id, TaskRecord.org_id, TaskRecord.title, TaskRecord.status,
     TaskRecord.priority, TaskRecord.starts_on, TaskRecord.due_on, TaskRecord.assignee_user_id,
     TaskRecord.assignee_name, TaskRecord.recurrence, TaskRecord.leo_fields, TaskRecord.source,
-    TaskRecord.cover_attachment_id,
+    TaskRecord.cover_attachment_id, TaskRecord.stopwatch_since, TaskRecord.stopwatch_total_ms,
+    TaskRecord.stopwatch_by_column, TaskRecord.timer_length_ms, TaskRecord.timer_ends_at,
+    TaskRecord.timer_paused_left_ms, TaskRecord.plan_minutes, TaskRecord.fact_minutes,
 )  # fmt: skip
 
 
@@ -165,16 +167,11 @@ class BoardReads:
             .order_by(PLACED.rank)
         )  # fmt: skip
         placed: list[PlacedCard] = []
+        width = len(CARD_COLUMNS)
         for row in rows:
-            (
-                task_id, owner, org_id, title, status, priority, starts_on, due_on, member, name,
-                recurrence, leo_fields, source, cover_id, column_id, done, total, comments, files,
-                held, values,
-            ) = row  # fmt: skip
-            card = CardRecord(
-                task_id, owner, org_id, title, status, priority, starts_on, due_on, member, name,
-                recurrence, leo_fields, source, cover_id,
-            )  # fmt: skip
+            fields: tuple[Any, ...] = tuple(row)
+            card = CardRecord(*fields[:width])
+            column_id, done, total, comments, files, held, values = fields[width:]
             counted = counted_of((done, total, comments, files, held))
             placed.append(PlacedCard(card, column_id, counted, values_of(values)))
         return placed

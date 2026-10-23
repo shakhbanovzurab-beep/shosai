@@ -19,6 +19,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER
+from shosai.features.tasks.application.clock_views import clocks_of
 from shosai.features.tasks.application.part_reads import counts_of, covers_of
 from shosai.features.tasks.application.sticker_views import StickerView
 from shosai.features.tasks.application.task_parts import (
@@ -29,6 +30,7 @@ from shosai.features.tasks.application.task_parts import (
     CoverRef,
     SubtaskView,
 )
+from shosai.features.tasks.domain.clocks import NO_CLOCKS, TaskClocks
 from shosai.features.tasks.domain.recurrence import Recurrence, recurrence_of
 from shosai.features.tasks.domain.stickers import StickerValue
 from shosai.features.tasks.domain.tasks import LeoField, Priority, TaskSource, TaskStatus
@@ -72,6 +74,7 @@ class CardView:
     cover: CoverRef | None = None
     # Значения своих полей доски, на которой лежит карточка (шаг 4s).
     values: Mapping[UUID, StickerValue] = field(default_factory=dict)
+    clocks: TaskClocks = NO_CLOCKS
 
 
 @dataclass(frozen=True, slots=True)
@@ -241,6 +244,7 @@ def card_of(record: CardFacts, viewer: UUID, context: ViewContext) -> CardView:
         can_delete=may_delete(record, viewer, context.roles),
         counts=context.counts.get(record.id, NONE_COUNTED),
         cover=_cover(record, context),
+        clocks=clocks_of(record),
     )
 
 

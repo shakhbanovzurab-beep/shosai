@@ -14,6 +14,7 @@ from shosai.features.tasks.application.task_edits import Edit
 from shosai.features.tasks.application.task_parts import AttachmentView
 from shosai.features.tasks.application.views import CardView, TaskView
 from shosai.features.tasks.channels.http.card_models import AssigneeOut, Card, CoverOut, SpaceOut
+from shosai.features.tasks.channels.http.clock_shapes import clocks_out
 from shosai.features.tasks.channels.http.detail_models import (
     AttachmentOut,
     DayRule,
@@ -32,6 +33,7 @@ from shosai.features.tasks.channels.http.detail_models import (
 from shosai.features.tasks.channels.http.sticker_shapes import other_values_out, values_out
 from shosai.features.tasks.channels.http.strict import Strict
 from shosai.features.tasks.domain.changes import UNSET, TaskChange, Unset
+from shosai.features.tasks.domain.clocks import TRACKED_MINUTES_MAX
 from shosai.features.tasks.domain.recurrence import Every
 from shosai.features.tasks.domain.recurrence import Recurrence as Schedule
 from shosai.features.tasks.domain.tasks import Assignee, Priority, TaskStatus
@@ -80,6 +82,8 @@ class TaskPatchBody(Strict):
     recurrence: Recurrence | None = None
     cover_attachment_id: UUID | None = None
     project_id: UUID | None = None
+    plan_minutes: int | None = Field(default=None, ge=0, le=TRACKED_MINUTES_MAX)
+    fact_minutes: int | None = Field(default=None, ge=0, le=TRACKED_MINUTES_MAX)
 
 
 class TasksDeleteBody(Strict):
@@ -154,6 +158,8 @@ def _change_of(body: TaskPatchBody, sent: set[str]) -> TaskChange:
         recurrence=schedule_of(body.recurrence) if "recurrence" in sent else UNSET,
         assignee=_assignee_of(body, sent),
         project_id=body.project_id if "project_id" in sent else UNSET,
+        plan_minutes=body.plan_minutes if "plan_minutes" in sent else UNSET,
+        fact_minutes=body.fact_minutes if "fact_minutes" in sent else UNSET,
     )
 
 
@@ -184,6 +190,7 @@ def _card(card: CardView) -> dict[str, object]:
         "cover": None
         if card.cover is None
         else CoverOut(attachment_id=card.cover.attachment_id, preview_url=card.cover.preview_url),
+        **clocks_out(card.clocks),
     }
 
 

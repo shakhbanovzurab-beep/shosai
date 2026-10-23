@@ -1,13 +1,15 @@
 """A board's cards: a new personal task or a copy where it is put, and a card moved or edited
-(tasks plan §3.3, §3.5 flow 3, §3.14).
+(tasks plan §3.3, §3.5 flow 3, §3.9, §3.14).
 
 Writes take the board's lock. A new card is a hand-made personal task in its column's
-status; a board shows 1 000 open cards at most, so only a done column takes more. A copy of
-a card of the board takes its words, priority, dates, schedule, assignee name, values and
-checklist unticked, never its cover, comments or Leo's marks; a workspace's task is not copied. A
-moved card takes its new column's kind as its status, with that change's events and rules;
-its title and priority change as the task's own patch changes them. A card's transaction is
-opened in its task's space, as row-level security writes a workspace's rows only there.
+status, its stopwatch started if the board starts it on arrival; a board shows 1 000 open
+cards at most, so only a done column takes more. A copy of a card of the board takes its
+words, priority, dates, schedule, assignee name, values and checklist unticked, never its
+cover, comments, Leo's marks, timer, plan or fact; a workspace's task is not copied. A moved
+card takes its new column's kind as its status, with that change's events and rules, and
+its stopwatch follows as the board's automations say; its title and priority change as the
+task's own patch changes them. A card's transaction is opened in its task's space, as
+row-level security writes a workspace's rows only there.
 """
 
 from collections.abc import Callable
@@ -24,10 +26,11 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.ids import new_id
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal
+from shosai.features.tasks.application import clock_rules
 from shosai.features.tasks.application.board_access import owned_board
 from shosai.features.tasks.application.boards import board_failure
 from shosai.features.tasks.application.columns import not_found as column_not_found
-from shosai.features.tasks.application.placements import CardSpot, place
+from shosai.features.tasks.application.placements import CardSpot, board_columns, place
 from shosai.features.tasks.application.recurring import copy_checklist
 from shosai.features.tasks.application.scoping import Scoping, locked_task, rule_failure, scope_in
 from shosai.features.tasks.application.task_edits import Edit, TaskEdits
@@ -37,7 +40,7 @@ from shosai.features.tasks.application.views import TaskView
 from shosai.features.tasks.contracts import TaskNotFoundError
 from shosai.features.tasks.domain.boards import BoardRuleError, check_card_room
 from shosai.features.tasks.domain.changes import UNSET, TaskChange, Unset
-from shosai.features.tasks.domain.placement import status_after_move
+from shosai.features.tasks.domain.placement import spot_for, status_after_move
 from shosai.features.tasks.domain.recurrence import recurrence_of
 from shosai.features.tasks.domain.tasks import (
     Assignee,
@@ -119,6 +122,9 @@ class Cards:
             await place(
                 session, viewer, task_id, CardSpot(board_id, new.column_id, new.position), now
             )
+            made = await session.get(TaskRecord, task_id)
+            if made is not None:
+                await clock_rules.arrived(session, made, (board_id, new.column_id), now)
             view = await self._reads.view(session, viewer, task_id)
         return await self._reads.signed(principal, view)
 
@@ -134,20 +140,26 @@ class Cards:
             if placed is None or placed.board_id != board_id:
                 raise TaskNotFoundError
             record = await locked_task(session, self._ports, viewer, task_id)
+            before = TaskStatus(record.status)
             status: TaskStatus | Unset = UNSET
             if change.move is not None:
                 kind = await _column_kind(session, board_id, change.move[0])
-                moved = status_after_move(TaskStatus(record.status), kind)
-                status = UNSET if moved.value == record.status else moved
+                moved = status_after_move(before, kind)
+                status = UNSET if moved is before else moved
             edit = TaskChange(
                 title=UNSET if change.title is None else change.title,
                 priority=change.priority if change.priority_sent else UNSET,
                 status=status,
             )
-            await self._edits.apply(session, viewer, record, Edit(change=edit))
+            moving = change.move is not None
+            await self._edits.apply(session, viewer, record, Edit(change=edit, moving=moving))
             if change.move is not None:
+                # Откуда: где карточка показана для прежнего статуса — так её поставит чтение.
+                columns = await board_columns(session, board_id)
+                source = spot_for(before, columns, placed.column_id).column_id
                 spot = CardSpot(board_id, change.move[0], change.move[1])
                 await place(session, viewer, task_id, spot, now)
+                await clock_rules.moved(session, record, (board_id, source, spot.column_id), now)
             view = await self._reads.view(session, viewer, task_id)
         return await self._reads.signed(principal, view)
 

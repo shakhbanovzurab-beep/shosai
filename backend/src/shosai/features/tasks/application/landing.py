@@ -3,9 +3,10 @@
 A card whose task's status left its column's kind — the task was ticked in a workspace, in
 Today, by Leo — goes to the top of the first column of its status. The incoming board takes
 the open tasks that came to its person and sit on none of their boards, on top of the first
-column of their status, once: a task sits on at most one of a person's boards. Both happen
-in the read's transaction under the board's lock and raise its revision, so the order the
-person sees next stays.
+column of their status, once: a task sits on at most one of a person's boards, and its
+stopwatch starts if the board starts it on arrival (§3.9). Both happen in the read's
+transaction under the board's lock and raise its revision, so the order the person sees
+next stays; realigning a card never acts on its stopwatch.
 """
 
 from collections import defaultdict
@@ -16,12 +17,13 @@ from uuid import UUID
 from sqlalchemy import ColumnElement, and_, exists, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from shosai.features.tasks.application.placements import CardSpot, put_on_top
+from shosai.features.tasks.application.clock_rules import board_automations, start_landed
+from shosai.features.tasks.application.placements import CardSpot, board_columns, put_on_top
 from shosai.features.tasks.domain.boards import BOARD_OPEN_CARDS_MAX
+from shosai.features.tasks.domain.clocks import starts_on_arrival
 from shosai.features.tasks.domain.placement import BoardColumn, first_column_of, spot_for
 from shosai.features.tasks.domain.tasks import TaskSource, TaskStatus
 from shosai.features.tasks.infrastructure.board_records import (
-    BoardColumnRecord,
     BoardRecord,
     TaskPlacementRecord,
 )
@@ -44,18 +46,6 @@ def waiting_for(viewer: UUID) -> ColumnElement[bool]:
         ),
         ~exists().where(PLACED.user_id == viewer, PLACED.task_id == TaskRecord.id),
     )
-
-
-async def board_columns(session: AsyncSession, board_id: UUID) -> list[BoardColumn]:
-    """The board's columns, left to right."""
-    rows = await session.execute(
-        select(BoardColumnRecord.id, BoardColumnRecord.kind, BoardColumnRecord.position)
-        .where(BoardColumnRecord.board_id == board_id)
-        .order_by(BoardColumnRecord.position)
-    )
-    return [
-        BoardColumn(column_id, TaskStatus(kind), position) for column_id, kind, position in rows
-    ]
 
 
 type Sitting = Sequence[tuple[UUID, UUID, TaskStatus]]
@@ -82,6 +72,7 @@ async def reconcile(
         spot = spot_for(status, columns, column_id)
         if spot.to_top:
             tops[spot.column_id].append(task_id)
+    landed: list[tuple[UUID, UUID]] = []
     if incoming:
         waiting = await session.execute(
             select(TaskRecord.id, TaskRecord.status)
@@ -93,8 +84,11 @@ async def reconcile(
             target = first_column_of(columns, TaskStatus(kind))
             if target is not None:
                 tops[target.column_id].append(task_id)
+                landed.append((task_id, target.column_id))
     for column_id, task_ids in tops.items():
         await put_on_top(session, viewer, CardSpot(board_id, column_id, 0), task_ids, now)
+    if landed and starts_on_arrival(await board_automations(session, board_id), done=False):
+        await start_landed(session, landed, now)
     if tops:
         await session.execute(
             update(BoardRecord)

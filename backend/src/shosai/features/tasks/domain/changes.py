@@ -10,6 +10,7 @@ from enum import Enum
 from typing import Final
 from uuid import UUID
 
+from shosai.features.tasks.domain.clocks import TRACKED_MINUTES_MAX
 from shosai.features.tasks.domain.recurrence import Recurrence, checked_recurrence, first_due
 from shosai.features.tasks.domain.tasks import (
     Assignee,
@@ -46,6 +47,8 @@ class TaskChange:
     recurrence: Recurrence | Unset | None = UNSET
     assignee: Assignee | Unset = UNSET
     project_id: UUID | Unset | None = UNSET
+    plan_minutes: int | Unset | None = UNSET
+    fact_minutes: int | Unset | None = UNSET
 
     def present(self) -> frozenset[str]:
         """The names of the fields the change sets."""
@@ -65,6 +68,9 @@ def checked_change(change: TaskChange, org_id: UUID | None) -> TaskChange:
         checked = replace(checked, assignee=checked_assignee(org_id, change.assignee))
     if isinstance(change.recurrence, Recurrence):
         checked = replace(checked, recurrence=checked_recurrence(change.recurrence))
+    for minutes in (change.plan_minutes, change.fact_minutes):
+        if isinstance(minutes, int) and not 0 <= minutes <= TRACKED_MINUTES_MAX:
+            raise TaskRuleError(TaskRule.INVALID)
     return checked
 
 

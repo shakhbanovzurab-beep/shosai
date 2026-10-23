@@ -55,7 +55,7 @@ DROP_FUNCTION: Final = "DROP FUNCTION %(function)s(%(arguments)s)"
 
 type Privilege = Literal["SELECT", "INSERT", "UPDATE", "DELETE"]
 # Типы аргументов функций, которые открывают ревизии: закрытый набор, как и права.
-type FunctionArgument = Literal["uuid", "uuid[]", "text[]", "text"]
+type FunctionArgument = Literal["uuid", "uuid[]", "text[]", "text", "timestamptz"]
 APPLICATION_WRITES: Final[tuple[Privilege, ...]] = ("SELECT", "INSERT", "UPDATE", "DELETE")
 
 

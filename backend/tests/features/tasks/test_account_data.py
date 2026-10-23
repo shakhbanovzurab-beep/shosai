@@ -3,6 +3,7 @@
 import uuid
 from collections.abc import Collection
 from dataclasses import dataclass, field
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from typing import cast
 
@@ -21,6 +22,7 @@ from shosai.features.tasks.infrastructure.board_records import (
     TaskPlacementRecord,
     TaskSettingsRecord,
 )
+from shosai.features.tasks.infrastructure.clock_records import TaskClockSpanRecord
 from shosai.features.tasks.infrastructure.sticker_records import (
     StickerRecord,
     StickerStateRecord,
@@ -34,11 +36,12 @@ from shosai.features.tasks.infrastructure.thread_records import (
 from tests.harness.database_access import DatabaseAccess
 
 HELD = uuid.uuid4()
+STARTED = datetime(2026, 10, 22, 9, tzinfo=UTC)
 
 
 async def seed(homes: DatabaseAccess, person: uuid.UUID, org: uuid.UUID) -> tuple[uuid.UUID, ...]:
-    """A board with a personal and a workspace task, each with a line and a comment, a set and
-    the settings."""
+    """A board with a personal and a workspace task, each with a line, a comment and an hour of
+    the stopwatch, a set and the settings."""
     board, column, own, shared = (uuid.uuid4() for _ in range(4))
     async with homes.transactions.begin(TenancyScope(Home.RU, person, org)) as session:
         session.add(
@@ -74,6 +77,12 @@ async def seed(homes: DatabaseAccess, person: uuid.UUID, org: uuid.UUID) -> tupl
                 TaskCommentRecord(
                     id=uuid.uuid4(), task_id=task, user_id=person, org_id=org_id,
                     author_user_id=person, body="Комментарий",
+                )
+            )  # fmt: skip
+            session.add(
+                TaskClockSpanRecord(
+                    id=uuid.uuid4(), task_id=task, user_id=person, org_id=org_id,
+                    column_id=column, started_at=STARTED, stopped_at=STARTED + timedelta(hours=1),
                 )
             )  # fmt: skip
             if org_id is None:
@@ -136,10 +145,12 @@ async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
         "tasks.jsonl", "meeting_task_sets.jsonl", "boards.jsonl", "board_columns.jsonl",
         "task_placements.jsonl", "task_settings.jsonl", "task_subtasks.jsonl",
         "task_comments.jsonl", "task_attachments.jsonl", "stickers.jsonl", "sticker_states.jsonl",
-        "board_stickers.jsonl", "task_sticker_values.jsonl",
+        "board_stickers.jsonl", "task_sticker_values.jsonl", "task_clock_spans.jsonl",
     }  # fmt: skip
     assert str(own).encode() in exported["task_comments.jsonl"]
     assert str(shared).encode() not in exported["task_subtasks.jsonl"]
+    assert str(own).encode() in exported["task_clock_spans.jsonl"]
+    assert str(shared).encode() not in exported["task_clock_spans.jsonl"]
     assert str(own).encode() in exported["tasks.jsonl"]
     assert str(shared).encode() not in exported["tasks.jsonl"]
     assert str(shared).encode() in exported["task_placements.jsonl"]

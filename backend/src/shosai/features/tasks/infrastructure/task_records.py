@@ -1,6 +1,7 @@
 """Tasks and the sets of meetings' tasks in each home (tasks plan §3.4, §3.8).
 
-Revisions `b3d9e5a7c142`, `c8e4a1f6b293` and `a4c6e8b2d397` (the cover).
+Revisions `b3d9e5a7c142`, `c8e4a1f6b293`, `a4c6e8b2d397` (the cover) and `d9f2b4c6e813` (the
+timer, plan and fact).
 
 `tasks` is the shareable resource `task`: `user_id`, `org_id` and `access` as workspaces'
 access policy reads them, its assignee the named reader and its meeting the parent, so a
@@ -17,6 +18,7 @@ from uuid import UUID
 
 from sqlalchemy import (
     ARRAY,
+    BigInteger,
     CheckConstraint,
     Date,
     DateTime,
@@ -35,12 +37,18 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from shosai.core.access.shareable import ShareableResource
 from shosai.core.db.model_base import ModelBase
+from shosai.features.tasks.domain.clocks import TIMER_MAX_MS, TIMER_MIN_MS, TRACKED_MINUTES_MAX
 
 STATUSES: Final = "'todo', 'in_progress', 'done'"
 PRIORITIES: Final = "'high', 'medium', 'low'"
 SOURCES: Final = "'manual', 'meeting', 'hub', 'mail', 'jira'"
 CREATORS: Final = "'person', 'leo', 'meeting', 'sync'"
 OPEN: Final = "status <> 'done'"
+# Снятое расписание — SQL NULL, не JSON null (ревизия `d9f2b4c6e813`).
+RECURRENCE_KNOWN: Final = (
+    "recurrence IS NULL OR (jsonb_typeof(recurrence) = 'object'"
+    " AND recurrence ->> 'every' IN ('day', 'week', 'month'))"
+)
 
 
 class TaskRecord(ModelBase):
@@ -81,12 +89,32 @@ class TaskRecord(ModelBase):
         CheckConstraint(
             "starts_on IS NULL OR (due_on IS NOT NULL AND starts_on <= due_on)", name="range"
         ),
-        CheckConstraint(
-            "recurrence IS NULL OR recurrence ->> 'every' IN ('day', 'week', 'month')",
-            name="recurrence_known",
-        ),
+        CheckConstraint(RECURRENCE_KNOWN, name="recurrence_known"),
         CheckConstraint(
             "leo_fields <@ ARRAY['assignee', 'due', 'priority']::text[]", name="leo_fields_known"
+        ),
+        # Сводка секундомера по отрезкам: с какого момента идёт, закрытое время всего и по колонкам.
+        CheckConstraint(
+            "(stopwatch_total_ms IS NULL) = (stopwatch_by_column IS NULL)"
+            " AND (stopwatch_since IS NULL OR stopwatch_total_ms IS NOT NULL)"
+            " AND (stopwatch_total_ms IS NULL OR stopwatch_total_ms >= 0)"
+            " AND (stopwatch_by_column IS NULL OR jsonb_typeof(stopwatch_by_column) = 'object')",
+            name="stopwatch_shape",
+        ),
+        # Таймер: длина с моментом конца, пока идёт, или с остатком на паузе (ADR 0061).
+        CheckConstraint(
+            "(timer_length_ms IS NULL AND timer_ends_at IS NULL AND timer_paused_left_ms IS NULL)"
+            f" OR (timer_length_ms BETWEEN {TIMER_MIN_MS} AND {TIMER_MAX_MS}"
+            " AND num_nonnulls(timer_ends_at, timer_paused_left_ms) = 1)",
+            name="timer_shape",
+        ),
+        CheckConstraint(
+            f"plan_minutes IS NULL OR plan_minutes BETWEEN 0 AND {TRACKED_MINUTES_MAX}",
+            name="plan_range",
+        ),
+        CheckConstraint(
+            f"fact_minutes IS NULL OR fact_minutes BETWEEN 0 AND {TRACKED_MINUTES_MAX}",
+            name="fact_range",
         ),
         # Обложка — вложение этой же задачи; удаление вложения снимает её (ADR 0064).
         ForeignKeyConstraint(
@@ -151,7 +179,7 @@ class TaskRecord(ModelBase):
     priority: Mapped[str | None] = mapped_column(Text)
     starts_on: Mapped[date | None] = mapped_column(Date)
     due_on: Mapped[date | None] = mapped_column(Date)
-    recurrence: Mapped[dict[str, object] | None] = mapped_column(JSONB)
+    recurrence: Mapped[dict[str, object] | None] = mapped_column(JSONB(none_as_null=True))
     leo_fields: Mapped[list[str]] = mapped_column(ARRAY(Text), server_default=text("'{}'::text[]"))
     recurred_from_id: Mapped[UUID | None] = mapped_column(
         Uuid, ForeignKey("tasks.id", ondelete="SET NULL")
@@ -166,6 +194,16 @@ class TaskRecord(ModelBase):
     source_meeting_id: Mapped[UUID | None] = mapped_column(Uuid)
     source_finding_id: Mapped[UUID | None] = mapped_column(Uuid)
     cover_attachment_id: Mapped[UUID | None] = mapped_column(Uuid)
+    # Время задачи (шаг 4a, ревизия `d9f2b4c6e813`): сводка отрезков `task_clock_spans`,
+    # пишется вместе с ними под блокировкой задачи, — и таймер, план и факт.
+    stopwatch_since: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    stopwatch_total_ms: Mapped[int | None] = mapped_column(BigInteger)
+    stopwatch_by_column: Mapped[dict[str, int] | None] = mapped_column(JSONB(none_as_null=True))
+    timer_length_ms: Mapped[int | None] = mapped_column(BigInteger)
+    timer_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    timer_paused_left_ms: Mapped[int | None] = mapped_column(BigInteger)
+    plan_minutes: Mapped[int | None] = mapped_column(Integer)
+    fact_minutes: Mapped[int | None] = mapped_column(Integer)
     created_by: Mapped[str] = mapped_column(Text, server_default="person")
     version: Mapped[int] = mapped_column(Integer, server_default="1")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

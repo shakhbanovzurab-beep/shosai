@@ -13,6 +13,7 @@ from uuid import UUID
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.features.tasks.domain.placement import BoardColumn
 from shosai.features.tasks.domain.ranks import needs_rebalance, rank_at, rank_between, spaced_ranks
 from shosai.features.tasks.domain.tasks import TaskStatus
 from shosai.features.tasks.infrastructure.board_records import (
@@ -50,6 +51,18 @@ async def column_cards(
         .order_by(TaskPlacementRecord.rank)
     )
     return [(task_id, rank) for task_id, rank in rows]
+
+
+async def board_columns(session: AsyncSession, board_id: UUID) -> list[BoardColumn]:
+    """The board's columns, left to right."""
+    rows = await session.execute(
+        select(BoardColumnRecord.id, BoardColumnRecord.kind, BoardColumnRecord.position)
+        .where(BoardColumnRecord.board_id == board_id)
+        .order_by(BoardColumnRecord.position)
+    )
+    return [
+        BoardColumn(column_id, TaskStatus(kind), position) for column_id, kind, position in rows
+    ]
 
 
 @dataclass(frozen=True, slots=True)

@@ -20,6 +20,7 @@ from shosai.features.tasks.application.board_reads import BoardReads
 from shosai.features.tasks.application.board_stickers import BoardStickers
 from shosai.features.tasks.application.boards import BoardWrites
 from shosai.features.tasks.application.cards import Cards
+from shosai.features.tasks.application.clocks import Clocks
 from shosai.features.tasks.application.columns import Columns
 from shosai.features.tasks.application.comments import Comments
 from shosai.features.tasks.application.stickers import Stickers
@@ -31,6 +32,7 @@ from shosai.features.tasks.application.values import Values
 from shosai.features.tasks.channels.http.attachments import build_attachments_router
 from shosai.features.tasks.channels.http.board_parts import build_board_parts_router
 from shosai.features.tasks.channels.http.boards import build_boards_router
+from shosai.features.tasks.channels.http.clocks import build_clocks_router
 from shosai.features.tasks.channels.http.stickers import (
     build_stickers_router,
     build_values_router,
@@ -56,6 +58,7 @@ from shosai.features.tasks.infrastructure.board_records import (
     TaskPlacementRecord,
     TaskSettingsRecord,
 )
+from shosai.features.tasks.infrastructure.clock_records import TaskClockSpanRecord
 from shosai.features.tasks.infrastructure.sticker_records import (
     BoardStickerRecord,
     StickerRecord,
@@ -93,6 +96,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             ),
             build_stickers_router((Stickers(transactions), BoardStickers(transactions)), ports),
             build_values_router(Values(transactions, ports), ports),
+            build_clocks_router(Clocks(transactions, ports), ports),
         ),
         task_handlers=task_handlers(AttachmentReleases(transactions, ports)),
         periodic_jobs=PERIODIC_JOBS,
@@ -121,6 +125,7 @@ TASKS = FeatureModule(
         StickerStateRecord,
         BoardStickerRecord,
         TaskStickerValueRecord,
+        TaskClockSpanRecord,
     ),
     events=(TaskAssigned, TaskDueChanged, TaskCompleted, TaskReopened, TaskDeleted),
     account_data=(ACCOUNT_DATA,),

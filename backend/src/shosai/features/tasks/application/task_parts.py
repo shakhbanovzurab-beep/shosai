@@ -65,7 +65,28 @@ class AttachmentView:
     preview_url: str | None = None
 
 
-class CardFacts(Protocol):
+class ClockFacts(Protocol):
+    """A task row's time fields: its stopwatch's sum, timer, plan and fact (§3.9)."""
+
+    @property
+    def stopwatch_since(self) -> datetime | None: ...
+    @property
+    def stopwatch_total_ms(self) -> int | None: ...
+    @property
+    def stopwatch_by_column(self) -> dict[str, int] | None: ...
+    @property
+    def timer_length_ms(self) -> int | None: ...
+    @property
+    def timer_ends_at(self) -> datetime | None: ...
+    @property
+    def timer_paused_left_ms(self) -> int | None: ...
+    @property
+    def plan_minutes(self) -> int | None: ...
+    @property
+    def fact_minutes(self) -> int | None: ...
+
+
+class CardFacts(ClockFacts, Protocol):
     """The fields of a task row a card shows and its access needs: a mapped task, or the
     lighter row a board reads (`CardRecord`)."""
 
@@ -117,3 +138,11 @@ class CardRecord:
     leo_fields: list[str]
     source: str
     cover_attachment_id: UUID | None
+    stopwatch_since: datetime | None
+    stopwatch_total_ms: int | None
+    stopwatch_by_column: dict[str, int] | None
+    timer_length_ms: int | None
+    timer_ends_at: datetime | None
+    timer_paused_left_ms: int | None
+    plan_minutes: int | None
+    fact_minutes: int | None

@@ -2,7 +2,8 @@
 their limits (step 4).
 
 The board holds 1 000 open cards and 200 done ones across its columns, half of the open
-cards with a checklist, among tasks of others; the process's startup heap is frozen as the
+cards with a checklist, every open card with a running stopwatch after two closed spans and
+every fifth with a timer (§3.9), among tasks of others; the process's startup heap is frozen as the
 running process freezes it (ADR 0065). Its read sets the
 board right and answers its cards with their counts: p95 at most 300 ms. A full board takes
 no more open cards but takes done ones; a person holds 50 boards.
@@ -42,10 +43,21 @@ INSERT INTO task_subtasks (id, task_id, user_id, title, done, rank)
 SELECT gen_random_uuid(), md5(%(board)s || 't' || g)::uuid, %(person)s::uuid, 'Пункт',
        g %% 4 = 0, 'V'
 FROM generate_series(1, 1000, 2) AS g;
+INSERT INTO task_clock_spans (id, task_id, user_id, column_id, started_at, stopped_at)
+SELECT gen_random_uuid(), md5(%(board)s || 't' || g)::uuid, %(person)s::uuid,
+       CASE WHEN s = 1 THEN %(todo)s::uuid ELSE %(doing)s::uuid END,
+       now() - (4 - s) * interval '1 hour',
+       CASE WHEN s < 3 THEN now() - (3 - s) * interval '1 hour' - interval '10 minutes' END
+FROM generate_series(1, 1000) AS g, generate_series(1, 3) AS s;
+UPDATE tasks SET stopwatch_since = now() - interval '1 hour', stopwatch_total_ms = 6000000,
+       stopwatch_by_column = jsonb_build_object(%(todo)s::text, 3000000, %(doing)s::text, 3000000)
+WHERE id IN (SELECT md5(%(board)s || 't' || g)::uuid FROM generate_series(1, 1000) AS g);
+UPDATE tasks SET timer_length_ms = 3600000, timer_ends_at = now() + interval '30 minutes'
+WHERE id IN (SELECT md5(%(board)s || 't' || g)::uuid FROM generate_series(5, 1000, 5) AS g);
 INSERT INTO tasks (id, user_id, title, created_at, updated_at)
 SELECT gen_random_uuid(), md5('other' || (g %% 300))::uuid, 'Чужая', now(), now()
 FROM generate_series(1, 5000) AS g;
-ANALYZE tasks, task_placements, task_subtasks
+ANALYZE tasks, task_placements, task_subtasks, task_clock_spans
 """
 
 
@@ -90,6 +102,8 @@ async def test_a_board_of_a_thousand_open_cards_answers_within_the_objective(
     )
 
     assert len(cards) == 1200
+    assert sum(card["stopwatch"] is not None for card in cards) == 1000
+    assert sum(card["timer"] is not None for card in cards) == 200
     p95 = statistics.quantiles(took, n=20)[-1]
     assert p95 <= OBJECTIVE, (
         f"p95 {p95 * 1000:.0f} ms, median {statistics.median(took) * 1000:.0f} ms"

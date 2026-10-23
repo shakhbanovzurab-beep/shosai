@@ -33,29 +33,7 @@ from shosai.features.notes.application.meeting_reader import MeetingsFindings, M
 from shosai.features.notes.contracts import MEETING_FINDINGS, MEETING_READER
 from shosai.features.notes.infrastructure.meeting_records import MEETING_RESOURCE
 from shosai.features.notes.module import NOTES
-from shosai.features.tasks.application.attachments import Attachments
-from shosai.features.tasks.application.board_reads import BoardReads
-from shosai.features.tasks.application.board_stickers import BoardStickers
-from shosai.features.tasks.application.boards import BoardWrites
-from shosai.features.tasks.application.cards import Cards
-from shosai.features.tasks.application.columns import Columns
-from shosai.features.tasks.application.comments import Comments
 from shosai.features.tasks.application.placements import CardSpot, place
-from shosai.features.tasks.application.stickers import Stickers
-from shosai.features.tasks.application.subtasks import Subtasks
-from shosai.features.tasks.application.task_edits import TaskEdits
-from shosai.features.tasks.application.task_reads import TaskReads
-from shosai.features.tasks.application.task_writes import TaskWrites
-from shosai.features.tasks.application.values import Values
-from shosai.features.tasks.channels.http.attachments import build_attachments_router
-from shosai.features.tasks.channels.http.board_parts import build_board_parts_router
-from shosai.features.tasks.channels.http.boards import build_boards_router
-from shosai.features.tasks.channels.http.stickers import (
-    build_stickers_router,
-    build_values_router,
-)
-from shosai.features.tasks.channels.http.tasks import build_tasks_router
-from shosai.features.tasks.channels.http.threads import build_threads_router
 from shosai.features.tasks.infrastructure.board_records import (
     BoardColumnRecord,
     BoardRecord,
@@ -79,6 +57,7 @@ from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.features.files.upload_bench import UploadBench
 from tests.features.notes.no_archive import NO_ARCHIVE
+from tests.features.tasks.bench_routes import TestClock, task_routers
 from tests.features.tasks.holding_bench import Holding, holding
 from tests.harness.connections import Connection
 from tests.harness.database_access import DatabaseAccess
@@ -140,6 +119,7 @@ class TaskBench:
     connection: Connection
     files: Holding
     ports: PortDirectory
+    clock: TestClock
 
     async def call(
         self, who: uuid.UUID, method: str, path: str, body: object = None, **headers: str
@@ -264,26 +244,8 @@ async def task_bench(
     effects = EffectLedger(EffectKeyMetrics(CollectorRegistry()))
     async with holding(upload_bench, ports, run_slot) as files:
         install_ports(ports, profiles, transactions, files)
-        services = (
-            TaskReads(transactions, ports),
-            TaskWrites(transactions, ports, (OUTBOX, effects)),
-            TaskEdits(transactions, ports, OUTBOX),
-        )
-        threads = (Subtasks(transactions, ports), Comments(transactions, ports, effects))
-        routers = (
-            build_tasks_router(services, ports),
-            build_threads_router(threads, ports),
-            build_attachments_router(Attachments(transactions, ports), ports),
-            build_boards_router(
-                (BoardReads(transactions, ports), BoardWrites(transactions, ports, OUTBOX)), ports
-            ),
-            build_board_parts_router(
-                (Columns(transactions), Cards(transactions, ports, (services[1], services[2]))),
-                ports,
-            ),
-            build_stickers_router((Stickers(transactions), BoardStickers(transactions)), ports),
-            build_values_router(Values(transactions, ports), ports),
-        )
+        clock = TestClock()
+        routers = task_routers(transactions, ports, (OUTBOX, effects), clock)
         async with client_of(build_probe_app(extra=routers).app) as http:
             connection = run_slot.claimed.connections[HOME]
-            yield TaskBench(http, homes, profiles, connection, files, ports)
+            yield TaskBench(http, homes, profiles, connection, files, ports, clock)
