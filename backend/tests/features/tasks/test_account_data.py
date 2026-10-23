@@ -3,6 +3,7 @@
 import uuid
 from collections.abc import Collection
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import cast
 
 from sqlalchemy import select
@@ -19,6 +20,11 @@ from shosai.features.tasks.infrastructure.board_records import (
     BoardRecord,
     TaskPlacementRecord,
     TaskSettingsRecord,
+)
+from shosai.features.tasks.infrastructure.sticker_records import (
+    StickerRecord,
+    StickerStateRecord,
+    TaskStickerValueRecord,
 )
 from shosai.features.tasks.infrastructure.task_records import MeetingTaskSetRecord, TaskRecord
 from shosai.features.tasks.infrastructure.thread_records import (
@@ -129,7 +135,8 @@ async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
     assert set(exported) == {
         "tasks.jsonl", "meeting_task_sets.jsonl", "boards.jsonl", "board_columns.jsonl",
         "task_placements.jsonl", "task_settings.jsonl", "task_subtasks.jsonl",
-        "task_comments.jsonl", "task_attachments.jsonl",
+        "task_comments.jsonl", "task_attachments.jsonl", "stickers.jsonl", "sticker_states.jsonl",
+        "board_stickers.jsonl", "task_sticker_values.jsonl",
     }  # fmt: skip
     assert str(own).encode() in exported["task_comments.jsonl"]
     assert str(shared).encode() not in exported["task_subtasks.jsonl"]
@@ -142,3 +149,56 @@ async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
     assert released.ids == [HELD, HELD]
     assert await handler.remains(russian) == ()
     assert await handler.remains(european) == ()
+
+
+async def test_a_persons_stickers_go_with_them_and_their_values_stay_on_workspace_tasks(
+    homes: DatabaseAccess,
+) -> None:
+    person, org = uuid.uuid4(), uuid.uuid4()
+    own, shared = await seed(homes, person, org)
+    sticker, state, number = uuid.uuid4(), uuid.uuid4(), uuid.uuid4()
+    async with homes.transactions.begin(TenancyScope(Home.RU, person)) as session:
+        session.add_all(
+            [
+                StickerRecord(id=sticker, user_id=person, kind="states", name="Тип"),
+                StickerRecord(id=number, user_id=person, kind="number", name="Оценка"),
+            ]
+        )
+        await session.flush()
+        session.add(
+            StickerStateRecord(
+                id=state, sticker_id=sticker, user_id=person, name="Баг", color="red", position=0
+            )
+        )
+        await session.flush()
+        session.add(
+            TaskStickerValueRecord(
+                id=uuid.uuid4(), task_id=own, sticker_id=sticker, user_id=person, state_id=state
+            )
+        )
+    async with homes.transactions.begin(TenancyScope(Home.RU, person, org)) as session:
+        for sticker_id, value in (
+            (sticker, {"state_id": state}),
+            (number, {"number": Decimal("2.50")}),
+        ):
+            session.add(
+                TaskStickerValueRecord(
+                    id=uuid.uuid4(), task_id=shared, sticker_id=sticker_id, user_id=person,
+                    org_id=org, **value,
+                )
+            )  # fmt: skip
+    ports = PortDirectory()
+    ports.install([HELD_OBJECTS.bind(cast("HeldObjects", Released()))])
+    handler = TasksAccountData(homes.transactions, ports)
+
+    await handler.erase(AccountRef(person, Home.RU))
+    async with homes.transactions.begin(TenancyScope(Home.RU, person, org)) as session:
+        description = await session.scalar(
+            select(TaskRecord.description).where(TaskRecord.id == shared)
+        )
+        kept = list(await session.scalars(select(TaskStickerValueRecord.task_id)))
+
+    assert description is not None
+    assert sorted(description.split("\n")) == ["Оценка: 2.5", "Тип: Баг"]
+    assert kept == []
+    assert await handler.remains(AccountRef(person, Home.RU)) == ()

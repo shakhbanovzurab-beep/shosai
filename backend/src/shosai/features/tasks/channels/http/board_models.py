@@ -12,8 +12,8 @@ from uuid import UUID
 from pydantic import BaseModel, Field
 
 from shosai.features.tasks.channels.http.card_models import Card
-from shosai.features.tasks.channels.http.detail_models import StickerStateOut
-from shosai.features.tasks.channels.http.shapes import Strict
+from shosai.features.tasks.channels.http.detail_models import CustomStickerOut, StickerStateOut
+from shosai.features.tasks.channels.http.strict import Strict
 from shosai.features.tasks.domain.board_fields import Color, SystemSticker
 from shosai.features.tasks.domain.boards import BoardIcon, BoardTemplate
 from shosai.features.tasks.domain.tasks import Priority, TaskStatus
@@ -98,11 +98,44 @@ class StopwatchStickerOut(SystemStickerOut):
     automations: AutomationsOut
 
 
+class CustomBoardStickerOut(CustomStickerOut):
+    """A custom sticker on a board and whether its cards show it."""
+
+    visible: bool
+
+
+class StickerBoardOut(BaseModel):
+    """A board a sticker is on."""
+
+    id: UUID
+    name: str
+
+
+class StickerUsageOut(BaseModel):
+    """How many tasks carry a value of a sticker, in all and per state."""
+
+    tasks: int
+    states: dict[str, int]
+
+
+class OwnedStickerOut(CustomStickerOut):
+    """A sticker of its owner, with the boards it is on and its usage."""
+
+    boards: list[StickerBoardOut]
+    usage: StickerUsageOut
+
+
+class StickersOut(BaseModel):
+    """The person's stickers."""
+
+    items: list[OwnedStickerOut]
+
+
 class BoardDetailOut(BaseModel):
     """A board as its screen shows it."""
 
     board: BoardSummaryOut
-    stickers: list[StopwatchStickerOut | SystemStickerOut]
+    stickers: list[StopwatchStickerOut | SystemStickerOut | CustomBoardStickerOut]
     columns: list[ColumnOut]
     revision: int
     server_now: datetime

@@ -9,7 +9,7 @@ holds a task that needs it.
 """
 
 from collections.abc import Collection, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime
 from typing import Final
 from uuid import UUID
@@ -20,6 +20,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER
 from shosai.features.tasks.application.part_reads import counts_of, covers_of
+from shosai.features.tasks.application.sticker_views import StickerView
 from shosai.features.tasks.application.task_parts import (
     NONE_COUNTED,
     AttachmentView,
@@ -29,6 +30,7 @@ from shosai.features.tasks.application.task_parts import (
     SubtaskView,
 )
 from shosai.features.tasks.domain.recurrence import Recurrence, recurrence_of
+from shosai.features.tasks.domain.stickers import StickerValue
 from shosai.features.tasks.domain.tasks import LeoField, Priority, TaskSource, TaskStatus
 from shosai.features.tasks.infrastructure.board_records import TaskPlacementRecord
 from shosai.features.tasks.infrastructure.id_lists import among
@@ -68,6 +70,8 @@ class CardView:
     can_delete: bool
     counts: Counts = NONE_COUNTED
     cover: CoverRef | None = None
+    # Значения своих полей доски, на которой лежит карточка (шаг 4s).
+    values: Mapping[UUID, StickerValue] = field(default_factory=dict)
 
 
 @dataclass(frozen=True, slots=True)
@@ -106,6 +110,7 @@ class TaskView:
     finding: FindingRef | None = None
     subtasks: tuple[SubtaskView, ...] = ()
     attachments: tuple[AttachmentView, ...] = ()
+    other_values: tuple[tuple[StickerView, StickerValue], ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

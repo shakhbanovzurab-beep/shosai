@@ -2536,6 +2536,118 @@ export interface paths {
         patch: operations["change_card_v1_boards__board_id__cards__task_id__patch"];
         trace?: never;
     };
+    "/v1/stickers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Stickers
+         * @description The person's own stickers with their boards and usage.
+         */
+        get: operations["list_stickers_v1_stickers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/stickers/{sticker_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Sticker
+         * @description Delete a sticker: off every board, its values gone.
+         */
+        delete: operations["delete_sticker_v1_stickers__sticker_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Change Sticker
+         * @description Rename a sticker or give its states as the full list.
+         */
+        patch: operations["change_sticker_v1_stickers__sticker_id__patch"];
+        trace?: never;
+    };
+    "/v1/boards/{board_id}/stickers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Place Sticker
+         * @description Place one of the person's stickers, or a new one, on the board.
+         */
+        post: operations["place_sticker_v1_boards__board_id__stickers_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/boards/{board_id}/stickers/{sticker_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove Sticker
+         * @description Take a sticker off the board; the tasks keep their values.
+         */
+        delete: operations["remove_sticker_v1_boards__board_id__stickers__sticker_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Show Sticker
+         * @description Show or hide a sticker on the board's cards; set the stopwatch's automations.
+         */
+        patch: operations["show_sticker_v1_boards__board_id__stickers__sticker_id__patch"];
+        trace?: never;
+    };
+    "/v1/tasks/{task_id}/values/{sticker_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set Value
+         * @description Set the task's value of a sticker.
+         */
+        put: operations["set_value_v1_tasks__task_id__values__sticker_id__put"];
+        post?: never;
+        /**
+         * Clear Value
+         * @description Clear the task's value of a sticker.
+         */
+        delete: operations["clear_value_v1_tasks__task_id__values__sticker_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2776,6 +2888,18 @@ export interface components {
          */
         Audience: "individual" | "team" | "enterprise";
         /**
+         * AutomationsBody
+         * @description What the stopwatch does by itself on the board.
+         */
+        AutomationsBody: {
+            /** Start On Arrival */
+            start_on_arrival: boolean;
+            /** Restart On Move */
+            restart_on_move: boolean;
+            /** Stop On Done */
+            stop_on_done: boolean;
+        };
+        /**
          * AutomationsOut
          * @description What the stopwatch does by itself on the board.
          */
@@ -2804,7 +2928,7 @@ export interface components {
         BoardDetailOut: {
             board: components["schemas"]["BoardSummaryOut"];
             /** Stickers */
-            stickers: (components["schemas"]["StopwatchStickerOut"] | components["schemas"]["SystemStickerOut"])[];
+            stickers: (components["schemas"]["StopwatchStickerOut"] | components["schemas"]["SystemStickerOut"] | components["schemas"]["CustomBoardStickerOut"])[];
             /** Columns */
             columns: components["schemas"]["ColumnOut"][];
             /** Revision */
@@ -2829,6 +2953,16 @@ export interface components {
             /** Name */
             name?: string | null;
             icon?: components["schemas"]["BoardIcon"] | null;
+        };
+        BoardStickerOut: components["schemas"]["StopwatchStickerOut"] | components["schemas"]["SystemStickerOut"] | components["schemas"]["CustomBoardStickerOut"];
+        /**
+         * BoardStickerPatchBody
+         * @description A sticker shown or hidden on the board's cards; the stopwatch's automations.
+         */
+        BoardStickerPatchBody: {
+            /** Visible */
+            visible?: boolean | null;
+            automations?: components["schemas"]["AutomationsBody"] | null;
         };
         /**
          * BoardSummaryOut
@@ -3235,6 +3369,30 @@ export interface components {
          * @enum {string}
          */
         Currency: "RUB" | "USD" | "EUR";
+        /**
+         * CustomBoardStickerOut
+         * @description A custom sticker on a board and whether its cards show it.
+         */
+        CustomBoardStickerOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "states" | "number" | "text";
+            /** Name */
+            name: string;
+            /** States */
+            states: components["schemas"]["StickerStateOut"][];
+            /** Owner */
+            owner: components["schemas"]["PersonOwner"] | components["schemas"]["WorkspaceOwner"];
+            /** Visible */
+            visible: boolean;
+        };
         /**
          * CustomStickerOut
          * @description A field of the boards' owner: a set of states, a number or a text.
@@ -4543,6 +4701,14 @@ export interface components {
             number: number;
         };
         /**
+         * NumberValueBody
+         * @description A value: a number.
+         */
+        NumberValueBody: {
+            /** Number */
+            number: number | string;
+        };
+        /**
          * OtherValueOut
          * @description A value of a field that is not on the reader's board, with the field.
          */
@@ -4571,6 +4737,31 @@ export interface components {
              * Format: date-time
              */
             updated_at: string;
+        };
+        /**
+         * OwnedStickerOut
+         * @description A sticker of its owner, with the boards it is on and its usage.
+         */
+        OwnedStickerOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "states" | "number" | "text";
+            /** Name */
+            name: string;
+            /** States */
+            states: components["schemas"]["StickerStateOut"][];
+            /** Owner */
+            owner: components["schemas"]["PersonOwner"] | components["schemas"]["WorkspaceOwner"];
+            /** Boards */
+            boards: components["schemas"]["StickerBoardOut"][];
+            usage: components["schemas"]["StickerUsageOut"];
         };
         /** Page[AdminUser] */
         Page_AdminUser_: {
@@ -4715,6 +4906,28 @@ export interface components {
              * Format: uuid
              */
             user_id: string;
+        };
+        /**
+         * PlaceExistingBody
+         * @description The person's sticker to place.
+         */
+        PlaceExistingBody: {
+            /**
+             * Sticker Id
+             * Format: uuid
+             */
+            sticker_id: string;
+        };
+        /**
+         * PlaceNewBody
+         * @description A new sticker to make and place.
+         */
+        PlaceNewBody: {
+            kind: components["schemas"]["StickerKind"];
+            /** Name */
+            name: string;
+            /** States */
+            states?: components["schemas"]["StateBody"][] | null;
         };
         /**
          * PlacementOut
@@ -5871,11 +6084,33 @@ export interface components {
          */
         StageStatus: "pending" | "running" | "done" | "failed";
         /**
+         * StateBody
+         * @description A state of the full list: kept by its id, new without one.
+         */
+        StateBody: {
+            /** Id */
+            id?: string | null;
+            /** Name */
+            name: string;
+            color: components["schemas"]["Color"];
+        };
+        /**
          * StateValue
          * @description A field value: one of its states.
          */
         StateValue: {
             /** State Id */
+            state_id: string;
+        };
+        /**
+         * StateValueBody
+         * @description A value: one of the sticker's states.
+         */
+        StateValueBody: {
+            /**
+             * State Id
+             * Format: uuid
+             */
             state_id: string;
         };
         /**
@@ -5885,11 +6120,40 @@ export interface components {
          */
         StatusFilter: "open" | "done" | "todo" | "in_progress";
         /**
+         * StickerBoardOut
+         * @description A board a sticker is on.
+         */
+        StickerBoardOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+        };
+        /**
          * StickerColor
          * @description The palette of fields' states and columns.
          * @enum {string}
          */
         StickerColor: "gray" | "red" | "orange" | "amber" | "green" | "teal" | "blue" | "violet" | "pink";
+        /**
+         * StickerKind
+         * @description What a custom sticker holds.
+         * @enum {string}
+         */
+        StickerKind: "states" | "number" | "text";
+        /**
+         * StickerPatchBody
+         * @description A sticker renamed, or its states as the full list.
+         */
+        StickerPatchBody: {
+            /** Name */
+            name?: string | null;
+            /** States */
+            states?: components["schemas"]["StateBody"][] | null;
+        };
         /**
          * StickerStateOut
          * @description A state of a field.
@@ -5904,7 +6168,27 @@ export interface components {
             name: string;
             color: components["schemas"]["StickerColor"];
         };
+        /**
+         * StickerUsageOut
+         * @description How many tasks carry a value of a sticker, in all and per state.
+         */
+        StickerUsageOut: {
+            /** Tasks */
+            tasks: number;
+            /** States */
+            states: {
+                [key: string]: number;
+            };
+        };
         StickerValue: components["schemas"]["StateValue"] | components["schemas"]["NumberValue"] | components["schemas"]["TextValue"];
+        /**
+         * StickersOut
+         * @description The person's stickers.
+         */
+        StickersOut: {
+            /** Items */
+            items: components["schemas"]["OwnedStickerOut"][];
+        };
         /**
          * StopwatchOut
          * @description The stopwatch: closed time, per column, and since when it runs, if it runs.
@@ -6424,6 +6708,14 @@ export interface components {
          * @description A field value: a text.
          */
         TextValue: {
+            /** Text */
+            text: string;
+        };
+        /**
+         * TextValueBody
+         * @description A value: a text.
+         */
+        TextValueBody: {
             /** Text */
             text: string;
         };
@@ -12253,6 +12545,282 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Card"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_stickers_v1_stickers_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StickersOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_sticker_v1_stickers__sticker_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                sticker_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_sticker_v1_stickers__sticker_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                sticker_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StickerPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomStickerOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    place_sticker_v1_boards__board_id__stickers_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaceExistingBody"] | components["schemas"]["PlaceNewBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardStickerOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    remove_sticker_v1_boards__board_id__stickers__sticker_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+                sticker_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    show_sticker_v1_boards__board_id__stickers__sticker_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                board_id: string;
+                sticker_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardStickerPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardStickerOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    set_value_v1_tasks__task_id__values__sticker_id__put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+                sticker_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StateValueBody"] | components["schemas"]["NumberValueBody"] | components["schemas"]["TextValueBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StickerValue"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    clear_value_v1_tasks__task_id__values__sticker_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+                sticker_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

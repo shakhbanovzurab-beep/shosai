@@ -19,7 +19,7 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.ids import new_id
 from shosai.features.identity.contracts import Principal
-from shosai.features.tasks.application.board_reads import owned_board
+from shosai.features.tasks.application.board_access import owned_board
 from shosai.features.tasks.application.board_views import ColumnView, column_of
 from shosai.features.tasks.application.boards import board_failure
 from shosai.features.tasks.application.placements import CardSpot, column_cards, put_on_top

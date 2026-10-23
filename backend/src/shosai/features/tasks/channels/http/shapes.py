@@ -6,7 +6,7 @@ from typing import Annotated, Final
 from uuid import UUID
 
 from fastapi import Header
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import Field
 
 from shosai.core.idempotency.http import CLIENT_KEY_MAX_LENGTH, IDEMPOTENCY_KEY_HEADER
 from shosai.core.kernel.errors import AppError
@@ -29,6 +29,8 @@ from shosai.features.tasks.channels.http.detail_models import (
     TaskItem,
     WeekRule,
 )
+from shosai.features.tasks.channels.http.sticker_shapes import other_values_out, values_out
+from shosai.features.tasks.channels.http.strict import Strict
 from shosai.features.tasks.domain.changes import UNSET, TaskChange, Unset
 from shosai.features.tasks.domain.recurrence import Every
 from shosai.features.tasks.domain.recurrence import Recurrence as Schedule
@@ -46,12 +48,6 @@ OptionalIdempotencyKey = Annotated[
 ]
 # Поля, которым null не положен: их можно не прислать, но не очистить.
 NOT_NULL: Final = ("title", "description", "status")
-
-
-class Strict(BaseModel):
-    """A request body: unknown fields are refused."""
-
-    model_config = ConfigDict(extra="forbid")
 
 
 class TaskCreateBody(Strict):
@@ -184,6 +180,7 @@ def _card(card: CardView) -> dict[str, object]:
         "subtasks_total": card.counts.subtasks_total,
         "comment_count": card.counts.comments,
         "attachment_count": card.counts.attachments,
+        "values": values_out(card.values),
         "cover": None
         if card.cover is None
         else CoverOut(attachment_id=card.cover.attachment_id, preview_url=card.cover.preview_url),
@@ -238,6 +235,7 @@ def detail_out(view: TaskView) -> TaskDetail:
                 SubtaskOut(id=line.id, title=line.title, done=line.done) for line in view.subtasks
             ],
             "attachments": [attachment_out(attachment) for attachment in view.attachments],
+            "other_values": other_values_out(view.other_values),
             "placement": None
             if placement is None
             else PlacementOut(board_id=placement[0], column_id=placement[1]),

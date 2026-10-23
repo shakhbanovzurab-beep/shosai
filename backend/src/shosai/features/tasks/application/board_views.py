@@ -1,14 +1,16 @@
 """A person's boards as reads show them: summaries, columns with their cards, a whole board."""
 
-from collections.abc import Sequence
-from dataclasses import dataclass
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import UUID
 
+from shosai.features.tasks.application.sticker_views import BoardStickerView
 from shosai.features.tasks.application.task_parts import CardRecord, Counts
 from shosai.features.tasks.application.views import CardView
 from shosai.features.tasks.domain.board_fields import Color
 from shosai.features.tasks.domain.boards import BoardIcon
+from shosai.features.tasks.domain.stickers import StickerValue
 from shosai.features.tasks.domain.tasks import TaskStatus
 from shosai.features.tasks.infrastructure.board_records import BoardColumnRecord
 
@@ -45,6 +47,7 @@ class BoardDetailView:
     columns: tuple[ColumnView, ...]
     revision: int
     now: datetime
+    stickers: tuple[BoardStickerView, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,6 +66,7 @@ class PlacedCard:
     task: CardRecord
     column_id: UUID
     counted: tuple[Counts, UUID | None]
+    values: Mapping[UUID, StickerValue] = field(default_factory=dict)
 
 
 def column_of(record: BoardColumnRecord, cards: Sequence[CardView] = ()) -> ColumnView:

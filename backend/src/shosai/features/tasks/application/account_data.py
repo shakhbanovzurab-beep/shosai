@@ -1,15 +1,16 @@
-"""Tasks' handler of a person's data: personal tasks, boards, their columns and placements.
+"""Tasks' handler of a person's data: personal tasks, boards, stickers and what hangs on them.
 
-The person's rows are their personal tasks with their checklists, comments and attachments
-(files keeps the attachments' bytes, ADR 0064), the sets of their personal meetings, their
-boards with columns, where tasks sit on them, and their settings. A workspace's task stays
-with the workspace, whoever made it (nfr-16): it is neither exported nor erased with the
-person, and the workspace passes it to a successor when the member goes (step 6). The
-person's placements of a workspace's tasks are their own rows: exported and erased with
-them, never copied to another home, where those tasks are not. Erasing deletes boards and
-personal tasks, and their placements, columns, settings, checklists, comments and
-attachments go with them by the database's cascades; the attachments' held objects then go
-back to files, so nothing of them remains; a repeat deletes nothing more.
+The person's rows are their personal tasks with their checklists, comments, attachments
+(files keeps the attachments' bytes, ADR 0064) and values, the sets of their personal
+meetings, their boards with columns and stickers, where tasks sit on them, their own
+stickers and their settings. A workspace's task stays with the workspace, whoever made it
+(nfr-16): it is neither exported nor erased with the person, and the workspace passes it to
+a successor when the member goes (step 6); the person's stickers' values on it stay as
+lines of its description when the stickers go (§3.15). The person's placements of a
+workspace's tasks are their own rows: exported and erased with them, never copied to
+another home, where those tasks are not. Erasing deletes boards, personal tasks and
+stickers, and what hangs on them goes by the database's cascades; the attachments' held
+objects then go back to files, so nothing of them remains; a repeat deletes nothing more.
 """
 
 from collections.abc import AsyncIterator, Callable, Mapping
@@ -17,7 +18,7 @@ from dataclasses import replace
 from typing import Final, cast
 from uuid import UUID
 
-from sqlalchemy import ColumnElement, Table, and_, delete, exists, select
+from sqlalchemy import ColumnElement, Table, and_, delete, exists, select, text
 
 from shosai.core.account_data.handlers import AccountRef, ExportFile
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
@@ -45,6 +46,12 @@ from shosai.features.tasks.infrastructure.board_records import (
     TaskPlacementRecord,
     TaskSettingsRecord,
 )
+from shosai.features.tasks.infrastructure.sticker_records import (
+    BoardStickerRecord,
+    StickerRecord,
+    StickerStateRecord,
+    TaskStickerValueRecord,
+)
 from shosai.features.tasks.infrastructure.task_records import MeetingTaskSetRecord, TaskRecord
 from shosai.features.tasks.infrastructure.thread_records import (
     TaskCommentRecord,
@@ -52,6 +59,7 @@ from shosai.features.tasks.infrastructure.thread_records import (
 )
 
 OWNER: Final = "tasks"
+KEEP_VALUES_SQL: Final = text("SELECT tasks_keep_sticker_values(:person)")
 # В порядке ссылок: задачи и доски раньше колонок и мест, доски раньше настроек.
 MODELS: Final = (
     TaskRecord,
@@ -64,8 +72,18 @@ MODELS: Final = (
     BoardColumnRecord,
     TaskPlacementRecord,
     TaskSettingsRecord,
+    StickerRecord,
+    StickerStateRecord,
+    BoardStickerRecord,
+    TaskStickerValueRecord,
 )
-PERSONAL_MODELS: Final = (BoardRecord, BoardColumnRecord, TaskPlacementRecord, TaskSettingsRecord)
+PERSONAL_MODELS: Final = (
+    BoardRecord,
+    BoardColumnRecord,
+    TaskPlacementRecord,
+    TaskSettingsRecord,
+    BoardStickerRecord,
+)
 # Строки с пространством: человеку принадлежат только личные, без `org_id`.
 SPACED_MODELS: Final = (
     TaskRecord,
@@ -74,6 +92,9 @@ SPACED_MODELS: Final = (
     TaskAttachmentRecord,
     TaskAttachmentReleaseRecord,
     MeetingTaskSetRecord,
+    StickerRecord,
+    StickerStateRecord,
+    TaskStickerValueRecord,
 )
 # Очередь возврата объектов хранит одни идентификаторы и пустеет сама за такт (ADR 0064).
 ACCOUNT_DATA: Final = AccountDataSpec(
@@ -112,6 +133,9 @@ type Spaced = (
     | type[TaskCommentRecord]
     | type[TaskAttachmentRecord]
     | type[TaskAttachmentReleaseRecord]
+    | type[StickerRecord]
+    | type[StickerStateRecord]
+    | type[TaskStickerValueRecord]
 )
 
 
@@ -133,11 +157,16 @@ NARROWED: Final[Mapping[type[ModelBase], Callable[[UUID], ColumnElement[bool]]]]
     TaskAttachmentRecord: _of_personal_tasks(TaskAttachmentRecord),
     TaskAttachmentReleaseRecord: _of_personal_tasks(TaskAttachmentReleaseRecord),
     MeetingTaskSetRecord: _personal_sets,
+    StickerRecord: _of_personal_tasks(StickerRecord),
+    StickerStateRecord: _of_personal_tasks(StickerStateRecord),
+    TaskStickerValueRecord: _of_personal_tasks(TaskStickerValueRecord),
 }
 
 
 # Таблицы с отложенным уникальным порядком: копия пропускает уже перенесённые по первичному ключу.
 ARBITERS: Final[Mapping[type[ModelBase], tuple[str, ...]]] = {
+    StickerStateRecord: ("id",),
+    BoardStickerRecord: ("id",),
     TaskSubtaskRecord: ("id",),
     BoardColumnRecord: ("id",),
     TaskPlacementRecord: ("user_id", "task_id"),
@@ -214,6 +243,13 @@ class TasksAccountData:
                 delete(TaskPlacementRecord).where(TaskPlacementRecord.user_id == user_id)
             )
             await session.execute(delete(TaskRecord).where(personal_tasks(user_id)))
+            # Значения своих полей на задачах пространств остаются им строками описания (§3.15).
+            await session.execute(KEEP_VALUES_SQL, {"person": user_id})
+            await session.execute(
+                delete(StickerRecord).where(
+                    StickerRecord.user_id == user_id, StickerRecord.org_id.is_(None)
+                )
+            )
             await session.execute(
                 delete(MeetingTaskSetRecord).where(
                     MeetingTaskSetRecord.user_id == user_id, MeetingTaskSetRecord.org_id.is_(None)

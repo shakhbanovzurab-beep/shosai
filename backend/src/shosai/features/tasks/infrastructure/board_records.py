@@ -28,6 +28,7 @@ from sqlalchemy import (
     func,
     text,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shosai.core.db.model_base import ModelBase
@@ -38,6 +39,13 @@ ICONS: Final = (
 )
 KINDS: Final = "'todo', 'in_progress', 'done'"
 COLORS: Final = "'gray', 'red', 'orange', 'amber', 'green', 'teal', 'blue', 'violet', 'pink'"
+SYSTEM_VISIBILITY: Final = text(
+    '\'{"assignee": true, "due": true, "priority": true, "recurrence": false, '
+    '"stopwatch": false, "timer": false, "time_tracking": false}\'::jsonb'
+)
+AUTOMATIONS: Final = text(
+    '\'{"start_on_arrival": false, "restart_on_move": true, "stop_on_done": true}\'::jsonb'
+)
 # Ключ порядка — цифры base-62 без нуля в конце; длиннее 48 знаков колонку перераскладывают.
 RANK_FORMAT: Final = "rank ~ '^[0-9A-Za-z]*[1-9A-Za-z]$' AND length(rank) <= 128"
 
@@ -58,6 +66,13 @@ class BoardRecord(ModelBase):
     name: Mapped[str] = mapped_column(Text)
     icon: Mapped[str] = mapped_column(Text)
     revision: Mapped[int] = mapped_column(BigInteger, server_default="1")
+    # Видимость системных полей и автоматизации секундомера (шаг 4s, ревизия `c3e5a7b9d168`).
+    system_stickers: Mapped[dict[str, bool]] = mapped_column(
+        JSONB, server_default=SYSTEM_VISIBILITY
+    )
+    stopwatch_automations: Mapped[dict[str, bool]] = mapped_column(
+        JSONB, server_default=AUTOMATIONS
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 

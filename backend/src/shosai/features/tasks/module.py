@@ -4,8 +4,8 @@ Step 1 published the contract, the events and the domain; step 2 added the table
 home, the shareable `task` with its parent and named-reader rules (TK-D2), and the handler
 of a person's data; step 3a the one task API (`/v1/tasks*`) and the task reader, step 3b
 a task's checklist and comments, step 3c its attachments and cover through files' held
-objects, and step 4 boards with their columns and cards. Stickers, time, the action items
-from meetings, Leo's tools and Jira join in later steps.
+objects, step 4 boards with their columns and cards, and step 4s stickers and values. Time, the
+action items from meetings, Leo's tools and Jira join in later steps.
 """
 
 from collections.abc import AsyncIterator
@@ -17,17 +17,24 @@ from shosai.features.tasks.application.account_data import ACCOUNT_DATA, TasksAc
 from shosai.features.tasks.application.attachment_releases import AttachmentReleases
 from shosai.features.tasks.application.attachments import Attachments
 from shosai.features.tasks.application.board_reads import BoardReads
+from shosai.features.tasks.application.board_stickers import BoardStickers
 from shosai.features.tasks.application.boards import BoardWrites
 from shosai.features.tasks.application.cards import Cards
 from shosai.features.tasks.application.columns import Columns
 from shosai.features.tasks.application.comments import Comments
+from shosai.features.tasks.application.stickers import Stickers
 from shosai.features.tasks.application.subtasks import Subtasks
 from shosai.features.tasks.application.task_edits import TaskEdits
 from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import TaskWrites
+from shosai.features.tasks.application.values import Values
 from shosai.features.tasks.channels.http.attachments import build_attachments_router
 from shosai.features.tasks.channels.http.board_parts import build_board_parts_router
 from shosai.features.tasks.channels.http.boards import build_boards_router
+from shosai.features.tasks.channels.http.stickers import (
+    build_stickers_router,
+    build_values_router,
+)
 from shosai.features.tasks.channels.http.tasks import build_tasks_router
 from shosai.features.tasks.channels.http.threads import build_threads_router
 from shosai.features.tasks.channels.tasks import PERIODIC_JOBS, task_handlers
@@ -48,6 +55,12 @@ from shosai.features.tasks.infrastructure.board_records import (
     BoardRecord,
     TaskPlacementRecord,
     TaskSettingsRecord,
+)
+from shosai.features.tasks.infrastructure.sticker_records import (
+    BoardStickerRecord,
+    StickerRecord,
+    StickerStateRecord,
+    TaskStickerValueRecord,
 )
 from shosai.features.tasks.infrastructure.task_records import (
     TASK_RESOURCE,
@@ -78,6 +91,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             build_board_parts_router(
                 (Columns(transactions), Cards(transactions, ports, (writes, edits))), ports
             ),
+            build_stickers_router((Stickers(transactions), BoardStickers(transactions)), ports),
+            build_values_router(Values(transactions, ports), ports),
         ),
         task_handlers=task_handlers(AttachmentReleases(transactions, ports)),
         periodic_jobs=PERIODIC_JOBS,
@@ -102,6 +117,10 @@ TASKS = FeatureModule(
         BoardColumnRecord,
         TaskPlacementRecord,
         TaskSettingsRecord,
+        StickerRecord,
+        StickerStateRecord,
+        BoardStickerRecord,
+        TaskStickerValueRecord,
     ),
     events=(TaskAssigned, TaskDueChanged, TaskCompleted, TaskReopened, TaskDeleted),
     account_data=(ACCOUNT_DATA,),

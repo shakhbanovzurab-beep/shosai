@@ -14,13 +14,19 @@ from datetime import UTC, datetime
 from typing import Final
 from uuid import UUID
 
-from sqlalchemy import ColumnElement, func, or_, select
+from sqlalchemy import ColumnElement, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal
 from shosai.features.tasks.application.attachment_views import with_cover_previews
+from shosai.features.tasks.application.board_access import (
+    board_and_incoming,
+    incoming_board,
+    owned_board,
+    shown,
+)
 from shosai.features.tasks.application.board_views import (
     BoardDetailView,
     BoardSummaryView,
@@ -31,17 +37,16 @@ from shosai.features.tasks.application.board_views import (
 from shosai.features.tasks.application.landing import reconcile, waiting_for
 from shosai.features.tasks.application.part_reads import counted_columns, counted_of
 from shosai.features.tasks.application.placements import lock_board
+from shosai.features.tasks.application.sticker_views import card_values_json, values_of
 from shosai.features.tasks.application.task_parts import CardRecord
 from shosai.features.tasks.application.views import CardView, Wanted, card_of, context_of
-from shosai.features.tasks.contracts import BoardNotFoundError
-from shosai.features.tasks.domain.boards import DONE_VISIBLE, BoardIcon
+from shosai.features.tasks.domain.boards import BoardIcon
 from shosai.features.tasks.domain.placement import BoardColumn
 from shosai.features.tasks.domain.tasks import TaskStatus
 from shosai.features.tasks.infrastructure.board_records import (
     BoardColumnRecord,
     BoardRecord,
     TaskPlacementRecord,
-    TaskSettingsRecord,
 )
 from shosai.features.tasks.infrastructure.task_records import TASK_RESOURCE, TaskRecord
 from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
@@ -53,13 +58,6 @@ CARD_COLUMNS: Final = (
     TaskRecord.assignee_name, TaskRecord.recurrence, TaskRecord.leo_fields, TaskRecord.source,
     TaskRecord.cover_attachment_id,
 )  # fmt: skip
-
-
-def shown(now: datetime) -> ColumnElement[bool]:
-    """The cards a board shows: open, or done within the last 30 days."""
-    return or_(
-        TaskRecord.status != TaskStatus.DONE.value, TaskRecord.completed_at >= now - DONE_VISIBLE
-    )
 
 
 class BoardReads:
@@ -122,7 +120,7 @@ class BoardReads:
         """
         viewer, now = principal.user_id, self._clock()
         async with self._transactions.begin(principal.scope()) as session:
-            board, incoming = await _board_and_incoming(session, viewer, board_id)
+            board, incoming, stickers = await board_and_incoming(session, viewer, board_id)
             columns = list(
                 await session.scalars(
                     select(BoardColumnRecord)
@@ -140,6 +138,7 @@ class BoardReads:
                 await session.refresh(board)
                 rows = await self._cards(session, viewer, board_id, now)
             view = await self._view(session, viewer, (board, incoming, columns), (rows, now))
+            view = replace(view, stickers=tuple(stickers))
         signed = iter(
             await with_cover_previews(
                 self._ports, principal.scope(), [card for c in view.columns for card in c.cards]
@@ -157,7 +156,7 @@ class BoardReads:
         """The board's shown cards in order, each with its column, counts and cover."""
         # Только поля карточки, строками, без учёта объектов ORM: у тысячи задач это заметно.
         rows = await session.execute(
-            select(*CARD_COLUMNS, PLACED.column_id, *counted_columns())
+            select(*CARD_COLUMNS, PLACED.column_id, *counted_columns(), card_values_json(board_id))
             .join(PLACED, PLACED.task_id == TaskRecord.id)
             .where(
                 PLACED.user_id == viewer, PLACED.board_id == board_id,
@@ -166,47 +165,18 @@ class BoardReads:
             .order_by(PLACED.rank)
         )  # fmt: skip
         placed: list[PlacedCard] = []
-        for (
-            task_id,
-            owner,
-            org_id,
-            title,
-            status,
-            priority,
-            starts_on,
-            due_on,
-            member,
-            name,
-            recurrence,
-            leo_fields,
-            source,
-            cover_id,
-            column_id,
-            done,
-            total,
-            comments,
-            files,
-            held,
-        ) in rows:
+        for row in rows:
+            (
+                task_id, owner, org_id, title, status, priority, starts_on, due_on, member, name,
+                recurrence, leo_fields, source, cover_id, column_id, done, total, comments, files,
+                held, values,
+            ) = row  # fmt: skip
             card = CardRecord(
-                task_id,
-                owner,
-                org_id,
-                title,
-                status,
-                priority,
-                starts_on,
-                due_on,
-                member,
-                name,
-                recurrence,
-                leo_fields,
-                source,
-                cover_id,
-            )
-            placed.append(
-                PlacedCard(card, column_id, counted_of((done, total, comments, files, held)))
-            )
+                task_id, owner, org_id, title, status, priority, starts_on, due_on, member, name,
+                recurrence, leo_fields, source, cover_id,
+            )  # fmt: skip
+            counted = counted_of((done, total, comments, files, held))
+            placed.append(PlacedCard(card, column_id, counted, values_of(values)))
         return placed
 
     async def _view(
@@ -223,7 +193,8 @@ class BoardReads:
         context = await context_of(session, self._ports, viewer, tasks, Wanted(counted=counted))
         placed: defaultdict[UUID, list[CardView]] = defaultdict(list)
         for row in rows:
-            placed[row.column_id].append(card_of(row.task, viewer, context))
+            card = card_of(row.task, viewer, context)
+            placed[row.column_id].append(replace(card, values=row.values))
         heads = tuple(column_of(column, placed[column.id]) for column in columns)
         summary = summary_of(record, record.id if incoming else None, len(rows))
         return BoardDetailView(summary, heads, record.revision, now)
@@ -244,44 +215,3 @@ def summary_of(board: BoardRecord, incoming: UUID | None, task_count: int) -> Bo
         board.id, board.name, BoardIcon(board.icon), board.id == incoming, task_count,
         board.created_at,
     )  # fmt: skip
-
-
-async def incoming_board(session: AsyncSession, viewer: UUID) -> UUID | None:
-    """The person's incoming board, if they chose one."""
-    found: UUID | None = await session.scalar(
-        select(TaskSettingsRecord.incoming_board_id).where(TaskSettingsRecord.user_id == viewer)
-    )
-    return found
-
-
-async def owned_board(
-    session: AsyncSession, viewer: UUID, board_id: UUID, *, lock: bool = False
-) -> BoardRecord:
-    """The person's board, locked when asked; 404 otherwise."""
-    statement = select(BoardRecord).where(BoardRecord.id == board_id, BoardRecord.user_id == viewer)
-    board = await session.scalar(statement.with_for_update() if lock else statement)
-    if board is None:
-        raise BoardNotFoundError
-    return board
-
-
-async def _board_and_incoming(
-    session: AsyncSession, viewer: UUID, board_id: UUID
-) -> tuple[BoardRecord, bool]:
-    """The person's board under its lock, and whether it is their incoming board; 404."""
-    chosen = (
-        select(TaskSettingsRecord.incoming_board_id)
-        .where(TaskSettingsRecord.user_id == viewer)
-        .scalar_subquery()
-    )
-    found = (
-        await session.execute(
-            select(BoardRecord, chosen)
-            .where(BoardRecord.id == board_id, BoardRecord.user_id == viewer)
-            .with_for_update(of=BoardRecord)
-        )
-    ).first()
-    if found is None:
-        raise BoardNotFoundError
-    board, incoming = found
-    return board, incoming == board_id

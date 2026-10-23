@@ -19,7 +19,8 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal, bearer_principal
 from shosai.features.tasks.application.attachments import Attachments, FromFile, FromUpload
 from shosai.features.tasks.channels.http.detail_models import AttachmentOut
-from shosai.features.tasks.channels.http.shapes import Strict, attachment_out
+from shosai.features.tasks.channels.http.shapes import attachment_out
+from shosai.features.tasks.channels.http.strict import Strict
 
 
 class UploadSourceBody(Strict):

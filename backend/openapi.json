@@ -9947,6 +9947,546 @@
           }
         }
       }
+    },
+    "/v1/stickers": {
+      "get": {
+        "tags": [
+          "stickers"
+        ],
+        "summary": "List Stickers",
+        "description": "The person's own stickers with their boards and usage.",
+        "operationId": "list_stickers_v1_stickers_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StickersOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/stickers/{sticker_id}": {
+      "patch": {
+        "tags": [
+          "stickers"
+        ],
+        "summary": "Change Sticker",
+        "description": "Rename a sticker or give its states as the full list.",
+        "operationId": "change_sticker_v1_stickers__sticker_id__patch",
+        "parameters": [
+          {
+            "name": "sticker_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sticker Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StickerPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomStickerOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "stickers"
+        ],
+        "summary": "Delete Sticker",
+        "description": "Delete a sticker: off every board, its values gone.",
+        "operationId": "delete_sticker_v1_stickers__sticker_id__delete",
+        "parameters": [
+          {
+            "name": "sticker_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sticker Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{board_id}/stickers": {
+      "post": {
+        "tags": [
+          "stickers"
+        ],
+        "summary": "Place Sticker",
+        "description": "Place one of the person's stickers, or a new one, on the board.",
+        "operationId": "place_sticker_v1_boards__board_id__stickers_post",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/PlaceExistingBody"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PlaceNewBody"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardStickerOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{board_id}/stickers/{sticker_id}": {
+      "patch": {
+        "tags": [
+          "stickers"
+        ],
+        "summary": "Show Sticker",
+        "description": "Show or hide a sticker on the board's cards; set the stopwatch's automations.",
+        "operationId": "show_sticker_v1_boards__board_id__stickers__sticker_id__patch",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "sticker_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sticker Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoardStickerPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardStickerOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "stickers"
+        ],
+        "summary": "Remove Sticker",
+        "description": "Take a sticker off the board; the tasks keep their values.",
+        "operationId": "remove_sticker_v1_boards__board_id__stickers__sticker_id__delete",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Board Id"
+            }
+          },
+          {
+            "name": "sticker_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sticker Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}/values/{sticker_id}": {
+      "put": {
+        "tags": [
+          "stickers"
+        ],
+        "summary": "Set Value",
+        "description": "Set the task's value of a sticker.",
+        "operationId": "set_value_v1_tasks__task_id__values__sticker_id__put",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "sticker_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sticker Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/StateValueBody"
+                  },
+                  {
+                    "$ref": "#/components/schemas/NumberValueBody"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TextValueBody"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StickerValue"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "stickers"
+        ],
+        "summary": "Clear Value",
+        "description": "Clear the task's value of a sticker.",
+        "operationId": "clear_value_v1_tasks__task_id__values__sticker_id__delete",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "sticker_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sticker Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -10477,6 +11017,31 @@
         "title": "Audience",
         "description": "Who a plan is for: the Upgrade page's tabs."
       },
+      "AutomationsBody": {
+        "properties": {
+          "start_on_arrival": {
+            "type": "boolean",
+            "title": "Start On Arrival"
+          },
+          "restart_on_move": {
+            "type": "boolean",
+            "title": "Restart On Move"
+          },
+          "stop_on_done": {
+            "type": "boolean",
+            "title": "Stop On Done"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "start_on_arrival",
+          "restart_on_move",
+          "stop_on_done"
+        ],
+        "title": "AutomationsBody",
+        "description": "What the stopwatch does by itself on the board."
+      },
       "AutomationsOut": {
         "properties": {
           "start_on_arrival": {
@@ -10537,6 +11102,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/SystemStickerOut"
+                },
+                {
+                  "$ref": "#/components/schemas/CustomBoardStickerOut"
                 }
               ]
             },
@@ -10616,6 +11184,48 @@
         "type": "object",
         "title": "BoardPatchBody",
         "description": "A board renamed or with another icon."
+      },
+      "BoardStickerOut": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/StopwatchStickerOut"
+          },
+          {
+            "$ref": "#/components/schemas/SystemStickerOut"
+          },
+          {
+            "$ref": "#/components/schemas/CustomBoardStickerOut"
+          }
+        ]
+      },
+      "BoardStickerPatchBody": {
+        "properties": {
+          "visible": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Visible"
+          },
+          "automations": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AutomationsBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "BoardStickerPatchBody",
+        "description": "A sticker shown or hidden on the board's cards; the stopwatch's automations."
       },
       "BoardSummaryOut": {
         "properties": {
@@ -11617,6 +12227,61 @@
         ],
         "title": "Currency",
         "description": "A currency a plan is priced and paid in."
+      },
+      "CustomBoardStickerOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "states",
+              "number",
+              "text"
+            ],
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "states": {
+            "items": {
+              "$ref": "#/components/schemas/StickerStateOut"
+            },
+            "type": "array",
+            "title": "States"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonOwner"
+              },
+              {
+                "$ref": "#/components/schemas/WorkspaceOwner"
+              }
+            ],
+            "title": "Owner"
+          },
+          "visible": {
+            "type": "boolean",
+            "title": "Visible"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "states",
+          "owner",
+          "visible"
+        ],
+        "title": "CustomBoardStickerOut",
+        "description": "A custom sticker on a board and whether its cards show it."
       },
       "CustomStickerOut": {
         "properties": {
@@ -14625,6 +15290,29 @@
         "title": "NumberValue",
         "description": "A field value: a number."
       },
+      "NumberValueBody": {
+        "properties": {
+          "number": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Number"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "number"
+        ],
+        "title": "NumberValueBody",
+        "description": "A value: a number."
+      },
       "OtherValueOut": {
         "properties": {
           "sticker": {
@@ -14672,6 +15360,68 @@
         ],
         "title": "OwnNotesOut",
         "description": "What the person typed about the meeting, and where they last wrote it."
+      },
+      "OwnedStickerOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "states",
+              "number",
+              "text"
+            ],
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "states": {
+            "items": {
+              "$ref": "#/components/schemas/StickerStateOut"
+            },
+            "type": "array",
+            "title": "States"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonOwner"
+              },
+              {
+                "$ref": "#/components/schemas/WorkspaceOwner"
+              }
+            ],
+            "title": "Owner"
+          },
+          "boards": {
+            "items": {
+              "$ref": "#/components/schemas/StickerBoardOut"
+            },
+            "type": "array",
+            "title": "Boards"
+          },
+          "usage": {
+            "$ref": "#/components/schemas/StickerUsageOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "states",
+          "owner",
+          "boards",
+          "usage"
+        ],
+        "title": "OwnedStickerOut",
+        "description": "A sticker of its owner, with the boards it is on and its usage."
       },
       "Page_AdminUser_": {
         "properties": {
@@ -15106,6 +15856,55 @@
         ],
         "title": "PersonOwner",
         "description": "A field of a person's boards."
+      },
+      "PlaceExistingBody": {
+        "properties": {
+          "sticker_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Sticker Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "sticker_id"
+        ],
+        "title": "PlaceExistingBody",
+        "description": "The person's sticker to place."
+      },
+      "PlaceNewBody": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/StickerKind"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "states": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/StateBody"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "States"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "name"
+        ],
+        "title": "PlaceNewBody",
+        "description": "A new sticker to make and place."
       },
       "PlacementOut": {
         "properties": {
@@ -18114,6 +18913,37 @@
         "title": "StageStatus",
         "description": "Where a stage stands."
       },
+      "StateBody": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "color": {
+            "$ref": "#/components/schemas/Color"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "color"
+        ],
+        "title": "StateBody",
+        "description": "A state of the full list: kept by its id, new without one."
+      },
       "StateValue": {
         "properties": {
           "state_id": {
@@ -18128,6 +18958,22 @@
         "title": "StateValue",
         "description": "A field value: one of its states."
       },
+      "StateValueBody": {
+        "properties": {
+          "state_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "State Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state_id"
+        ],
+        "title": "StateValueBody",
+        "description": "A value: one of the sticker's states."
+      },
       "StatusFilter": {
         "type": "string",
         "enum": [
@@ -18138,6 +18984,26 @@
         ],
         "title": "StatusFilter",
         "description": "Which statuses a list shows."
+      },
+      "StickerBoardOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "StickerBoardOut",
+        "description": "A board a sticker is on."
       },
       "StickerColor": {
         "type": "string",
@@ -18154,6 +19020,49 @@
         ],
         "title": "StickerColor",
         "description": "The palette of fields' states and columns."
+      },
+      "StickerKind": {
+        "type": "string",
+        "enum": [
+          "states",
+          "number",
+          "text"
+        ],
+        "title": "StickerKind",
+        "description": "What a custom sticker holds."
+      },
+      "StickerPatchBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "states": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/StateBody"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "States"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "StickerPatchBody",
+        "description": "A sticker renamed, or its states as the full list."
       },
       "StickerStateOut": {
         "properties": {
@@ -18179,6 +19088,28 @@
         "title": "StickerStateOut",
         "description": "A state of a field."
       },
+      "StickerUsageOut": {
+        "properties": {
+          "tasks": {
+            "type": "integer",
+            "title": "Tasks"
+          },
+          "states": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "States"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tasks",
+          "states"
+        ],
+        "title": "StickerUsageOut",
+        "description": "How many tasks carry a value of a sticker, in all and per state."
+      },
       "StickerValue": {
         "anyOf": [
           {
@@ -18191,6 +19122,23 @@
             "$ref": "#/components/schemas/TextValue"
           }
         ]
+      },
+      "StickersOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/OwnedStickerOut"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "StickersOut",
+        "description": "The person's stickers."
       },
       "StopwatchOut": {
         "properties": {
@@ -19794,6 +20742,21 @@
         ],
         "title": "TextValue",
         "description": "A field value: a text."
+      },
+      "TextValueBody": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "TextValueBody",
+        "description": "A value: a text."
       },
       "TicketRequest": {
         "properties": {

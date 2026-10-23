@@ -22,7 +22,8 @@ from shosai.features.tasks.application.comments import Comments, CommentView
 from shosai.features.tasks.application.subtasks import SubtaskChange, Subtasks
 from shosai.features.tasks.application.task_parts import SubtaskView
 from shosai.features.tasks.channels.http.detail_models import SubtaskOut
-from shosai.features.tasks.channels.http.shapes import OptionalIdempotencyKey, Strict, invalid
+from shosai.features.tasks.channels.http.shapes import OptionalIdempotencyKey, invalid
+from shosai.features.tasks.channels.http.strict import Strict
 
 COMMENTS_PAGE = Depends(page_parameters(default=50, maximum=100))
 

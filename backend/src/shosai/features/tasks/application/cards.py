@@ -3,8 +3,8 @@
 
 Writes take the board's lock. A new card is a hand-made personal task in its column's
 status; a board shows 1 000 open cards at most, so only a done column takes more. A copy of
-a card of the board takes its words, priority, dates, schedule, assignee name and checklist
-unticked, never its cover, comments or Leo's marks; a workspace's task is not copied. A
+a card of the board takes its words, priority, dates, schedule, assignee name, values and
+checklist unticked, never its cover, comments or Leo's marks; a workspace's task is not copied. A
 moved card takes its new column's kind as its status, with that change's events and rules;
 its title and priority change as the task's own patch changes them. A card's transaction is
 opened in its task's space, as row-level security writes a workspace's rows only there.
@@ -21,9 +21,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.errors import AppError
+from shosai.core.kernel.ids import new_id
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal
-from shosai.features.tasks.application.board_reads import owned_board
+from shosai.features.tasks.application.board_access import owned_board
 from shosai.features.tasks.application.boards import board_failure
 from shosai.features.tasks.application.columns import not_found as column_not_found
 from shosai.features.tasks.application.placements import CardSpot, place
@@ -49,6 +50,7 @@ from shosai.features.tasks.infrastructure.board_records import (
     BoardColumnRecord,
     TaskPlacementRecord,
 )
+from shosai.features.tasks.infrastructure.sticker_records import TaskStickerValueRecord
 from shosai.features.tasks.infrastructure.task_records import TaskRecord
 
 PLACED = TaskPlacementRecord
@@ -113,6 +115,7 @@ class Cards:
             task_id = await self._writes.make(session, principal, draft)
             if source is not None:
                 await copy_checklist(session, source, task_id, now)
+                await _copy_values(session, source.id, (task_id, viewer), now)
             await place(
                 session, viewer, task_id, CardSpot(board_id, new.column_id, new.position), now
             )
@@ -200,3 +203,23 @@ async def _room(session: AsyncSession, viewer: UUID, board_id: UUID) -> None:
         check_card_room(open_cards or 0)
     except BoardRuleError as error:
         raise board_failure(error) from error
+
+
+async def _copy_values(
+    session: AsyncSession, source_id: UUID, copy: tuple[UUID, UUID], now: datetime
+) -> None:
+    """The source card's values on its copy, a personal task of the person."""
+    task_id, owner = copy
+    values = TaskStickerValueRecord
+    rows = await session.execute(
+        select(values.sticker_id, values.state_id, values.number, values.text).where(
+            values.task_id == source_id
+        )
+    )
+    session.add_all(
+        values(
+            id=new_id(), task_id=task_id, sticker_id=sticker_id, user_id=owner, state_id=state_id,
+            number=number, text=text, updated_at=now,
+        )
+        for sticker_id, state_id, number, text in rows
+    )  # fmt: skip

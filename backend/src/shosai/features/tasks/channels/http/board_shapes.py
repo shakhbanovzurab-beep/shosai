@@ -9,7 +9,6 @@ from shosai.features.tasks.application.board_views import (
     ColumnView,
 )
 from shosai.features.tasks.channels.http.board_models import (
-    AutomationsOut,
     BoardDetailOut,
     BoardsOut,
     BoardSummaryOut,
@@ -17,15 +16,9 @@ from shosai.features.tasks.channels.http.board_models import (
     ColumnOut,
     IncomingOut,
     LayoutBody,
-    StopwatchStickerOut,
-    SystemStickerOut,
 )
 from shosai.features.tasks.channels.http.shapes import card_view_out
-from shosai.features.tasks.domain.board_fields import (
-    DEFAULT_AUTOMATIONS,
-    NEW_BOARD_VISIBILITY,
-    SystemSticker,
-)
+from shosai.features.tasks.channels.http.sticker_shapes import board_stickers_out
 from shosai.features.tasks.domain.boards import LayoutColumn
 
 
@@ -52,27 +45,6 @@ def head_out(view: ColumnView) -> ColumnHeadOut:
     )
 
 
-def stickers_out() -> list[StopwatchStickerOut | SystemStickerOut]:
-    """A board's system stickers with a new board's visibility; its own come with step 4s."""
-    stickers: list[StopwatchStickerOut | SystemStickerOut] = []
-    for sticker in SystemSticker:
-        visible = NEW_BOARD_VISIBILITY[sticker]
-        if sticker is SystemSticker.STOPWATCH:
-            automations = AutomationsOut(
-                start_on_arrival=DEFAULT_AUTOMATIONS.start_on_arrival,
-                restart_on_move=DEFAULT_AUTOMATIONS.restart_on_move,
-                stop_on_done=DEFAULT_AUTOMATIONS.stop_on_done,
-            )
-            stickers.append(
-                StopwatchStickerOut(
-                    id=sticker, kind=sticker, visible=visible, automations=automations
-                )
-            )
-        else:
-            stickers.append(SystemStickerOut(id=sticker, kind=sticker, visible=visible))
-    return stickers
-
-
 def board_out(view: BoardDetailView) -> BoardDetailOut:
     """A board with its columns and cards."""
     columns = [
@@ -82,7 +54,7 @@ def board_out(view: BoardDetailView) -> BoardDetailOut:
         for column in view.columns
     ]
     return BoardDetailOut(
-        board=summary_out(view.board), stickers=stickers_out(), columns=columns,
+        board=summary_out(view.board), stickers=board_stickers_out(view.stickers), columns=columns,
         revision=view.revision, server_now=datetime.now(UTC),
     )  # fmt: skip
 

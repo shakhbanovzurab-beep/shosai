@@ -25,13 +25,8 @@ from shosai.core.kernel.ids import new_id
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER, Principal
 from shosai.features.tasks.application.attachment_releases import AttachmentReleases
-from shosai.features.tasks.application.board_reads import (
-    BoardReads,
-    incoming_board,
-    owned_board,
-    shown,
-    summary_of,
-)
+from shosai.features.tasks.application.board_access import incoming_board, owned_board, shown
+from shosai.features.tasks.application.board_reads import BoardReads, summary_of
 from shosai.features.tasks.application.board_views import BoardSummaryView, BoardsView
 from shosai.features.tasks.application.landing import reconcile
 from shosai.features.tasks.application.task_events import deleted_of

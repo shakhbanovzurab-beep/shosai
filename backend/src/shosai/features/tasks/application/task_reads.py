@@ -34,6 +34,7 @@ from shosai.features.tasks.application.task_query import (
     TaskSort,
     filters_of,
 )
+from shosai.features.tasks.application.value_reads import with_values
 from shosai.features.tasks.application.views import TaskView, Wanted, context_of, task_of
 from shosai.features.tasks.contracts import TaskFacts, TaskNotFoundError
 from shosai.features.tasks.domain.tasks import Assignee, Priority, TaskSource, TaskStatus
@@ -170,6 +171,7 @@ class TaskReads:
             subtasks=await subtasks_of(session, task_id),
             attachments=await attachments_of(session, self._ports, task_id),
         )
+        view = await with_values(session, view)
         return await with_source(session, self._ports, Viewer(viewer), view)
 
     async def facts(
