@@ -2,7 +2,8 @@
 
 Start: settings and the production gate → logs, metrics, traces → the ops server (so
 liveness answers and readiness says `starting` from here on) → the platform
-(`platform.py`) → the role. A failed step exits with code 1 and one line naming it.
+(`platform.py`) → the role → the startup heap frozen for the garbage collector
+(`core/runtime/heap.py`). A failed step exits with code 1 and one line naming it.
 
 Stop on SIGTERM or SIGINT: readiness turns 503 at once → the role stops taking work and
 drains it (in-flight requests, running tasks, the loops' current iteration) → the slices,
@@ -39,6 +40,7 @@ from shosai.core.features import FeatureModule
 from shosai.core.health.probes import DependencyProbe
 from shosai.core.health.readiness import Readiness
 from shosai.core.observability.debug_switches import following_debug_switches
+from shosai.core.runtime.heap import freeze_startup_heap
 from shosai.core.runtime.servers import HttpServer, server_config
 from shosai.core.runtime.signals import stop_on_signals
 from shosai.core.web.ops import build_ops_app
@@ -107,6 +109,7 @@ class LongRunningProcess:
                 )
                 with start_step("role"):
                     tasks = await stack.enter_async_context(work(platform, self._telemetry))
+                freeze_startup_heap()
                 return await serve_until_stopped(
                     self.readiness, self.stop, platform.probes, (*tasks, ops.task, debug)
                 )
