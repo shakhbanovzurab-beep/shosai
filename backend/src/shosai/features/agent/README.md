@@ -6,6 +6,19 @@ Leo's core: a person's conversations with Leo in Personal and in each workspace,
 - Public surface: `contracts` (`ActionProposals` for a slice's planned write without a model round; the ports agent needs — `TurnRouter`, `FrictionJudge`, `MemoryRecall`, `ProfileFacts` — and `SkillReader` for studio) and `contracts.events` (`agent.turn.completed`).
 - Turns run on the dedicated `agent` queue's workers; the API admits, commits and streams them from the run's log in Valkey (AG-D12). LangGraph is only the frame of a turn (AG-D14).
 
+## Tables (each home, revision `a6c8e2f4b917`)
+
+Every table is personal by nature: row-level security admits the person's own rows only (ADR 0053).
+
+- `agent_threads` — a conversation in one space (Personal, a workspace, a hub; the database keeps the scope naming exactly its space), its title, summary and `erase_after` for a departed workspace (AG-D3).
+- `agent_messages` — a thread's rows in monthly partitions kept with the thread: questions, answers (with a status), tool rounds and their digests, server notes; deleted with the thread.
+- `agent_tool_results` — tools' whole outputs with the spaces of their sources, read for 30 days, partitions dropped after two months.
+- `agent_runs` — a run's status and telemetry (ids, numbers, codes), monthly partitions kept four months; `ended_at` exactly when it is over.
+- `agent_actions` — a proposed write with its planned items (1–20), friction, taint and expiry; resolved exactly when over; one card per origin key (AG-R2); a deleted thread leaves its actions in the inbox.
+- `agent_audit` — append-only for the application (insert and select), monthly partitions kept 12 months, codes only.
+- `agent_settings`, `agent_skills`, `agent_feedback`, `agent_eval_cases` — Settings > Leo (absent while the person keeps the defaults), installed skills pinned to a commit, one rating per answer, and the cases a rating made with consent; ratings and cases go with their thread.
+- `application/account_data.py` — the person's rows are exported, erased (with the Valkey keys of their recent runs and threads, `infrastructure/run_keys.py`) and copied to another home; runs and the audit expire by their partitions; tool results and actions are short-lived and not copied.
+
 ## Rules the domain holds
 
 - `domain/threads.py` — a thread's scope (Personal, a workspace or a hub), titles of 1–120 characters, a question of 1–4 000 characters with up to five attachments, "Regenerate" and "Edit" on the last question only; a departed workspace's threads erased 7 days after the departure unless the membership is active again (AG-D3).

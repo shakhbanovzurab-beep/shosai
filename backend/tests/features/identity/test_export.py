@@ -16,6 +16,7 @@ from shosai.core.events.catalog import EventTypes
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.agent.application.account_data import AgentAccountData
 from shosai.features.billing.application.account_data import BillingAccountData
 from shosai.features.files.application.account_data import FilesAccountData
 from shosai.features.identity.application.account_data import IdentityAccountData
@@ -41,7 +42,10 @@ OTHER_EMAIL = "someone.else@example.com"
 
 
 def runner_of(
-    bench: RegistrationBench, homes: DatabaseAccess, buckets: Mapping[Home, SlotBucket]
+    bench: RegistrationBench,
+    homes: DatabaseAccess,
+    buckets: Mapping[Home, SlotBucket],
+    valkey: Redis,
 ) -> ExportRunner:
     storages = {home: slot_storage(bucket) for home, bucket in buckets.items()}
     objects = {home: storage.objects for home, storage in storages.items()}
@@ -61,6 +65,7 @@ def runner_of(
             ACCOUNT_DATA_HANDLERS.bind(FilesAccountData(homes.transactions, (objects, uploads))),
             ACCOUNT_DATA_HANDLERS.bind(NotesAccountData(homes.transactions, (objects, uploads))),
             ACCOUNT_DATA_HANDLERS.bind(TasksAccountData(homes.transactions, ports)),
+            ACCOUNT_DATA_HANDLERS.bind(AgentAccountData(homes.transactions, valkey)),
         ]
     )
     return ExportRunner(homes.transactions, ports, (objects, uploads), bench.services.email)
@@ -86,7 +91,7 @@ async def test_the_archive_has_every_covered_table_and_nothing_of_another_accoun
         await bench.http.put("/v1/me/avatar", content=png(), headers=headers)
         first = (await bench.http.post("/v1/me/exports", headers=headers)).json()
         again = (await bench.http.post("/v1/me/exports", headers=headers)).json()
-        jobs = await run_due(runner_of(bench, homes, buckets))
+        jobs = await run_due(runner_of(bench, homes, buckets, valkey))
         latest = (await bench.http.get("/v1/me/exports/latest", headers=headers)).json()
     async with httpx.AsyncClient() as http:
         archive = zipfile.ZipFile(io.BytesIO((await http.get(latest["download_url"])).content))
@@ -143,7 +148,7 @@ async def test_a_kept_archive_goes_after_7_days_and_a_stuck_job_is_given_up(
     async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
         await account(bench, run_slot)
         headers = bearer((await login(bench))["access_token"])
-        runner = runner_of(bench, homes, buckets)
+        runner = runner_of(bench, homes, buckets, valkey)
         await bench.http.post("/v1/me/exports", headers=headers)
         await run_due(runner)
         await connection.execute(
