@@ -81,7 +81,7 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 | Step timeline, "Needs approval" badge | Action cards under the answer (fields, or a text edit word by word with each change taken or left; approve or decline) and "Needs you" on the home screen, on the routes of Leo §13.2 (`/v1/agent/actions*`), answered by mocks until `agent` ships (ADR 0025, `frontend/docs/leo-actions-api.md`) | proposals | Cd | agent |
 | Voice mode | Browser Web Speech only; transcripts sent as messages; no server voice | — | — | agent (client) |
 | Attachments (≤ 5 × 10 MB) | Presigned upload, digests in context | reads them | — | files → agent |
-| Leo in the admin panel | Russian suggestions ("Какие обращения ждут ответа?") imply admin toolsets | — | — | §8 SM-12 |
+| Leo in the admin panel | Russian suggestions ("Какие обращения ждут ответа?") imply admin toolsets | read-only over platform aggregates | — | agent ([ADR 0068](../adr/0068-leo-agent-slice.md) AG-D5; was §8 SM-12) |
 | Leo feed "Today", in-context chips | Not in the cabinet yet (Leo architecture §13.3) | initiative | Wa | proactive |
 
 ### 2.5 Files and knowledge
@@ -365,13 +365,14 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 #### 14–18. Leo: agent, decisions, memory, proactive, errands
 Scope, data and routes as the [Leo architecture](../design/leo/ARCHITECTURE.md) §3.3, §4, §10 and §13 define them, with three changes from this map:
 - `models` is not a Leo slice: the model catalogue, defaults and role assignments go to `studio` (§8 SM-5); the agent reads them through studio's `ModelRoutes` contract.
-- **agent** also owns the native model proxy (`/v1/ai/chat/stream`, `/v1/ai/vision/analyze`), the skills store used by Studio's skills dialog (`agent_skills`, `prompt_skills`), and the cabinet's Leo panel moved from NDJSON v1 to SSE v2 with action cards and the approvals inbox. Core toolset: `workspace.search` (knowledge), `read_result`, `load_toolset`, `navigate`, `ask_user`; egress `web` toolset.
+- **agent** also owns the native model proxy (`/v1/ai/chat/stream`, `/v1/ai/vision/analyze`), the skills store used by Studio's skills dialog (`agent_skills`; `prompt_skills` is studio's, [ADR 0068](../adr/0068-leo-agent-slice.md) AG-D11), the feedback on answers (AG-D13), and the cabinet's Leo panel moved from NDJSON v1 to SSE v2 with action cards and the approvals inbox. Core toolset: `read_result`, `load_toolset`, `navigate`; `workspace.search` comes with knowledge and `ask_user` with a cabinet UI for it (AG-D10); egress `web` toolset. Plan: [slices/agent.md](slices/agent.md).
+- **Leo in the admin panel** (ADR 0068 AG-D5, the owner's of 2026-10-15; replaces SM-12's "no tools in this cut" for Leo): the operator's Leo on `/v1/admin/agent/*`, read-only toolsets over platform aggregates, with charts and images for its analytics; no person's content, no writes.
 - **memory** also owns Settings › Memory and `leo_personalization` (profile core). **proactive** owns `/v1/ws/user` and the Today feed the home screen shows. **errands** owns the two native reminder routes.
 - **Leo is one per person** (§8.1 SM-1): it reads everything the person may access in Personal and in every workspace they belong to; the thread scope ranks its own space first and is the default target of writes; every answer names its sources and their space.
 
 #### 19. studio
 - **Scope:** the model catalogue and prices view (from F6), enable and default per model, role assignments; platform prompts (system prompt, behaviour, guardrails, feature prompts, versions, publish); the user's prompts per role, the active prompt per role and model settings per role; the user's personal context ("About you"); the Studio screen and the admin AI models and Platform prompts screens; the `PromptResolver` and `ModelRoutes` contracts used by capture, meetings, agent and memory.
-- **Owns:** platform (EU) `models_registry`, `model_defaults`, platform `prompt_templates`; home `model_role_assignments`, user `prompt_templates`, `user_contexts`, `user_context_files` (L2 → object).
+- **Owns:** platform (EU) `models_registry`, `model_defaults`, platform `prompt_templates`; home `model_role_assignments`, user `prompt_templates`, `prompt_skills` (a prompt's skills, composed by studio from agent's `SkillReader`; [ADR 0068](../adr/0068-leo-agent-slice.md) AG-D11), `user_contexts`, `user_context_files` (L2 → object).
 - **Routes:** no native or external; `/v1/studio/*`, `/v1/admin/{ai-models,platform-prompts}*`.
 - **Depends on:** F6 (provider price sync, spend reports, OpenRouter credits), billing (models on the plan), agent (skills store).
 - **Emits:** `studio.prompts_published`, `studio.model_disabled`.
@@ -552,7 +553,7 @@ DATA_MAPPING §5 is organised by S01–S17. In the follow-up step (§9) each tab
 | O2 dual pointer of room recordings | meetings, with files |
 | `meeting_note_action_items`, `tracker_*` | tasks (SM-3) |
 | `hub*` | hubs; `pcg_*` → commitments |
-| `models_registry`, `model_defaults`, `model_role_assignments`, `prompt_templates`, `prompt_skills`, `user_contexts`, `user_context_files` | studio (`prompt_skills`, `agent_skills` → agent) |
+| `models_registry`, `model_defaults`, `model_role_assignments`, `prompt_templates`, `prompt_skills`, `user_contexts`, `user_context_files` | studio (`agent_skills` → agent; `prompt_skills` stays studio's, [ADR 0068](../adr/0068-leo-agent-slice.md) AG-D11) |
 | `proactive_mail_cursors`, `proactive_mail_watches` | mail |
 | `oauth_accounts`, `connector_connections`, `meeting_integrations` | connectors |
 | `jira_links`, `jira_issue_links` | tasks |

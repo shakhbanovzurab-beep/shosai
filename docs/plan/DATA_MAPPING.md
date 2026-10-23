@@ -284,11 +284,11 @@ These start empty: `directory_domains`, `organizations`, `memberships`, `resourc
 | `calendar` | 8 | 6 | 1 | 0 | 1 |
 | `mail` | 2 | 2 | 0 | 0 | 0 |
 | `connectors` | 3 | 2 | 0 | 0 | 1 |
-| `agent` | 3 | 2 | 1 | 0 | 0 |
+| `agent` | 2 | 1 | 1 | 0 | 0 |
 | `memory` | 2 | 1 | 1 | 0 | 0 |
 | `proactive` | 4 | 2 | 1 | 0 | 1 |
 | `errands` | 1 | 0 | 1 | 0 | 0 |
-| `studio` | 7 | 5 | 1 | 0 | 1 |
+| `studio` | 8 | 6 | 1 | 0 | 1 |
 | `mcp` | 5 | 4 | 1 | 0 | 0 |
 | `support` | 4 | 3 | 1 | 0 | 0 |
 | `releases` | 1 | 0 | 1 | 0 | 0 |
@@ -320,6 +320,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **New in v2:** `org_id` — NULL: the draft has no work accounts (R3).
 - **identity plan ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)), 2026-10-14:** v2 adds `full_name` and `display_name` (both from the draft's `username`), `work_role` (NULL), `country` (NULL until the person confirms it), `avatar_key` and `state` (from `status`). The draft's `avatar_url` data URL is decoded, signature-checked and written to the RU bucket as the avatar object; `consent_*` columns become `user_consents` rows (`personal_data`, `marketing`), and the cross-border row follows the lawyer's answer (ADR 0045 point 5). Columns owned by other slices (minutes, storage, switches) move with those slices' mappings. The draft saved the browser's zone only into an empty `timezone` and never overwrote it, a hand-picked one included, so a migrated account with a zone keeps it fixed (`timezone_auto` false) and one without a zone follows the browser (`timezone_auto` true; identity step 17, [ADR 0058](../adr/0058-time-zones-the-persons-and-the-business-zone.md)).
 - `email_verified` is always true in the draft; moved as is.
+- **Agent plan, 2026-10-23:** `leo_voice_enabled`, `leo_kb_search_enabled`, `leo_web_search_enabled` and `leo_connector_search_enabled` move to agent's `agent_settings` (`voice_mode`, `knowledge_base_search`, `web_search`, `connected_services_search`); a row is written only for an account where one of them differs from its default (on), since a missing row means the defaults ([slices/agent.md](slices/agent.md) §3.4).
 - Anonymised accounts (R5) are moved because the money tables reference them.
 
 #### `refresh_sessions` → `refresh_sessions` · **transformed**
@@ -922,25 +923,23 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 ### 5.12 `agent`
 
 > **Leo architecture, accepted on 2026-10-08** ([docs/design/leo/ARCHITECTURE.md](../design/leo/ARCHITECTURE.md) §10, ADR 0023–0033). The plans of the Leo slices (`agent`, `memory`, `proactive`) revise the targets in 5.12–5.14: `memory_items` → `memory_facts` with a pgvector embedding (ADR 0030, ADR 0033); `proactive_nudges` → `agent_suggestions` with `suggestion_deliveries` and `suggestion_feedback` (ADR 0027); new tables without a draft source: `agent_threads`, `agent_messages`, `agent_runs`, `agent_actions`, `agent_decisions`, `proactive_triggers`, and the platform tables `decision_policies`, `decision_thresholds` (EU home). The Redis `agent:ckpt:*` keys stay dropped (U-5).
+>
+> **Agent plan, approved on 2026-10-23** ([slices/agent.md](slices/agent.md) §3.4, [ADR 0068](../adr/0068-leo-agent-slice.md)): new tables without a draft source also `agent_tool_results`, `agent_feedback`, `agent_eval_cases`; `agent_settings` is filled from the draft's `users.leo_*` switches (§5.1); `prompt_skills` moves to `studio` (§5.16, AG-D11).
 
 #### `agent_audit_log` → `agent_audit` · **transformed**
 
 - **Owner → home:** own `user_id`.
-- **Columns:** 13 of 14 move unchanged; exceptions:
+- **Columns:** 11 of 14 move unchanged; exceptions:
   - `created_at` — *transformed*. Partition key: monthly partitions; table renamed `agent_audit` per §8.2.
-- Append-only audit of agent write actions; `args` is redacted.
+  - `args` — *transformed*. Reduced to the argument names: the draft removed secrets but kept content, and v2's audit holds ids, tool names and codes only (agent plan §3.4, Leo audit A11).
+  - `result` — *dropped*. Result text; the status and `error_code` stay.
+- Append-only audit of agent write actions.
 
 #### `agent_skills` → `agent_skills` · **moved**
 
 - **Owner → home:** own `user_id`.
 - **Columns:** all 13 move unchanged.
 - Installed skills pinned to a commit; `body` is kept, not re-fetched.
-
-#### `prompt_skills` → `prompt_skills` · **moved**
-
-- **Owner → home:** via `prompt_id` → `prompt_templates.user_id`.
-- **Columns:** all 7 move unchanged.
-- Links a prompt to skills; a platform prompt with an admin's skill crosses homes and becomes a soft reference.
 
 ### 5.13 `memory`
 
@@ -1019,6 +1018,12 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **Owner → home:** own `user_id`; NULL = platform prompt (R12).
 - **Columns:** all 14 move unchanged.
 - Platform rows (`user_id IS NULL`) stay platform rows; they are never attributed to an admin.
+
+#### `prompt_skills` → `prompt_skills` · **moved**
+
+- **Owner → home:** via `prompt_id` → `prompt_templates.user_id`. Studio's since the agent plan ([ADR 0068](../adr/0068-leo-agent-slice.md) AG-D11): a prompt's composition lives with the prompt; the skills themselves stay agent's `agent_skills`.
+- **Columns:** all 7 move unchanged.
+- Links a prompt to skills; a platform prompt with an admin's skill crosses homes and becomes a soft reference.
 
 #### `prompt_role_bindings` → no v2 table · **dropped**
 

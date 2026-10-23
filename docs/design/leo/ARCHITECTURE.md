@@ -1,6 +1,6 @@
 # Leo — agent architecture
 
-- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md). Amended on 2026-10-13 by the [slice map](../../plan/SLICE_MAP.md): the `models` slice is absorbed by `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)); Leo is one per person across Personal and every workspace ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)); package ids S01–S17 are replaced by slice names.
+- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md). Amended on 2026-10-13 by the [slice map](../../plan/SLICE_MAP.md): the `models` slice is absorbed by `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)); Leo is one per person across Personal and every workspace ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)); package ids S01–S17 are replaced by slice names. Amended on 2026-10-23 by the [`agent` slice plan](../../plan/slices/agent.md) ([ADR 0068](../../adr/0068-leo-agent-slice.md)): sources from tools (§13.2), LangGraph's boundary (§3.3), rules before Jev (§6.3), parts built with their first consumer (§8.2, §8.4, §13.2), feedback and donated evaluation cases (§11.4), the cabinet's renderer (§17 Q-2). Where turns run (§12) is open until the plan's step 5a.
 - **Scope:** Leo, the proactive AI agent at the centre of the workspace (brand Shosai). The slices `agent`, `decisions`, `memory`, `proactive` and `errands`, and the agent-facing parts of `capture` (voice), `mcp`, `connectors` and `studio` (models and prompts).
 - **Inputs:** [AUDIT.md](AUDIT.md) (the draft's Leo); target architecture §1–§22; the new cabinet design in `frontend/src/features/leo`; the D1 contract (`contracts/draft/`); [Jev](#6-decision-layer-and-jev) public documentation as of 2026-10-08.
 - **Diagram:** [architecture.html](architecture.html) — components and layers, the turn and approval path, the proactive pipeline.
@@ -161,7 +161,7 @@ Feature-first, as the target architecture §5 and CLAUDE.md require. Leo is a se
   - `infrastructure/` holds the LangGraph graph, the Valkey checkpointer and event log, and repositories.
   - `channels/` holds HTTP/SSE, tasks and subscriptions.
 
-  LangGraph is infrastructure: no domain rule depends on it ([ADR 0023](../../adr/0023-leo-agent-core-layers.md)).
+  LangGraph is infrastructure: no domain rule depends on it ([ADR 0023](../../adr/0023-leo-agent-core-layers.md)). **Its boundary** ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D14): LangGraph is the frame of a turn — the loop model ⇄ tools, the pause for approval and its resume, the state passed between nodes. Its ready-made savers, prebuilt agents, `ToolNode`, model clients and memory or store are not used; rights, the Action Gateway, sources, taint, model calls through the provider port, storage and deletion are Shosai's own, the saver over LangGraph's public interface included. A saver that outgrows one file or needs LangGraph's internals is a separate decision for the owner.
 - **import-linter.** The existing contracts already enforce slice independence. One new rule: `agent.domain`, `decisions.domain` and `memory.domain` import neither `langgraph` nor provider SDKs.
 
 ---
@@ -315,8 +315,8 @@ caller ──decide(point, subject, features, snippets)──► Decision Servic
 
 | Point | Caller, when | Questions to Jev (one request) | Outcomes | Deadline | Fallback |
 |---|---|---|---|---|---|
-| `turn.route` | Agent, every turn, parallel with context | `noul` per candidate toolset (≤ 15), `choice` of skill (enabled skills + none), `score` complexity (4 levels), `noul` needs clarification | toolsets, skill, model tier, clarify-first flag | 350 ms | core toolset + toolsets of the surface, mentions and thread history; default tier; no skill |
-| `action.friction` | Action Gateway, per proposal | `noul` the action matches what the user asked in this turn; `noul` the content was steered by third-party text; `score` impact | standard card · card with warning, screen-only approval · refuse and explain | 400 ms | card with warning, screen-only approval |
+| `turn.route` | Agent, every turn, parallel with context | `noul` per candidate toolset (≤ 15), `choice` of skill (enabled skills + none), `score` complexity (4 levels), `noul` needs clarification | toolsets, skill, model tier, clarify-first flag | 350 ms | core toolset + toolsets of the surface, mentions and the thread's last 3 turns, then every other toolset the person may use while segment 2's cap holds; default tier; no skill (ADR 0068 AG-D7) |
+| `action.friction` | Action Gateway, per proposal | `noul` the action matches what the user asked in this turn; `noul` the content was steered by third-party text; `score` impact | standard card · card with warning, screen-only approval · refuse and explain | 400 ms | card with warning, screen-only approval when the run's taint is external or worse or the write is irreversible; otherwise standard (ADR 0068 AG-D7) |
 | `content.injection` | Context builder, per untrusted chunk entering a run (mail, web, foreign files, MCP output) | `noul` the text contains instructions addressed to an AI assistant | raise the run's taint level | 300 ms, async where possible | taint = external (the floor for any external content) |
 | `memory.admit` | Memory, after a turn (background) | `choice` kind (preference, fact, relationship, goal, none); `noul` durable beyond a week; `noul` sensitive personal data; `noul` updates an existing fact (with neighbours in state) | store · ask the user · supersede · skip | 2 s | store only explicit requests made through the memory UI or the memory tool; skip the rest |
 | `proactive.value` | Proactive, per candidate | `score` value to the user (5 levels); `score` urgency (4); `noul` the user already knows; `noul` actionable now | keep (with value, urgency) · drop | 2 s | the kind's static urgency, the draft's rules (`restraint.decide`) |
@@ -504,6 +504,8 @@ About 14 toolsets, each owned by a slice:
 - `navigate`;
 - `ask_user`, a structured clarification.
 
+Each arrives with its first consumer ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D10): `read_result`, `load_toolset` and `navigate` with the agent's tools; `workspace.search` with `knowledge`; `ask_user` with a cabinet UI for a structured question.
+
 **Routing** combines these signals:
 
 - `decide(turn.route)`;
@@ -564,7 +566,7 @@ proposed ──approve──► approved ──claim──► executing ──�
 
    A crash in between leaves `outcome_unknown`. That item is never retried automatically, and the user is told "may have been sent — check before retrying". At-most-once wins over at-least-once, as inv-12 demands.
 3. **Expiry.** Interactive proposals expire after 1 h. Proposals produced by initiative expire with their suggestion (≤ 24 h). Errand approvals are valid until their `not_before` plus the lateness tolerance (§9.5).
-4. **Secrets** go through a one-time Valkey vault (`GETDEL`, TTL 5 min). The secret is submitted only with the approval request, never by voice, never in a checkpoint, a message or an action row.
+4. **Secrets** go through a one-time Valkey vault (`GETDEL`, TTL 5 min). The secret is submitted only with the approval request, never by voice, never in a checkpoint, a message or an action row. The vault is built with the first tool that needs a secret (ADR 0068 AG-D10).
 5. **Batches** apply item by item, with honest partial success; they are never presented as atomic.
 6. **Audit.** Each item's effect emits an outbox event `agent.action_item.executed` (ids, tool, status, codes; no content) in the slice's transaction — core's `ActionItems.once` claims the item key in the effect-key ledger, runs the effect and writes the event together, so a slice's `execute` cannot forget either. The `agent` slice consumes it into `agent_audit` (monthly partitions, 12 months, append-only role). Rejections and expiries are audited by the gateway itself.
 
@@ -719,7 +721,9 @@ If any check fails, the errand becomes a **new proposal** delivered to the user,
 
 | Store | Data | Kind | Home | Retention | Loss |
 |---|---|---|---|---|---|
-| home PostgreSQL | `agent_threads`, `agent_messages` (monthly partitions, UUIDv7) | authoritative | user's / company's home | thread until deleted; tool payloads 30 d | backup, PITR (nfr-2) |
+| home PostgreSQL | `agent_threads`, `agent_messages` (monthly partitions, UUIDv7) | authoritative | user's / company's home | thread until deleted; a workspace's threads hidden when membership ends and erased 7 d later unless it is restored (ADR 0068 AG-D3) | backup, PITR (nfr-2) |
+| home PostgreSQL | `agent_tool_results` (monthly partitions) | authoritative | home | read for 30 d, partitions dropped after 2 months | — |
+| home PostgreSQL | `agent_feedback`, `agent_eval_cases` (ADR 0068 AG-D13) | authoritative | home | a rating with its answer; a case only with `improve_models` consent, erased with the rating, the consent, the thread or the account, and after 12 months | — |
 | home PostgreSQL | `agent_runs` (partitions) | authoritative telemetry: ids, model, tokens, cost, latencies, outcome, policy versions | home | 90 d | — |
 | home PostgreSQL | `agent_actions` | authoritative | home | 30 d after a terminal state; audit stays 12 months | — |
 | home PostgreSQL | `agent_audit` (partitions) | authoritative, append-only | home | 12 months | — |
@@ -828,7 +832,8 @@ This is below the transcript tables (1.9 TB/year) and needs no new store.
 | Decision calibration | Per policy: accuracy per band, ECE, coverage per language | CI on threshold or question change | ECE ≤ 0.05 |
 | Context budget | Token count per segment on fixtures; prefix stability (byte-identical segments 1–4 across turns) | CI | caps hold |
 | Cost | Tokens and model calls per scenario | CI | no increase > 10% without a recorded reason |
-| Online | Shadow decisions; sampled LLM-judge scores on 1% of runs (in the plane, scores only stored); thumbs; approval and rejection per tool; suggestion outcomes | production | dashboards; weekly review |
+| Online | Shadow decisions; sampled LLM-judge scores on 1% of runs (in the plane, scores only stored); "Useful / Not useful" under answers; approval and rejection per tool; suggestion outcomes | production | dashboards; weekly review |
+| Donated cases | Rated turns shared with the person's `improve_models` consent and no workspace source, kept in the person's home: "Not useful" ones as a set a change must improve, "Useful" ones as a guard set (ADR 0068 AG-D13) | `shosai agent eval`, before a release of a prompt, model or toolset change | no regression on the guard set |
 
 Prompts, policies, toolset descriptions and model choices are versioned, and every change runs the suites. The draft's live tool-choice eval was a skipped stub (`tests/test_agent_tool_choice_evals.py:228-244`). Here the suites are gates.
 
@@ -853,7 +858,7 @@ For Russian users, add 3 transactions × 45 ms ≈ 135 ms of round trip; this is
 **Throughput:**
 
 - At 10 K DAU: ≈ 3 turns/s peak and ≈ 35 concurrent streams. At 100 K DAU: ≈ 29 turns/s and ≈ 350 concurrent streams.
-- A run is I/O-bound. One API process holds 64 requests in flight (§4.3), so streams need a separate cap of 48 concurrent runs per process, with 429 `agent_busy` above it. That means 1 process at 10 K DAU and about 8 processes at 100 K DAU, by configuration with the N+2 rule.
+- A run is I/O-bound. One API process holds 64 requests in flight (§4.3), so streams need a separate cap of 48 concurrent runs per process, with 429 `agent_busy` above it. That means 1 process at 10 K DAU and about 8 processes at 100 K DAU, by configuration with the N+2 rule. **Open:** whether runs execute in API processes or in worker processes of a dedicated `agent` queue, the API only streaming from the run's log, is decided with the owner before the agent plan's step 5a ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D12, the plan's §2.1).
 - Model concurrency is bounded by the provider-wide semaphore (§12).
 
 **Valkey:**
@@ -931,6 +936,10 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 | `GET/PUT /v1/agent/settings` | initiative level, quiet hours, channels, model, answer language, style, switches |
 | `GET/POST /v1/agent/memory` · `PATCH/DELETE /v1/agent/memory/{id}` · `DELETE /v1/agent/memory` · `POST /v1/agent/memory/{id}/accept` | memory controls |
 | `GET/POST/DELETE /v1/agent/skills…` | skills |
+| `PUT/DELETE /v1/agent/messages/{id}/feedback` | "Useful / Not useful" under an answer (ADR 0068 AG-D13) |
+| `/v1/admin/agent/*` | Leo in the admin panel: the operator's threads and turns, read-only toolsets over platform aggregates (ADR 0068 AG-D5) |
+
+The full contract — turn body, refusals, page shapes — is in the [agent plan](../../plan/slices/agent.md) §3.3.
 
 **SSE events** — every event has `id: <seq>` and a 15 s heartbeat comment:
 
@@ -939,12 +948,13 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 | `run.started` | `run_id, thread_id, message_id` | — |
 | `step.started` / `step.completed` / `step.failed` | `id, seq, activity, tool?, toolset?, detail?, duration_ms?, error?` | `step` / `step_start`, `step_end` |
 | `text.delta` | `text` | `token` / `text` |
-| `artifact` | `kind (image · chart · file), ref, alt` | `image` (no base64 in the stream) |
-| `client.action` | `navigate{to}` · `set_theme{theme}` | `action{navigate,set_theme}` |
+| `sources` | the cumulative `LeoSource[]` (kind, id, title, space, locator, quote, highlight), numbered by position; the answer cites `[n]` (ADR 0068 AG-D1) | the new UI's mock `sources` |
+| `artifact` | `kind, ref, alt` and the kind's fields: `chat_digest` (`workspace_id, chat_id`; agent plan AG-R1); `chart` and `image` with the admin's analytics, `file` with its first producer (ADR 0068 AG-D10) | `image` (no base64 in the stream) |
+| `client.action` | `navigate{to}` (`set_theme` dropped, ADR 0068 AG-D10) | `action{navigate,set_theme}` |
 | `action.proposed` | the action as stored, server preview, friction, taint note, `invalidates` | `action{action_proposal}` |
 | `action.updated` | id, status, per-item outcome, `invalidates` | `action_result` |
 | `run.paused` | `action_id` | — |
-| `run.completed` | `message_id, truncated?` | `done` |
+| `run.completed` | `message_id, outcome (answered · stopped), truncated?` | `done` |
 | `run.failed` | `code` (i18n key on the client) | `error` |
 
 **Native, unchanged** (D1 `native` class; nfr-12):
@@ -977,7 +987,7 @@ This design turns that into a real client and adds what is missing. The frontend
 
 | Surface | Change |
 |---|---|
-| Leo panel | threads from the server; scope = the panel context; streaming from SSE with resume; the step timeline keeps its ledger reducer (dedup by id, order by seq, terminal states final) |
+| Leo panel | threads from the server; scope = the panel context; a "Recent chats" menu (ADR 0068 AG-D2); streaming from SSE with resume; the step timeline keeps its ledger reducer (dedup by id, order by seq, terminal states final); answers with their sources and spaces; "Useful / Not useful" under each answer (AG-D13) |
 | Action card | compound component (`ActionCard.Root/Header/Preview/Items/Actions`); shows the server preview, friction warning, taint note; approve/reject; per-item outcome; replaces the "needs approval" badge |
 | Approvals inbox | new: pending actions across threads, errands and MCP |
 | Leo feed ("Today") | new: suggestions, daily brief, feedback controls |
@@ -987,7 +997,7 @@ This design turns that into a real client and adds what is missing. The frontend
 
 **Engineering rules:**
 
-- **Render cost.** A token re-renders only the live message. The run store (Zustand) is keyed by run, with selector subscriptions, and deltas are batched per animation frame. Markdown is incremental: finished blocks are memoised and only the tail block re-parses. That fixes W1. The library choice is open (§17 Q-2).
+- **Render cost.** A token re-renders only the live message. The run store (Zustand) is keyed by run, with selector subscriptions, and deltas are batched per animation frame. Markdown is incremental: finished blocks are memoised and only the tail block re-parses. That fixes W1. The renderer is the cabinet's own, on `marked`'s lexer; it never renders raw HTML, renders links only with `https`, `http`, `mailto` or a cabinet path, loads no remote resource, and is tested on unfinished Markdown and XSS (§17 Q-2, ADR 0068 AG-D6).
 - **No hand-mirrored registries.** Types come from OpenAPI, and activity labels come from server activity codes plus i18n with a generic fallback. Cache invalidation follows `invalidates` from `action.updated` (fixes W2).
 - **Lazy loading.** The panel, voice and Markdown extras load on first open, prefetched on hover or ⌘I (fixes W4).
 - **Accessibility.** The panel is a dialog: focus moves in and out, Escape closes. The feed is `role="log"` and announces completed messages, not tokens. Mentions use combobox semantics (fixes W3).
@@ -1009,6 +1019,7 @@ This design turns that into a real client and adds what is missing. The frontend
 | [0030](../../adr/0030-leo-memory-v2.md) | Memory v2: admission by extraction + decision, supersession, provenance, untrusted rendering, switches on every path | regex capture of raw messages, longest-text merge |
 | [0031](../../adr/0031-leo-context-budget-and-compaction.md) | Budgeted, cache-stable context with digests, `read_result` and background compaction | message-count cap, unbounded context files |
 | [0032](../../adr/0032-leo-stream-protocol-v2.md) | `/v1/agent/*` with SSE events with ids and resume; native routes kept | `/v1/ai/agent/*` without resume; NDJSON mock |
+| [0068](../../adr/0068-leo-agent-slice.md) | The agent slice's decisions: sources from tools, past conversations, a workspace's threads after membership ends, routes before studio, Leo in the admin panel, the cabinet's Markdown renderer, rules before Jev, eval gates, parts built with their consumer, skills, feedback and donated cases, LangGraph's boundary; where turns run open | sources on sample data; client-held history; no rating |
 
 ---
 
@@ -1059,7 +1070,7 @@ Accepted by the owner on 2026-10-08 and applied to [ARCHITECTURE.md](../ARCHITEC
 | # | Question | Recommendation | Blocks |
 |---|---|---|---|
 | Q-1 | Where do memory vectors live: pgvector in the home DB or Qdrant? | **Decided 2026-10-08:** pgvector in the home DB for memory; Qdrant for knowledge and meetings ([ADR 0033](../../adr/0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md)) | — |
-| Q-2 | Streaming Markdown in the cabinet: `streamdown`, another library, or our own incremental renderer? (CLAUDE.md "Undecided") | decide by a measured prototype on a long answer (INP, CPU per frame) in phase 2 | phase 2 UI |
+| Q-2 | Streaming Markdown in the cabinet: `streamdown`, another library, or our own incremental renderer? (CLAUDE.md "Undecided") | **Decided 2026-10-23:** our own incremental renderer on `marked`'s lexer, with no raw HTML, allowed link schemes only and tests on unfinished Markdown and XSS; measured on a long answer in the agent plan's step 7 ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D6) | — |
 | Q-3 | Jev legal and contract: TypeSafe's retention and DPA are not published on the pages read; the endpoint is `alpha` | until resolved, Jev runs only on synthetic data and in shadow over features without text; every policy runs on its fallback | phase 4 activation |
 | Q-4 | Standing approvals (a confirmation given once for a class of writes)? | not now; revisit with acceptance data from phase 7, as an explicit amendment of inv-12 if ever | — |
 | Q-5 | The agent's name after the rebrand: does "Leo" stay? | keep "Leo" in code and prompts (`agent` slice); the visible name is i18n | copy only |
