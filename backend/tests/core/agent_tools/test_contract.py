@@ -172,5 +172,6 @@ def test_a_result_s_untrusted_text_is_labelled_from_the_closed_set() -> None:
     assert SEARCH.provenance is None
     assert labelled.provenance == "meeting:speech"
     assert {label.value for label in Provenance} == {
-        "mail", "web", "file:foreign", "file:own", "meeting:speech", "memory", "skill:user",
+        "mail", "web", "file:foreign", "file:own", "meeting:speech", "task:foreign", "memory",
+        "skill:user",
     }  # fmt: skip

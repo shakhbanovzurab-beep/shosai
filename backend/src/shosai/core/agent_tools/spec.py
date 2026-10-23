@@ -63,6 +63,8 @@ class Provenance(StrEnum):
     FILE_FOREIGN = "file:foreign"
     FILE_OWN = "file:own"
     MEETING_SPEECH = "meeting:speech"
+    # Текст задач, которого человек не писал: коллеги, встречи через извлечение, Jira.
+    TASK_FOREIGN = "task:foreign"
     MEMORY = "memory"
     SKILL_USER = "skill:user"
 

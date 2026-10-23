@@ -23,12 +23,15 @@ from shosai.features.tasks.application.cards import Cards
 from shosai.features.tasks.application.clocks import Clocks
 from shosai.features.tasks.application.columns import Columns
 from shosai.features.tasks.application.comments import Comments
+from shosai.features.tasks.application.leo_reads import LeoReads
 from shosai.features.tasks.application.stickers import Stickers
 from shosai.features.tasks.application.subtasks import Subtasks
 from shosai.features.tasks.application.task_edits import TaskEdits
 from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import TaskWrites
 from shosai.features.tasks.application.values import Values
+from shosai.features.tasks.channels.agent_tool_reads import agent_tools
+from shosai.features.tasks.channels.agent_tools import READ_TOOLS
 from shosai.features.tasks.channels.http.attachments import build_attachments_router
 from shosai.features.tasks.channels.http.board_parts import build_board_parts_router
 from shosai.features.tasks.channels.http.boards import build_boards_router
@@ -101,6 +104,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         ),
         task_handlers=task_handlers(AttachmentReleases(transactions, ports)),
         subscriptions=subscriptions(ports),
+        agent_tools=agent_tools(LeoReads(transactions, ports)),
         periodic_jobs=PERIODIC_JOBS,
         provides=(
             ACCOUNT_DATA_HANDLERS.bind(TasksAccountData(transactions, ports)),
@@ -132,4 +136,5 @@ TASKS = FeatureModule(
     events=(TaskAssigned, TaskDueChanged, TaskCompleted, TaskReopened, TaskDeleted),
     account_data=(ACCOUNT_DATA,),
     shareable=(TASK_RESOURCE,),
+    agent_tools=READ_TOOLS,
 )
