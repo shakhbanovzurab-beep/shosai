@@ -22,9 +22,8 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.ids import new_id
 from shosai.core.ports.directory import PortDirectory
-from shosai.features.files.contracts import UploadNotClaimableError
+from shosai.features.files.contracts import UploadNotClaimableError, UploadPurpose
 from shosai.features.files.contracts.held_objects import HELD_OBJECTS, HeldObject, ObjectLink
-from shosai.features.files.domain.purposes import UploadPurpose
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER, Principal
 from shosai.features.tasks.application.attachment_releases import AttachmentReleases
 from shosai.features.tasks.application.attachment_views import attachment_of
