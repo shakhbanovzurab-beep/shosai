@@ -83,6 +83,8 @@ class NewTask:
     assignee: Assignee = field(default_factory=Assignee)
     project_id: UUID | None = None
     chat: ChatOrigin | None = None
+    # Кто пишет задачу: человек сам или Лео с его одобрения (шаг 8).
+    created_by: CreatedBy = CreatedBy.PERSON
 
 
 class TaskMade(BaseModel):
@@ -147,13 +149,11 @@ class TaskWrites:
     ) -> TaskView:
         """A new task in the person's space or a workspace's; once per key when one is sent."""
         try:
-            title, description = checked_title(draft.title), checked_description(draft.description)
-            assignee = checked_assignee(draft.workspace_id, draft.assignee)
+            clean = checked_draft(draft)
         except TaskRuleError as error:
             raise rule_failure(error) from error
-        clean = replace(draft, title=title, description=description, assignee=assignee)
         async with self._transactions.begin(scope_in(principal, draft.workspace_id)) as session:
-            await self._admit(session, principal, clean)
+            await self.admit(session, principal, clean)
             if client_key is None:
                 task_id = await self.make(session, principal, clean)
             else:
@@ -172,7 +172,8 @@ class TaskWrites:
             view = await self._reads.view(session, principal.user_id, task_id)
         return await self._reads.signed(principal, view)
 
-    async def _admit(self, session: AsyncSession, principal: Principal, draft: NewTask) -> None:
+    async def admit(self, session: AsyncSession, principal: Principal, draft: NewTask) -> None:
+        """The space is the person's to write in, and its member and project are its own."""
         if draft.workspace_id is not None:
             memberships = await self._ports.get(MEMBERSHIP_READER).active(
                 session, principal.user_id
@@ -213,7 +214,7 @@ class TaskWrites:
             assignee_name=draft.assignee.name,
             project_id=draft.project_id,
             source=(TaskSource.MANUAL if chat is None else TaskSource.CHAT).value,
-            created_by=(CreatedBy.PERSON if chat is None else CreatedBy.LEO).value,
+            created_by=(draft.created_by if chat is None else CreatedBy.LEO).value,
             leo_fields=[],
             created_at=now,
             updated_at=now,
@@ -259,6 +260,17 @@ class TaskWrites:
         await self._releases.owner(scope_in(principal, None))
         if org_id is not None:
             await self._releases.owner(scope_in(principal, org_id))
+
+
+def checked_draft(draft: NewTask) -> NewTask:
+    """The draft with its words trimmed and its assignee fit for its space; a broken rule
+    raises."""
+    return replace(
+        draft,
+        title=checked_title(draft.title),
+        description=checked_description(draft.description),
+        assignee=checked_assignee(draft.workspace_id, draft.assignee),
+    )
 
 
 def _chat_of(draft: NewTask) -> ChatOrigin | None:

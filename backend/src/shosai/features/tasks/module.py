@@ -13,6 +13,7 @@ from contextlib import asynccontextmanager
 
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.core.idempotency.action_items import ActionItems
 from shosai.features.tasks.application.account_data import ACCOUNT_DATA, TasksAccountData
 from shosai.features.tasks.application.attachment_releases import AttachmentReleases
 from shosai.features.tasks.application.attachments import Attachments
@@ -30,8 +31,11 @@ from shosai.features.tasks.application.task_edits import TaskEdits
 from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import TaskWrites
 from shosai.features.tasks.application.values import Values
+from shosai.features.tasks.channels.agent_task_changes import TaskChanges
+from shosai.features.tasks.channels.agent_task_creates import TaskCreates
 from shosai.features.tasks.channels.agent_tool_reads import agent_tools
 from shosai.features.tasks.channels.agent_tools import READ_TOOLS
+from shosai.features.tasks.channels.agent_write_tools import WRITE_TOOLS
 from shosai.features.tasks.channels.http.attachments import build_attachments_router
 from shosai.features.tasks.channels.http.board_parts import build_board_parts_router
 from shosai.features.tasks.channels.http.boards import build_boards_router
@@ -89,6 +93,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     edits = TaskEdits(transactions, ports, services.outbox)
     threads = (Subtasks(transactions, ports), Comments(transactions, ports, services.effects))
     boards = (BoardReads(transactions, ports), BoardWrites(transactions, ports, services.outbox))
+    items = ActionItems(services.effects, services.outbox)
     yield FeatureParts(
         http_routers=(
             build_tasks_router((reads, writes, edits), ports),
@@ -104,7 +109,11 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         ),
         task_handlers=task_handlers(AttachmentReleases(transactions, ports)),
         subscriptions=subscriptions(ports),
-        agent_tools=agent_tools(LeoReads(transactions, ports)),
+        agent_tools=(
+            *agent_tools(LeoReads(transactions, ports)),
+            TaskCreates(transactions, (writes, items)).bound(),
+            *TaskChanges(transactions, ports, (edits, items)).bound(),
+        ),
         periodic_jobs=PERIODIC_JOBS,
         provides=(
             ACCOUNT_DATA_HANDLERS.bind(TasksAccountData(transactions, ports)),
@@ -136,5 +145,5 @@ TASKS = FeatureModule(
     events=(TaskAssigned, TaskDueChanged, TaskCompleted, TaskReopened, TaskDeleted),
     account_data=(ACCOUNT_DATA,),
     shareable=(TASK_RESOURCE,),
-    agent_tools=READ_TOOLS,
+    agent_tools=(*READ_TOOLS, *WRITE_TOOLS),
 )

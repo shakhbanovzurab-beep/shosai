@@ -29,8 +29,12 @@ from shosai.features.identity.contracts import Principal
 from shosai.features.tasks.application import clock_rules
 from shosai.features.tasks.application.board_access import owned_board
 from shosai.features.tasks.application.boards import board_failure
-from shosai.features.tasks.application.columns import not_found as column_not_found
-from shosai.features.tasks.application.placements import CardSpot, board_columns, place
+from shosai.features.tasks.application.placements import (
+    CardSpot,
+    board_columns,
+    column_kind,
+    place,
+)
 from shosai.features.tasks.application.recurring import copy_checklist
 from shosai.features.tasks.application.scoping import Scoping, locked_task, rule_failure, scope_in
 from shosai.features.tasks.application.task_edits import Edit, TaskEdits
@@ -50,7 +54,6 @@ from shosai.features.tasks.domain.tasks import (
     checked_title,
 )
 from shosai.features.tasks.infrastructure.board_records import (
-    BoardColumnRecord,
     TaskPlacementRecord,
 )
 from shosai.features.tasks.infrastructure.sticker_records import TaskStickerValueRecord
@@ -106,7 +109,7 @@ class Cards:
         viewer, now = principal.user_id, self._clock()
         async with self._transactions.begin(scope_in(principal, None)) as session:
             await owned_board(session, viewer, board_id, lock=True)
-            kind = await _column_kind(session, board_id, new.column_id)
+            kind = await column_kind(session, board_id, new.column_id)
             if kind is not TaskStatus.DONE:
                 await _room(session, viewer, board_id)
             source = (
@@ -143,7 +146,7 @@ class Cards:
             before = TaskStatus(record.status)
             status: TaskStatus | Unset = UNSET
             if change.move is not None:
-                kind = await _column_kind(session, board_id, change.move[0])
+                kind = await column_kind(session, board_id, change.move[0])
                 moved = status_after_move(before, kind)
                 status = UNSET if moved is before else moved
             edit = TaskChange(
@@ -186,17 +189,6 @@ def _draft(title: str, kind: TaskStatus, source: TaskRecord | None) -> NewTask:
         recurrence=recurrence_of(source.recurrence) if source.recurrence else None,
         assignee=Assignee(name=source.assignee_name),
     )  # fmt: skip
-
-
-async def _column_kind(session: AsyncSession, board_id: UUID, column_id: UUID) -> TaskStatus:
-    kind = await session.scalar(
-        select(BoardColumnRecord.kind).where(
-            BoardColumnRecord.id == column_id, BoardColumnRecord.board_id == board_id
-        )
-    )
-    if kind is None:
-        raise column_not_found()
-    return TaskStatus(kind)
 
 
 async def _room(session: AsyncSession, viewer: UUID, board_id: UUID) -> None:

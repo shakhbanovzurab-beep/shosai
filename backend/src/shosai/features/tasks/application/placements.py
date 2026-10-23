@@ -8,11 +8,13 @@ grows past its bound the column gets evenly spaced keys again, in the same trans
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime
+from http import HTTPStatus
 from uuid import UUID
 
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.kernel.errors import AppError
 from shosai.features.tasks.domain.placement import BoardColumn
 from shosai.features.tasks.domain.ranks import needs_rebalance, rank_at, rank_between, spaced_ranks
 from shosai.features.tasks.domain.tasks import TaskStatus
@@ -176,3 +178,15 @@ async def _set_rank(session: AsyncSession, spot: CardSpot, task_id: UUID, key: s
         )
         .values(rank=key)
     )
+
+
+async def column_kind(session: AsyncSession, board_id: UUID, column_id: UUID) -> TaskStatus:
+    """The kind of a column of the board; 404 when the board has no such column."""
+    kind = await session.scalar(
+        select(BoardColumnRecord.kind).where(
+            BoardColumnRecord.id == column_id, BoardColumnRecord.board_id == board_id
+        )
+    )
+    if kind is None:
+        raise AppError("column_not_found", HTTPStatus.NOT_FOUND)
+    return TaskStatus(kind)
