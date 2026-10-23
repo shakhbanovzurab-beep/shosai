@@ -83,7 +83,7 @@ async def follow_departure(
         delete(PLACED).where(PLACED.user_id == person, PLACED.task_id.in_(workspace_tasks))
     )
     await _touch(session, boards, now)
-    unassigned = await session.execute(
+    unassigned = await session.scalars(
         update(TaskRecord)
         .where(
             TaskRecord.org_id == org_id,
@@ -96,7 +96,7 @@ async def follow_departure(
     passed = await _pass_on(session, removed, now)
     log.info(
         "Задачи ушедшего участника переданы",
-        org_id=str(org_id), unassigned=len(unassigned.all()), passed=passed, boards=len(boards),
+        org_id=str(org_id), unassigned=len(list(unassigned)), passed=passed, boards=len(boards),
     )  # fmt: skip
 
 
@@ -108,7 +108,7 @@ async def _pass_on(session: AsyncSession, removed: MemberRemoved, now: datetime)
             org_id=str(removed.org_id),
         )
         return 0
-    passed = await session.execute(
+    passed = await session.scalars(
         update(TaskRecord)
         .where(TaskRecord.org_id == removed.org_id, TaskRecord.user_id == removed.user_id)
         .values(user_id=removed.successor_user_id, version=TaskRecord.version + 1, updated_at=now)
@@ -120,7 +120,7 @@ async def _pass_on(session: AsyncSession, removed: MemberRemoved, now: datetime)
             .where(model.org_id == removed.org_id, model.user_id == removed.user_id)
             .values(user_id=removed.successor_user_id)
         )
-    return len(passed.all())
+    return len(list(passed))
 
 
 async def _touch(session: AsyncSession, boards: Sequence[UUID], now: datetime) -> None:
