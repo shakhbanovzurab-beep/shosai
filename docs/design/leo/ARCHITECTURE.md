@@ -1,6 +1,6 @@
 # Leo — agent architecture
 
-- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md). Amended on 2026-10-13 by the [slice map](../../plan/SLICE_MAP.md): the `models` slice is absorbed by `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)); Leo is one per person across Personal and every workspace ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)); package ids S01–S17 are replaced by slice names. Amended on 2026-10-23 by the [`agent` slice plan](../../plan/slices/agent.md) ([ADR 0068](../../adr/0068-leo-agent-slice.md)): sources from tools (§13.2), LangGraph's boundary (§3.3), rules before Jev (§6.3), parts built with their first consumer (§8.2, §8.4, §13.2), feedback and donated evaluation cases (§11.4), the cabinet's renderer (§17 Q-2). Where turns run (§12) is open until the plan's step 5a.
+- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md). Amended on 2026-10-13 by the [slice map](../../plan/SLICE_MAP.md): the `models` slice is absorbed by `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)); Leo is one per person across Personal and every workspace ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)); package ids S01–S17 are replaced by slice names. Amended on 2026-10-23 by the [`agent` slice plan](../../plan/slices/agent.md) ([ADR 0068](../../adr/0068-leo-agent-slice.md)): sources from tools (§13.2), LangGraph's boundary (§3.3), rules before Jev (§6.3), parts built with their first consumer (§8.2, §8.4, §13.2), feedback and donated evaluation cases (§11.4), the cabinet's renderer (§17 Q-2), and turns run by worker processes of a dedicated `agent` queue, the API only streaming them (§3.1, §11.1, §12).
 - **Scope:** Leo, the proactive AI agent at the centre of the workspace (brand Shosai). The slices `agent`, `decisions`, `memory`, `proactive` and `errands`, and the agent-facing parts of `capture` (voice), `mcp`, `connectors` and `studio` (models and prompts).
 - **Inputs:** [AUDIT.md](AUDIT.md) (the draft's Leo); target architecture §1–§22; the new cabinet design in `frontend/src/features/leo`; the D1 contract (`contracts/draft/`); [Jev](#6-decision-layer-and-jev) public documentation as of 2026-10-08.
 - **Diagram:** [architecture.html](architecture.html) — components and layers, the turn and approval path, the proactive pipeline.
@@ -107,9 +107,11 @@ The design must hold the right-hand column without a structural change.
                      │                │ ToolSpec        │ decide()
   ───────────────────┼────────────────┼─────────────────┼──────────────── Infrastructure ─────────
    home PostgreSQL (threads, actions, memory, suggestions) · Valkey (leases, run checkpoints,
-   run event logs, user state) · TaskIQ + outbox · scheduler · Qdrant · provider port (F6):
-   OpenRouter chat/embed/rerank/decisions(Jev) · Web Push · domain slices via contracts
+   run event logs, user state) · TaskIQ (`agent` queue: runs) + outbox · scheduler · Qdrant ·
+   provider port (F6): OpenRouter chat/embed/rerank/decisions(Jev) · Web Push · domain slices
 ```
+
+**Where the Agent Core runs** ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D12). A turn, and the resume after an approval, is a task of a dedicated TaskIQ queue `agent`, served by its own worker processes. The API authenticates, admits, commits the question and the `agent_runs` row, sends `run.started`, enqueues the run and streams the run's event log from Valkey; it holds no run state. Any API process can serve any run's stream, and a release of the API cuts no run.
 
 ### 3.2 The rule of separation
 
@@ -765,7 +767,8 @@ This is below the transcript tables (1.9 TB/year) and needs no new store.
 | Link to the Russian DB lost | Leo 503 for Russian users (§11 flow 8); EU unaffected |
 | Qdrant down | Knowledge search falls back to PostgreSQL keyword search (§4.3); memory unaffected (pgvector in the home DB, ADR 0033) |
 | A domain slice's tool fails | Typed error result to the model; writes record the item `failed` with a code |
-| API process dies mid-run | Lease expires (30 s); the run is marked `failed{process_lost}` by a sweep; the user message is already persisted, so "retry" re-runs; paused actions are unaffected |
+| Agent worker dies mid-run | Lease expires (30 s); the run is marked `failed{process_lost}` by a sweep, never re-run by the queue; the user message is already persisted, so "retry" re-runs; paused actions are unaffected |
+| API process dies or is released while streaming | The run continues in its agent worker; the client resumes from `Last-Event-ID` on another API process |
 | Process dies mid-execution of an approved action | The item stays `executing` past its lease → `outcome_unknown`; the user is told; never auto-retried (§8.4) |
 | Client disconnect | The run continues; the answer is persisted; the client resumes from `Last-Event-ID` or reloads the thread |
 | Unknown exception in a run | Always a terminal `run.failed{code}` (fixes C5); traced and counted |
@@ -858,7 +861,8 @@ For Russian users, add 3 transactions × 45 ms ≈ 135 ms of round trip; this is
 **Throughput:**
 
 - At 10 K DAU: ≈ 3 turns/s peak and ≈ 35 concurrent streams. At 100 K DAU: ≈ 29 turns/s and ≈ 350 concurrent streams.
-- A run is I/O-bound. One API process holds 64 requests in flight (§4.3), so streams need a separate cap of 48 concurrent runs per process, with 429 `agent_busy` above it. That means 1 process at 10 K DAU and about 8 processes at 100 K DAU, by configuration with the N+2 rule. **Open:** whether runs execute in API processes or in worker processes of a dedicated `agent` queue, the API only streaming from the run's log, is decided with the owner before the agent plan's step 5a ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D12, the plan's §2.1).
+- A run is I/O-bound. Runs execute in worker processes of the dedicated `agent` queue, at most 48 concurrent runs each ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D12): 1 process at 10 K DAU and about 8 at 100 K DAU, by configuration with the N+2 rule. A count of running runs across the fleet, kept in Valkey, answers 429 `agent_busy` when the workers are full, so a turn never waits in the queue behind a full fleet. The run task has no automatic retry. Agent workers stop with a 200 s grace and are handed over without a gap; the API keeps its 30 s.
+- The API serves the streams: one blocked `XREAD` per process tails all the run logs its clients follow, so an open stream costs it kilobytes and no Valkey connection of its own. The queue's pickup adds a few milliseconds before the first token; it is measured and counted in the platform overhead.
 - Model concurrency is bounded by the provider-wide semaphore (§12).
 
 **Valkey:**
@@ -1019,7 +1023,7 @@ This design turns that into a real client and adds what is missing. The frontend
 | [0030](../../adr/0030-leo-memory-v2.md) | Memory v2: admission by extraction + decision, supersession, provenance, untrusted rendering, switches on every path | regex capture of raw messages, longest-text merge |
 | [0031](../../adr/0031-leo-context-budget-and-compaction.md) | Budgeted, cache-stable context with digests, `read_result` and background compaction | message-count cap, unbounded context files |
 | [0032](../../adr/0032-leo-stream-protocol-v2.md) | `/v1/agent/*` with SSE events with ids and resume; native routes kept | `/v1/ai/agent/*` without resume; NDJSON mock |
-| [0068](../../adr/0068-leo-agent-slice.md) | The agent slice's decisions: sources from tools, past conversations, a workspace's threads after membership ends, routes before studio, Leo in the admin panel, the cabinet's Markdown renderer, rules before Jev, eval gates, parts built with their consumer, skills, feedback and donated cases, LangGraph's boundary; where turns run open | sources on sample data; client-held history; no rating |
+| [0068](../../adr/0068-leo-agent-slice.md) | The agent slice's decisions: sources from tools, past conversations, a workspace's threads after membership ends, routes before studio, Leo in the admin panel, the cabinet's Markdown renderer, rules before Jev, eval gates, parts built with their consumer, skills, feedback and donated cases, LangGraph's boundary; turns on a dedicated `agent` queue's workers | sources on sample data; client-held history; no rating |
 
 ---
 

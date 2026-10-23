@@ -94,9 +94,9 @@
 | Clients | user devices | Web cabinet (Vite SPA, PWA); public site in the browser; macOS, iOS, Linux, Windows apps; external MCP clients. One base URL `shosai.tech` ([ADR 0040](../adr/0040-shosai-tech-is-the-domain.md)); the shipped native clients call `whisperer.one`, pointed at v2 at cutover Desktop clients buffer up to 30 s of unsent audio | — |
 | Edge | plane | NGINX ×2: TLS, static assets, rate limits; `/v1/ws/*` → WS gateway (least_conn), `/v1/*` and `/email/*` (images that mail points at) → API; cabinet paths (`/app/*`, `/admin/*`, OAuth callback, `/unauthorized`) → the cabinet's static files; every other path → public site; handshake closed with 1013 when the plane is full | 2 nodes |
 | Public site | plane | Next.js: server-rendered and statically generated public pages — landing, pricing, documentation, blog, legal, help centre, shared-link pages with previews; real `404`; `sitemap.xml`, `robots.txt`. Reads data only from the API; holds no business logic, database connection or queue ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | N stateless processes |
-| API | plane | FastAPI: cabinet, Leo, billing, companies and access policy, administration, presigned uploads, acquirer webhooks | N processes; one pool per database |
+| API | plane | FastAPI: cabinet, Leo (turns admitted, committed and streamed from their event logs; run by the agent workers), billing, companies and access policy, administration, presigned uploads, acquirer webhooks | N processes; one pool per database |
 | WS gateway | plane | Live capture, voice, translation, ingest of room participant tracks from LiveKit egress. Meeting resume state lives in Redis; any process can resume any meeting | 250 meetings per process; 11–13 processes |
-| Workers | plane | TaskIQ on Redis Streams, queues `critical`, `default`, `bulk`, `meeting`: outbox relay, transcript queue drain, post-meeting pipeline, indexing, bank statement reconciliation | processes per queue; one pool per database |
+| Workers | plane | TaskIQ on Redis Streams, queues `critical`, `default`, `bulk`, `meeting`, `agent`: outbox relay, transcript queue drain, post-meeting pipeline, indexing, bank statement reconciliation; Leo's turns on `agent`, whose workers run at most 48 turns each and stop with a 200 s grace ([ADR 0068](../adr/0068-leo-agent-slice.md)) | processes per queue; one pool per database |
 | Scheduler | plane | One process: periodic jobs from `schedule_runs`, due rows from `errands` and `proactive_triggers`. Only enqueues tasks | 1 |
 | Valkey (managed) | EU | Task streams, transcript queue, locks, WS slots, meeting resume state, Leo run state (active and paused runs, run event logs, thread leases), circuit-breaker state. AOF every second, replica, `noeviction` | managed |
 | Redis cache | plane | LRU cache only; losing it is harmless | container |
@@ -139,7 +139,7 @@
 
 ## 5. Process model and code structure
 
-- **One modular monolith, one image**, four process roles: `api`, `ws`, `workers` (per queue), `scheduler`.
+- **One modular monolith, one image**, four process roles: `api`, `ws`, `workers` (per queue), `scheduler`. Leo's turns run as tasks of the `agent` queue in its own worker processes; the API admits a turn, commits it and streams its events from the run's log in Valkey, holding no run state ([ADR 0068](../adr/0068-leo-agent-slice.md) AG-D12).
 - **Two web applications** beside it ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)): the cabinet in `frontend/` (Vite SPA, static files served by the edge) and the public site in `site/` (Next.js, its own image and process). Both follow the same feature-first layout; neither owns an API — the backend is FastAPI only.
 - **Feature First** (vertical slices): `core/`, `features/<domain>/`, `composition/`, `entrypoints/`. A feature owns its data, application services, channels (HTTP, WS, tasks, consumers) and its README.
 - A feature depends on another only through its `contracts`. Boundaries are enforced by import-linter contracts in CI.
@@ -369,7 +369,7 @@
 
 ## 12. Async work and scheduling
 
-- **TaskIQ on Redis Streams.** Queues: `critical` (money, email), `default`, `bulk`, `meeting`. Every task declares a deadline, queue and retry policy.
+- **TaskIQ on Redis Streams.** Queues: `critical` (money, email), `default`, `bulk`, `meeting`, `agent` (Leo's turns; never retried automatically, a lost run is swept as failed; [ADR 0068](../adr/0068-leo-agent-slice.md)). Every task declares a deadline, queue and retry policy.
 - **Events:**
   - written as `outbox_messages` in the transaction of the effect;
   - the relay enqueues one task per subscriber; a tick per home every 5 s drains in passes of 100 while each pass claims a full batch, within a 15 s budget;
@@ -598,6 +598,7 @@ Each of these counters must stay at zero; any non-zero value pages.
   - no build on production hosts;
   - production secrets are not available to development sessions.
 - **Order:** expand-only migrations applied to both homes by one release → task consumers → API → WS (drain with `server.shutdown`, up to 600 s).
+- **Leo's turns across a release** ([ADR 0068](../adr/0068-leo-agent-slice.md)): the agent workers are handed over without a gap — the new one takes runs before the old one gets SIGTERM — and the old one finishes its runs within a 200 s stop grace; the API keeps its 30 s, and its clients resume their streams from the run's log on the new API.
 - **Restore:** quarterly drill per home; runbooks written.
 - **Pinned versions** for LiveKit, egress, coturn and Nango; they are updated by the common release.
 - **Companies:**
