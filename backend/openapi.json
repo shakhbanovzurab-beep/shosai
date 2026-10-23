@@ -11045,6 +11045,114 @@
           }
         }
       }
+    },
+    "/v1/agent/settings": {
+      "get": {
+        "tags": [
+          "agent"
+        ],
+        "summary": "Get Agent Settings",
+        "description": "Your Settings > Leo.",
+        "operationId": "get_agent_settings_v1_agent_settings_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentSettingsOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "agent"
+        ],
+        "summary": "Patch Agent Settings",
+        "description": "Change some of your Settings > Leo; the answer is all of them as saved.",
+        "operationId": "patch_agent_settings_v1_agent_settings_patch",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentSettingsPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentSettingsOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -11460,6 +11568,140 @@
         ],
         "title": "AdminUserCard",
         "description": "What the admin sees of one account."
+      },
+      "AgentSettingsOut": {
+        "properties": {
+          "leo_model": {
+            "type": "string",
+            "title": "Leo Model",
+            "description": "`auto`, or a model the person's plan offers."
+          },
+          "response_language": {
+            "type": "string",
+            "title": "Response Language",
+            "description": "`auto` (the interface's), or a language code."
+          },
+          "response_length": {
+            "$ref": "#/components/schemas/ResponseLength"
+          },
+          "web_search": {
+            "type": "boolean",
+            "title": "Web Search"
+          },
+          "voice_mode": {
+            "type": "boolean",
+            "title": "Voice Mode",
+            "description": "Off also hides the microphone."
+          },
+          "knowledge_base_search": {
+            "type": "boolean",
+            "title": "Knowledge Base Search"
+          },
+          "connected_services_search": {
+            "type": "boolean",
+            "title": "Connected Services Search"
+          }
+        },
+        "type": "object",
+        "required": [
+          "leo_model",
+          "response_language",
+          "response_length",
+          "web_search",
+          "voice_mode",
+          "knowledge_base_search",
+          "connected_services_search"
+        ],
+        "title": "AgentSettingsOut",
+        "description": "Settings > Leo as saved."
+      },
+      "AgentSettingsPatch": {
+        "properties": {
+          "leo_model": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leo Model"
+          },
+          "response_language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 10,
+                "minLength": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Response Language"
+          },
+          "response_length": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResponseLength"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "web_search": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Web Search"
+          },
+          "voice_mode": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Mode"
+          },
+          "knowledge_base_search": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Knowledge Base Search"
+          },
+          "connected_services_search": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connected Services Search"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "AgentSettingsPatch",
+        "description": "The fields to change; the others stay as they are."
       },
       "AssigneeOut": {
         "properties": {
@@ -17895,6 +18137,16 @@
         ],
         "title": "ResetRequest",
         "description": "The token of the link and the new password."
+      },
+      "ResponseLength": {
+        "type": "string",
+        "enum": [
+          "concise",
+          "balanced",
+          "detailed"
+        ],
+        "title": "ResponseLength",
+        "description": "How much Leo says by default."
       },
       "RestoreBody": {
         "properties": {

@@ -12,6 +12,7 @@ import { usePollingResource } from "@/hooks/use-polling-resource";
 
 import type { SettingsSection } from "../domain/sections";
 import { useSettingsDialog } from "../model/dialog-store";
+import { leoSettingsResource } from "../model/leo-settings";
 import { settingsResource } from "../model/settings-resources";
 import { AccountSection } from "./account/account-section";
 import { BillingSection } from "./billing/billing-section";
@@ -59,13 +60,23 @@ function SectionBody({ section }: { section: SettingsSection }) {
   if (section === "usage") return <UsageSection />;
   if (section === "mcp") return <McpSection />;
   if (section === "connectors") return <ConnectorsSection />;
+  if (section === "leo") return <LeoSettingsBody />;
   return (
     <SectionState state={settings} onRetry={() => void settingsResource.refresh()}>
       {(data) => {
-        if (section === "leo") return <LeoSection settings={data} />;
         if (section === "hotkeys") return <HotkeysSection settings={data} />;
         return <MemorySection settings={data} />;
       }}
+    </SectionState>
+  );
+}
+
+/** Settings › Leo, read from agent's own route. */
+function LeoSettingsBody() {
+  const settings = usePollingResource(leoSettingsResource);
+  return (
+    <SectionState state={settings} onRetry={() => void leoSettingsResource.refresh()}>
+      {(data) => <LeoSection settings={data} />}
     </SectionState>
   );
 }
@@ -97,7 +108,7 @@ export function SettingsDialog() {
                   : "text-muted-foreground hover:bg-background/60 hover:text-foreground",
               )}
             >
-              {item.icon ? <item.icon className="size-4" aria-hidden="true" /> : <LeoOrb />}
+              {item.icon ? <item.icon className="size-4 shrink-0" aria-hidden="true" /> : <LeoOrb />}
               {t(`sections.${item.id}`)}
             </button>
           ))}

@@ -1,15 +1,11 @@
 import { z } from "zod";
 
-import { isSubscriptionTextModel } from "@/features/studio/mocks/demo-models";
-import { LANGUAGES } from "@/lib/language";
 import { JsonResponse } from "@/mocks/runtime";
 
 import { comboProblem, effectiveBindings, HOTKEY_IDS, type HotkeyBindings, isValidCombo } from "../domain/hotkeys";
-import { RESPONSE_LENGTHS, type UserSettings } from "../domain/settings-contract";
+import type { UserSettings } from "../domain/settings-contract";
 import { getSettings, patchSettings } from "./demo-settings";
 import { firstIssue, type Problem, readJson, refuse, refuseCombo } from "./problems";
-
-const languages = ["auto", ...LANGUAGES.map((l) => l.code)] as [string, ...string[]];
 
 // Messages are problem codes, worded for the request when it is refused (see ./problems).
 const FIXABLE = ["hotkeyUnsupported"] as const satisfies Problem[];
@@ -17,13 +13,6 @@ type Fixable = (typeof FIXABLE)[number];
 
 const patchSchema = z
   .object({
-    leo_model: z.string().max(200),
-    response_language: z.enum(languages),
-    response_length: z.enum(RESPONSE_LENGTHS),
-    web_search: z.boolean(),
-    voice_mode: z.boolean(),
-    knowledge_base_search: z.boolean(),
-    connected_services_search: z.boolean(),
     memory_enabled: z.boolean(),
     hotkeys: z.partialRecord(
       z.enum(HOTKEY_IDS),
@@ -49,7 +38,7 @@ function hotkeysProblem(hotkeys: HotkeyBindings) {
   return null;
 }
 
-/** /api/settings: the user's preferences. */
+/** /api/settings: the preferences memory and capture still serve from mocks (Leo's are agent's `/v1/agent/settings`). */
 export const settingsRoute = {
   async GET(_request: Request) {
     return JsonResponse.json<UserSettings>(getSettings());
@@ -61,8 +50,6 @@ export const settingsRoute = {
     if (!body.success) return refuse(firstIssue(body.error, FIXABLE), 422);
     const problem = body.data.hotkeys ? hotkeysProblem(body.data.hotkeys) : null;
     if (problem) return refuseCombo(problem);
-    const model = body.data.leo_model;
-    if (model && model !== "auto" && !isSubscriptionTextModel(model)) return refuse("modelNotOnPlan", 422);
     return JsonResponse.json<UserSettings>(patchSettings(body.data));
   },
 };

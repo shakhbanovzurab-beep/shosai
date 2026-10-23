@@ -11,7 +11,7 @@ draft's names.
 from collections.abc import Collection, Mapping
 from dataclasses import dataclass, fields
 from enum import StrEnum
-from typing import Final
+from typing import Final, TypedDict
 
 from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
 
@@ -69,6 +69,18 @@ class Preferences:
             return True
         attribute = _SWITCH_FIELDS.get(switch)
         return attribute is not None and bool(getattr(self, attribute))
+
+
+class PreferenceChanges(TypedDict, total=False):
+    """The fields of Settings > Leo a change names; the others stay as they are."""
+
+    leo_model: str
+    response_language: str
+    response_length: ResponseLength
+    web_search: bool
+    voice_mode: bool
+    knowledge_base_search: bool
+    connected_services_search: bool
 
 
 _SWITCH_FIELDS: Final[Mapping[str, str]] = {

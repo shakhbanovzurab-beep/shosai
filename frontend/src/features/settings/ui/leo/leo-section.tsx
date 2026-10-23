@@ -6,16 +6,17 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { LANGUAGES } from "@/lib/language";
 
-import { RESPONSE_LENGTHS, type UserSettings } from "../../domain/settings-contract";
-import { saveSettings } from "../../model/account-actions";
+import type { LeoSettings, LeoSettingsPatch } from "../../domain/leo-settings-contract";
+import { RESPONSE_LENGTHS } from "../../domain/settings-contract";
+import { saveLeoSettings } from "../../model/leo-settings";
 import { SettingSwitch } from "../setting-switch";
 import { SettingsGroup, SettingsRow } from "../settings-row";
 import { LeoModelRow } from "./leo-model-row";
 
-export function LeoSection({ settings }: { settings: UserSettings }) {
+export function LeoSection({ settings }: { settings: LeoSettings }) {
   const t = useTranslations("settingsLeo");
   const words = useTranslations("settings");
-  const save = (patch: Partial<UserSettings>) => void saveSettings(patch, words).catch(() => undefined);
+  const save = (patch: LeoSettingsPatch) => void saveLeoSettings(patch, words("saveFailed")).catch(() => undefined);
 
   return (
     <div className="flex flex-col gap-6">
@@ -69,26 +70,30 @@ export function LeoSection({ settings }: { settings: UserSettings }) {
         <p className="text-muted-foreground text-sm">{t("advanced.description")}</p>
         <div className="divide-y">
           <SettingSwitch
-            settings={settings}
-            field="web_search"
+            id="setting-web_search"
+            checked={settings.web_search}
+            onCheckedChange={(checked) => save({ web_search: checked })}
             title={t("advanced.webSearch")}
             description={t("advanced.webSearchHint")}
           />
           <SettingSwitch
-            settings={settings}
-            field="voice_mode"
+            id="setting-voice_mode"
+            checked={settings.voice_mode}
+            onCheckedChange={(checked) => save({ voice_mode: checked })}
             title={t("advanced.voiceMode")}
             description={t("advanced.voiceModeHint")}
           />
           <SettingSwitch
-            settings={settings}
-            field="knowledge_base_search"
+            id="setting-knowledge_base_search"
+            checked={settings.knowledge_base_search}
+            onCheckedChange={(checked) => save({ knowledge_base_search: checked })}
             title={t("advanced.knowledgeSearch")}
             description={t("advanced.knowledgeSearchHint")}
           />
           <SettingSwitch
-            settings={settings}
-            field="connected_services_search"
+            id="setting-connected_services_search"
+            checked={settings.connected_services_search}
+            onCheckedChange={(checked) => save({ connected_services_search: checked })}
             title={t("advanced.connectedSearch")}
             description={t("advanced.connectedSearchHint")}
           />

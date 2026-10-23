@@ -1,6 +1,6 @@
 "use client";
 
-import { useResponseLanguageSetting } from "@/features/settings/model/settings-hooks";
+import { useResponseLanguageSetting } from "@/features/settings/model/leo-settings";
 import { useUiLanguage } from "@/hooks/use-ui-language";
 
 import { answerLanguage } from "../domain/answer-language";

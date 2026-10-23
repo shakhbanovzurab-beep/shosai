@@ -37,14 +37,12 @@ artifacts, uploaded files, feedback) return when their owners serve them.
 - **Everything saves as it changes.** Switches and selects send a one-field `PATCH`; name fields
   send theirs a moment after typing stops. The UI shows the change at once and rolls back if the
   request fails, so return the full saved `UserSettings`.
-- **Leo.** `leo_model` is `"auto"` (Leo picks per task) or the id of a text model from the
-  subscription's list (`GET /v1/studio/models`, where models now carry `tier: standard | frontier`);
-  reject anything else (422). Frontier models draw on the weekly frontier allowance.
-  `response_language` is a code from `src/lib/language.ts` or `"auto"`;
-  `response_length` is `concise | balanced | detailed`.
-  Advanced switches say what Leo may use — `web_search`, `voice_mode` (off also hides the
-  microphone), `knowledge_base_search`, `connected_services_search`; anything off is neither
-  offered nor used.
+- **Leo** is agent's and runs on the real API: `GET` and `PATCH /v1/agent/settings` (see `leo-api.md`):
+  `leo_model` (`auto` only until studio publishes the plan's models, `422 leo_model_unavailable`),
+  `response_language` (a code from `src/lib/language.ts` or `auto`, `422 response_language_invalid`),
+  `response_length` (`concise | balanced | detailed`) and the switches `web_search`, `voice_mode` (off also hides
+  the microphone), `knowledge_base_search`, `connected_services_search` — anything off is neither offered nor
+  used. Everything is on by default. The fields left on `/api/settings` are memory's and capture's.
 - **Billing / Usage** are read-only. Invoices carry a human-facing `number`, a `description` and a
   `status` of `paid | pending | failed`; `download_url` points at the PDF (null until issued).
   `payment_methods` lists saved cards (exactly one `is_default`). Adding or updating a card never

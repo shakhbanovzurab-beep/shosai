@@ -1,4 +1,3 @@
-import { responseLanguageSetting } from "@/features/settings/mocks/demo-settings";
 import { DEFAULT_LANGUAGE } from "@/lib/language";
 
 import { answerLanguage } from "../domain/answer-language";
@@ -17,7 +16,7 @@ export const leoRoute = {
 
     const turn = {
       ...parsed,
-      answerLanguage: answerLanguage(responseLanguageSetting(), parsed.locale ?? DEFAULT_LANGUAGE),
+      answerLanguage: answerLanguage("auto", parsed.locale ?? DEFAULT_LANGUAGE),
     };
     const encoder = new TextEncoder();
     const stream = new ReadableStream<Uint8Array>({

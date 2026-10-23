@@ -6,6 +6,10 @@ Leo's core: a person's conversations with Leo in Personal and in each workspace,
 - Public surface: `contracts` (`ActionProposals` for a slice's planned write without a model round; the ports agent needs — `TurnRouter`, `FrictionJudge`, `MemoryRecall`, `ProfileFacts` — and `SkillReader` for studio) and `contracts.events` (`agent.turn.completed`).
 - Turns run on the dedicated `agent` queue's workers; the API admits, commits and streams them from the run's log in Valkey (AG-D12). LangGraph is only the frame of a turn (AG-D14).
 
+## HTTP
+
+- `GET` and `PATCH /v1/agent/settings` — Settings › Leo, saved field by field and answered whole (`channels/http/settings.py` over `application/preferences.py`); the four `leo_*` switches of the native `/v1/auth/me` come from the same rows through identity's `ME_CONTRIBUTIONS`.
+
 ## Tables (each home, revision `a6c8e2f4b917`)
 
 Every table is personal by nature: row-level security admits the person's own rows only (ADR 0053).

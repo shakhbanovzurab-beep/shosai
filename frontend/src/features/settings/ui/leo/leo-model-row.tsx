@@ -2,37 +2,32 @@
 
 import { useTranslations } from "use-intl";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { useStudioModels } from "@/features/studio/model/studio-resources";
 import { ModelPicker } from "@/features/studio/ui/model-picker";
 
-import type { UserSettings } from "../../domain/settings-contract";
-import { saveSettings } from "../../model/account-actions";
+import type { LeoSettings } from "../../domain/leo-settings-contract";
+import { saveLeoSettings } from "../../model/leo-settings";
 import { SettingsRow } from "../settings-row";
 
-/** Which model Leo answers with: Auto, or any text model on the subscription. */
-export function LeoModelRow({ settings }: { settings: UserSettings }) {
+/**
+ * Which model Leo answers with. Until studio publishes the plan's models, Auto is the one choice the server
+ * accepts (ADR 0068 AG-D4), so the picker offers it alone.
+ */
+export function LeoModelRow({ settings }: { settings: LeoSettings }) {
   const t = useTranslations("settingsLeo");
   const words = useTranslations("settings");
-  const models = useStudioModels();
-  const textModels = models.status === "ready" ? models.data.models.filter((m) => m.capabilities.includes("text")) : [];
   const auto = [{ id: "auto", label: t("model.auto"), hint: t("model.autoHint") }];
 
   return (
     <SettingsRow title={t("model.title")} description={t("model.description")} htmlFor="leo-model">
       <div className="w-full sm:w-64">
-        {models.status === "loading" ? (
-          <Skeleton className="h-9 w-full" />
-        ) : (
-          <ModelPicker
-            id="leo-model"
-            label={t("model.label")}
-            models={textModels}
-            options={auto}
-            value={settings.leo_model}
-            onChange={(id) => void saveSettings({ leo_model: id }, words).catch(() => undefined)}
-          />
-        )}
+        <ModelPicker
+          id="leo-model"
+          label={t("model.label")}
+          models={[]}
+          options={auto}
+          value={settings.leo_model}
+          onChange={(id) => void saveLeoSettings({ leo_model: id }, words("saveFailed")).catch(() => undefined)}
+        />
       </div>
     </SettingsRow>
   );

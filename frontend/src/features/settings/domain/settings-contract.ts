@@ -13,20 +13,11 @@ import type { HotkeyBindings } from "./hotkeys";
 export const RESPONSE_LENGTHS = ["concise", "balanced", "detailed"] as const;
 export type ResponseLength = (typeof RESPONSE_LENGTHS)[number];
 
+/**
+ * The preferences still served by mocks: memory's switch and capture's hotkeys. Settings › Leo is agent's
+ * (`/v1/agent/settings`, see docs/leo-api.md); `RESPONSE_LENGTHS` names its length options in order.
+ */
 export type UserSettings = {
-  /* Leo */
-  /** "auto" lets Leo pick per task; otherwise a text model id from GET /studio/models (the subscription's list). */
-  leo_model: string;
-  /** A language code from src/lib/language.ts, or "auto" to answer in the interface language. */
-  response_language: string;
-  response_length: ResponseLength;
-  /* Leo › Advanced: what Leo may use; anything off is neither offered nor used */
-  web_search: boolean;
-  /** Off also removes the microphone from the interface. */
-  voice_mode: boolean;
-  knowledge_base_search: boolean;
-  /** Search sources connected in Knowledge › Sources (Google Drive, Notion…). */
-  connected_services_search: boolean;
   /* Memory */
   memory_enabled: boolean;
   /* Hotkeys */

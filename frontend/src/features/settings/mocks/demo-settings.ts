@@ -20,13 +20,6 @@ const section = (title: string, body: string) => ({ title, body });
 const shared = globalThis as typeof globalThis & { settingsDemo?: State };
 shared.settingsDemo ??= {
   settings: {
-    leo_model: "auto",
-    response_language: "auto",
-    response_length: "balanced",
-    web_search: true,
-    voice_mode: true,
-    knowledge_base_search: false,
-    connected_services_search: false,
     memory_enabled: true,
     hotkeys: {},
   },
@@ -54,9 +47,6 @@ shared.settingsDemo ??= {
 const state = shared.settingsDemo;
 
 export const getSettings = () => state.settings;
-
-/** Settings › Leo › Response language, for the Leo agent: a language code or "auto". */
-export const responseLanguageSetting = () => state.settings.response_language;
 
 export function patchSettings(patch: SettingsPatch): UserSettings {
   state.settings = { ...state.settings, ...patch };

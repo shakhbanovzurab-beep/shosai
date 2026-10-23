@@ -8,7 +8,7 @@ import { Paperclip } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import { Separator } from "@/components/ui/separator";
-import { useVoiceModeEnabled } from "@/features/settings/model/settings-hooks";
+import { useVoiceModeEnabled } from "@/features/settings/model/leo-settings";
 
 import { useLeoAttachments } from "../model/use-leo-attachments";
 import type { useLeoChat } from "../model/use-leo-chat";

@@ -2772,6 +2772,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agent/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Agent Settings
+         * @description Your Settings > Leo.
+         */
+        get: operations["get_agent_settings_v1_agent_settings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Patch Agent Settings
+         * @description Change some of your Settings > Leo; the answer is all of them as saved.
+         */
+        patch: operations["patch_agent_settings_v1_agent_settings_patch"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2954,6 +2978,53 @@ export interface components {
             /** Sign Ins */
             sign_ins: components["schemas"]["AdminSignIn"][];
             spend: components["schemas"]["AdminSpend"];
+        };
+        /**
+         * AgentSettingsOut
+         * @description Settings > Leo as saved.
+         */
+        AgentSettingsOut: {
+            /**
+             * Leo Model
+             * @description `auto`, or a model the person's plan offers.
+             */
+            leo_model: string;
+            /**
+             * Response Language
+             * @description `auto` (the interface's), or a language code.
+             */
+            response_language: string;
+            response_length: components["schemas"]["ResponseLength"];
+            /** Web Search */
+            web_search: boolean;
+            /**
+             * Voice Mode
+             * @description Off also hides the microphone.
+             */
+            voice_mode: boolean;
+            /** Knowledge Base Search */
+            knowledge_base_search: boolean;
+            /** Connected Services Search */
+            connected_services_search: boolean;
+        };
+        /**
+         * AgentSettingsPatch
+         * @description The fields to change; the others stay as they are.
+         */
+        AgentSettingsPatch: {
+            /** Leo Model */
+            leo_model?: string | null;
+            /** Response Language */
+            response_language?: string | null;
+            response_length?: components["schemas"]["ResponseLength"] | null;
+            /** Web Search */
+            web_search?: boolean | null;
+            /** Voice Mode */
+            voice_mode?: boolean | null;
+            /** Knowledge Base Search */
+            knowledge_base_search?: boolean | null;
+            /** Connected Services Search */
+            connected_services_search?: boolean | null;
         };
         /**
          * AssigneeOut
@@ -5497,6 +5568,12 @@ export interface components {
             /** Password */
             password: string;
         };
+        /**
+         * ResponseLength
+         * @description How much Leo says by default.
+         * @enum {string}
+         */
+        ResponseLength: "concise" | "balanced" | "detailed";
         /**
          * RestoreBody
          * @description The person's home, as the account's card shows it.
@@ -13187,6 +13264,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ClocksReply"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_agent_settings_v1_agent_settings_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentSettingsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    patch_agent_settings_v1_agent_settings_patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AgentSettingsPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentSettingsOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
