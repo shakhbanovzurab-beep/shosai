@@ -12,20 +12,28 @@ source of truth once the routes ship; until a step moves a screen to the API, it
 | Method | Path | Body | Response |
 | --- | --- | --- | --- |
 | `GET` | `/v1/agent/threads?scope=personal\|workspace&workspace_id=&cursor=&limit=` | — | `{items: Thread[], next_cursor}`, newest activity first |
-| `POST` | `/v1/agent/threads` | `{scope: {kind, workspace_id?}}` | `201 Thread` |
+| `POST` | `/v1/agent/threads` with `Idempotency-Key` | `{scope: {kind, workspace_id?}}` | `201 Thread` |
 | `GET` / `PATCH` / `DELETE` | `/v1/agent/threads/{id}` | `PATCH {title}` (1–120) | `Thread` / `Thread` / `204` |
 | `GET` | `/v1/agent/threads/{id}/messages?cursor=&limit=` | — | `{items: Message[], next_cursor}`, newest first |
 
 ```text
-Thread  = {id, scope: {kind: personal | workspace | hub, workspace_id?, hub_id?}, title, last_activity_at, created_at}
-Message = {id, role: user | assistant | server, text, status: done | stopped | failed,
+Thread  = {id, scope: {kind: personal | workspace | hub, workspace_id | null, hub_id | null}, title | null,
+           last_activity_at, created_at}
+Message = {id, role: user | assistant | server, text, status: done | stopped | failed | null,
            attachments: [{id, name, size, type}], steps: [{id, activity, detail, status, duration_ms}],
            sources: LeoSource[], artifacts: LeoArtifact[], actions: LeoProposal[],
            feedback: {rating: useful | not_useful, shared} | null, created_at, duration_ms}
 ```
 
-- The panel opens its context's latest thread; "New chat" creates one; the "Recent chats" menu lists the context's
-  threads and renames or deletes them. Nothing of a thread is kept in the browser's storage.
+- The panel opens its context's latest thread; "New chat" empties the panel, and the thread is created when its first
+  question is sent (a retry with the same key answers the same thread). Its `title` is null until that question
+  names it; the cabinet words an untitled thread itself. The "Recent chats" menu lists the context's threads and
+  renames or deletes them. Nothing of a thread is kept in the browser's storage.
+- A message carries what exists when its step ships: now `id`, `role`, `text`, `status` (null for a question or a
+  server note), `created_at` and `duration_ms`; `steps` and `sources` come with answers over tools, `artifacts` and
+  `actions` with the cards, `feedback` with the rating and `attachments` with uploads.
+- `POST` with a workspace the person is not in is `404 workspace_not_found`; a workspace scope without
+  `workspace_id`, or Personal with one, is `422 scope_invalid`.
 - A workspace's threads disappear the moment the person's membership ends (`404 thread_not_found`); they are erased
   7 days later unless the membership comes back. `scope=hub` answers `422 scope_unavailable` until hubs ship.
 - A failed or stopped answer keeps the text written so far; the failure itself is never part of the text.

@@ -40,6 +40,8 @@ class ThreadRule(StrEnum):
     TOO_MANY_ATTACHMENTS = "too_many_attachments"
     NOT_LAST_QUESTION = "not_last_question"
     SCOPE_INVALID = "scope_invalid"
+    # Треды хаба приходят с хабами (шаг 20).
+    SCOPE_UNAVAILABLE = "scope_unavailable"
 
 
 class ThreadRuleError(ValueError):
@@ -78,6 +80,14 @@ class MessageRole(StrEnum):
     SERVER = "server"
 
 
+class HistoryRole(StrEnum):
+    """Who wrote a row the history lists: the person, Leo, or the server's note."""
+
+    USER = "user"
+    ASSISTANT = "assistant"
+    SERVER = "server"
+
+
 class AnswerStatus(StrEnum):
     """How an answer ended; a failure is never written into the text."""
 
@@ -94,6 +104,12 @@ class TurnKind(StrEnum):
     REGENERATE = "regenerate"
     # Последний вопрос переписан, ответ заново.
     EDIT = "edit"
+
+
+def check_available(kind: ScopeKind) -> None:
+    """A hub's threads come with hubs (agent plan step 20); until then the scope is refused."""
+    if kind is ScopeKind.HUB:
+        raise ThreadRuleError(ThreadRule.SCOPE_UNAVAILABLE)
 
 
 def clean_title(raw: str) -> str:

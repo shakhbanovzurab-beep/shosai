@@ -44,6 +44,7 @@ pytest_plugins = (
     "tests.features.notes.share_bench",
     "tests.features.notes.write_bench",
     "tests.features.tasks.task_bench",
+    "tests.features.agent.thread_bench",
 )
 
 

@@ -2796,6 +2796,78 @@ export interface paths {
         patch: operations["patch_agent_settings_v1_agent_settings_patch"];
         trace?: never;
     };
+    "/v1/agent/threads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Threads
+         * @description A page of one space's threads, newest activity first.
+         */
+        get: operations["list_threads_v1_agent_threads_get"];
+        put?: never;
+        /**
+         * Create Thread
+         * @description A new thread in a space; a retry with the same key answers the same thread.
+         */
+        post: operations["create_thread_v1_agent_threads_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/threads/{thread_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Thread
+         * @description One of the person's threads.
+         */
+        get: operations["get_thread_v1_agent_threads__thread_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Thread
+         * @description Delete a thread with its whole conversation.
+         */
+        delete: operations["delete_thread_v1_agent_threads__thread_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Rename Thread
+         * @description Rename a thread.
+         */
+        patch: operations["rename_thread_v1_agent_threads__thread_id__patch"];
+        trace?: never;
+    };
+    "/v1/agent/threads/{thread_id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Messages
+         * @description A page of the thread's history, newest first.
+         */
+        get: operations["list_messages_v1_agent_threads__thread_id__messages_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -3026,6 +3098,12 @@ export interface components {
             /** Connected Services Search */
             connected_services_search?: boolean | null;
         };
+        /**
+         * AnswerStatus
+         * @description How an answer ended; a failure is never written into the text.
+         * @enum {string}
+         */
+        AnswerStatus: "done" | "stopped" | "failed";
         /**
          * AssigneeOut
          * @description Who does the task: a member by id and name, or a name as written.
@@ -4244,6 +4322,12 @@ export interface components {
             deleted_at: string;
         };
         /**
+         * HistoryRole
+         * @description Who wrote a row the history lists: the person, Leo, or the server's note.
+         * @enum {string}
+         */
+        HistoryRole: "user" | "assistant" | "server";
+        /**
          * Home
          * @description A data home: a separate PostgreSQL cluster in its own jurisdiction.
          *
@@ -4806,6 +4890,28 @@ export interface components {
             resets_at: string;
         };
         /**
+         * MessageOut
+         * @description A row of the history: a question, an answer (with how it ended) or a server's note.
+         */
+        MessageOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            role: components["schemas"]["HistoryRole"];
+            /** Text */
+            text: string;
+            status: components["schemas"]["AnswerStatus"] | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Duration Ms */
+            duration_ms: number | null;
+        };
+        /**
          * Messenger
          * @description A messenger a team chat lives in (chats §1.1).
          * @enum {string}
@@ -5028,10 +5134,24 @@ export interface components {
             /** Next Cursor */
             next_cursor: string | null;
         };
+        /** Page[MessageOut] */
+        Page_MessageOut_: {
+            /** Items */
+            items: components["schemas"]["MessageOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
         /** Page[TaskItem] */
         Page_TaskItem_: {
             /** Items */
             items: components["schemas"]["TaskItem"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** Page[ThreadOut] */
+        Page_ThreadOut_: {
+            /** Items */
+            items: components["schemas"]["ThreadOut"][];
             /** Next Cursor */
             next_cursor: string | null;
         };
@@ -5683,6 +5803,32 @@ export interface components {
             team_size: "1-10" | "11-50" | "51-200" | "201-1000" | "1000+";
             /** Message */
             message: string;
+        };
+        /**
+         * ScopeIn
+         * @description The space of a new thread: Personal, or a workspace the person belongs to.
+         */
+        ScopeIn: {
+            kind: components["schemas"]["ScopeKind"];
+            /** Workspace Id */
+            workspace_id?: string | null;
+        };
+        /**
+         * ScopeKind
+         * @description Which space a thread belongs to.
+         * @enum {string}
+         */
+        ScopeKind: "personal" | "workspace" | "hub";
+        /**
+         * ScopeOut
+         * @description The space a thread belongs to.
+         */
+        ScopeOut: {
+            kind: components["schemas"]["ScopeKind"];
+            /** Workspace Id */
+            workspace_id: string | null;
+            /** Hub Id */
+            hub_id: string | null;
         };
         /**
          * SeatView
@@ -6911,6 +7057,45 @@ export interface components {
         TextValueBody: {
             /** Text */
             text: string;
+        };
+        /**
+         * ThreadCreateBody
+         * @description A new thread.
+         */
+        ThreadCreateBody: {
+            scope: components["schemas"]["ScopeIn"];
+        };
+        /**
+         * ThreadOut
+         * @description A thread; `title` is null until its first question names it.
+         */
+        ThreadOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            scope: components["schemas"]["ScopeOut"];
+            /** Title */
+            title: string | null;
+            /**
+             * Last Activity At
+             * Format: date-time
+             */
+            last_activity_at: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * ThreadPatchBody
+         * @description A thread's new title, 1 to 120 characters.
+         */
+        ThreadPatchBody: {
+            /** Title */
+            title: string;
         };
         /**
          * TicketRequest
@@ -13330,6 +13515,222 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AgentSettingsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_threads_v1_agent_threads_get: {
+        parameters: {
+            query: {
+                /** @description The context's space. */
+                scope: components["schemas"]["ScopeKind"];
+                /** @description The workspace, with `scope=workspace`. */
+                workspace_id?: string | null;
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_ThreadOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_thread_v1_agent_threads_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ThreadCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_thread_v1_agent_threads__thread_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                thread_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_thread_v1_agent_threads__thread_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                thread_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    rename_thread_v1_agent_threads__thread_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                thread_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ThreadPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_messages_v1_agent_threads__thread_id__messages_get: {
+        parameters: {
+            query?: {
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                thread_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_MessageOut_"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

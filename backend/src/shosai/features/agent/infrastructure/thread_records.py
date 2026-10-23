@@ -63,6 +63,12 @@ class AgentThreadRecord(ModelBase):
             "erase_after",
             postgresql_where=sql_text("erase_after IS NOT NULL"),
         ),
+        Index(
+            "ix_agent_threads_workspace",
+            "org_id",
+            "user_id",
+            postgresql_where=sql_text("org_id IS NOT NULL"),
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
@@ -70,7 +76,8 @@ class AgentThreadRecord(ModelBase):
     scope_kind: Mapped[str] = mapped_column(Text)
     org_id: Mapped[UUID | None] = mapped_column(Uuid)
     hub_id: Mapped[UUID | None] = mapped_column(Uuid)
-    title: Mapped[str] = mapped_column(Text)
+    # Пусто до первого вопроса: тред создаётся при его отправке и называется им.
+    title: Mapped[str | None] = mapped_column(Text)
     title_source: Mapped[str] = mapped_column(Text, server_default="question")
     # Сводка старых ходов, которую пишет сжатие, и последнее сообщение, свёрнутое в неё.
     summary: Mapped[str] = mapped_column(Text, server_default="")

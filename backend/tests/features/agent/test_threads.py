@@ -16,6 +16,7 @@ from shosai.features.agent.domain.threads import (
     ThreadRuleError,
     ThreadScope,
     TurnKind,
+    check_available,
     check_question,
     check_replacement,
     clean_title,
@@ -46,6 +47,14 @@ def test_a_scope_names_exactly_the_space_of_its_kind() -> None:
         with pytest.raises(ThreadRuleError) as raised:
             ThreadScope(kind, org_id=org_id, hub_id=hub_id)
         assert rule_of(raised) is ThreadRule.SCOPE_INVALID
+
+
+def test_only_a_hub_s_threads_wait_for_hubs() -> None:
+    check_available(ScopeKind.PERSONAL)
+    check_available(ScopeKind.WORKSPACE)
+    with pytest.raises(ThreadRuleError) as raised:
+        check_available(ScopeKind.HUB)
+    assert rule_of(raised) is ThreadRule.SCOPE_UNAVAILABLE
 
 
 def test_a_title_is_trimmed_and_bounded() -> None:

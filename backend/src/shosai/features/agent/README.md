@@ -9,12 +9,17 @@ Leo's core: a person's conversations with Leo in Personal and in each workspace,
 ## HTTP
 
 - `GET` and `PATCH /v1/agent/settings` — Settings › Leo, saved field by field and answered whole (`channels/http/settings.py` over `application/preferences.py`); the four `leo_*` switches of the native `/v1/auth/me` come from the same rows through identity's `ME_CONTRIBUTIONS`.
+- `/v1/agent/threads*` — a space's threads by cursor, created at the first question under an `Idempotency-Key` and untitled until it names them, renamed, deleted with their conversation, and a thread's history newest first (`channels/http/threads.py` over `application/threads.py` and `application/history.py`). Every read puts the person's active memberships into its statement, so a departed workspace's threads vanish at once (AG-D3).
 
-## Tables (each home, revision `a6c8e2f4b917`)
+## Departures
+
+`application/departures.py` (AG-D3): `workspaces.member.removed` marks the departed person's threads of the workspace to be erased in 7 days, as that person (ADR 0067); the hourly `agent.purge_departed` erases the due ones or, for a member active again, clears the mark; `workspaces.workspace.deleted` erases the workspace's threads at once, person by person.
+
+## Tables (each home, revisions `a6c8e2f4b917` and `9a43ed077e60`)
 
 Every table is personal by nature: row-level security admits the person's own rows only (ADR 0053).
 
-- `agent_threads` — a conversation in one space (Personal, a workspace, a hub; the database keeps the scope naming exactly its space), its title, summary and `erase_after` for a departed workspace (AG-D3).
+- `agent_threads` — a conversation in one space (Personal, a workspace, a hub; the database keeps the scope naming exactly its space), its title (null until the first question), summary and `erase_after` for a departed workspace (AG-D3).
 - `agent_messages` — a thread's rows in monthly partitions kept with the thread: questions, answers (with a status), tool rounds and their digests, server notes; deleted with the thread.
 - `agent_tool_results` — tools' whole outputs with the spaces of their sources, read for 30 days, partitions dropped after two months.
 - `agent_runs` — a run's status and telemetry (ids, numbers, codes), monthly partitions kept four months; `ended_at` exactly when it is over.
