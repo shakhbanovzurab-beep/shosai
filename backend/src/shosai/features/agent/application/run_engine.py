@@ -13,11 +13,10 @@ import asyncio
 import time
 from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
-from typing import Any, Protocol
+from datetime import UTC, datetime
+from typing import Protocol
 
 import structlog
-from sqlalchemy import select, update
 
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
 from shosai.core.ai.errors import AiCallError
@@ -38,21 +37,15 @@ from shosai.features.agent.application.run_context import (
     ThreadGoneError,
     turn_request,
 )
+from shosai.features.agent.application.run_end import record_end
 from shosai.features.agent.application.run_registry import ActiveRun, RunRegistry
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
-from shosai.features.agent.contracts.events import TurnCompleted
-from shosai.features.agent.domain.budgets import estimate_tokens
 from shosai.features.agent.domain.endings import Ending, answered, cancelled, failed, stopped
-from shosai.features.agent.domain.runs import TURN_DEADLINE, RunFailure, RunStatus
-from shosai.features.agent.domain.threads import MessageRole
+from shosai.features.agent.domain.runs import TURN_DEADLINE, RunFailure
 from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.run_log import RunLog
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
-from shosai.features.agent.infrastructure.thread_records import (
-    AgentMessageRecord,
-    AgentThreadRecord,
-)
 from shosai.features.agent.infrastructure.turn_graph import (
     ModelAnswer,
     TurnAnswer,
@@ -218,7 +211,12 @@ class RunEngine:
     ) -> None:
         ending, answer = result
         try:
-            recorded = await self._record(payload, ending, buffer, answer)
+            recorded = await record_end(
+                (self._parts.transactions, self._parts.outbox),
+                payload,
+                (ending, buffer.text, answer),
+                self._clock(),
+            )
             if recorded is not None:
                 await emitter.emit(*recorded.terminal(payload.reply_id))
         except REDIS_FAILURES as error:
@@ -226,55 +224,6 @@ class RunEngine:
             log.warning("Конец хода Leo не попал в журнал", error_type=type(error).__name__)
         finally:
             await self._release(payload)
-
-    async def _record(
-        self,
-        payload: TurnPayload,
-        ending: Ending,
-        buffer: AnswerBuffer,
-        answer: ModelAnswer | None,
-    ) -> Ending | None:
-        """The final transaction; the ending it recorded, or None when the sweep won."""
-        now = self._clock()
-        text = buffer.text
-        async with self._parts.transactions.begin(payload.scope()) as session:
-            thread = await session.scalar(
-                select(AgentThreadRecord)
-                .where(AgentThreadRecord.id == payload.thread_id)
-                .with_for_update()
-            )
-            if thread is None:
-                ending = cancelled()
-            won = await session.scalar(
-                update(RUN)
-                .where(
-                    RUN.id == payload.run_id,
-                    RUN.started_at == payload.started_at,
-                    RUN.status == RunStatus.RUNNING.value,
-                )
-                .values(ended_at=now, **telemetry(payload, ending, answer, now))
-                .returning(RUN.id)
-            )
-            if won is None:
-                return None
-            if thread is not None:
-                if ending.keeps(text) and ending.answer is not None:
-                    session.add(
-                        AgentMessageRecord(
-                            id=payload.reply_id, created_at=now, thread_id=thread.id,
-                            user_id=thread.user_id, run_id=payload.run_id,
-                            role=MessageRole.ASSISTANT.value, status=ending.answer.value,
-                            text=text, tokens=estimate_tokens(text),
-                            duration_ms=millis(now - payload.started_at),
-                        )
-                    )  # fmt: skip
-                thread.last_activity_at = now
-            if ending.status is RunStatus.COMPLETED and thread is not None:
-                completed = TurnCompleted(
-                    thread_id=payload.thread_id, run_id=payload.run_id, user_id=thread.user_id
-                )
-                await self._parts.outbox.add(session, completed)
-        return ending
 
     async def _release(self, payload: TurnPayload) -> None:
         user_id = payload.scope().user_id
@@ -285,27 +234,3 @@ class RunEngine:
         except REDIS_FAILURES as error:
             # Аренда и счёт истекут сами через 30 с.
             log.warning("Аренда хода Leo не снята", error_type=type(error).__name__)
-
-
-def millis(delta: timedelta) -> int:
-    """Milliseconds of a time span."""
-    return int(delta.total_seconds() * 1000)
-
-
-def telemetry(
-    payload: TurnPayload, ending: Ending, answer: ModelAnswer | None, now: datetime
-) -> dict[str, Any]:
-    """The run row's end: status and code, the model's numbers, the time it took."""
-    usage = answer.usage if answer is not None else None
-    return {
-        "status": ending.status.value,
-        "outcome_code": ending.code,
-        "tier": "standard",
-        "token_route": payload.token_route,
-        "rounds": 1 if answer is not None else 0,
-        "input_tokens": usage.input_tokens if usage is not None else 0,
-        "cached_tokens": usage.cached_tokens if usage is not None else 0,
-        "output_tokens": usage.output_tokens if usage is not None else 0,
-        "ttft_ms": answer.first_token_ms if answer is not None else None,
-        "duration_ms": millis(now - payload.started_at),
-    }
