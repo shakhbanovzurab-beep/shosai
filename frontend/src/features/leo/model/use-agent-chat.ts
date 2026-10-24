@@ -11,12 +11,14 @@ import { agentApi, type TurnBody } from "../api/agent-api";
 import { lastQuestion } from "../domain/agent-history";
 import { contextKey, type LeoContext } from "../domain/context";
 import { isRecorded, type LiveTurn, mergedConversation, type TurnKind } from "../domain/live-turns";
+import { pageSubject } from "../domain/page-subject";
 import type { LeoProposal } from "../domain/proposals";
 import type { LeoMessage } from "../domain/types";
 import { chooseThread, messagesKey, scopeOf, threadsKey, useAgentThread } from "./agent-thread";
 import { refusal, runTurn, stopTurn } from "./agent-turn-runner";
 import { addTurn, dropTurns, failedReply, liveTurns, subscribeTurns, updateTurn } from "./agent-turns";
 import type { LeoChat } from "./leo-chat";
+import { useAgentThreads } from "./use-agent-threads";
 
 /** Leo на настоящем API (`/v1/agent/*`): разговор пространства, его ходы, «Стоп», «Ещё раз» и правка. */
 export function useAgentChat({ page, context }: { page: string; context: LeoContext }): LeoChat {
@@ -33,6 +35,7 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
   );
   const isBusy = turns.some((turn) => turn.reply.status === "streaming");
   const thread = useAgentThread(scopeKey, scope, !isBusy);
+  const threads = useAgentThreads(scopeKey, scope, thread.threadId);
   const visible = turns.filter((turn) => turn.threadId === thread.threadId || turn.threadId === null);
   const messages = mergedConversation(thread.conversation, visible);
 
@@ -82,13 +85,16 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
   };
 
   const turnOfKey = (key: string) => liveTurns(scopeKey).find((turn) => turn.key === key);
-  const surface = { path: page };
-  const base = { locale, surface, supersede: false };
+  // Строка запроса читается в момент вопроса: фильтры страницы в адресе не перерисовывают Leo.
+  const base = () => {
+    const surface = { path: page, subject: pageSubject(page, window.location.search) };
+    return { locale, surface, supersede: false };
+  };
 
   const send = (content: string): Promise<LeoMessage | undefined> => {
     if (isBusy) return Promise.resolve(undefined);
     const question: LeoMessage = { id: crypto.randomUUID(), role: "user", content, status: "done" };
-    return ask("new", question, { ...base, text: content });
+    return ask("new", question, { ...base(), text: content });
   };
 
   const again = (kind: Exclude<TurnKind, "new">, content?: string) => {
@@ -97,7 +103,7 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     const text = content ?? last.content;
     const question: LeoMessage = { ...last, content: text };
     const replaces = kind === "edit" ? { edit_of: last.id } : { regenerate_of: last.id };
-    void ask(kind, question, { ...base, text, ...replaces });
+    void ask(kind, question, { ...base(), text, ...replaces });
   };
 
   const stop = () => {
@@ -126,5 +132,6 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     reset,
     earlier: thread.earlier,
     attachments: false,
+    threads,
   };
 }

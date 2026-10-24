@@ -159,5 +159,17 @@
     "turn_deadline": "Leo 花了太久時間。請再試一次，或問得更具體一些。",
     "process_lost": "Leo 被中斷了。請再試一次。",
     "stopFailed": "無法停止 Leo。請再試一次。"
+  },
+  "recent": {
+    "title": "最近的對話",
+    "empty": "這裡還沒有對話。",
+    "untitled": "未命名的對話",
+    "more": "顯示更多",
+    "failed": "無法載入你的對話。",
+    "titleLabel": "對話標題",
+    "deleteTitle": "要刪除這個對話嗎？",
+    "deleteDescription": "這個對話及其所有訊息將永久刪除。",
+    "renameFailed": "無法重新命名對話。",
+    "deleteFailed": "無法刪除對話。"
   }
 }

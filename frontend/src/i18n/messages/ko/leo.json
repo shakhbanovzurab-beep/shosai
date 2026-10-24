@@ -159,5 +159,17 @@
     "turn_deadline": "Leo가 너무 오래 걸렸습니다. 다시 시도하거나 더 좁은 질문을 하세요.",
     "process_lost": "Leo가 중단되었습니다. 다시 시도하세요.",
     "stopFailed": "Leo를 멈추지 못했습니다. 다시 시도하세요."
+  },
+  "recent": {
+    "title": "최근 채팅",
+    "empty": "아직 채팅이 없습니다.",
+    "untitled": "제목 없는 채팅",
+    "more": "더 보기",
+    "failed": "채팅을 불러오지 못했습니다.",
+    "titleLabel": "채팅 제목",
+    "deleteTitle": "이 채팅을 삭제할까요?",
+    "deleteDescription": "채팅과 모든 메시지가 영구적으로 삭제됩니다.",
+    "renameFailed": "채팅 이름을 바꾸지 못했습니다.",
+    "deleteFailed": "채팅을 삭제하지 못했습니다."
   }
 }

@@ -159,5 +159,17 @@
     "turn_deadline": "Leo çok uzun sürdü. Tekrar deneyin ya da daha dar bir soru sorun.",
     "process_lost": "Leo kesintiye uğradı. Tekrar deneyin.",
     "stopFailed": "Leo durdurulamadı. Tekrar deneyin."
+  },
+  "recent": {
+    "title": "Son sohbetler",
+    "empty": "Burada henüz sohbet yok.",
+    "untitled": "Başlıksız sohbet",
+    "more": "Daha fazla göster",
+    "failed": "Sohbetleriniz yüklenemedi.",
+    "titleLabel": "Sohbet başlığı",
+    "deleteTitle": "Bu sohbet silinsin mi?",
+    "deleteDescription": "Sohbet ve tüm mesajları kalıcı olarak silinecek.",
+    "renameFailed": "Sohbet yeniden adlandırılamadı.",
+    "deleteFailed": "Sohbet silinemedi."
   }
 }

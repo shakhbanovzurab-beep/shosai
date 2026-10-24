@@ -159,5 +159,17 @@
     "turn_deadline": "Leo ci ha messo troppo. Riprova o fai una domanda più mirata.",
     "process_lost": "Leo è stato interrotto. Riprova.",
     "stopFailed": "Impossibile fermare Leo. Riprova."
+  },
+  "recent": {
+    "title": "Chat recenti",
+    "empty": "Ancora nessuna chat qui.",
+    "untitled": "Chat senza titolo",
+    "more": "Mostra altro",
+    "failed": "Impossibile caricare le chat.",
+    "titleLabel": "Titolo della chat",
+    "deleteTitle": "Eliminare questa chat?",
+    "deleteDescription": "La chat e tutti i suoi messaggi verranno eliminati definitivamente.",
+    "renameFailed": "Impossibile rinominare la chat.",
+    "deleteFailed": "Impossibile eliminare la chat."
   }
 }

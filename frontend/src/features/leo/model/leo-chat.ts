@@ -1,5 +1,6 @@
 import type { LeoProposal } from "../domain/proposals";
 import type { LeoMessage } from "../domain/types";
+import type { LeoThreads } from "./use-agent-threads";
 
 /*
  * Что панель Leo получает от разговора, откуда бы он ни шёл: с настоящего API (`useAgentChat`) или с примерного
@@ -21,4 +22,6 @@ export interface LeoChat {
   readonly earlier?: { readonly available: boolean; readonly loading: boolean; readonly load: () => void };
   /** Можно ли приложить файлы к вопросу: к Leo на API — с загрузками для Leo (шаг 12). */
   readonly attachments: boolean;
+  /** «Недавние чаты» пространства; у примерного чата их нет. */
+  readonly threads?: LeoThreads;
 }

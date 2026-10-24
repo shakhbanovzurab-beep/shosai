@@ -159,5 +159,17 @@
     "turn_deadline": "Leo hat zu lange gebraucht. Versuche es erneut oder stelle eine engere Frage.",
     "process_lost": "Leo wurde unterbrochen. Versuche es erneut.",
     "stopFailed": "Leo konnte nicht gestoppt werden. Versuche es erneut."
+  },
+  "recent": {
+    "title": "Letzte Chats",
+    "empty": "Hier gibt es noch keine Chats.",
+    "untitled": "Chat ohne Titel",
+    "more": "Mehr anzeigen",
+    "failed": "Deine Chats konnten nicht geladen werden.",
+    "titleLabel": "Chat-Titel",
+    "deleteTitle": "Diesen Chat löschen?",
+    "deleteDescription": "Der Chat und alle seine Nachrichten werden endgültig gelöscht.",
+    "renameFailed": "Der Chat konnte nicht umbenannt werden.",
+    "deleteFailed": "Der Chat konnte nicht gelöscht werden."
   }
 }

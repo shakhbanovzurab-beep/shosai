@@ -159,5 +159,17 @@
     "turn_deadline": "Leo took too long. Try again or ask something narrower.",
     "process_lost": "Leo was interrupted. Try again.",
     "stopFailed": "Couldn’t stop Leo. Try again."
+  },
+  "recent": {
+    "title": "Recent chats",
+    "empty": "No chats here yet.",
+    "untitled": "Untitled chat",
+    "more": "Show more",
+    "failed": "Couldn’t load your chats.",
+    "titleLabel": "Chat title",
+    "deleteTitle": "Delete this chat?",
+    "deleteDescription": "The chat and all its messages will be deleted for good.",
+    "renameFailed": "Couldn’t rename the chat.",
+    "deleteFailed": "Couldn’t delete the chat."
   }
 }

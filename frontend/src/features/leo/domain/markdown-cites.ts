@@ -6,9 +6,11 @@ import type { MdBlock, MdInline } from "./markdown";
  */
 
 const MARKER = /\[(\d{1,2})\]/g;
+// Знаки сразу после маркера: строка не переносится между ними и маркером, точка не остаётся одна на новой строке.
+const TAIL = /^[.,;:!?…)\]»”’。、，；：！？）]+/u;
 
-/** Кусок текста или номер источника; `key` — его место в тексте. */
-export type CitedPart = { key: number; text: string } | { key: number; n: number };
+/** Кусок текста или номер источника; `key` — его место в тексте, `tail` — знаки препинания сразу после номера. */
+export type CitedPart = { key: number; text: string } | { key: number; n: number; tail: string };
 
 /** Текст, разрезанный на куски и номера источников, которые в нём упомянуты. */
 export function citedParts(text: string, count: number): CitedPart[] {
@@ -17,9 +19,11 @@ export function citedParts(text: string, count: number): CitedPart[] {
   for (const match of text.matchAll(MARKER)) {
     const n = Number(match[1]);
     if (n < 1 || n > count) continue;
+    const end = match.index + match[0].length;
+    const tail = TAIL.exec(text.slice(end))?.[0] ?? "";
     if (match.index > start) parts.push({ key: start, text: text.slice(start, match.index) });
-    parts.push({ key: match.index, n });
-    start = match.index + match[0].length;
+    parts.push({ key: match.index, n, tail });
+    start = end + tail.length;
   }
   if (start < text.length) parts.push({ key: start, text: text.slice(start) });
   return parts;

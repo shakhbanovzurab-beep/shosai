@@ -159,5 +159,17 @@
     "turn_deadline": "Leo terlalu lama. Coba lagi atau ajukan pertanyaan yang lebih spesifik.",
     "process_lost": "Leo terhenti. Coba lagi.",
     "stopFailed": "Leo tidak dapat dihentikan. Coba lagi."
+  },
+  "recent": {
+    "title": "Chat terbaru",
+    "empty": "Belum ada chat di sini.",
+    "untitled": "Chat tanpa judul",
+    "more": "Tampilkan lebih banyak",
+    "failed": "Chat Anda tidak dapat dimuat.",
+    "titleLabel": "Judul chat",
+    "deleteTitle": "Hapus chat ini?",
+    "deleteDescription": "Chat dan semua pesannya akan dihapus secara permanen.",
+    "renameFailed": "Chat tidak dapat diganti namanya.",
+    "deleteFailed": "Chat tidak dapat dihapus."
   }
 }

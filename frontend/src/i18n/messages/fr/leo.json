@@ -159,5 +159,17 @@
     "turn_deadline": "Leo a mis trop de temps. Réessayez ou posez une question plus précise.",
     "process_lost": "Leo a été interrompu. Réessayez.",
     "stopFailed": "Impossible d’arrêter Leo. Réessayez."
+  },
+  "recent": {
+    "title": "Chats récents",
+    "empty": "Aucun chat ici pour l’instant.",
+    "untitled": "Chat sans titre",
+    "more": "Afficher plus",
+    "failed": "Impossible de charger vos chats.",
+    "titleLabel": "Titre du chat",
+    "deleteTitle": "Supprimer ce chat ?",
+    "deleteDescription": "Le chat et tous ses messages seront supprimés définitivement.",
+    "renameFailed": "Impossible de renommer le chat.",
+    "deleteFailed": "Impossible de supprimer le chat."
   }
 }

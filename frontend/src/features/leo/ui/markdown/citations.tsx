@@ -17,6 +17,13 @@ export function CitedText({ text }: { readonly text: string }) {
   const citations = use(CitationsContext);
   if (citations === null) return text;
   return citedParts(text, citations.count).map((part) =>
-    "n" in part ? <span key={part.key}>{citations.marker(part.n)}</span> : <span key={part.key}>{part.text}</span>,
+    "n" in part ? (
+      <span key={part.key} className="whitespace-nowrap">
+        {citations.marker(part.n)}
+        {part.tail}
+      </span>
+    ) : (
+      <span key={part.key}>{part.text}</span>
+    ),
   );
 }

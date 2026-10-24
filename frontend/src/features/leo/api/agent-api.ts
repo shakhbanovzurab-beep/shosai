@@ -29,6 +29,24 @@ export const agentApi = {
     return page.items[0] ?? null;
   },
 
+  /** Треды пространства по активности, новыми вперёд: меню «Недавние чаты». */
+  threads: (scope: AgentScope, cursor: string | null): Promise<AgentPage<AgentThread>> =>
+    dataOf(
+      apiClient.GET("/v1/agent/threads", {
+        params: { query: { scope: scope.kind, workspace_id: scope.workspace_id ?? null, cursor, limit: PAGE_SIZE } },
+      }),
+    ),
+
+  rename: (threadId: string, title: string): Promise<AgentThread> =>
+    dataOf(
+      apiClient.PATCH("/v1/agent/threads/{thread_id}", { params: { path: { thread_id: threadId } }, body: { title } }),
+    ),
+
+  /** Тред с его сообщениями; идущий в нём ход останавливается. */
+  remove: async (threadId: string): Promise<void> => {
+    await dataOf(apiClient.DELETE("/v1/agent/threads/{thread_id}", { params: { path: { thread_id: threadId } } }));
+  },
+
   /** Тред для первого вопроса; тот же ключ — тот же тред. */
   createThread: (scope: AgentScope, key: string): Promise<AgentThread> =>
     dataOf(apiClient.POST("/v1/agent/threads", { body: { scope }, params: { header: { "Idempotency-Key": key } } })),

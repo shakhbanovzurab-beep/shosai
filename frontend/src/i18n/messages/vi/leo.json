@@ -159,5 +159,17 @@
     "turn_deadline": "Leo mất quá nhiều thời gian. Hãy thử lại hoặc hỏi câu cụ thể hơn.",
     "process_lost": "Leo bị gián đoạn. Hãy thử lại.",
     "stopFailed": "Không dừng được Leo. Hãy thử lại."
+  },
+  "recent": {
+    "title": "Cuộc trò chuyện gần đây",
+    "empty": "Chưa có cuộc trò chuyện nào ở đây.",
+    "untitled": "Cuộc trò chuyện chưa có tiêu đề",
+    "more": "Hiện thêm",
+    "failed": "Không tải được các cuộc trò chuyện.",
+    "titleLabel": "Tiêu đề cuộc trò chuyện",
+    "deleteTitle": "Xóa cuộc trò chuyện này?",
+    "deleteDescription": "Cuộc trò chuyện và mọi tin nhắn trong đó sẽ bị xóa vĩnh viễn.",
+    "renameFailed": "Không đổi tên được cuộc trò chuyện.",
+    "deleteFailed": "Không xóa được cuộc trò chuyện."
   }
 }

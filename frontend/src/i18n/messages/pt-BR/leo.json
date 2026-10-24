@@ -159,5 +159,17 @@
     "turn_deadline": "O Leo demorou demais. Tente de novo ou faça uma pergunta mais específica.",
     "process_lost": "O Leo foi interrompido. Tente de novo.",
     "stopFailed": "Não foi possível parar o Leo. Tente de novo."
+  },
+  "recent": {
+    "title": "Chats recentes",
+    "empty": "Ainda não há chats aqui.",
+    "untitled": "Chat sem título",
+    "more": "Mostrar mais",
+    "failed": "Não foi possível carregar seus chats.",
+    "titleLabel": "Título do chat",
+    "deleteTitle": "Excluir este chat?",
+    "deleteDescription": "O chat e todas as mensagens dele serão excluídos para sempre.",
+    "renameFailed": "Não foi possível renomear o chat.",
+    "deleteFailed": "Não foi possível excluir o chat."
   }
 }

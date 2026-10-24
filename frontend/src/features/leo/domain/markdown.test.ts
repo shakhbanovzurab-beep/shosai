@@ -81,10 +81,19 @@ describe("the sources an answer cites", () => {
   it("draws only the numbers the run's sources have", () => {
     expect(citedParts("Cut [1], kept [2][9] and [x].", 2)).toEqual([
       { key: 0, text: "Cut " },
-      { key: 4, n: 1 },
-      { key: 7, text: ", kept " },
-      { key: 14, n: 2 },
+      { key: 4, n: 1, tail: "," },
+      { key: 8, text: " kept " },
+      { key: 14, n: 2, tail: "" },
       { key: 17, text: "[9] and [x]." },
+    ]);
+  });
+
+  it("keeps the stop after a number on the number's line", () => {
+    expect(citedParts("It holds [1]. Then [2]]", 2)).toEqual([
+      { key: 0, text: "It holds " },
+      { key: 9, n: 1, tail: "." },
+      { key: 13, text: " Then " },
+      { key: 19, n: 2, tail: "]" },
     ]);
   });
 

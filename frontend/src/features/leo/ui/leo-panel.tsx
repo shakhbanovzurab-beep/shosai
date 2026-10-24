@@ -18,6 +18,7 @@ import { LeoConversation } from "./leo-conversation";
 import { LeoPanelHeader } from "./leo-panel-header";
 import type { LeoPlace } from "./leo-place";
 import { LeoVoiceMode } from "./leo-voice-mode";
+import { RecentChats } from "./recent-chats";
 import { useFileDrop } from "./use-file-drop";
 
 /** Вопрос, пришедший, пока Leo отвечал: он ждёт в поле ввода; новый id — новое поле с этим текстом. */
@@ -84,6 +85,7 @@ export function LeoPanel({
         expanded={expanded}
         canReset={messages.length > 0}
         onReset={reset}
+        beside={chat.threads ? <RecentChats threads={chat.threads} /> : null}
         onToggleExpanded={onToggleExpanded}
         onClose={onClose}
       />

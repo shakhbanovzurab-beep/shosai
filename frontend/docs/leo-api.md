@@ -7,9 +7,11 @@ architecture §13). Shapes are snake_case; errors use the platform's envelope (A
 are `{items, next_cursor}` with `limit` 1–100 (default 50). The generated client in `src/lib/api/generated/` is the
 source of truth once the routes ship; until a step moves a screen to the API, its mocks answer as this document says.
 
-The panel talks to the API in Personal and in a workspace (agent step 7a): the context's latest thread, its history
-by cursor, turns over SSE with resume after `Last-Event-ID`, "Stop", "Regenerate" and "Edit", steps and sources.
-Nothing of a conversation is kept in the browser; old `leo-chat*` keys are erased. A hub and the admin panel keep the
+The panel talks to the API in Personal and in a workspace (agent steps 7a and 7b): the context's latest thread, the
+"Recent chats" menu (open, rename, delete), history by cursor, turns over SSE with resume after `Last-Event-ID`,
+"Stop", "Regenerate" and "Edit", steps and sources. Every turn names the page and its subject: a note or a meeting,
+a task (`?task=`) or a board (`?board=`); only a UUID is ever sent as a subject's id. Nothing of a conversation is
+kept in the browser; old `leo-chat*` keys are erased. A hub and the admin panel keep the
 sample `/api/leo` (NDJSON) until agent steps 20 and 16; cards and "Needs you" keep their mocks until step 10;
 attachments come with step 12.
 

@@ -18,6 +18,8 @@ interface LeoPanelHeaderProps {
   readonly expanded: boolean;
   readonly canReset: boolean;
   readonly onReset: () => void;
+  /** Что ещё стоит рядом с «Новым чатом»: меню «Недавние чаты» у Leo на API. */
+  readonly beside?: React.ReactNode;
   readonly onToggleExpanded: () => void;
   readonly onClose: () => void;
 }
@@ -29,6 +31,7 @@ export function LeoPanelHeader({
   expanded,
   canReset,
   onReset,
+  beside,
   onToggleExpanded,
   onClose,
 }: LeoPanelHeaderProps) {
@@ -39,6 +42,7 @@ export function LeoPanelHeader({
         <HeaderAction label={t("panel.newChat")} onClick={onReset} disabled={!canReset}>
           <Plus />
         </HeaderAction>
+        {beside}
       </div>
       {/* The orb hangs off the left edge so the title itself sits exactly in the middle. */}
       <div className="relative flex flex-col items-center text-center">
