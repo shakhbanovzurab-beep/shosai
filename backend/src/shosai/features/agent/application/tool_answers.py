@@ -32,10 +32,12 @@ def refusal_content(code: str, text: str) -> str:
     return compact({"error": {"code": code, "message": text}})
 
 
-def digest_content(value: JsonValue, budget: int, ref: UUID) -> str:
-    """A result cut to its budget, with the ref of the whole; the skeleton only when even the
-    cut does not fit."""
+def digest_content(value: JsonValue, budget: int, ref: UUID, cites: list[JsonValue]) -> str:
+    """A result cut to its budget, with the ref of the whole and its sources whole; the
+    skeleton only when even the cut does not fit."""
     envelope: dict[str, JsonValue] = {"truncated": True, "result_ref": str(ref), "note": CUT_RESULT}
+    if cites:
+        envelope["sources"] = cites
     room = budget - estimate_tokens(compact(envelope)) - ENVELOPE_SPARE
     cut = digest(value, room) if room > 0 else None
     if cut is not None:

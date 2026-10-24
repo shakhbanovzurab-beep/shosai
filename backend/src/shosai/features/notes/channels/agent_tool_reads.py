@@ -1,10 +1,10 @@
 """The read tools of Leo's `meetings` toolset: search, digest, transcript, findings (step 14).
 
 Each acts for the person of the tool context's scope, never for an id the model names, and
-sees exactly what `visible_meetings` admits: a meeting they may not read is `not_found`,
-like one that does not exist. A transcript page holds the lines that fit the tool's token
-budget, counted at four characters a token with each line's frame, and names where the
-next page starts.
+sees exactly what `visible_meetings` admits: a meeting they may not read is `not_found`, like
+one that does not exist. Each names the meetings it read as the sources of Leo's answer, in
+their workspace (`agent_tool_sources`). A transcript page holds the lines that fit the tool's
+token budget (`agent_transcript_pages`) and names where the next page starts.
 """
 
 from collections.abc import Sequence
@@ -18,17 +18,21 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.agent_tools.bindings import ReadTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolErrorCode, ToolResult
-from shosai.core.ai.spend.estimates import CHARS_PER_TOKEN
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.notes.application.library_cards import cards_of
 from shosai.features.notes.application.visibility import visible_meetings
+from shosai.features.notes.channels.agent_tool_sources import (
+    LINE_QUOTE,
+    meeting_source,
+    meeting_spaces,
+    moment,
+)
 from shosai.features.notes.channels.agent_tools import (
     GET,
     LIST_FINDINGS,
     READ_TRANSCRIPT,
     SEARCH,
-    TRANSCRIPT_BUDGET,
     FindingCounts,
     FoundMeeting,
     FoundMeetings,
@@ -40,11 +44,10 @@ from shosai.features.notes.channels.agent_tools import (
     Participant,
     ReadTranscript,
     SearchMeetings,
-    SpokenLine,
     TranscriptPage,
 )
+from shosai.features.notes.channels.agent_transcript_pages import LINES_READ, owner_voice, page_of
 from shosai.features.notes.domain.findings import FindingKind
-from shosai.features.notes.domain.transcript import SIDE_SPEAKER, Side
 from shosai.features.notes.domain.transcript_archive import TranscriptLine, spoken_order
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
@@ -59,9 +62,6 @@ from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
 SUMMARY_CHARS: Final = 300
 PARTICIPANTS_SHOWN: Final = 50
 FINDINGS_SHOWN: Final = 200
-LINES_READ: Final = 500
-# Сколько символов JSON занимает строка расшифровки сверх своего текста.
-LINE_FRAME_CHARS: Final = 80
 Lines = TranscriptLineRecord
 
 
@@ -120,6 +120,8 @@ class MeetingReads:
         async with self._transactions.begin(context.scope, read_only=True) as session:
             found = list(await session.scalars(statement))
             cards = await cards_of(session, found[: arguments.limit], user_id)
+            policy = self._ports.get(ACCESS_POLICY)
+            spaces = await meeting_spaces(session, policy, user_id, found[: arguments.limit])
         meetings = [
             FoundMeeting(
                 meeting_id=c.meeting_id, title=c.title, started_at=c.started_at,
@@ -127,7 +129,11 @@ class MeetingReads:
             )
             for c in cards
         ]  # fmt: skip
-        return ToolResult(FoundMeetings(meetings=meetings, more=len(found) > arguments.limit))
+        sources = tuple(
+            meeting_source((c.meeting_id, c.title, spaces[c.meeting_id])) for c in cards
+        )
+        more = len(found) > arguments.limit
+        return ToolResult(FoundMeetings(meetings=meetings, more=more), sources=sources)
 
     async def get(self, arguments: MeetingId, context: ToolContext) -> ToolResult[MeetingDigest]:
         """A readable meeting's facts and Leo's summary."""
@@ -144,8 +150,11 @@ class MeetingReads:
             )
             counts = await self._counts(session, meeting.id)
             participants = [Participant(name=p.name, email=p.email) for p in people]
+            space = await self._space(session, context, meeting)
+        source = meeting_source((meeting.id, meeting.title, space), quote=card.summary or "")
         return ToolResult(
-            MeetingDigest(
+            sources=(source,),
+            output=MeetingDigest(
                 meeting_id=meeting.id, title=meeting.title, status=meeting.status,
                 started_at=meeting.started_at, ended_at=meeting.ended_at,
                 seconds=meeting.seconds, owned=card.owned, participants=participants,
@@ -183,12 +192,20 @@ class MeetingReads:
                 )
             )
             owner = owner_voice({idx: role for idx, role in roles})
+            space = await self._space(session, context, meeting)
         if archived is not None:
             spoken = spoken_order(await self._archive.lines(context.scope.home, archived))
             lines = [line for line in spoken if line.start_ms >= arguments.from_ms][
                 : LINES_READ + 1
             ]
-        return ToolResult(page_of(lines, owner))
+        page = page_of(lines, owner)
+        first = page.lines[0] if page.lines else None
+        source = meeting_source(
+            (meeting.id, meeting.title, space),
+            locator=None if first is None else moment(first.at_ms),
+            quote="" if first is None else first.text[:LINE_QUOTE],
+        )
+        return ToolResult(page, sources=(source,))
 
     async def list_findings(
         self, arguments: ListFindings, context: ToolContext
@@ -216,7 +233,9 @@ class MeetingReads:
                 )
                 for r in records
             ]  # fmt: skip
-        return ToolResult(MeetingFindings(findings=findings))
+            space = await self._space(session, context, meeting)
+        source = meeting_source((meeting.id, meeting.title, space))
+        return ToolResult(MeetingFindings(findings=findings), sources=(source,))
 
     async def _visible(
         self, session: AsyncSession, context: ToolContext, meeting_id: UUID
@@ -228,6 +247,13 @@ class MeetingReads:
             statement.where(MeetingRecord.id == meeting_id)
         )
         return meeting
+
+    async def _space(
+        self, session: AsyncSession, context: ToolContext, meeting: MeetingRecord
+    ) -> UUID | None:
+        """The meeting's space as Leo names its source."""
+        policy, viewer = self._ports.get(ACCESS_POLICY), meeting_viewer(context)
+        return (await meeting_spaces(session, policy, viewer, [meeting]))[meeting.id]
 
     async def _counts(self, session: AsyncSession, meeting_id: UUID) -> FindingCounts:
         run = await session.scalar(
@@ -256,34 +282,3 @@ def meeting_viewer(context: ToolContext) -> UUID:
         message = "инструмент встреч вызывается только от имени человека"
         raise ValueError(message)
     return user_id
-
-
-def owner_voice(roles: dict[int, str]) -> int | None:
-    """The meeting owner's voice: a recording's owner, or the live "me" side."""
-    owned = [idx for idx, role in roles.items() if role == "owner"]
-    if owned:
-        return owned[0]
-    return None if roles else SIDE_SPEAKER[Side.ME]
-
-
-def page_of(lines: Sequence[TranscriptLine], owner: int | None) -> TranscriptPage:
-    """The lines that fit the budget, and where the next page starts."""
-    room = TRANSCRIPT_BUDGET * CHARS_PER_TOKEN
-    shown: list[SpokenLine] = []
-    for line in lines[:LINES_READ]:
-        cost = len(line.text) + LINE_FRAME_CHARS
-        if shown and cost > room:
-            return TranscriptPage(lines=shown, next_from_ms=line.start_ms)
-        room -= cost
-        shown.append(
-            SpokenLine(
-                at_ms=line.start_ms,
-                speaker=None if line.speaker_idx is None else line.speaker_idx + 1,
-                owner_voice=line.speaker_idx is not None and line.speaker_idx == owner,
-                text=line.text,
-            )
-        )
-    following = lines[LINES_READ] if len(lines) > LINES_READ else None
-    return TranscriptPage(
-        lines=shown, next_from_ms=following.start_ms if following is not None else None
-    )

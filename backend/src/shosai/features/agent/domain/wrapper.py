@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from typing import Final
 
 from shosai.core.agent_tools.context import Taint
-from shosai.core.agent_tools.spec import Provenance
+from shosai.core.agent_tools.provenance import Provenance
 
 BOUNDARY_BYTES: Final = 12
 MCP_SERVER: Final = re.compile(r"[a-z0-9][a-z0-9_-]{0,39}")

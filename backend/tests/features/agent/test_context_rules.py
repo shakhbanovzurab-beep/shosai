@@ -7,8 +7,8 @@ from hypothesis import given
 from hypothesis import strategies as st
 
 from shosai.core.agent_tools.context import Taint
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.sources import SourceKind, SourceRef
-from shosai.core.agent_tools.spec import Provenance
 from shosai.features.agent.domain.budgets import (
     HARD_ROUNDS,
     SOFT_ROUNDS,

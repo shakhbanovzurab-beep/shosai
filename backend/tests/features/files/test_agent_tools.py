@@ -8,7 +8,9 @@ from datetime import UTC, datetime, timedelta
 from sqlalchemy import func, select
 
 from shosai.core.agent_tools.context import ToolContext
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import PlannedEffect, ToolError, ToolErrorCode
+from shosai.core.agent_tools.sources import SourceKind
 from shosai.core.events.records import OutboxMessage
 from shosai.core.kernel.homes import Home
 from shosai.features.files.application.file_edits import FileChanges
@@ -180,3 +182,27 @@ async def test_a_folder_switch_by_leo_makes_its_files_used(file_bench: FileBench
     assert dict(preview.params) == {"target": "folder", "use": True, "name": "Research"}
     assert view.leo is not None
     assert view.leo.via is LeoVia.FOLDER
+
+
+async def test_a_read_names_its_file_in_its_space_and_labels_whose_text_it_is(
+    file_bench: FileBench, run_slot: RunSlot
+) -> None:
+    owner, member = person(Home.RU, uuid.uuid4()), person(Home.RU, uuid.uuid4())
+    shared = await shared_file(file_bench, run_slot, owner, member)
+    own = await file_bench.file(member, "Mine.txt", b"my words")
+    reads = file_bench.reads
+
+    mine = await reads.read(ReadFile(file_id=own.id), context(member))
+    found = await reads.search(SearchFiles(query="plan"), context(member))
+    by_owner = await reads.search(SearchFiles(query="plan"), context(owner))
+
+    assert [(s.kind, s.id, s.title, s.org_id, s.quote) for s in mine.sources] == [
+        (SourceKind.FILE, str(own.id), "Mine.txt", None, "my words")
+    ]
+    assert mine.provenance is Provenance.FILE_OWN
+    # Файл коллеги, поделённый в workspace, назван этим workspace, а его текст — чужим.
+    [source] = found.sources
+    assert (source.id, source.org_id is not None) == (str(shared), True)
+    assert found.provenance is Provenance.FILE_FOREIGN
+    assert [s.org_id for s in by_owner.sources] == [None]
+    assert by_owner.provenance is Provenance.FILE_OWN

@@ -27,6 +27,7 @@ from typing import Any, Final
 from pydantic import BaseModel, JsonValue
 
 from shosai.core.agent_tools.previews import PreviewWording
+from shosai.core.agent_tools.provenance import Provenance
 
 TOOL_NAME: Final = re.compile(r"[a-z][a-z0-9_]*\.[a-z][a-z0-9_]*")
 GATE_NAME: Final = re.compile(r"[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)*")
@@ -53,24 +54,6 @@ class Reversibility(StrEnum):
     REVERSIBLE = "reversible"
     COMPENSABLE = "compensable"
     IRREVERSIBLE = "irreversible"
-
-
-class Provenance(StrEnum):
-    """Where untrusted text in a result comes from: the label Leo wraps it with (Leo §7.4).
-
-    A closed set, never attacker text; an external MCP server's label is the agent's,
-    `mcp:<server>`, since a slice's spec cannot know the server.
-    """
-
-    MAIL = "mail"
-    WEB = "web"
-    FILE_FOREIGN = "file:foreign"
-    FILE_OWN = "file:own"
-    MEETING_SPEECH = "meeting:speech"
-    # Текст задач, которого человек не писал: коллеги, встречи через извлечение, Jira.
-    TASK_FOREIGN = "task:foreign"
-    MEMORY = "memory"
-    SKILL_USER = "skill:user"
 
 
 class CostClass(StrEnum):

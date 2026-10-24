@@ -113,6 +113,18 @@ class AccessPolicy(Protocol):
         """The ids the viewer may read now, in one query: search hits re-checked (§7)."""
         ...
 
+    async def shared_into(
+        self,
+        session: AsyncSession,
+        resource: ShareableResource,
+        ids: Collection[UUID],
+        viewer: Viewer,
+    ) -> Mapping[UUID, UUID]:
+        """For someone else's personal rows among `ids` that reach the viewer through a share,
+        a workspace each is shared into that admits the viewer: the space Leo names such a
+        source by (ADR 0068 AG-D1). The viewer's own rows and workspace rows are absent."""
+        ...
+
     async def set_access(self, session: AsyncSession, change: AccessChange) -> None:
         """Write the level, the grants, the audit row and the event in the caller's transaction.
 

@@ -25,6 +25,7 @@ TOOLSET_ORDER: Final[tuple[str, ...]] = (CORE, "notes", "tasks", "files", "accou
 TOOLS_PER_TOOLSET: Final = 8
 OFFERED_EFFECTS: Final = frozenset({ToolEffect.READ, ToolEffect.CLIENT})
 WIRE_DOT: Final = "__"
+SOURCES_FIELD: Final = "sources"
 
 
 def wire_name(name: str) -> str:
@@ -113,6 +114,11 @@ def toolsets_of(catalog: AgentToolCatalog) -> Toolsets:
         tools = catalog.toolset(name)
         if len(tools) > TOOLS_PER_TOOLSET:
             message = f"в наборе {name} {len(tools)} инструментов, предел {TOOLS_PER_TOOLSET}"
+            raise ValueError(message)
+        # Модель читает источники результата под этим ключом: у выхода инструмента его нет.
+        taken = [tool.spec.name for tool in tools if SOURCES_FIELD in tool.spec.output.model_fields]
+        if taken:
+            message = f"у выхода {taken} есть поле {SOURCES_FIELD}: оно занято источниками"
             raise ValueError(message)
         by_name[name] = tuple(
             offered(tool) for tool in tools if tool.spec.effect in OFFERED_EFFECTS

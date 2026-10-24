@@ -2,16 +2,17 @@
 
 `readable` and `manageable` return the predicate a slice puts into its own query, so the
 check runs with the read and nothing is cached. `filter_readable` re-checks a batch of
-ids — search hits, Leo's sources — in one query. `set_access` is the only way to change a
-workspace row's level and grants: in the caller's transaction, with its audit row and
-event, and only by someone who may manage the row.
+ids — search hits, Leo's sources — in one query; `shared_into` names the workspace a member
+reads someone else's shared personal row through, the space Leo shows it in. `set_access` is
+the only way to change a workspace row's level and grants: in the caller's transaction, with
+its audit row and event, and only by someone who may manage the row.
 
 A resource with a parent (a meeting's task, ADR 0059) also opens to whoever may read its
 parent row now: the parent's own predicate runs in an `EXISTS` of the same query, so the
 right is never copied. The policy knows every declared resource to find the parent by kind.
 """
 
-from collections.abc import Collection, Sequence
+from collections.abc import Collection, Mapping, Sequence
 from http import HTTPStatus
 from uuid import UUID
 
@@ -37,8 +38,10 @@ from shosai.features.workspaces.infrastructure.access_records import ResourceGra
 from shosai.features.workspaces.infrastructure.organization_records import Membership, Team
 from shosai.features.workspaces.infrastructure.policy_predicates import (
     personal_rows,
+    sharing_workspaces,
     workspace_rows,
 )
+from shosai.features.workspaces.infrastructure.share_records import SHARE_RECORDS
 
 
 class AccessScopeMismatchError(ValueError):
@@ -110,6 +113,24 @@ class WorkspaceAccessPolicy:
         row_id = resource.table.c[resource.id]
         query = select(row_id).where(row_id.in_(list(ids)), self.readable(resource, viewer))
         return frozenset(await session.scalars(query))
+
+    async def shared_into(
+        self,
+        session: AsyncSession,
+        resource: ShareableResource,
+        ids: Collection[UUID],
+        viewer: Viewer,
+    ) -> Mapping[UUID, UUID]:
+        """For someone else's personal rows among `ids` that reach the viewer through a share,
+        a workspace each is shared into that admits the viewer, the first by id."""
+        records = SHARE_RECORDS.get(resource.kind)
+        if records is None or not ids:
+            return {}
+        found: dict[UUID, UUID] = {}
+        query = sharing_workspaces(resource, records, viewer.user_id, ids)
+        for row_id, org_id in await session.execute(query):
+            found.setdefault(row_id, org_id)
+        return found
 
     async def set_access(self, session: AsyncSession, change: AccessChange) -> None:
         """Write the level, the grants, the audit row and the event in the caller's transaction."""

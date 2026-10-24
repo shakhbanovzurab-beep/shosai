@@ -17,8 +17,10 @@ from pydantic import BaseModel, ConfigDict, Field, create_model
 
 from shosai.core.agent_tools.bindings import AgentTool, ReadTool, WriteTool
 from shosai.core.agent_tools.context import ToolContext
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import PlannedEffect, Preview, ToolResult
-from shosai.core.agent_tools.spec import Provenance, Reversibility, ToolEffect, ToolSpec
+from shosai.core.agent_tools.sources import SourceRef
+from shosai.core.agent_tools.spec import Reversibility, ToolEffect, ToolSpec
 from shosai.core.ai.calls import ModelRef, Provider
 from shosai.core.ai.requests import ToolCall
 from shosai.core.ai.results import ChatDelta, Usage
@@ -98,12 +100,14 @@ class ProbeTools:
 
     items: list[str] = field(default_factory=lambda: ["Budget review: travel cut by 20%"])
     ran: list[str] = field(default_factory=list)
+    # Источники, которые называет каждый поиск.
+    sources: list[SourceRef] = field(default_factory=list)
 
     async def search(self, arguments: Query, context: ToolContext) -> ToolResult[Found]:
-        """The items, once per call."""
+        """The items and the sources, once per call."""
         del context
         self.ran.append(arguments.query)
-        return ToolResult(Found(items=list(self.items)))
+        return ToolResult(Found(items=list(self.items)), sources=tuple(self.sources))
 
     async def archive(self, arguments: BaseModel, context: ToolContext) -> ToolResult[Found]:
         """The archive's items, noted as one run."""

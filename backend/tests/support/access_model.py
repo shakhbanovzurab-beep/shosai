@@ -115,6 +115,22 @@ def readable(world: World, kind: str, user_id: UUID, within: UUID | None = None)
     }
 
 
+def source_spaces(world: World, row_id: UUID, user_id: UUID) -> set[UUID | None]:
+    """The spaces Leo may name a readable row's source by: its workspace, none for the
+    person's own personal row, or a workspace someone else's personal row is shared into
+    that the person is an active member of (ADR 0068 AG-D1)."""
+    row = next(row for row in world.rows if row.id == row_id)
+    if row.org_id is not None:
+        return {row.org_id}
+    if row.owner == user_id:
+        return {None}
+    return {
+        share.org_id
+        for share in world.shares
+        if share.resource_id == row.id and world.active_member(share.org_id, user_id)
+    }
+
+
 def manageable(world: World, kind: str, user_id: UUID) -> set[UUID]:
     """The rows of a kind whose access the person may change."""
     return {

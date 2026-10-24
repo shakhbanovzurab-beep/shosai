@@ -77,7 +77,7 @@ class Uploads(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class FileFacts:
-    """A file the viewer may read, as other slices see it."""
+    """A file the viewer may read, as other slices see it, with whose it is and where."""
 
     file_id: UUID
     name: str
@@ -85,6 +85,9 @@ class FileFacts:
     content_type: str
     size_bytes: int
     leo_readable: bool
+    # Кто загрузил файл и в каком workspace он лежит; None — личный файл владельца.
+    owner_id: UUID | None = None
+    org_id: UUID | None = None
 
 
 class FileUnreadableError(AppError):

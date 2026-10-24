@@ -53,6 +53,8 @@ class FilesReader:
                 content_type=record.content_type,
                 size_bytes=record.size_bytes,
                 leo_readable=leo_readable(record.name, record.size_bytes),
+                owner_id=record.user_id,
+                org_id=record.org_id,
             )
             for record in await session.scalars(query)
         }

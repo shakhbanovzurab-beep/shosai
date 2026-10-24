@@ -11,7 +11,7 @@ Other slices import only `contracts` (the package) and `contracts.events`:
 
 | Item | What it is |
 |---|---|
-| `AccessPolicy` (`ACCESS_POLICY`) | The predicate a slice puts into its own query (`readable`, `manageable`), the batch re-check of search hits (`filter_readable`) and the one way to change access (`set_access`) |
+| `AccessPolicy` (`ACCESS_POLICY`) | The predicate a slice puts into its own query (`readable`, `manageable`), the batch re-check of search hits (`filter_readable`), the workspace a member reads someone else's shared personal row through — the space Leo names that source by (`shared_into`, agent step 6) — and the one way to change access (`set_access`) |
 | `Viewer` | The person reading; `within` narrows a workspace screen, never Leo |
 | `ShareableResource` (core) | Declared on a slice's `FeatureModule.shareable` for each table it shares, naming its id, owner, workspace and access columns |
 | `MembershipReader` (`MEMBERSHIP_READER`) | A person's active memberships, read in the caller's transaction; the account transfer guard |

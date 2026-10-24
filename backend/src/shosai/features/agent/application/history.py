@@ -3,9 +3,9 @@
 History is the person's questions, Leo's answers and the server's notes; tool rounds are the
 run's record and are never listed. A page reads the thread's monthly partitions from the
 thread's creation on, so older months are pruned, walks the thread's index by moment and
-id, and reads only the columns it shows. An answer lists the steps the person saw (step 6);
-its sources join it with step 6b, its artifacts and cards with 9b, its rating with 11 and its
-attachments with 12: each with the step that writes it.
+id, and reads only the columns it shows. An answer lists the steps the person saw and the
+sources the tools named (step 6); its artifacts and cards join it with 9b, its rating with 11
+and its attachments with 12: each with the step that writes it.
 """
 
 from dataclasses import dataclass
@@ -17,6 +17,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import load_only
 
+from shosai.core.agent_tools.sources import SourceKind
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.pagination.cursor import CursorCodec
 from shosai.core.pagination.keyset import Keyset
@@ -29,10 +30,10 @@ from shosai.features.identity.contracts import Principal
 MESSAGE = AgentMessageRecord
 LISTED: Final = tuple(role.value for role in HistoryRole)
 NEWEST: Final = Keyset((MESSAGE.created_at.expression, MESSAGE.id.expression), descending=True)
-# Только показываемые столбцы: источники и вызовы раунда в страницу не читаются.
+# Только показываемые столбцы: вызовы раунда и дайджесты в страницу не читаются.
 SHOWN: Final = load_only(
     MESSAGE.id, MESSAGE.created_at, MESSAGE.role, MESSAGE.text, MESSAGE.status,
-    MESSAGE.duration_ms, MESSAGE.steps,
+    MESSAGE.duration_ms, MESSAGE.steps, MESSAGE.sources,
 )  # fmt: skip
 
 
@@ -70,6 +71,32 @@ def steps_of(stored: list[dict[str, Any]]) -> tuple[StepView, ...]:
 
 
 @dataclass(frozen=True, slots=True)
+class SourceView:
+    """A source of an answer, numbered by its place: what it is, its space, where and what."""
+
+    id: str
+    kind: SourceKind
+    title: str
+    space: str
+    locator: str | None
+    quote: str
+
+
+def sources_of(stored: list[dict[str, Any]]) -> tuple[SourceView, ...]:
+    """An answer's sources as its row keeps them; one of a kind this build lacks is skipped."""
+    kinds = {kind.value for kind in SourceKind}
+    return tuple(
+        SourceView(
+            id=str(source.get("id", "")), kind=SourceKind(source["kind"]),
+            title=str(source.get("title", "")), space=str(source.get("space", "")),
+            locator=source.get("locator"), quote=str(source.get("quote", "")),
+        )
+        for source in stored
+        if source.get("kind") in kinds
+    )  # fmt: skip
+
+
+@dataclass(frozen=True, slots=True)
 class MessageView:
     """A row of the history."""
 
@@ -80,6 +107,7 @@ class MessageView:
     created_at: datetime
     duration_ms: int | None
     steps: tuple[StepView, ...] = ()
+    sources: tuple[SourceView, ...] = ()
 
 
 def view_of(record: AgentMessageRecord) -> MessageView:
@@ -88,7 +116,7 @@ def view_of(record: AgentMessageRecord) -> MessageView:
     return MessageView(
         id=record.id, role=HistoryRole(record.role), text=record.text, status=status,
         created_at=record.created_at, duration_ms=record.duration_ms,
-        steps=steps_of(record.steps),
+        steps=steps_of(record.steps), sources=sources_of(record.sources),
     )  # fmt: skip
 
 

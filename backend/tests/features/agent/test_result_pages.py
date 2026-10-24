@@ -110,7 +110,7 @@ async def test_a_kept_result_is_paged_whole_to_its_person_and_to_no_one_else(
     pages = pages_of(homes, memberships, now)
     whole = json.dumps({"items": ["встреча о бюджете — решено"] * 400}, ensure_ascii=False)
 
-    ref = str(await pages.keep(as_person(person), "notes.search", whole, frozenset({workspace})))
+    ref = str(await pages.keep(as_person(person), "notes.search", whole))
     read = await read_all(pages, as_person(person), ref)
     stranger_reads = await pages.page(as_person(stranger), ref, 0)
     later = await pages_of(homes, memberships, now + timedelta(days=31)).page(
@@ -129,14 +129,14 @@ async def test_a_kept_result_is_paged_whole_to_its_person_and_to_no_one_else(
     assert await pages.page(as_person(person), "not-a-ref", 0) is ToolErrorCode.NOT_FOUND
 
 
-async def test_a_result_naming_no_sources_is_kept_as_from_every_workspace_of_its_person(
+async def test_a_result_is_kept_as_from_every_workspace_its_person_is_in(
     homes: DatabaseAccess,
 ) -> None:
     person, first, second = uuid.uuid4(), uuid.uuid4(), uuid.uuid4()
     memberships = Memberships({person: {first, second}})
     pages = pages_of(homes, memberships, datetime.now(UTC))
 
-    ref = str(await pages.keep(as_person(person), "account.get_plan", "{}", None))
+    ref = str(await pages.keep(as_person(person), "account.get_plan", "{}"))
     readable = await pages.page(as_person(person), ref, 0)
     memberships.spaces[person] = {first}
     after_leaving_one = await pages.page(as_person(person), ref, 0)

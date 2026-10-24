@@ -12,6 +12,7 @@ from shosai.core.agent_tools.arguments import parse_arguments
 from shosai.core.agent_tools.bindings import ReadTool, WriteTool
 from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.agent_tools.context import Taint, ToolContext
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import (
     TOOL_ERROR_TEXTS,
     PlannedEffect,
@@ -19,7 +20,7 @@ from shosai.core.agent_tools.results import (
     ToolErrorCode,
     ToolResult,
 )
-from shosai.core.agent_tools.spec import CostClass, Provenance, Reversibility, ToolEffect
+from shosai.core.agent_tools.spec import CostClass, Reversibility, ToolEffect
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from tests.core.agent_tools.probe_tools import (

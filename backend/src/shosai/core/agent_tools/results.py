@@ -6,7 +6,8 @@ the effect to those targets only, so the preview and the execution cannot diverg
 the model. A `ToolResult` is the output model or a `ToolError` whose code the model can
 explain; the error's text is the code's registered English text, never a slice's prose,
 so everything a model reads from a failed tool is in the model-facing test. A result also
-names its sources and the artifacts it hands over (`core.agent_tools.sources`, ADR 0068).
+names its sources and the artifacts it hands over (`core.agent_tools.sources`, ADR 0068), and
+may narrow its text's label (`core.agent_tools.provenance`).
 """
 
 from collections.abc import Mapping
@@ -16,6 +17,7 @@ from typing import Final
 
 from pydantic import BaseModel, JsonValue
 
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.sources import ArtifactRef, SourceRef
 
 type PreviewParam = str | int | float | bool | None
@@ -76,21 +78,23 @@ class ToolError:
 class ToolResult[O: BaseModel]:
     """The output of a call, or its error; exactly one of them.
 
-    An output may name the sources it rests on and the artifacts it hands over; an error
-    has neither.
+    An output may name the sources it rests on, the artifacts it hands over, and the label of
+    its untrusted text when it is narrower than the spec's — the person's own file where the
+    spec says a colleague's; it never removes the spec's label. An error has none of them.
     """
 
     output: O | None = None
     error: ToolError | None = None
     sources: tuple[SourceRef, ...] = ()
     artifacts: tuple[ArtifactRef, ...] = ()
+    provenance: Provenance | None = None
 
     def __post_init__(self) -> None:
         if (self.output is None) == (self.error is None):
             message = "результат инструмента — либо данные, либо ошибка"
             raise ValueError(message)
-        if self.error is not None and (self.sources or self.artifacts):
-            message = "у ошибки инструмента нет источников и артефактов"
+        if self.error is not None and (self.sources or self.artifacts or self.provenance):
+            message = "у ошибки инструмента нет источников, артефактов и метки"
             raise ValueError(message)
 
     @classmethod

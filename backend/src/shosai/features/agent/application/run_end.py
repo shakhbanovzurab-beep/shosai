@@ -1,12 +1,12 @@
 """A run's end in the database: one transaction the worker or the sweep wins (Leo §5.2 step 11).
 
 The run moves from `running` with a condition, so of the run's worker and the lost-run sweep
-exactly one records an end. The answer is kept with the text the model wrote and the steps the
-person saw, after the rounds that led to it — each model message with its calls and each call's
-answer as the model read it, for the run's record, never for later turns' context; a
-regenerated or edited question's earlier answers and rounds give way to it. The thread's last
-activity moves, and a completed turn is told through the outbox. A thread deleted meanwhile
-turns the end into `cancelled` and keeps nothing.
+exactly one records an end. The answer is kept with the text the model wrote, the steps the
+person saw and the sources the tools named, after the rounds that led to it — each model
+message with its calls and each call's answer as the model read it, for the run's record, never
+for later turns' context; a regenerated or edited question's earlier answers and rounds give
+way to it. The thread's last activity moves, and a completed turn is told through the outbox.
+A thread deleted meanwhile turns the end into `cancelled` and keeps nothing.
 """
 
 from datetime import datetime, timedelta
@@ -18,6 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.ids import new_id
+from shosai.features.agent.application.run_sources import kept
 from shosai.features.agent.application.run_telemetry import TIER, TurnTimes, micro_usd
 from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.turn_task import TurnPayload
@@ -79,7 +80,8 @@ async def record_end(
                         id=payload.reply_id, created_at=now, thread_id=thread.id,
                         user_id=thread.user_id, run_id=payload.run_id,
                         role=MessageRole.ASSISTANT.value, status=ending.answer.value,
-                        text=text, steps=work.ordered_steps(), tokens=estimate_tokens(text),
+                        text=text, steps=work.ordered_steps(),
+                        sources=kept(work, payload.language), tokens=estimate_tokens(text),
                         duration_ms=millis(now - payload.started_at),
                     )
                 )  # fmt: skip

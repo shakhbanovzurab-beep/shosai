@@ -3159,6 +3159,27 @@ export interface components {
             connected_services_search?: boolean | null;
         };
         /**
+         * AnswerSourceOut
+         * @description A source of an answer, the n-th counting from one: what it is, the space it belongs to
+         *     ("Personal" in the person's language or the workspace's name), where inside it and the
+         *     quote the answer rests on; `highlight` stays empty while the quote is shown whole.
+         */
+        AnswerSourceOut: {
+            /** Id */
+            id: string;
+            kind: components["schemas"]["SourceKind"];
+            /** Title */
+            title: string;
+            /** Space */
+            space: string;
+            /** Locator */
+            locator: string | null;
+            /** Quote */
+            quote: string;
+            /** Highlight */
+            highlight: string[];
+        };
+        /**
          * AnswerStatus
          * @description How an answer ended; a failure is never written into the text.
          * @enum {string}
@@ -4951,8 +4972,8 @@ export interface components {
         };
         /**
          * MessageOut
-         * @description A row of the history: a question, an answer (with how it ended and the steps it took) or
-         *     a server's note.
+         * @description A row of the history: a question, an answer (with how it ended, the steps it took and
+         *     its sources) or a server's note.
          */
         MessageOut: {
             /**
@@ -4973,6 +4994,8 @@ export interface components {
             duration_ms: number | null;
             /** Steps */
             steps: components["schemas"]["StepOut"][];
+            /** Sources */
+            sources: components["schemas"]["AnswerSourceOut"][];
         };
         /**
          * Messenger
@@ -6440,6 +6463,12 @@ export interface components {
             /** Start Ms */
             start_ms: number;
         };
+        /**
+         * SourceKind
+         * @description What a source is; the cabinet picks its icon by the kind.
+         * @enum {string}
+         */
+        SourceKind: "meeting" | "file" | "task" | "note" | "mail" | "web";
         /**
          * SourceMeetingOut
          * @description The meeting a task came from.

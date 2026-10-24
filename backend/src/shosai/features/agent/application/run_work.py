@@ -1,11 +1,13 @@
-"""What a run did besides its answer's text: its rounds, its steps, its taint (agent step 6).
+"""What a run did besides its answer's text: its rounds, steps, sources and taint (step 6).
 
 The engine keeps it while the run goes on, so a run stopped or failed midway still records the
-steps the person saw and the rounds the model saw. A round is the model's message — the text
-it wrote before calling tools and the calls — and each call's answer as the model read it. The
-run's taint only grows (Leo §7.4); its wrapper boundary is random per run.
+steps the person saw, the rounds the model saw and the sources it numbered. A round is the
+model's message — the text it wrote before calling tools and the calls — and each call's answer
+as the model read it. The run's taint only grows (Leo §7.4); its wrapper boundary is random per
+run.
 """
 
+import asyncio
 import secrets
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -19,6 +21,7 @@ from shosai.core.agent_tools.context import Taint
 from shosai.core.ai.requests import ToolCall
 from shosai.core.ai.results import Usage
 from shosai.features.agent.application.tool_offer import TurnOffer
+from shosai.features.agent.domain.sources import SourceLedger
 from shosai.features.agent.domain.wrapper import BOUNDARY_BYTES, boundary
 from shosai.features.agent.infrastructure.turn_graph import ModelAnswer
 
@@ -94,6 +97,10 @@ class RunWork:
     answers: list[ModelAnswer] = field(default_factory=list)
     rounds: list[Round] = field(default_factory=list)
     steps: list[Step] = field(default_factory=list)
+    sources: SourceLedger = field(default_factory=SourceLedger)
+    # Пространства человека с именами: читаются при первом источнике, один раз за ход.
+    spaces: dict[UUID, str] | None = None
+    spaces_read: asyncio.Lock = field(default_factory=asyncio.Lock)
     opened: int = field(default=0, init=False)
 
     def open_step(self) -> int:

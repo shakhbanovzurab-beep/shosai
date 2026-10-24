@@ -14,7 +14,7 @@ model is asked, and so does a run the sweep ended while it waited for a worker.
 import secrets
 from collections.abc import Callable
 from datetime import UTC, datetime
-from typing import Final
+from typing import Any, Final
 from uuid import UUID
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -38,6 +38,7 @@ from shosai.features.agent.domain.wrapper import BOUNDARY_BYTES, boundary
 from shosai.features.agent.infrastructure.prompts import (
     POLICY,
     QUESTION,
+    SOURCES_NOTE,
     SUMMARY,
     VOLATILE,
     turn_instructions,
@@ -54,6 +55,8 @@ MESSAGE = AgentMessageRecord
 MAX_OUTPUT_TOKENS: Final = 4_096
 # Строк читается с запасом: окно режет их по токенам, редкий тред упрётся в это число раньше.
 HISTORY_ROWS: Final = 60
+# Сколько источников прошлого ответа называется в контексте: остальные — за пределами окна.
+NOTED_SOURCES: Final = 10
 ROLES: Final = {MessageRole.USER.value: Role.USER, MessageRole.ASSISTANT.value: Role.ASSISTANT}
 UTC_ZONE: Final = "UTC"
 
@@ -177,14 +180,17 @@ class ContextBuilder:
             conditions.append(MESSAGE.id != thread.summary_upto)
         rows = (
             await session.execute(
-                select(MESSAGE.id, MESSAGE.role, MESSAGE.text, MESSAGE.tokens)
+                select(MESSAGE.id, MESSAGE.role, MESSAGE.text, MESSAGE.tokens, MESSAGE.sources)
                 .where(*conditions)
                 .order_by(MESSAGE.created_at.desc(), MESSAGE.id.desc())
                 .limit(HISTORY_ROWS)
             )
         ).all()
-        kept = rows[: recent_window([row.tokens for row in rows], cap(6))]
-        return [text_message(ROLES[row.role], row.text) for row in reversed(kept)]
+        texts = [with_sources(row.text, row.sources) for row in rows]
+        sizes = [row.tokens + estimate_tokens(text) - estimate_tokens(row.text)
+                 for row, text in zip(rows, texts, strict=True)]  # fmt: skip
+        kept = recent_window(sizes, cap(6))
+        return [text_message(ROLES[rows[i].role], texts[i]) for i in reversed(range(kept))]
 
     async def _volatile(self, session: AsyncSession, payload: TurnPayload, zone: str) -> str:
         """Segment 7: the time to the minute, the page and what it shows."""
@@ -201,6 +207,18 @@ class ContextBuilder:
             if digest is not None:
                 lines.append(digest.text)
         return VOLATILE.format(context=clip("\n".join(lines), cap(7)))
+
+
+def with_sources(text: str, sources: list[dict[str, Any]]) -> str:
+    """An earlier answer with what its numbers stood for: kinds and ids, so a follow-up can
+    name the same things, never their titles' foreign text."""
+    if not sources:
+        return text
+    listed = "; ".join(
+        f"[{n}] {source.get('kind')} {source.get('id')}"
+        for n, source in enumerate(sources[:NOTED_SOURCES], start=1)
+    )
+    return f"{text}\n\n{SOURCES_NOTE.format(sources=listed)}"
 
 
 def cap(segment: int) -> int:

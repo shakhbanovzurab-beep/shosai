@@ -11,7 +11,8 @@ colleague's, a meeting's through extraction, a Jira user's — so both are label
 from datetime import timedelta
 from typing import Final
 
-from shosai.core.agent_tools.spec import Provenance, ToolEffect, ToolSpec
+from shosai.core.agent_tools.provenance import Provenance
+from shosai.core.agent_tools.spec import ToolEffect, ToolSpec
 from shosai.features.tasks.channels.agent_tool_models import (
     BoardRead,
     FoundTasks,
@@ -33,7 +34,7 @@ SEARCH_TASKS: Final = ToolSpec(
     ),
     input=SearchTasks, output=FoundTasks, effect=ToolEffect.READ,
     result_budget=SEARCH_BUDGET, timeout=timedelta(seconds=5),
-    provenance=Provenance.TASK_FOREIGN,
+    provenance=Provenance.TASK_FOREIGN, step_detail="query",
 )  # fmt: skip
 LIST_BOARD: Final = ToolSpec(
     name="tasks.list_board", toolset=TOOLSET,

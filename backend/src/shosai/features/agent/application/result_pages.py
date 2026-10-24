@@ -2,11 +2,11 @@
 
 A result longer than its tool's budget enters the context as a digest naming its
 `result_ref`; the whole of it is kept in `agent_tool_results` and read by `core.read_result` a
-page at a time, for 30 days. Every read re-checks the spaces its sources came from: a result
-from a workspace the person has since left is refused, so nothing of that workspace is paged
-out again. A result that names no sources may hold anything the person could read, so it is
-kept as from every workspace they were in. A ref that is not the person's, or older than 30
-days, is not found.
+page at a time, for 30 days. A result may hold anything the person could read through any of
+their workspaces — a colleague's meeting shared into one among it — so it is kept with every
+workspace they are in, and every read re-checks them: once the person has left any of them,
+the result is refused and nothing it may hold is paged out again (re-asking the tool reads
+what they may read now). A ref that is not the person's, or older than 30 days, is not found.
 """
 
 from collections.abc import Callable
@@ -54,16 +54,13 @@ class ResultPages:
         self._ports = ports
         self._clock = clock
 
-    async def keep(
-        self, context: ToolContext, tool: str, payload: str, spaces: frozenset[UUID] | None
-    ) -> UUID:
-        """Store a whole result; its ref. `spaces` None: the result names no sources."""
+    async def keep(self, context: ToolContext, tool: str, payload: str) -> UUID:
+        """Store a whole result with the person's workspaces now; its ref."""
         user_id = person(context)
         result_id = new_id()
         async with self._transactions.begin(context.scope) as session:
-            if spaces is None:
-                memberships = await self._ports.get(MEMBERSHIP_READER).active(session, user_id)
-                spaces = frozenset(membership.org_id for membership in memberships)
+            memberships = await self._ports.get(MEMBERSHIP_READER).active(session, user_id)
+            spaces = frozenset(membership.org_id for membership in memberships)
             session.add(
                 RESULT(
                     id=result_id, created_at=self._clock(), user_id=user_id,

@@ -32,6 +32,7 @@ from shosai.features.agent.application.run_context import ContextBuilder
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.run_engine_parts import EngineParts
 from shosai.features.agent.application.run_registry import RunRegistry
+from shosai.features.agent.application.run_sources import RunSources
 from shosai.features.agent.application.run_streams import RunStreams
 from shosai.features.agent.application.run_telemetry import RunTelemetry
 from shosai.features.agent.application.thread_care import ThreadCare
@@ -90,7 +91,10 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         services.tracer_provider.get_tracer(TRACER_NAME),
     )
     telemetry, pages = RunTelemetry(metrics, tracer), ResultPages(transactions, ports)
-    tools = ToolParts(pages, tool_bulkhead(services.role), ToolMetrics(services.registry), tracer)
+    tools = ToolParts(
+        pages, RunSources(transactions, ports), tool_bulkhead(services.role),
+        ToolMetrics(services.registry), tracer,
+    )  # fmt: skip
     routing = TurnRouting(ToolRegistry(services.agent_tools), ports)
     engine = RunEngine(
         EngineParts(

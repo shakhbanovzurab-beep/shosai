@@ -120,3 +120,26 @@ async def test_revoked_hits_are_dropped_by_the_batch_check(
     assert before == readable(canon.world, "file", frank.user_id)
     assert len(before - after) == 1
     assert nothing == frozenset()
+
+
+@pytest.mark.parametrize("kind", ["meeting", "file"])
+async def test_a_shared_personal_row_is_named_by_a_workspace_that_shares_it_to_the_viewer(
+    homes: DatabaseAccess, probe_resources: None, run_slot: RunSlot, kind: str
+) -> None:
+    canon = canonical_world(kind)
+    resource = RESOURCES[kind]
+    await write_world(run_slot.claimed.connections[Home.EU], resource, canon.world)
+    rows = {row.id: row for row in canon.world.rows}
+    shared_into = {(share.resource_id, share.org_id) for share in canon.world.shares}
+
+    for person in canon.people.values():
+        async with homes.transactions.begin(TenancyScope(Home.EU, person)) as session:
+            named = await policy().shared_into(session, resource, list(rows), Viewer(person))
+        expected = {
+            row_id for row_id in readable(canon.world, kind, person)
+            if rows[row_id].org_id is None and rows[row_id].owner != person
+        }  # fmt: skip
+
+        assert set(named) == expected
+        assert all((row_id, org) in shared_into for row_id, org in named.items())
+        assert all(canon.world.active_member(org, person) for org in named.values())

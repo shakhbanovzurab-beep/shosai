@@ -14,6 +14,7 @@ from shosai.core.agent_tools.previews import (
     PreviewWording,
     render_preview,
 )
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import Preview, ToolError, ToolErrorCode, ToolResult
 from shosai.core.agent_tools.sources import ArtifactKind, ArtifactRef, SourceKind, SourceRef
 from tests.core.agent_tools.probe_tools import ARCHIVE, SEARCH, FoundNotes
@@ -59,13 +60,15 @@ def test_an_artifact_carries_exactly_its_kind_s_fields() -> None:
         ArtifactRef(ArtifactKind.CHAT_DIGEST, "d-1", "Digest", {"workspace_id": "w"})
 
 
-def test_an_error_has_no_sources_or_artifacts() -> None:
+def test_an_error_has_no_sources_artifacts_or_label() -> None:
     source = SourceRef(SourceKind.TASK, "t-1", "Call the bank")
-    found = ToolResult(FoundNotes(titles=["a"]), sources=(source,))
+    found = ToolResult(FoundNotes(titles=["a"]), sources=(source,), provenance=Provenance.FILE_OWN)
 
-    assert found.sources == (source,)
+    assert (found.sources, found.provenance) == ((source,), Provenance.FILE_OWN)
     with pytest.raises(ValueError, match="ошибки"):
         ToolResult[FoundNotes](error=ToolError(ToolErrorCode.FAILED), sources=(source,))
+    with pytest.raises(ValueError, match="ошибки"):
+        ToolResult[FoundNotes](error=ToolError(ToolErrorCode.FAILED), provenance=Provenance.MAIL)
 
 
 def test_a_card_renders_in_the_language_and_skips_empty_values() -> None:

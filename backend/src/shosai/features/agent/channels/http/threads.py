@@ -15,6 +15,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, Response
 
+from shosai.core.agent_tools.sources import SourceKind
 from shosai.core.idempotency.http import IdempotencyKeyHeader
 from shosai.core.kernel.errors import AppError
 from shosai.core.pagination.page import Page, PageParameters
@@ -82,9 +83,23 @@ class StepOut(Out):
     duration_ms: int | None
 
 
+class AnswerSourceOut(Out):
+    """A source of an answer, the n-th counting from one: what it is, the space it belongs to
+    ("Personal" in the person's language or the workspace's name), where inside it and the
+    quote the answer rests on; `highlight` stays empty while the quote is shown whole."""
+
+    id: str
+    kind: SourceKind
+    title: str
+    space: str
+    locator: str | None
+    quote: str
+    highlight: list[str]
+
+
 class MessageOut(Out):
-    """A row of the history: a question, an answer (with how it ended and the steps it took) or
-    a server's note."""
+    """A row of the history: a question, an answer (with how it ended, the steps it took and
+    its sources) or a server's note."""
 
     id: UUID
     role: HistoryRole
@@ -93,6 +108,7 @@ class MessageOut(Out):
     created_at: datetime
     duration_ms: int | None
     steps: list[StepOut]
+    sources: list[AnswerSourceOut]
 
 
 def scope_of(kind: ScopeKind, workspace_id: UUID | None) -> ThreadScope:
@@ -126,6 +142,13 @@ def message_out(view: MessageView) -> MessageOut:
     return MessageOut(
         id=view.id, role=view.role, text=view.text, status=view.status,
         created_at=view.created_at, duration_ms=view.duration_ms, steps=steps,
+        sources=[
+            AnswerSourceOut(
+                id=source.id, kind=source.kind, title=source.title, space=source.space,
+                locator=source.locator, quote=source.quote, highlight=[],
+            )
+            for source in view.sources
+        ],
     )  # fmt: skip
 
 

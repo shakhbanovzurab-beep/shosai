@@ -1,7 +1,8 @@
 """Leo's task reads bound to the toolset's specs: arguments in, results out (tasks step 7).
 
 A board the person does not have is `not_found`; anything else the model sends is already
-checked by the arguments' schema. A running stopwatch's time is counted up to now.
+checked by the arguments' schema. A running stopwatch's time is counted up to now. Every task
+a result shows is a source of Leo's answer, with the workspace it belongs to (ADR 0068 AG-D1).
 """
 
 from collections.abc import Callable
@@ -11,6 +12,7 @@ from typing import Any
 from shosai.core.agent_tools.bindings import AgentTool, ReadTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolError, ToolErrorCode, ToolResult
+from shosai.core.agent_tools.sources import TITLE_MAX, SourceKind, SourceRef
 from shosai.features.tasks.application.leo_reads import BoardRead as BoardView
 from shosai.features.tasks.application.leo_reads import Found, LeoReads, TaskSearch
 from shosai.features.tasks.application.views import TaskView
@@ -51,14 +53,18 @@ class TaskToolReads:
         )  # fmt: skip
         found = await self._reads.search(context.scope, search)
         tasks = [self._found(view, found, context) for view in found.tasks]
-        return ToolResult(output=FoundTasks(tasks=tasks, more=found.more))
+        return ToolResult(
+            output=FoundTasks(tasks=tasks, more=found.more),
+            sources=tuple(source_of(view) for view in found.tasks),
+        )
 
     async def list_board(self, args: ListBoard, context: ToolContext) -> ToolResult[BoardRead]:
         """The board as the person sees it."""
         board = await self._reads.board(context.scope, args.board_id)
         if board is None:
             return ToolResult(error=ToolError(ToolErrorCode.NOT_FOUND))
-        return ToolResult(output=_board_out(board))
+        cards = (view for column in board.columns for view in column.cards)
+        return ToolResult(output=_board_out(board), sources=tuple(map(source_of, cards)))
 
     def _found(self, view: TaskView, found: Found, context: ToolContext) -> FoundTask:
         card = view.card
@@ -85,6 +91,16 @@ class TaskToolReads:
             stopwatch_ms=elapsed,
             stopwatch_running=watch is not None and watch.running_since is not None,
         )
+
+
+def source_of(view: TaskView) -> SourceRef:
+    """A task as a source of Leo's answer, in the space it belongs to (ADR 0068 AG-D1)."""
+    card = view.card
+    space = card.space
+    return SourceRef(
+        kind=SourceKind.TASK, id=str(card.id), title=card.title[:TITLE_MAX],
+        org_id=None if space is None else space.org_id,
+    )  # fmt: skip
 
 
 def _who(view: TaskView, context: ToolContext) -> WhoDoes | None:

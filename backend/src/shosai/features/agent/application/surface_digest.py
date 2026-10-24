@@ -15,7 +15,7 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from shosai.core.agent_tools.spec import Provenance
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.domain.context import clip
 from shosai.features.agent.domain.wrapper import Label, wrap

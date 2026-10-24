@@ -6,9 +6,9 @@ a tool not offered, or with arguments its schema refuses, is answered with an er
 can act on and never runs. A call runs within its tool's timeout and the turn's deadline,
 through a bulkhead kept below the process's database pool, so a burst of calls waits for a
 connection instead of failing for one; a failure is the model's to explain, never the run's
-end. A result over its tool's budget is kept whole and read as a digest with its reference; a
-result with a provenance — a page of a kept one with its tool's — is wrapped with the run's
-boundary and raises the run's taint. The person sees each call that runs as a step.
+end. What the model reads of a result — its numbered sources, a digest of one over budget,
+the wrapper of its label — is `tool_read_back`'s. The person sees each call that runs as a
+step, and the run's list of sources whenever a result adds to it.
 """
 
 import asyncio
@@ -16,8 +16,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from typing import Any, cast
-from uuid import UUID
+from typing import Any
 
 import structlog
 from opentelemetry.trace import Tracer
@@ -27,26 +26,25 @@ from shosai.core.agent_tools.arguments import parse_arguments
 from shosai.core.agent_tools.bindings import ReadTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolError, ToolErrorCode, ToolResult
-from shosai.core.agent_tools.spec import Provenance
 from shosai.core.ai.requests import ChatMessage, Role, TextPart, ToolCall
 from shosai.features.agent.application.result_pages import ResultPages
+from shosai.features.agent.application.run_sources import RunSources, listed
 from shosai.features.agent.application.run_work import CallAnswer, Round, RunWork, Step
 from shosai.features.agent.application.tool_answers import (
-    digest_content,
     error_content,
     named,
     refusal_content,
     step_detail,
 )
 from shosai.features.agent.application.tool_offer import TurnOffer
+from shosai.features.agent.application.tool_read_back import ResultReader
 from shosai.features.agent.application.tool_registry import OfferedTool
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
-from shosai.features.agent.domain.budgets import CALLS_PER_ROUND, estimate_tokens, over_budget
-from shosai.features.agent.domain.core_tools import LOAD_TOOLSET, NAVIGATE, READ_RESULT
+from shosai.features.agent.domain.budgets import CALLS_PER_ROUND, estimate_tokens
+from shosai.features.agent.domain.core_tools import LOAD_TOOLSET, NAVIGATE
 from shosai.features.agent.domain.runs import TURN_DEADLINE
 from shosai.features.agent.domain.stream import EventKind
 from shosai.features.agent.domain.threads import StepStatus
-from shosai.features.agent.domain.wrapper import Label, taint_after, wrap
 from shosai.features.agent.infrastructure.prompts import CUT_CALL, EXTRA_CALL, UNKNOWN_TOOL
 from shosai.features.agent.infrastructure.tool_metrics import ToolMetrics
 from shosai.features.agent.infrastructure.turn_graph import LENGTH_FINISH, ModelAnswer
@@ -57,9 +55,11 @@ OK = "ok"
 
 @dataclass(frozen=True, slots=True)
 class ToolParts:
-    """What a round works with: kept results, the bulkhead, numbers and spans."""
+    """What a round works with: kept results, the run's sources, the bulkhead, numbers and
+    spans."""
 
     pages: ResultPages
+    sources: RunSources
     bulkhead: asyncio.Semaphore
     metrics: ToolMetrics
     tracer: Tracer
@@ -77,6 +77,9 @@ class ToolRound:
         self._parts = parts
         self._payload, self._work, self._emitter = run
         self._clock = clock
+        self._reader = ResultReader(
+            (parts.pages, parts.sources, parts.bulkhead), (self._payload, self._work)
+        )
 
     async def run(self, number: int, answer: ModelAnswer) -> tuple[ChatMessage, ...]:
         """The model's message and an answer to each of its calls, in their order."""
@@ -146,10 +149,10 @@ class ToolRound:
         with self._parts.tracer.start_as_current_span(name, attributes=attributes) as span:
             result = await self._execute(offered, arguments, context)
             offer.called(offered)
-            content, result_id = await self._read_back(offer, offered, result, context)
+            read = await self._reader.read(offer, offered, result, context)
             outcome = OK if result.error is None else result.error.code.value
             span.set_attribute("tool.outcome", outcome)
-            span.set_attribute("tool.result_tokens", estimate_tokens(content))
+            span.set_attribute("tool.result_tokens", estimate_tokens(read.text))
         seconds = self._clock() - began
         self._parts.metrics.called(spec.toolset, spec.effect.value, outcome, seconds)
         status = StepStatus.DONE if result.error is None else StepStatus.FAILED
@@ -162,7 +165,10 @@ class ToolRound:
             await self._follow(offer, spec.name, result.output)
         else:
             await self._emitter.emit(EventKind.STEP_FAILED, closed | {"code": outcome})
-        return CallAnswer(call.call_id, spec.name, content, result_id)
+        if read.new_sources:
+            sources = listed(self._work, self._payload.language)
+            await self._emitter.emit(EventKind.SOURCES, {"sources": list(sources)})
+        return CallAnswer(call.call_id, spec.name, read.text, read.result_id)
 
     async def _execute(
         self, offered: OfferedTool, arguments: BaseModel, context: ToolContext
@@ -181,39 +187,6 @@ class ToolRound:
         except Exception:
             log.exception("Инструмент Leo упал", tool=spec.name)
             return ToolResult.failed(ToolErrorCode.FAILED)
-
-    async def _read_back(
-        self, offer: TurnOffer, offered: OfferedTool, result: ToolResult[Any], context: ToolContext
-    ) -> tuple[str, UUID | None]:
-        """What the model reads: the result, its digest or its error, wrapped by provenance."""
-        if result.output is None:
-            return error_content(result.error or ToolError(ToolErrorCode.FAILED)), None
-        spec = offered.spec
-        text, result_id = result.output.model_dump_json(), cast("UUID | None", None)
-        if spec.name != READ_RESULT and over_budget(estimate_tokens(text), spec.result_budget):
-            spaces = frozenset(s.org_id for s in result.sources if s.org_id is not None)
-            async with self._parts.bulkhead:
-                result_id = await self._parts.pages.keep(
-                    context, spec.name, text, spaces if result.sources else None
-                )
-            dumped = result.output.model_dump(mode="json")
-            text = digest_content(dumped, spec.result_budget, result_id)
-        provenance = self._provenance(offer, offered, result)
-        if provenance is not None:
-            label = Label.of(provenance)
-            text = wrap(text, label, self._work.token)
-            self._work.taint = taint_after(self._work.taint, label)
-        return text, result_id
-
-    @staticmethod
-    def _provenance(
-        offer: TurnOffer, offered: OfferedTool, result: ToolResult[Any]
-    ) -> Provenance | None:
-        if offered.spec.name != READ_RESULT:
-            return offered.spec.provenance
-        origin = offer.kept_from(str(getattr(result.output, "tool", "")))
-        # Инструмента хранимого результата больше нет: это прочитанное раньше, метка памяти.
-        return origin.spec.provenance if origin is not None else Provenance.MEMORY
 
     async def _follow(self, offer: TurnOffer, name: str, output: BaseModel | None) -> None:
         """What the turn itself does after `load_toolset` and `navigate`."""

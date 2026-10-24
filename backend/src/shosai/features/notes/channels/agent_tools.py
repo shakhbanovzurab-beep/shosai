@@ -14,7 +14,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from shosai.core.agent_tools.spec import Provenance, ToolEffect, ToolSpec
+from shosai.core.agent_tools.provenance import Provenance
+from shosai.core.agent_tools.spec import ToolEffect, ToolSpec
 from shosai.features.notes.domain.findings import FindingKind
 from shosai.features.notes.domain.reading import NotesState
 
@@ -166,6 +167,7 @@ SEARCH: Final = ToolSpec(
     ),
     input=SearchMeetings, output=FoundMeetings, effect=ToolEffect.READ,
     result_budget=1_500, timeout=timedelta(seconds=5), provenance=Provenance.MEETING_SPEECH,
+    step_detail="query",
 )  # fmt: skip
 GET: Final = ToolSpec(
     name="notes.get",

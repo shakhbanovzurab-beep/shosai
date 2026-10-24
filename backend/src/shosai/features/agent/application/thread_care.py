@@ -20,7 +20,7 @@ import structlog
 from sqlalchemy import or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from shosai.core.agent_tools.spec import Provenance
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
 from shosai.core.ai.errors import AiCallError
 from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart

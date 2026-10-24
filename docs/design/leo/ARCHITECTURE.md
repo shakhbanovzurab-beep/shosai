@@ -475,7 +475,7 @@ A domain slice declares its tools in `contracts.agent_tools` as `ToolSpec`s:
 | `cost_class` | `free` · `metered` |
 | `entitlement`, `switch` | required gate and user switch, checked at planning and at execution |
 | `result_budget` | token cap of the result in context |
-| `provenance` | the label of the untrusted text the result carries, from §7.4's closed set (`meeting:speech`, `file:foreign` …); none for the user's own words and data. The agent wraps the result with it and raises the run's taint |
+| `provenance` | the label of the untrusted text the result carries, from §7.4's closed set (`meeting:speech`, `file:foreign` …); none for the user's own words and data. A result may narrow it — the user's own file where the spec says a colleague's — but never remove it. The agent wraps the result with it and raises the run's taint |
 | `timeout` | per call |
 | `plan(args, ctx) → PlannedEffect` | writes only: **freezes the exact targets** (ids, counts) at proposal time |
 | `preview(planned, ctx) → Preview` | server-computed, i18n keys and parameters; never the model's prose |

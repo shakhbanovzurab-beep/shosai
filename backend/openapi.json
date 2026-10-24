@@ -12404,6 +12404,59 @@
         "title": "AgentSettingsPatch",
         "description": "The fields to change; the others stay as they are."
       },
+      "AnswerSourceOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/SourceKind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "space": {
+            "type": "string",
+            "title": "Space"
+          },
+          "locator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locator"
+          },
+          "quote": {
+            "type": "string",
+            "title": "Quote"
+          },
+          "highlight": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Highlight"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "space",
+          "locator",
+          "quote",
+          "highlight"
+        ],
+        "title": "AnswerSourceOut",
+        "description": "A source of an answer, the n-th counting from one: what it is, the space it belongs to\n(\"Personal\" in the person's language or the workspace's name), where inside it and the\nquote the answer rests on; `highlight` stays empty while the quote is shown whole."
+      },
       "AnswerStatus": {
         "type": "string",
         "enum": [
@@ -16711,6 +16764,13 @@
             },
             "type": "array",
             "title": "Steps"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/AnswerSourceOut"
+            },
+            "type": "array",
+            "title": "Sources"
           }
         },
         "type": "object",
@@ -16721,10 +16781,11 @@
           "status",
           "created_at",
           "duration_ms",
-          "steps"
+          "steps",
+          "sources"
         ],
         "title": "MessageOut",
-        "description": "A row of the history: a question, an answer (with how it ended and the steps it took) or\na server's note."
+        "description": "A row of the history: a question, an answer (with how it ended, the steps it took and\nits sources) or a server's note."
       },
       "Messenger": {
         "type": "string",
@@ -20551,6 +20612,19 @@
         ],
         "title": "SourceFindingOut",
         "description": "The moment of the meeting that proves the action item."
+      },
+      "SourceKind": {
+        "type": "string",
+        "enum": [
+          "meeting",
+          "file",
+          "task",
+          "note",
+          "mail",
+          "web"
+        ],
+        "title": "SourceKind",
+        "description": "What a source is; the cabinet picks its icon by the kind."
       },
       "SourceMeetingOut": {
         "properties": {

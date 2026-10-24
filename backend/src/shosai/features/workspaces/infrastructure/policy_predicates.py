@@ -12,6 +12,7 @@ row. Aliases are anonymous, so the checks nest without clashing. Unknown levels 
 nobody.
 """
 
+from collections.abc import Collection
 from typing import Any
 from uuid import UUID
 
@@ -236,3 +237,39 @@ def _shared(
         listed.c[records.org] == _member_orgs(user_id, within)
     )
     return and_(row_id.in_(shared_in_mine), row_id == any_(as_array(shared_list)), exact)
+
+
+def sharing_workspaces(
+    resource: ShareableResource, records: ShareRecords, user_id: UUID, ids: Collection[UUID]
+) -> Select[UUID, UUID]:
+    """The personal rows among `ids` of someone else that reach the viewer through a share,
+    each with a workspace it is shared into that admits the viewer: the same rules as the
+    share's predicate, as pairs of row and workspace."""
+    table = resource.table
+    row_id, owner = table.c[resource.id], table.c[resource.owner]
+    share = records.table.alias()
+    org = share.c[records.org]
+    member, joined, conditions = _member_of(org, user_id)
+    sharer = _table(Membership).alias()
+    admits = level_admits(
+        share.c[records.access], org, (records.grant_kind, share.c[records.grant_key]), member
+    )
+    filters = [
+        row_id.in_(list(ids)),
+        table.c[resource.org].is_(None),
+        owner != user_id,
+        sharer.c.state == MembershipState.ACTIVE,
+        sharer.c.user_id == owner,
+    ]
+    if records.only is not None:
+        column, value = records.only
+        filters.append(share.c[column] == value)
+    return (
+        select(row_id, org)
+        .select_from(table)
+        .join(share, share.c[records.resource] == row_id)
+        .join(sharer, sharer.c.id == share.c[records.sharer])
+        .join(joined, true())
+        .where(*filters, *conditions, admits)
+        .order_by(row_id, org)
+    )

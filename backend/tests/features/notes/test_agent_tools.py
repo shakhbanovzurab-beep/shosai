@@ -8,8 +8,8 @@ from typing import Any
 import pytest
 
 from shosai.core.agent_tools.context import ToolContext
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import ToolErrorCode
-from shosai.core.agent_tools.spec import Provenance
 from shosai.core.ai.spend.estimates import tokens_of
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
@@ -30,7 +30,7 @@ from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.features.notes.test_library_isolation import meetings, world
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
-from tests.support.access_model import readable
+from tests.support.access_model import readable, source_spaces
 
 START = datetime.now(UTC).replace(day=1, hour=1, minute=0, second=0, microsecond=0)
 SECTIONS: list[dict[str, Any]] = [
@@ -68,6 +68,9 @@ async def test_a_tool_never_returns_a_meeting_the_person_may_not_read(
         found = await reads.search(SearchMeetings(limit=20), context(person))
         assert found.output is not None
         assert {m.meeting_id for m in found.output.meetings} == allowed, name
+        for hit, source in zip(found.output.meetings, found.sources, strict=True):
+            assert source.id == str(hit.meeting_id)
+            assert source.org_id in source_spaces(canon.world, hit.meeting_id, person), name
         for meeting_id in meetings(canon):
             answers = [
                 await reads.get(MeetingId(meeting_id=meeting_id), context(person)),
@@ -78,6 +81,10 @@ async def test_a_tool_never_returns_a_meeting_the_person_may_not_read(
                 a.error is not None and a.error.code is ToolErrorCode.NOT_FOUND for a in answers
             ]
             assert refused == [meeting_id not in allowed] * 3, (name, meeting_id)
+            for answer in answers if meeting_id in allowed else []:
+                [source] = answer.sources
+                assert source.id == str(meeting_id)
+                assert source.org_id in source_spaces(canon.world, meeting_id, person)
 
 
 async def test_a_transcript_reads_page_by_page_within_its_budget(homes: DatabaseAccess) -> None:

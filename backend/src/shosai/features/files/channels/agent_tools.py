@@ -14,6 +14,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.spec import Reversibility, ToolEffect, ToolSpec
 from shosai.features.files.domain.kinds import FileKind
 from shosai.features.files.domain.leo import LeoVia
@@ -163,6 +164,9 @@ SEARCH: Final = ToolSpec(
     effect=ToolEffect.READ,
     result_budget=1_500,
     timeout=timedelta(seconds=5),
+    # Имя файла коллеги — чужой текст; результат из одних своих файлов сужает метку до file:own.
+    provenance=Provenance.FILE_FOREIGN,
+    step_detail="query",
 )
 READ: Final = ToolSpec(
     name="files.read",
@@ -176,6 +180,7 @@ READ: Final = ToolSpec(
     effect=ToolEffect.READ,
     result_budget=2_500,
     timeout=timedelta(seconds=15),
+    provenance=Provenance.FILE_FOREIGN,
 )
 SET_LEO_USE: Final = ToolSpec(
     name="files.set_leo_use",

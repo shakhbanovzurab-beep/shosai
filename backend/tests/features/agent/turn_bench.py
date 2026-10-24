@@ -42,6 +42,7 @@ from shosai.features.agent.application.run_context import ContextBuilder
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.run_engine_parts import EngineParts
 from shosai.features.agent.application.run_registry import RunRegistry
+from shosai.features.agent.application.run_sources import RunSources
 from shosai.features.agent.application.run_streams import RunStreams
 from shosai.features.agent.application.run_telemetry import RunTelemetry
 from shosai.features.agent.application.threads import Threads
@@ -68,8 +69,11 @@ from shosai.features.identity.contracts import (
     CONSENT_READER,
 )
 from shosai.features.notes.contracts import MEETING_READER
-from shosai.features.workspaces.contracts import MEMBERSHIP_READER
-from shosai.features.workspaces.infrastructure.membership_reader import MembershipDirectory
+from shosai.features.workspaces.contracts import MEMBERSHIP_READER, WORKSPACE_READER
+from shosai.features.workspaces.infrastructure.membership_reader import (
+    MembershipDirectory,
+    WorkspaceDirectory,
+)
 from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.agent.tool_doubles import ProbeTools
 from tests.features.agent.turn_doubles import (
@@ -184,6 +188,7 @@ async def turn_bench(
             CONSENT_READER.bind(terms),
             ACCOUNT_PROFILE_READER.bind(Profiles()),
             MEETING_READER.bind(meetings),
+            WORKSPACE_READER.bind(WorkspaceDirectory()),
         ]
     )
     registry = CollectorRegistry()
@@ -199,7 +204,8 @@ async def turn_bench(
     pages, tools = ResultPages(homes.transactions, ports), ProbeTools()
     catalog = AgentToolCatalog()
     catalog.install([*core_tools(pages), *tools.bound()])
-    tool_parts = ToolParts(pages, asyncio.Semaphore(4), ToolMetrics(registry), tracer)
+    sources = RunSources(homes.transactions, ports)
+    tool_parts = ToolParts(pages, sources, asyncio.Semaphore(4), ToolMetrics(registry), tracer)
     parts = EngineParts(
         homes.transactions, model, ROUTE, run_log, leases, fleet, runs, outbox, turn_graph(),
         ContextBuilder(ports), TurnRouting(ToolRegistry(catalog), ports), tool_parts, telemetry,

@@ -6,8 +6,8 @@ from datetime import UTC, date, datetime, timedelta
 import pytest
 
 from shosai.core.agent_tools.context import ToolContext
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import ToolErrorCode
-from shosai.core.agent_tools.spec import Provenance
 from shosai.core.ai.spend.estimates import tokens_of
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
@@ -165,6 +165,10 @@ async def test_a_tool_never_returns_a_task_the_person_may_not_read(
             found = await tools(task_bench).search(args, context(viewer.user_id))
             assert found.output is not None
             opened |= {task.task_id for task in found.output.tasks}
+            # Источник задачи — в её пространстве: workspace или личное владельца.
+            spaces = {row.id: row.org_id for row in rows}
+            for task, source in zip(found.output.tasks, found.sources, strict=True):
+                assert (source.id, source.org_id) == (str(task.task_id), spaces[task.task_id])
         return opened
 
     def columns(row: ResourceRow) -> dict[str, object]:
