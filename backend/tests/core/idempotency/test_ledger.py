@@ -146,6 +146,29 @@ async def test_an_expired_key_is_applied_again_and_the_purge_removes_only_expire
     assert registry.get_sample_value("shosai_effect_keys_purged_total", {"home": "ru"}) == 1
 
 
+async def test_a_recorded_outcome_is_read_without_claiming_the_key(
+    homes: DatabaseAccess, probe_table: sa.TableClause
+) -> None:
+    del probe_table
+    effects, _, _ = ledger()
+    writer = NoteWriter()
+    key = EffectKey(
+        NOTES, account_key(USER_ID, "turn-1"), fingerprint_of(NoteWritten(note_id=uuid.UUID(int=2)))
+    )
+    other = EffectKey(NOTES, key.key, fingerprint_of(NoteWritten(note_id=uuid.UUID(int=3))))
+    scope = TenancyScope(Home.RU, USER_ID)
+
+    async with homes.transactions.begin(scope, read_only=True) as session:
+        before = await effects.recorded(session, key, NoteWritten)
+    written, _ = await write_once(homes, effects, writer, key)
+    async with homes.transactions.begin(scope, read_only=True) as session:
+        after = await effects.recorded(session, key, NoteWritten)
+        with pytest.raises(IdempotencyKeyReusedError):
+            await effects.recorded(session, other, NoteWritten)
+
+    assert (before, after, writer.runs) == (None, written, 1)
+
+
 async def test_a_read_only_transaction_cannot_record_a_key(homes: DatabaseAccess) -> None:
     effects, _, _ = ledger()
     writer = NoteWriter()

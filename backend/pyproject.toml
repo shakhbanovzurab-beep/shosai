@@ -23,6 +23,7 @@ dependencies = [
     # Исходящие вызовы: OpenRouter, pyannote и другие провайдеры ИИ, курс ЦБ (F6, ADR 0034).
     "httpx>=0.28.1",
     "jinja2>=3.1.6",
+    "langgraph==1.2.16",
     "opentelemetry-api>=1.45.0",
     "opentelemetry-exporter-otlp-proto-http>=1.45.0",
     "opentelemetry-instrumentation-redis>=0.66b0",
@@ -237,6 +238,20 @@ forbidden_modules = [
     "starlette", "structlog", "taskiq", "websockets",
 ]
 broken_contract_guidance = "core.ai value types stay framework-free; move the code to an adapter."
+
+# LangGraph — только каркас хода в инфраструктуре агента (ADR 0068 AG-D14); что из него можно
+# брать — граф, состояние и рантайм, без готовых агентов, ToolNode, сохранителей и клиентов
+# моделей — проверяет тест среза (tests/features/agent/test_endings_and_frame.py).
+[[tool.importlinter.contracts]]
+id = "langgraph-frames-turns-only"
+name = "LangGraph only in the agent's turn frame"
+type = "forbidden"
+source_modules = ["shosai"]
+forbidden_modules = ["langgraph", "langchain_core", "langsmith"]
+ignore_imports = ["shosai.features.agent.infrastructure.turn_graph -> langgraph"]
+allow_indirect_imports = true
+unmatched_ignore_imports_alerting = "none"
+broken_contract_guidance = "LangGraph frames Leo's turn in agent.infrastructure.turn_graph only."
 
 # Контракт инструментов агента лёгкий, как ядро (ADR 0029): его импортируют контракты всех
 # срезов и агент; ни фреймворка, ни базы, ни Valkey, ни SDK провайдеров, ни агентного рантайма.

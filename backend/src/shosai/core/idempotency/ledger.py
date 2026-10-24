@@ -140,6 +140,13 @@ class EffectLedger:
                 return Replayable(stored, replayed=True)
         raise UnfinishedEffectKeyError(scope.name)
 
+    async def recorded[R: BaseModel](
+        self, session: AsyncSession, effect_key: EffectKey, outcome_type: type[R]
+    ) -> R | None:
+        """The outcome an earlier run of the key stored, without claiming the key: a caller
+        checks it before work that must not start twice, such as a Leo turn's admission."""
+        return await self._stored(session, effect_key, outcome_type)
+
     async def _apply[R: BaseModel](
         self, session: AsyncSession, effect_key: EffectKey, effect: Callable[[], Awaitable[R]]
     ) -> R:

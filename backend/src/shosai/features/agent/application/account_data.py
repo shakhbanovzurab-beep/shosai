@@ -37,7 +37,11 @@ from shosai.features.agent.infrastructure.person_records import (
     AgentSettingsRecord,
     AgentSkillRecord,
 )
-from shosai.features.agent.infrastructure.run_keys import lease_key, run_keys
+from shosai.features.agent.infrastructure.run_keys import (
+    lease_key,
+    person_runs_key,
+    run_keys,
+)
 from shosai.features.agent.infrastructure.run_records import (
     AgentActionRecord,
     AgentAuditRecord,
@@ -164,6 +168,7 @@ class AgentAccountData:
             )
         keys = [key for run_id in runs for key in run_keys(run_id)]
         keys += [lease_key(thread_id) for thread_id in threads]
+        keys.append(person_runs_key(user_id))
         if keys:
             await self._valkey.delete(*keys)
 

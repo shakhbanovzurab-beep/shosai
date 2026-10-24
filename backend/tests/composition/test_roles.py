@@ -3,7 +3,8 @@
 import asyncio
 import time
 from collections import Counter
-from collections.abc import Callable
+from collections.abc import AsyncIterator, Callable
+from contextlib import asynccontextmanager
 
 import httpx
 import pytest
@@ -15,6 +16,7 @@ from taskiq import TaskiqMessage
 from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
 from shosai.composition.telemetry import ProcessTelemetry
 from shosai.core.config.roles import ProcessRole
+from shosai.core.features import CoreServices, FeatureModule, FeatureParts, QueueCompanion
 from shosai.core.tasks.queues import TaskQueue
 from tests.composition.fixture_features import (
     DIGEST_ROUTE,
@@ -97,6 +99,46 @@ async def test_a_worker_runs_the_tasks_of_its_queue(
         await eventually(lambda: "notes:tidy" in lifecycle.events)
 
     assert lifecycle.events.count("notes:tidy") == 1
+
+
+def companion_feature(lifecycle: Lifecycle) -> FeatureModule:
+    """A slice with work beside the default queue's worker and the bulk queue's."""
+
+    def companion(queue: TaskQueue) -> QueueCompanion:
+        @asynccontextmanager
+        async def run() -> AsyncIterator[None]:
+            lifecycle.events.append(f"companion:open:{queue.value}")
+            try:
+                yield
+            finally:
+                lifecycle.events.append(f"companion:close:{queue.value}")
+
+        return QueueCompanion(queue, run)
+
+    @asynccontextmanager
+    async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
+        del services
+        yield FeatureParts(
+            queue_companions=(companion(TaskQueue.DEFAULT), companion(TaskQueue.BULK))
+        )
+
+    return FeatureModule(name="companions", build=build)
+
+
+async def test_a_worker_runs_its_queue_s_companions_while_it_takes_tasks(
+    run_slot: RunSlot, harness_settings: HarnessSettings
+) -> None:
+    lifecycle = Lifecycle()
+    features = (companion_feature(lifecycle),)
+
+    async with (
+        platform_over_slot(run_slot, harness_settings, features, ProcessRole.WORKERS) as bench,
+        workers_role(TaskQueue.DEFAULT)(bench.platform, bench.telemetry),
+    ):
+        running = list(lifecycle.events)
+
+    assert running == ["companion:open:default"]
+    assert lifecycle.events == ["companion:open:default", "companion:close:default"]
 
 
 async def test_the_scheduler_runs_the_core_loops_and_the_slices_loops(

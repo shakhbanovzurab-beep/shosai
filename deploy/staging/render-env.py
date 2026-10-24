@@ -37,6 +37,9 @@ SERVER_NAME = "shosai.tech"
 NOTES_MODEL = "google/gemini-3.8-flash"
 TRANSCRIBE_MODEL = "openai/whisper-large-v3"
 DIARIZE_MODEL = "precision-3"
+# Модели Leo до studio (ADR 0068 AG-D4), те же, что в .env.example; владелец может задать свои в .env.
+AGENT_STANDARD_MODEL = "google/gemini-3.8-flash"
+AGENT_STANDARD_FALLBACK_MODEL = "anthropic/claude-haiku-5.5"
 GENERATED = (
     "VALKEY_PASSWORD",
     "REDIS_CACHE_PASSWORD",
@@ -81,6 +84,8 @@ COPIED = (
     "NOTES_TRANSCRIBE_MODEL",
     "NOTES_TRANSCRIBE_FALLBACK_MODEL",
     "NOTES_DIARIZE_MODEL",
+    "AGENT_STANDARD_MODEL",
+    "AGENT_STANDARD_FALLBACK_MODEL",
     *(f"HOME_{home}_S3_{part}" for home in ("RU", "EU")
       for part in ("ENDPOINT_URL", "REGION", "BUCKET", "ACCESS_KEY_ID", "SECRET_ACCESS_KEY")),
 )
@@ -188,6 +193,8 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
         "NOTES_MODEL": NOTES_MODEL,
         "NOTES_TRANSCRIBE_MODEL": TRANSCRIBE_MODEL,
         "NOTES_DIARIZE_MODEL": DIARIZE_MODEL,
+        "AGENT_STANDARD_MODEL": AGENT_STANDARD_MODEL,
+        "AGENT_STANDARD_FALLBACK_MODEL": AGENT_STANDARD_FALLBACK_MODEL,
     }
     env |= {key: source[key] for key in COPIED if source.get(key)}
     for home in ("RU", "EU"):

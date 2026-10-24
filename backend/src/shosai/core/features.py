@@ -57,6 +57,7 @@ from shosai.core.runtime.loops import ScheduledLoop
 from shosai.core.schedule.jobs import DueRowSource, PeriodicJob
 from shosai.core.storage.port import MultipartUploads, ObjectStorage
 from shosai.core.tasks.declaration import TaskHandler
+from shosai.core.tasks.queues import TaskQueue
 from shosai.core.tasks.sender import TaskSender
 
 FEATURE_NAME: Final = re.compile(r"[a-z][a-z0-9_]*")
@@ -97,6 +98,18 @@ class CoreServices:
 
 
 @dataclass(frozen=True, slots=True)
+class QueueCompanion:
+    """Work a slice runs beside the worker of one queue, for as long as it takes tasks.
+
+    `run` opens it when the worker starts and closes it when the worker stops taking tasks,
+    before the tasks it holds are drained: agent's workers say they are alive this way.
+    """
+
+    queue: TaskQueue
+    run: Callable[[], AbstractAsyncContextManager[None]]
+
+
+@dataclass(frozen=True, slots=True)
 class FeatureParts:
     """What a slice built for this process; each role takes the parts it serves."""
 
@@ -111,6 +124,7 @@ class FeatureParts:
     cost_settlements: tuple[CostSettlement, ...] = ()
     email_templates: tuple[EmailTemplate, ...] = ()
     agent_tools: tuple[AgentTool, ...] = ()
+    queue_companions: tuple[QueueCompanion, ...] = ()
     # Реализации портов, которые срез предлагает другим срезам.
     provides: tuple[PortBinding[Any], ...] = ()
 
@@ -132,6 +146,7 @@ def combine_parts(parts: Sequence[FeatureParts]) -> FeatureParts:
             cost_settlements=combined.cost_settlements + part.cost_settlements,
             email_templates=combined.email_templates + part.email_templates,
             agent_tools=combined.agent_tools + part.agent_tools,
+            queue_companions=combined.queue_companions + part.queue_companions,
             provides=combined.provides + part.provides,
         )
     return combined

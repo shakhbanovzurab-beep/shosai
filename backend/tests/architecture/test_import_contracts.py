@@ -24,7 +24,8 @@ PROVIDER_SDKS = "Provider SDKs only in core.ai"
 LIGHT_AI = "Light AI value types"
 LIGHT_TOOLS = "Light agent tool contract"
 LIGHT_CONTRACTS = "Light slice contracts"
-CONTRACT_COUNT = 8
+LANGGRAPH = "LangGraph only in the agent's turn frame"
+CONTRACT_COUNT = 9
 BASE_TREE = {
     "shosai.core.kernel.homes": "",
     # Порт ИИ: типы-значения лёгкие, SDK провайдера — в его адаптере, и это законно.
@@ -120,6 +121,8 @@ def test_the_layered_tree_keeps_every_contract(tmp_path: Path) -> None:
             "from langgraph.graph import StateGraph\n",
             LIGHT_TOOLS,
         ),
+        ("shosai.features.beta.service", "from langgraph.graph import StateGraph\n", LANGGRAPH),
+        ("shosai.composition.voice", "import langchain_core\n", LANGGRAPH),
         ("shosai.core.ports.directory", "import sqlalchemy\n", LIGHT_CONTRACTS),
         ("shosai.core.account_data.spec", "from fastapi import Depends\n", LIGHT_CONTRACTS),
     ],

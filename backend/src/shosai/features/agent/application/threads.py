@@ -182,12 +182,14 @@ class Threads:
                 return ThreadMade(thread_id=thread_id)
 
             done = await self._effects.once(session, effect, ThreadMade, write)
-            return view_of(await self.visible_thread(session, principal, done.outcome.thread_id))
+            return view_of(
+                await self.visible_thread(session, principal.user_id, done.outcome.thread_id)
+            )
 
     async def get(self, principal: Principal, thread_id: UUID) -> ThreadView:
         """One of the person's visible threads."""
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
-            return view_of(await self.visible_thread(session, principal, thread_id))
+            return view_of(await self.visible_thread(session, principal.user_id, thread_id))
 
     async def rename(self, principal: Principal, thread_id: UUID, title: str) -> ThreadView:
         """The person's own title; Leo never renames it afterwards."""
@@ -196,7 +198,7 @@ class Threads:
         except ThreadRuleError as error:
             raise refused(error) from error
         async with self._transactions.begin(principal.scope()) as session:
-            record = await self.visible_thread(session, principal, thread_id, lock=True)
+            record = await self.visible_thread(session, principal.user_id, thread_id, lock=True)
             record.title, record.title_source, record.updated_at = clean, "person", self._clock()
             await session.flush()
             return view_of(record)
@@ -204,17 +206,17 @@ class Threads:
     async def delete(self, principal: Principal, thread_id: UUID) -> None:
         """The thread with its messages, ratings, cases and its runs' stored results."""
         async with self._transactions.begin(principal.scope()) as session:
-            record = await self.visible_thread(session, principal, thread_id, lock=True)
+            record = await self.visible_thread(session, principal.user_id, thread_id, lock=True)
             await erase_threads(session, principal.user_id, (record.id,))
 
     async def visible_thread(
-        self, session: AsyncSession, principal: Principal, thread_id: UUID, *, lock: bool = False
+        self, session: AsyncSession, user_id: UUID, thread_id: UUID, *, lock: bool = False
     ) -> AgentThreadRecord:
         """The person's thread while they may see it; `thread_not_found` otherwise."""
         statement = select(THREAD).where(
             THREAD.id == thread_id,
-            THREAD.user_id == principal.user_id,
-            visible(await self.spaces(session, principal.user_id)),
+            THREAD.user_id == user_id,
+            visible(await self.spaces(session, user_id)),
         )
         record = await session.scalar(statement.with_for_update() if lock else statement)
         if record is None:

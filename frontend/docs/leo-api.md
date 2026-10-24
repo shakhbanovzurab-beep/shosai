@@ -48,6 +48,8 @@ Message = {id, role: user | assistant | server, text, status: done | stopped | f
  regenerate_of?: <the last question's id>, edit_of?: <the last question's id>, supersede?: bool}
 ```
 
+- The body grows with the steps that use it: now `text`, `locale` and `supersede`; `surface`, `regenerate_of` and
+  `edit_of` come with the context builder, `upload_ids` with attachments. Until then any other field is `422`.
 - `regenerate_of` answers the last question again; `edit_of` replaces its text and its answer. Any other id is
   `409 not_last_question`.
 - A busy thread answers `409 thread_busy`; `supersede: true` stops the running answer first.
@@ -56,7 +58,10 @@ Message = {id, role: user | assistant | server, text, status: done | stopped | f
   `standard_weekly_tokens`), `403 consent_required`, `404 thread_not_found`, `409 thread_busy`, `422`,
   `429 rate_limited | too_many_runs | agent_busy` with `Retry-After`, `503 agent_unavailable | entitlements_unavailable`.
 - Resume: `GET /v1/agent/runs/{id}/events` with `Last-Event-ID`; `410 run_events_gone` after an hour — reload the
-  thread. Stop: `POST /v1/agent/runs/{id}/cancel` (202).
+  thread. Stop: `POST /v1/agent/runs/{id}/cancel` (202; asking again, or after the end, changes nothing). Another
+  person's run is `404 run_not_found`.
+- A run whose worker was lost ends `run.failed {process_lost}` within a minute; the question stays in the thread, so
+  "Retry" asks it again.
 
 ### Stream events
 

@@ -96,6 +96,10 @@ Each home's bucket needs ADR 0055's rules before files can be uploaded from the 
 
 Files download through the edge (ADR 0055 point 8, FL-D9): the API answers `https://shosai.tech/dl/{home}/…`, and the edge streams the presigned object from that home's bucket (`SHOSAI_DOWNLOAD_RU_ORIGIN`, `SHOSAI_DOWNLOAD_EU_ORIGIN` in `/srv/shosai/.env`) with `X-Content-Type-Options: nosniff` and `Content-Security-Policy: sandbox`. `render-env.py` writes both origins from the homes' `HOME_*_S3_ENDPOINT_URL` (HTTPS only) and `FILES_DOWNLOAD_BASE_URL` for the backend. Without them a release stops before any service changes: run «Change a setting or a secret» first. A download answering 403 from the bucket means the signature did not survive the path; the edge forwards the raw request line, so check that nothing between the browser and the edge rewrites it.
 
+## Leo's model
+
+Outside development the backend refuses to start without `AGENT_STANDARD_MODEL` (ADR 0068 AG-D4): the OpenRouter model Leo answers with until studio publishes its routes. `render-env.py` writes `google/gemini-3.8-flash` with the fallback `anthropic/claude-haiku-5.5`, or the owner's `AGENT_STANDARD_MODEL` and `AGENT_STANDARD_FALLBACK_MODEL` from `/root/shosai/.env` when set. A release that stops at the `settings` step naming it needs «Change a setting or a secret» first. A process with `LANGSMITH_TRACING` or `LANGCHAIN_TRACING_V2` on refuses to start: a conversation never goes to LangSmith.
+
 ## Meetings' notes model
 
 Outside development the backend refuses to start without `NOTES_MODEL` (notes plan step 6): the OpenRouter model that writes the findings and Leo's write-up until studio assigns the `notes` role. `render-env.py` writes `google/gemini-3.8-flash`, or the owner's `NOTES_MODEL` and `NOTES_FALLBACK_MODEL` from `/root/shosai/.env` when set. A release that stops at the `settings` step naming it needs «Change a setting or a secret» first.

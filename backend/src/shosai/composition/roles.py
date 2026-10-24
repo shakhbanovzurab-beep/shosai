@@ -14,7 +14,7 @@ ends by itself is a failure — and leaves the role when asked to stop.
 
 import asyncio
 from collections.abc import AsyncIterator, Callable, Sequence
-from contextlib import AbstractAsyncContextManager, asynccontextmanager
+from contextlib import AbstractAsyncContextManager, AsyncExitStack, asynccontextmanager
 from datetime import timedelta
 from typing import Final
 
@@ -83,18 +83,24 @@ def ws_role(
 
 
 def workers_role(queue: TaskQueue) -> Role:
-    """A worker of one queue: one message at a time per run slot, drained on stop."""
+    """A worker of one queue: one message at a time per run slot, drained on stop. The
+    slices' companions of the queue run beside it and close when it stops taking tasks."""
 
     @asynccontextmanager
     async def consume(platform: Platform, _telemetry: ProcessTelemetry) -> AsyncIterator[RoleTasks]:
         stop = asyncio.Event()
         broker = platform.tasks.brokers[queue]
-        worker = asyncio.create_task(consume_queue(broker, stop), name=f"worker:{queue.value}")
-        try:
-            yield (worker,)
-        finally:
-            stop.set()
-            await worker
+        async with AsyncExitStack() as companions:
+            for companion in platform.parts.queue_companions:
+                if companion.queue is queue:
+                    await companions.enter_async_context(companion.run())
+            worker = asyncio.create_task(consume_queue(broker, stop), name=f"worker:{queue.value}")
+            try:
+                yield (worker,)
+            finally:
+                stop.set()
+                await companions.aclose()
+                await worker
 
     return consume
 

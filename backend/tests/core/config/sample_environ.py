@@ -92,6 +92,7 @@ def production_environ(**overrides: str) -> dict[str, str]:
         EMAIL_LINK_SECRET=SAMPLE_LINK_SECRET,
         FILES_DOWNLOAD_BASE_URL="https://shosai.example/dl",
         NOTES_MODEL="probe/notes",
+        AGENT_STANDARD_MODEL="probe/leo",
         NOTES_TRANSCRIBE_MODEL="probe/transcribe",
         NOTES_DIARIZE_MODEL="probe-diarize",
         **PRODUCTION_IDENTITY,

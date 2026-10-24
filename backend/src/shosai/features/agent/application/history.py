@@ -86,7 +86,7 @@ class History:
         position = None if request.cursor is None else CODEC.decode(request.cursor)
         after = None if position is None else (position.created_at, position.id)
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
-            thread = await self._threads.visible_thread(session, principal, thread_id)
+            thread = await self._threads.visible_thread(session, principal.user_id, thread_id)
             statement = (
                 select(MESSAGE)
                 .options(SHOWN)
