@@ -13,7 +13,8 @@
     "fullScreen": "Vollbild",
     "exitFullScreen": "Vollbild beenden",
     "close": "Schließen",
-    "dropFiles": "Lege Dateien hier ab, um sie anzuhängen"
+    "dropFiles": "Lege Dateien hier ab, um sie anzuhängen",
+    "loading": "Chat wird geladen"
   },
   "place": {
     "personal": "Persönlich",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo konnte die Antwort nicht fertigstellen. Prüfe deine Verbindung und versuche es erneut.",
     "edit": "Bearbeiten",
     "editMessage": "Nachricht bearbeiten",
-    "attachedFiles": "Angehängte Dateien"
+    "attachedFiles": "Angehängte Dateien",
+    "earlier": "Frühere Nachrichten anzeigen",
+    "latest": "Zur neuesten Nachricht"
   },
   "steps": {
     "gettingStarted": "Legt los",
@@ -140,5 +143,21 @@
     "micBlockedHint": "Erlaube den Mikrofonzugriff, um mit Leo zu sprechen.",
     "needsHttps": "Der Sprachmodus braucht eine sichere Verbindung (HTTPS), um das Mikrofon zu nutzen.",
     "unsupported": "Dieser Browser unterstützt den Sprachmodus nicht. Probiere die neueste Version von Chrome, Edge oder Safari."
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {Du hast dein heutiges Leo-Limit erreicht. Es erneuert sich morgen, oder wechsle zu einem höheren Tarif, um weiterzumachen.} other {Du hast dein Leo-Limit dieser Woche erreicht. Es erneuert sich nächste Woche, oder wechsle zu einem höheren Tarif, um weiterzumachen.}}",
+    "consent_required": "Leo verarbeitet deine Daten in der EU. Aktiviere „Verarbeitung in der EU“ unter Einstellungen › Datenschutz, um Leo zu nutzen.",
+    "thread_busy": "Leo antwortet in diesem Chat noch in einem anderen Fenster. Warte, bis die Antwort fertig ist.",
+    "rate_limited": "Du fragst schneller, als Leo antworten kann. Versuche es gleich noch einmal.",
+    "too_many_runs": "Leo beantwortet bereits zwei deiner Fragen. Versuche es erneut, sobald eine fertig ist.",
+    "agent_busy": "Leo ist gerade ausgelastet. Versuche es in ein paar Sekunden erneut.",
+    "unavailable": "Leo ist gerade nicht verfügbar. Versuche es in einer Minute erneut.",
+    "not_last_question": "Nur deine letzte Frage kann erneut gestellt werden.",
+    "thread_not_found": "Dieser Chat wurde gelöscht. Beginne einen neuen.",
+    "question_invalid": "Diese Frage ist zu lang. Kürze sie und sende sie erneut.",
+    "model_unavailable": "Das KI-Modell hat nicht geantwortet. Versuche es erneut.",
+    "turn_deadline": "Leo hat zu lange gebraucht. Versuche es erneut oder stelle eine engere Frage.",
+    "process_lost": "Leo wurde unterbrochen. Versuche es erneut.",
+    "stopFailed": "Leo konnte nicht gestoppt werden. Versuche es erneut."
   }
 }

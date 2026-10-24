@@ -11,7 +11,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Spinner } from "@/components/ui/spinner";
 import { formatDuration } from "@/i18n/format-units";
 
-import { LEO_ACTIONS } from "../domain/actions";
+import { isLeoActionId, LEO_ACTIONS } from "../domain/actions";
 import { getStepsSummary, MIN_VISIBLE_DURATION_MS, type StepsSummary } from "../domain/step-summary";
 import type { LeoMessage, LeoStep } from "../domain/types";
 
@@ -60,7 +60,7 @@ function SummaryText({ summary }: { readonly summary: StepsSummary }) {
   const locale = useLocale();
   switch (summary.kind) {
     case "running":
-      return tActions(summary.action);
+      return activityLabel(tActions, summary.action);
     case "starting":
       return t("steps.gettingStarted");
     case "stopped":
@@ -70,6 +70,15 @@ function SummaryText({ summary }: { readonly summary: StepsSummary }) {
     default:
       return t("steps.doneIn", { duration: formatDuration(locale, summary.ms) });
   }
+}
+
+type ActionsT = ReturnType<typeof useTranslations<"leoActions">>;
+
+/** Слова шага: инструмент или рассуждение по своему коду; код, которого кабинет не знает, — общая строка. */
+function activityLabel(tActions: ActionsT, activity: string): string {
+  return tActions.has(activity as Parameters<ActionsT>[0])
+    ? tActions(activity as Parameters<ActionsT>[0])
+    : tActions("generic");
 }
 
 function SummaryIcon({ status }: { readonly status: LeoMessage["status"] }) {
@@ -82,7 +91,7 @@ function StepRow({ step, isLast }: { readonly step: LeoStep; readonly isLast: bo
   const t = useTranslations("leo");
   const tActions = useTranslations("leoActions");
   const locale = useLocale();
-  const action = LEO_ACTIONS[step.action];
+  const action = isLeoActionId(step.action) ? LEO_ACTIONS[step.action] : null;
   const showDuration = step.durationMs !== undefined && step.durationMs >= MIN_VISIBLE_DURATION_MS;
   // What Leo looked for and found is its own text, so it is quoted the language's way and left to set its direction.
   const meta = [step.detail ? t("steps.detail", { detail: step.detail }) : null, step.result]
@@ -98,8 +107,8 @@ function StepRow({ step, isLast }: { readonly step: LeoStep; readonly isLast: bo
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <div className="flex items-baseline justify-between gap-3">
           <span className={cn("text-sm", step.status === "running" ? "text-foreground" : "text-muted-foreground")}>
-            {tActions(step.action)}
-            {action.access === "approval" && (
+            {activityLabel(tActions, step.action)}
+            {action?.access === "approval" && (
               <span className="ms-1.5 rounded-sm bg-muted px-1 py-0.5 text-[10px] uppercase tracking-wide">
                 {t("steps.needsApproval")}
               </span>

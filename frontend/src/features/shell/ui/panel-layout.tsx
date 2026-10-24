@@ -4,7 +4,7 @@ import { cn } from "cn";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar-panel";
-import { LeoWidget } from "@/features/leo/ui/leo-widget";
+import { SampleLeo } from "@/features/leo/ui/sample-leo";
 import { readSidebarPreferences } from "@/features/preferences/domain/sidebar-preferences";
 import { LayoutControls } from "@/features/preferences/ui/layout-controls";
 import { SettingsDialog } from "@/features/settings/ui/settings-dialog";
@@ -66,7 +66,8 @@ export function PanelLayout({ panel, children }: Readonly<{ panel: Panel; childr
           {children}
         </div>
       </SidebarInset>
-      {panel === "dashboard" ? <UserPanelLeo /> : <LeoWidget />}
+      {/* Leo в админке — на примерном чате до своего шага (agent, шаг 16, AG-D5). */}
+      {panel === "dashboard" ? <UserPanelLeo /> : <SampleLeo />}
       <SettingsDialog />
     </SidebarProvider>
   );

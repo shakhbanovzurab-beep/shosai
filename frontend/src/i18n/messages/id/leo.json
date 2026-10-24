@@ -13,7 +13,8 @@
     "fullScreen": "Layar penuh",
     "exitFullScreen": "Keluar dari layar penuh",
     "close": "Tutup",
-    "dropFiles": "Lepaskan file untuk melampirkannya"
+    "dropFiles": "Lepaskan file untuk melampirkannya",
+    "loading": "Memuat chat"
   },
   "place": {
     "personal": "Pribadi",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo tidak dapat menyelesaikan jawaban. Periksa koneksi Anda, lalu coba lagi.",
     "edit": "Edit",
     "editMessage": "Edit pesan",
-    "attachedFiles": "File terlampir"
+    "attachedFiles": "File terlampir",
+    "earlier": "Tampilkan pesan sebelumnya",
+    "latest": "Ke pesan terbaru"
   },
   "steps": {
     "gettingStarted": "Memulai",
@@ -140,5 +143,21 @@
     "micBlockedHint": "Izinkan akses mikrofon untuk berbicara dengan Leo.",
     "needsHttps": "Mode suara memerlukan koneksi aman (HTTPS) untuk menggunakan mikrofon.",
     "unsupported": "Browser ini tidak mendukung mode suara. Coba versi terbaru Chrome, Edge, atau Safari."
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {Kuota Leo hari ini sudah habis. Kuota diperbarui besok, atau tingkatkan paket Anda untuk melanjutkan.} other {Kuota Leo minggu ini sudah habis. Kuota diperbarui minggu depan, atau tingkatkan paket Anda untuk melanjutkan.}}",
+    "consent_required": "Leo memproses data Anda di UE. Aktifkan “Pemrosesan di UE” di Pengaturan › Privasi untuk menggunakannya.",
+    "thread_busy": "Leo masih menjawab di chat ini di jendela lain. Tunggu hingga selesai.",
+    "rate_limited": "Anda bertanya lebih cepat daripada Leo bisa menjawab. Coba lagi sebentar lagi.",
+    "too_many_runs": "Leo sudah menjawab dua pertanyaan Anda. Coba lagi setelah salah satunya selesai.",
+    "agent_busy": "Leo sedang sibuk. Coba lagi dalam beberapa detik.",
+    "unavailable": "Leo sedang tidak tersedia. Coba lagi dalam satu menit.",
+    "not_last_question": "Hanya pertanyaan terakhir Anda yang bisa diajukan lagi.",
+    "thread_not_found": "Chat ini telah dihapus. Mulai chat baru.",
+    "question_invalid": "Pertanyaan ini terlalu panjang. Persingkat lalu kirim lagi.",
+    "model_unavailable": "Model AI tidak merespons. Coba lagi.",
+    "turn_deadline": "Leo terlalu lama. Coba lagi atau ajukan pertanyaan yang lebih spesifik.",
+    "process_lost": "Leo terhenti. Coba lagi.",
+    "stopFailed": "Leo tidak dapat dihentikan. Coba lagi."
   }
 }

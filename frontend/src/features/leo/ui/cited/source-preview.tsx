@@ -61,13 +61,18 @@ export function SourcePreview({ source, index, onClose }: { source: LeoSource; i
           <X />
         </Button>
       </div>
-      <blockquote dir="auto" className="border-s-2 ps-3 text-sm leading-relaxed">
-        <Quote quote={source.quote} highlight={source.highlight} />
-      </blockquote>
-      <Button variant="ghost" size="xs" className="self-start" onClick={() => void copy()}>
-        <Copy data-icon="inline-start" />
-        {t("sources.copy")}
-      </Button>
+      {/* Источник без отрывка (задача, найденный файл) — только название и пространство. */}
+      {source.quote ? (
+        <>
+          <blockquote dir="auto" className="border-s-2 ps-3 text-sm leading-relaxed">
+            <Quote quote={source.quote} highlight={source.highlight} />
+          </blockquote>
+          <Button variant="ghost" size="xs" className="self-start" onClick={() => void copy()}>
+            <Copy data-icon="inline-start" />
+            {t("sources.copy")}
+          </Button>
+        </>
+      ) : null}
     </section>
   );
 }

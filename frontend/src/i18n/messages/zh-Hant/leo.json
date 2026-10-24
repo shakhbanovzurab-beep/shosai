@@ -13,7 +13,8 @@
     "fullScreen": "全螢幕",
     "exitFullScreen": "結束全螢幕",
     "close": "關閉",
-    "dropFiles": "放開即可附加檔案"
+    "dropFiles": "放開即可附加檔案",
+    "loading": "正在載入對話"
   },
   "place": {
     "personal": "個人",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo 無法完成回覆。請檢查網路連線，然後再試一次。",
     "edit": "編輯",
     "editMessage": "編輯訊息",
-    "attachedFiles": "附件"
+    "attachedFiles": "附件",
+    "earlier": "顯示較早的訊息",
+    "latest": "前往最新訊息"
   },
   "steps": {
     "gettingStarted": "正在準備",
@@ -140,5 +143,21 @@
     "micBlockedHint": "允許使用麥克風，即可與 Leo 對話。",
     "needsHttps": "語音模式需要安全連線（HTTPS）才能使用麥克風。",
     "unsupported": "這個瀏覽器不支援語音模式。請改用最新版的 Chrome、Edge 或 Safari。"
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {你已達到今天的 Leo 使用上限。上限明天會重置，或升級方案以繼續使用。} other {你已達到本週的 Leo 使用上限。上限下週會重置，或升級方案以繼續使用。}}",
+    "consent_required": "Leo 會在歐盟處理你的資料。請在「設定 › 隱私權」中開啟「在歐盟處理」以使用 Leo。",
+    "thread_busy": "Leo 仍在另一個視窗中回覆這個對話。請等它完成。",
+    "rate_limited": "你提問的速度比 Leo 回覆得還快。請稍後再試。",
+    "too_many_runs": "Leo 正在回覆你的兩個問題。等其中一個完成後再試。",
+    "agent_busy": "Leo 目前忙碌中。請幾秒後再試。",
+    "unavailable": "Leo 目前無法使用。請一分鐘後再試。",
+    "not_last_question": "只有最後一個問題可以重新提問。",
+    "thread_not_found": "這個對話已刪除。請開始新的對話。",
+    "question_invalid": "問題太長了。請縮短後重新傳送。",
+    "model_unavailable": "AI 模型沒有回應。請再試一次。",
+    "turn_deadline": "Leo 花了太久時間。請再試一次，或問得更具體一些。",
+    "process_lost": "Leo 被中斷了。請再試一次。",
+    "stopFailed": "無法停止 Leo。請再試一次。"
   }
 }

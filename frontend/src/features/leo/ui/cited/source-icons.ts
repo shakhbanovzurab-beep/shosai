@@ -1,4 +1,4 @@
-import { FileText, Globe, Mail, NotebookPen, Video } from "lucide-react";
+import { FileText, Globe, ListChecks, Mail, NotebookPen, Video } from "lucide-react";
 
 import type { SourceKind } from "../../domain/sources";
 
@@ -6,6 +6,7 @@ import type { SourceKind } from "../../domain/sources";
 export const SOURCE_ICONS: Record<SourceKind, typeof FileText> = {
   meeting: Video,
   file: FileText,
+  task: ListChecks,
   note: NotebookPen,
   mail: Mail,
   web: Globe,

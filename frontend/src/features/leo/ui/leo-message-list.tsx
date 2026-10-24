@@ -1,8 +1,9 @@
 "use client";
 
-import { RotateCcw } from "lucide-react";
+import { ArrowDown, History, RotateCcw } from "lucide-react";
 import { useTranslations } from "use-intl";
 
+import { Button } from "@/components/ui/button";
 import {
   MessageScroller,
   MessageScrollerButton,
@@ -11,28 +12,41 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
+import { Spinner } from "@/components/ui/spinner";
 
 import type { LeoProposal } from "../domain/proposals";
 import type { LeoSource } from "../domain/sources";
 import type { LeoMessage } from "../domain/types";
+import type { LeoChat } from "../model/leo-chat";
 import { CitedAnswer } from "./cited/cited-answer";
 import { LeoArtifacts } from "./leo-artifacts";
 import { CopyAction, MessageAction } from "./leo-message-actions";
-import { LeoRichText } from "./leo-rich-text";
+import { LeoReplyError } from "./leo-reply-error";
 import { LeoSteps } from "./leo-steps";
 import { LeoUserMessage } from "./leo-user-message";
+import { LeoMarkdown } from "./markdown/leo-markdown";
 import { LeoProposalCard } from "./proposal/leo-proposal";
 
 interface LeoMessageListProps {
   readonly messages: LeoMessage[];
   readonly isBusy: boolean;
+  /** Более ранние сообщения треда на сервере: кнопка над разговором их подгружает. */
+  readonly earlier?: LeoChat["earlier"];
   readonly onRegenerate: () => void;
   readonly onEditLast: (content: string) => void;
   /** Карточка одобрения, сделанная из артефакта ответа (дайджест чата), — в этот же ответ. */
   readonly onProposal: (messageId: string, proposal: LeoProposal) => void;
 }
 
-export function LeoMessageList({ messages, isBusy, onRegenerate, onEditLast, onProposal }: LeoMessageListProps) {
+export function LeoMessageList({
+  messages,
+  isBusy,
+  earlier,
+  onRegenerate,
+  onEditLast,
+  onProposal,
+}: LeoMessageListProps) {
+  const t = useTranslations("leo");
   const lastAssistantId = messages.findLast((m) => m.role === "assistant")?.id;
   const lastUserId = messages.findLast((m) => m.role === "user")?.id;
 
@@ -41,6 +55,18 @@ export function LeoMessageList({ messages, isBusy, onRegenerate, onEditLast, onP
       <MessageScroller className="min-h-0 flex-1">
         <MessageScrollerViewport>
           <MessageScrollerContent className="gap-6 px-4 py-5 group-data-[expanded=true]/leo:mx-auto group-data-[expanded=true]/leo:w-full group-data-[expanded=true]/leo:max-w-3xl">
+            {earlier?.available ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="self-center"
+                disabled={earlier.loading}
+                onClick={earlier.load}
+              >
+                {earlier.loading ? <Spinner data-icon="inline-start" /> : <History data-icon="inline-start" />}
+                {t("message.earlier")}
+              </Button>
+            ) : null}
             {messages.map((message) => (
               <MessageScrollerItem key={message.id} messageId={message.id} scrollAnchor={message.role === "user"}>
                 {message.role === "user" ? (
@@ -62,7 +88,10 @@ export function LeoMessageList({ messages, isBusy, onRegenerate, onEditLast, onP
             ))}
           </MessageScrollerContent>
         </MessageScrollerViewport>
-        <MessageScrollerButton />
+        <MessageScrollerButton>
+          <ArrowDown />
+          <span className="sr-only">{t("message.latest")}</span>
+        </MessageScrollerButton>
       </MessageScroller>
     </MessageScrollerProvider>
   );
@@ -90,7 +119,7 @@ function AssistantMessage({
   return (
     <div className="flex flex-col gap-3">
       <LeoSteps message={message} />
-      {message.status === "error" ? <ReplyError /> : null}
+      {message.status === "error" ? <LeoReplyError failure={message.failure} /> : null}
       {hasAnswer || showActions || artifacts.length > 0 ? (
         <div className="flex flex-col gap-1">
           {hasAnswer ? <AnswerCard text={message.content} sources={message.sources} isStreaming={isStreaming} /> : null}
@@ -112,22 +141,13 @@ function AssistantMessage({
   );
 }
 
-function ReplyError() {
-  const t = useTranslations("leo");
-  return (
-    <p className="text-destructive text-sm" role="alert">
-      {t("message.replyFailed")}
-    </p>
-  );
-}
-
 function AnswerCard({ text, sources, isStreaming }: { text: string; sources?: LeoSource[]; isStreaming: boolean }) {
   return (
     <div className="rounded-2xl border bg-card px-4 py-3 text-sm leading-relaxed">
       {sources?.length ? (
         <CitedAnswer text={text} sources={sources} isStreaming={isStreaming} />
       ) : (
-        <LeoRichText text={text} />
+        <LeoMarkdown text={text} />
       )}
       {isStreaming ? (
         <span

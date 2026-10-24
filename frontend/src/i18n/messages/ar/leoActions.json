@@ -49,5 +49,30 @@
   "analyze_data": "أحلل البيانات",
   "create_chart": "أرسم مخططًا",
   "recall_memory": "أتذكر المحادثات السابقة",
-  "save_memory": "أحفظ في الذاكرة"
+  "save_memory": "أحفظ في الذاكرة",
+  "generic": "أعمل على ذلك",
+  "notes": {
+    "search": "أبحث في اجتماعاتك",
+    "get": "أقرأ اجتماعًا",
+    "read_transcript": "أقرأ نص اجتماع",
+    "list_findings": "أقرأ ملاحظات اجتماع"
+  },
+  "tasks": {
+    "search": "أبحث في مهامك",
+    "list_board": "أقرأ لوحة"
+  },
+  "files": {
+    "search": "أبحث في ملفاتك",
+    "read": "أقرأ ملفًا"
+  },
+  "account": {
+    "get_profile": "أراجع ملفك الشخصي",
+    "get_plan": "أراجع خطتك",
+    "get_usage": "أراجع استخدامك"
+  },
+  "core": {
+    "read_result": "أقرأ بقية نتيجة",
+    "load_toolset": "أحمّل أدوات أخرى",
+    "navigate": "أفتح صفحة"
+  }
 }

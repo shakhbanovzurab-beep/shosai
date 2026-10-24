@@ -13,7 +13,8 @@
     "fullScreen": "Pantalla completa",
     "exitFullScreen": "Salir de pantalla completa",
     "close": "Cerrar",
-    "dropFiles": "Suelta los archivos para adjuntarlos"
+    "dropFiles": "Suelta los archivos para adjuntarlos",
+    "loading": "Cargando el chat"
   },
   "place": {
     "personal": "Personal",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo no pudo terminar. Revisa tu conexión e inténtalo de nuevo.",
     "edit": "Editar",
     "editMessage": "Editar mensaje",
-    "attachedFiles": "Archivos adjuntos"
+    "attachedFiles": "Archivos adjuntos",
+    "earlier": "Mostrar mensajes anteriores",
+    "latest": "Ir al último mensaje"
   },
   "steps": {
     "gettingStarted": "Empezando",
@@ -140,5 +143,21 @@
     "micBlockedHint": "Permite el acceso al micrófono para hablar con Leo.",
     "needsHttps": "El modo de voz requiere una conexión segura (HTTPS) para usar el micrófono.",
     "unsupported": "Este navegador no admite el modo de voz. Prueba la última versión de Chrome, Edge o Safari."
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {Has usado la cuota de Leo de hoy. Se renueva mañana, o mejora tu plan para seguir.} other {Has usado la cuota de Leo de esta semana. Se renueva la próxima semana, o mejora tu plan para seguir.}}",
+    "consent_required": "Leo procesa tus datos en la UE. Activa «Procesamiento en la UE» en Configuración › Privacidad para usarlo.",
+    "thread_busy": "Leo aún está respondiendo en este chat en otra ventana. Espera a que termine.",
+    "rate_limited": "Preguntas más rápido de lo que Leo puede responder. Inténtalo de nuevo en un momento.",
+    "too_many_runs": "Leo ya está respondiendo dos de tus preguntas. Inténtalo de nuevo cuando termine una.",
+    "agent_busy": "Leo está ocupado ahora. Inténtalo de nuevo en unos segundos.",
+    "unavailable": "Leo no está disponible ahora. Inténtalo de nuevo en un minuto.",
+    "not_last_question": "Solo se puede volver a hacer tu última pregunta.",
+    "thread_not_found": "Este chat se eliminó. Empieza uno nuevo.",
+    "question_invalid": "La pregunta es demasiado larga. Acórtala y envíala de nuevo.",
+    "model_unavailable": "El modelo de IA no respondió. Inténtalo de nuevo.",
+    "turn_deadline": "Leo tardó demasiado. Inténtalo de nuevo o haz una pregunta más concreta.",
+    "process_lost": "Leo se interrumpió. Inténtalo de nuevo.",
+    "stopFailed": "No se pudo detener a Leo. Inténtalo de nuevo."
   }
 }

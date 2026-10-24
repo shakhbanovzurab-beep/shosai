@@ -49,5 +49,30 @@
   "analyze_data": "Verileri analiz ediyorum",
   "create_chart": "Grafik oluşturuyorum",
   "recall_memory": "Önceki sohbetleri hatırlıyorum",
-  "save_memory": "Belleğe kaydediyorum"
+  "save_memory": "Belleğe kaydediyorum",
+  "generic": "Üzerinde çalışıyorum",
+  "notes": {
+    "search": "Toplantılarınızda arıyorum",
+    "get": "Bir toplantıyı okuyorum",
+    "read_transcript": "Bir toplantı transkriptini okuyorum",
+    "list_findings": "Bir toplantının notlarını okuyorum"
+  },
+  "tasks": {
+    "search": "Görevlerinizde arıyorum",
+    "list_board": "Bir panoyu okuyorum"
+  },
+  "files": {
+    "search": "Dosyalarınızda arıyorum",
+    "read": "Bir dosyayı okuyorum"
+  },
+  "account": {
+    "get_profile": "Profilinizi kontrol ediyorum",
+    "get_plan": "Planınızı kontrol ediyorum",
+    "get_usage": "Kullanımınızı kontrol ediyorum"
+  },
+  "core": {
+    "read_result": "Bir sonucun devamını okuyorum",
+    "load_toolset": "Başka araçlar yüklüyorum",
+    "navigate": "Bir sayfa açıyorum"
+  }
 }

@@ -49,5 +49,30 @@
   "analyze_data": "J’analyse des données",
   "create_chart": "Je crée un graphique",
   "recall_memory": "Je retrouve nos conversations passées",
-  "save_memory": "J’enregistre en mémoire"
+  "save_memory": "J’enregistre en mémoire",
+  "generic": "Je m’en occupe",
+  "notes": {
+    "search": "Je cherche dans vos réunions",
+    "get": "Je lis une réunion",
+    "read_transcript": "Je lis la transcription d’une réunion",
+    "list_findings": "Je lis les notes d’une réunion"
+  },
+  "tasks": {
+    "search": "Je cherche dans vos tâches",
+    "list_board": "Je lis un tableau"
+  },
+  "files": {
+    "search": "Je cherche dans vos fichiers",
+    "read": "Je lis un fichier"
+  },
+  "account": {
+    "get_profile": "Je consulte votre profil",
+    "get_plan": "Je consulte votre forfait",
+    "get_usage": "Je consulte votre utilisation"
+  },
+  "core": {
+    "read_result": "Je lis la suite d’un résultat",
+    "load_toolset": "Je charge d’autres outils",
+    "navigate": "J’ouvre une page"
+  }
 }

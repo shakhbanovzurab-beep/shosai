@@ -13,7 +13,8 @@
     "fullScreen": "Volledig scherm",
     "exitFullScreen": "Volledig scherm sluiten",
     "close": "Sluiten",
-    "dropFiles": "Laat de bestanden los om ze bij te voegen"
+    "dropFiles": "Laat de bestanden los om ze bij te voegen",
+    "loading": "Chat laden"
   },
   "place": {
     "personal": "Persoonlijk",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo kan het antwoord niet afronden. Controleer je verbinding en probeer het opnieuw.",
     "edit": "Bewerken",
     "editMessage": "Bericht bewerken",
-    "attachedFiles": "Bijgevoegde bestanden"
+    "attachedFiles": "Bijgevoegde bestanden",
+    "earlier": "Eerdere berichten tonen",
+    "latest": "Naar het nieuwste bericht"
   },
   "steps": {
     "gettingStarted": "Ik ga aan de slag",
@@ -140,5 +143,21 @@
     "micBlockedHint": "Geef toegang tot de microfoon om met Leo te praten.",
     "needsHttps": "Spraakmodus heeft een beveiligde verbinding (HTTPS) nodig om de microfoon te gebruiken.",
     "unsupported": "Deze browser ondersteunt geen spraakmodus. Probeer de nieuwste versie van Chrome, Edge of Safari."
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {Je hebt het Leo-tegoed van vandaag gebruikt. Het wordt morgen aangevuld, of upgrade je abonnement om door te gaan.} other {Je hebt het Leo-tegoed van deze week gebruikt. Het wordt volgende week aangevuld, of upgrade je abonnement om door te gaan.}}",
+    "consent_required": "Leo verwerkt je gegevens in de EU. Zet ‘Verwerking in de EU’ aan in Instellingen › Privacy om Leo te gebruiken.",
+    "thread_busy": "Leo antwoordt in deze chat nog in een ander venster. Wacht tot het antwoord klaar is.",
+    "rate_limited": "Je vraagt sneller dan Leo kan antwoorden. Probeer het zo opnieuw.",
+    "too_many_runs": "Leo beantwoordt al twee van je vragen. Probeer het opnieuw als er een klaar is.",
+    "agent_busy": "Leo is nu bezet. Probeer het over een paar seconden opnieuw.",
+    "unavailable": "Leo is nu niet beschikbaar. Probeer het over een minuut opnieuw.",
+    "not_last_question": "Alleen je laatste vraag kan opnieuw worden gesteld.",
+    "thread_not_found": "Deze chat is verwijderd. Begin een nieuwe.",
+    "question_invalid": "Die vraag is te lang. Maak hem korter en verstuur hem opnieuw.",
+    "model_unavailable": "Het AI-model reageerde niet. Probeer het opnieuw.",
+    "turn_deadline": "Leo had te veel tijd nodig. Probeer het opnieuw of stel een gerichtere vraag.",
+    "process_lost": "Leo werd onderbroken. Probeer het opnieuw.",
+    "stopFailed": "Leo kon niet worden gestopt. Probeer het opnieuw."
   }
 }

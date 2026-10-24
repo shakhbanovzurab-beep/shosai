@@ -49,5 +49,30 @@
   "analyze_data": "Analyzing data",
   "create_chart": "Building a chart",
   "recall_memory": "Recalling past conversations",
-  "save_memory": "Saving to memory"
+  "save_memory": "Saving to memory",
+  "generic": "Working on it",
+  "notes": {
+    "search": "Searching your meetings",
+    "get": "Reading a meeting",
+    "read_transcript": "Reading a meeting transcript",
+    "list_findings": "Reading a meeting’s notes"
+  },
+  "tasks": {
+    "search": "Searching your tasks",
+    "list_board": "Reading a board"
+  },
+  "files": {
+    "search": "Searching your files",
+    "read": "Reading a file"
+  },
+  "account": {
+    "get_profile": "Checking your profile",
+    "get_plan": "Checking your plan",
+    "get_usage": "Checking your usage"
+  },
+  "core": {
+    "read_result": "Reading the rest of a result",
+    "load_toolset": "Getting more tools",
+    "navigate": "Opening a page"
+  }
 }

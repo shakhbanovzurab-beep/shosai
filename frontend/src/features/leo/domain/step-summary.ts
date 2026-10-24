@@ -1,4 +1,3 @@
-import type { LeoActionId } from "./actions";
 import type { LeoMessage, LeoStep } from "./types";
 
 // Short steps are noise; only steps that took noticeable time show their duration.
@@ -6,7 +5,7 @@ export const MIN_VISIBLE_DURATION_MS = 1000;
 
 /** The one line shown above a reply's steps, as data: what Leo is doing now, or how the reply ended. */
 export type StepsSummary =
-  | { kind: "running"; action: LeoActionId }
+  | { kind: "running"; action: string }
   | { kind: "starting" }
   | { kind: "stopped"; ms: number }
   | { kind: "error" }

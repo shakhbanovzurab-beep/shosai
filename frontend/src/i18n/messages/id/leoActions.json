@@ -49,5 +49,30 @@
   "analyze_data": "Menganalisis data",
   "create_chart": "Membuat grafik",
   "recall_memory": "Mengingat chat sebelumnya",
-  "save_memory": "Menyimpan ke memori"
+  "save_memory": "Menyimpan ke memori",
+  "generic": "Sedang dikerjakan",
+  "notes": {
+    "search": "Mencari di rapat Anda",
+    "get": "Membaca rapat",
+    "read_transcript": "Membaca transkrip rapat",
+    "list_findings": "Membaca catatan rapat"
+  },
+  "tasks": {
+    "search": "Mencari tugas Anda",
+    "list_board": "Membaca papan"
+  },
+  "files": {
+    "search": "Mencari file Anda",
+    "read": "Membaca file"
+  },
+  "account": {
+    "get_profile": "Memeriksa profil Anda",
+    "get_plan": "Memeriksa paket Anda",
+    "get_usage": "Memeriksa penggunaan Anda"
+  },
+  "core": {
+    "read_result": "Membaca sisa hasil",
+    "load_toolset": "Memuat alat lain",
+    "navigate": "Membuka halaman"
+  }
 }

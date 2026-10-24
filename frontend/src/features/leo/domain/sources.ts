@@ -1,10 +1,9 @@
 /*
- * Источники ответа Leo: «каждый ответ называет свои источники и пространство, откуда каждый» (ADR 0039 §7).
- * Формат — предложение для решения владельца: событие `sources` в потоке и маркеры `[n]` в тексте ответа;
- * пока его отдают только моки разработки.
+ * Источники ответа Leo: «каждый ответ называет свои источники и пространство, откуда каждый» (ADR 0039 §7,
+ * ADR 0068 AG-D1): событие `sources` в потоке и маркеры `[n]` в тексте ответа; номера дают инструменты.
  */
 
-export type SourceKind = "meeting" | "file" | "note" | "mail" | "web";
+export type SourceKind = "meeting" | "file" | "task" | "note" | "mail" | "web";
 
 export type LeoSource = {
   id: string;
@@ -19,39 +18,6 @@ export type LeoSource = {
   /** Слова отрывка, которые подтверждают ответ, — выделяются. */
   highlight: string[];
 };
-
-/** Предложение ответа и номера источников (с единицы), на которые оно ссылается. */
-export type CitedSentence = { text: string; cites: number[] };
-
-const MARKER = /\[(\d{1,2})\]/g;
-const LEADING_MARKERS = /^(\s*\[\d{1,2}\])+/;
-
-/** Номера из маркеров, только существующих источников: выдуманная ссылка просто не рисуется. */
-function citesOf(text: string, sourceCount: number): number[] {
-  const numbers = [...text.matchAll(MARKER)].map((match) => Number(match[1]));
-  return [...new Set(numbers)].filter((n) => n >= 1 && n <= sourceCount);
-}
-
-/**
- * Делит абзац на предложения и отдаёт каждому его маркеры. Маркер, стоящий после точки («…звонок. [1] Дальше»),
- * относится к предыдущему предложению. Границы предложений — по `Intl.Segmenter` языка ответа.
- */
-export function citedSentences(paragraph: string, sourceCount: number, locale: string): CitedSentence[] {
-  const segmenter = new Intl.Segmenter(locale, { granularity: "sentence" });
-  const sentences: CitedSentence[] = [];
-  for (const { segment } of segmenter.segment(paragraph)) {
-    const leading = segment.match(LEADING_MARKERS)?.[0] ?? "";
-    const previous = sentences.at(-1);
-    if (leading && previous) previous.cites = [...new Set([...previous.cites, ...citesOf(leading, sourceCount)])];
-    const rest = leading ? segment.slice(leading.length).trimStart() : segment;
-    if (rest.trim() === "") continue;
-    sentences.push({
-      text: rest.replace(MARKER, "").replace(/\s+([.,;:!?])/g, "$1"),
-      cites: citesOf(rest, sourceCount),
-    });
-  }
-  return sentences;
-}
 
 export type QuotePart = { text: string; at: number; lit: boolean };
 

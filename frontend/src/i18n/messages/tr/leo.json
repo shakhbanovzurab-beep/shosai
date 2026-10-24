@@ -13,7 +13,8 @@
     "fullScreen": "Tam ekran",
     "exitFullScreen": "Tam ekrandan çık",
     "close": "Kapat",
-    "dropFiles": "Eklemek için dosyaları bırakın"
+    "dropFiles": "Eklemek için dosyaları bırakın",
+    "loading": "Sohbet yükleniyor"
   },
   "place": {
     "personal": "Kişisel",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo’nun yanıtı tamamlanamadı. Bağlantınızı kontrol edip tekrar deneyin.",
     "edit": "Düzenle",
     "editMessage": "Mesajı düzenle",
-    "attachedFiles": "Ekli dosyalar"
+    "attachedFiles": "Ekli dosyalar",
+    "earlier": "Önceki mesajları göster",
+    "latest": "En son mesaja git"
   },
   "steps": {
     "gettingStarted": "Başlıyorum",
@@ -140,5 +143,21 @@
     "micBlockedHint": "Leo ile konuşmak için mikrofona izin verin.",
     "needsHttps": "Sesli modun mikrofonu kullanabilmesi için güvenli (HTTPS) bağlantı gerekir.",
     "unsupported": "Bu tarayıcı sesli modu desteklemiyor. Chrome, Edge veya Safari’nin en son sürümünü deneyin."
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {Bugünkü Leo kotanızı kullandınız. Yarın yenilenir ya da devam etmek için planınızı yükseltin.} other {Bu haftaki Leo kotanızı kullandınız. Gelecek hafta yenilenir ya da devam etmek için planınızı yükseltin.}}",
+    "consent_required": "Leo verilerinizi AB’de işler. Kullanmak için Ayarlar › Gizlilik bölümünde “AB’de işleme” seçeneğini açın.",
+    "thread_busy": "Leo bu sohbette başka bir pencerede hâlâ yanıt veriyor. Bitmesini bekleyin.",
+    "rate_limited": "Leo’nun yanıtlayabileceğinden daha hızlı soruyorsunuz. Birazdan tekrar deneyin.",
+    "too_many_runs": "Leo zaten iki sorunuzu yanıtlıyor. Biri bitince tekrar deneyin.",
+    "agent_busy": "Leo şu anda meşgul. Birkaç saniye sonra tekrar deneyin.",
+    "unavailable": "Leo şu anda kullanılamıyor. Bir dakika sonra tekrar deneyin.",
+    "not_last_question": "Yalnızca son sorunuz yeniden sorulabilir.",
+    "thread_not_found": "Bu sohbet silindi. Yeni bir sohbet başlatın.",
+    "question_invalid": "Bu soru çok uzun. Kısaltıp yeniden gönderin.",
+    "model_unavailable": "Yapay zekâ modeli yanıt vermedi. Tekrar deneyin.",
+    "turn_deadline": "Leo çok uzun sürdü. Tekrar deneyin ya da daha dar bir soru sorun.",
+    "process_lost": "Leo kesintiye uğradı. Tekrar deneyin.",
+    "stopFailed": "Leo durdurulamadı. Tekrar deneyin."
   }
 }

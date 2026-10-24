@@ -13,7 +13,8 @@
     "fullScreen": "Toàn màn hình",
     "exitFullScreen": "Thoát toàn màn hình",
     "close": "Đóng",
-    "dropFiles": "Thả tệp vào đây để đính kèm"
+    "dropFiles": "Thả tệp vào đây để đính kèm",
+    "loading": "Đang tải cuộc trò chuyện"
   },
   "place": {
     "personal": "Cá nhân",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo không thể hoàn tất câu trả lời. Hãy kiểm tra kết nối và thử lại.",
     "edit": "Chỉnh sửa",
     "editMessage": "Chỉnh sửa tin nhắn",
-    "attachedFiles": "Tệp đính kèm"
+    "attachedFiles": "Tệp đính kèm",
+    "earlier": "Hiện tin nhắn trước đó",
+    "latest": "Đến tin nhắn mới nhất"
   },
   "steps": {
     "gettingStarted": "Đang bắt đầu",
@@ -140,5 +143,21 @@
     "micBlockedHint": "Hãy cho phép dùng micrô để nói chuyện với Leo.",
     "needsHttps": "Chế độ giọng nói cần kết nối bảo mật (HTTPS) để dùng micrô.",
     "unsupported": "Trình duyệt này không hỗ trợ chế độ giọng nói. Hãy thử phiên bản mới nhất của Chrome, Edge hoặc Safari."
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {Bạn đã dùng hết hạn mức Leo hôm nay. Hạn mức sẽ được làm mới vào ngày mai, hoặc nâng cấp gói để tiếp tục.} other {Bạn đã dùng hết hạn mức Leo tuần này. Hạn mức sẽ được làm mới vào tuần sau, hoặc nâng cấp gói để tiếp tục.}}",
+    "consent_required": "Leo xử lý dữ liệu của bạn tại EU. Hãy bật “Xử lý tại EU” trong Cài đặt › Quyền riêng tư để sử dụng.",
+    "thread_busy": "Leo vẫn đang trả lời trong cuộc trò chuyện này ở một cửa sổ khác. Hãy đợi Leo trả lời xong.",
+    "rate_limited": "Bạn hỏi nhanh hơn tốc độ Leo có thể trả lời. Hãy thử lại sau giây lát.",
+    "too_many_runs": "Leo đang trả lời hai câu hỏi của bạn. Hãy thử lại khi một câu đã xong.",
+    "agent_busy": "Leo đang bận. Hãy thử lại sau vài giây.",
+    "unavailable": "Leo hiện không khả dụng. Hãy thử lại sau một phút.",
+    "not_last_question": "Chỉ có thể hỏi lại câu hỏi cuối cùng của bạn.",
+    "thread_not_found": "Cuộc trò chuyện này đã bị xóa. Hãy bắt đầu cuộc trò chuyện mới.",
+    "question_invalid": "Câu hỏi quá dài. Hãy rút ngắn và gửi lại.",
+    "model_unavailable": "Mô hình AI không phản hồi. Hãy thử lại.",
+    "turn_deadline": "Leo mất quá nhiều thời gian. Hãy thử lại hoặc hỏi câu cụ thể hơn.",
+    "process_lost": "Leo bị gián đoạn. Hãy thử lại.",
+    "stopFailed": "Không dừng được Leo. Hãy thử lại."
   }
 }

@@ -9,26 +9,34 @@ import { useTranslations } from "use-intl";
 import { useDirection } from "@/components/ui/direction";
 import { Kbd } from "@/components/ui/kbd";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { lazyComponent } from "@/lib/lazy-component";
 import { usePathname } from "@/lib/navigation";
 
 import { type LeoContext, PERSONAL_CONTEXT } from "../domain/context";
+import { forgetStoredConversations } from "../model/chat-store";
+import type { LeoChat } from "../model/leo-chat";
 import { useLeoQuestions } from "../model/leo-questions";
-import { useLeoChat } from "../model/use-leo-chat";
-import { type LeoDraft, LeoPanel } from "./leo-panel";
+import type { LeoDraft } from "./leo-panel";
 import { leoPlace } from "./leo-place";
+
+// Панель — свой чанк: разговор, Markdown и композер грузятся с первым открытием, а не со страницей.
+const LeoPanel = lazyComponent(() => import("./leo-panel").then((module) => module.LeoPanel));
 
 // One spring drives every layout change, so the window, its content and its corners move as a single piece.
 const MORPH: Transition = { type: "spring", bounce: 0.14, duration: 0.55 };
 const FADE: Transition = { ease: [0.23, 1, 0.32, 1], duration: 0.22 };
 
 /**
- * Leo, floating on every page; `context` says whether it works in Personal, a workspace or a hub.
- * `notice` is shown before the first question, e.g. a topic of the hub going in circles.
+ * Leo, floating on every page; `context` says whether it works in Personal, a workspace or a hub, `chat` is its
+ * conversation (the real API or the sample one). `notice` is shown before the first question, e.g. a topic of
+ * the hub going in circles.
  */
 export function LeoWidget({
+  chat,
   context = PERSONAL_CONTEXT,
   notice = null,
 }: {
+  readonly chat: LeoChat;
   readonly context?: LeoContext;
   readonly notice?: React.ReactNode;
 }) {
@@ -36,7 +44,9 @@ export function LeoWidget({
   const [open, setOpen] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const launcherRef = React.useRef<HTMLButtonElement>(null);
-  const chat = useLeoChat({ page: pathname, context });
+
+  // Разговоры, которые прежняя панель хранила в браузере, стираются: разговор живёт только на сервере.
+  React.useEffect(() => forgetStoredConversations(), []);
   const [draft, setDraft] = React.useState<LeoDraft | null>(null);
 
   // Вопрос из ⌘K: свободный Leo отвечает сразу; занятый — вопрос ждёт в поле ввода, отправит его человек.

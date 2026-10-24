@@ -25,7 +25,8 @@ const SINGLE_LINE_HEIGHT = 44;
 
 interface LeoComposerProps {
   readonly isBusy: boolean;
-  readonly attachments: ReturnType<typeof useLeoAttachments>;
+  /** Файлы к вопросу; null — к этому Leo их не приложить (Leo на API — с загрузками для Leo, шаг 12). */
+  readonly attachments: ReturnType<typeof useLeoAttachments> | null;
   readonly onSend: (content: string, files: File[]) => void;
   readonly onStop: () => void;
   readonly onStartVoice: () => void;
@@ -49,7 +50,7 @@ export function LeoComposer({
 }: LeoComposerProps) {
   const t = useTranslations("leo");
   const locale = useLocale();
-  const { files, addFiles, removeFile, clearFiles } = attachments;
+  const files = attachments?.files ?? [];
   const [value, setValue] = React.useState(initialValue);
   // Single row while the text fits on one line; once it wraps, the text takes the full width above the buttons.
   // Like ChatGPT it stays that way until the field is cleared.
@@ -76,7 +77,7 @@ export function LeoComposer({
     );
     setValue("");
     setIsMultiline(false);
-    clearFiles();
+    attachments?.clearFiles();
   };
 
   return (
@@ -101,7 +102,7 @@ export function LeoComposer({
               <AttachmentActions>
                 <AttachmentAction
                   aria-label={t("composer.removeFile", { name: file.name })}
-                  onClick={() => removeFile(id)}
+                  onClick={() => attachments?.removeFile(id)}
                 >
                   <X />
                 </AttachmentAction>
@@ -112,34 +113,36 @@ export function LeoComposer({
       ) : null}
       {/* One row like ChatGPT: attach, the message, then voice / send / stop; buttons stay on the last line. */}
       <InputGroup data-multiline={isMultiline} className="flex-wrap items-center rounded-3xl px-1">
-        <InputGroupAddon
-          align="inline-start"
-          className="py-1 group-data-[multiline=true]/input-group:order-2 group-data-[multiline=true]/input-group:pt-0"
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            className="sr-only"
-            tabIndex={-1}
-            aria-hidden="true"
-            onChange={(event) => {
-              if (event.target.files) addFiles(event.target.files);
-              event.target.value = "";
-            }}
-          />
-          <InputGroupButton
-            type="button"
-            size="icon-sm"
-            className="rounded-full"
-            aria-label={t("composer.attach")}
-            title={t("composer.attachLimit", { max: LEO_MAX_ATTACHMENTS })}
-            disabled={files.length >= LEO_MAX_ATTACHMENTS}
-            onClick={() => fileInputRef.current?.click()}
+        {attachments === null ? null : (
+          <InputGroupAddon
+            align="inline-start"
+            className="py-1 group-data-[multiline=true]/input-group:order-2 group-data-[multiline=true]/input-group:pt-0"
           >
-            <Plus />
-          </InputGroupButton>
-        </InputGroupAddon>
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              className="sr-only"
+              tabIndex={-1}
+              aria-hidden="true"
+              onChange={(event) => {
+                if (event.target.files) attachments.addFiles(event.target.files);
+                event.target.value = "";
+              }}
+            />
+            <InputGroupButton
+              type="button"
+              size="icon-sm"
+              className="rounded-full"
+              aria-label={t("composer.attach")}
+              title={t("composer.attachLimit", { max: LEO_MAX_ATTACHMENTS })}
+              disabled={files.length >= LEO_MAX_ATTACHMENTS}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Plus />
+            </InputGroupButton>
+          </InputGroupAddon>
+        )}
         <InputGroupTextarea
           ref={textareaRef}
           value={value}
@@ -156,9 +159,9 @@ export function LeoComposer({
             }
           }}
           onPaste={(event) => {
-            if (event.clipboardData.files.length === 0) return;
+            if (attachments === null || event.clipboardData.files.length === 0) return;
             event.preventDefault();
-            addFiles(event.clipboardData.files);
+            attachments.addFiles(event.clipboardData.files);
           }}
           placeholder={t("composer.placeholder")}
           aria-label={t("composer.label")}

@@ -13,7 +13,8 @@
     "fullScreen": "全画面表示",
     "exitFullScreen": "全画面表示を終了",
     "close": "閉じる",
-    "dropFiles": "ファイルをドロップして添付"
+    "dropFiles": "ファイルをドロップして添付",
+    "loading": "チャットを読み込んでいます"
   },
   "place": {
     "personal": "個人",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo は回答を完了できませんでした。接続を確認して、もう一度お試しください。",
     "edit": "編集",
     "editMessage": "メッセージを編集",
-    "attachedFiles": "添付ファイル"
+    "attachedFiles": "添付ファイル",
+    "earlier": "以前のメッセージを表示",
+    "latest": "最新のメッセージへ移動"
   },
   "steps": {
     "gettingStarted": "開始しています",
@@ -140,5 +143,21 @@
     "micBlockedHint": "Leo と話すには、マイクへのアクセスを許可してください。",
     "needsHttps": "音声モードでマイクを使うには、安全な接続（HTTPS）が必要です。",
     "unsupported": "このブラウザは音声モードに対応していません。最新の Chrome、Edge、Safari をお試しください。"
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {本日の Leo の利用枠を使い切りました。明日リセットされます。続けるにはプランをアップグレードしてください。} other {今週の Leo の利用枠を使い切りました。来週リセットされます。続けるにはプランをアップグレードしてください。}}",
+    "consent_required": "Leo は EU でデータを処理します。利用するには「設定 › プライバシー」で「EU でのデータ処理」をオンにしてください。",
+    "thread_busy": "Leo は別のウィンドウでこのチャットにまだ回答しています。終わるまでお待ちください。",
+    "rate_limited": "Leo が回答できる速さを超えて質問しています。少し待ってからもう一度お試しください。",
+    "too_many_runs": "Leo はすでに 2 つの質問に回答しています。どちらかが終わってからもう一度お試しください。",
+    "agent_busy": "Leo は現在混み合っています。数秒後にもう一度お試しください。",
+    "unavailable": "Leo は現在利用できません。1 分後にもう一度お試しください。",
+    "not_last_question": "もう一度質問できるのは最後の質問だけです。",
+    "thread_not_found": "このチャットは削除されました。新しいチャットを始めてください。",
+    "question_invalid": "質問が長すぎます。短くしてもう一度送信してください。",
+    "model_unavailable": "AI モデルが応答しませんでした。もう一度お試しください。",
+    "turn_deadline": "Leo の回答に時間がかかりすぎました。もう一度お試しいただくか、質問を絞ってください。",
+    "process_lost": "Leo が中断されました。もう一度お試しください。",
+    "stopFailed": "Leo を停止できませんでした。もう一度お試しください。"
   }
 }

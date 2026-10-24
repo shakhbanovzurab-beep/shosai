@@ -49,5 +49,30 @@
   "analyze_data": "データを分析しています",
   "create_chart": "グラフを作成しています",
   "recall_memory": "過去の会話を思い出しています",
-  "save_memory": "メモリに保存しています"
+  "save_memory": "メモリに保存しています",
+  "generic": "対応しています",
+  "notes": {
+    "search": "会議を検索しています",
+    "get": "会議を読んでいます",
+    "read_transcript": "会議の文字起こしを読んでいます",
+    "list_findings": "会議ノートを読んでいます"
+  },
+  "tasks": {
+    "search": "タスクを検索しています",
+    "list_board": "ボードを読んでいます"
+  },
+  "files": {
+    "search": "ファイルを検索しています",
+    "read": "ファイルを読んでいます"
+  },
+  "account": {
+    "get_profile": "プロフィールを確認しています",
+    "get_plan": "プランを確認しています",
+    "get_usage": "使用量を確認しています"
+  },
+  "core": {
+    "read_result": "結果の続きを読んでいます",
+    "load_toolset": "ほかのツールを読み込んでいます",
+    "navigate": "ページを開いています"
+  }
 }

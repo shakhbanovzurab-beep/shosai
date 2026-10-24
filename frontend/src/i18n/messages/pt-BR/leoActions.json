@@ -49,5 +49,30 @@
   "analyze_data": "Analisando dados",
   "create_chart": "Criando um gráfico",
   "recall_memory": "Relembrando conversas anteriores",
-  "save_memory": "Salvando na memória"
+  "save_memory": "Salvando na memória",
+  "generic": "Trabalhando nisso",
+  "notes": {
+    "search": "Pesquisando suas reuniões",
+    "get": "Lendo uma reunião",
+    "read_transcript": "Lendo a transcrição de uma reunião",
+    "list_findings": "Lendo as notas de uma reunião"
+  },
+  "tasks": {
+    "search": "Pesquisando suas tarefas",
+    "list_board": "Lendo um quadro"
+  },
+  "files": {
+    "search": "Pesquisando seus arquivos",
+    "read": "Lendo um arquivo"
+  },
+  "account": {
+    "get_profile": "Verificando seu perfil",
+    "get_plan": "Verificando seu plano",
+    "get_usage": "Verificando seu uso"
+  },
+  "core": {
+    "read_result": "Lendo o restante de um resultado",
+    "load_toolset": "Carregando mais ferramentas",
+    "navigate": "Abrindo uma página"
+  }
 }

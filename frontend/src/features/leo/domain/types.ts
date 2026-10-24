@@ -1,4 +1,3 @@
-import type { LeoActionId } from "./actions";
 import type { LeoArtifact } from "./artifacts";
 import type { LeoProposal } from "./proposals";
 import type { LeoSource } from "./sources";
@@ -7,7 +6,8 @@ export type LeoMessageStatus = "streaming" | "done" | "stopped" | "error";
 
 export interface LeoStep {
   id: string;
-  action: LeoActionId;
+  /** Что делал Leo: имя инструмента (`notes.search`) или код рассуждения; незнакомое слово — общая строка. */
+  action: string;
   detail?: string;
   result?: string;
   status: "running" | "done" | "error" | "stopped";
@@ -36,4 +36,12 @@ export interface LeoMessage {
   proposals?: LeoProposal[];
   /** Результаты, которые читаются отдельно по ссылке: дайджест чата (CF-D11). */
   artifacts?: LeoArtifact[];
+  /** Почему ответа нет: код отказа до хода или сбоя хода (`token_limit`, `turn_deadline` …). */
+  failure?: LeoFailure;
+}
+
+/** Код сбоя и, для лимита токенов, какой лимит кончился (`standard_daily_tokens` …). */
+export interface LeoFailure {
+  code: string;
+  limit?: string;
 }

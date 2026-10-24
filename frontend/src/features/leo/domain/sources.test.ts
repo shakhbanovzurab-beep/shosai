@@ -1,23 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import { appliedText, changeIndexes, type DiffSegment, segmentKeys } from "./proposals";
-import { citedSentences, quoteParts } from "./sources";
+import { quoteParts } from "./sources";
 
 describe("a cited answer", () => {
-  it("gives each sentence its markers, also a marker written after the full stop", () => {
-    const sentences = citedSentences(
-      "Jonas agreed to €18 per seat [1]. Billing starts in March. [2][9] Done.",
-      2,
-      "en",
-    );
-
-    expect(sentences).toEqual([
-      { text: "Jonas agreed to €18 per seat. ", cites: [1] },
-      { text: "Billing starts in March. ", cites: [2] },
-      { text: "Done.", cites: [] },
-    ]);
-  });
-
   it("marks the words of a quote that back the answer, whatever their case", () => {
     expect(quoteParts("We sign at Eighteen euros per seat.", ["eighteen euros"])).toEqual([
       { text: "We sign at ", at: 0, lit: false },

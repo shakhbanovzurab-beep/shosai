@@ -13,7 +13,8 @@
     "fullScreen": "Schermo intero",
     "exitFullScreen": "Esci da schermo intero",
     "close": "Chiudi",
-    "dropFiles": "Rilascia i file per allegarli"
+    "dropFiles": "Rilascia i file per allegarli",
+    "loading": "Caricamento della chat"
   },
   "place": {
     "personal": "Personale",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo non è riuscito a completare la risposta. Controlla la connessione e riprova.",
     "edit": "Modifica",
     "editMessage": "Modifica messaggio",
-    "attachedFiles": "File allegati"
+    "attachedFiles": "File allegati",
+    "earlier": "Mostra i messaggi precedenti",
+    "latest": "Vai all’ultimo messaggio"
   },
   "steps": {
     "gettingStarted": "Comincio",
@@ -140,5 +143,21 @@
     "micBlockedHint": "Consenti l’accesso al microfono per parlare con Leo.",
     "needsHttps": "La modalità vocale richiede una connessione sicura (HTTPS) per usare il microfono.",
     "unsupported": "Questo browser non supporta la modalità vocale. Prova l’ultima versione di Chrome, Edge o Safari."
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {Hai usato la quota di Leo di oggi. Si rinnova domani, oppure passa a un piano superiore per continuare.} other {Hai usato la quota di Leo di questa settimana. Si rinnova la settimana prossima, oppure passa a un piano superiore per continuare.}}",
+    "consent_required": "Leo elabora i tuoi dati nell’UE. Attiva «Trattamento nell’UE» in Impostazioni › Privacy per usarlo.",
+    "thread_busy": "Leo sta ancora rispondendo in questa chat in un’altra finestra. Attendi che finisca.",
+    "rate_limited": "Fai domande più in fretta di quanto Leo riesca a rispondere. Riprova tra un attimo.",
+    "too_many_runs": "Leo sta già rispondendo a due tue domande. Riprova quando una è terminata.",
+    "agent_busy": "Leo è occupato in questo momento. Riprova tra qualche secondo.",
+    "unavailable": "Leo non è disponibile in questo momento. Riprova tra un minuto.",
+    "not_last_question": "Solo l’ultima domanda può essere posta di nuovo.",
+    "thread_not_found": "Questa chat è stata eliminata. Iniziane una nuova.",
+    "question_invalid": "La domanda è troppo lunga. Accorciala e inviala di nuovo.",
+    "model_unavailable": "Il modello di IA non ha risposto. Riprova.",
+    "turn_deadline": "Leo ci ha messo troppo. Riprova o fai una domanda più mirata.",
+    "process_lost": "Leo è stato interrotto. Riprova.",
+    "stopFailed": "Impossibile fermare Leo. Riprova."
   }
 }

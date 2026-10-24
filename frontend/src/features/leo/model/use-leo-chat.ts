@@ -18,10 +18,14 @@ import {
   subscribe,
   updateMessage,
 } from "./chat-store";
+import type { LeoChat } from "./leo-chat";
 import { proposalArrived } from "./proposals";
 
-/** The conversation of one context; switching context switches conversation, the other stays as it was. */
-export function useLeoChat({ page, context }: { page: string; context: LeoContext }) {
+/**
+ * Примерный разговор на `/api/leo`: хаб и админка остаются на нём до своих шагов (agent, шаги 20 и 16). Разговор
+ * одного контекста; смена контекста меняет разговор, прежний остаётся как был.
+ */
+export function useLeoChat({ page, context }: { page: string; context: LeoContext }): LeoChat {
   const key = contextKey(context);
   const locale = useUiLanguage();
   const read = React.useCallback(() => getMessages(key), [key]);
@@ -116,5 +120,5 @@ export function useLeoChat({ page, context }: { page: string; context: LeoContex
     setMessages(key, () => []);
   }, [key]);
 
-  return { messages, isBusy, send, stop, regenerate, editLast, addProposal, reset };
+  return { messages, isBusy, loading: false, send, stop, regenerate, editLast, addProposal, reset, attachments: true };
 }

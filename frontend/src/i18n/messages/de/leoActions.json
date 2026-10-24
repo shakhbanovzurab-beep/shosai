@@ -49,5 +49,30 @@
   "analyze_data": "Analysiert Daten",
   "create_chart": "Erstellt ein Diagramm",
   "recall_memory": "Erinnert sich an frühere Gespräche",
-  "save_memory": "Speichert im Gedächtnis"
+  "save_memory": "Speichert im Gedächtnis",
+  "generic": "Arbeitet daran",
+  "notes": {
+    "search": "Durchsucht deine Meetings",
+    "get": "Liest ein Meeting",
+    "read_transcript": "Liest ein Meeting-Transkript",
+    "list_findings": "Liest die Notizen eines Meetings"
+  },
+  "tasks": {
+    "search": "Durchsucht deine Aufgaben",
+    "list_board": "Liest ein Board"
+  },
+  "files": {
+    "search": "Durchsucht deine Dateien",
+    "read": "Liest eine Datei"
+  },
+  "account": {
+    "get_profile": "Prüft dein Profil",
+    "get_plan": "Prüft deinen Tarif",
+    "get_usage": "Prüft deine Nutzung"
+  },
+  "core": {
+    "read_result": "Liest den Rest eines Ergebnisses",
+    "load_toolset": "Lädt weitere Tools",
+    "navigate": "Öffnet eine Seite"
+  }
 }

@@ -49,5 +49,30 @@
   "analyze_data": "正在分析資料",
   "create_chart": "正在建立圖表",
   "recall_memory": "正在回想過去的對話",
-  "save_memory": "正在儲存至記憶"
+  "save_memory": "正在儲存至記憶",
+  "generic": "正在處理",
+  "notes": {
+    "search": "正在搜尋你的會議",
+    "get": "正在閱讀會議",
+    "read_transcript": "正在閱讀會議逐字稿",
+    "list_findings": "正在閱讀會議筆記"
+  },
+  "tasks": {
+    "search": "正在搜尋你的任務",
+    "list_board": "正在閱讀看板"
+  },
+  "files": {
+    "search": "正在搜尋你的檔案",
+    "read": "正在閱讀檔案"
+  },
+  "account": {
+    "get_profile": "正在查看你的個人資料",
+    "get_plan": "正在查看你的方案",
+    "get_usage": "正在查看你的用量"
+  },
+  "core": {
+    "read_result": "正在閱讀結果的其餘部分",
+    "load_toolset": "正在載入更多工具",
+    "navigate": "正在開啟頁面"
+  }
 }

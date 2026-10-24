@@ -49,5 +49,30 @@
   "analyze_data": "Đang phân tích dữ liệu",
   "create_chart": "Đang vẽ biểu đồ",
   "recall_memory": "Đang nhớ lại các cuộc trò chuyện trước",
-  "save_memory": "Đang lưu vào bộ nhớ"
+  "save_memory": "Đang lưu vào bộ nhớ",
+  "generic": "Đang xử lý",
+  "notes": {
+    "search": "Đang tìm trong các cuộc họp",
+    "get": "Đang đọc cuộc họp",
+    "read_transcript": "Đang đọc bản chép lời cuộc họp",
+    "list_findings": "Đang đọc ghi chú cuộc họp"
+  },
+  "tasks": {
+    "search": "Đang tìm công việc",
+    "list_board": "Đang đọc bảng"
+  },
+  "files": {
+    "search": "Đang tìm tệp",
+    "read": "Đang đọc tệp"
+  },
+  "account": {
+    "get_profile": "Đang xem hồ sơ của bạn",
+    "get_plan": "Đang xem gói của bạn",
+    "get_usage": "Đang xem mức sử dụng"
+  },
+  "core": {
+    "read_result": "Đang đọc phần còn lại của kết quả",
+    "load_toolset": "Đang tải thêm công cụ",
+    "navigate": "Đang mở trang"
+  }
 }

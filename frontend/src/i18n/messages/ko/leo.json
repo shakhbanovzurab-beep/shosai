@@ -13,7 +13,8 @@
     "fullScreen": "전체 화면",
     "exitFullScreen": "전체 화면 종료",
     "close": "닫기",
-    "dropFiles": "첨부할 파일을 여기에 놓아 주세요"
+    "dropFiles": "첨부할 파일을 여기에 놓아 주세요",
+    "loading": "채팅을 불러오는 중"
   },
   "place": {
     "personal": "개인",
@@ -110,7 +111,9 @@
     "replyFailed": "Leo 답변을 끝까지 받지 못했어요. 연결을 확인하고 다시 시도해 주세요.",
     "edit": "편집",
     "editMessage": "메시지 편집",
-    "attachedFiles": "첨부 파일"
+    "attachedFiles": "첨부 파일",
+    "earlier": "이전 메시지 보기",
+    "latest": "최신 메시지로 이동"
   },
   "steps": {
     "gettingStarted": "시작하는 중",
@@ -140,5 +143,21 @@
     "micBlockedHint": "Leo 음성 대화를 이용하려면 마이크 접근을 허용해 주세요.",
     "needsHttps": "음성 모드에서 마이크를 사용하려면 보안 연결(HTTPS)이 필요해요.",
     "unsupported": "이 브라우저는 음성 모드를 지원하지 않아요. 최신 버전의 Chrome, Edge 또는 Safari를 사용해 보세요."
+  },
+  "failure": {
+    "token_limit": "{limit, select, standard_daily_tokens {오늘의 Leo 사용 한도를 모두 사용했습니다. 내일 다시 채워지며, 계속하려면 플랜을 업그레이드하세요.} other {이번 주 Leo 사용 한도를 모두 사용했습니다. 다음 주에 다시 채워지며, 계속하려면 플랜을 업그레이드하세요.}}",
+    "consent_required": "Leo는 데이터를 EU에서 처리합니다. 사용하려면 설정 › 개인정보 보호에서 ‘EU 내 처리’를 켜세요.",
+    "thread_busy": "Leo가 다른 창에서 이 채팅에 아직 답하고 있습니다. 끝날 때까지 기다려 주세요.",
+    "rate_limited": "Leo가 답할 수 있는 속도보다 빠르게 질문하고 있습니다. 잠시 후 다시 시도하세요.",
+    "too_many_runs": "Leo가 이미 질문 두 개에 답하고 있습니다. 하나가 끝나면 다시 시도하세요.",
+    "agent_busy": "Leo가 지금 바쁩니다. 몇 초 후 다시 시도하세요.",
+    "unavailable": "Leo를 지금 사용할 수 없습니다. 1분 후 다시 시도하세요.",
+    "not_last_question": "마지막 질문만 다시 할 수 있습니다.",
+    "thread_not_found": "이 채팅은 삭제되었습니다. 새 채팅을 시작하세요.",
+    "question_invalid": "질문이 너무 깁니다. 줄여서 다시 보내세요.",
+    "model_unavailable": "AI 모델이 응답하지 않았습니다. 다시 시도하세요.",
+    "turn_deadline": "Leo가 너무 오래 걸렸습니다. 다시 시도하거나 더 좁은 질문을 하세요.",
+    "process_lost": "Leo가 중단되었습니다. 다시 시도하세요.",
+    "stopFailed": "Leo를 멈추지 못했습니다. 다시 시도하세요."
   }
 }

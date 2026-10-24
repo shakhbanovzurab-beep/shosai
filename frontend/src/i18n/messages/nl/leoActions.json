@@ -49,5 +49,30 @@
   "analyze_data": "Ik analyseer gegevens",
   "create_chart": "Ik maak een grafiek",
   "recall_memory": "Ik haal eerdere chats op",
-  "save_memory": "Ik bewaar dit in mijn geheugen"
+  "save_memory": "Ik bewaar dit in mijn geheugen",
+  "generic": "Ik ben ermee bezig",
+  "notes": {
+    "search": "Ik doorzoek je vergaderingen",
+    "get": "Ik lees een vergadering",
+    "read_transcript": "Ik lees een transcriptie",
+    "list_findings": "Ik lees de notities van een vergadering"
+  },
+  "tasks": {
+    "search": "Ik doorzoek je taken",
+    "list_board": "Ik lees een bord"
+  },
+  "files": {
+    "search": "Ik doorzoek je bestanden",
+    "read": "Ik lees een bestand"
+  },
+  "account": {
+    "get_profile": "Ik bekijk je profiel",
+    "get_plan": "Ik bekijk je abonnement",
+    "get_usage": "Ik bekijk je gebruik"
+  },
+  "core": {
+    "read_result": "Ik lees de rest van een resultaat",
+    "load_toolset": "Ik laad meer tools",
+    "navigate": "Ik open een pagina"
+  }
 }

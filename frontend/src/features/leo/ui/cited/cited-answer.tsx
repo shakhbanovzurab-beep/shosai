@@ -3,9 +3,12 @@
 import { useState } from "react";
 
 import { cn } from "cn";
-import { useLocale, useTranslations } from "use-intl";
+import { useTranslations } from "use-intl";
 
-import { citedSentences, type LeoSource } from "../../domain/sources";
+import { citesIn } from "../../domain/markdown-cites";
+import type { LeoSource } from "../../domain/sources";
+import { type Citations, CitationsContext } from "../markdown/citations";
+import { LeoMarkdown, type PartMark } from "../markdown/leo-markdown";
 import { SOURCE_ICONS } from "./source-icons";
 import { SourcePreview } from "./source-preview";
 
@@ -47,8 +50,8 @@ function Marker({
 }
 
 /**
- * Ответ Leo, связанный с источниками (Cited Answer): у предложения — его маркеры, под ответом — источники. Точка
- * на маркере или источнике подсвечивает предложения, которые на него опираются, и приглушает остальное.
+ * Ответ Leo, связанный с источниками (Cited Answer): в тексте — маркеры, под ответом — источники. Точка на маркере
+ * или источнике подсвечивает блоки ответа, которые на него опираются, и приглушает остальное.
  */
 export function CitedAnswer({
   text,
@@ -60,35 +63,23 @@ export function CitedAnswer({
   isStreaming: boolean;
 }) {
   const t = useTranslations("leoCards");
-  const locale = useLocale();
   const [focus, setFocus] = useState<Focus>({ lit: null, open: null });
   const light = (lit: number | null) => setFocus((f) => ({ ...f, lit }));
   const open = (n: number) => setFocus((f) => ({ ...f, open: f.open === n ? null : n }));
   const active = focus.lit ?? focus.open;
   const opened = focus.open === null ? null : sources[focus.open - 1];
+  const citations: Citations = {
+    count: sources.length,
+    marker: (n) => <Marker n={n} source={sources[n - 1]} focus={focus} onLight={light} onOpen={open} />,
+  };
+  const mark: PartMark | undefined =
+    active === null ? undefined : (part) => (citesIn(part.blocks, sources.length).has(active) ? "lit" : "dim");
 
   return (
     <div className="flex flex-col gap-3">
-      {text.split(/\n{2,}/).map((paragraph, p) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: абзацы ответа только дописываются в конец
-        <p key={p} dir="auto" className="whitespace-pre-wrap">
-          {citedSentences(paragraph, sources.length, locale).map((sentence, s) => (
-            <span
-              // biome-ignore lint/suspicious/noArrayIndexKey: предложения ответа только дописываются в конец
-              key={s}
-              className={cn(
-                "rounded-sm transition-colors",
-                active !== null && (sentence.cites.includes(active) ? "bg-primary/10" : "text-muted-foreground"),
-              )}
-            >
-              {sentence.text.trimEnd()}
-              {sentence.cites.map((n) => (
-                <Marker key={n} n={n} source={sources[n - 1]} focus={focus} onLight={light} onOpen={open} />
-              ))}{" "}
-            </span>
-          ))}
-        </p>
-      ))}
+      <CitationsContext value={citations}>
+        <LeoMarkdown text={text} mark={mark} />
+      </CitationsContext>
       {isStreaming ? null : (
         <div className="flex flex-col gap-2">
           <span className="text-muted-foreground text-xs">{t("sources.count", { count: sources.length })}</span>
@@ -97,7 +88,7 @@ export function CitedAnswer({
               const Icon = SOURCE_ICONS[source.kind];
               const n = index + 1;
               return (
-                <li key={source.id}>
+                <li key={`${source.kind}:${source.id}:${source.locator ?? ""}`}>
                   <button
                     type="button"
                     aria-expanded={focus.open === n}

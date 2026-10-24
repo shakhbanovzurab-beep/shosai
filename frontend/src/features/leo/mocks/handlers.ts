@@ -1,5 +1,6 @@
-// Моки разработки слайса, по записи на путь. Чат — учебный `/api/leo` (NDJSON v1), предложения Leo — на путях
-// бэкенда `/v1/agent/actions*` (Leo §13.2), пока слайс `agent` не опубликует API (F2-D1).
+// Моки разработки слайса, по записи на путь. Учебный чат `/api/leo` (NDJSON v1) — для хаба и админки до их шагов
+// (agent, 20 и 16): Personal и workspace ходят в `/v1/agent/*`. Предложения Leo — на путях `/v1/agent/actions*`
+// (Leo §13.2), пока срез `agent` не опубликует их (шаг 9b, F2-D1).
 import { type MockRoute, mockRoute } from "@/mocks/routing";
 
 import { digestTaskProposalsRoute } from "./digest-proposals";

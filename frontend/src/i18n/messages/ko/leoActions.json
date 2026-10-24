@@ -49,5 +49,30 @@
   "analyze_data": "데이터 분석 중",
   "create_chart": "차트 만드는 중",
   "recall_memory": "지난 대화 떠올리는 중",
-  "save_memory": "메모리에 저장 중"
+  "save_memory": "메모리에 저장 중",
+  "generic": "작업 중",
+  "notes": {
+    "search": "회의 검색 중",
+    "get": "회의 읽는 중",
+    "read_transcript": "회의 스크립트 읽는 중",
+    "list_findings": "회의 노트 읽는 중"
+  },
+  "tasks": {
+    "search": "작업 검색 중",
+    "list_board": "보드 읽는 중"
+  },
+  "files": {
+    "search": "파일 검색 중",
+    "read": "파일 읽는 중"
+  },
+  "account": {
+    "get_profile": "프로필 확인 중",
+    "get_plan": "플랜 확인 중",
+    "get_usage": "사용량 확인 중"
+  },
+  "core": {
+    "read_result": "결과의 나머지 읽는 중",
+    "load_toolset": "도구 더 불러오는 중",
+    "navigate": "페이지 여는 중"
+  }
 }
