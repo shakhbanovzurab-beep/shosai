@@ -50,8 +50,10 @@ export function GoogleButton({
 
   if (failed) return fallback;
   // color-scheme: light — иначе в тёмной теме браузер подкладывает под чужой светлый фрейм белый фон (полосы).
-  // Рамку рисует контейнер; собственная обводка светлой кнопки Google (1 px по краю слота 40 px) срезана, иначе
-  // обводка была бы двойной. Пока кнопка не готова, её закрывает ссылка, а inert убирает её из фокуса и дерева
+  // Рамку рисует контейнер; собственная обводка светлой кнопки Google срезана, иначе обводка была бы двойной. Она
+  // лежит у края слота 40 px, но на пиксель глубже, и при срезе в 1 px от неё оставались тонкие линии сверху, снизу
+  // и справа; срез в 2 px убирает её целиком (содержимое кнопки отстоит от краёв на 6 px и больше). Пока кнопка не
+  // готова, её закрывает ссылка, а inert убирает её из фокуса и дерева
   // доступности. Прятать её через visibility нельзя: невидимой кнопке Google не задаёт размер фрейма, и она не
   // появилась бы никогда.
   return (
@@ -61,7 +63,7 @@ export function GoogleButton({
         className="flex h-11 w-full items-center justify-center overflow-hidden rounded-lg border border-zinc-300 bg-white dark:border-white/20 dark:bg-(--google-fill)"
         style={{ "--google-fill": GOOGLE_BUTTON_FILL, colorScheme: "light" } as CSSProperties}
       >
-        <div ref={slot} className="flex w-full justify-center [clip-path:inset(1px)] dark:[clip-path:none]" />
+        <div ref={slot} className="flex w-full justify-center [clip-path:inset(2px)] dark:[clip-path:none]" />
       </div>
       {shown ? null : <div className="absolute inset-0">{fallback}</div>}
     </div>
