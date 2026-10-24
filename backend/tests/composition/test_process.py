@@ -20,7 +20,7 @@ from shosai.core.config.loading import Settings
 from shosai.core.features import FeatureModule
 from shosai.core.health.readiness import ProcessPhase, Readiness
 from shosai.core.observability.tracing import SHUTDOWN_BUDGET_SECONDS
-from shosai.core.tasks.worker import DRAIN_TIMEOUT
+from shosai.core.tasks.queues import QUEUE_PROFILES, TaskQueue
 
 
 async def runs_until_cancelled() -> None:
@@ -86,10 +86,13 @@ def test_a_failure_inside_a_nested_step_keeps_the_inner_name() -> None:
 
 
 def test_the_drain_and_the_close_fit_the_stop_grace_period() -> None:
-    longest_drain = max(PUBLIC_DRAIN, DRAIN_TIMEOUT)
     close = OPS_DRAIN + timedelta(seconds=SHUTDOWN_BUDGET_SECONDS)
 
-    assert longest_drain + close < STOP_GRACE_PERIOD
+    assert PUBLIC_DRAIN + close < STOP_GRACE_PERIOD
+    for queue, profile in QUEUE_PROFILES.items():
+        assert profile.drain + close < profile.stop_grace, queue
+    assert QUEUE_PROFILES[TaskQueue.CRITICAL].stop_grace == STOP_GRACE_PERIOD
+    assert QUEUE_PROFILES[TaskQueue.AGENT].stop_grace == timedelta(seconds=200)
 
 
 def test_the_slices_add_their_checks_and_are_listed_once() -> None:

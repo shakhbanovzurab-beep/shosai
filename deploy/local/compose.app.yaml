@@ -106,6 +106,17 @@ services:
     profiles: ["all-roles"]
     command: ["workers", "--queue", "meeting"]
 
+  # Ходы Leo (AG-D12): до 48 ходов в процессе; при остановке дослушивает их до 190 с.
+  workers-agent:
+    <<: *backend
+    profiles: ["all-roles"]
+    command: ["workers", "--queue", "agent"]
+    stop_grace_period: 200s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
   scheduler:
     <<: *backend
     profiles: ["all-roles"]

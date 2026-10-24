@@ -99,7 +99,7 @@ uv run --env-file ../.env shosai api                # public API on 127.0.0.1:80
 |---|---|---|---|
 | API | `shosai api` | `HTTP_PORT` (8000) | `OPS_PORT` (9100) |
 | WS gateway | `shosai ws` | `HTTP_PORT` | `OPS_PORT` |
-| Worker of one queue | `shosai workers --queue critical` (or `default`, `bulk`, `meeting`) | — | `OPS_PORT` |
+| Worker of one queue | `shosai workers --queue critical` (or `default`, `bulk`, `meeting`, `agent`) | — | `OPS_PORT` |
 | Scheduler | `shosai scheduler` | — | `OPS_PORT` |
 
 - Several roles at once need different ports: `HTTP_PORT=8001 OPS_PORT=9101 uv run --env-file ../.env shosai ws`, `OPS_PORT=9102 … shosai scheduler`, and so on. A variable set on the command line wins over `.env`.

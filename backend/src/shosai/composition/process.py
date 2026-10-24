@@ -48,7 +48,8 @@ from shosai.core.web.ops import build_ops_app
 EXIT_OK: Final = 0
 EXIT_FAILED: Final = 1
 # Отсрочка между SIGTERM и SIGKILL у контейнера (F4 задаёт stop_grace_period столько же):
-# слив роли (20 с), закрытие клиентов и выгрузка спанов (≤ 5 с) укладываются в неё.
+# слив роли (20 с), закрытие клиентов и выгрузка спанов (≤ 5 с) укладываются в неё. У воркера
+# ходов Leo своя, 200 с (QUEUE_PROFILES в core/tasks/queues.py, AG-D12).
 STOP_GRACE_PERIOD: Final = timedelta(seconds=30)
 OPS_DRAIN: Final = timedelta(seconds=2)
 log = structlog.stdlib.get_logger(__name__)

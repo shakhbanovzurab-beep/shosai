@@ -1,12 +1,15 @@
-"""Task queues: four latency classes, each a Valkey stream (target architecture §4.3, §12).
+"""Task queues: five latency classes, each a Valkey stream (target architecture §4.3, §12).
 
 Queues are split by latency class, not by domain: a mass mailing must never delay a
 sign-up confirmation (draft lesson). One worker process consumes one queue; every process
 can enqueue to every queue. The stream keeps only unfinished tasks — a finished one is
-acknowledged and deleted at once — so its length is the queue's depth.
+acknowledged and deleted at once — so its length is the queue's depth. Leo's turns have a
+queue of their own (ADR 0068 AG-D12): many long, mostly waiting runs per process, drained
+for up to 190 s on a release, while every other worker drains for 20 s.
 """
 
 from dataclasses import dataclass
+from datetime import timedelta
 from enum import StrEnum
 from types import MappingProxyType
 from typing import Final
@@ -28,23 +31,38 @@ class TaskQueue(StrEnum):
     BULK = "bulk"
     # Обработка встречи: долгая, но интерактивная, поэтому не в bulk.
     MEETING = "meeting"
+    # Ходы Leo: человек ждёт поток ответа, ход почти всё время ждёт модель (AG-D12).
+    AGENT = "agent"
+
+
+# Ожидание начатых задач при остановке и отсрочка SIGKILL у контейнера (stop_grace_period).
+DRAIN: Final = timedelta(seconds=20)
+STOP_GRACE: Final = timedelta(seconds=30)
 
 
 @dataclass(frozen=True, slots=True)
 class QueueProfile:
-    """How many tasks of the queue one worker process runs at once."""
+    """How many tasks of the queue one worker process runs at once, how long it waits for
+    them on a stop, and the stop grace period its container is given for that."""
 
     concurrency: int
+    drain: timedelta = DRAIN
+    stop_grace: timedelta = STOP_GRACE
 
 
 # Значения черновика, проверенные в production: без предела TaskIQ берёт сто задач при пуле
-# базы в пять соединений; critical шире, потому что письма почти не держат соединение.
+# базы в пять соединений; critical шире, потому что письма почти не держат соединение. Ход Leo
+# держит соединение с базой только в своих двух транзакциях и ждёт модель до 180 с, поэтому
+# воркер ходов ведёт 48 ходов и при выкатке дослушивает их до конца (AG-D12).
 QUEUE_PROFILES: Final = MappingProxyType(
     {
         TaskQueue.CRITICAL: QueueProfile(concurrency=16),
         TaskQueue.DEFAULT: QueueProfile(concurrency=5),
         TaskQueue.BULK: QueueProfile(concurrency=3),
         TaskQueue.MEETING: QueueProfile(concurrency=3),
+        TaskQueue.AGENT: QueueProfile(
+            concurrency=48, drain=timedelta(seconds=190), stop_grace=timedelta(seconds=200)
+        ),
     }
 )
 

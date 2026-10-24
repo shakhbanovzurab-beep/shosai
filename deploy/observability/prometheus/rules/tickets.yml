@@ -117,6 +117,7 @@ groups:
           absent(up{service="api"}) or absent(up{service="ws"}) or absent(up{service="scheduler"})
           or absent(up{service="workers-critical"}) or absent(up{service="workers-default"})
           or absent(up{service="workers-bulk"}) or absent(up{service="workers-meeting"})
+          or absent(up{service="workers-agent"})
         for: 10m
         labels:
           severity: ticket

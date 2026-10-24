@@ -152,6 +152,17 @@ services:
     <<: *backend
     command: ["workers", "--queue", "meeting"]
 
+  # Ходы Leo (AG-D12): до 48 ходов в процессе; при выкатке release.sh передаёт работу новой копии
+  # и даёт старой дослушать начатые ходы до 190 с.
+  workers-agent:
+    <<: *backend
+    command: ["workers", "--queue", "agent"]
+    stop_grace_period: 200s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
   scheduler:
     <<: *backend
     command: ["scheduler"]

@@ -198,6 +198,8 @@ tests:
         values: "1x40"
       - series: 'up{job="workers",service="workers-meeting",instance="m"}'
         values: "1x40"
+      - series: 'up{job="workers",service="workers-agent",instance="g"}'
+        values: "1x40"
     alert_rule_test:
       - eval_time: 15m
         alertname: RoleMissing

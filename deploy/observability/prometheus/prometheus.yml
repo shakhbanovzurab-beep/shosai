@@ -54,7 +54,7 @@ scrape_configs:
 
   - job_name: workers
     dns_sd_configs:
-      - names: [workers-critical, workers-default, workers-bulk, workers-meeting]
+      - names: [workers-critical, workers-default, workers-bulk, workers-meeting, workers-agent]
         type: A
         port: 9100
         refresh_interval: 15s

@@ -157,6 +157,14 @@ def task_panels() -> list[Panel]:
                 for queue, name in QUEUES.items()
             ],
         ).panel(),
+        # Ход ждёт секунды, а не минуты: у очереди ходов Leo своя шкала (AG-D12).
+        Chart(
+            "Ход Leo ждёт воркер",
+            "Сколько секунд ждёт самый старый ход Leo, которого ещё не взял воркер ходов: эти "
+            "секунды человек видит до первого слова ответа.",
+            SECONDS,
+            [Series("ходы Leo", 'max(shosai_task_queue_oldest_age_seconds{queue="agent"})')],
+        ).panel(),
         POOLS.panel(),
     ]
 

@@ -12,8 +12,9 @@
 #
 # Порядок §17: pull → стек наблюдаемости с конфигурацией коммита (F5-D6; загруженные правила должны
 # совпасть с правилами образа) → миграции обоих домов (только расширяющие) → потребители задач и
-# планировщик → api → ws → edge. api и ws сменяются без простоя: новая копия становится здоровой раньше, чем старая
-# получает SIGTERM. Роль, не ставшая здоровой, или не ответивший через edge /v1/health возвращают
+# планировщик → воркер ходов Leo → api → ws → edge. Воркер ходов, api и ws сменяются без простоя: новая
+# копия становится здоровой раньше, чем старая получает SIGTERM; старый воркер ходов дослушивает начатые
+# ходы до 190 с (AG-D12). Роль, не ставшая здоровой, или не ответивший через edge /v1/health возвращают
 # прежние образы; миграции не откатываются — они совместимы с прежним кодом. Откат — та же смена без
 # миграций к образам releases/previous.env; повторный откат возвращает откаченные образы.
 set -euo pipefail
@@ -24,6 +25,9 @@ readonly RELEASES="$STAGING/releases"
 readonly OBSERVABILITY="$STAGING/observability"
 readonly PLANE_NETWORK=shosai-staging_plane
 readonly CONSUMERS=(workers-critical workers-default workers-bulk workers-meeting scheduler)
+# Ходы Leo: передаётся без простоя, как api, и останавливается со своей отсрочкой (compose.yaml).
+readonly AGENT_WORKERS=workers-agent
+readonly AGENT_STOP_SECONDS=200
 readonly WAIT_SECONDS=180
 # Edge перечитывает адреса api и ws раз в 10 с (resolver … valid=10s): за это время он узнаёт новую копию.
 readonly EDGE_RESOLVE_SECONDS=12
@@ -113,9 +117,10 @@ write_images() {
 start() { compose up --detach --no-deps --pull never --wait --wait-timeout "$WAIT_SECONDS" "$@"; }
 
 # Смена роли без простоя: вторая копия с новым образом рядом со старой, пауза, пока edge узнаёт её адрес,
-# затем старая останавливается (запрос, не дошедший до неё, edge повторяет на новой) и удаляется.
+# затем старая останавливается (запрос, не дошедший до неё, edge повторяет на новой) и удаляется. Второй
+# аргумент — отсрочка остановки старой копии в секундах.
 hand_over() {
-  local service="$1" old
+  local service="$1" stop_seconds="${2:-$STOP_SECONDS}" old
   old="$(compose ps --quiet "$service")"
   if [[ -z $old || $(docker inspect --format '{{.Config.Image}}' "$old") == "$backend" ]]; then
     start "$service"
@@ -124,7 +129,7 @@ hand_over() {
   compose up --detach --no-deps --pull never --no-recreate --wait --wait-timeout "$WAIT_SECONDS" \
     --scale "$service=2" "$service" || return 1
   sleep "$EDGE_RESOLVE_SECONDS"
-  docker stop --time "$STOP_SECONDS" "$old" >/dev/null || return 1
+  docker stop --time "$stop_seconds" "$old" >/dev/null || return 1
   docker rm "$old" >/dev/null
 }
 
@@ -141,6 +146,8 @@ record_release() { printf '%s %s %s %s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$
 switch_roles() {
   log "потребители задач и планировщик"
   start "${CONSUMERS[@]}" || return 1
+  log "воркер ходов Leo"
+  hand_over "$AGENT_WORKERS" "$AGENT_STOP_SECONDS" || return 1
   log "api"
   hand_over api || return 1
   log "ws"
@@ -169,7 +176,7 @@ restore() {
       log "прежней конфигурации наблюдаемости нет: стек остаётся как есть"
     fi
   fi
-  if start "${CONSUMERS[@]}" api ws edge && edge_health; then
+  if start "${CONSUMERS[@]}" "$AGENT_WORKERS" api ws edge && edge_health; then
     log "прежние образы снова работают"
   else
     log "прежние образы не поднялись: нужен человек"
