@@ -1,5 +1,6 @@
-"""The slice's tasks (agent plan §3.1): Leo's turns on the `agent` queue, a minute's sweep of
-lost runs and the hourly purge of departed workspaces' threads.
+"""The slice's tasks (agent plan §3.1): Leo's turns on the `agent` queue, a thread's title and
+compaction after a turn, a minute's sweep of lost runs and the hourly purge of departed
+workspaces' threads.
 
 A turn is never retried by the queue (`application/turn_task.py`); the sweep and the purge are
 per-home ticks that are not retried either — the next tick repeats them, and a pass takes at
@@ -13,9 +14,11 @@ from shosai.core.schedule.jobs import PeriodicJob
 from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration, TaskHandler, TaskKind
 from shosai.core.tasks.payloads import HomeTaskPayload
 from shosai.core.tasks.queues import TaskQueue
+from shosai.features.agent.application.after_turn import COMPACT_THREAD, TITLE_THREAD, ThreadTask
 from shosai.features.agent.application.departures import Departures
 from shosai.features.agent.application.lost_runs import LostRuns
 from shosai.features.agent.application.run_engine import RunEngine
+from shosai.features.agent.application.thread_care import ThreadCare
 from shosai.features.agent.application.turn_task import RUN_TURN, TurnPayload
 
 
@@ -40,9 +43,15 @@ PERIODIC_JOBS: Final = (
 
 
 def task_handlers(
-    departures: Departures, lost_runs: LostRuns, engine: RunEngine
+    departures: Departures, lost_runs: LostRuns, engine: RunEngine, care: ThreadCare
 ) -> tuple[TaskHandler[Any], ...]:
     """The handlers of the slice's tasks in this process."""
+
+    async def title_thread(payload: ThreadTask) -> None:
+        await care.title(payload)
+
+    async def compact_thread(payload: ThreadTask) -> None:
+        await care.compact(payload)
 
     async def purge_departed(payload: HomeTaskPayload) -> None:
         await departures.purge(payload.home)
@@ -57,4 +66,6 @@ def task_handlers(
         TaskHandler(PURGE_DEPARTED, purge_departed),
         TaskHandler(SWEEP_LOST_RUNS, sweep_lost_runs),
         TaskHandler(RUN_TURN, run_turn),
+        TaskHandler(TITLE_THREAD, title_thread),
+        TaskHandler(COMPACT_THREAD, compact_thread),
     )

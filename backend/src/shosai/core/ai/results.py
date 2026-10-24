@@ -54,11 +54,13 @@ class ChatResult:
 
 @dataclass(frozen=True, slots=True)
 class ChatDelta:
-    """A piece of a streamed answer; the last one carries the usage of the whole call."""
+    """A piece of a streamed answer; the last one carries the usage of the whole call, and
+    every one the model of the route that is answering."""
 
     text: str = ""
     finish_reason: str | None = None
     usage: Usage | None = None
+    model: ModelRef | None = None
 
 
 @dataclass(frozen=True, slots=True)

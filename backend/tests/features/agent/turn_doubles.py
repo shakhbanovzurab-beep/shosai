@@ -9,15 +9,17 @@ import asyncio
 import uuid
 from collections.abc import AsyncIterator, Collection, Mapping
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import Final
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from shosai.core.ai.calls import CallContext, ModelRoute
+from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute, Provider
 from shosai.core.ai.requests import ChatRequest
-from shosai.core.ai.results import ChatDelta, Usage
+from shosai.core.ai.results import ChatDelta, ChatResult, Usage
 from shosai.core.kernel.homes import Home
 from shosai.core.tasks.declaration import TaskDeclaration
+from shosai.features.agent.application.after_turn import ThreadTask
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.billing.contracts import ModelTier, TokenDecision, TokenRoute
@@ -36,7 +38,11 @@ class ScriptedModel:
         default_factory=lambda: [
             ChatDelta(text="Hello"),
             ChatDelta(text=", world."),
-            ChatDelta(finish_reason="stop", usage=Usage(input_tokens=12, output_tokens=3)),
+            ChatDelta(
+                finish_reason="stop",
+                usage=Usage(input_tokens=12, output_tokens=3, reported_cost_usd=Decimal("0.0012")),
+                model=ModelRef(Provider.OPENROUTER, "probe/leo"),
+            ),
         ]
     )
     gate: asyncio.Event = field(default_factory=asyncio.Event)
@@ -147,3 +153,31 @@ class Meetings:
         """No transcript is read before Leo's tools."""
         del home, viewer, meeting_id, cursor, limit
         return TranscriptPage((), None)
+
+
+@dataclass
+class SentTasks:
+    """The default queue: what the code under test sent to it, by task name."""
+
+    sent: list[tuple[str, ThreadTask]] = field(default_factory=list)
+
+    async def send(self, task: TaskDeclaration[ThreadTask], payload: ThreadTask) -> str:
+        """Keep the task."""
+        self.sent.append((task.name, payload))
+        return str(uuid.uuid4())
+
+
+@dataclass
+class Utility:
+    """The utility model: answers each call with the next of its answers."""
+
+    answers: list[str] = field(default_factory=list)
+    requests: list[ChatRequest] = field(default_factory=list)
+
+    async def chat(
+        self, context: CallContext, route: ModelRoute, request: ChatRequest
+    ) -> ChatResult:
+        """The next answer."""
+        del context
+        self.requests.append(request)
+        return ChatResult(self.answers.pop(0), (), "stop", route.primary, Usage())

@@ -8,11 +8,13 @@ import uuid
 from datetime import datetime, timedelta
 
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.agent.application.after_turn import AfterTurn
 from shosai.features.agent.application.departures import Departures, scope_of_departure
 from shosai.features.agent.channels.subscriptions import subscriptions
 from shosai.features.workspaces.contracts.events import MemberRemoved
 from shosai.features.workspaces.domain.memberships import RemovalReason
 from tests.features.agent.thread_bench import HOME, ThreadBench
+from tests.features.agent.turn_doubles import SentTasks
 from tests.harness.connections import fetch_value
 
 WEEK = timedelta(days=7)
@@ -167,11 +169,13 @@ async def test_the_consumers_keep_their_names_and_the_departed_person_s_scope(
     thread_bench: ThreadBench,
 ) -> None:
     org, member, actor = uuid.uuid4(), uuid.uuid4(), uuid.uuid4()
-    found = subscriptions(Departures(thread_bench.homes.transactions, thread_bench.ports))
+    departures = Departures(thread_bench.homes.transactions, thread_bench.ports)
+    found = subscriptions(departures, AfterTurn(SentTasks()))
     scope = found[0].scope
 
     assert [entry.consumer for entry in found] == [
         "agent.follow_departure",
+        "agent.after_turn",
         "agent.erase_with_workspace",
     ]
     assert scope is not None

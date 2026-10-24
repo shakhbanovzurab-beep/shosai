@@ -21,6 +21,8 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** A release just before the burn → roll back (`release.sh rollback`, [staging runbook](staging.md)). A dependency in the trace (a home's database, Valkey, a provider) → see its own alert. Latency in the Russian home only → the link to Russia, see [russian-home-link-slow](#russian-home-link-slow).
 
+**Leo's turn (`journey="leo_turn"`).** Failures: split `shosai_agent_turns_total` by `outcome`. `process_lost` — agent workers died or were killed mid-turn: check `RoleMissing` for `workers-agent`, its restarts and memory; `turn_deadline` — turns ran past 180 s, usually a slow model (`shosai_ai_call_duration_seconds` by model); `failed` — find "Ход Leo упал" in the agent worker's logs, with its stack. Overhead (the platform's own time, EU home): the worker's pickup (`shosai_agent_queue_pickup_seconds` — agent workers full or Valkey slow), then the trace of a slow turn: `agent.run` → `agent.context` and the final transaction around the model's `ai.call`.
+
 ## Pages: invariant monitors (§16.4)
 
 <a id="unknown-task-dropped"></a>

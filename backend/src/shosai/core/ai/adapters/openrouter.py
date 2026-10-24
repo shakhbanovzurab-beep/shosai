@@ -108,7 +108,7 @@ class OpenRouter:
                 async for line in response.aiter_lines():
                     chunk = stream_chunk(line)
                     if chunk is not None:
-                        yield self._delta(chunk)
+                        yield self._delta(chunk, model)
         except httpx.ConnectError, httpx.ConnectTimeout, httpx.PoolTimeout:
             raise AiCallError(AiFailure.PROVIDER_ERROR, retryable=True) from None
         except httpx.TimeoutException:
@@ -208,7 +208,7 @@ class OpenRouter:
         return await call_json(self._client, Provider.OPENROUTER, request)
 
     @staticmethod
-    def _delta(chunk: Json) -> ChatDelta:
+    def _delta(chunk: Json, model: ModelRef) -> ChatDelta:
         choices = chunk.get("choices") or []
         choice = choices[0] if choices and isinstance(choices[0], dict) else {}
         delta = choice.get("delta") or {}
@@ -217,4 +217,5 @@ class OpenRouter:
             text=str(delta.get("content") or ""),
             finish_reason=choice.get("finish_reason"),
             usage=usage_of(usage) if isinstance(usage, dict) else None,
+            model=model,
         )

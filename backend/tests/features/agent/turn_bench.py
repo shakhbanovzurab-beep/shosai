@@ -16,6 +16,9 @@ from typing import Any, Final
 
 import httpx
 import pytest_asyncio
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
@@ -36,6 +39,7 @@ from shosai.features.agent.application.run_context import ContextBuilder
 from shosai.features.agent.application.run_engine import EngineParts, RunEngine
 from shosai.features.agent.application.run_registry import RunRegistry
 from shosai.features.agent.application.run_streams import RunStreams
+from shosai.features.agent.application.run_telemetry import RunTelemetry
 from shosai.features.agent.application.threads import Threads
 from shosai.features.agent.application.turn_commit import TurnParts
 from shosai.features.agent.application.turn_start import TurnStarter
@@ -44,6 +48,7 @@ from shosai.features.agent.channels.http.turns import build_turns_router
 from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.run_log import RunLog
+from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 from shosai.features.agent.infrastructure.turn_graph import turn_graph
 from shosai.features.agent.module import AGENT
@@ -96,6 +101,8 @@ class TurnBench:
     parts: EngineParts
     run_slot: RunSlot
     meetings: Meetings
+    # Реестр метрик стенда и снятые спаны: тесты телеметрии читают их.
+    observed: tuple[CollectorRegistry, InMemorySpanExporter]
 
     @property
     def connection(self) -> Connection:
@@ -173,9 +180,13 @@ async def turn_bench(
     run_log, leases, fleet = RunLog(valkey), ThreadLeases(valkey), Fleet(valkey)
     tail, runs = LogTail(valkey, run_log), RunRegistry(leases, fleet)
     outbox = EventOutbox(EventTypes([*AGENT.events]))
+    metrics, spans = RunMetrics(registry), InMemorySpanExporter()
+    tracing = TracerProvider(shutdown_on_exit=False)
+    tracing.add_span_processor(SimpleSpanProcessor(spans))
+    telemetry = RunTelemetry(metrics, tracing.get_tracer("shosai.agent"))
     parts = EngineParts(
         homes.transactions, model, ROUTE, run_log, leases, fleet, runs, outbox, turn_graph(),
-        ContextBuilder(ports), QUICK,
+        ContextBuilder(ports), telemetry, QUICK,
     )  # fmt: skip
     queue.engine = RunEngine(parts)
     threads = Threads(homes.transactions, (ports, effects))
@@ -189,13 +200,17 @@ async def turn_bench(
     routers = (
         build_threads_router((threads, History(homes.transactions, threads)), ports),
         build_turns_router(
-            (starter, RunStreams(homes.transactions, (run_log, tail), leases, SILENCE)), ports
+            (starter, RunStreams(homes.transactions, (run_log, tail), leases, metrics, SILENCE)),
+            ports,
         ),
     )
     await fleet.alive("bench-worker")
     try:
         async with client_of(build_probe_app(extra=routers).app) as http:
-            yield TurnBench(http, homes, valkey, model, queue, terms, parts, run_slot, meetings)
+            yield TurnBench(
+                http, homes, valkey, model, queue, terms, parts, run_slot, meetings,
+                (registry, spans),
+            )  # fmt: skip
             await queue.settle()
     finally:
         await tail.close()

@@ -30,6 +30,8 @@ class ModelAnswer:
     finish_reason: str | None
     usage: Usage | None
     first_token_ms: int | None
+    # Модель маршрута, которая ответила: основная или запасная.
+    model: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

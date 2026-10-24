@@ -1,0 +1,105 @@
+{
+  "groups": [
+    {
+      "name": "agent-slo",
+      "rules": [
+        {
+          "alert": "LeoTurnFailuresBudgetBurnFast",
+          "expr": "slo:leo_turn_failures:bad_ratio:rate1h > 0.144 and slo:leo_turn_failures:bad_ratio:rate5m > 0.144",
+          "for": "2m",
+          "labels": {
+            "severity": "page",
+            "slo": "leo_turn_failures",
+            "journey": "leo_turn"
+          },
+          "annotations": {
+            "summary": "Ходы Leo заканчиваются сбоем платформы",
+            "description": "Мы обещаем, что ход Leo заканчивается без сбоя платформы в 99 % случаев. Сбоев сейчас очень много: если так продолжится, обещание на этот месяц будет нарушено примерно через 2 дня.",
+            "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+            "dashboard": "/d/journey-leo-turn"
+          }
+        },
+        {
+          "alert": "LeoTurnFailuresBudgetBurnSlow",
+          "expr": "slo:leo_turn_failures:bad_ratio:rate6h > 0.06 and slo:leo_turn_failures:bad_ratio:rate30m > 0.06",
+          "for": "15m",
+          "labels": {
+            "severity": "page",
+            "slo": "leo_turn_failures",
+            "journey": "leo_turn"
+          },
+          "annotations": {
+            "summary": "Ходы Leo заканчиваются сбоем платформы",
+            "description": "Мы обещаем, что ход Leo заканчивается без сбоя платформы в 99 % случаев. Сбоев больше нормы уже несколько часов: если так продолжится, обещание на этот месяц будет нарушено примерно через 5 дней.",
+            "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+            "dashboard": "/d/journey-leo-turn"
+          }
+        },
+        {
+          "alert": "LeoTurnFailuresBudgetBurnTicket",
+          "expr": "slo:leo_turn_failures:bad_ratio:rate3d > 0.01 and slo:leo_turn_failures:bad_ratio:rate6h > 0.01",
+          "for": "1h",
+          "labels": {
+            "severity": "ticket",
+            "slo": "leo_turn_failures",
+            "journey": "leo_turn"
+          },
+          "annotations": {
+            "summary": "Ходы Leo заканчиваются сбоем платформы",
+            "description": "Мы обещаем, что ход Leo заканчивается без сбоя платформы в 99 % случаев. Сбоев понемногу больше нормы уже три дня: если ничего не делать, обещание будет нарушено до конца месяца.",
+            "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+            "dashboard": "/d/journey-leo-turn"
+          }
+        },
+        {
+          "alert": "LeoTurnOverheadBudgetBurnFast",
+          "expr": "slo:leo_turn_overhead:bad_ratio:rate1h > 0.72 and slo:leo_turn_overhead:bad_ratio:rate5m > 0.72",
+          "for": "2m",
+          "labels": {
+            "severity": "page",
+            "slo": "leo_turn_overhead",
+            "journey": "leo_turn"
+          },
+          "annotations": {
+            "summary": "Платформа задерживает ходы Leo",
+            "description": "Мы обещаем, что платформа тратит на ход Leo человека из ЕС не больше 0,5 с в 95 % ходов. Сбоев сейчас очень много: если так продолжится, обещание на этот месяц будет нарушено примерно через 2 дня.",
+            "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+            "dashboard": "/d/journey-leo-turn"
+          }
+        },
+        {
+          "alert": "LeoTurnOverheadBudgetBurnSlow",
+          "expr": "slo:leo_turn_overhead:bad_ratio:rate6h > 0.3 and slo:leo_turn_overhead:bad_ratio:rate30m > 0.3",
+          "for": "15m",
+          "labels": {
+            "severity": "page",
+            "slo": "leo_turn_overhead",
+            "journey": "leo_turn"
+          },
+          "annotations": {
+            "summary": "Платформа задерживает ходы Leo",
+            "description": "Мы обещаем, что платформа тратит на ход Leo человека из ЕС не больше 0,5 с в 95 % ходов. Сбоев больше нормы уже несколько часов: если так продолжится, обещание на этот месяц будет нарушено примерно через 5 дней.",
+            "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+            "dashboard": "/d/journey-leo-turn"
+          }
+        },
+        {
+          "alert": "LeoTurnOverheadBudgetBurnTicket",
+          "expr": "slo:leo_turn_overhead:bad_ratio:rate3d > 0.05 and slo:leo_turn_overhead:bad_ratio:rate6h > 0.05",
+          "for": "1h",
+          "labels": {
+            "severity": "ticket",
+            "slo": "leo_turn_overhead",
+            "journey": "leo_turn"
+          },
+          "annotations": {
+            "summary": "Платформа задерживает ходы Leo",
+            "description": "Мы обещаем, что платформа тратит на ход Leo человека из ЕС не больше 0,5 с в 95 % ходов. Сбоев понемногу больше нормы уже три дня: если ничего не делать, обещание будет нарушено до конца месяца.",
+            "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+            "dashboard": "/d/journey-leo-turn"
+          }
+        }
+      ]
+    }
+  ]
+}

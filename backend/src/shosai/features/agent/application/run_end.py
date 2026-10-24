@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
+from shosai.features.agent.application.run_telemetry import TIER, TurnTimes, micro_usd
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.contracts.events import TurnCompleted
 from shosai.features.agent.domain.budgets import estimate_tokens
@@ -35,11 +36,12 @@ async def record_end(
     writers: tuple[HomeTransactions, EventOutbox],
     payload: TurnPayload,
     result: tuple[Ending, str, ModelAnswer | None],
-    now: datetime,
+    clocked: tuple[TurnTimes, datetime],
 ) -> Ending | None:
     """The final transaction; the ending it recorded, or None when the sweep won."""
     transactions, outbox = writers
     ending, text, answer = result
+    times, now = clocked
     async with transactions.begin(payload.scope()) as session:
         thread = await session.scalar(
             select(AgentThreadRecord)
@@ -55,7 +57,7 @@ async def record_end(
                 RUN.started_at == payload.started_at,
                 RUN.status == RunStatus.RUNNING.value,
             )
-            .values(ended_at=now, **telemetry(payload, ending, answer, now))
+            .values(ended_at=now, **telemetry(payload, (ending, answer), times, now))
             .returning(RUN.id)
         )
         if won is None:
@@ -112,19 +114,27 @@ def millis(delta: timedelta) -> int:
 
 
 def telemetry(
-    payload: TurnPayload, ending: Ending, answer: ModelAnswer | None, now: datetime
+    payload: TurnPayload,
+    result: tuple[Ending, ModelAnswer | None],
+    times: TurnTimes,
+    now: datetime,
 ) -> dict[str, Any]:
-    """The run row's end: status and code, the model's numbers, the time it took."""
+    """The run row's end: status and code, the model and its numbers, the times."""
+    ending, answer = result
     usage = answer.usage if answer is not None else None
+    first = times.first_word(payload.started_at, answer)
     return {
         "status": ending.status.value,
         "outcome_code": ending.code,
-        "tier": "standard",
+        "model": answer.model if answer is not None else None,
+        "tier": TIER,
         "token_route": payload.token_route,
         "rounds": 1 if answer is not None else 0,
         "input_tokens": usage.input_tokens if usage is not None else 0,
         "cached_tokens": usage.cached_tokens if usage is not None else 0,
         "output_tokens": usage.output_tokens if usage is not None else 0,
-        "ttft_ms": answer.first_token_ms if answer is not None else None,
+        "cost_micro_usd": micro_usd(answer),
+        "ttft_ms": None if first is None else millis(first),
+        "overhead_ms": millis(times.overhead(payload.started_at, now)),
         "duration_ms": millis(now - payload.started_at),
     }

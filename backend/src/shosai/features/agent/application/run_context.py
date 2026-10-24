@@ -24,7 +24,12 @@ from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.surface_digest import Subject, subject_digest
 from shosai.features.agent.application.turn_task import TurnPayload
-from shosai.features.agent.domain.budgets import SEGMENT_CAPS, Segment, recent_window
+from shosai.features.agent.domain.budgets import (
+    SEGMENT_CAPS,
+    Segment,
+    estimate_tokens,
+    recent_window,
+)
 from shosai.features.agent.domain.context import clean_path, clip, now_line, page_line, profile_core
 from shosai.features.agent.domain.runs import RunStatus
 from shosai.features.agent.domain.threads import AnswerStatus, MessageRole
@@ -64,6 +69,11 @@ def text_message(role: Role, text: str) -> ChatMessage:
     return ChatMessage(role=role, parts=(TextPart(text),))
 
 
+def text_of(message: ChatMessage) -> str:
+    """The text of a message of plain text."""
+    return "".join(part.text for part in message.parts if isinstance(part, TextPart))
+
+
 class ContextBuilder:
     """Builds the model's input of a run, as the person."""
 
@@ -73,8 +83,14 @@ class ContextBuilder:
         self._ports = ports
         self._clock = clock
 
-    async def request(self, session: AsyncSession, payload: TurnPayload) -> ChatRequest:
-        """The request for the model, read in the person's transaction."""
+    async def request(
+        self,
+        session: AsyncSession,
+        payload: TurnPayload,
+        sizes: dict[Segment, int] | None = None,
+    ) -> ChatRequest:
+        """The request for the model, read in the person's transaction; `sizes` receives the
+        segments' estimated tokens."""
         user_id = person_of(payload)
         await self._still_running(session, payload)
         thread = await session.scalar(
@@ -95,16 +111,25 @@ class ContextBuilder:
             raise ThreadGoneError
         profile = await self._ports.get(ACCOUNT_PROFILE_READER).profile(session, user_id)
         zone = profile.timezone if profile is not None and profile.timezone else UTC_ZONE
-        head = f"{POLICY}\n\n" + profile_core(
+        core = profile_core(
             profile.display_name if profile is not None else "",
             zone,
             turn_instructions(payload.language, payload.length),
         )
-        if thread.summary:
-            # Сводка идёт после стабильной головы: кэш провайдера держит голову целиком.
-            head += "\n\n" + SUMMARY.format(summary=clip(thread.summary, cap(5)))
+        # Сводка идёт после стабильной головы: кэш провайдера держит голову целиком.
+        summary = SUMMARY.format(summary=clip(thread.summary, cap(5))) if thread.summary else ""
+        head = "\n\n".join(part for part in (POLICY, core, summary) if part)
         history = await self._recent(session, thread, question)
         volatile = await self._volatile(session, payload, zone)
+        if sizes is not None:
+            sizes |= {
+                Segment.POLICY: estimate_tokens(POLICY),
+                Segment.PROFILE: estimate_tokens(core),
+                Segment.SUMMARY: estimate_tokens(summary),
+                Segment.RECENT: sum(estimate_tokens(text_of(message)) for message in history),
+                Segment.VOLATILE: estimate_tokens(volatile),
+                Segment.QUESTION: estimate_tokens(question.text),
+            }
         return ChatRequest(
             messages=(
                 text_message(Role.SYSTEM, head),

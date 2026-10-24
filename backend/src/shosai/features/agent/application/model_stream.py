@@ -32,6 +32,7 @@ class AnswerBuffer:
         self.finish_reason: str | None = None
         self.usage: Usage | None = None
         self.first_token_ms: int | None = None
+        self.model: str | None = None
         self._write = write
         self._pending: list[str] = []
         self._started = started
@@ -56,6 +57,8 @@ class AnswerBuffer:
             self._pending.append(delta.text)
         self.finish_reason = delta.finish_reason or self.finish_reason
         self.usage = delta.usage or self.usage
+        if delta.model is not None:
+            self.model = delta.model.model
 
     async def flush(self, now: float) -> None:
         """Write the waiting text as one event."""
@@ -66,7 +69,9 @@ class AnswerBuffer:
 
     def answer(self) -> ModelAnswer:
         """The answer as the model left it."""
-        return ModelAnswer(self.text, self.finish_reason, self.usage, self.first_token_ms)
+        return ModelAnswer(
+            self.text, self.finish_reason, self.usage, self.first_token_ms, self.model
+        )
 
 
 @dataclass(frozen=True, slots=True)

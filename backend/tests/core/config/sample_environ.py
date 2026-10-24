@@ -93,6 +93,7 @@ def production_environ(**overrides: str) -> dict[str, str]:
         FILES_DOWNLOAD_BASE_URL="https://shosai.example/dl",
         NOTES_MODEL="probe/notes",
         AGENT_STANDARD_MODEL="probe/leo",
+        AGENT_UTILITY_MODEL="probe/leo-utility",
         NOTES_TRANSCRIBE_MODEL="probe/transcribe",
         NOTES_DIARIZE_MODEL="probe-diarize",
         **PRODUCTION_IDENTITY,

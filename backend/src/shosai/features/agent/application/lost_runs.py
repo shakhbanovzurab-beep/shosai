@@ -21,10 +21,11 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.kv.connection import REDIS_FAILURES
 from shosai.features.agent.domain.endings import failed
-from shosai.features.agent.domain.runs import LEASE_TTL, RunFailure, RunStatus
+from shosai.features.agent.domain.runs import LEASE_TTL, Channel, RunFailure, RunStatus
 from shosai.features.agent.domain.stream import StreamEvent
 from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.run_log import RunLog
+from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 
@@ -40,10 +41,12 @@ class LostRuns:
         self,
         transactions: HomeTransactions,
         valkey_parts: tuple[RunLog, ThreadLeases, Fleet],
+        metrics: RunMetrics,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
         self._log, self._leases, self._fleet = valkey_parts
+        self._metrics = metrics
         self._clock = clock
 
     async def sweep(self, home: Home) -> int:
@@ -65,6 +68,7 @@ class LostRuns:
                 continue
             if await self._end(TenancyScope(home, user_id), (run_id, started_at), now):
                 ended += 1
+                self._metrics.ended(Channel.WEB, RunFailure.PROCESS_LOST.value)
                 await self._close_log(run_id)
                 await self._fleet.release(user_id, run_id)
         if ended:

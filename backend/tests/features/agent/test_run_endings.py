@@ -97,7 +97,12 @@ async def test_a_lost_worker_s_run_is_swept_once(turn_bench: TurnBench) -> None:
     parts = turn_bench.parts
 
     async with turn_bench.sweeping() as transactions:
-        swept = LostRuns(transactions, (parts.run_log, parts.leases, parts.fleet), lambda: later)
+        swept = LostRuns(
+            transactions,
+            (parts.run_log, parts.leases, parts.fleet),
+            parts.telemetry.metrics,
+            lambda: later,
+        )
         first, again = await swept.sweep(Home.EU), await swept.sweep(Home.EU)
     events = stream_of(await asked)
 

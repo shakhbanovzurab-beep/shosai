@@ -26,6 +26,7 @@ from shosai.features.agent.domain.stream import StreamEvent
 from shosai.features.agent.domain.threads import MessageRole
 from shosai.features.agent.infrastructure.log_tail import LogTail, Silence
 from shosai.features.agent.infrastructure.run_log import RunLog
+from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 from shosai.features.agent.infrastructure.thread_records import AgentMessageRecord
@@ -58,11 +59,13 @@ class RunStreams:
         transactions: HomeTransactions,
         logs: tuple[RunLog, LogTail],
         leases: ThreadLeases,
+        metrics: RunMetrics,
         silence: timedelta = STREAM_STALL,
     ) -> None:
         self._transactions = transactions
         self._log, self._tail = logs
         self._leases = leases
+        self._metrics = metrics
         self._silence = silence
 
     async def owned(self, principal: Principal, run_id: UUID) -> RunRecord:
@@ -87,7 +90,9 @@ class RunStreams:
         except REDIS_FAILURES as error:
             raise unavailable() from error
         if not kept:
+            self._metrics.resumed("gone")
             raise AppError("run_events_gone", HTTPStatus.GONE)
+        self._metrics.resumed("served")
         return run
 
     def events(self, principal: Principal, run_id: UUID, after: int) -> AsyncIterator[StreamEvent]:

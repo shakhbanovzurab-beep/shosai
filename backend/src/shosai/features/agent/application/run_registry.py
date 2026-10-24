@@ -82,6 +82,11 @@ class RunRegistry:
         """Stop watching a run that ended."""
         self._runs.pop(run.run_id, None)
 
+    @property
+    def count(self) -> int:
+        """How many runs this worker drives now."""
+        return len(self._runs)
+
     async def close(self) -> None:
         """Stop the watcher; called when the process stops."""
         if self._watcher is not None:

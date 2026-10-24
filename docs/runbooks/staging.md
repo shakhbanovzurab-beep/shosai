@@ -98,7 +98,7 @@ Files download through the edge (ADR 0055 point 8, FL-D9): the API answers `http
 
 ## Leo's model
 
-Outside development the backend refuses to start without `AGENT_STANDARD_MODEL` (ADR 0068 AG-D4): the OpenRouter model Leo answers with until studio publishes its routes. `render-env.py` writes `google/gemini-3.8-flash` with the fallback `anthropic/claude-haiku-5.5`, or the owner's `AGENT_STANDARD_MODEL` and `AGENT_STANDARD_FALLBACK_MODEL` from `/root/shosai/.env` when set. A release that stops at the `settings` step naming it needs «Change a setting or a secret» first. A process with `LANGSMITH_TRACING` or `LANGCHAIN_TRACING_V2` on refuses to start: a conversation never goes to LangSmith.
+Outside development the backend refuses to start without `AGENT_STANDARD_MODEL` and `AGENT_UTILITY_MODEL` (ADR 0068 AG-D4): the OpenRouter models Leo answers with, and writes threads' titles and summaries with, until studio publishes its routes. `render-env.py` writes `google/gemini-3.8-flash` for both, with the fallback `anthropic/claude-haiku-5.5` for answers, or the owner's `AGENT_*_MODEL` and `AGENT_*_FALLBACK_MODEL` from `/root/shosai/.env` when set. A release that stops at the `settings` step naming it needs «Change a setting or a secret» first. A process with `LANGSMITH_TRACING` or `LANGCHAIN_TRACING_V2` on refuses to start: a conversation never goes to LangSmith.
 
 ## Meetings' notes model
 

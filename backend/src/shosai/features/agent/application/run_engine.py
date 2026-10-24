@@ -39,6 +39,7 @@ from shosai.features.agent.application.run_context import (
 )
 from shosai.features.agent.application.run_end import record_end
 from shosai.features.agent.application.run_registry import ActiveRun, RunRegistry
+from shosai.features.agent.application.run_telemetry import RunTelemetry, TurnTimes
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.endings import Ending, answered, cancelled, failed, stopped
 from shosai.features.agent.domain.runs import TURN_DEADLINE, RunFailure
@@ -81,6 +82,7 @@ class EngineParts:
     outbox: EventOutbox
     graph: TurnGraph
     context: ContextBuilder
+    telemetry: RunTelemetry
     pace: Pace = DEFAULT_PACE
 
 
@@ -90,18 +92,20 @@ class RunSteps:
     def __init__(
         self,
         parts: EngineParts,
-        run: tuple[TurnPayload, ModelRoute],
+        run: tuple[TurnPayload, ModelRoute, TurnTimes],
         buffer: AnswerBuffer,
     ) -> None:
         self._parts = parts
-        self._payload, self._route = run
+        self._payload, self._route, self._times = run
         self._buffer = buffer
 
     async def context(self) -> ChatRequest:
         """The policy, the recent conversation and the question."""
         scope = self._payload.scope()
-        async with self._parts.transactions.begin(scope, read_only=True) as session:
-            return await self._parts.context.request(session, self._payload)
+        with self._parts.telemetry.context():
+            async with self._parts.transactions.begin(scope, read_only=True) as session:
+                sizes = self._times.sizes
+                return await self._parts.context.request(session, self._payload, sizes)
 
     async def model(self, request: ChatRequest) -> ModelAnswer:
         """The model's answer through the provider port, streamed as it is written."""
@@ -115,8 +119,12 @@ class RunSteps:
             cross_border_consent=payload.cross_border_consent,
             deadline=TURN_DEADLINE,
         )
+        self._times.model_started = datetime.now(UTC)
         deltas = self._parts.ai.stream_chat(context, self._route, request)
-        return await stream_answer(deltas, self._buffer, self._parts.pace)
+        try:
+            return await stream_answer(deltas, self._buffer, self._parts.pace)
+        finally:
+            self._times.model_ended = datetime.now(UTC)
 
 
 class RunEngine:
@@ -141,26 +149,33 @@ class RunEngine:
         run = ActiveRun(payload.run_id, payload.thread_id, user_id)
         emitter = RunEmitter(self._parts.run_log, payload.run_id)
         buffer = AnswerBuffer(emitter.text, self._monotonic())
-        self._parts.registry.join(run)
-        try:
-            ending, answer = await self._drive(payload, run, buffer)
-        except RunOverError:
-            log.info("Ход Leo закончен до того, как его взял воркер")
-            return
-        # Ровно один конец: непредвиденная ошибка — это `failed` со стеком в журнале.
-        except Exception:
-            log.exception("Ход Leo упал")
-            ending, answer = failed(RunFailure.FAILED), None
-        finally:
-            self._parts.registry.leave(run)
-        if run.lost:
-            log.warning("Ход Leo потерял аренду: конец записал обход")
-            return
-        await self._finish(payload, (ending, answer), buffer, emitter)
+        times = TurnTimes(picked_up=self._clock())
+        telemetry, registry = self._parts.telemetry, self._parts.registry
+        telemetry.picked(payload, times)
+        with telemetry.run(payload):
+            registry.join(run)
+            telemetry.metrics.active(registry.count)
+            try:
+                ending, answer = await self._drive(payload, (run, times), buffer)
+            except RunOverError:
+                log.info("Ход Leo закончен до того, как его взял воркер")
+                return
+            # Ровно один конец: непредвиденная ошибка — это `failed` со стеком в журнале.
+            except Exception:
+                log.exception("Ход Leo упал")
+                ending, answer = failed(RunFailure.FAILED), None
+            finally:
+                registry.leave(run)
+                telemetry.metrics.active(registry.count)
+            if run.lost:
+                log.warning("Ход Leo потерял аренду: конец записал обход")
+                return
+            await self._finish(payload, (ending, answer), (buffer, times), emitter)
 
     async def _drive(
-        self, payload: TurnPayload, run: ActiveRun, buffer: AnswerBuffer
+        self, payload: TurnPayload, active: tuple[ActiveRun, TurnTimes], buffer: AnswerBuffer
     ) -> tuple[Ending, ModelAnswer | None]:
+        run, times = active
         route = self._parts.route
         if route is None:
             log.error("Ход Leo без модели: не задан AGENT_STANDARD_MODEL")
@@ -168,7 +183,7 @@ class RunEngine:
         early = await self._early_end(payload)
         if early is not None:
             return early, None
-        steps = RunSteps(self._parts, (payload, route), buffer)
+        steps = RunSteps(self._parts, (payload, route, times), buffer)
         work = asyncio.create_task(run_turn(self._parts.graph, steps), name="agent-turn")
         run.work = work
         return await self._outcome(payload, work)
@@ -207,18 +222,21 @@ class RunEngine:
         self,
         payload: TurnPayload,
         result: tuple[Ending, ModelAnswer | None],
-        buffer: AnswerBuffer,
+        kept: tuple[AnswerBuffer, TurnTimes],
         emitter: RunEmitter,
     ) -> None:
         ending, answer = result
+        buffer, times = kept
+        now = self._clock()
         try:
             recorded = await record_end(
                 (self._parts.transactions, self._parts.outbox),
                 payload,
                 (ending, buffer.text, answer),
-                self._clock(),
+                (times, now),
             )
             if recorded is not None:
+                self._parts.telemetry.ended(payload, (recorded, answer), times, now)
                 await emitter.emit(*recorded.terminal(payload.reply_id))
         except REDIS_FAILURES as error:
             # Конец записан в базе; поток клиента возьмёт его оттуда, если журнал недоступен.
