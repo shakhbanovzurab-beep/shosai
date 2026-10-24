@@ -2,9 +2,11 @@
 
 The cabinet names the page and, when there is one, the meeting, task, board or file it shows.
 Its owner's reader tells what the person may read of it — a meeting nobody shares with them,
-a deleted task, another person's file are simply not mentioned. Words the person did not
-write — a meeting's title and summary, a colleague's task, a file's name — enter wrapped and
-labelled; the person's own task and board do not need it. A digest stays within 1 500 tokens.
+a deleted task, another person's file are simply not mentioned. The subject's id is named, so
+Leo's tools can read "this board" or "this meeting" by it; the id is the server's, never text
+someone wrote. Words the person did not write — a meeting's title and summary, a colleague's
+task, a file's name — enter wrapped and labelled, and their label taints the run as a tool's
+would; the person's own task and board do not need it. A digest stays within 1 500 tokens.
 """
 
 from collections.abc import Awaitable, Callable
@@ -26,11 +28,11 @@ from shosai.features.workspaces.contracts import Viewer
 
 DIGEST_TOKENS: Final = 1_500
 # Строки дайджеста, которые читает модель: английские, зарегистрированы в тесте model-facing.
-MEETING: Final = "The page shows a meeting from {moment} UTC, {status}:"
-TASK: Final = "The page shows a task, {status}{due}:"
+MEETING: Final = "The page shows the meeting {id} from {moment} UTC, {status}:"
+TASK: Final = "The page shows the task {id}, {status}{due}:"
 DUE: Final = ", due {day}"
-BOARD: Final = "The page shows the person's board:"
-FILE: Final = "The page shows a file ({kind}, {size} bytes):"
+BOARD: Final = "The page shows the person's board {id}:"
+FILE: Final = "The page shows the file {id} ({kind}, {size} bytes):"
 SUBJECT_TEXTS: Final = (MEETING, TASK, DUE, BOARD, FILE)
 
 
@@ -53,10 +55,10 @@ class Subject:
 
 @dataclass(frozen=True, slots=True)
 class Digest:
-    """What Leo is told of the subject, and whether its words came from someone else."""
+    """What Leo is told of the subject; the label of its words when someone else wrote them."""
 
     text: str
-    external: bool
+    label: Provenance | None = None
 
 
 type Reader = tuple[AsyncSession, PortDirectory, UUID, str]
@@ -81,7 +83,7 @@ async def meeting_digest(reader: Reader, key: UUID) -> Digest | None:
     if meeting is None:
         return None
     head = MEETING.format(
-        moment=meeting.started_at.strftime("%Y-%m-%d %H:%M"), status=meeting.status.value
+        id=key, moment=meeting.started_at.strftime("%Y-%m-%d %H:%M"), status=meeting.status.value
     )
     body = "\n".join(part for part in (meeting.title, meeting.summary or "") if part)
     return external(head, body, Provenance.MEETING_SPEECH, boundary)
@@ -94,9 +96,9 @@ async def task_digest(reader: Reader, key: UUID) -> Digest | None:
     if task is None:
         return None
     due = DUE.format(day=task.due_on.isoformat()) if task.due_on else ""
-    head = TASK.format(status=task.status.value, due=due)
+    head = TASK.format(id=key, status=task.status.value, due=due)
     if task.user_id == user_id:
-        return Digest(f"{head}\n{clip(task.title, DIGEST_TOKENS)}", external=False)
+        return Digest(f"{head}\n{clip(task.title, DIGEST_TOKENS)}")
     return external(head, task.title, Provenance.TASK_FOREIGN, boundary)
 
 
@@ -107,7 +109,7 @@ async def board_digest(reader: Reader, key: UUID) -> Digest | None:
     board = next((found for found in boards if found.board_id == key), None)
     if board is None:
         return None
-    return Digest(f"{BOARD}\n{clip(board.name, DIGEST_TOKENS)}", external=False)
+    return Digest(f"{BOARD.format(id=key)}\n{clip(board.name, DIGEST_TOKENS)}")
 
 
 async def file_digest(reader: Reader, key: UUID) -> Digest | None:
@@ -116,7 +118,7 @@ async def file_digest(reader: Reader, key: UUID) -> Digest | None:
     file = (await ports.get(FILE_READER).facts(session, Viewer(user_id), [key])).get(key)
     if file is None:
         return None
-    head = FILE.format(kind=file.kind.value, size=file.size_bytes)
+    head = FILE.format(id=key, kind=file.kind.value, size=file.size_bytes)
     return external(head, file.name, Provenance.FILE_FOREIGN, boundary)
 
 
@@ -131,4 +133,4 @@ DIGESTS: Final[dict[SubjectKind, Callable[[Reader, UUID], Awaitable[Digest | Non
 def external(head: str, body: str, provenance: Provenance, boundary: str) -> Digest:
     """A digest whose words someone else wrote: wrapped, labelled, within its budget."""
     wrapped = wrap(clip(body, DIGEST_TOKENS), Label.of(provenance), boundary)
-    return Digest(f"{head}\n{wrapped}", external=True)
+    return Digest(f"{head}\n{wrapped}", provenance)

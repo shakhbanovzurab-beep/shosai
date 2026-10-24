@@ -22,6 +22,7 @@ from shosai.core.agent_tools.spec import ToolSpec
 from shosai.core.ai.errors import MODEL_TEXTS
 from shosai.features.agent.application.surface_digest import SUBJECT_TEXTS
 from shosai.features.agent.domain.context import CONTEXT_TEXTS
+from shosai.features.agent.infrastructure.eval_prompts import JUDGE_TEXTS
 from shosai.features.agent.infrastructure.prompts import PROMPT_TEXTS as AGENT_PROMPTS
 from shosai.features.notes.infrastructure.prompts import PROMPT_TEXTS as NOTES_PROMPTS
 
@@ -73,5 +74,6 @@ MODEL_FACING_SOURCES: tuple[ModelFacingSource, ...] = (
     ModelFacingSource(owner="agent", name="Leo's policy", collect=lambda: AGENT_PROMPTS),
     ModelFacingSource(owner="agent", name="Leo's context", collect=lambda: CONTEXT_TEXTS),
     ModelFacingSource(owner="agent", name="Leo's page subjects", collect=lambda: SUBJECT_TEXTS),
+    ModelFacingSource(owner="agent", name="the evaluation's judge", collect=lambda: JUDGE_TEXTS),
     *slice_tool_sources(),
 )

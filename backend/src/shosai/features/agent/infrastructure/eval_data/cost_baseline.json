@@ -1,0 +1,16 @@
+{
+  "reason": "First recording: the scripted scenarios of agent step 8, read-only tools, policy v1.",
+  "recorded_on": "2026-10-24",
+  "scenarios": {
+    "greeting": {"model_calls": 1, "input_tokens": 3959, "output_tokens": 19},
+    "meeting_decision": {"model_calls": 2, "input_tokens": 8107, "output_tokens": 36},
+    "overdue_tasks": {"model_calls": 2, "input_tokens": 8319, "output_tokens": 43},
+    "board_page": {"model_calls": 2, "input_tokens": 8375, "output_tokens": 54},
+    "meeting_page": {"model_calls": 2, "input_tokens": 8449, "output_tokens": 74},
+    "file_lookup": {"model_calls": 3, "input_tokens": 12499, "output_tokens": 61},
+    "plan_minutes": {"model_calls": 2, "input_tokens": 8029, "output_tokens": 27},
+    "nothing_found": {"model_calls": 2, "input_tokens": 8001, "output_tokens": 44},
+    "cannot_write_yet": {"model_calls": 1, "input_tokens": 3965, "output_tokens": 25},
+    "multi_source": {"model_calls": 2, "input_tokens": 8504, "output_tokens": 79}
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "reason": "First recording: agent step 8, google/gemini-3.8-flash judged by itself, read-only tools, policy v1.",
+  "recorded_on": "2026-10-24",
+  "model": "google/gemini-3.8-flash",
+  "scores": {
+    "tool_choice": 1.0,
+    "answers": 1.0,
+    "judge": 1.0
+  },
+  "language_floor": 0.9
+}

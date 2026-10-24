@@ -1,11 +1,12 @@
 """The nodes' work for one run: the context and its tools, each model round, each tool round.
 
-The context and the run's toolsets are read in one transaction as the person. Each round asks
-the model through the provider port under its own effect key, with the tools its number
-allows (Leo §8.3): from the fifth the model is asked to conclude, and the tenth offers no tools
-and tells it so, so the loop always ends; a call the model makes anyway in a round without
-tools is dropped. The model's time and the tools' time are measured apart, since neither is
-the platform's own.
+The context and the run's toolsets are read in one transaction as the person; wrapped text in
+the context — a page's subject someone else wrote — taints the run before the first round.
+Each round asks the model through the provider port under its own effect key, with the tools
+its number allows (Leo §8.3): from the fifth the model is asked to conclude, and the tenth
+offers no tools and tells it so, so the loop always ends; a call the model makes anyway in a
+round without tools is dropped. The model's time and the tools' time are measured apart,
+since neither is the platform's own.
 """
 
 import time
@@ -13,6 +14,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from datetime import timedelta
 
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
 from shosai.core.ai.requests import ChatRequest, Role
 from shosai.features.agent.application.model_stream import AnswerBuffer, stream_answer
@@ -24,6 +26,7 @@ from shosai.features.agent.application.tool_round import ToolRound
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.budgets import Segment, round_policy
 from shosai.features.agent.domain.runs import TURN_DEADLINE
+from shosai.features.agent.domain.wrapper import Label, taint_after
 from shosai.features.agent.infrastructure.prompts import CONCLUDE, LAST_ROUND
 from shosai.features.agent.infrastructure.turn_graph import ModelAnswer
 
@@ -57,11 +60,15 @@ class RunSteps:
     async def context(self) -> ChatRequest:
         """The policy, the recent conversation and the question; the run's toolsets."""
         payload, sizes = self._run.payload, self._run.times.sizes
+        labels: list[Provenance] = []
         with self._parts.telemetry.context():
             async with self._parts.transactions.begin(payload.scope(), read_only=True) as session:
-                request = await self._parts.context.request(session, payload, sizes)
+                request = await self._parts.context.request(session, payload, sizes, labels)
                 offer = await self._parts.routing.offer(session, payload)
-        self._run.work.offer = offer
+        work = self._run.work
+        work.offer = offer
+        for provenance in labels:
+            work.taint = taint_after(work.taint, Label.of(provenance))
         sizes[Segment.TOOLS] = offer.tokens()
         return request
 

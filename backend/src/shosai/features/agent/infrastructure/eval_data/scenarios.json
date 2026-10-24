@@ -1,0 +1,858 @@
+{
+  "scenarios": [
+    {
+      "id": "greeting",
+      "summary": "Small talk needs no tool.",
+      "questions": {
+        "en": "Hi Leo! How are you today?",
+        "fr": "Salut Leo ! Comment vas-tu aujourd’hui ?",
+        "de": "Hallo Leo! Wie geht es dir heute?",
+        "ru": "Привет, Leo! Как дела сегодня?",
+        "nl": "Hoi Leo! Hoe gaat het vandaag?",
+        "it": "Ciao Leo! Come stai oggi?",
+        "es": "¡Hola, Leo! ¿Cómo estás hoy?",
+        "pt-BR": "Oi, Leo! Como você está hoje?",
+        "ar": "مرحبًا يا Leo! كيف حالك اليوم؟",
+        "tr": "Merhaba Leo! Bugün nasılsın?",
+        "ko": "안녕 Leo! 오늘 기분 어때?",
+        "hi": "नमस्ते Leo! आज आप कैसे हैं?",
+        "vi": "Chào Leo! Hôm nay bạn thế nào?",
+        "zh-Hant": "嗨，Leo！你今天好嗎？",
+        "ja": "こんにちは、Leo！今日の調子はどう？",
+        "id": "Halo Leo! Apa kabar hari ini?"
+      },
+      "script": [
+        {
+          "say": "Hi! I'm well, thank you. What can I help you with today?"
+        }
+      ],
+      "expect": {
+        "quiet": true
+      }
+    },
+    {
+      "id": "meeting_decision",
+      "summary": "A decision from a meeting: search the meetings, answer with the number and cite it.",
+      "questions": {
+        "en": "What did we decide about the travel budget?",
+        "fr": "Qu’avons-nous décidé pour le budget de déplacements ?",
+        "de": "Was haben wir zum Reisebudget beschlossen?",
+        "ru": "Что мы решили насчёт бюджета на командировки?",
+        "nl": "Wat hebben we besloten over het reisbudget?",
+        "it": "Che cosa abbiamo deciso sul budget per i viaggi?",
+        "es": "¿Qué decidimos sobre el presupuesto de viajes?",
+        "pt-BR": "O que decidimos sobre o orçamento de viagens?",
+        "ar": "ماذا قررنا بشأن ميزانية السفر؟",
+        "tr": "Seyahat bütçesi konusunda ne karar verdik?",
+        "ko": "출장 예산에 대해 무엇을 결정했지?",
+        "hi": "यात्रा बजट के बारे में हमने क्या तय किया था?",
+        "vi": "Chúng ta đã quyết định gì về ngân sách công tác?",
+        "zh-Hant": "我們對差旅預算做了什麼決定？",
+        "ja": "出張予算について何を決めましたか？",
+        "id": "Apa yang kita putuskan soal anggaran perjalanan dinas?"
+      },
+      "fixtures": {
+        "notes.search": {
+          "output": {
+            "meetings": [
+              {
+                "meeting_id": "0192f1a0-0000-7000-8000-00000000b001",
+                "title": "Budget review Q4",
+                "started_at": "2026-10-14T10:00:00Z",
+                "seconds": 3000,
+                "owned": true,
+                "summary": "Travel budget cut by 20% from November; the marketing budget stays as it is."
+              }
+            ],
+            "more": false
+          },
+          "sources": [
+            {
+              "kind": "meeting",
+              "id": "0192f1a0-0000-7000-8000-00000000b001",
+              "title": "Budget review Q4"
+            }
+          ]
+        },
+        "notes.list_findings": {
+          "output": {
+            "findings": [
+              {
+                "finding_id": "0192f1a0-0000-7000-8000-00000000f001",
+                "kind": "decision",
+                "text": "Cut the travel budget by 20% starting in November.",
+                "owner_name": null,
+                "due_on": null,
+                "at_ms": 754000,
+                "quote": "So we cut travel by twenty percent from November."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "kind": "meeting",
+              "id": "0192f1a0-0000-7000-8000-00000000b001",
+              "title": "Budget review Q4"
+            }
+          ]
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "notes.search",
+              "arguments": {
+                "query": "travel budget"
+              }
+            }
+          ]
+        },
+        {
+          "say": "You decided to cut the travel budget by 20% starting in November [1]."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "notes.search"
+        ],
+        "mentions": [
+          "20"
+        ],
+        "cites": true
+      }
+    },
+    {
+      "id": "overdue_tasks",
+      "summary": "Overdue tasks: search tasks by the due window, list them with citations.",
+      "questions": {
+        "en": "Which of my tasks are overdue?",
+        "fr": "Lesquelles de mes tâches sont en retard ?",
+        "de": "Welche meiner Aufgaben sind überfällig?",
+        "ru": "Какие из моих задач просрочены?",
+        "nl": "Welke van mijn taken zijn te laat?",
+        "it": "Quali delle mie attività sono in ritardo?",
+        "es": "¿Cuáles de mis tareas están vencidas?",
+        "pt-BR": "Quais das minhas tarefas estão atrasadas?",
+        "ar": "ما المهام المتأخرة لدي؟",
+        "tr": "Hangi görevlerimin süresi geçti?",
+        "ko": "내 작업 중 기한이 지난 건 뭐야?",
+        "hi": "मेरे कौन-से काम की समय-सीमा निकल चुकी है?",
+        "vi": "Những việc nào của tôi đã quá hạn?",
+        "zh-Hant": "我有哪些任務已經逾期？",
+        "ja": "期限を過ぎている私のタスクはどれですか？",
+        "id": "Tugas saya yang mana saja yang sudah lewat tenggat?"
+      },
+      "fixtures": {
+        "tasks.search": {
+          "output": {
+            "tasks": [
+              {
+                "task_id": "0192f1a0-0000-7000-8000-00000000c001",
+                "title": "Acme contract renewal",
+                "status": "todo",
+                "priority": "high",
+                "starts_on": null,
+                "due_on": "2026-10-15",
+                "overdue": true,
+                "who": {
+                  "name": "Anna Petrova",
+                  "is_you": true
+                },
+                "workspace": null,
+                "source": "manual",
+                "meeting_id": null,
+                "recurring": false,
+                "on_board": null,
+                "time": {
+                  "plan_minutes": null,
+                  "fact_minutes": null,
+                  "stopwatch_ms": null,
+                  "stopwatch_running": false
+                }
+              },
+              {
+                "task_id": "0192f1a0-0000-7000-8000-00000000c002",
+                "title": "Stripe invoice reconciliation",
+                "status": "todo",
+                "priority": null,
+                "starts_on": null,
+                "due_on": "2026-10-20",
+                "overdue": true,
+                "who": {
+                  "name": "Anna Petrova",
+                  "is_you": true
+                },
+                "workspace": null,
+                "source": "manual",
+                "meeting_id": null,
+                "recurring": false,
+                "on_board": null,
+                "time": {
+                  "plan_minutes": null,
+                  "fact_minutes": null,
+                  "stopwatch_ms": null,
+                  "stopwatch_running": false
+                }
+              }
+            ],
+            "more": false
+          },
+          "sources": [
+            {
+              "kind": "task",
+              "id": "0192f1a0-0000-7000-8000-00000000c001",
+              "title": "Acme contract renewal"
+            },
+            {
+              "kind": "task",
+              "id": "0192f1a0-0000-7000-8000-00000000c002",
+              "title": "Stripe invoice reconciliation"
+            }
+          ]
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "tasks.search",
+              "arguments": {
+                "due": "overdue"
+              }
+            }
+          ]
+        },
+        {
+          "say": "Two tasks are overdue: the Acme contract renewal [1] and the Stripe invoice reconciliation [2]."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "tasks.search"
+        ],
+        "arguments": {
+          "tasks.search": {
+            "due": "overdue"
+          }
+        },
+        "mentions": [
+          "Acme",
+          "Stripe"
+        ],
+        "cites": true
+      }
+    },
+    {
+      "id": "board_page",
+      "summary": "The board on the page: read that board by its id.",
+      "page": "/app/kanban",
+      "subject": {
+        "kind": "board",
+        "id": "0192f1a0-0000-7000-8000-00000000d001",
+        "title": "Website launch"
+      },
+      "questions": {
+        "en": "What is still in progress on this board?",
+        "fr": "Qu’est-ce qui est encore en cours sur ce tableau ?",
+        "de": "Was ist auf diesem Board noch in Arbeit?",
+        "ru": "Что на этой доске ещё в работе?",
+        "nl": "Wat staat er op dit bord nog in uitvoering?",
+        "it": "Cosa è ancora in corso su questa bacheca?",
+        "es": "¿Qué sigue en curso en este tablero?",
+        "pt-BR": "O que ainda está em andamento neste quadro?",
+        "ar": "ما الذي لا يزال قيد التنفيذ في هذه اللوحة؟",
+        "tr": "Bu panoda hâlâ devam eden neler var?",
+        "ko": "이 보드에서 아직 진행 중인 건 뭐야?",
+        "hi": "इस बोर्ड पर अभी क्या-क्या काम चल रहा है?",
+        "vi": "Trên bảng này còn những việc gì đang làm dở?",
+        "zh-Hant": "這個看板上還有哪些項目正在進行中？",
+        "ja": "このボードでまだ進行中のものは何ですか？",
+        "id": "Apa saja yang masih dikerjakan di papan ini?"
+      },
+      "fixtures": {
+        "tasks.list_board": {
+          "output": {
+            "board": {
+              "board_id": "0192f1a0-0000-7000-8000-00000000d001",
+              "name": "Website launch"
+            },
+            "columns": [
+              {
+                "title": "To do",
+                "kind": "todo",
+                "cards": [
+                  {
+                    "task_id": "0192f1a0-0000-7000-8000-00000000c005",
+                    "title": "Pricing page copy",
+                    "priority": null,
+                    "due_on": null,
+                    "who": null
+                  }
+                ],
+                "more": 0
+              },
+              {
+                "title": "In progress",
+                "kind": "in_progress",
+                "cards": [
+                  {
+                    "task_id": "0192f1a0-0000-7000-8000-00000000c003",
+                    "title": "Stripe checkout integration",
+                    "priority": "high",
+                    "due_on": "2026-10-28",
+                    "who": "Anna Petrova"
+                  },
+                  {
+                    "task_id": "0192f1a0-0000-7000-8000-00000000c004",
+                    "title": "Figma hero banner",
+                    "priority": null,
+                    "due_on": null,
+                    "who": null
+                  }
+                ],
+                "more": 0
+              },
+              {
+                "title": "Done",
+                "kind": "done",
+                "cards": [],
+                "more": 0
+              }
+            ],
+            "other_boards": []
+          },
+          "sources": [
+            {
+              "kind": "task",
+              "id": "0192f1a0-0000-7000-8000-00000000c003",
+              "title": "Stripe checkout integration"
+            },
+            {
+              "kind": "task",
+              "id": "0192f1a0-0000-7000-8000-00000000c004",
+              "title": "Figma hero banner"
+            }
+          ]
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "tasks.list_board",
+              "arguments": {
+                "board_id": "0192f1a0-0000-7000-8000-00000000d001"
+              }
+            }
+          ]
+        },
+        {
+          "say": "Two cards are in progress: the Stripe checkout integration [1] and the Figma hero banner [2]."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "tasks.list_board"
+        ],
+        "arguments": {
+          "tasks.list_board": {
+            "board_id": "0192f1a0-0000-7000-8000-00000000d001"
+          }
+        },
+        "mentions": [
+          "Stripe",
+          "Figma"
+        ],
+        "cites": true
+      }
+    },
+    {
+      "id": "meeting_page",
+      "summary": "The meeting on the page: list its action items by its id.",
+      "page": "/app/notes/0192f1a0-0000-7000-8000-00000000b002",
+      "subject": {
+        "kind": "meeting",
+        "id": "0192f1a0-0000-7000-8000-00000000b002",
+        "title": "Weekly sync with the Berlin team",
+        "summary": "Office lease, hiring plan and Q4 targets."
+      },
+      "questions": {
+        "en": "What were the action items from this meeting?",
+        "fr": "Quelles étaient les actions à mener issues de cette réunion ?",
+        "de": "Welche Aufgaben haben sich aus diesem Meeting ergeben?",
+        "ru": "Какие задачи появились по итогам этой встречи?",
+        "nl": "Wat waren de actiepunten van deze vergadering?",
+        "it": "Quali erano le azioni da intraprendere emerse da questa riunione?",
+        "es": "¿Cuáles fueron las tareas pendientes de esta reunión?",
+        "pt-BR": "Quais foram os itens de ação desta reunião?",
+        "ar": "ما بنود العمل التي خرج بها هذا الاجتماع؟",
+        "tr": "Bu toplantıdan hangi aksiyon maddeleri çıktı?",
+        "ko": "이 회의에서 나온 실행 항목은 뭐였어?",
+        "hi": "इस मीटिंग से कौन-से एक्शन आइटम निकले?",
+        "vi": "Cuộc họp này có những đầu việc cần làm nào?",
+        "zh-Hant": "這場會議有哪些待辦事項？",
+        "ja": "この会議で決まったアクションアイテムは何ですか？",
+        "id": "Apa saja item tindakan dari rapat ini?"
+      },
+      "fixtures": {
+        "notes.list_findings": {
+          "output": {
+            "findings": [
+              {
+                "finding_id": "0192f1a0-0000-7000-8000-00000000f002",
+                "kind": "action_item",
+                "text": "Send the Berlin office lease to legal by Friday.",
+                "owner_name": "Maria",
+                "due_on": "2026-10-23",
+                "at_ms": 312000,
+                "quote": "Maria, can you get the lease to legal by Friday?"
+              },
+              {
+                "finding_id": "0192f1a0-0000-7000-8000-00000000f003",
+                "kind": "action_item",
+                "text": "Post the backend engineer job opening.",
+                "owner_name": "Jonas",
+                "due_on": null,
+                "at_ms": 1405000,
+                "quote": "Jonas will post the opening this week."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "kind": "meeting",
+              "id": "0192f1a0-0000-7000-8000-00000000b002",
+              "title": "Weekly sync with the Berlin team"
+            }
+          ]
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "notes.list_findings",
+              "arguments": {
+                "meeting_id": "0192f1a0-0000-7000-8000-00000000b002",
+                "kind": "action_item"
+              }
+            }
+          ]
+        },
+        {
+          "say": "Two action items: Maria sends the Berlin office lease to legal by Friday, and Jonas posts the backend engineer opening [1]."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "notes.list_findings"
+        ],
+        "arguments": {
+          "notes.list_findings": {
+            "meeting_id": "0192f1a0-0000-7000-8000-00000000b002"
+          }
+        },
+        "mentions": [
+          "Maria",
+          "Jonas"
+        ],
+        "cites": true
+      }
+    },
+    {
+      "id": "file_lookup",
+      "summary": "A file by its name, then its text: search, read, quote the first step.",
+      "questions": {
+        "en": "Find the onboarding checklist and tell me the first step.",
+        "fr": "Trouve la checklist d’intégration et dis-moi la première étape.",
+        "de": "Finde die Onboarding-Checkliste und nenne mir den ersten Schritt.",
+        "ru": "Найди чек-лист онбординга и скажи, какой там первый шаг.",
+        "nl": "Zoek de onboardingchecklist en vertel me wat de eerste stap is.",
+        "it": "Trova la checklist di onboarding e dimmi qual è il primo passo.",
+        "es": "Busca la lista de verificación de incorporación y dime cuál es el primer paso.",
+        "pt-BR": "Encontre o checklist de integração e me diga qual é o primeiro passo.",
+        "ar": "ابحث عن قائمة التهيئة وأخبرني ما الخطوة الأولى.",
+        "tr": "İşe alıştırma kontrol listesini bul ve ilk adımı söyle.",
+        "ko": "온보딩 체크리스트를 찾아서 첫 번째 단계를 알려 줘.",
+        "hi": "ऑनबोर्डिंग चेकलिस्ट ढूँढो और मुझे पहला कदम बताओ।",
+        "vi": "Tìm danh sách kiểm tra hội nhập và cho tôi biết bước đầu tiên.",
+        "zh-Hant": "找到新人到職檢查清單，告訴我第一步是什麼。",
+        "ja": "オンボーディングのチェックリストを探して、最初のステップを教えてください。",
+        "id": "Cari daftar periksa onboarding dan beri tahu saya langkah pertamanya."
+      },
+      "fixtures": {
+        "files.search": {
+          "output": {
+            "files": [
+              {
+                "file_id": "0192f1a0-0000-7000-8000-00000000e001",
+                "name": "Onboarding checklist.docx",
+                "kind": "document",
+                "size_bytes": 48213,
+                "modified_at": "2026-10-02T08:15:00Z",
+                "owned": true,
+                "folder_id": null,
+                "leo": "file"
+              }
+            ],
+            "more": false
+          },
+          "sources": [
+            {
+              "kind": "file",
+              "id": "0192f1a0-0000-7000-8000-00000000e001",
+              "title": "Onboarding checklist.docx"
+            }
+          ],
+          "provenance": "file:own"
+        },
+        "files.read": {
+          "output": {
+            "file_id": "0192f1a0-0000-7000-8000-00000000e001",
+            "name": "Onboarding checklist.docx",
+            "kind": "document",
+            "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "size_bytes": 48213,
+            "leo_readable": true,
+            "excerpt": "Onboarding checklist\n1. Install Okta Verify on your phone and sign in to your Shosai account.\n2. Request a laptop from IT through the IT-HW queue.\n3. Read the security handbook.",
+            "excerpt_truncated": false,
+            "no_excerpt": null
+          },
+          "sources": [
+            {
+              "kind": "file",
+              "id": "0192f1a0-0000-7000-8000-00000000e001",
+              "title": "Onboarding checklist.docx"
+            }
+          ],
+          "provenance": "file:own"
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "files.search",
+              "arguments": {
+                "query": "onboarding checklist"
+              }
+            }
+          ]
+        },
+        {
+          "calls": [
+            {
+              "tool": "files.read",
+              "arguments": {
+                "file_id": "0192f1a0-0000-7000-8000-00000000e001"
+              }
+            }
+          ]
+        },
+        {
+          "say": "The first step is to install Okta Verify on your phone and sign in [1]."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "files.search",
+          "files.read"
+        ],
+        "arguments": {
+          "files.read": {
+            "file_id": "0192f1a0-0000-7000-8000-00000000e001"
+          }
+        },
+        "mentions": [
+          "Okta"
+        ],
+        "cites": true
+      }
+    },
+    {
+      "id": "plan_minutes",
+      "summary": "A question about the plan: read it and do the arithmetic.",
+      "questions": {
+        "en": "How many meeting minutes do I have left this month?",
+        "fr": "Combien de minutes de réunion me reste-t-il ce mois-ci ?",
+        "de": "Wie viele Meeting-Minuten habe ich diesen Monat noch übrig?",
+        "ru": "Сколько минут встреч у меня осталось в этом месяце?",
+        "nl": "Hoeveel vergaderminuten heb ik deze maand nog over?",
+        "it": "Quanti minuti di riunione mi restano questo mese?",
+        "es": "¿Cuántos minutos de reuniones me quedan este mes?",
+        "pt-BR": "Quantos minutos de reunião ainda tenho este mês?",
+        "ar": "كم دقيقة اجتماعات تبقّت لي هذا الشهر؟",
+        "tr": "Bu ay kaç toplantı dakikam kaldı?",
+        "ko": "이번 달에 회의 시간이 몇 분 남았어?",
+        "hi": "इस महीने मेरे पास मीटिंग के कितने मिनट बचे हैं?",
+        "vi": "Tháng này tôi còn bao nhiêu phút họp?",
+        "zh-Hant": "我這個月還剩多少會議分鐘數？",
+        "ja": "今月の会議時間はあと何分残っていますか？",
+        "id": "Berapa menit rapat yang tersisa untuk saya bulan ini?"
+      },
+      "fixtures": {
+        "account.get_plan": {
+          "output": {
+            "plan_name": "Pro",
+            "paid": true,
+            "paid_until": "2026-11-15T00:00:00Z",
+            "meeting_minutes_per_month": 1200,
+            "minutes_used_this_month": 450,
+            "minutes_reset_at": "2026-11-01T00:00:00Z",
+            "file_manager_gb": 100,
+            "knowledge_base_mb": 500,
+            "capabilities": []
+          }
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "account.get_plan",
+              "arguments": {}
+            }
+          ]
+        },
+        {
+          "say": "You have 750 of your 1,200 meeting minutes left this month."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "account.get_plan"
+        ],
+        "mentions": [
+          "750"
+        ]
+      }
+    },
+    {
+      "id": "nothing_found",
+      "summary": "Nothing found: say so instead of inventing a decision.",
+      "questions": {
+        "en": "What did we decide about moving the office to Lisbon?",
+        "fr": "Qu’avons-nous décidé concernant le déménagement du bureau à Lisbonne ?",
+        "de": "Was haben wir zum Umzug des Büros nach Lissabon beschlossen?",
+        "ru": "Что мы решили насчёт переезда офиса в Лиссабон?",
+        "nl": "Wat hebben we besloten over de verhuizing van het kantoor naar Lissabon?",
+        "it": "Che cosa abbiamo deciso sul trasferimento dell’ufficio a Lisbona?",
+        "es": "¿Qué decidimos sobre mudar la oficina a Lisboa?",
+        "pt-BR": "O que decidimos sobre a mudança do escritório para Lisboa?",
+        "ar": "ماذا قررنا بشأن نقل المكتب إلى لشبونة؟",
+        "tr": "Ofisi Lizbon’a taşıma konusunda ne karar verdik?",
+        "ko": "사무실을 리스본으로 옮기는 것에 대해 무엇을 결정했지?",
+        "hi": "ऑफ़िस को लिस्बन ले जाने के बारे में हमने क्या तय किया था?",
+        "vi": "Chúng ta đã quyết định gì về việc chuyển văn phòng sang Lisbon?",
+        "zh-Hant": "我們對把辦公室搬到里斯本做了什麼決定？",
+        "ja": "オフィスをリスボンに移転する件について、何を決めましたか？",
+        "id": "Apa yang kita putuskan soal pemindahan kantor ke Lisbon?"
+      },
+      "fixtures": {
+        "notes.search": {
+          "output": {
+            "meetings": [],
+            "more": false
+          }
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "notes.search",
+              "arguments": {
+                "query": "office move Lisbon"
+              }
+            }
+          ]
+        },
+        {
+          "say": "I couldn't find a meeting where moving the office to Lisbon was discussed or decided."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "notes.search"
+        ]
+      }
+    },
+    {
+      "id": "cannot_write_yet",
+      "summary": "A write Leo cannot make yet: no write runs, the answer says so.",
+      "questions": {
+        "en": "Create a task to call Anna tomorrow at 10.",
+        "fr": "Crée une tâche pour appeler Anna demain à 10 h.",
+        "de": "Erstelle eine Aufgabe: Anna morgen um 10 Uhr anrufen.",
+        "ru": "Создай задачу позвонить Анне завтра в 10.",
+        "nl": "Maak een taak aan om Anna morgen om 10 uur te bellen.",
+        "it": "Crea un’attività per chiamare Anna domani alle 10.",
+        "es": "Crea una tarea para llamar a Anna mañana a las 10.",
+        "pt-BR": "Crie uma tarefa para ligar para a Anna amanhã às 10h.",
+        "ar": "أنشئ مهمة للاتصال بآنا غدًا الساعة 10.",
+        "tr": "Yarın saat 10’da Anna’yı aramak için bir görev oluştur.",
+        "ko": "내일 10시에 안나에게 전화하는 작업을 만들어 줘.",
+        "hi": "कल 10 बजे अन्ना को कॉल करने का एक टास्क बना दो।",
+        "vi": "Tạo một việc cần làm: gọi cho Anna lúc 10 giờ ngày mai.",
+        "zh-Hant": "建立一個任務：明天十點打電話給 Anna。",
+        "ja": "明日10時にアンナに電話するタスクを作成して。",
+        "id": "Buat tugas untuk menelepon Anna besok pukul 10."
+      },
+      "script": [
+        {
+          "say": "I can't create tasks yet. Please add it yourself: call Anna tomorrow at 10."
+        }
+      ],
+      "expect": {
+        "avoid": [
+          "tasks.create"
+        ]
+      }
+    },
+    {
+      "id": "multi_source",
+      "summary": "Tasks and meetings at once: both searches in one round, one answer from both.",
+      "questions": {
+        "en": "What do I need to do for the Acme deal?",
+        "fr": "Que dois-je faire pour le contrat Acme ?",
+        "de": "Was muss ich für den Acme-Deal erledigen?",
+        "ru": "Что мне нужно сделать по сделке с Acme?",
+        "nl": "Wat moet ik doen voor de Acme-deal?",
+        "it": "Cosa devo fare per l’accordo con Acme?",
+        "es": "¿Qué tengo que hacer para el acuerdo con Acme?",
+        "pt-BR": "O que preciso fazer para o negócio com a Acme?",
+        "ar": "ما الذي عليّ فعله بخصوص صفقة Acme؟",
+        "tr": "Acme anlaşması için ne yapmam gerekiyor?",
+        "ko": "Acme 거래를 위해 내가 해야 할 일이 뭐야?",
+        "hi": "Acme डील के लिए मुझे क्या करना है?",
+        "vi": "Tôi cần làm gì cho thương vụ với Acme?",
+        "zh-Hant": "為了 Acme 這筆交易，我需要做什麼？",
+        "ja": "Acme の案件で私がやるべきことは何ですか？",
+        "id": "Apa yang perlu saya lakukan untuk kesepakatan Acme?"
+      },
+      "fixtures": {
+        "tasks.search": {
+          "output": {
+            "tasks": [
+              {
+                "task_id": "0192f1a0-0000-7000-8000-00000000c001",
+                "title": "Acme contract renewal",
+                "status": "todo",
+                "priority": "high",
+                "starts_on": null,
+                "due_on": "2026-10-15",
+                "overdue": true,
+                "who": {
+                  "name": "Anna Petrova",
+                  "is_you": true
+                },
+                "workspace": null,
+                "source": "manual",
+                "meeting_id": null,
+                "recurring": false,
+                "on_board": null,
+                "time": {
+                  "plan_minutes": null,
+                  "fact_minutes": null,
+                  "stopwatch_ms": null,
+                  "stopwatch_running": false
+                }
+              },
+              {
+                "task_id": "0192f1a0-0000-7000-8000-00000000c006",
+                "title": "Prepare the Acme pricing proposal",
+                "status": "todo",
+                "priority": null,
+                "starts_on": null,
+                "due_on": "2026-10-30",
+                "overdue": false,
+                "who": {
+                  "name": "Anna Petrova",
+                  "is_you": true
+                },
+                "workspace": null,
+                "source": "manual",
+                "meeting_id": null,
+                "recurring": false,
+                "on_board": null,
+                "time": {
+                  "plan_minutes": null,
+                  "fact_minutes": null,
+                  "stopwatch_ms": null,
+                  "stopwatch_running": false
+                }
+              }
+            ],
+            "more": false
+          },
+          "sources": [
+            {
+              "kind": "task",
+              "id": "0192f1a0-0000-7000-8000-00000000c001",
+              "title": "Acme contract renewal"
+            },
+            {
+              "kind": "task",
+              "id": "0192f1a0-0000-7000-8000-00000000c006",
+              "title": "Prepare the Acme pricing proposal"
+            }
+          ]
+        },
+        "notes.search": {
+          "output": {
+            "meetings": [
+              {
+                "meeting_id": "0192f1a0-0000-7000-8000-00000000b003",
+                "title": "Acme negotiation call",
+                "started_at": "2026-10-16T15:00:00Z",
+                "seconds": 2400,
+                "owned": true,
+                "summary": "Acme asked for a 10% volume discount; legal must review the contract before signing."
+              }
+            ],
+            "more": false
+          },
+          "sources": [
+            {
+              "kind": "meeting",
+              "id": "0192f1a0-0000-7000-8000-00000000b003",
+              "title": "Acme negotiation call"
+            }
+          ]
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "tasks.search",
+              "arguments": {
+                "query": "Acme"
+              }
+            },
+            {
+              "tool": "notes.search",
+              "arguments": {
+                "query": "Acme"
+              }
+            }
+          ]
+        },
+        {
+          "say": "Renew the Acme contract, which is overdue [1], and prepare the pricing proposal by October 30 [2]; Acme asked for a 10% volume discount and legal must review the contract [3]."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "tasks.search",
+          "notes.search"
+        ],
+        "mentions": [
+          "Acme"
+        ],
+        "cites": true
+      }
+    }
+  ]
+}

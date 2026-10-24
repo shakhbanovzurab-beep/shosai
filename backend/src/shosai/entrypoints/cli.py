@@ -12,6 +12,8 @@
     shosai identity admin-password-hash   print the bcrypt hash of the admin's password
     shosai observability debug --user ID --reason TEXT   DEBUG lines of one account for a while
     shosai files bucket-rules [--home ru|eu]   put ADR 0055's bucket lifecycle and CORS rules
+    shosai agent eval [--scripted] [--scenario ID] [--language CODE] [--record REASON]
+                                   Leo's evaluation suites, in development only
 
 Every long-running role also serves `/livez`, `/readyz` and `/metrics` on OPS_PORT. The
 settings come from the environment only (`.env.example`, section 2). One process runs
@@ -21,11 +23,17 @@ one role on one uvloop event loop.
 import argparse
 import os
 from collections.abc import Coroutine, Mapping, Sequence
+from pathlib import Path
 from typing import Any
 from uuid import UUID
 
 import uvloop
 
+from shosai.composition.agent_eval_command import (
+    AgentEvalCommand,
+    default_report,
+    run_agent_eval,
+)
 from shosai.composition.ai_command import KillSwitchAction, KillSwitchCommand, run_kill_switch
 from shosai.composition.ai_rebuild import run_rebuild
 from shosai.composition.email_command import MailCheckCommand, run_mail_check
@@ -82,6 +90,7 @@ def build_parser() -> argparse.ArgumentParser:
         "admin-password-hash", help="print the bcrypt hash of the admin's password"
     )
     add_observability(roles)
+    add_agent(roles)
     files = roles.add_parser(ProcessRole.FILES.value, help="operator commands of the buckets")
     bucket_tools = files.add_subparsers(dest="tool", required=True, metavar="TOOL")
     rules = bucket_tools.add_parser(
@@ -112,6 +121,47 @@ def add_observability(roles: argparse._SubParsersAction[argparse.ArgumentParser]
     debug.add_argument("--off", action="store_true", help="end the switch now")
 
 
+def add_agent(roles: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
+    """`shosai agent eval`: Leo's evaluation suites (AG-D8)."""
+    agent = roles.add_parser(ProcessRole.AGENT.value, help="engineer commands of Leo")
+    tools = agent.add_subparsers(dest="tool", required=True, metavar="TOOL")
+    evaluation = tools.add_parser("eval", help="run Leo's evaluation suites, in development only")
+    evaluation.add_argument(
+        "--scripted", action="store_true", help="the deterministic suites CI runs, without a key"
+    )
+    evaluation.add_argument(
+        "--scenario", action="append", default=[], help="one scenario by id; every one if omitted"
+    )
+    evaluation.add_argument(
+        "--language", action="append", default=[], choices=SUPPORTED_LANGUAGES,
+        help="one language; all 16 if omitted",
+    )  # fmt: skip
+    evaluation.add_argument(
+        "--judge-model", help="the judge's model; the standard model if omitted"
+    )
+    evaluation.add_argument("--no-judge", action="store_true", help="leave the answers ungraded")
+    evaluation.add_argument(
+        "--concurrency", type=int, default=4, choices=range(1, 9), metavar="1..8",
+        help="cases run at once",
+    )  # fmt: skip
+    evaluation.add_argument("--report", type=Path, help="the report's directory")
+    evaluation.add_argument("--record", metavar="REASON", help="also write the new baseline")
+
+
+def agent_eval_command(arguments: argparse.Namespace) -> AgentEvalCommand:
+    """The evaluation command from the parsed arguments."""
+    return AgentEvalCommand(
+        scripted=arguments.scripted,
+        scenarios=tuple(arguments.scenario),
+        languages=tuple(arguments.language),
+        judge_model=arguments.judge_model,
+        judge=not arguments.no_judge,
+        concurrency=arguments.concurrency,
+        report=arguments.report or default_report(),
+        record=arguments.record,
+    )
+
+
 def debug_command(arguments: argparse.Namespace) -> DebugCommand:
     """The debug switch command from the parsed arguments."""
     if arguments.user is not None:
@@ -135,8 +185,8 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
             return run_process(role, environ, workers_role(TaskQueue(arguments.queue)))
         case ProcessRole.SCHEDULER:
             return run_process(role, environ, scheduler_role)
-        case ProcessRole.OBSERVABILITY:
-            return run_debug_switch(environ, debug_command(arguments))
+        case ProcessRole.OBSERVABILITY | ProcessRole.AGENT:
+            return engineer_command(role, arguments, environ)
         case (
             ProcessRole.MIGRATE
             | ProcessRole.AI
@@ -145,6 +195,15 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
             | ProcessRole.FILES
         ):
             return one_shot(role, arguments, environ)
+
+
+def engineer_command(
+    role: ProcessRole, arguments: argparse.Namespace, environ: Mapping[str, str]
+) -> Coroutine[Any, Any, int]:
+    """The coroutine of a debug switch or of Leo's evaluation."""
+    if role is ProcessRole.AGENT:
+        return run_agent_eval(environ, agent_eval_command(arguments))
+    return run_debug_switch(environ, debug_command(arguments))
 
 
 def one_shot(

@@ -10,3 +10,5 @@
 .coverage.*
 htmlcov/
 __pycache__/
+# Отчёты `shosai agent eval`: результат прогона — в записи изменения, не в репозитории.
+agent-eval/

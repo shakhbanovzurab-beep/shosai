@@ -3,7 +3,7 @@
 import pytest
 
 from shosai.core.tasks.queues import TaskQueue
-from shosai.entrypoints.cli import build_parser, command
+from shosai.entrypoints.cli import agent_eval_command, build_parser, command
 
 USAGE_ERROR = 2
 
@@ -17,6 +17,7 @@ USAGE_ERROR = 2
         (["scheduler"], "scheduler"),
         (["migrate", "current"], "migrate"),
         (["observability", "debug"], "observability"),
+        (["agent", "eval", "--scripted"], "agent"),
     ],
 )
 async def test_each_role_is_a_subcommand(argv: list[str], role: str) -> None:
@@ -49,6 +50,30 @@ def test_a_debug_switch_names_one_target_for_at_most_an_hour() -> None:
         ["observability", "debug", "--user", user, "--org", user],
         ["observability", "debug", "--user", "not-an-id"],
     ):
+        with pytest.raises(SystemExit) as raised:
+            parser.parse_args(argv)
+        assert raised.value.code == USAGE_ERROR
+
+
+def test_an_evaluation_names_its_scenarios_languages_and_report() -> None:
+    parser = build_parser()
+
+    arguments = parser.parse_args(
+        ["agent", "eval", "--scenario", "greeting", "--language", "ja", "--report", "out",
+         "--record", "New policy.", "--no-judge"]
+    )  # fmt: skip
+    evaluation = agent_eval_command(arguments)
+
+    assert (evaluation.scenarios, evaluation.languages, str(evaluation.report)) == (
+        ("greeting",), ("ja",), "out",
+    )  # fmt: skip
+    assert (evaluation.scripted, evaluation.judge, evaluation.record) == (
+        False,
+        False,
+        "New policy.",
+    )
+    assert agent_eval_command(parser.parse_args(["agent", "eval"])).report.parts[0] == "agent-eval"
+    for argv in (["agent", "eval", "--language", "xx"], ["agent", "eval", "--concurrency", "9"]):
         with pytest.raises(SystemExit) as raised:
             parser.parse_args(argv)
         assert raised.value.code == USAGE_ERROR

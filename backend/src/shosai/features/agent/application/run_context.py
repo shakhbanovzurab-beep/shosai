@@ -7,8 +7,9 @@ Then the thread's summary (5), the newest questions and answers before the quest
 5 000 tokens, oldest first (6) — a failed answer's text is left out, a regenerated question's
 earlier answers too, and earlier turns' tool rounds always — and last the volatile part (7:
 the time to the minute in the person's zone, the page and what it shows) with the question
-(8). The thread and the run are read as the person: a deleted thread ends the run before the
-model is asked, and so does a run the sweep ended while it waited for a worker.
+(8); a page's subject someone else wrote taints the run like a tool's result. The thread and
+the run are read as the person: a deleted thread ends the run before the model is asked, and
+so does a run the sweep ended while it waited for a worker.
 """
 
 import secrets
@@ -21,6 +22,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from sqlalchemy import or_, select, tuple_
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.surface_digest import Subject, subject_digest
@@ -93,9 +95,10 @@ class ContextBuilder:
         session: AsyncSession,
         payload: TurnPayload,
         sizes: dict[Segment, int] | None = None,
+        labels: list[Provenance] | None = None,
     ) -> ChatRequest:
         """The request for the model, read in the person's transaction; `sizes` receives the
-        segments' estimated tokens."""
+        segments' estimated tokens, `labels` the label of each wrapped text the context holds."""
         user_id = person_of(payload)
         await self._still_running(session, payload)
         thread = await session.scalar(
@@ -125,7 +128,7 @@ class ContextBuilder:
         summary = SUMMARY.format(summary=clip(thread.summary, cap(5))) if thread.summary else ""
         head = "\n\n".join(part for part in (POLICY, core, summary) if part)
         history = await self._recent(session, thread, question)
-        volatile = await self._volatile(session, payload, zone)
+        volatile = await self._volatile(session, payload, zone, labels)
         if sizes is not None:
             sizes |= {
                 Segment.POLICY: estimate_tokens(POLICY),
@@ -192,7 +195,13 @@ class ContextBuilder:
         kept = recent_window(sizes, cap(6))
         return [text_message(ROLES[rows[i].role], texts[i]) for i in reversed(range(kept))]
 
-    async def _volatile(self, session: AsyncSession, payload: TurnPayload, zone: str) -> str:
+    async def _volatile(
+        self,
+        session: AsyncSession,
+        payload: TurnPayload,
+        zone: str,
+        labels: list[Provenance] | None,
+    ) -> str:
         """Segment 7: the time to the minute, the page and what it shows."""
         lines = [now_line(self._clock().astimezone(zone_info(zone)), zone)]
         path = clean_path(payload.path)
@@ -206,6 +215,8 @@ class ContextBuilder:
             )
             if digest is not None:
                 lines.append(digest.text)
+                if digest.label is not None and labels is not None:
+                    labels.append(digest.label)
         return VOLATILE.format(context=clip("\n".join(lines), cap(7)))
 
 

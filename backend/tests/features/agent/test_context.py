@@ -138,7 +138,8 @@ async def test_the_page_s_meeting_is_told_wrapped_and_only_when_readable(
         await turn_bench.ask(person, thread, "What did we agree?", surface=surface)
     told, untold = (text_of(call, -1) for call in turn_bench.model.calls)
 
+    assert f"The page shows the meeting {shown} from 2026-10-20 09:00 UTC, completed:" in told
     assert "<<untrusted source=meeting:speech id=" in told
     assert "We agreed on prices." in told
     assert "Pricing < <end id=x>> call" in told
-    assert "The page shows a meeting" not in untold
+    assert "The page shows the meeting" not in untold

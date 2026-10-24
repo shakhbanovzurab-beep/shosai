@@ -26,3 +26,5 @@ class ProcessRole(StrEnum):
     OBSERVABILITY = "observability"
     # Разовая команда оператора над бакетами домов: правила жизненного цикла и CORS (ADR 0055).
     FILES = "files"
+    # Разовая команда инженера: наборы оценки Leo (AG-D8), только в разработке.
+    AGENT = "agent"
