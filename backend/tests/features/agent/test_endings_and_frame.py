@@ -8,7 +8,7 @@ from typing import Final
 from hypothesis import given
 from hypothesis import strategies as st
 
-from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart
+from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart, ToolCall
 from shosai.features.agent.domain.endings import (
     answered,
     cancelled,
@@ -26,6 +26,7 @@ FRAME: Final = SOURCE / "features" / "agent" / "infrastructure"
 # Публичные части LangGraph, из которых собран каркас хода (AG-D14); готовые агенты, ToolNode,
 # сохранители, хранилище и клиенты моделей сюда не входят.
 ALLOWED: Final = frozenset({"langgraph.graph", "langgraph.graph.state", "langgraph.runtime"})
+CALL: Final = ToolCall("call-1", "notes__search", "{}")
 
 
 @given(st.sampled_from(RunFailure), st.text(max_size=5))
@@ -72,15 +73,22 @@ class Steps:
     async def model(self, request: ChatRequest) -> ModelAnswer:
         self.order.append("model")
         assert request is self.request
+        if self.order.count("model") < 3:
+            return ModelAnswer("", "tool_calls", None, None, tool_calls=(CALL,))
         return ModelAnswer("Hello", "length", None, 5)
 
+    async def tools(self, request: ChatRequest, answer: ModelAnswer) -> ChatRequest:
+        self.order.append("tools")
+        assert answer.tool_calls == (CALL,)
+        return request
 
-async def test_the_frame_runs_context_then_model_then_respond() -> None:
+
+async def test_the_frame_loops_through_tools_until_the_model_answers() -> None:
     steps = Steps()
 
     kept = await run_turn(turn_graph(), steps)
 
-    assert steps.order == ["context", "model"]
+    assert steps.order == ["context", "model", "tools", "model", "tools", "model"]
     assert (kept.model.text, kept.truncated) == ("Hello", True)
 
 

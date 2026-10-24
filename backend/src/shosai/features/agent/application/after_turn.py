@@ -22,6 +22,7 @@ from shosai.features.agent.contracts.events import TurnCompleted
 from shosai.features.agent.domain.budgets import needs_compaction
 from shosai.features.agent.domain.threads import AnswerStatus, MessageRole
 from shosai.features.agent.infrastructure.thread_records import (
+    SPOKEN,
     AgentMessageRecord,
     AgentThreadRecord,
 )
@@ -86,6 +87,7 @@ async def answers(session: AsyncSession, thread: AgentThreadRecord) -> int:
             MESSAGE.thread_id == thread.id,
             MESSAGE.created_at >= thread.created_at,
             MESSAGE.role == MessageRole.ASSISTANT.value,
+            SPOKEN,
         )
         .limit(2)
     )
@@ -107,6 +109,7 @@ async def recent_tokens(session: AsyncSession, thread: AgentThreadRecord) -> int
         MESSAGE.created_at >= since,
         MESSAGE.role.in_((MessageRole.USER.value, MessageRole.ASSISTANT.value)),
         or_(MESSAGE.status.is_(None), MESSAGE.status != AnswerStatus.FAILED.value),
+        SPOKEN,
     ]
     if thread.summary_upto is not None:
         conditions.append(MESSAGE.id != thread.summary_upto)

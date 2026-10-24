@@ -28,6 +28,7 @@ from shosai.core.ai.adapters.openrouter_decisions import (
     decision_usage,
 )
 from shosai.core.ai.adapters.openrouter_wire import (
+    StreamedToolCalls,
     chat_body,
     data_url,
     first_choice,
@@ -98,6 +99,7 @@ class OpenRouter:
     async def stream_chat(self, model: ModelRef, request: ChatRequest) -> AsyncGenerator[ChatDelta]:
         """The answer as it is written; the last delta carries the usage of the whole call."""
         body = chat_body(model.model, request, stream=True)
+        calls = StreamedToolCalls()
         try:
             async with self._client.stream(
                 "POST", "chat/completions", json=body, timeout=STREAM_TIMEOUT
@@ -108,7 +110,7 @@ class OpenRouter:
                 async for line in response.aiter_lines():
                     chunk = stream_chunk(line)
                     if chunk is not None:
-                        yield self._delta(chunk, model)
+                        yield self._delta(chunk, model, calls)
         except httpx.ConnectError, httpx.ConnectTimeout, httpx.PoolTimeout:
             raise AiCallError(AiFailure.PROVIDER_ERROR, retryable=True) from None
         except httpx.TimeoutException:
@@ -208,14 +210,19 @@ class OpenRouter:
         return await call_json(self._client, Provider.OPENROUTER, request)
 
     @staticmethod
-    def _delta(chunk: Json, model: ModelRef) -> ChatDelta:
+    def _delta(chunk: Json, model: ModelRef, calls: StreamedToolCalls) -> ChatDelta:
         choices = chunk.get("choices") or []
         choice = choices[0] if choices and isinstance(choices[0], dict) else {}
         delta = choice.get("delta") or {}
+        if isinstance(delta, dict):
+            calls.take(delta)
         usage = chunk.get("usage")
+        finish = choice.get("finish_reason")
         return ChatDelta(
             text=str(delta.get("content") or ""),
-            finish_reason=choice.get("finish_reason"),
+            finish_reason=finish,
             usage=usage_of(usage) if isinstance(usage, dict) else None,
             model=model,
+            # Вызовы целы только к концу ответа: отдаются с причиной остановки.
+            tool_calls=calls.calls() if finish else (),
         )

@@ -16704,6 +16704,13 @@
               }
             ],
             "title": "Duration Ms"
+          },
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/StepOut"
+            },
+            "type": "array",
+            "title": "Steps"
           }
         },
         "type": "object",
@@ -16713,10 +16720,11 @@
           "text",
           "status",
           "created_at",
-          "duration_ms"
+          "duration_ms",
+          "steps"
         ],
         "title": "MessageOut",
-        "description": "A row of the history: a question, an answer (with how it ended) or a server's note."
+        "description": "A row of the history: a question, an answer (with how it ended and the steps it took) or\na server's note."
       },
       "Messenger": {
         "type": "string",
@@ -20760,6 +20768,62 @@
         ],
         "title": "StatusFilter",
         "description": "Which statuses a list shows."
+      },
+      "StepOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "activity": {
+            "type": "string",
+            "title": "Activity"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "status": {
+            "$ref": "#/components/schemas/StepStatus"
+          },
+          "duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "activity",
+          "detail",
+          "status",
+          "duration_ms"
+        ],
+        "title": "StepOut",
+        "description": "A step of an answer: the tool's name or a reasoning code, the argument it showed, how it\nended and how long it took."
+      },
+      "StepStatus": {
+        "type": "string",
+        "enum": [
+          "done",
+          "failed"
+        ],
+        "title": "StepStatus",
+        "description": "How a step of an answer ended: its tool answered, or gave an error the model read."
       },
       "StickerBoardOut": {
         "properties": {

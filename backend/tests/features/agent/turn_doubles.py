@@ -7,7 +7,7 @@ sent turn at once in the background unless it holds it to play a lost worker.
 
 import asyncio
 import uuid
-from collections.abc import AsyncIterator, Collection, Mapping
+from collections.abc import AsyncIterator, Callable, Collection, Mapping
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Final
@@ -28,6 +28,7 @@ from shosai.features.notes.contracts import MeetingFacts, TranscriptPage
 from shosai.features.workspaces.contracts import Viewer
 
 WAIT: Final = 15.0
+type Script = list[ChatDelta] | Callable[[ChatRequest], list[ChatDelta]]
 
 
 @dataclass
@@ -45,6 +46,9 @@ class ScriptedModel:
             ),
         ]
     )
+    # Свой сценарий на каждый вызов по порядку, последний — для остальных; пусто — `pieces`.
+    # Сценарий-функция читает запрос: так модель берёт ссылку из прочитанного результата.
+    scripts: list[Script] = field(default_factory=list)
     gate: asyncio.Event = field(default_factory=asyncio.Event)
     # Сколько первых вызовов после первого куска ждут открытых ворот; остальные идут сразу.
     held_calls: int = 0
@@ -60,8 +64,10 @@ class ScriptedModel:
         """The script, piece by piece."""
         del context, route
         held = len(self.calls) < self.held_calls
+        script = self.scripts[min(len(self.calls), len(self.scripts) - 1)] if self.scripts else None
+        pieces = self.pieces if script is None else script(request) if callable(script) else script
         self.calls.append(request)
-        for index, piece in enumerate(self.pieces):
+        for index, piece in enumerate(pieces):
             if held and index > 0:
                 await self.gate.wait()
             yield piece

@@ -99,6 +99,19 @@ groups:
           description: 'Журналы или трассировки не дошли до хранилища — на графиках и в журналах могут быть пробелы. На работу сервиса для людей это не влияет.'
           runbook: docs/runbooks/alerts.md#telemetry-dropped
 
+      - alert: LeoToolsetLoadsFrequent
+        expr: |
+          sum(increase(shosai_agent_load_toolset_total[1d]))
+            / sum(increase(shosai_agent_turns_total[1d])) > 0.05
+          and sum(increase(shosai_agent_turns_total[1d])) >= 100
+        for: 1h
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Leo часто догружает наборы инструментов'
+          description: 'Больше чем в 5 % ходов за сутки модели пришлось загрузить набор инструментов, который маршрутизация не предложила. Каждая загрузка стоит лишнего раунда: ответы Leo приходят медленнее и дороже.'
+          runbook: docs/runbooks/alerts.md#leo-toolset-loads-frequent
+
   - name: tickets-targets
     rules:
       - alert: ScrapeTargetDown

@@ -118,6 +118,8 @@ async def test_a_turn_records_its_model_cost_times_numbers_and_spans(
     registry, spans = turn_bench.observed
 
     events = stream_of(await turn_bench.ask(person, thread))
+    # Спан прогона закрывается после терминального события: ход дожидается своего конца.
+    await turn_bench.queue.settle()
     run_id = events[0][2]["run_id"]
     row = (
         await fetch_rows(

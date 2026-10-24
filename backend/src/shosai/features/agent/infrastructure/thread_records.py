@@ -128,11 +128,12 @@ class AgentMessageRecord(ModelBase):
     status: Mapped[str | None] = mapped_column(Text)
     text: Mapped[str] = mapped_column(Text, server_default="")
     # Вызовы инструментов, которые модель сделала в этом раунде (роль assistant).
-    tool_calls: Mapped[list[dict[str, Any]] | None] = mapped_column(JSONB)
+    # None — SQL NULL, не JSON null: по нему строка разговора отличается от раунда.
+    tool_calls: Mapped[list[dict[str, Any]] | None] = mapped_column(JSONB(none_as_null=True))
     tool_call_id: Mapped[str | None] = mapped_column(Text)
     tool_name: Mapped[str | None] = mapped_column(Text)
     # Что модель прочла из результата: целиком в пределах бюджета или дайджест со ссылкой.
-    digest: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    digest: Mapped[dict[str, Any] | None] = mapped_column(JSONB(none_as_null=True))
     result_id: Mapped[UUID | None] = mapped_column(Uuid)
     attachments: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, server_default=EMPTY_LIST)
     steps: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, server_default=EMPTY_LIST)
@@ -168,4 +169,6 @@ class AgentToolResultRecord(ModelBase):
     tokens: Mapped[int] = mapped_column(Integer, server_default="0")
 
 
+# Строка разговора, а не раунд инструментов: у сообщения модели с вызовами есть tool_calls.
+SPOKEN: Final = AgentMessageRecord.tool_calls.is_(None)
 THREAD_MODELS: Final = (AgentThreadRecord, AgentMessageRecord, AgentToolResultRecord)

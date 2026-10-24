@@ -144,11 +144,11 @@ async def test_history_pages_newest_first_without_the_model_s_rounds(
     thread = await thread_bench.thread(person)
     moment = thread_bench.clock.now
     shown = []
-    for offset, role in enumerate(("user", "tool", "assistant", "server", "user")):
+    for offset, role in enumerate(("user", "round", "tool", "assistant", "server", "user")):
         written = await thread_bench.message(
             person, thread, role, moment + timedelta(seconds=offset), f"{role} {offset}"
         )
-        if role != "tool":
+        if role not in {"round", "tool"}:
             shown.append(written)
 
     path = f"/v1/agent/threads/{thread}/messages?limit=3"
@@ -159,7 +159,7 @@ async def test_history_pages_newest_first_without_the_model_s_rounds(
     assert pages == shown[::-1]
     assert rest.json()["next_cursor"] is None
     assert first.json()["items"][1] == {
-        "id": shown[2], "role": "server", "text": "server 3", "status": None,
-        "created_at": first.json()["items"][1]["created_at"], "duration_ms": None,
+        "id": shown[2], "role": "server", "text": "server 4", "status": None,
+        "created_at": first.json()["items"][1]["created_at"], "duration_ms": None, "steps": [],
     }  # fmt: skip
     assert first.json()["items"][2]["status"] == "done"

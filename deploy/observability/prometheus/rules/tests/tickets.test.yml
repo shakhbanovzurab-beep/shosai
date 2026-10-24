@@ -268,3 +268,22 @@ tests:
       - eval_time: 40m
         alertname: RussianHomeLinkSlow
         exp_alerts: []
+
+  - interval: 1h
+    input_series:
+      - series: 'shosai_agent_turns_total{channel="web",outcome="answered"}'
+        values: "0+10x60"
+      - series: 'shosai_agent_load_toolset_total'
+        values: "0+1x24 24x36"
+    alert_rule_test:
+      - eval_time: 20h
+        alertname: LeoToolsetLoadsFrequent
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "Leo часто догружает наборы инструментов"
+              description: "Больше чем в 5 % ходов за сутки модели пришлось загрузить набор инструментов, который маршрутизация не предложила. Каждая загрузка стоит лишнего раунда: ответы Leo приходят медленнее и дороже."
+              runbook: docs/runbooks/alerts.md#leo-toolset-loads-frequent
+      - eval_time: 55h
+        alertname: LeoToolsetLoadsFrequent
+        exp_alerts: []

@@ -6,10 +6,11 @@ edited turn answers the thread's last question again; the page and its subject c
 The task is never retried by the queue: a run whose worker was lost is swept as
 `process_lost`, and the person's "Retry" asks again. Its deadline outlives the turn's own
 180 s, so the run always ends itself. The payload carries what the admission decided —
-consent, the answer's language and length, the token route — so the worker reads only the
-conversation.
+consent, the answer's language and length, the token route, the switches left on — so the
+worker reads only the conversation.
 """
 
+import asyncio
 from datetime import datetime, timedelta
 from typing import Final
 from uuid import UUID
@@ -41,6 +42,8 @@ class TurnPayload(HomeTaskPayload):
     path: str | None = None
     subject_kind: SubjectKind | None = None
     subject_id: UUID | None = None
+    # Включённые переключатели Leo (`ToolSpec.switch`): пусто — инструменты за ними не предлагаются.
+    switches_on: tuple[str, ...] = ()
 
 
 RUN_TURN: Final = TaskDeclaration(
@@ -67,17 +70,23 @@ def started_event(payload: TurnPayload) -> StreamEvent:
 
 
 class RunEmitter:
-    """The worker's side of a run's stream: the next numbers after `run.started`."""
+    """The worker's side of a run's stream: the next numbers after `run.started`.
+
+    Parallel tool calls emit at once; events go to the log one at a time, in their numbers'
+    order, since the log takes each number only after the one before.
+    """
 
     def __init__(self, run_log: RunLog, run_id: UUID) -> None:
         self._log = run_log
         self._run_id = run_id
         self._ledger = StreamLedger(seq=1)
+        self._order = asyncio.Lock()
 
     async def emit(self, kind: EventKind, data: EventData) -> StreamEvent:
         """Append one event to the run's log."""
-        self._ledger, event = self._ledger.emit(kind, data)
-        await self._log.append(self._run_id, (event,))
+        async with self._order:
+            self._ledger, event = self._ledger.emit(kind, data)
+            await self._log.append(self._run_id, (event,))
         return event
 
     async def text(self, text: str) -> None:

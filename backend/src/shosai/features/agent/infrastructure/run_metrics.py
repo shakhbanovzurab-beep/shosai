@@ -2,7 +2,7 @@
 
 `shosai_agent_turns_total{channel, outcome}` counts runs by how they ended — the objective's
 platform failures are `failed`, `process_lost` and `turn_deadline`. The platform's own time on
-a turn — admission to the model's call, and the model's last word to the recorded end — is
+a turn — its wall time less the model's calls and the tools' time in their slices — is
 `shosai_agent_platform_overhead_seconds{home}`, whose objective is 500 ms for 95 % of EU turns.
 The person's wait for the first word is `shosai_agent_ttft_seconds{tier}`, the worker's
 pickup of a sent turn `shosai_agent_queue_pickup_seconds`, the context's size by segment
@@ -41,7 +41,7 @@ class RunMetrics:
         )
         self._overhead = Histogram(
             OVERHEAD,
-            "Время платформы на ходе Leo без ответа модели: допуск, контекст, запись конца",
+            "Время платформы на ходе Leo без модели и инструментов: допуск, контекст, запись конца",
             ("home",),
             buckets=OVERHEAD_BUCKETS,
             registry=registry,

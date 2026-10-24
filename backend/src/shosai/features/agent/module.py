@@ -5,14 +5,19 @@ home and the handler of a person's data; step 3 Settings > Leo and its four swit
 native `/v1/auth/me`; step 4 the threads and their history, with a workspace's threads
 following the person's membership; step 5a the run — admitted and streamed by the API, driven
 by the workers of the `agent` queue, swept when its worker is lost (AG-D12); step 5b its
-context, a thread's title and summary, and the run's telemetry and objectives. The tools, the
-Action Gateway and the cabinet's other routes join in the later steps.
+context, a thread's title and summary, and the run's telemetry and objectives; step 6 the
+tools — Leo's own `core` toolset, the routing of every slice's toolsets and the rounds that
+call them. The Action Gateway and the cabinet's other routes join in the later steps.
 """
 
+import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Final
 
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
+from shosai.core.config.roles import ProcessRole
+from shosai.core.db.engines import DATABASE_PROFILES
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, QueueCompanion
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.agent.application.account_data import ACCOUNT_DATA, AgentAccountData
@@ -22,15 +27,21 @@ from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.lost_runs import LostRuns
 from shosai.features.agent.application.preferences import AgentPreferences
+from shosai.features.agent.application.result_pages import ResultPages
 from shosai.features.agent.application.run_context import ContextBuilder
-from shosai.features.agent.application.run_engine import EngineParts, RunEngine
+from shosai.features.agent.application.run_engine import RunEngine
+from shosai.features.agent.application.run_engine_parts import EngineParts
 from shosai.features.agent.application.run_registry import RunRegistry
 from shosai.features.agent.application.run_streams import RunStreams
 from shosai.features.agent.application.run_telemetry import RunTelemetry
 from shosai.features.agent.application.thread_care import ThreadCare
 from shosai.features.agent.application.threads import Threads
+from shosai.features.agent.application.tool_offer import TurnRouting
+from shosai.features.agent.application.tool_registry import ToolRegistry
+from shosai.features.agent.application.tool_round import ToolParts
 from shosai.features.agent.application.turn_commit import TurnParts
 from shosai.features.agent.application.turn_start import TurnStarter
+from shosai.features.agent.channels.agent_tools import CORE_TOOLS, core_tools
 from shosai.features.agent.channels.http.settings import build_settings_router
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
@@ -45,6 +56,7 @@ from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.run_records import RUN_MODELS
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 from shosai.features.agent.infrastructure.thread_records import THREAD_MODELS
+from shosai.features.agent.infrastructure.tool_metrics import ToolMetrics
 from shosai.features.agent.infrastructure.turn_graph import turn_graph
 from shosai.features.agent.objectives import AGENT_OBJECTIVES
 from shosai.features.agent.settings import AgentSettings, agent_model_set
@@ -52,6 +64,14 @@ from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 
 # Трассировщик среза: спаны хода Leo (agent.run, agent.context) без единого слова разговора.
 TRACER_NAME = "shosai.agent"
+# Одно соединение пула дома остаётся ходам: контекст, раунды и конец прогона.
+SPARE_CONNECTIONS: Final = 1
+
+
+def tool_bulkhead(role: ProcessRole) -> asyncio.Semaphore:
+    """How many tool calls of this process run at once: below its pool of connections."""
+    profile = DATABASE_PROFILES.get(role) or DATABASE_PROFILES[ProcessRole.WORKERS]
+    return asyncio.Semaphore(max(profile.pool_size - SPARE_CONNECTIONS, 1))
 
 
 @asynccontextmanager
@@ -65,12 +85,18 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     run_log, leases, fleet = RunLog(valkey), ThreadLeases(valkey), Fleet(valkey)
     tail, registry = LogTail(valkey, run_log), RunRegistry(leases, fleet)
     settings = services.settings.features.get(AgentSettings)
-    metrics = RunMetrics(services.registry)
-    telemetry = RunTelemetry(metrics, services.tracer_provider.get_tracer(TRACER_NAME))
+    metrics, tracer = (
+        RunMetrics(services.registry),
+        services.tracer_provider.get_tracer(TRACER_NAME),
+    )
+    telemetry, pages = RunTelemetry(metrics, tracer), ResultPages(transactions, ports)
+    tools = ToolParts(pages, tool_bulkhead(services.role), ToolMetrics(services.registry), tracer)
+    routing = TurnRouting(ToolRegistry(services.agent_tools), ports)
     engine = RunEngine(
         EngineParts(
             transactions, services.ai, settings.standard_route(), run_log, leases, fleet,
-            registry, services.outbox, turn_graph(), ContextBuilder(ports), telemetry,
+            registry, services.outbox, turn_graph(), ContextBuilder(ports), routing, tools,
+            telemetry,
         )
     )  # fmt: skip
     starter = TurnStarter(
@@ -92,6 +118,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             task_handlers=task_handlers(departures, lost_runs, engine, care),
             subscriptions=subscriptions(departures, AfterTurn(services.tasks)),
             periodic_jobs=PERIODIC_JOBS,
+            agent_tools=core_tools(pages),
             queue_companions=(QueueCompanion(TaskQueue.AGENT, lambda: present_in_fleet(fleet)),),
             provides=(
                 ACCOUNT_DATA_HANDLERS.bind(AgentAccountData(transactions, valkey)),
@@ -110,6 +137,7 @@ AGENT = FeatureModule(
     events=(TurnCompleted,),
     settings=(AgentSettings,),
     production_checks=(agent_model_set,),
+    agent_tools=CORE_TOOLS,
     objectives=AGENT_OBJECTIVES,
     account_data=(ACCOUNT_DATA,),
 )

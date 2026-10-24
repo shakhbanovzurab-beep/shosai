@@ -30,8 +30,9 @@ Message = {id, role: user | assistant | server, text, status: done | stopped | f
   names it; the cabinet words an untitled thread itself. The "Recent chats" menu lists the context's threads and
   renames or deletes them. Nothing of a thread is kept in the browser's storage.
 - A message carries what exists when its step ships: now `id`, `role`, `text`, `status` (null for a question or a
-  server note), `created_at` and `duration_ms`; `steps` and `sources` come with answers over tools, `artifacts` and
-  `actions` with the cards, `feedback` with the rating and `attachments` with uploads.
+  server note), `created_at`, `duration_ms` and `steps` (an answer's tool calls; empty otherwise, `status` `done`
+  or `failed`); `sources` come with the sources step, `artifacts` and `actions` with the cards, `feedback` with the
+  rating and `attachments` with uploads. The model's tool rounds are never listed.
 - `POST` with a workspace the person is not in is `404 workspace_not_found`; a workspace scope without
   `workspace_id`, or Personal with one, is `422 scope_invalid`.
 - A workspace's threads disappear the moment the person's membership ends (`404 thread_not_found`); they are erased

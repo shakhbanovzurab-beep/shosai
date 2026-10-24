@@ -5,9 +5,17 @@ from decimal import Decimal
 
 import pytest
 
-from shosai.core.ai.adapters.openrouter_wire import image_of, reported_cost, stream_chunk, usage_of
+from shosai.core.ai.adapters.openrouter_wire import (
+    StreamedToolCalls,
+    image_of,
+    message_body,
+    reported_cost,
+    stream_chunk,
+    usage_of,
+)
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, PlatformAccount
 from shosai.core.ai.errors import AiCallError
+from shosai.core.ai.requests import ChatMessage, Role, TextPart, ToolCall
 from shosai.core.ai.results import Unit
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
@@ -83,3 +91,45 @@ def test_a_context_names_one_payer_and_a_user_for_a_scope() -> None:
     with pytest.raises(ValueError, match="snake_case"):
         make_context(account=PlatformAccount.SYSTEM, feature="Probe Chat")
     assert make_context(account=PlatformAccount.SYSTEM).payer_scope == TenancyScope(Home.EU)
+
+
+def test_streamed_tool_calls_are_assembled_from_their_pieces_in_order() -> None:
+    calls = StreamedToolCalls()
+    for delta in (
+        {"tool_calls": [{"index": 1, "id": "b", "function": {"name": "tasks__search"}}]},
+        {
+            "tool_calls": [
+                {"index": 0, "id": "a", "function": {"name": "notes__search", "arguments": '{"q'}}
+            ]
+        },
+        {"tool_calls": [{"index": 0, "function": {"arguments": '": "budget"}'}}]},
+        {"content": "text only"},
+        {"tool_calls": "broken"},
+    ):
+        calls.take(delta)
+
+    assert calls.calls() == (
+        ToolCall(call_id="a", name="notes__search", arguments='{"q": "budget"}'),
+        ToolCall(call_id="b", name="tasks__search", arguments="{}"),
+    )
+    assert StreamedToolCalls().calls() == ()
+
+
+def test_a_round_of_calls_and_its_answer_are_sent_in_the_provider_shape() -> None:
+    call = ToolCall(call_id="a", name="notes__search", arguments='{"query": "budget"}')
+    silent = ChatMessage(Role.ASSISTANT, tool_calls=(call,))
+    spoken = ChatMessage(Role.ASSISTANT, (TextPart("Looking."),), tool_calls=(call,))
+    answer = ChatMessage(Role.TOOL, (TextPart('{"meetings": []}'),), tool_call_id="a")
+
+    assert message_body(silent) == {
+        "role": "assistant",
+        "content": None,
+        "tool_calls": [
+            {"id": "a", "type": "function",
+             "function": {"name": "notes__search", "arguments": '{"query": "budget"}'}}
+        ],
+    }  # fmt: skip
+    assert message_body(spoken)["content"] == [{"type": "text", "text": "Looking."}]
+    assert message_body(answer) == {
+        "role": "tool", "content": '{"meetings": []}', "tool_call_id": "a",
+    }  # fmt: skip

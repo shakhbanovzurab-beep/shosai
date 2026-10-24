@@ -6,6 +6,7 @@ a script of pieces, with a pause or a gate between them and an optional failure 
 The plan's token decision and the person's consent are doubles the test sets.
 """
 
+import asyncio
 import json
 import uuid
 from collections.abc import AsyncIterator, Mapping
@@ -22,6 +23,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
 from shosai.core.config.roles import ProcessRole
 from shosai.core.db.transactions import HomeTransactions
@@ -35,14 +37,20 @@ from shosai.core.kv.rate_limits import RateLimit, RateLimiter
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.model_stream import Pace
+from shosai.features.agent.application.result_pages import ResultPages
 from shosai.features.agent.application.run_context import ContextBuilder
-from shosai.features.agent.application.run_engine import EngineParts, RunEngine
+from shosai.features.agent.application.run_engine import RunEngine
+from shosai.features.agent.application.run_engine_parts import EngineParts
 from shosai.features.agent.application.run_registry import RunRegistry
 from shosai.features.agent.application.run_streams import RunStreams
 from shosai.features.agent.application.run_telemetry import RunTelemetry
 from shosai.features.agent.application.threads import Threads
+from shosai.features.agent.application.tool_offer import TurnRouting
+from shosai.features.agent.application.tool_registry import ToolRegistry
+from shosai.features.agent.application.tool_round import ToolParts
 from shosai.features.agent.application.turn_commit import TurnParts
 from shosai.features.agent.application.turn_start import TurnStarter
+from shosai.features.agent.channels.agent_tools import core_tools
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
 from shosai.features.agent.infrastructure.fleet import Fleet
@@ -50,6 +58,7 @@ from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.run_log import RunLog
 from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
+from shosai.features.agent.infrastructure.tool_metrics import ToolMetrics
 from shosai.features.agent.infrastructure.turn_graph import turn_graph
 from shosai.features.agent.module import AGENT
 from shosai.features.billing.contracts import TOKEN_ALLOWANCE
@@ -62,6 +71,7 @@ from shosai.features.notes.contracts import MEETING_READER
 from shosai.features.workspaces.contracts import MEMBERSHIP_READER
 from shosai.features.workspaces.infrastructure.membership_reader import MembershipDirectory
 from tests.core.web.probe_app import build_probe_app, client_of
+from tests.features.agent.tool_doubles import ProbeTools
 from tests.features.agent.turn_doubles import (
     WAIT,
     InlineQueue,
@@ -103,6 +113,7 @@ class TurnBench:
     meetings: Meetings
     # Реестр метрик стенда и снятые спаны: тесты телеметрии читают их.
     observed: tuple[CollectorRegistry, InMemorySpanExporter]
+    tools: ProbeTools
 
     @property
     def connection(self) -> Connection:
@@ -183,10 +194,16 @@ async def turn_bench(
     metrics, spans = RunMetrics(registry), InMemorySpanExporter()
     tracing = TracerProvider(shutdown_on_exit=False)
     tracing.add_span_processor(SimpleSpanProcessor(spans))
-    telemetry = RunTelemetry(metrics, tracing.get_tracer("shosai.agent"))
+    tracer = tracing.get_tracer("shosai.agent")
+    telemetry = RunTelemetry(metrics, tracer)
+    pages, tools = ResultPages(homes.transactions, ports), ProbeTools()
+    catalog = AgentToolCatalog()
+    catalog.install([*core_tools(pages), *tools.bound()])
+    tool_parts = ToolParts(pages, asyncio.Semaphore(4), ToolMetrics(registry), tracer)
     parts = EngineParts(
         homes.transactions, model, ROUTE, run_log, leases, fleet, runs, outbox, turn_graph(),
-        ContextBuilder(ports), telemetry, QUICK,
+        ContextBuilder(ports), TurnRouting(ToolRegistry(catalog), ports), tool_parts, telemetry,
+        QUICK,
     )  # fmt: skip
     queue.engine = RunEngine(parts)
     threads = Threads(homes.transactions, (ports, effects))
@@ -209,7 +226,7 @@ async def turn_bench(
         async with client_of(build_probe_app(extra=routers).app) as http:
             yield TurnBench(
                 http, homes, valkey, model, queue, terms, parts, run_slot, meetings,
-                (registry, spans),
+                (registry, spans), tools,
             )  # fmt: skip
             await queue.settle()
     finally:

@@ -40,6 +40,7 @@ from shosai.features.agent.domain.threads import (
 from shosai.features.agent.domain.wrapper import BOUNDARY_BYTES, Label, boundary, wrap
 from shosai.features.agent.infrastructure.prompts import FIRST_QUESTION, SUMMARY_TASK, TITLE_TASK
 from shosai.features.agent.infrastructure.thread_records import (
+    SPOKEN,
     AgentMessageRecord,
     AgentThreadRecord,
 )
@@ -207,6 +208,7 @@ async def opening(session: AsyncSession, thread: AgentThreadRecord) -> list[Line
                 MESSAGE.thread_id == thread.id,
                 MESSAGE.created_at >= thread.created_at,
                 MESSAGE.role.in_(tuple(SPEAKERS)),
+                SPOKEN,
             )
             .order_by(MESSAGE.created_at, MESSAGE.id)
             .limit(2)
@@ -230,6 +232,7 @@ async def unfolded(session: AsyncSession, thread: AgentThreadRecord) -> list[Lin
         MESSAGE.created_at >= since,
         MESSAGE.role.in_(tuple(SPEAKERS)),
         or_(MESSAGE.status.is_(None), MESSAGE.status != AnswerStatus.FAILED.value),
+        SPOKEN,
     ]
     if thread.summary_upto is not None:
         conditions.append(MESSAGE.id != thread.summary_upto)

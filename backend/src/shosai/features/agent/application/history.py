@@ -1,16 +1,16 @@
 """A thread's history by cursor, newest first (agent plan §3.3, step 4).
 
 History is the person's questions, Leo's answers and the server's notes; tool rounds are the
-model's context and are never listed. A page reads the thread's monthly partitions from the
+run's record and are never listed. A page reads the thread's monthly partitions from the
 thread's creation on, so older months are pruned, walks the thread's index by moment and
-id, and reads only the columns it shows. A message's steps and sources join it with step
-6, its artifacts and cards with 9b, its rating with 11 and its attachments with 12: each
-with the step that writes it.
+id, and reads only the columns it shows. An answer lists the steps the person saw (step 6);
+its sources join it with step 6b, its artifacts and cards with 9b, its rating with 11 and its
+attachments with 12: each with the step that writes it.
 """
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Final
+from typing import Any, Final
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -23,16 +23,16 @@ from shosai.core.pagination.keyset import Keyset
 from shosai.core.pagination.page import Page, PageRequest, page_of
 from shosai.features.agent.application.threads import Threads
 from shosai.features.agent.domain.threads import AnswerStatus, HistoryRole
-from shosai.features.agent.infrastructure.thread_records import AgentMessageRecord
+from shosai.features.agent.infrastructure.thread_records import SPOKEN, AgentMessageRecord
 from shosai.features.identity.contracts import Principal
 
 MESSAGE = AgentMessageRecord
 LISTED: Final = tuple(role.value for role in HistoryRole)
 NEWEST: Final = Keyset((MESSAGE.created_at.expression, MESSAGE.id.expression), descending=True)
-# Только показываемые столбцы: шаги, источники и вызовы раунда в страницу не читаются.
+# Только показываемые столбцы: источники и вызовы раунда в страницу не читаются.
 SHOWN: Final = load_only(
     MESSAGE.id, MESSAGE.created_at, MESSAGE.role, MESSAGE.text, MESSAGE.status,
-    MESSAGE.duration_ms,
+    MESSAGE.duration_ms, MESSAGE.steps,
 )  # fmt: skip
 
 
@@ -47,6 +47,29 @@ CODEC: Final = CursorCodec("agent.messages", MessagePosition)
 
 
 @dataclass(frozen=True, slots=True)
+class StepView:
+    """A step of an answer: the tool or activity, its detail, how it ended and how long."""
+
+    id: str
+    activity: str
+    detail: str | None
+    status: str
+    duration_ms: int | None
+
+
+def steps_of(stored: list[dict[str, Any]]) -> tuple[StepView, ...]:
+    """An answer's steps as its row keeps them."""
+    return tuple(
+        StepView(
+            id=str(step.get("id", "")), activity=str(step.get("activity", "")),
+            detail=step.get("detail"), status=str(step.get("status", "")),
+            duration_ms=step.get("duration_ms"),
+        )
+        for step in stored
+    )  # fmt: skip
+
+
+@dataclass(frozen=True, slots=True)
 class MessageView:
     """A row of the history."""
 
@@ -56,6 +79,7 @@ class MessageView:
     status: AnswerStatus | None
     created_at: datetime
     duration_ms: int | None
+    steps: tuple[StepView, ...] = ()
 
 
 def view_of(record: AgentMessageRecord) -> MessageView:
@@ -64,6 +88,7 @@ def view_of(record: AgentMessageRecord) -> MessageView:
     return MessageView(
         id=record.id, role=HistoryRole(record.role), text=record.text, status=status,
         created_at=record.created_at, duration_ms=record.duration_ms,
+        steps=steps_of(record.steps),
     )  # fmt: skip
 
 
@@ -95,6 +120,7 @@ class History:
                     MESSAGE.user_id == principal.user_id,
                     MESSAGE.created_at >= thread.created_at,
                     MESSAGE.role.in_(LISTED),
+                    SPOKEN,
                 )
             )
             rows = list(await session.scalars(NEWEST.page(statement, after, request.limit)))

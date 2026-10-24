@@ -211,6 +211,13 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Loki or Tempo down or slow → see their targets; a flood of lines → find the service in Loki's volume panel; the collector's memory → its limit (F5-D3).
 
+<a id="leo-toolset-loads-frequent"></a>
+### LeoToolsetLoadsFrequent
+
+**Means.** In more than 5 % of the day's Leo turns the model called `core.load_toolset`: routing (ADR 0068 AG-D7) left out a toolset the question needed, so the turn paid an extra round of the model. Answers are slower and cost more; nothing is lost.
+
+**Fix.** Read which toolsets runs loaded and on which pages: `agent_runs.routing` keeps `selected`, `deferred` and `loaded` per run. A page that should bring a toolset → add its section to the surface map in `features/agent/application/tool_offer.py`; segment 2 too full to hold the toolsets turns need → shorten the largest schemas or descriptions of the slice that owns them.
+
 <a id="scrape-target-down"></a>
 ### ScrapeTargetDown
 

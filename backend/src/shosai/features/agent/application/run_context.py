@@ -1,13 +1,14 @@
 """A turn's input for the model: the context builder v1 (Leo §7.3, ADR 0031; agent step 5b).
 
 The stable head — the policy (segment 1) and the profile core (4) — opens every turn of a
-thread byte for byte, so a provider's prefix cache keeps it; tools (2) and a skill (3) join it
-with their steps. Then the thread's summary (5), the newest messages before the question that
-fit 5 000 tokens, oldest first (6) — a failed answer's text is left out, and a regenerated
-question's earlier answers too — and last the volatile part (7: the time to the minute in the
-person's zone, the page and what it shows) with the question (8). The thread and the run are
-read as the person: a deleted thread ends the run before the model is asked, and so does a
-run the sweep ended while it waited for a worker.
+thread byte for byte, so a provider's prefix cache keeps it; the tools' schemas (2) travel
+beside it in the request, in a fixed order (step 6), and a skill (3) joins it with its step.
+Then the thread's summary (5), the newest questions and answers before the question that fit
+5 000 tokens, oldest first (6) — a failed answer's text is left out, a regenerated question's
+earlier answers too, and earlier turns' tool rounds always — and last the volatile part (7:
+the time to the minute in the person's zone, the page and what it shows) with the question
+(8). The thread and the run are read as the person: a deleted thread ends the run before the
+model is asked, and so does a run the sweep ended while it waited for a worker.
 """
 
 import secrets
@@ -43,6 +44,7 @@ from shosai.features.agent.infrastructure.prompts import (
 )
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.thread_records import (
+    SPOKEN,
     AgentMessageRecord,
     AgentThreadRecord,
 )
@@ -169,6 +171,7 @@ class ContextBuilder:
             position < tuple_(question.created_at, question.id),
             MESSAGE.role.in_(tuple(ROLES)),
             or_(MESSAGE.status.is_(None), MESSAGE.status != AnswerStatus.FAILED.value),
+            SPOKEN,
         ]
         if thread.summary_upto is not None:
             conditions.append(MESSAGE.id != thread.summary_upto)

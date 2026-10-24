@@ -1,11 +1,11 @@
 """A run's telemetry: its times, its spans and its numbers (agent plan §3.6, Leo §16; step 5b).
 
 A run's times are the person's: from the question's admission (`started_at`) to the worker's
-pickup, to the model's call and its first word, to the model's last word and the recorded end.
-The platform's own time is everything but the model: admission, queue and context before the
-call, the final transaction after it. Spans carry ids and codes only — `agent.run` with the
-run's id, `agent.context`, and the provider port's own `ai.call` inside — never a word of the
-conversation.
+pickup, to the model's first word, to the recorded end. The platform's own time is the run's
+wall time less the model's calls and the tools' time in their slices (Leo §11.3): admission,
+queue, context, routing and dispatch, the final transaction. Spans carry ids and codes only —
+`agent.run` with the run's id, `agent.context`, the provider port's own `ai.call` and a
+`tool.<name>` per call inside — never a word of the conversation.
 """
 
 from collections.abc import Iterator
@@ -30,18 +30,16 @@ MICRO: Final = Decimal(1_000_000)
 
 @dataclass
 class TurnTimes:
-    """When a run's worker took it, and when its model call began and ended."""
+    """When a run's worker took it, and how long its model calls and its tools took."""
 
     picked_up: datetime
-    model_started: datetime | None = None
-    model_ended: datetime | None = None
+    model: timedelta = timedelta(0)
+    tools: timedelta = timedelta(0)
     sizes: dict[Segment, int] = field(default_factory=dict)
 
     def overhead(self, started: datetime, ended: datetime) -> timedelta:
-        """The platform's own time: everything but the model's call."""
-        if self.model_started is None or self.model_ended is None:
-            return ended - started
-        return (self.model_started - started) + (ended - self.model_ended)
+        """The platform's own time: everything but the model's calls and the tools."""
+        return max(ended - started - self.model - self.tools, timedelta(0))
 
     def first_word(self, started: datetime, answer: ModelAnswer | None) -> timedelta | None:
         """From the admission to the first word, when the model wrote one."""

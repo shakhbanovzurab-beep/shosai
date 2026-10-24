@@ -26,6 +26,7 @@ from shosai.features.agent.domain.threads import (
     AnswerStatus,
     HistoryRole,
     ScopeKind,
+    StepStatus,
     ThreadRuleError,
     ThreadScope,
     check_available,
@@ -70,8 +71,20 @@ class ThreadOut(Out):
     created_at: datetime
 
 
+class StepOut(Out):
+    """A step of an answer: the tool's name or a reasoning code, the argument it showed, how it
+    ended and how long it took."""
+
+    id: str
+    activity: str
+    detail: str | None
+    status: StepStatus
+    duration_ms: int | None
+
+
 class MessageOut(Out):
-    """A row of the history: a question, an answer (with how it ended) or a server's note."""
+    """A row of the history: a question, an answer (with how it ended and the steps it took) or
+    a server's note."""
 
     id: UUID
     role: HistoryRole
@@ -79,6 +92,7 @@ class MessageOut(Out):
     status: AnswerStatus | None
     created_at: datetime
     duration_ms: int | None
+    steps: list[StepOut]
 
 
 def scope_of(kind: ScopeKind, workspace_id: UUID | None) -> ThreadScope:
@@ -102,9 +116,16 @@ def thread_out(view: ThreadView) -> ThreadOut:
 
 def message_out(view: MessageView) -> MessageOut:
     """A message as the cabinet reads it."""
+    steps = [
+        StepOut(
+            id=step.id, activity=step.activity, detail=step.detail,
+            status=StepStatus(step.status), duration_ms=step.duration_ms,
+        )
+        for step in view.steps
+    ]  # fmt: skip
     return MessageOut(
         id=view.id, role=view.role, text=view.text, status=view.status,
-        created_at=view.created_at, duration_ms=view.duration_ms,
+        created_at=view.created_at, duration_ms=view.duration_ms, steps=steps,
     )  # fmt: skip
 
 

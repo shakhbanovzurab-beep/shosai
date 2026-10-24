@@ -34,6 +34,10 @@ class AgentToolCatalog:
         """The tool of the name, or None for a name the model made up."""
         return self._installed().get(name)
 
+    def toolsets(self) -> tuple[str, ...]:
+        """The names of the toolsets, in the order their first tool was bound."""
+        return tuple(dict.fromkeys(tool.spec.toolset for tool in self._installed().values()))
+
     def toolset(self, name: str) -> tuple[AgentTool, ...]:
         """The tools of a toolset, in the order the slices bound them."""
         return tuple(tool for tool in self._installed().values() if tool.spec.toolset == name)

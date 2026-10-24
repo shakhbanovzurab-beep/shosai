@@ -53,6 +53,8 @@ def message_body(message: ChatMessage) -> Json:
         body["tool_call_id"] = message.tool_call_id
         body["content"] = "".join(p.text for p in message.parts if isinstance(p, TextPart))
     if message.tool_calls:
+        # Сообщение модели только с вызовами: содержимого нет, не пустой список частей.
+        body["content"] = body["content"] or None
         body["tool_calls"] = [
             {"id": call.call_id, "type": "function",
              "function": {"name": call.name, "arguments": call.arguments}}
@@ -125,6 +127,37 @@ def tool_calls_of(message: Json) -> tuple[ToolCall, ...]:
         for call in calls
         if isinstance(call, dict)
     )
+
+
+class StreamedToolCalls:
+    """The tool calls of a streamed answer, assembled from their pieces.
+
+    A stream sends each call in pieces keyed by its index: the id and the name once, the
+    arguments' JSON in fragments. The calls are whole only when the answer finishes.
+    """
+
+    def __init__(self) -> None:
+        self._parts: dict[int, list[str]] = {}
+
+    def take(self, delta: Json) -> None:
+        """Add the pieces of tool calls a delta carries."""
+        pieces = delta.get("tool_calls") or []
+        for piece in pieces if isinstance(pieces, list) else ():
+            if not isinstance(piece, dict):
+                continue
+            index = piece.get("index")
+            slot = self._parts.setdefault(index if isinstance(index, int) else 0, ["", "", ""])
+            function = piece.get("function") or {}
+            slot[0] = slot[0] or str(piece.get("id") or "")
+            slot[1] = slot[1] or str(function.get("name") or "")
+            slot[2] += str(function.get("arguments") or "")
+
+    def calls(self) -> tuple[ToolCall, ...]:
+        """The whole calls in their order."""
+        return tuple(
+            ToolCall(call_id=call_id, name=name, arguments=arguments or "{}")
+            for call_id, name, arguments in (self._parts[index] for index in sorted(self._parts))
+        )
 
 
 def first_choice(answer: Json) -> Json:

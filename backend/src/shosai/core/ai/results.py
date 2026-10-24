@@ -54,13 +54,15 @@ class ChatResult:
 
 @dataclass(frozen=True, slots=True)
 class ChatDelta:
-    """A piece of a streamed answer; the last one carries the usage of the whole call, and
-    every one the model of the route that is answering."""
+    """A piece of a streamed answer; the last one carries the usage of the whole call, the one
+    with the finish reason the whole tool calls, and every one the model that is answering."""
 
     text: str = ""
     finish_reason: str | None = None
     usage: Usage | None = None
     model: ModelRef | None = None
+    # Вызовы инструментов целиком: приходят с причиной остановки ответа.
+    tool_calls: tuple[ToolCall, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

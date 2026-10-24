@@ -160,6 +160,7 @@ def test_the_catalog_holds_each_name_once_and_answers_by_toolset() -> None:
     assert catalog.tool("notes.search") is SEARCH_TOOL
     assert catalog.tool("notes.delete_everything") is None
     assert catalog.toolset("notes") == (SEARCH_TOOL, ARCHIVE_TOOL)
+    assert catalog.toolsets() == ("notes",)
     with pytest.raises(RuntimeError, match="уже установлены"):
         catalog.install([])
     with pytest.raises(ValueError, match="дважды"):

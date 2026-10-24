@@ -426,7 +426,7 @@ Recall does **not** refresh decay. Only use the model cites, or the user's confi
 | 4 | Profile core | per user, rarely | 600 | pinned memory, personalization, timezone, answer language |
 | ↑ | **cache breakpoint** | | | explicit where the provider supports it |
 | 5 | Thread summary | every few turns | 1 000 | rolling, written in the background |
-| 6 | Recent messages, verbatim | per turn | 5 000 | tool results as digests with `result_ref` |
+| 6 | Recent messages, verbatim | per turn | 5 000 | questions and answers; earlier turns' tool rounds left out (agent step 6) |
 | 7 | Volatile context | per turn | 2 500 | time to the minute, surface and subject digest, recalled memory, mentions, attachment digests, retrieved knowledge; all external text wrapped |
 | 8 | User message | per turn | 4 000 | longer input becomes an attachment |
 
@@ -434,7 +434,8 @@ Recall does **not** refresh decay. Only use the model cites, or the user's confi
 
 **Rules:**
 
-- **Tool results over budget** (default 1 500 tokens) are stored in full in `agent_messages` for 30 days. The context gets a digest: counts, the first items, `truncated: true` and a `result_ref`. The `read_result(ref, cursor)` tool pages through the rest.
+- **Tool results over budget** (default 1 500 tokens) are stored in full in `agent_tool_results` for 30 days. The context gets a digest: the same JSON with its longest lists cut to their first items and the full count of each, `truncated: true` and a `result_ref`. The `read_result(ref, cursor)` tool pages through the rest, wrapped with the label of the tool that produced it.
+- **Earlier turns' tool rounds stay out of later turns** (amended 2026-10-24, agent step 6): within a run every round is whole; afterwards the answer carries what was learned, and its numbered sources carry the ids a follow-up needs. Stale tool output is the cheapest context to drop — it would crowd the questions and answers out of segment 6 and set compaction off after nearly every turn. The rounds stay in `agent_messages` for the run's record.
 - **Compaction** runs after a turn, when the recent segment exceeds 70% of its cap. A cheap model folds the oldest turns into the thread summary. The hot path never waits for it; if compaction lags, the builder drops the oldest turns.
 - **Attachments** are stored and referenced. Their digest stays available on later turns (fixes the draft's per-turn loss), and the full text is read through `read_result`.
 - **Time and surface go last**, never in segment 1. The draft's minute-level `now_line` at the top broke every prefix cache (T2).
@@ -520,7 +521,8 @@ If the model needs more, `load_toolset(name)` adds the schemas for the next roun
 
 ### 8.3 Execution
 
-- **Reads and egress** run in parallel, at most 8 calls per round. Each has its own timeout, and its result is capped by `result_budget`. Errors become typed error data the model can explain.
+- **Reads and egress** run in parallel, at most 8 calls per round; further calls of the round are refused. Each has its own timeout, and its result is capped by `result_budget`. Errors become typed error data the model can explain; a call of a tool not offered, or with arguments its schema refuses, never runs. Calls pass a per-process bulkhead sized below the database pool, so a burst waits for a connection instead of failing for one.
+- **Until the Action Gateway** (agent step 9a) only reads and cabinet actions are offered; writes and egress join with their cards.
 - **Egress** additionally requires a card when taint ≥ external (§7.4), and is metered.
 - **Rounds:**
   - soft limit 4: after it, reasoning is forced on and the planner prompt asks to conclude;
@@ -954,7 +956,7 @@ The full contract — turn body, refusals, page shapes — is in the [agent plan
 | `text.delta` | `text` | `token` / `text` |
 | `sources` | the cumulative `LeoSource[]` (kind, id, title, space, locator, quote, highlight), numbered by position; the answer cites `[n]` (ADR 0068 AG-D1) | the new UI's mock `sources` |
 | `artifact` | `kind, ref, alt` and the kind's fields: `chat_digest` (`workspace_id, chat_id`; agent plan AG-R1); `chart` and `image` with the admin's analytics, `file` with its first producer (ADR 0068 AG-D10) | `image` (no base64 in the stream) |
-| `client.action` | `navigate{to}` (`set_theme` dropped, ADR 0068 AG-D10) | `action{navigate,set_theme}` |
+| `client.action` | `{navigate: {to}}` (`set_theme` dropped, ADR 0068 AG-D10) | `action{navigate,set_theme}` |
 | `action.proposed` | the action as stored, server preview, friction, taint note, `invalidates` | `action{action_proposal}` |
 | `action.updated` | id, status, per-item outcome, `invalidates` | `action_result` |
 | `run.paused` | `action_id` | — |

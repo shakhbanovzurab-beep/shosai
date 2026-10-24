@@ -46,7 +46,7 @@ from shosai.features.agent.application.turn_commit import (
     commit_turn,
 )
 from shosai.features.agent.application.turn_task import RUN_TURN, TurnPayload, started_event
-from shosai.features.agent.domain.preferences import answer_language
+from shosai.features.agent.domain.preferences import Switch, answer_language
 from shosai.features.agent.domain.threads import ThreadRuleError, TurnKind, check_question
 from shosai.features.agent.infrastructure.fleet import Admission
 from shosai.features.agent.infrastructure.person_records import AgentSettingsRecord
@@ -163,6 +163,7 @@ class TurnStarter:
             token_route=route.value, kind=again.kind, path=page.path,
             subject_kind=page.subject.kind if page.subject else None,
             subject_id=page.subject.subject_id if page.subject else None,
+            switches_on=tuple(switch.value for switch in Switch if preferences.switched_on(switch)),
         )  # fmt: skip
         return await self._admitted(
             principal, terms, (effect, question), supersede=request.supersede

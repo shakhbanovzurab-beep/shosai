@@ -96,6 +96,13 @@ class AnswerStatus(StrEnum):
     FAILED = "failed"
 
 
+class StepStatus(StrEnum):
+    """How a step of an answer ended: its tool answered, or gave an error the model read."""
+
+    DONE = "done"
+    FAILED = "failed"
+
+
 class TurnKind(StrEnum):
     """What a turn does to the thread."""
 

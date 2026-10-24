@@ -4951,7 +4951,8 @@ export interface components {
         };
         /**
          * MessageOut
-         * @description A row of the history: a question, an answer (with how it ended) or a server's note.
+         * @description A row of the history: a question, an answer (with how it ended and the steps it took) or
+         *     a server's note.
          */
         MessageOut: {
             /**
@@ -4970,6 +4971,8 @@ export interface components {
             created_at: string;
             /** Duration Ms */
             duration_ms: number | null;
+            /** Steps */
+            steps: components["schemas"]["StepOut"][];
         };
         /**
          * Messenger
@@ -6540,6 +6543,28 @@ export interface components {
          * @enum {string}
          */
         StatusFilter: "open" | "done" | "todo" | "in_progress";
+        /**
+         * StepOut
+         * @description A step of an answer: the tool's name or a reasoning code, the argument it showed, how it
+         *     ended and how long it took.
+         */
+        StepOut: {
+            /** Id */
+            id: string;
+            /** Activity */
+            activity: string;
+            /** Detail */
+            detail: string | null;
+            status: components["schemas"]["StepStatus"];
+            /** Duration Ms */
+            duration_ms: number | null;
+        };
+        /**
+         * StepStatus
+         * @description How a step of an answer ended: its tool answered, or gave an error the model read.
+         * @enum {string}
+         */
+        StepStatus: "done" | "failed";
         /**
          * StickerBoardOut
          * @description A board a sticker is on.

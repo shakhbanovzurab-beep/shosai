@@ -132,16 +132,20 @@ class ThreadBench:
     async def message(
         self, person: uuid.UUID, thread: str, role: str, moment: datetime, text: str = "…"
     ) -> str:
-        """A row of the thread, written as a turn writes it: its id."""
+        """A row of the thread, written as a turn writes it: its id. A `round` is the model's
+        message with its tool calls."""
         message_id = uuid.uuid4()
-        status = "done" if role == "assistant" else None
+        calls = [{"id": "call-1", "name": "notes__search", "arguments": "{}"}]
+        stored = "assistant" if role == "round" else role
+        status = "done" if stored == "assistant" else None
         tool = ("call-1", "notes.search") if role == "tool" else (None, None)
         async with self.homes.transactions.begin(TenancyScope(HOME, person)) as session:
             session.add(
                 AgentMessageRecord(
                     id=message_id, created_at=moment, thread_id=uuid.UUID(thread),
-                    user_id=person, role=role, status=status, text=text,
+                    user_id=person, role=stored, status=status, text=text,
                     tool_call_id=tool[0], tool_name=tool[1],
+                    tool_calls=calls if role == "round" else None,
                 )
             )  # fmt: skip
         return str(message_id)
