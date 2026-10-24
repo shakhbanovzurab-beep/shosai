@@ -1,15 +1,17 @@
 """A run's end in the database: one transaction the worker or the sweep wins (Leo §5.2 step 11).
 
 The run moves from `running` with a condition, so of the run's worker and the lost-run sweep
-exactly one records an end. The answer is kept with the text the model wrote, the thread's
-last activity moves, and a completed turn is told through the outbox. A thread deleted
-meanwhile turns the end into `cancelled` and keeps nothing.
+exactly one records an end. The answer is kept with the text the model wrote — a regenerated or
+edited question's earlier answers give way to it — the thread's last activity moves, and a
+completed turn is told through the outbox. A thread deleted meanwhile turns the end into
+`cancelled` and keeps nothing.
 """
 
 from datetime import datetime, timedelta
 from typing import Any
 
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, tuple_, update
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
@@ -18,7 +20,7 @@ from shosai.features.agent.contracts.events import TurnCompleted
 from shosai.features.agent.domain.budgets import estimate_tokens
 from shosai.features.agent.domain.endings import Ending, cancelled
 from shosai.features.agent.domain.runs import RunStatus
-from shosai.features.agent.domain.threads import MessageRole
+from shosai.features.agent.domain.threads import MessageRole, TurnKind
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.thread_records import (
     AgentMessageRecord,
@@ -60,6 +62,7 @@ async def record_end(
             return None
         if thread is not None:
             if ending.keeps(text) and ending.answer is not None:
+                await replace_answers(session, payload)
                 session.add(
                     AgentMessageRecord(
                         id=payload.reply_id, created_at=now, thread_id=thread.id,
@@ -76,6 +79,31 @@ async def record_end(
                 )
                 await outbox.add(session, completed)
     return ending
+
+
+async def replace_answers(session: AsyncSession, payload: TurnPayload) -> None:
+    """A regenerated or edited question's earlier answers give way to the new one."""
+    if payload.kind is TurnKind.NEW:
+        return
+    question = await session.scalar(
+        select(AgentMessageRecord).where(
+            AgentMessageRecord.id == payload.question_id,
+            AgentMessageRecord.thread_id == payload.thread_id,
+        )
+    )
+    if question is None:
+        return
+    after = tuple_(AgentMessageRecord.created_at, AgentMessageRecord.id) > tuple_(
+        question.created_at, question.id
+    )
+    await session.execute(
+        delete(AgentMessageRecord).where(
+            AgentMessageRecord.thread_id == payload.thread_id,
+            AgentMessageRecord.created_at >= question.created_at,
+            AgentMessageRecord.role == MessageRole.ASSISTANT.value,
+            after,
+        )
+    )
 
 
 def millis(delta: timedelta) -> int:

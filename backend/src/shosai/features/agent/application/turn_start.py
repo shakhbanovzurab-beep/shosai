@@ -15,7 +15,7 @@ back on every failure after it; a Valkey that does not answer is 503 `agent_unav
 import asyncio
 import time
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from http import HTTPStatus
 from typing import Final
@@ -38,6 +38,7 @@ from shosai.core.kv.rate_limits import RateLimit
 from shosai.core.tasks.errors import TaskQueueUnavailableError
 from shosai.core.web.rate_limit import RateLimitedError
 from shosai.features.agent.application.preferences import preferences_of
+from shosai.features.agent.application.surface_digest import Subject
 from shosai.features.agent.application.turn_commit import (
     TurnMade,
     TurnParts,
@@ -46,7 +47,7 @@ from shosai.features.agent.application.turn_commit import (
 )
 from shosai.features.agent.application.turn_task import RUN_TURN, TurnPayload, started_event
 from shosai.features.agent.domain.preferences import answer_language
-from shosai.features.agent.domain.threads import ThreadRuleError, check_question
+from shosai.features.agent.domain.threads import ThreadRuleError, TurnKind, check_question
 from shosai.features.agent.infrastructure.fleet import Admission
 from shosai.features.agent.infrastructure.person_records import AgentSettingsRecord
 from shosai.features.billing.contracts import (
@@ -67,13 +68,31 @@ log = structlog.stdlib.get_logger(__name__)
 
 
 @dataclass(frozen=True, slots=True)
+class Page:
+    """The cabinet page the person is on and what it shows."""
+
+    path: str | None
+    subject: Subject | None
+
+
+@dataclass(frozen=True, slots=True)
+class Replacement:
+    """A new question, or the thread's last one answered again (regenerate) or rewritten (edit)."""
+
+    kind: TurnKind
+    question_id: UUID | None
+
+
+@dataclass(frozen=True, slots=True)
 class TurnRequest:
-    """What the person sent: the question, the interface's language, and whether it
-    supersedes the answer still being written."""
+    """What the person sent: the question, the interface's language, whether it supersedes
+    the answer still being written, the page they are on, and the question it answers again."""
 
     text: str
     locale: str | None
     supersede: bool
+    page: Page = field(default_factory=lambda: Page(None, None))
+    again: Replacement = field(default_factory=lambda: Replacement(TurnKind.NEW, None))
 
 
 class TurnPrint(BaseModel):
@@ -81,6 +100,8 @@ class TurnPrint(BaseModel):
 
     thread_id: UUID
     question: str
+    kind: TurnKind
+    question_id: UUID | None
 
 
 def unavailable() -> AppError:
@@ -96,10 +117,12 @@ class TurnStarter:
         parts: TurnParts,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
         monotonic: Callable[[], float] = time.monotonic,
+        limit: RateLimit = TURN_LIMIT,
     ) -> None:
         self._parts = parts
         self._clock = clock
         self._monotonic = monotonic
+        self._limit = limit
 
     async def start(
         self, principal: Principal, thread_id: UUID, request: TurnRequest, client_key: str
@@ -109,10 +132,14 @@ class TurnStarter:
             question = check_question(request.text, 0)
         except ThreadRuleError as error:
             raise AppError(error.rule.value, HTTPStatus.UNPROCESSABLE_CONTENT) from error
+        asked = TurnPrint(
+            thread_id=thread_id,
+            question=question,
+            kind=request.again.kind,
+            question_id=request.again.question_id,
+        )
         effect = EffectKey(
-            TURN_KEYS,
-            account_key(principal.user_id, client_key),
-            fingerprint_of(TurnPrint(thread_id=thread_id, question=question)),
+            TURN_KEYS, account_key(principal.user_id, client_key), fingerprint_of(asked)
         )
         parts = self._parts
         async with parts.transactions.begin(principal.scope(), read_only=True) as session:
@@ -127,12 +154,15 @@ class TurnStarter:
         route = await self._token_route(principal)
         await self._within_rate(principal)
         preferences = preferences_of(stored)
+        page, again = request.page, request.again
         terms = TurnPayload(
             home=principal.home, user_id=principal.user_id, run_id=new_id(), thread_id=thread_id,
-            started_at=self._clock(), question_id=new_id(), reply_id=new_id(),
-            language=answer_language(preferences, request.locale),
+            started_at=self._clock(), question_id=again.question_id or new_id(),
+            reply_id=new_id(), language=answer_language(preferences, request.locale),
             length=preferences.response_length, cross_border_consent=consent,
-            token_route=route.value,
+            token_route=route.value, kind=again.kind, path=page.path,
+            subject_kind=page.subject.kind if page.subject else None,
+            subject_id=page.subject.subject_id if page.subject else None,
         )  # fmt: skip
         return await self._admitted(
             principal, terms, (effect, question), supersede=request.supersede
@@ -186,7 +216,7 @@ class TurnStarter:
         return decision.route
 
     async def _within_rate(self, principal: Principal) -> None:
-        verdict = await self._parts.limiter.check(TURN_LIMIT, str(principal.user_id))
+        verdict = await self._parts.limiter.check(self._limit, str(principal.user_id))
         if not verdict.allowed:
             raise RateLimitedError(verdict.retry_after)
 

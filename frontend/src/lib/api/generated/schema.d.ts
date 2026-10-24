@@ -6662,6 +6662,24 @@ export interface components {
             leo_removal_at: string | null;
         };
         /**
+         * SubjectIn
+         * @description What the page shows: a meeting, a task, a board or a file.
+         */
+        SubjectIn: {
+            kind: components["schemas"]["SubjectKind"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+        };
+        /**
+         * SubjectKind
+         * @description What a cabinet page can show to Leo.
+         * @enum {string}
+         */
+        SubjectKind: "meeting" | "task" | "board" | "file";
+        /**
          * SubscriptionCardDTO
          * @description The person's subscription; billing fills it.
          */
@@ -6719,6 +6737,18 @@ export interface components {
             done?: boolean | null;
             /** Position */
             position?: number | null;
+        };
+        /**
+         * SurfaceIn
+         * @description The cabinet page the person asks from.
+         */
+        SurfaceIn: {
+            /**
+             * Path
+             * @description The cabinet path, such as /app/notes.
+             */
+            path: string;
+            subject?: components["schemas"]["SubjectIn"] | null;
         };
         /**
          * SystemSticker
@@ -7315,6 +7345,17 @@ export interface components {
              * @default false
              */
             supersede: boolean;
+            surface?: components["schemas"]["SurfaceIn"] | null;
+            /**
+             * Regenerate Of
+             * @description The thread's last question, answered again.
+             */
+            regenerate_of?: string | null;
+            /**
+             * Edit Of
+             * @description The thread's last question, rewritten to `text` and answered.
+             */
+            edit_of?: string | null;
         };
         /**
          * UnsubscribeAnswer

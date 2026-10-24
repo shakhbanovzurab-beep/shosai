@@ -33,9 +33,9 @@ from shosai.features.agent.application.model_stream import (
     stream_answer,
 )
 from shosai.features.agent.application.run_context import (
+    ContextBuilder,
     RunOverError,
     ThreadGoneError,
-    turn_request,
 )
 from shosai.features.agent.application.run_end import record_end
 from shosai.features.agent.application.run_registry import ActiveRun, RunRegistry
@@ -80,6 +80,7 @@ class EngineParts:
     registry: RunRegistry
     outbox: EventOutbox
     graph: TurnGraph
+    context: ContextBuilder
     pace: Pace = DEFAULT_PACE
 
 
@@ -100,7 +101,7 @@ class RunSteps:
         """The policy, the recent conversation and the question."""
         scope = self._payload.scope()
         async with self._parts.transactions.begin(scope, read_only=True) as session:
-            return await turn_request(session, self._payload)
+            return await self._parts.context.request(session, self._payload)
 
     async def model(self, request: ChatRequest) -> ModelAnswer:
         """The model's answer through the provider port, streamed as it is written."""

@@ -32,7 +32,10 @@ LENGTHS: Final = {
     ResponseLength.DETAILED: "Give a thorough answer with the reasoning and the details.",
 }
 LANGUAGE: Final = "Write the answer in the language tagged {code} ({name})."
-PROMPT_TEXTS: Final = (POLICY, *LENGTHS.values(), LANGUAGE)
+SUMMARY: Final = "Summary of the earlier part of this conversation:\n{summary}"
+VOLATILE: Final = "Context for this message, from Shosai (the person did not write it):\n{context}"
+QUESTION: Final = "The person's message:\n{text}"
+PROMPT_TEXTS: Final = (POLICY, *LENGTHS.values(), LANGUAGE, SUMMARY, VOLATILE, QUESTION)
 
 
 def turn_instructions(language: str, length: ResponseLength) -> str:

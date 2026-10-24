@@ -20,6 +20,7 @@ from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.lost_runs import LostRuns
 from shosai.features.agent.application.preferences import AgentPreferences
+from shosai.features.agent.application.run_context import ContextBuilder
 from shosai.features.agent.application.run_engine import EngineParts, RunEngine
 from shosai.features.agent.application.run_registry import RunRegistry
 from shosai.features.agent.application.run_streams import RunStreams
@@ -58,7 +59,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     engine = RunEngine(
         EngineParts(
             transactions, services.ai, route, run_log, leases, fleet, registry, services.outbox,
-            turn_graph(),
+            turn_graph(), ContextBuilder(ports),
         )
     )  # fmt: skip
     starter = TurnStarter(

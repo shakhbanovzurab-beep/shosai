@@ -5,7 +5,8 @@
 the stream, as the platform's envelope: `question_invalid`, `thread_not_found`,
 `consent_required` (403), `token_limit` (402, `params.limit`), `thread_busy` (409),
 `rate_limited`, `too_many_runs`, `agent_busy` (429 with `Retry-After`), `agent_unavailable`,
-`entitlements_unavailable` (503), `idempotency_key_reused`, `validation_error`. Each event
+`entitlements_unavailable` (503), `not_last_question` (409, a regenerate or an edit of any
+question but the thread's last), `idempotency_key_reused`, `validation_error`. Each event
 has the run's next number as its id, and a comment every 15 s keeps the connection open.
 `GET /v1/agent/runs/{id}/events` resumes after `Last-Event-ID` (410 `run_events_gone` after
 the log's hour); `POST /v1/agent/runs/{id}/cancel` asks the run to stop (202).
@@ -13,25 +14,46 @@ the log's hour); `POST /v1/agent/runs/{id}/cancel` asks the run to stop (202).
 
 from collections.abc import AsyncIterable
 from http import HTTPStatus
-from typing import Annotated
+from typing import Annotated, Self
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, Response
 from fastapi.sse import EventSourceResponse, ServerSentEvent
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from shosai.core.idempotency.http import IdempotencyKeyHeader
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.run_streams import RunStreams
-from shosai.features.agent.application.turn_start import TurnRequest, TurnStarter
+from shosai.features.agent.application.surface_digest import Subject, SubjectKind
+from shosai.features.agent.application.turn_start import (
+    Page,
+    Replacement,
+    TurnRequest,
+    TurnStarter,
+)
 from shosai.features.agent.channels.http.shapes import Strict
 from shosai.features.agent.domain.stream import StreamEvent
-from shosai.features.agent.domain.threads import QUESTION_MAX
+from shosai.features.agent.domain.threads import QUESTION_MAX, SURFACE_PATH_MAX, TurnKind
 from shosai.features.identity.contracts import Principal, bearer_principal
 
 LOCALE_MAX = 16
+PATH_MAX = SURFACE_PATH_MAX
 # Сырой текст длиннее вопроса на поля по краям: обрезанный пробелами вопрос проверяет домен.
 TEXT_MAX = QUESTION_MAX * 2
+
+
+class SubjectIn(Strict):
+    """What the page shows: a meeting, a task, a board or a file."""
+
+    kind: SubjectKind
+    id: UUID
+
+
+class SurfaceIn(Strict):
+    """The cabinet page the person asks from."""
+
+    path: str = Field(max_length=PATH_MAX, description="The cabinet path, such as /app/notes.")
+    subject: SubjectIn | None = None
 
 
 class TurnBody(Strict):
@@ -46,6 +68,36 @@ class TurnBody(Strict):
     supersede: bool = Field(
         default=False, description="Stop the answer still being written in this thread first."
     )
+    surface: SurfaceIn | None = None
+    regenerate_of: UUID | None = Field(
+        default=None, description="The thread's last question, answered again."
+    )
+    edit_of: UUID | None = Field(
+        default=None, description="The thread's last question, rewritten to `text` and answered."
+    )
+
+    @model_validator(mode="after")
+    def one_replacement(self) -> Self:
+        """A turn regenerates or edits, never both."""
+        if self.regenerate_of is not None and self.edit_of is not None:
+            message = "regenerate_of and edit_of exclude each other"
+            raise ValueError(message)
+        return self
+
+    def request(self) -> TurnRequest:
+        """The turn as admission reads it."""
+        subject = self.surface.subject if self.surface else None
+        page = Page(
+            self.surface.path if self.surface else None,
+            Subject(subject.kind, subject.id) if subject else None,
+        )
+        if self.regenerate_of is not None:
+            again = Replacement(TurnKind.REGENERATE, self.regenerate_of)
+        elif self.edit_of is not None:
+            again = Replacement(TurnKind.EDIT, self.edit_of)
+        else:
+            again = Replacement(TurnKind.NEW, None)
+        return TurnRequest(self.text, self.locale, self.supersede, page, again)
 
 
 def server_event(event: StreamEvent) -> ServerSentEvent:
@@ -62,8 +114,7 @@ def build_turns_router(services: tuple[TurnStarter, RunStreams], ports: PortDire
     async def admitted_run(
         principal: person, thread_id: UUID, body: TurnBody, idempotency_key: IdempotencyKeyHeader
     ) -> UUID:
-        request = TurnRequest(body.text, body.locale, body.supersede)
-        return await starter.start(principal, thread_id, request, idempotency_key)
+        return await starter.start(principal, thread_id, body.request(), idempotency_key)
 
     async def resumable_run(principal: person, run_id: UUID) -> UUID:
         return (await streams.resumable(principal, run_id)).run_id

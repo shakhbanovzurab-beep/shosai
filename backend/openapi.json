@@ -21092,6 +21092,37 @@
         "title": "StorageOut",
         "description": "What the person holds against what the plan allows; a null limit is unlimited."
       },
+      "SubjectIn": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/SubjectKind"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "id"
+        ],
+        "title": "SubjectIn",
+        "description": "What the page shows: a meeting, a task, a board or a file."
+      },
+      "SubjectKind": {
+        "type": "string",
+        "enum": [
+          "meeting",
+          "task",
+          "board",
+          "file"
+        ],
+        "title": "SubjectKind",
+        "description": "What a cabinet page can show to Leo."
+      },
       "SubscriptionCardDTO": {
         "properties": {
           "status": {
@@ -21251,6 +21282,33 @@
         "type": "object",
         "title": "SubtaskPatchBody",
         "description": "A change of a line by field presence; none of its fields is cleared."
+      },
+      "SurfaceIn": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Path",
+            "description": "The cabinet path, such as /app/notes."
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubjectIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "title": "SurfaceIn",
+        "description": "The cabinet page the person asks from."
       },
       "SystemSticker": {
         "type": "string",
@@ -22926,6 +22984,42 @@
             "title": "Supersede",
             "description": "Stop the answer still being written in this thread first.",
             "default": false
+          },
+          "surface": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SurfaceIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "regenerate_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Regenerate Of",
+            "description": "The thread's last question, answered again."
+          },
+          "edit_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Edit Of",
+            "description": "The thread's last question, rewritten to `text` and answered."
           }
         },
         "additionalProperties": false,

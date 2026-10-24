@@ -48,8 +48,11 @@ Message = {id, role: user | assistant | server, text, status: done | stopped | f
  regenerate_of?: <the last question's id>, edit_of?: <the last question's id>, supersede?: bool}
 ```
 
-- The body grows with the steps that use it: now `text`, `locale` and `supersede`; `surface`, `regenerate_of` and
-  `edit_of` come with the context builder, `upload_ids` with attachments. Until then any other field is `422`.
+- The body grows with the steps that use it: now `text`, `locale`, `supersede`, `surface`, `regenerate_of` and
+  `edit_of`; `upload_ids` comes with attachments, until then it is `422`. A regenerate or an edit sends the question's
+  text as well (the edited text for an edit); naming both is `422`.
+- `surface.path` is the cabinet path without its query; Leo is told the page and, through the subject's owner, what
+  the person may read of the meeting, task, board or file it shows — nothing about one they may not read.
 - `regenerate_of` answers the last question again; `edit_of` replaces its text and its answer. Any other id is
   `409 not_last_question`.
 - A busy thread answers `409 thread_busy`; `supersede: true` stops the running answer first.
