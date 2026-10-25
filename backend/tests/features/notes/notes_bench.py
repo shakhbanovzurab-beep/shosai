@@ -104,6 +104,10 @@ class Consents:
         del session
         return user_id in self.people
 
+    async def improve_models(self, session: AsyncSession, user_id: uuid.UUID) -> bool:
+        del session, user_id
+        return False
+
 
 def recorded(name: str) -> Json:
     """A recorded meeting: its lines and the model's answers as they came."""

@@ -1,7 +1,8 @@
 """Agent's consumers of events, by names that never change: a workspace's departure marks the
 person's threads of it and its deletion erases them all (agent plan §3.5 flow 5, step 4); the
 slice's own completed turn sends its thread's title and compaction when due (step 5b); an
-approved item's effect in its slice joins the action's audit trail (step 9a)."""
+approved item's effect in its slice joins the action's audit trail (step 9a); a withdrawn
+consent to improve the models erases the person's evaluation cases (step 11a)."""
 
 from datetime import timedelta
 from typing import Any, Final
@@ -13,8 +14,10 @@ from shosai.core.events.subscriptions import EventSubscription, ReceivedEvent
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.agent.application.action_audit import audit_item
 from shosai.features.agent.application.after_turn import AfterTurn
+from shosai.features.agent.application.case_care import consent_changed
 from shosai.features.agent.application.departures import Departures, scope_of_departure
 from shosai.features.agent.contracts.events import TurnCompleted
+from shosai.features.identity.contracts import ConsentChanged
 from shosai.features.workspaces.contracts.events import MemberRemoved, WorkspaceDeleted
 
 DEADLINE: Final = timedelta(seconds=30)
@@ -33,6 +36,11 @@ def subscriptions(
 
     async def follow(session: AsyncSession, received: ReceivedEvent[MemberRemoved]) -> None:
         await departures.follow(session, received.event, received.occurred_at)
+
+    async def withdraw_cases(
+        session: AsyncSession, received: ReceivedEvent[ConsentChanged]
+    ) -> None:
+        await consent_changed(session, received.event)
 
     async def erase_with_workspace(
         session: AsyncSession, received: ReceivedEvent[WorkspaceDeleted]
@@ -62,6 +70,13 @@ def subscriptions(
             queue=TaskQueue.DEFAULT,
             deadline=DEADLINE,
             handle=audit_item,
+        ),
+        EventSubscription(
+            consumer="agent.withdraw_cases",
+            event=ConsentChanged,
+            queue=TaskQueue.DEFAULT,
+            deadline=DEADLINE,
+            handle=withdraw_cases,
         ),
         EventSubscription(
             consumer="agent.erase_with_workspace",

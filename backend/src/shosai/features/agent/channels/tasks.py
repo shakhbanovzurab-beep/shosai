@@ -1,7 +1,8 @@
 """The slice's tasks (agent plan §3.1): Leo's turns, approved actions and the epilogues after
 them on the `agent` queue, a thread's title and compaction after a turn, the minute's sweeps of
 lost runs and of actions nobody decides or carries out, the hourly check of the actions'
-invariants and the hourly purge of departed workspaces' threads.
+invariants, the hourly purge of departed workspaces' threads and the daily purge of evaluation
+cases past their year.
 
 A turn is never retried by the queue (`application/turn_task.py`); the sweep and the purge are
 per-home ticks that are not retried either — the next tick repeats them, and a pass takes at
@@ -21,6 +22,7 @@ from shosai.features.agent.application.action_execution import ActionExecution
 from shosai.features.agent.application.action_invariants import ActionInvariants
 from shosai.features.agent.application.action_sweeps import ActionSweeps
 from shosai.features.agent.application.after_turn import COMPACT_THREAD, TITLE_THREAD, ThreadTask
+from shosai.features.agent.application.case_care import CasePurge
 from shosai.features.agent.application.departures import Departures
 from shosai.features.agent.application.lost_runs import LostRuns
 from shosai.features.agent.application.run_engine import RunEngine
@@ -45,11 +47,13 @@ PURGE_DEPARTED: Final = tick("agent.purge_departed", timedelta(minutes=5))
 SWEEP_LOST_RUNS: Final = tick("agent.sweep_lost_runs", timedelta(seconds=50))
 SWEEP_ACTIONS: Final = tick("agent.sweep_actions", timedelta(seconds=50))
 CHECK_ACTIONS: Final = tick("agent.check_actions", timedelta(minutes=5))
+PURGE_CASES: Final = tick("agent.purge_cases", timedelta(minutes=5))
 PERIODIC_JOBS: Final = (
     PeriodicJob(PURGE_DEPARTED, every=timedelta(hours=1)),
     PeriodicJob(SWEEP_LOST_RUNS, every=timedelta(minutes=1)),
     PeriodicJob(SWEEP_ACTIONS, every=timedelta(minutes=1)),
     PeriodicJob(CHECK_ACTIONS, every=timedelta(hours=1)),
+    PeriodicJob(PURGE_CASES, every=timedelta(days=1)),
 )
 
 
@@ -62,6 +66,7 @@ class Handlers:
     engine: RunEngine
     care: ThreadCare
     actions: tuple[ActionExecution, ActionSweeps, ActionInvariants]
+    cases: CasePurge
 
 
 def task_handlers(handlers: Handlers) -> tuple[TaskHandler[Any], ...]:
@@ -93,7 +98,7 @@ def agent_queue_handlers(handlers: Handlers) -> tuple[TaskHandler[Any], ...]:
 
 
 def upkeep_handlers(handlers: Handlers) -> tuple[TaskHandler[Any], ...]:
-    """The work around turns: titles and compaction, the sweeps, the check and the purge."""
+    """The work around turns: titles and compaction, the sweeps, the check and the purges."""
     departures, lost_runs, care = handlers.departures, handlers.lost_runs, handlers.care
     _, sweeps, invariants = handlers.actions
 
@@ -115,11 +120,15 @@ def upkeep_handlers(handlers: Handlers) -> tuple[TaskHandler[Any], ...]:
     async def check_actions(payload: HomeTaskPayload) -> None:
         await invariants.check(payload.home)
 
+    async def purge_cases(payload: HomeTaskPayload) -> None:
+        await handlers.cases.purge(payload.home)
+
     return (
         TaskHandler(PURGE_DEPARTED, purge_departed),
         TaskHandler(SWEEP_LOST_RUNS, sweep_lost_runs),
         TaskHandler(SWEEP_ACTIONS, sweep_actions),
         TaskHandler(CHECK_ACTIONS, check_actions),
+        TaskHandler(PURGE_CASES, purge_cases),
         TaskHandler(TITLE_THREAD, title_thread),
         TaskHandler(COMPACT_THREAD, compact_thread),
     )

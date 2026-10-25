@@ -96,7 +96,8 @@ async def commit_turn(
                 AgentRunRecord(
                     id=terms.run_id, started_at=now, thread_id=thread.id,
                     user_id=principal.user_id, channel=Channel.WEB.value,
-                    status=RunStatus.RUNNING.value, token_route=terms.token_route,
+                    language=terms.language, status=RunStatus.RUNNING.value,
+                    token_route=terms.token_route,
                 )
             )  # fmt: skip
             closed = await close_for_new_turn(session, thread.id, now)

@@ -180,7 +180,7 @@ async def registration_bench(
             reset_page="https://shosai.example/app/reset",
         )
     )  # fmt: skip
-    profiles = Profiles(transactions, ConsentJournal(), chosen.objects)
+    profiles = Profiles(transactions, ConsentJournal(), chosen.objects, outbox)
     routers = [
         build_me_router(profiles, ports),
         build_registration_router(

@@ -12155,6 +12155,127 @@
           }
         }
       }
+    },
+    "/v1/agent/messages/{message_id}/feedback": {
+      "put": {
+        "tags": [
+          "agent"
+        ],
+        "summary": "Rate Answer",
+        "description": "Rate the answer; the same rating again changes nothing.",
+        "operationId": "rate_answer_v1_agent_messages__message_id__feedback_put",
+        "parameters": [
+          {
+            "name": "message_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Message Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "agent"
+        ],
+        "summary": "Remove Rating",
+        "description": "Take the rating back, and its evaluation case with it.",
+        "operationId": "remove_rating_v1_agent_messages__message_id__feedback_delete",
+        "parameters": [
+          {
+            "name": "message_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Message Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -15164,6 +15285,39 @@
         "title": "FeaturesOut",
         "description": "Capabilities of the plan; the draft's defaults until billing contributes."
       },
+      "FeedbackBody": {
+        "properties": {
+          "rating": {
+            "$ref": "#/components/schemas/Rating"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rating"
+        ],
+        "title": "FeedbackBody",
+        "description": "What the person said about the answer."
+      },
+      "FeedbackOut": {
+        "properties": {
+          "rating": {
+            "$ref": "#/components/schemas/Rating"
+          },
+          "shared": {
+            "type": "boolean",
+            "title": "Shared",
+            "description": "Whether the turn was kept as an evaluation case."
+          }
+        },
+        "type": "object",
+        "required": [
+          "rating",
+          "shared"
+        ],
+        "title": "FeedbackOut",
+        "description": "The rating as kept."
+      },
       "FieldOut": {
         "properties": {
           "label": {
@@ -17292,6 +17446,17 @@
             "type": "array",
             "title": "Artifacts",
             "description": "What the tools handed over, by reference."
+          },
+          "feedback": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Rating"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The person's rating of the answer, if any."
           }
         },
         "type": "object",
@@ -17305,7 +17470,8 @@
           "steps",
           "sources",
           "actions",
-          "artifacts"
+          "artifacts",
+          "feedback"
         ],
         "title": "MessageOut",
         "description": "A row of the history: a question, an answer (with how it ended, the steps it took, its\nsources and its cards) or a server's note (with the card it tells about)."
@@ -19591,6 +19757,15 @@
         ],
         "title": "QuotaSnapshot",
         "description": "Recording minutes left; billing fills it."
+      },
+      "Rating": {
+        "type": "string",
+        "enum": [
+          "useful",
+          "not_useful"
+        ],
+        "title": "Rating",
+        "description": "What the person said about an answer."
       },
       "Recurrence": {
         "oneOf": [

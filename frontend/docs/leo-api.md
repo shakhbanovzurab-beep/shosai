@@ -186,7 +186,9 @@ neither offered to Leo nor used; `voice_mode` off also hides the microphone.
 
 ## Rating an answer
 
-`PUT /v1/agent/messages/{id}/feedback {rating: useful | not_useful}` → `{rating, shared}`; `DELETE` → `204`.
+`PUT /v1/agent/messages/{id}/feedback {rating: useful | not_useful}` → `{rating, shared}`; `DELETE` → `204`. A
+question, a server note, another person's answer or a thread the person no longer sees is `404 message_not_found`. The
+history's messages carry the person's rating in `feedback` (`useful`, `not_useful` or null).
 
 One press under an answer, the same press again takes it back. The rating counts only in anonymous totals.
 `shared` is true when the person's "Help improve the models" consent (Settings › Privacy) let the conversation become

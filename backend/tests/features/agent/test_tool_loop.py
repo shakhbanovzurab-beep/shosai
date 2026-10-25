@@ -5,7 +5,9 @@ import uuid
 from typing import Any
 
 from shosai.core.ai.requests import ChatMessage, ChatRequest, Role
+from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.agent.application.run_context import text_of
+from shosai.features.agent.infrastructure.person_records import AgentFeedbackRecord
 from tests.features.agent.tool_doubles import calling, saying
 from tests.features.agent.turn_bench import HOME, TurnBench, stream_of
 from tests.features.billing.people_bench import bearer
@@ -159,12 +161,24 @@ async def test_later_turns_read_the_answers_not_the_rounds_and_regenerate_replac
     turn_bench.model.scripts = [searching, saying("Travel.")]
     last = stream_of(await turn_bench.ask(person, thread, "And travel?"))
     turn_bench.model.scripts = [saying("Travel, again.")]
+    reply = uuid.UUID(last[0][2]["reply_id"])
+    async with turn_bench.homes.transactions.begin(TenancyScope(HOME, person)) as session:
+        session.add(
+            AgentFeedbackRecord(
+                message_id=reply, user_id=person, thread_id=uuid.UUID(thread), rating="useful"
+            )
+        )
 
     await turn_bench.ask(person, thread, "And travel?", regenerate_of=last[0][2]["message_id"])
     replaced = await run_rows(turn_bench, last[0][2]["run_id"])
+    rated = await fetch_rows(
+        turn_bench.connection, "SELECT 1 FROM agent_feedback WHERE message_id = %s", (reply,)
+    )
 
     assert [message.role for message in follow_up.messages] == [
         Role.SYSTEM, Role.USER, Role.ASSISTANT, Role.USER,
     ]  # fmt: skip
     assert text_of(follow_up.messages[2]) == "Cut."
     assert replaced == []
+    # Оценка уходит вместе с заменённым ответом.
+    assert rated == []

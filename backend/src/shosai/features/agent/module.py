@@ -29,7 +29,9 @@ from shosai.features.agent.application.action_invariants import ActionInvariants
 from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.action_sweeps import ActionSweeps
 from shosai.features.agent.application.after_turn import AfterTurn
+from shosai.features.agent.application.case_care import CasePurge
 from shosai.features.agent.application.departures import Departures
+from shosai.features.agent.application.feedback import Feedback
 from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.lost_runs import LostRuns
@@ -53,6 +55,7 @@ from shosai.features.agent.application.turn_commit import TurnParts
 from shosai.features.agent.application.turn_start import TurnStarter
 from shosai.features.agent.channels.agent_tools import CORE_TOOLS, core_tools
 from shosai.features.agent.channels.http.actions import build_actions_router
+from shosai.features.agent.channels.http.feedback import build_feedback_router
 from shosai.features.agent.channels.http.settings import build_settings_router
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
@@ -61,6 +64,7 @@ from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_h
 from shosai.features.agent.contracts import ACTION_PROPOSALS
 from shosai.features.agent.contracts.events import TurnCompleted
 from shosai.features.agent.infrastructure.action_metrics import ActionMetrics
+from shosai.features.agent.infrastructure.feedback_metrics import FeedbackMetrics
 from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.person_records import PERSON_MODELS
@@ -131,6 +135,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         ActionMetrics(services.registry),
     )
     decisions = ActionDecisions(transactions, (services.tasks, paused, action_metrics))
+    feedback = Feedback((transactions, ports, threads), FeedbackMetrics(services.registry))
     actions = (
         ActionExecution(transactions, (services.agent_tools, paused, action_metrics)),
         ActionSweeps(transactions, (services.tasks, paused, action_metrics)),
@@ -143,8 +148,11 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 build_threads_router((threads, History(transactions, threads, cards)), ports),
                 build_turns_router((starter, streams), ports),
                 build_actions_router((decisions, ActionInbox(transactions, cards)), ports),
+                build_feedback_router(feedback, ports),
             ),
-            task_handlers=task_handlers(Handlers(departures, lost_runs, engine, care, actions)),
+            task_handlers=task_handlers(
+                Handlers(departures, lost_runs, engine, care, actions, CasePurge(transactions))
+            ),
             subscriptions=subscriptions(departures, AfterTurn(services.tasks)),
             periodic_jobs=PERIODIC_JOBS,
             agent_tools=core_tools(pages),

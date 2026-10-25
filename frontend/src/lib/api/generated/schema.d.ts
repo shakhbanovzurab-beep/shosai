@@ -3008,6 +3008,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agent/messages/{message_id}/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Rate Answer
+         * @description Rate the answer; the same rating again changes nothing.
+         */
+        put: operations["rate_answer_v1_agent_messages__message_id__feedback_put"];
+        post?: never;
+        /**
+         * Remove Rating
+         * @description Take the rating back, and its evaluation case with it.
+         */
+        delete: operations["remove_rating_v1_agent_messages__message_id__feedback_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -4283,6 +4307,25 @@ export interface components {
             premium_credit_amount: number;
         };
         /**
+         * FeedbackBody
+         * @description What the person said about the answer.
+         */
+        FeedbackBody: {
+            rating: components["schemas"]["Rating"];
+        };
+        /**
+         * FeedbackOut
+         * @description The rating as kept.
+         */
+        FeedbackOut: {
+            rating: components["schemas"]["Rating"];
+            /**
+             * Shared
+             * @description Whether the turn was kept as an evaluation case.
+             */
+            shared: boolean;
+        };
+        /**
          * FieldOut
          * @description One row of a card.
          */
@@ -5197,6 +5240,8 @@ export interface components {
              * @description What the tools handed over, by reference.
              */
             artifacts: components["schemas"]["ArtifactOut"][];
+            /** @description The person's rating of the answer, if any. */
+            feedback: components["schemas"]["Rating"] | null;
         };
         /**
          * Messenger
@@ -6002,6 +6047,12 @@ export interface components {
             /** Exhausted */
             exhausted: boolean;
         };
+        /**
+         * Rating
+         * @description What the person said about an answer.
+         * @enum {string}
+         */
+        Rating: "useful" | "not_useful";
         Recurrence: components["schemas"]["DayRule"] | components["schemas"]["WeekRule"] | components["schemas"]["MonthRule"];
         /**
          * RegisterBody
@@ -14466,6 +14517,74 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["DecidedOut"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    rate_answer_v1_agent_messages__message_id__feedback_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                message_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedbackOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    remove_rating_v1_agent_messages__message_id__feedback_delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                message_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

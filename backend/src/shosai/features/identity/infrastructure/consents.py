@@ -1,8 +1,9 @@
 """The consent journal: every change is a row, the latest row of a kind is current (ID-D2).
 
 It implements the `identity.consent_reader` port: a slice building a `CallContext` asks,
-in its own transaction, whether the person consents to transfer abroad, so the answer is
-never older than that transaction (rights are not cached, §7).
+in its own transaction, whether the person consents to transfer abroad, and Leo asks whether
+a rated answer may become an evaluation case, so the answer is never older than that
+transaction (rights are not cached, §7).
 """
 
 from collections.abc import Mapping
@@ -34,6 +35,10 @@ class ConsentJournal:
     async def cross_border(self, session: AsyncSession, user_id: UUID) -> bool:
         """Whether the person currently consents to transfer to providers abroad."""
         return (await self.current(session, user_id))[ConsentKind.CROSS_BORDER]
+
+    async def improve_models(self, session: AsyncSession, user_id: UUID) -> bool:
+        """Whether the person currently lets their conversations help improve the models."""
+        return (await self.current(session, user_id))[ConsentKind.IMPROVE_MODELS]
 
     def record(
         self,

@@ -8,6 +8,8 @@ from uuid import UUID
 from redis.asyncio import Redis
 
 from shosai.core.agent_tools.context import ToolContext
+from shosai.core.events.catalog import EventTypes
+from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from shosai.core.kernel.tenancy import TenancyScope
@@ -152,6 +154,35 @@ async def test_a_consent_change_is_one_journal_row_seen_by_the_next_reader(
     assert await consent_rows(run_slot) == rows_before + 2
 
 
+async def test_improving_the_models_is_read_by_leo_and_told_once_per_change(
+    homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
+) -> None:
+    async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
+        headers = await signed_in(bench, run_slot)
+        user_id = UUID((await bench.http.get("/v1/me", headers=headers)).json()["id"])
+        reads = []
+        for wanted in (True, True, False):
+            await bench.http.patch(
+                "/v1/me", headers=headers, json={"consents": {"improve_models": wanted}}
+            )
+            async with homes.transactions.begin(
+                TenancyScope(Home.RU, user_id), read_only=True
+            ) as session:
+                reads.append(await ConsentJournal().improve_models(session, user_id))
+    told = await fetch_rows(
+        run_slot.claimed.connections[Home.RU],
+        "SELECT payload FROM outbox_messages WHERE event_type = 'identity.consent.changed'"
+        " ORDER BY occurred_at",
+    )
+
+    assert reads == [True, True, False]
+    assert [
+        (row["payload"]["kind"], row["payload"]["granted"])
+        for row in told
+        if row["payload"]["user_id"] == str(user_id)
+    ] == [("improve_models", True), ("improve_models", False)]
+
+
 async def consent_rows(run_slot: RunSlot) -> int:
     rows = await fetch_rows(run_slot.claimed.connections[Home.RU], "SELECT id FROM user_consents")
     return len(rows)
@@ -198,7 +229,7 @@ async def test_leo_reads_only_the_account_its_run_acts_for(
         await bench.http.patch("/v1/me", headers=headers, json={"display_name": "Аня"})
         me = (await bench.http.get("/v1/me", headers=headers)).json()
         user_id = UUID(me["id"])
-    profiles = Profiles(homes.transactions, ConsentJournal(), {})
+    profiles = Profiles(homes.transactions, ConsentJournal(), {}, EventOutbox(EventTypes([])))
     [tool] = account_tools(homes.transactions, profiles)
     deadline = datetime.now(UTC) + timedelta(seconds=5)
 

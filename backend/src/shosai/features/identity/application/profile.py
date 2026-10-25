@@ -19,6 +19,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.events.outbox import EventOutbox
 from shosai.core.i18n.locales import normalize_language
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
@@ -26,7 +27,7 @@ from shosai.core.storage.errors import StorageRejectedError, StorageUnavailableE
 from shosai.core.storage.port import Disposition, ObjectStorage
 from shosai.features.identity.application import registration_errors as errors
 from shosai.features.identity.application.registration import ClientFacts
-from shosai.features.identity.contracts import AccountProfile, Principal
+from shosai.features.identity.contracts import AccountProfile, ConsentChanged, Principal
 from shosai.features.identity.domain.avatars import AvatarProblem, check_avatar
 from shosai.features.identity.domain.profile import (
     SWITCHABLE,
@@ -78,10 +79,12 @@ class Profiles:
         transactions: HomeTransactions,
         journal: ConsentJournal,
         objects: Mapping[Home, ObjectStorage],
+        outbox: EventOutbox,
     ) -> None:
         self._transactions = transactions
         self._journal = journal
         self._objects = objects
+        self._outbox = outbox
 
     async def read(self, principal: Principal) -> ProfileView:
         """The person's profile and current consents."""
@@ -94,7 +97,8 @@ class Profiles:
     async def change(
         self, principal: Principal, change: ProfileChange, client: ClientFacts
     ) -> ProfileView:
-        """Apply a PATCH; consents changed are journaled, a withdrawal needs its warning."""
+        """Apply a PATCH; consents changed are journaled and told (`identity.consent.changed`),
+        a withdrawal needs its warning."""
         async with self._transactions.begin(principal.scope()) as session:
             user = await _user(session, principal.user_id, lock=True)
             _apply_fields(user, change)
@@ -111,6 +115,9 @@ class Profiles:
             if withdrawing and not change.warning_confirmed:
                 raise errors.invalid(ProfileProblem.CONSENT_WARNING_REQUIRED.value)
             self._journal.record(session, user.id, changed, (client.ip, client.user_agent))
+            for kind, granted in changed.items():
+                event = ConsentChanged(user_id=user.id, kind=kind.value, granted=granted)
+                await self._outbox.add(session, event)
             consents.update(changed)
         avatar = await self.avatar_url(principal.home, user)
         return ProfileView(user, principal.home, consents, avatar)

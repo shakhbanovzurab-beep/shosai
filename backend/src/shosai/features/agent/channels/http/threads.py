@@ -25,6 +25,7 @@ from shosai.features.agent.application.history import History, MessageView
 from shosai.features.agent.application.threads import Threads, ThreadView
 from shosai.features.agent.channels.http.actions import ProposalOut
 from shosai.features.agent.channels.http.shapes import Out, Strict
+from shosai.features.agent.domain.feedback import Rating
 from shosai.features.agent.domain.threads import (
     AnswerStatus,
     HistoryRole,
@@ -123,6 +124,7 @@ class MessageOut(Out):
     sources: list[AnswerSourceOut]
     actions: list[ProposalOut] = Field(description="The cards the answer proposed, as they stand.")
     artifacts: list[ArtifactOut] = Field(description="What the tools handed over, by reference.")
+    feedback: Rating | None = Field(description="The person's rating of the answer, if any.")
 
 
 def scope_of(kind: ScopeKind, workspace_id: UUID | None) -> ThreadScope:
@@ -165,6 +167,7 @@ def message_out(view: MessageView) -> MessageOut:
         ],
         actions=[ProposalOut.model_validate(card) for card in view.actions],
         artifacts=[ArtifactOut.model_validate(artifact) for artifact in view.artifacts],
+        feedback=view.feedback,
     )  # fmt: skip
 
 

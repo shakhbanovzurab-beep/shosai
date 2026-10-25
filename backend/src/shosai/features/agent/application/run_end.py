@@ -5,11 +5,12 @@ exactly one records an end. The answer is kept with the text the model wrote, th
 person saw and the sources the tools named, after the rounds that led to it — each model
 message with its calls and each call's answer as the model read it, for the run's record, never
 for later turns' context; a regenerated or edited question's earlier answers and rounds give
-way to it. The thread's last activity moves, and a completed turn is told through the outbox.
-A thread deleted meanwhile turns the end into `cancelled` and keeps nothing. A run that proposed
-a write is kept `paused` the same way, its answer so far written, until its action is decided.
-A resumed run's end adds to what the run recorded before its card — its rounds, calls, tokens,
-cost and time — and moves its answer, now with the epilogue, after the card's server note.
+way to it, their ratings and cases with them. The thread's last activity moves, and a completed
+turn is told through the outbox. A thread deleted meanwhile turns the end into `cancelled` and
+keeps nothing. A run that proposed a write is kept `paused` the same way, its answer so far
+written, until its action is decided. A resumed run's end adds to what the run recorded before
+its card — its rounds, calls, tokens, cost and time — and moves its answer, now with the
+epilogue, after the card's server note.
 """
 
 from datetime import datetime, timedelta
@@ -30,6 +31,7 @@ from shosai.features.agent.domain.budgets import estimate_tokens
 from shosai.features.agent.domain.endings import Ending, cancelled
 from shosai.features.agent.domain.runs import RunStatus
 from shosai.features.agent.domain.threads import AnswerStatus, MessageRole, TurnKind
+from shosai.features.agent.infrastructure.person_records import AgentFeedbackRecord
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.thread_records import (
     AgentMessageRecord,
@@ -137,14 +139,18 @@ async def replace_answers(session: AsyncSession, payload: TurnPayload) -> None:
     after = tuple_(AgentMessageRecord.created_at, AgentMessageRecord.id) > tuple_(
         question.created_at, question.id
     )
-    await session.execute(
-        delete(AgentMessageRecord).where(
-            AgentMessageRecord.thread_id == payload.thread_id,
-            AgentMessageRecord.created_at >= question.created_at,
-            AgentMessageRecord.role.in_(ANSWER_ROLES),
-            after,
-        )
+    replaced = delete(AgentMessageRecord).where(
+        AgentMessageRecord.thread_id == payload.thread_id,
+        AgentMessageRecord.created_at >= question.created_at,
+        AgentMessageRecord.role.in_(ANSWER_ROLES),
+        after,
     )
+    gone = list(await session.scalars(replaced.returning(AgentMessageRecord.id)))
+    # Оценка уходит с ответом, а с ней и оценочный случай (каскад базы).
+    if gone:
+        await session.execute(
+            delete(AgentFeedbackRecord).where(AgentFeedbackRecord.message_id.in_(gone))
+        )
 
 
 def round_rows(

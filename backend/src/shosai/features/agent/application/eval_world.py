@@ -94,6 +94,11 @@ class EvalTerms:
         del session, user_id
         return True
 
+    async def improve_models(self, session: AsyncSession, user_id: UUID) -> bool:
+        """The world's person never shares a turn: an eval makes no case."""
+        del session, user_id
+        return False
+
 
 @dataclass(frozen=True, slots=True)
 class EvalPeople:

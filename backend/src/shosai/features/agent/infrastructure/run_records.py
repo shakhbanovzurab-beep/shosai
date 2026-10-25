@@ -59,6 +59,9 @@ class AgentRunRecord(ModelBase):
         CheckConstraint(
             "(status IN ('running', 'paused')) = (ended_at IS NULL)", name="ended_when_over"
         ),
+        CheckConstraint(
+            "language IS NULL OR language ~ '^[a-z]{2,3}(-[A-Za-z]{2,4})?$'", name="language_form"
+        ),
         Index("ix_agent_runs_thread", "thread_id", sql_text("started_at DESC")),
         Index(
             "ix_agent_runs_live",
@@ -74,6 +77,8 @@ class AgentRunRecord(ModelBase):
     thread_id: Mapped[UUID] = mapped_column(Uuid)
     user_id: Mapped[UUID] = mapped_column(Uuid)
     channel: Mapped[str] = mapped_column(Text)
+    # Язык ответа, выбранный при старте хода: оценочный случай хранит его.
+    language: Mapped[str | None] = mapped_column(Text)
     status: Mapped[str] = mapped_column(Text, server_default="running")
     outcome_code: Mapped[str | None] = mapped_column(Text)
     model: Mapped[str | None] = mapped_column(Text)

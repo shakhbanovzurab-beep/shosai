@@ -161,6 +161,6 @@ async def test_history_pages_newest_first_without_the_model_s_rounds(
     assert first.json()["items"][1] == {
         "id": shown[2], "role": "server", "text": "server 4", "status": None,
         "created_at": first.json()["items"][1]["created_at"], "duration_ms": None, "steps": [],
-        "sources": [], "actions": [], "artifacts": [],
+        "sources": [], "actions": [], "artifacts": [], "feedback": None,
     }  # fmt: skip
     assert first.json()["items"][2]["status"] == "done"

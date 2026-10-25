@@ -263,7 +263,7 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 - **Owns:** `users`, `directory_entries`, `refresh_sessions`, `password_reset_tokens`, `login_events`, `user_identities`, `user_consents`, `pending_registrations`, `data_export_jobs` (O9), `account_deletions`, `home_transfers`, `operator_audit_events` (EU home; the admin signs in from the environment, ADR 0049); desktop codes and registration routing in Valkey; `user_onboarding` dropped (SM-10). Plan: [slices/identity.md](slices/identity.md).
 - **Routes:** N and E per §3; `/v1/auth/*`, `/v1/me*`, `/v1/admin/users*`. Sign-in screens per §8 SM-7.
 - **Depends on:** F6 (email, consent flag in `CallContext`), billing (entitlements in `/me`).
-- **Emits:** `identity.account.registered`, `identity.account.deletion_scheduled`, `identity.account.deletion_cancelled`, `identity.account.deleted`, `identity.account.transferred`, `identity.account.blocked`, `identity.sessions.revoked` (three-part names, core's event rule; [ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)).
+- **Emits:** `identity.account.registered`, `identity.account.deletion_scheduled`, `identity.account.deletion_cancelled`, `identity.account.deleted`, `identity.account.transferred`, `identity.account.blocked`, `identity.sessions.revoked`, `identity.consent.changed` (a consent changed in the settings: its kind and whether it is given; added for agent step 11a) (three-part names, core's event rule; [ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)).
 - **Leo tools:** `account` toolset (read profile and plan summary with billing; `navigate` is core).
 
 #### 2. workspaces

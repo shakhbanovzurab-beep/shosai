@@ -134,7 +134,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             markers = AccountMarkers(services.valkey)
             authenticator = TokenAuthenticator(codec, directory, markers)
             journal = ConsentJournal()
-            profiles = Profiles(services.transactions, journal, services.objects)
+            profiles = Profiles(services.transactions, journal, services.objects, services.outbox)
             passwords = Passwords(
                 PasswordServices(
                     transactions=services.transactions, directory=directory, hasher=hasher,

@@ -177,6 +177,7 @@ async def test_the_consumers_keep_their_names_and_the_departed_person_s_scope(
         "agent.follow_departure",
         "agent.after_turn",
         "agent.audit_action_item",
+        "agent.withdraw_cases",
         "agent.erase_with_workspace",
     ]
     assert scope is not None

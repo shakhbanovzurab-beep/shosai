@@ -99,10 +99,12 @@ class InlineQueue:
 
 @dataclass
 class Terms:
-    """The plan's token decision and who consents to cross-border transfer."""
+    """The plan's token decision, who consents to cross-border transfer and who lets their
+    conversations help improve the models."""
 
     route: TokenRoute = TokenRoute.WITHIN_ALLOWANCE
     consenting: set[uuid.UUID] = field(default_factory=set)
+    improving: set[uuid.UUID] = field(default_factory=set)
 
     async def decision(self, home: Home, user_id: uuid.UUID, tier: ModelTier) -> TokenDecision:
         """The route the test set."""
@@ -113,6 +115,11 @@ class Terms:
         """Whether the person consented."""
         del session
         return user_id in self.consenting
+
+    async def improve_models(self, session: AsyncSession, user_id: uuid.UUID) -> bool:
+        """Whether the person lets their conversations help improve the models."""
+        del session
+        return user_id in self.improving
 
 
 @dataclass

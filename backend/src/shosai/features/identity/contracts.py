@@ -72,10 +72,15 @@ class Authenticator(Protocol):
 
 
 class ConsentReader(Protocol):
-    """Cross-border consent (nfr-14), read in the caller's transaction for its `CallContext`."""
+    """A person's consents, read in the caller's transaction: cross-border for a `CallContext`
+    (nfr-14), improving the models for Leo's evaluation cases (AG-D13)."""
 
     async def cross_border(self, session: AsyncSession, user_id: UUID) -> bool:
         """Whether the person currently consents to transfer to providers abroad."""
+        ...
+
+    async def improve_models(self, session: AsyncSession, user_id: UUID) -> bool:
+        """Whether the person currently lets their conversations help improve the models."""
         ...
 
 
@@ -250,6 +255,16 @@ class SessionsRevoked(DomainEvent):
     user_id: UUID
 
 
+class ConsentChanged(DomainEvent):
+    """The person changed a consent in their settings; `kind` names it (`improve_models` …)."""
+
+    event_type: ClassVar[str] = "identity.consent.changed"
+    version: ClassVar[int] = 1
+    user_id: UUID
+    kind: EventCode
+    granted: bool
+
+
 class OperatorActed(DomainEvent):
     """The admin changed an account; the EU audit log records it."""
 
@@ -275,5 +290,6 @@ IDENTITY_EVENTS: Final[tuple[type[DomainEvent], ...]] = (
     AccountBlocked,
     AccountUnblocked,
     SessionsRevoked,
+    ConsentChanged,
     OperatorActed,
 )

@@ -6,8 +6,8 @@ thread's creation on, so older months are pruned, walks the thread's index by mo
 id, and reads only the columns it shows. An answer lists the steps the person saw and the
 sources the tools named (step 6), the artifacts the tools handed over by reference (AG-R1),
 and the cards it proposed — a server's note the card it tells about — rendered in the person's
-language, read with the page in one query (step 9b); its rating joins it with 11 and its
-attachments with 12: each with the step that writes it.
+language, read with the page in one query (step 9b), and the person's rating of it (step 11a);
+its attachments join it with step 12.
 """
 
 from dataclasses import dataclass, replace
@@ -27,13 +27,16 @@ from shosai.core.pagination.keyset import Keyset
 from shosai.core.pagination.page import Page, PageRequest, page_of
 from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.threads import Threads
+from shosai.features.agent.domain.feedback import Rating
 from shosai.features.agent.domain.threads import AnswerStatus, HistoryRole
+from shosai.features.agent.infrastructure.person_records import AgentFeedbackRecord
 from shosai.features.agent.infrastructure.run_records import AgentActionRecord
 from shosai.features.agent.infrastructure.thread_records import SPOKEN, AgentMessageRecord
 from shosai.features.identity.contracts import Principal
 
 MESSAGE = AgentMessageRecord
 ACTION = AgentActionRecord
+FEEDBACK = AgentFeedbackRecord
 LISTED: Final = tuple(role.value for role in HistoryRole)
 NEWEST: Final = Keyset((MESSAGE.created_at.expression, MESSAGE.id.expression), descending=True)
 # Только показываемые столбцы: вызовы раунда и дайджесты в страницу не читаются.
@@ -116,6 +119,7 @@ class MessageView:
     sources: tuple[SourceView, ...] = ()
     actions: tuple[dict[str, JsonValue], ...] = ()
     artifacts: tuple[dict[str, JsonValue], ...] = ()
+    feedback: Rating | None = None
 
 
 def view_of(record: AgentMessageRecord) -> MessageView:
@@ -127,6 +131,21 @@ def view_of(record: AgentMessageRecord) -> MessageView:
         steps=steps_of(record.steps), sources=sources_of(record.sources),
         artifacts=tuple(record.artifacts),
     )  # fmt: skip
+
+
+async def ratings_of(
+    session: AsyncSession, user_id: UUID, rows: list[AgentMessageRecord]
+) -> dict[UUID, Rating]:
+    """The person's ratings of the page's answers, by message, in one keyed read."""
+    answers = [row.id for row in rows if row.role == HistoryRole.ASSISTANT.value]
+    if not answers:
+        return {}
+    found = await session.execute(
+        select(FEEDBACK.message_id, FEEDBACK.rating).where(
+            FEEDBACK.message_id.in_(answers), FEEDBACK.user_id == user_id
+        )
+    )
+    return {message_id: Rating(rating) for message_id, rating in found.all()}
 
 
 def position_of(record: AgentMessageRecord) -> MessagePosition:
@@ -165,9 +184,14 @@ class History:
             )
             rows = list(await session.scalars(NEWEST.page(statement, after, request.limit)))
             cards = await self._cards_of(session, principal, rows[: request.limit])
+            ratings = await ratings_of(session, principal.user_id, rows[: request.limit])
         page = page_of(rows, request, CODEC, view_of, position_of)
         items = [
-            replace(view, actions=tuple(cards[i] for i in row.action_ids if i in cards))
+            replace(
+                view,
+                actions=tuple(cards[i] for i in row.action_ids if i in cards),
+                feedback=ratings.get(row.id),
+            )
             for view, row in zip(page.items, rows, strict=False)
         ]
         return Page(items=items, next_cursor=page.next_cursor)
