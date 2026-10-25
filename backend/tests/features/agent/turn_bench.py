@@ -62,6 +62,7 @@ from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 from shosai.features.agent.infrastructure.tool_metrics import ToolMetrics
 from shosai.features.agent.infrastructure.turn_graph import turn_graph
+from shosai.features.agent.infrastructure.turn_saver import TurnSaver
 from shosai.features.agent.module import AGENT
 from shosai.features.billing.contracts import TOKEN_ALLOWANCE
 from shosai.features.identity.contracts import (
@@ -211,17 +212,18 @@ async def turn_bench(
         pages, sources, asyncio.Semaphore(4), ToolMetrics(registry), tracer,
         ActionProposer(homes.transactions),
     )  # fmt: skip
+    frames = TurnSaver(valkey)
     parts = EngineParts(
-        homes.transactions, model, ROUTE, run_log, leases, fleet, runs, outbox, turn_graph(),
-        ContextBuilder(ports), TurnRouting(ToolRegistry(catalog), ports), tool_parts, telemetry,
-        QUICK,
+        homes.transactions, model, ROUTE, run_log, leases, fleet, runs, outbox,
+        turn_graph(frames), frames, ContextBuilder(ports),
+        TurnRouting(ToolRegistry(catalog), ports), tool_parts, telemetry, QUICK,
     )  # fmt: skip
     queue.engine = RunEngine(parts)
     threads = Threads(homes.transactions, (ports, effects))
     starter = TurnStarter(
         TurnParts(
             homes.transactions, ports, effects, RateLimiter(valkey, KeyValueMetrics(registry)),
-            queue, run_log, leases, fleet, threads,
+            queue, run_log, leases, fleet, threads, frames,
         ),
         limit=GENEROUS,
     )  # fmt: skip

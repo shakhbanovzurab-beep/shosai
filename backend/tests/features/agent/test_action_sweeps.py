@@ -32,7 +32,7 @@ async def test_a_card_past_its_hour_expires_and_closes_its_run(action_bench: Act
 
     assert settled == 1
     assert action["status"] == "expired"
-    assert (run["status"], run["outcome_code"]) == ("completed", "checkpoint_lost")
+    assert (run["status"], run["outcome_code"]) == ("completed", "decided")
     assert [row["event"] for row in await action_bench.rows(AUDITED, action_id)] == [
         "proposed", "expired",
     ]  # fmt: skip

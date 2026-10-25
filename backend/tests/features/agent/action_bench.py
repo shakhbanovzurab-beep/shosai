@@ -1,8 +1,9 @@
 """Leo's cards over the turn bench: decisions over HTTP, execution and sweeps (agent step 9a).
 
 A turn whose model calls the probe's write pauses with a card; the person decides through the
-actions router; an approved card runs on an inline `agent` queue, unless the bench holds it to
-play a worker that never came. Times are moved in the rows themselves, as the table's owner.
+actions router; an approved card runs on an inline `agent` queue, and so does its run's
+resume for the epilogue, unless the bench holds either to play a worker that never came.
+Times are moved in the rows themselves, as the table's owner.
 """
 
 import asyncio
@@ -22,6 +23,8 @@ from shosai.features.agent.application.action_decisions import ActionDecisions, 
 from shosai.features.agent.application.action_execution import ActionExecution
 from shosai.features.agent.application.action_sweeps import ActionSweeps
 from shosai.features.agent.application.paused_runs import PausedRuns
+from shosai.features.agent.application.run_engine import RunEngine
+from shosai.features.agent.application.run_resumption import ResumePayload
 from shosai.features.agent.channels.http.actions import build_actions_router
 from shosai.features.agent.infrastructure.action_metrics import ActionMetrics
 from shosai.features.identity.contracts import AUTHENTICATOR
@@ -37,15 +40,23 @@ WRITE: Final = ("tasks__create", '{"query": "Call Anna"}')
 
 @dataclass
 class InlineActions:
-    """The `agent` queue for approved actions: carried out at once, or held."""
+    """The `agent` queue for approved actions and epilogues: carried out at once, or held."""
 
     execution: ActionExecution | None = None
+    engine: RunEngine | None = None
     hold: bool = False
+    hold_resumes: bool = False
     sent: list[ActionPayload] = field(default_factory=list)
+    resumes: list[ResumePayload] = field(default_factory=list)
     running: list[asyncio.Task[None]] = field(default_factory=list)
 
-    async def send(self, task: TaskDeclaration[ActionPayload], payload: ActionPayload) -> str:
-        """Run the action in the background unless held."""
+    async def send(self, task: TaskDeclaration[Any], payload: ActionPayload | ResumePayload) -> str:
+        """Run the action, or the run's resume, in the background unless held."""
+        if isinstance(payload, ResumePayload):
+            self.resumes.append(payload)
+            if not self.hold_resumes and self.engine is not None:
+                self.running.append(asyncio.create_task(self.engine.resume(payload)))
+            return str(uuid.uuid4())
         del task
         self.sent.append(payload)
         if not self.hold and self.execution is not None and payload.user_id is not None:
@@ -54,8 +65,9 @@ class InlineActions:
         return str(uuid.uuid4())
 
     async def settle(self) -> None:
-        """Wait for every action sent so far."""
-        await asyncio.gather(*self.running)
+        """Wait for every action and resume sent so far, those they sent included."""
+        while not all(task.done() for task in self.running):
+            await asyncio.gather(*self.running)
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,6 +79,7 @@ class ActionBench:
     execution: ActionExecution
     queue: InlineActions
     parts: tuple[InlineActions, PausedRuns, ActionMetrics]
+    registry: CollectorRegistry
 
     async def sweep(self) -> int:
         """The minute's sweep, as a worker runs it."""
@@ -105,9 +118,12 @@ class ActionBench:
 async def action_bench(turn_bench: TurnBench) -> AsyncIterator[ActionBench]:
     """Decisions over HTTP, execution and sweeps beside the turn bench."""
     parts = turn_bench.parts
-    metrics = ActionMetrics(CollectorRegistry())
-    paused = PausedRuns((turn_bench.homes.transactions, parts.outbox), parts.run_log)
-    queue = InlineActions()
+    registry = CollectorRegistry()
+    metrics = ActionMetrics(registry)
+    queue = InlineActions(engine=turn_bench.queue.engine)
+    paused = PausedRuns(
+        (turn_bench.homes.transactions, parts.outbox), (parts.run_log, parts.frames), queue
+    )
     transactions = turn_bench.homes.transactions
     execution = ActionExecution(transactions, (turn_bench.catalog, paused, metrics))
     queue.execution = execution
@@ -116,5 +132,5 @@ async def action_bench(turn_bench: TurnBench) -> AsyncIterator[ActionBench]:
     ports.install([AUTHENTICATOR.bind(BearerOfTheTest())])
     app = build_probe_app(extra=(build_actions_router(decisions, ports),)).app
     async with client_of(app) as http:
-        yield ActionBench(turn_bench, http, execution, queue, (queue, paused, metrics))
+        yield ActionBench(turn_bench, http, execution, queue, (queue, paused, metrics), registry)
         await queue.settle()

@@ -107,6 +107,8 @@ async def test_a_killed_executor_never_applies_twice_or_unapproved(
     await action_bench.sweep()
     for _ in range(deliveries):
         await action_bench.execution.run(HOME, person, action_id)
+    # Эпилог после конца действия идёт в фоне: он доигрывает свой сценарий до следующего примера.
+    await action_bench.queue.settle()
     status = (await action_bench.rows(STATUS, action_id))[0]["status"]
     applied = action_bench.turns.tools.executed[executed_before:]
 

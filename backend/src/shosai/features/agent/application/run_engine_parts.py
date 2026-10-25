@@ -1,8 +1,8 @@
 """What the engine of the `agent` queue's workers works with (AG-D12; agent steps 5a, 6).
 
 The provider port's streaming chat as the engine uses it, the run's stores and its log, the
-leases and the fleet, the compiled frame, the context builder and the routing of tools, the
-tools' bulkhead and pages, the telemetry, and the stream's pace.
+leases and the fleet, the compiled frame and our saver of it, the context builder and the
+routing of tools, the tools' bulkhead and pages, the telemetry, and the stream's pace.
 """
 
 from collections.abc import AsyncIterator
@@ -24,6 +24,7 @@ from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.run_log import RunLog
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 from shosai.features.agent.infrastructure.turn_graph import TurnGraph
+from shosai.features.agent.infrastructure.turn_saver import TurnSaver
 
 
 class ModelStreams(Protocol):
@@ -49,6 +50,7 @@ class EngineParts:
     registry: RunRegistry
     outbox: EventOutbox
     graph: TurnGraph
+    frames: TurnSaver
     context: ContextBuilder
     routing: TurnRouting
     tools: ToolParts

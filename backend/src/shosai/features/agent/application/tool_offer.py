@@ -121,6 +121,13 @@ class TurnOffer:
         if is_write(tool) and toolset not in self.wrote:
             self.wrote.append(toolset)
 
+    def restore(self, routing: Mapping[str, Any]) -> None:
+        """Go on with what a resumed run loaded, called and wrote to before its card."""
+        for name in listed_names(routing, "loaded"):
+            self.load(name)
+        for kept, key in ((self.used, "used"), (self.wrote, "wrote")):
+            kept.extend(name for name in listed_names(routing, key) if name not in kept)
+
     def routing(self) -> dict[str, object]:
         """What the run's row keeps: names and the rule's code."""
         return {"rule": self.rule, "selected": self.selected, "reading": self.reading,
@@ -199,6 +206,12 @@ class TurnRouting:
             sticky_toolsets(names(routings, "wrote"), STICKY_TURNS),
             sticky_toolsets(names(routings, "used"), STICKY_TURNS),
         )
+
+
+def listed_names(routing: Mapping[str, Any], key: str) -> list[str]:
+    """The toolsets one run's routing lists under a key."""
+    listed = routing.get(key, ())
+    return [name for name in listed if isinstance(name, str)] if isinstance(listed, list) else []
 
 
 def names(routings: list[dict[str, Any]], key: str) -> list[frozenset[str]]:

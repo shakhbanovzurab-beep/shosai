@@ -7,7 +7,9 @@ a turn — its wall time less the model's calls and the tools' time in their sli
 The person's wait for the first word is `shosai_agent_ttft_seconds{tier}`, the worker's
 pickup of a sent turn `shosai_agent_queue_pickup_seconds`, the context's size by segment
 `shosai_agent_context_tokens{segment}`, a turn's cost `shosai_agent_turn_cost_usd{tier}`. An
-agent worker holds `shosai_agent_active_runs`; the API counts resumes by their outcome.
+agent worker holds `shosai_agent_active_runs`; the API counts a stream's resumes by their
+outcome, and an agent worker `shosai_agent_run_resumes_total{outcome}` — a paused run taken
+back for its epilogue after its card, or found without its frame, or already closed.
 """
 
 from typing import Final
@@ -82,6 +84,12 @@ class RunMetrics:
             ("outcome",),
             registry=registry,
         )
+        self._run_resumes = Counter(
+            "shosai_agent_run_resumes",
+            "Прогоны после решения по карточке: эпилог начат, кадр потерян или прогон уже закрыт",
+            ("outcome",),
+            registry=registry,
+        )
 
     def ended(self, channel: Channel, outcome: str) -> None:
         """A turn ended with its code."""
@@ -113,3 +121,7 @@ class RunMetrics:
     def resumed(self, outcome: str) -> None:
         """A stream was resumed (`served`) or its log was gone (`gone`)."""
         self._resumes.labels(outcome=outcome).inc()
+
+    def resumed_run(self, outcome: str) -> None:
+        """A paused run handed over after its card: resumed, its frame lost, or closed."""
+        self._run_resumes.labels(outcome=outcome).inc()

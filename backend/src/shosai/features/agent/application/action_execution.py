@@ -5,8 +5,9 @@ the task only one goes on — and applies its items in order. Each item is marke
 its own commit before its slice is called, then its outcome in the next: the slice applies the
 effect once per key `action:index` in its own transaction, with its audit event. A typed refusal
 fails the item; a timeout or an unexpected error leaves its outcome unknown, since the effect
-may have committed — it is never retried. The action ends with its items' honest outcome, its
-paused run closes with a note, and the cabinet sees the card's end and what to refresh.
+may have committed — it is never retried. The action ends with its items' honest outcome and
+a note in its thread, its paused run goes back to the `agent` queue for the epilogue, and the
+cabinet sees the card's end and what to refresh.
 """
 
 import asyncio
@@ -41,7 +42,6 @@ from shosai.features.agent.domain.actions import (
     item_key,
     transition,
 )
-from shosai.features.agent.domain.runs import CloseReason
 from shosai.features.agent.infrastructure.action_metrics import ActionMetrics
 from shosai.features.agent.infrastructure.run_records import AgentActionRecord
 
@@ -86,7 +86,7 @@ class ActionExecution:
             )  # fmt: skip
         if record is None:
             return
-        await self._paused.tell(record, None)
+        await self._paused.tell(home, record)
         claimed = Claimed(record, scope)
         items = list(items_of(record))
         for index, item in enumerate(items):
@@ -143,11 +143,12 @@ class ActionExecution:
             if ended in AUDITED_ENDS:
                 code = next((item.code for item in items if item.code), None)
                 audit(session, record, AuditEntry(AUDITED_ENDS[ended], code=code), now)
-            note = await self._paused.close(session, record, CloseReason.CHECKPOINT_LOST)
+            settled = await self._paused.settle(session, record)
         self._metrics.decided(record.origin, ended.value)
         if record.approved_at is not None:
-            self._metrics.executed((now - record.approved_at).total_seconds())
-        await self._paused.tell(record, note, self._invalidates(items))
+            waited = (now - record.approved_at).total_seconds()
+            self._metrics.ended_after_approval(record.status, waited)
+        await self._paused.tell(claimed.scope.home, record, settled, self._invalidates(items))
 
     def _invalidates(self, items: list[ActionItem]) -> tuple[str, ...]:
         """The cabinet's query domains the succeeded items changed."""

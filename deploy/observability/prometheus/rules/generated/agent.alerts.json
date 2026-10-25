@@ -98,6 +98,87 @@
             "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
             "dashboard": "/d/journey-leo-turn"
           }
+        },
+        {
+          "alert": "LeoApprovedActionsBudgetBurnFast",
+          "expr": "slo:leo_approved_actions:bad_ratio:rate1h > 0.144 and slo:leo_approved_actions:bad_ratio:rate5m > 0.144",
+          "for": "2m",
+          "labels": {
+            "severity": "page",
+            "slo": "leo_approved_actions",
+            "journey": "leo_action"
+          },
+          "annotations": {
+            "summary": "Одобренные действия Leo выполняются медленно или с неизвестным исходом",
+            "description": "Мы обещаем, что одобренное действие Leo выполняется или отклоняется с понятной причиной за 30 секунд в 99 % случаев. Сбоев сейчас очень много: если так продолжится, обещание на этот месяц будет нарушено примерно через 2 дня.",
+            "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+            "dashboard": "/d/journey-leo-action"
+          }
+        },
+        {
+          "alert": "LeoApprovedActionsBudgetBurnSlow",
+          "expr": "slo:leo_approved_actions:bad_ratio:rate6h > 0.06 and slo:leo_approved_actions:bad_ratio:rate30m > 0.06",
+          "for": "15m",
+          "labels": {
+            "severity": "page",
+            "slo": "leo_approved_actions",
+            "journey": "leo_action"
+          },
+          "annotations": {
+            "summary": "Одобренные действия Leo выполняются медленно или с неизвестным исходом",
+            "description": "Мы обещаем, что одобренное действие Leo выполняется или отклоняется с понятной причиной за 30 секунд в 99 % случаев. Сбоев больше нормы уже несколько часов: если так продолжится, обещание на этот месяц будет нарушено примерно через 5 дней.",
+            "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+            "dashboard": "/d/journey-leo-action"
+          }
+        },
+        {
+          "alert": "LeoApprovedActionsBudgetBurnTicket",
+          "expr": "slo:leo_approved_actions:bad_ratio:rate3d > 0.01 and slo:leo_approved_actions:bad_ratio:rate6h > 0.01",
+          "for": "1h",
+          "labels": {
+            "severity": "ticket",
+            "slo": "leo_approved_actions",
+            "journey": "leo_action"
+          },
+          "annotations": {
+            "summary": "Одобренные действия Leo выполняются медленно или с неизвестным исходом",
+            "description": "Мы обещаем, что одобренное действие Leo выполняется или отклоняется с понятной причиной за 30 секунд в 99 % случаев. Сбоев понемногу больше нормы уже три дня: если ничего не делать, обещание будет нарушено до конца месяца.",
+            "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+            "dashboard": "/d/journey-leo-action"
+          }
+        }
+      ]
+    },
+    {
+      "name": "agent-invariants",
+      "rules": [
+        {
+          "alert": "LeoItemExecutedTwice",
+          "expr": "max(shosai_agent_items_executed_twice) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "L-N5"
+          },
+          "annotations": {
+            "summary": "Действие Leo выполнено дважды",
+            "description": "Почасовая проверка аудита нашла пункт одобренного действия Leo, который срез применил больше одного раза: например, две одинаковые задачи вместо одной. Ключ пункта должен был это исключить. Ид действий — в журнале проверки; посмотрите, какой срез исполнил пункт повторно.",
+            "runbook": "docs/runbooks/alerts.md#leo-item-executed-twice",
+            "dashboard": "/d/invariant-monitors"
+          }
+        },
+        {
+          "alert": "LeoItemExecutedUnapproved",
+          "expr": "max(shosai_agent_items_executed_unapproved) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "L-N5"
+          },
+          "annotations": {
+            "summary": "Действие Leo выполнено без одобрения",
+            "description": "Почасовая проверка аудита нашла пункт действия Leo, исполненный без одобрения человека: Leo мог изменить данные человека без его решения. Ид действий — в журнале проверки; срочно найдите путь, который исполнил пункт в обход шлюза действий.",
+            "runbook": "docs/runbooks/alerts.md#leo-item-executed-unapproved",
+            "dashboard": "/d/invariant-monitors"
+          }
         }
       ]
     }

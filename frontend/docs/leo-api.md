@@ -21,7 +21,11 @@ Since agent step 9a1 Leo proposes writes: a write call becomes a card (`action.p
 taint, reversibility, created_at, expires_at, resolved_at}` (`taint` is a label such as `task:foreign`; `run_id` is
 added to the decision's answer); step 9b adds `title`, `space`, `origin` and `preview` in the person's language, and
 the inbox's `GET` routes. A decided card adds a server note to the thread (`role: server`, empty `text`) that
-the cabinet renders from the card; Leo's next turns read it in plain words.
+the cabinet renders from the card; Leo's next turns read it in plain words. Since step 9a2 an approved card's run
+resumes: after the two `action.updated` (`executing`, then the end with `invalidates`) the same run's stream carries
+the epilogue — `text.delta`, steps, `sources` — and `run.completed`, and the answer, epilogue included, follows the
+note in the history. A rejected or expired card, or a run a new turn closed, gets no epilogue: `action.updated` and,
+for a run still paused, `run.completed`.
 
 ## Conversations
 

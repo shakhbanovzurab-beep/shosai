@@ -8,12 +8,14 @@ for later turns' context; a regenerated or edited question's earlier answers and
 way to it. The thread's last activity moves, and a completed turn is told through the outbox.
 A thread deleted meanwhile turns the end into `cancelled` and keeps nothing. A run that proposed
 a write is kept `paused` the same way, its answer so far written, until its action is decided.
+A resumed run's end adds to what the run recorded before its card — its rounds, calls, tokens,
+cost and time — and moves its answer, now with the epilogue, after the card's server note.
 """
 
 from datetime import datetime, timedelta
 from typing import Any, Final
 
-from sqlalchemy import delete, select, tuple_, update
+from sqlalchemy import delete, func, select, tuple_, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
@@ -39,19 +41,28 @@ RUN = AgentRunRecord
 # Ответ и раунды хода: их заменяет новый ответ на тот же вопрос.
 ANSWER_ROLES: Final = (MessageRole.ASSISTANT.value, MessageRole.TOOL.value)
 TICK: Final = timedelta(microseconds=1)
+# Что эпилог прибавляет к строке прогона, и что остаётся от хода до карточки.
+ADDED: Final = frozenset(
+    {
+        "rounds", "tool_calls", "input_tokens", "cached_tokens", "output_tokens",
+        "cost_micro_usd", "overhead_ms", "duration_ms",
+    }
+)  # fmt: skip
+KEPT: Final = frozenset({"ttft_ms"})
 
 
 async def record_end(
     writers: tuple[HomeTransactions, EventOutbox],
     payload: TurnPayload,
     result: tuple[Ending, str, ModelAnswer | None],
-    clocked: tuple[TurnTimes, datetime],
+    clocked: tuple[TurnTimes, datetime, bool],
     work: RunWork,
 ) -> Ending | None:
-    """The final transaction; the ending it recorded, or None when the sweep won."""
+    """The final transaction; the ending it recorded, or None when the sweep won. `clocked`
+    holds the run's times, the moment and whether the run was resumed after a card."""
     transactions, outbox = writers
     ending, text, answer = result
-    times, now = clocked
+    times, now, resumed = clocked
     async with transactions.begin(payload.scope()) as session:
         thread = await session.scalar(
             select(AgentThreadRecord)
@@ -69,7 +80,9 @@ async def record_end(
             )
             .values(
                 ended_at=None if ending.status is RunStatus.PAUSED else now,
-                **telemetry(payload, (ending, answer), (times, work), now),
+                **ended_values(
+                    telemetry(payload, (ending, answer), (times, work), now), resumed=resumed
+                ),
             )
             .returning(RUN.id)
         )
@@ -77,7 +90,7 @@ async def record_end(
             return None
         if thread is not None:
             if ending.keeps(text) and ending.answer is not None:
-                await replace_answers(session, payload)
+                await (moved_answer if resumed else replace_answers)(session, payload)
                 session.add_all(round_rows(thread, payload, work, now))
                 session.add(
                     AgentMessageRecord(
@@ -86,7 +99,7 @@ async def record_end(
                         role=MessageRole.ASSISTANT.value, status=ending.answer.value,
                         text=text, steps=work.ordered_steps(),
                         sources=kept(work, payload.language), tokens=estimate_tokens(text),
-                        duration_ms=millis(now - payload.started_at),
+                        duration_ms=millis(now - times.began),
                     )
                 )  # fmt: skip
             thread.last_activity_at = now
@@ -96,6 +109,16 @@ async def record_end(
                 )
                 await outbox.add(session, completed)
     return ending
+
+
+async def moved_answer(session: AsyncSession, payload: TurnPayload) -> None:
+    """A resumed run's answer so far gives way to the whole one, written after the note."""
+    await session.execute(
+        delete(AgentMessageRecord).where(
+            AgentMessageRecord.id == payload.reply_id,
+            AgentMessageRecord.thread_id == payload.thread_id,
+        )
+    )
 
 
 async def replace_answers(session: AsyncSession, payload: TurnPayload) -> None:
@@ -155,6 +178,20 @@ def round_rows(
     return rows
 
 
+def ended_values(values: dict[str, Any], *, resumed: bool) -> dict[str, Any]:
+    """The run row's end: as measured for a new run; for a resumed one, its counts added to
+    those before the card, and its first word kept."""
+    if not resumed:
+        return values
+    added = {
+        name: func.coalesce(getattr(RUN, name), 0) + values[name]
+        for name in ADDED
+        if values.get(name) is not None
+    }
+    kept = {name: value for name, value in values.items() if name not in ADDED | KEPT}
+    return kept | added
+
+
 def millis(delta: timedelta) -> int:
     """Milliseconds of a time span."""
     return int(delta.total_seconds() * 1000)
@@ -170,7 +207,7 @@ def telemetry(
     ending, answer = result
     times, work = done
     usage = answer.usage if answer is not None else None
-    first = times.first_word(payload.started_at, answer)
+    first = times.first_word(answer)
     return {
         "status": ending.status.value,
         "outcome_code": ending.code,
@@ -185,6 +222,6 @@ def telemetry(
         "output_tokens": usage.output_tokens if usage is not None else 0,
         "cost_micro_usd": micro_usd(answer),
         "ttft_ms": None if first is None else millis(first),
-        "overhead_ms": millis(times.overhead(payload.started_at, now)),
-        "duration_ms": millis(now - payload.started_at),
+        "overhead_ms": millis(times.overhead(now)),
+        "duration_ms": millis(now - times.began),
     }

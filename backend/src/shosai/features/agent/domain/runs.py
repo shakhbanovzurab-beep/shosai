@@ -90,10 +90,13 @@ class RunFailure(StrEnum):
 
 
 class CloseReason(StrEnum):
-    """Why a paused run closed without its epilogue."""
+    """Why a paused run closed without its epilogue: its card ended unapproved, its frame was
+    gone when the approval came, a new turn took its thread, or its thread was deleted."""
 
     SUPERSEDED = "superseded"
     CHECKPOINT_LOST = "checkpoint_lost"
+    DECIDED = "decided"
+    NEW_TURN = "new_turn"
 
 
 class Channel(StrEnum):

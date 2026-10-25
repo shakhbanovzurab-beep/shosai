@@ -1,10 +1,11 @@
 """A turn's first transaction (Leo §5.2 step 4; §14 rule 1: commit before streaming).
 
 Under its `Idempotency-Key` the transaction writes the question and the running run and
-moves the thread's last activity; an untitled thread takes its title from the question. A
-concurrent repeat of the key finds the outcome the first one stored and answers its run. A
-run that was committed but could not be sent to a worker is ended `failed` at once, so
-nothing waits for it.
+moves the thread's last activity; an untitled thread takes its title from the question. The
+thread's runs paused on a card close (`new_turn`): the conversation went on, so no epilogue
+follows, while their cards stay decidable. A concurrent repeat of the key finds the outcome
+the first one stored and answers its run. A run that was committed but could not be sent to a
+worker is ended `failed` at once, so nothing waits for it.
 """
 
 from dataclasses import dataclass
@@ -23,6 +24,7 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.tasks.declaration import TaskDeclaration
+from shosai.features.agent.application.run_close import close_for_new_turn
 from shosai.features.agent.application.threads import Threads
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.budgets import estimate_tokens
@@ -42,6 +44,7 @@ from shosai.features.agent.infrastructure.thread_records import (
     AgentMessageRecord,
     AgentThreadRecord,
 )
+from shosai.features.agent.infrastructure.turn_saver import TurnSaver
 from shosai.features.identity.contracts import Principal
 
 
@@ -66,12 +69,14 @@ class TurnParts:
     leases: ThreadLeases
     fleet: Fleet
     threads: Threads
+    frames: TurnSaver
 
 
 class TurnMade(BaseModel):
-    """The run a turn's key made."""
+    """The run a turn's key made, and the paused runs it closed."""
 
     run_id: UUID
+    closed: tuple[UUID, ...] = ()
 
 
 async def commit_turn(
@@ -94,11 +99,12 @@ async def commit_turn(
                     status=RunStatus.RUNNING.value, token_route=terms.token_route,
                 )
             )  # fmt: skip
+            closed = await close_for_new_turn(session, thread.id, now)
             thread.last_activity_at = now
             if thread.title is None:
                 thread.title = title_from_question(question)
             await session.flush()
-            return TurnMade(run_id=terms.run_id)
+            return TurnMade(run_id=terms.run_id, closed=tuple(closed))
 
         done = await parts.effects.once(session, effect, TurnMade, write)
         return done.outcome

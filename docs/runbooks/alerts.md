@@ -23,6 +23,8 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Leo's turn (`journey="leo_turn"`).** Failures: split `shosai_agent_turns_total` by `outcome`. `process_lost` — agent workers died or were killed mid-turn: check `RoleMissing` for `workers-agent`, its restarts and memory; `turn_deadline` — turns ran past 180 s, usually a slow model (`shosai_ai_call_duration_seconds` by model); `failed` — find "Ход Leo упал" in the agent worker's logs, with its stack. Overhead (the platform's own time, EU home): the worker's pickup (`shosai_agent_queue_pickup_seconds` — agent workers full or Valkey slow), then the trace of a slow turn: `agent.run` → `agent.context` and the final transaction around the model's `ai.call`.
 
+**Leo's approved actions (`journey="leo_action"`).** `shosai_agent_approved_actions_total` by `result`: `late` — actions ended more than 30 s after their approval: the `agent` queue's age (`TaskQueueOld`), a slow slice's `execute` (`shosai_agent_action_execution_seconds`, the trace's `tool.<name>`), or the minute's sweep handing an unclaimed approval over again ("Одобренное действие снова не передано" in `workers-default`); `unknown` — an item's outcome nobody can tell: "Пункт действия Leo упал" in `workers-agent` with its stack, a slice's timeout, or an executor lost mid-action (the sweep's "Обход действий Leo").
+
 ## Pages: invariant monitors (§16.4)
 
 <a id="unknown-task-dropped"></a>
@@ -150,6 +152,24 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 **Look.** `shosai_notes_unsettled` by `home`; the task `notes.settle_ended` in the workers' logs and its errors; `SELECT id, ended_at FROM sessions WHERE status <> 'active' AND settled_at IS NULL AND deleted_at IS NULL ORDER BY ended_at` in that home.
 
 **Fix.** Make the sweep pass again: fix the failing task or the meeting row it stops at, with a test. The next pass settles the backlog oldest first, a batch a minute, and gives each spoken meeting its run; the gauge returns to zero.
+
+<a id="leo-item-executed-twice"></a>
+### LeoItemExecutedTwice — L-N5
+
+**Means.** The hourly check of the agent's audit trail found an item of an approved Leo action that a slice applied more than once under its key `action:index` (agent, from step 9a2): for example two identical tasks where the person approved one. The gateway marks an item `executing` before its slice runs and never retries it, and the slice applies a key once, so this should be impossible.
+
+**Look.** `shosai_agent_items_executed_twice` by `home`; the `workers-default` log line «Пункты действий Leo исполнены дважды» names up to 20 action ids. For one of them: `SELECT event, item_key, tool_name, created_at FROM agent_audit WHERE action_id = '…' ORDER BY created_at` — two `executed` rows of one `item_key` show the slice that applied it twice (`tool_name`); the effect ledger's row for that key (`effect_keys`) shows whether the slice checked it.
+
+**Fix.** Fix the slice's `execute` so the key is checked in the same transaction as the effect, with a test of two concurrent calls. Undo the duplicate for the person by hand only with their agreement. The gauge returns to zero once the rows are older than two hours.
+
+<a id="leo-item-executed-unapproved"></a>
+### LeoItemExecutedUnapproved — L-N5
+
+**Means.** The hourly check found an item of a Leo action with an `executed` audit row but no `approved` row for its action (agent, from step 9a2): a change to the person's data that nobody approved. Only the Action Gateway executes items, and only after the conditional `proposed → approved` update that writes the `approved` row.
+
+**Look.** `shosai_agent_items_executed_unapproved` by `home`; the `workers-default` log line «Пункты действий Leo исполнены без одобрения» names the action ids. `SELECT status, approved_at, approved_via FROM agent_actions WHERE id = '…'` and the action's audit rows; the slice named by `tool_name` and who sent its `agent.action_item.executed` (a write that bypassed the gateway, or an event with a forged key).
+
+**Fix.** Stop the path that executes without the gateway — release a fix or switch the slice's write tools off — then tell the owner which people's data changed. The gauge returns to zero once the rows are older than two hours.
 
 ## Tickets (§16.6)
 

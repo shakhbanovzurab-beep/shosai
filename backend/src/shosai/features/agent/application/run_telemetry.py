@@ -1,7 +1,8 @@
 """A run's telemetry: its times, its spans and its numbers (agent plan §3.6, Leo §16; step 5b).
 
-A run's times are the person's: from the question's admission (`started_at`) to the worker's
-pickup, to the model's first word, to the recorded end. The platform's own time is the run's
+A run's times are the person's: from the question's admission (`started_at`) — or, for the
+epilogue after a card, from the decision that resumed it — to the worker's pickup, to the
+model's first word, to the recorded end. The platform's own time is the run's
 wall time less the model's calls and the tools' time in their slices (Leo §11.3): admission,
 queue, context, routing and dispatch, the final transaction. Spans carry ids and codes only —
 `agent.run` with the run's id, `agent.context`, the provider port's own `ai.call` and a
@@ -30,22 +31,24 @@ MICRO: Final = Decimal(1_000_000)
 
 @dataclass
 class TurnTimes:
-    """When a run's worker took it, and how long its model calls and its tools took."""
+    """When this part of a run began — its admission, or its resume — when its worker took
+    it, and how long its model calls and its tools took."""
 
+    began: datetime
     picked_up: datetime
     model: timedelta = timedelta(0)
     tools: timedelta = timedelta(0)
     sizes: dict[Segment, int] = field(default_factory=dict)
 
-    def overhead(self, started: datetime, ended: datetime) -> timedelta:
+    def overhead(self, ended: datetime) -> timedelta:
         """The platform's own time: everything but the model's calls and the tools."""
-        return max(ended - started - self.model - self.tools, timedelta(0))
+        return max(ended - self.began - self.model - self.tools, timedelta(0))
 
-    def first_word(self, started: datetime, answer: ModelAnswer | None) -> timedelta | None:
-        """From the admission to the first word, when the model wrote one."""
+    def first_word(self, answer: ModelAnswer | None) -> timedelta | None:
+        """From the beginning to the first word, when the model wrote one."""
         if answer is None or answer.first_token_ms is None:
             return None
-        return (self.picked_up - started) + timedelta(milliseconds=answer.first_token_ms)
+        return (self.picked_up - self.began) + timedelta(milliseconds=answer.first_token_ms)
 
 
 def micro_usd(answer: ModelAnswer | None) -> int:
@@ -75,9 +78,9 @@ class RunTelemetry:
         with self._tracer.start_as_current_span("agent.context"):
             yield
 
-    def picked(self, payload: TurnPayload, times: TurnTimes) -> None:
-        """A worker took the run."""
-        self.metrics.picked_up(max((times.picked_up - payload.started_at).total_seconds(), 0.0))
+    def picked(self, times: TurnTimes) -> None:
+        """A worker took the turn."""
+        self.metrics.picked_up(max((times.picked_up - times.began).total_seconds(), 0.0))
 
     def ended(
         self,
@@ -89,8 +92,8 @@ class RunTelemetry:
         """A run's end, its times, its context and its cost."""
         ending, answer = result
         self.metrics.ended(Channel.WEB, ending.code)
-        first = times.first_word(payload.started_at, answer)
-        overhead = times.overhead(payload.started_at, now).total_seconds()
+        first = times.first_word(answer)
+        overhead = times.overhead(now).total_seconds()
         seconds = None if first is None else first.total_seconds()
         self.metrics.timed(payload.home, overhead, seconds, TIER)
         if times.sizes:

@@ -68,6 +68,7 @@ from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 from shosai.features.agent.infrastructure.tool_metrics import ToolMetrics
 from shosai.features.agent.infrastructure.turn_graph import ModelAnswer, turn_graph
+from shosai.features.agent.infrastructure.turn_saver import TurnSaver
 from shosai.features.identity.contracts import Principal
 
 
@@ -145,6 +146,7 @@ class EvalRunner:
             tool.spec.name: tool for name in catalog.toolsets() for tool in catalog.toolset(name)
         }
         self._run_log, leases, self._fleet = RunLog(valkey), ThreadLeases(valkey), Fleet(valkey)
+        frames = TurnSaver(valkey)
         self._registry = RunRegistry(leases, self._fleet)
         self._telemetry = EvalTelemetry()
         tools = ToolParts(
@@ -155,7 +157,7 @@ class EvalRunner:
         self._parts_with = partial(
             EngineParts, transactions=transactions, route=route, run_log=self._run_log,
             leases=leases, fleet=self._fleet, registry=self._registry, outbox=services.outbox,
-            graph=turn_graph(), context=ContextBuilder(ports),
+            graph=turn_graph(frames), frames=frames, context=ContextBuilder(ports),
             routing=TurnRouting(ToolRegistry(catalog), ports), tools=tools,
             telemetry=self._telemetry, pace=services.pace,
         )  # fmt: skip
@@ -164,7 +166,7 @@ class EvalRunner:
         self._starter = TurnStarter(
             TurnParts(
                 transactions, ports, services.effects, services.limiter, self._queue,
-                self._run_log, leases, self._fleet, self._threads,
+                self._run_log, leases, self._fleet, self._threads, frames,
             )
         )  # fmt: skip
 

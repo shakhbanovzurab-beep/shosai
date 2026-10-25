@@ -51,7 +51,7 @@ async def test_a_write_call_pauses_the_run_with_a_card_and_changes_nothing(
     ]
 
 
-async def test_an_approved_card_takes_effect_once_and_closes_its_run_with_a_note(
+async def test_an_approved_card_takes_effect_once_and_tells_its_thread(
     action_bench: ActionBench,
 ) -> None:
     person = uuid.uuid4()
@@ -60,6 +60,7 @@ async def test_an_approved_card_takes_effect_once_and_closes_its_run_with_a_note
 
     approved = await action_bench.decide(person, card, "approve")
     again = await action_bench.decide(person, card, "approve")
+    await action_bench.queue.settle()
     tail = await action_bench.turns.http.get(
         f"/v1/agent/runs/{turn['run_id']}/events",
         headers=bearer((HOME, person)) | {"Last-Event-ID": str(turn["events"][-1][1])},
@@ -72,13 +73,11 @@ async def test_an_approved_card_takes_effect_once_and_closes_its_run_with_a_note
     assert again.status_code == 409
     assert again.json()["error"]["code"] == "action_not_pending"
     assert action_bench.turns.tools.executed == [f"{card['id']}:0"]
-    assert [kind for kind, _, _ in stream_of(tail)] == [
-        "action.updated", "action.updated", "run.completed",
-    ]  # fmt: skip
+    assert [kind for kind, _, _ in stream_of(tail)][:2] == ["action.updated", "action.updated"]
     assert [data["action"]["status"] for kind, _, data in stream_of(tail)[:2]] == [
         "executing", "succeeded",
     ]  # fmt: skip
-    assert (run["status"], run["outcome_code"]) == ("completed", "checkpoint_lost")
+    assert (run["status"], run["outcome_code"]) == ("completed", "answered")
     assert note["text"] == ""
     assert note["action_ids"] == [uuid.UUID(card["id"])]
     assert note["digest"]["text"].endswith("with tasks.create was approved and done.")

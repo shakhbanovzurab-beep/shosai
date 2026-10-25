@@ -7,7 +7,7 @@ approval is audited with its channel and handed to an agent worker on the `agent
 answer waits up to 20 s for the action's end and otherwise says `executing` — the outcome
 follows as `action.updated` on the run's stream. A failed hand-over is not the person's
 problem: the action stays `approved`, and the minute's sweep hands it over again. A rejection
-ends the card and closes its paused run in the same transaction.
+ends the card and closes its paused run in the same transaction, with no epilogue.
 """
 
 import asyncio
@@ -45,7 +45,7 @@ from shosai.features.agent.domain.actions import (
     AuditEvent,
     transition,
 )
-from shosai.features.agent.domain.runs import APPROVAL_WAIT, CloseReason
+from shosai.features.agent.domain.runs import APPROVAL_WAIT
 from shosai.features.agent.infrastructure.action_metrics import ActionMetrics
 from shosai.features.agent.infrastructure.run_records import AgentActionRecord
 from shosai.features.identity.contracts import Principal
@@ -123,7 +123,7 @@ class ActionDecisions:
         return Decided(await self._outcome(principal, record))
 
     async def reject(self, principal: Principal, action_id: UUID, nonce: str) -> Decided:
-        """Reject the card; its paused run closes."""
+        """Reject the card; its paused run closes without an epilogue."""
         return Decided(await self._decide(principal, (action_id, nonce), ActionEvent.REJECT))
 
     async def _decide(
@@ -147,12 +147,10 @@ class ActionDecisions:
                     AuditEvent.APPROVED if event is ActionEvent.APPROVE else AuditEvent.REJECTED
                 )
                 audit(session, record, AuditEntry(audited, via=ApprovedVia.WEB.value), now)
-            note = None
-            if ended is not None:
-                note = await self._paused.close(session, ended, CloseReason.CHECKPOINT_LOST)
+            settled = await self._paused.settle(session, ended) if ended is not None else None
         if ended is not None:
             self._metrics.decided(ended.origin, ended.status)
-            await self._paused.tell(ended, note)
+            await self._paused.tell(principal.home, ended, settled)
         if record is None:
             raise (
                 not_found()

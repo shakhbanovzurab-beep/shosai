@@ -194,6 +194,9 @@ class TurnStarter:
         if made.run_id != terms.run_id:
             await self._let_go(principal.user_id, terms)
             return made.run_id
+        for closed in made.closed:
+            # Закрытому новым ходом прогону эпилог не нужен: его кадр удаляется.
+            await parts.frames.forget(closed)
         try:
             await parts.run_log.append(terms.run_id, (started_event(terms),))
             await parts.tasks.send(RUN_TURN, terms)

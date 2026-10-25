@@ -82,6 +82,46 @@
             "slo": "leo_turn_overhead",
             "journey": "leo_turn"
           }
+        },
+        {
+          "record": "slo:leo_approved_actions:bad_ratio:rate5m",
+          "expr": "(sum(rate(shosai_agent_approved_actions_total{result!=\"in_time\"}[5m])) or vector(0)) / sum(rate(shosai_agent_approved_actions_total[5m]))",
+          "labels": {
+            "slo": "leo_approved_actions",
+            "journey": "leo_action"
+          }
+        },
+        {
+          "record": "slo:leo_approved_actions:bad_ratio:rate30m",
+          "expr": "(sum(rate(shosai_agent_approved_actions_total{result!=\"in_time\"}[30m])) or vector(0)) / sum(rate(shosai_agent_approved_actions_total[30m]))",
+          "labels": {
+            "slo": "leo_approved_actions",
+            "journey": "leo_action"
+          }
+        },
+        {
+          "record": "slo:leo_approved_actions:bad_ratio:rate1h",
+          "expr": "(sum(rate(shosai_agent_approved_actions_total{result!=\"in_time\"}[1h])) or vector(0)) / sum(rate(shosai_agent_approved_actions_total[1h]))",
+          "labels": {
+            "slo": "leo_approved_actions",
+            "journey": "leo_action"
+          }
+        },
+        {
+          "record": "slo:leo_approved_actions:bad_ratio:rate6h",
+          "expr": "(sum(rate(shosai_agent_approved_actions_total{result!=\"in_time\"}[6h])) or vector(0)) / sum(rate(shosai_agent_approved_actions_total[6h]))",
+          "labels": {
+            "slo": "leo_approved_actions",
+            "journey": "leo_action"
+          }
+        },
+        {
+          "record": "slo:leo_approved_actions:bad_ratio:rate3d",
+          "expr": "(sum(rate(shosai_agent_approved_actions_total{result!=\"in_time\"}[3d])) or vector(0)) / sum(rate(shosai_agent_approved_actions_total[3d]))",
+          "labels": {
+            "slo": "leo_approved_actions",
+            "journey": "leo_action"
+          }
         }
       ]
     }

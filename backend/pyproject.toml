@@ -239,19 +239,24 @@ forbidden_modules = [
 ]
 broken_contract_guidance = "core.ai value types stay framework-free; move the code to an adapter."
 
-# LangGraph — только каркас хода в инфраструктуре агента (ADR 0068 AG-D14); что из него можно
-# брать — граф, состояние и рантайм, без готовых агентов, ToolNode, сохранителей и клиентов
-# моделей — проверяет тест среза (tests/features/agent/test_endings_and_frame.py).
+# LangGraph — только каркас хода и наш сохранитель в инфраструктуре агента (ADR 0068 AG-D14);
+# что из него можно брать — граф, состояние, рантайм, прерывание и интерфейс сохранителя, без
+# готовых агентов, ToolNode, сохранителей и клиентов моделей — проверяет тест среза
+# (tests/features/agent/test_endings_and_frame.py).
 [[tool.importlinter.contracts]]
 id = "langgraph-frames-turns-only"
 name = "LangGraph only in the agent's turn frame"
 type = "forbidden"
 source_modules = ["shosai"]
 forbidden_modules = ["langgraph", "langchain_core", "langsmith"]
-ignore_imports = ["shosai.features.agent.infrastructure.turn_graph -> langgraph"]
+ignore_imports = [
+    "shosai.features.agent.infrastructure.turn_graph -> langgraph",
+    "shosai.features.agent.infrastructure.turn_saver -> langgraph",
+    "shosai.features.agent.infrastructure.turn_saver -> langchain_core",
+]
 allow_indirect_imports = true
 unmatched_ignore_imports_alerting = "none"
-broken_contract_guidance = "LangGraph frames Leo's turn in agent.infrastructure.turn_graph only."
+broken_contract_guidance = "LangGraph frames Leo's turn in agent.infrastructure.turn_graph and turn_saver only."
 
 # Контракт инструментов агента лёгкий, как ядро (ADR 0029): его импортируют контракты всех
 # срезов и агент; ни фреймворка, ни базы, ни Valkey, ни SDK провайдеров, ни агентного рантайма.

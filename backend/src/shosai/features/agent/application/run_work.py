@@ -4,7 +4,8 @@ The engine keeps it while the run goes on, so a run stopped or failed midway sti
 steps the person saw, the rounds the model saw and the sources it numbered. A round is the
 model's message — the text it wrote before calling tools and the calls — and each call's answer
 as the model read it. The run's taint only grows (Leo §7.4); its wrapper boundary is random per
-run.
+run. A run resumed after its card goes on from what it did before: its rounds keep counting,
+its steps and sources keep their numbers, its taint stays where it was.
 """
 
 import asyncio
@@ -18,7 +19,8 @@ from uuid import UUID
 from pydantic import JsonValue
 
 from shosai.core.agent_tools.context import Taint
-from shosai.core.ai.requests import ToolCall
+from shosai.core.agent_tools.sources import SourceRef
+from shosai.core.ai.requests import ChatMessage, ToolCall
 from shosai.core.ai.results import Usage
 from shosai.features.agent.application.tool_offer import TurnOffer
 from shosai.features.agent.domain.sources import SourceLedger
@@ -87,6 +89,22 @@ def summed(usages: list[Usage | None]) -> Usage | None:
     )
 
 
+@dataclass(frozen=True, slots=True)
+class EarlierWork:
+    """A paused run's past, read back for its epilogue: the messages the model reads again,
+    the answer so far with its steps and sources, the counts, toolsets and taint it reached."""
+
+    messages: tuple[ChatMessage, ...] = ()
+    text: str = ""
+    steps: tuple[Step, ...] = ()
+    sources: tuple[SourceRef, ...] = ()
+    rounds: int = 0
+    calls: int = 0
+    routing: dict[str, JsonValue] = field(default_factory=dict)
+    taint: Taint = Taint.NONE
+    taint_sources: tuple[str, ...] = ()
+
+
 @dataclass
 class RunWork:
     """The run's rounds and steps so far, its offer of tools and its taint."""
@@ -102,6 +120,9 @@ class RunWork:
     rounds: list[Round] = field(default_factory=list)
     steps: list[Step] = field(default_factory=list)
     sources: SourceLedger = field(default_factory=SourceLedger)
+    # Раунды и вызовы прогона до карточки: возобновлённый прогон продолжает их счёт.
+    rounds_before: int = 0
+    calls_before: int = 0
     # Пространства человека с именами: читаются при первом источнике, один раз за ход.
     spaces: dict[UUID, str] | None = None
     spaces_read: asyncio.Lock = field(default_factory=asyncio.Lock)
@@ -112,6 +133,22 @@ class RunWork:
         self.taint = taint_after(self.taint, label)
         if label.text not in self.taint_sources:
             self.taint_sources.append(label.text)
+
+    def resume_from(self, earlier: EarlierWork) -> None:
+        """Go on from the run's work before its card."""
+        self.rounds_before, self.calls_before = earlier.rounds, earlier.calls
+        self.steps = list(earlier.steps)
+        self.opened = max((step.seq for step in earlier.steps), default=0)
+        self.sources = SourceLedger(earlier.sources)
+        self.taint = max(self.taint, earlier.taint)
+        for label in earlier.taint_sources:
+            if label not in self.taint_sources:
+                self.taint_sources.append(label)
+
+    @property
+    def round_number(self) -> int:
+        """How many rounds the model has had in the run, those before its card included."""
+        return self.rounds_before + len(self.answers)
 
     def open_step(self) -> int:
         """The next step's number."""

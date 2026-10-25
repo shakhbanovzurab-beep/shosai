@@ -44,6 +44,11 @@ class AnswerBuffer:
         self._round_start = 0
         self.flushed_at = started
 
+    def restore(self, text: str) -> None:
+        """Go on after the answer a resumed run wrote before its card; it is in the log."""
+        self.parts = [text] if text else []
+        self._round_start = len(self.parts)
+
     def begin_round(self) -> None:
         """Start a model call: its facts are its own, its text follows the earlier text."""
         self.finish_reason, self.usage, self.tool_calls = None, None, ()

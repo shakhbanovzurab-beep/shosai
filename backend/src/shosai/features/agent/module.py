@@ -23,6 +23,7 @@ from shosai.core.tasks.queues import TaskQueue
 from shosai.features.agent.application.account_data import ACCOUNT_DATA, AgentAccountData
 from shosai.features.agent.application.action_decisions import ActionDecisions
 from shosai.features.agent.application.action_execution import ActionExecution
+from shosai.features.agent.application.action_invariants import ActionInvariants
 from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.action_sweeps import ActionSweeps
 from shosai.features.agent.application.after_turn import AfterTurn
@@ -66,7 +67,8 @@ from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 from shosai.features.agent.infrastructure.thread_records import THREAD_MODELS
 from shosai.features.agent.infrastructure.tool_metrics import ToolMetrics
 from shosai.features.agent.infrastructure.turn_graph import turn_graph
-from shosai.features.agent.objectives import AGENT_OBJECTIVES
+from shosai.features.agent.infrastructure.turn_saver import TurnSaver
+from shosai.features.agent.objectives import AGENT_MONITORS, AGENT_OBJECTIVES
 from shosai.features.agent.settings import AgentSettings, agent_model_set
 from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 
@@ -102,31 +104,32 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         pages, RunSources(transactions, ports), tool_bulkhead(services.role),
         ToolMetrics(services.registry), tracer, ActionProposer(transactions),
     )  # fmt: skip
-    routing = TurnRouting(ToolRegistry(services.agent_tools), ports)
+    routing, frames = TurnRouting(ToolRegistry(services.agent_tools), ports), TurnSaver(valkey)
     engine = RunEngine(
         EngineParts(
             transactions, services.ai, settings.standard_route(), run_log, leases, fleet,
-            registry, services.outbox, turn_graph(), ContextBuilder(ports), routing, tools,
-            telemetry,
+            registry, services.outbox, turn_graph(frames), frames, ContextBuilder(ports),
+            routing, tools, telemetry,
         )
     )  # fmt: skip
     starter = TurnStarter(
         TurnParts(
             transactions, ports, services.effects, services.rate_limiter, services.tasks,
-            run_log, leases, fleet, threads,
+            run_log, leases, fleet, threads, frames,
         )
     )  # fmt: skip
     streams = RunStreams(transactions, (run_log, tail), leases, metrics)
     lost_runs = LostRuns(transactions, (run_log, leases, fleet), metrics)
     care = ThreadCare(transactions, (services.ai, settings.utility_route()), ports)
     paused, action_metrics = (
-        PausedRuns((transactions, services.outbox), run_log),
+        PausedRuns((transactions, services.outbox), (run_log, frames), services.tasks),
         ActionMetrics(services.registry),
     )
     decisions = ActionDecisions(transactions, (services.tasks, paused, action_metrics))
     actions = (
         ActionExecution(transactions, (services.agent_tools, paused, action_metrics)),
         ActionSweeps(transactions, (services.tasks, paused, action_metrics)),
+        ActionInvariants(transactions, action_metrics),
     )
     try:
         yield FeatureParts(
@@ -160,5 +163,6 @@ AGENT = FeatureModule(
     production_checks=(agent_model_set,),
     agent_tools=CORE_TOOLS,
     objectives=AGENT_OBJECTIVES,
+    monitors=AGENT_MONITORS,
     account_data=(ACCOUNT_DATA,),
 )

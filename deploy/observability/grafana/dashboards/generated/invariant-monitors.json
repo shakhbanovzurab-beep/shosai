@@ -1258,6 +1258,182 @@
         }
       },
       "id": 14
+    },
+    {
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 35,
+        "w": 12,
+        "h": 5
+      },
+      "title": "Действие Leo выполнено дважды",
+      "description": "Почасовая проверка аудита нашла пункт одобренного действия Leo, который срез применил больше одного раза: например, две одинаковые задачи вместо одной. Ключ пункта должен был это исключить. Ид действий — в журнале проверки; посмотрите, какой срез исполнил пункт повторно.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "max(shosai_agent_items_executed_twice) or vector(0)",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "нет данных",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#0ca30c",
+                "value": -1000000000000000.0
+              },
+              {
+                "color": "#d03b3b",
+                "value": 1e-09
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": -1000000000000000.0,
+                "to": 0,
+                "result": {
+                  "text": "нет ✓"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1e-09,
+                "to": 1000000000000000.0,
+                "result": {
+                  "text": "да ✗"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 15
+    },
+    {
+      "type": "stat",
+      "gridPos": {
+        "x": 12,
+        "y": 35,
+        "w": 12,
+        "h": 5
+      },
+      "title": "Действие Leo выполнено без одобрения",
+      "description": "Почасовая проверка аудита нашла пункт действия Leo, исполненный без одобрения человека: Leo мог изменить данные человека без его решения. Ид действий — в журнале проверки; срочно найдите путь, который исполнил пункт в обход шлюза действий.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "max(shosai_agent_items_executed_unapproved) or vector(0)",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "нет данных",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#0ca30c",
+                "value": -1000000000000000.0
+              },
+              {
+                "color": "#d03b3b",
+                "value": 1e-09
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": -1000000000000000.0,
+                "to": 0,
+                "result": {
+                  "text": "нет ✓"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1e-09,
+                "to": 1000000000000000.0,
+                "result": {
+                  "text": "да ✗"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 16
     }
   ]
 }

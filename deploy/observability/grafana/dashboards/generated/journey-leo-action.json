@@ -1,0 +1,352 @@
+{
+  "uid": "journey-leo-action",
+  "title": "Действие Leo после одобрения",
+  "description": "Что Shosai обещает на пути «Действие Leo после одобрения» и как это выполняется.",
+  "tags": [
+    "shosai"
+  ],
+  "editable": false,
+  "graphTooltip": 1,
+  "links": [
+    {
+      "type": "dashboards",
+      "tags": [
+        "shosai"
+      ],
+      "asDropdown": true,
+      "title": "Другие панели",
+      "includeVars": false,
+      "keepTime": true
+    }
+  ],
+  "schemaVersion": 41,
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "refresh": "1m",
+  "timezone": "browser",
+  "panels": [
+    {
+      "type": "row",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      },
+      "title": "Мы обещаем, что одобренное действие Leo выполняется или отклоняется с понятной причиной за 30 секунд в 99 % случаев",
+      "collapsed": false,
+      "panels": [],
+      "id": 1
+    },
+    {
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 6,
+        "h": 9
+      },
+      "title": "Выполнено за 3 дня",
+      "description": "Какая доля событий за последние 3 дня уложилась в обещание: зелёная плитка — обещание выполняется, красная — нарушается.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "1 - slo:leo_approved_actions:bad_ratio:rate3d",
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "нет данных",
+          "unit": "percentunit",
+          "decimals": 2,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#d03b3b",
+                "value": -1000000000000000.0
+              },
+              {
+                "color": "#0ca30c",
+                "value": 0.99
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "textMode": "value",
+        "justifyMode": "center",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 2
+    },
+    {
+      "type": "timeseries",
+      "gridPos": {
+        "x": 6,
+        "y": 1,
+        "w": 9,
+        "h": 9
+      },
+      "title": "Доля сбоев",
+      "description": "Какая часть событий заканчивается плохо — за последний час и за последние 5 минут. Пунктир — сколько сбоев допускает обещание.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "slo:leo_approved_actions:bad_ratio:rate1h",
+          "legendFormat": "за час",
+          "range": true,
+          "exemplar": false
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "slo:leo_approved_actions:bad_ratio:rate5m",
+          "legendFormat": "за 5 минут",
+          "range": true,
+          "exemplar": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": null,
+          "min": 0,
+          "noValue": "нет данных",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#3987e5"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#d03b3b",
+                "value": 0.01
+              }
+            ]
+          },
+          "custom": {
+            "axisLabel": "доля",
+            "axisSoftMax": 0.0125,
+            "axisBorderShow": false,
+            "lineWidth": 2,
+            "lineInterpolation": "linear",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "showPoints": "never",
+            "spanNulls": true,
+            "thresholdsStyle": {
+              "mode": "dashed+area"
+            }
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#3987e5"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#d95926"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "id": 3
+    },
+    {
+      "type": "timeseries",
+      "gridPos": {
+        "x": 15,
+        "y": 1,
+        "w": 9,
+        "h": 9
+      },
+      "title": "Событий в минуту",
+      "description": "Сколько раз люди проходили этот путь.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(shosai_agent_approved_actions_total[5m])) * 60",
+          "legendFormat": "всего",
+          "range": true,
+          "exemplar": false
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(shosai_agent_approved_actions_total{result!=\"in_time\"}[5m])) * 60",
+          "legendFormat": "со сбоем",
+          "range": true,
+          "exemplar": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix: в мин",
+          "decimals": null,
+          "min": 0,
+          "noValue": "нет данных",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#3987e5"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "axisLabel": "в минуту",
+            "axisSoftMax": null,
+            "axisBorderShow": false,
+            "lineWidth": 2,
+            "lineInterpolation": "linear",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "showPoints": "never",
+            "spanNulls": true,
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#3987e5"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#d95926"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "id": 4
+    }
+  ]
+}
