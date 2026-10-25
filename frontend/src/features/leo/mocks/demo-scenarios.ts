@@ -38,6 +38,7 @@ function proposal(fields: Pick<LeoProposal, "tool" | "title" | "space" | "revers
     created_at: new Date().toISOString(),
     expires_at: new Date(Date.now() + HOUR).toISOString(),
     resolved_at: null,
+    nonce: crypto.randomUUID(),
     ...fields,
   });
 }

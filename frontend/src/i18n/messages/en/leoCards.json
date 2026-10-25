@@ -21,6 +21,33 @@
       "rejected": "Declined",
       "expired": "Expired",
       "outcome_unknown": "May have gone through — check before trying again"
+    },
+    "taint": {
+      "mail": "Prepared using an email",
+      "web": "Prepared using a web page",
+      "fileForeign": "Prepared using someone else’s file",
+      "fileOwn": "Prepared using one of your files",
+      "meetingSpeech": "Prepared using what was said in a meeting",
+      "taskForeign": "Prepared using a task someone else wrote",
+      "memory": "Prepared using what Leo remembers about you",
+      "skillUser": "Prepared using a skill you added",
+      "mcp": "Prepared using text from {server}",
+      "other": "Prepared using outside text"
+    },
+    "outcome": {
+      "invalid_arguments": "The details didn’t fit",
+      "not_found": "It’s no longer there",
+      "forbidden": "No access",
+      "not_entitled": "Not in your plan",
+      "limit_reached": "Over your plan’s limit",
+      "switched_off": "Turned off in settings",
+      "conflict": "Something changed in the meantime",
+      "timeout": "Took too long",
+      "unavailable": "The service was unavailable",
+      "rate_limited": "Too many requests. Try again later",
+      "failed": "The service returned an error",
+      "not_started": "Didn’t start",
+      "executor_lost": "Interrupted"
     }
   },
   "diff": {

@@ -21,6 +21,33 @@
       "rejected": "却下済み",
       "expired": "期限切れ",
       "outcome_unknown": "すでに実行された可能性があります。やり直す前に確認してください"
+    },
+    "taint": {
+      "mail": "メールをもとに準備",
+      "web": "Web ページをもとに準備",
+      "fileForeign": "他の人のファイルをもとに準備",
+      "fileOwn": "あなたのファイルをもとに準備",
+      "meetingSpeech": "会議での発言をもとに準備",
+      "taskForeign": "他の人が書いたタスクをもとに準備",
+      "memory": "Leo が覚えているあなたの情報をもとに準備",
+      "skillUser": "あなたが追加したスキルで準備",
+      "mcp": "{server} のテキストをもとに準備",
+      "other": "外部のテキストをもとに準備"
+    },
+    "outcome": {
+      "invalid_arguments": "内容が条件に合いませんでした",
+      "not_found": "もう見つかりません",
+      "forbidden": "アクセス権がありません",
+      "not_entitled": "ご利用のプランに含まれていません",
+      "limit_reached": "プランの上限を超えています",
+      "switched_off": "設定でオフになっています",
+      "conflict": "その間に変更がありました",
+      "timeout": "時間がかかりすぎました",
+      "unavailable": "サービスを利用できませんでした",
+      "rate_limited": "リクエストが多すぎます。しばらくしてからやり直してください",
+      "failed": "サービスがエラーを返しました",
+      "not_started": "開始されませんでした",
+      "executor_lost": "中断されました"
     }
   },
   "diff": {

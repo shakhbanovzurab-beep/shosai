@@ -40,7 +40,9 @@ export function scopeOf(context: LeoContext): AgentScope {
   return context.kind === "workspace" ? { kind: "workspace", workspace_id: context.id } : { kind: "personal" };
 }
 
-export const threadsKey = (scope: string) => ["agent", "threads", scope] as const;
+/** Списки тредов всех пространств: последняя активность треда меняет порядок в каждом. */
+export const allThreadsKey = ["agent", "threads"] as const;
+export const threadsKey = (scope: string) => [...allThreadsKey, scope] as const;
 export const messagesKey = (threadId: string | null) => ["agent", "messages", threadId] as const;
 
 function waitsForAnswer(data: History | undefined): boolean {

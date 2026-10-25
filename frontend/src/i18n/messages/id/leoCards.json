@@ -21,6 +21,33 @@
       "rejected": "Ditolak",
       "expired": "Kedaluwarsa",
       "outcome_unknown": "Mungkin sudah terjadi — periksa sebelum mencoba lagi"
+    },
+    "taint": {
+      "mail": "Disiapkan berdasarkan email",
+      "web": "Disiapkan berdasarkan halaman web",
+      "fileForeign": "Disiapkan berdasarkan file milik orang lain",
+      "fileOwn": "Disiapkan berdasarkan salah satu file Anda",
+      "meetingSpeech": "Disiapkan berdasarkan ucapan dalam rapat",
+      "taskForeign": "Disiapkan berdasarkan tugas yang ditulis orang lain",
+      "memory": "Disiapkan berdasarkan apa yang diingat Leo tentang Anda",
+      "skillUser": "Disiapkan dengan skill yang Anda tambahkan",
+      "mcp": "Disiapkan berdasarkan teks dari {server}",
+      "other": "Disiapkan berdasarkan teks dari luar"
+    },
+    "outcome": {
+      "invalid_arguments": "Datanya tidak sesuai",
+      "not_found": "Sudah tidak ada",
+      "forbidden": "Tidak ada akses",
+      "not_entitled": "Tidak termasuk dalam paket Anda",
+      "limit_reached": "Melebihi batas paket Anda",
+      "switched_off": "Dinonaktifkan di pengaturan",
+      "conflict": "Ada yang berubah sementara itu",
+      "timeout": "Terlalu lama",
+      "unavailable": "Layanan tidak tersedia",
+      "rate_limited": "Terlalu banyak permintaan. Coba lagi nanti",
+      "failed": "Layanan mengembalikan kesalahan",
+      "not_started": "Tidak dimulai",
+      "executor_lost": "Terputus"
     }
   },
   "diff": {

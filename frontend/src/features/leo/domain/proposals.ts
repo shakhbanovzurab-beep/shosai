@@ -1,7 +1,6 @@
 /*
  * Предложенные действия Leo (Action Gateway, ADR 0025; Leo §5.3, §8.4): Leo ничего не пишет без согласия —
- * сначала карточка с превью от сервера, потом «Одобрить» или «Отклонить». Пока бэкенда `agent` нет, действия
- * отдают моки разработки на маршрутах Leo §13.2.
+ * сначала карточка с превью от сервера, потом «Одобрить» или «Отклонить» с её `nonce` (`/v1/agent/actions*`).
  */
 
 /** proposed → approved → executing → succeeded | partially_succeeded | failed; иначе rejected | expired. */
@@ -40,18 +39,38 @@ export type LeoProposal = {
   reversibility: Reversibility;
   /** Карточка с предупреждением: подтверждать только на экране, внимательно. */
   warning: boolean;
-  /** Действие готовилось по внешнему тексту (письмо, веб): человек видит, по чему именно. */
+  /** Метка внешнего текста, прочитанного до карточки (`mail`, `web`, `mcp:<сервер>` …): человек видит, по чему. */
   taint: string | null;
   preview: ProposalPreview;
   status: ProposalStatus;
-  /** Итог, когда действие выполнено или не удалось, — от сервера. */
+  /** Код неудачи пункта действия (`not_found`, `timeout` …), когда оно не удалось целиком. */
   outcome: string | null;
+  /** Решение несёт его: сервер примет решение только по той карточке, которую человек видел. */
+  nonce: string;
   created_at: string;
   expires_at: string;
   resolved_at: string | null;
 };
 
+/** Карточка после решения и прогон, чей поток несёт итог и эпилог Leo. */
+export type DecidedProposal = LeoProposal & { run_id: string | null };
+
 export const isPending = (proposal: Pick<LeoProposal, "status">) => proposal.status === "proposed";
+
+const RANK: Record<ProposalStatus, number> = {
+  proposed: 0,
+  executing: 1,
+  succeeded: 2,
+  partially_succeeded: 2,
+  failed: 2,
+  rejected: 2,
+  expired: 2,
+  outcome_unknown: 2,
+};
+
+/** Более позднее из двух известных состояний карточки: статус только идёт вперёд, при равных — свежее прочтённое. */
+export const laterOf = (known: LeoProposal, fresh: LeoProposal) =>
+  RANK[known.status] > RANK[fresh.status] ? known : fresh;
 
 /** Ид карточки одобрения на странице: к ней ведёт «Ждёт вашего одобрения» из дайджеста. */
 export const proposalCardId = (proposalId: string) => `leo-proposal-${proposalId}`;

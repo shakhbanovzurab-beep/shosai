@@ -2,6 +2,7 @@ import { toast } from "sonner";
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource } from "@/lib/polling-resource";
+import { inDomain } from "@/lib/resource-domains";
 
 import { notesApi } from "../api/notes-api";
 import type { NoteFolder } from "../domain/types";
@@ -28,7 +29,10 @@ async function everyFolder(): Promise<NoteFolder[]> {
 }
 
 const foldersResource = createPollingResource(everyFolder);
-const countsResource = createPollingResource(async () => countsOf(await notesApi.counts()));
+const countsResource = inDomain(
+  "notes",
+  createPollingResource(async () => countsOf(await notesApi.counts())),
+);
 
 export const useFolders = () => usePollingResource(foldersResource);
 export const useLibraryCounts = () => usePollingResource(countsResource);

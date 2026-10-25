@@ -5,14 +5,10 @@ import { useState } from "react";
 import { useTranslations } from "use-intl";
 
 import { changeIndexes, isPending, type LeoProposal } from "../../domain/proposals";
-import { approveProposal, rejectProposal, useProposal } from "../../model/proposals";
-import {
-  ActionCardActions,
-  ActionCardHeader,
-  ActionCardResolved,
-  ActionCardRoot,
-  ActionCardTaint,
-} from "./action-card";
+import { useProposal } from "../../model/proposal-store";
+import { approveProposal, rejectProposal } from "../../model/proposals";
+import { ActionCardActions, ActionCardHeader, ActionCardRoot, ActionCardTaint } from "./action-card";
+import { ActionCardResolved } from "./action-card-resolved";
 import { FieldsPreview } from "./fields-preview";
 import { InlineDiff } from "./inline-diff";
 
@@ -32,11 +28,14 @@ export function LeoProposalCard({ proposal: sent }: { proposal: LeoProposal }) {
   const all = diff ? changeIndexes(diff.segments) : [];
   const accepted = new Set(all.filter((index) => !declined.has(index)));
   const words = { failed: t("card.failed") };
+  // Клавиши карточки работают и при занятых кнопках: решение, которое уже ждёт ответа, не уходит второй раз.
   const approve = () => {
-    if (diff && accepted.size === 0) return;
+    if (busy || (diff && accepted.size === 0)) return;
     void approveProposal(proposal, diff ? [...accepted] : undefined, words);
   };
-  const reject = () => void rejectProposal(proposal, words);
+  const reject = () => {
+    if (!busy) void rejectProposal(proposal, words);
+  };
   const toggle = (index: number) =>
     setDeclined((current) => {
       const next = new Set(current);
@@ -59,7 +58,7 @@ export function LeoProposalCard({ proposal: sent }: { proposal: LeoProposal }) {
       ) : (
         <FieldsPreview fields={proposal.preview.fields} body={proposal.preview.body} />
       )}
-      <ActionCardTaint text={proposal.taint} />
+      <ActionCardTaint label={proposal.taint} />
       <ActionCardActions
         proposal={proposal}
         busy={busy}

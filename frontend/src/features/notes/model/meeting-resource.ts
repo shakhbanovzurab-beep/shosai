@@ -1,5 +1,6 @@
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
+import { inDomain } from "@/lib/resource-domains";
 
 import { type MeetingOut, notesApi } from "../api/notes-api";
 import { isBusyCard } from "../domain/library";
@@ -27,7 +28,10 @@ function meetingOf(id: string) {
   let resource = meetings.get(id);
   if (!resource) {
     // Пока встреча идёт или её записи пишутся, страница перечитывается: записи появляются сами.
-    resource = createPollingResource(async () => pageOf(await notesApi.meeting(id)), isBusyCard);
+    resource = inDomain(
+      "notes",
+      createPollingResource(async () => pageOf(await notesApi.meeting(id)), isBusyCard),
+    );
     meetings.set(id, resource);
   }
   return resource;

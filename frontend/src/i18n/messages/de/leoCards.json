@@ -21,6 +21,33 @@
       "rejected": "Abgelehnt",
       "expired": "Abgelaufen",
       "outcome_unknown": "Möglicherweise schon ausgeführt – prüfe das, bevor du es erneut versuchst"
+    },
+    "taint": {
+      "mail": "Vorbereitet anhand einer E-Mail",
+      "web": "Vorbereitet anhand einer Webseite",
+      "fileForeign": "Vorbereitet anhand einer fremden Datei",
+      "fileOwn": "Vorbereitet anhand einer deiner Dateien",
+      "meetingSpeech": "Vorbereitet anhand des Gesagten in einem Meeting",
+      "taskForeign": "Vorbereitet anhand einer Aufgabe, die jemand anderes geschrieben hat",
+      "memory": "Vorbereitet anhand dessen, was Leo über dich weiß",
+      "skillUser": "Vorbereitet mit einem Skill, den du hinzugefügt hast",
+      "mcp": "Vorbereitet anhand von Text aus {server}",
+      "other": "Vorbereitet anhand von externem Text"
+    },
+    "outcome": {
+      "invalid_arguments": "Die Angaben passten nicht",
+      "not_found": "Das gibt es nicht mehr",
+      "forbidden": "Kein Zugriff",
+      "not_entitled": "Nicht in deinem Tarif enthalten",
+      "limit_reached": "Über dem Limit deines Tarifs",
+      "switched_off": "In den Einstellungen ausgeschaltet",
+      "conflict": "Inzwischen hat sich etwas geändert",
+      "timeout": "Hat zu lange gedauert",
+      "unavailable": "Der Dienst war nicht erreichbar",
+      "rate_limited": "Zu viele Anfragen. Versuche es später erneut",
+      "failed": "Der Dienst hat einen Fehler gemeldet",
+      "not_started": "Nicht gestartet",
+      "executor_lost": "Unterbrochen"
     }
   },
   "diff": {

@@ -21,6 +21,33 @@
       "rejected": "Reddedildi",
       "expired": "Süresi doldu",
       "outcome_unknown": "Zaten yapılmış olabilir; tekrar denemeden önce kontrol edin"
+    },
+    "taint": {
+      "mail": "Bir e-postaya dayanarak hazırlandı",
+      "web": "Bir web sayfasına dayanarak hazırlandı",
+      "fileForeign": "Başka birinin dosyasına dayanarak hazırlandı",
+      "fileOwn": "Dosyalarınızdan birine dayanarak hazırlandı",
+      "meetingSpeech": "Bir toplantıda söylenenlere dayanarak hazırlandı",
+      "taskForeign": "Başka birinin yazdığı bir göreve dayanarak hazırlandı",
+      "memory": "Leo’nun sizinle ilgili hatırladıklarına dayanarak hazırlandı",
+      "skillUser": "Eklediğiniz bir beceriyle hazırlandı",
+      "mcp": "{server} kaynağından gelen metne dayanarak hazırlandı",
+      "other": "Dışarıdan gelen bir metne dayanarak hazırlandı"
+    },
+    "outcome": {
+      "invalid_arguments": "Bilgiler uygun değildi",
+      "not_found": "Artık mevcut değil",
+      "forbidden": "Erişim yok",
+      "not_entitled": "Planınıza dahil değil",
+      "limit_reached": "Planınızın sınırını aşıyor",
+      "switched_off": "Ayarlarda kapalı",
+      "conflict": "Bu arada bir şey değişti",
+      "timeout": "Çok uzun sürdü",
+      "unavailable": "Hizmet kullanılamıyordu",
+      "rate_limited": "Çok fazla istek var. Daha sonra tekrar deneyin",
+      "failed": "Hizmet bir hata döndürdü",
+      "not_started": "Başlamadı",
+      "executor_lost": "Yarıda kesildi"
     }
   },
   "diff": {

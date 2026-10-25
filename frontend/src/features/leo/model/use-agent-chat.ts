@@ -10,15 +10,17 @@ import { useRouter } from "@/lib/navigation";
 import { agentApi, type TurnBody } from "../api/agent-api";
 import { lastQuestion } from "../domain/agent-history";
 import { contextKey, type LeoContext } from "../domain/context";
+import { withEpilogues } from "../domain/epilogues";
 import { isRecorded, type LiveTurn, mergedConversation, type TurnKind } from "../domain/live-turns";
 import { pageSubject } from "../domain/page-subject";
-import type { LeoProposal } from "../domain/proposals";
 import type { LeoMessage } from "../domain/types";
 import { chooseThread, messagesKey, scopeOf, threadsKey, useAgentThread } from "./agent-thread";
 import { refusal, runTurn, stopTurn } from "./agent-turn-runner";
 import { addTurn, dropTurns, failedReply, liveTurns, subscribeTurns, updateTurn } from "./agent-turns";
+import { liveEpilogues, subscribeEpilogues } from "./epilogues";
 import type { LeoChat } from "./leo-chat";
 import { useAgentThreads } from "./use-agent-threads";
+import { useSettledEpilogues } from "./use-settled-epilogues";
 
 /** Leo на настоящем API (`/v1/agent/*`): разговор пространства, его ходы, «Стоп», «Ещё раз» и правка. */
 export function useAgentChat({ page, context }: { page: string; context: LeoContext }): LeoChat {
@@ -33,11 +35,17 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     () => liveTurns(scopeKey),
     () => liveTurns(scopeKey),
   );
-  const isBusy = turns.some((turn) => turn.reply.status === "streaming");
-  const thread = useAgentThread(scopeKey, scope, !isBusy);
+  const epilogues = React.useSyncExternalStore(subscribeEpilogues, liveEpilogues, liveEpilogues);
+  const asking = turns.some((turn) => turn.reply.status === "streaming");
+  const thread = useAgentThread(scopeKey, scope, !asking);
   const threads = useAgentThreads(scopeKey, scope, thread.threadId);
   const visible = turns.filter((turn) => turn.threadId === thread.threadId || turn.threadId === null);
-  const messages = mergedConversation(thread.conversation, visible);
+  // Эпилог после одобрения идёт в своём треде: пока он пишет, новый вопрос ждёт, а «Стоп» останавливает его.
+  const shown = epilogues.filter((epilogue) => epilogue.threadId !== null && epilogue.threadId === thread.threadId);
+  const writing = shown.find((epilogue) => epilogue.reply?.status === "streaming");
+  const isBusy = asking || writing !== undefined;
+  const messages = withEpilogues(mergedConversation(thread.conversation, visible), shown);
+  useSettledEpilogues(epilogues);
 
   // Записанный историей ход больше не нужен: его ответ уже в ней.
   React.useEffect(() => {
@@ -108,8 +116,10 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
 
   const stop = () => {
     const running = turns.find((turn) => turn.reply.status === "streaming");
-    if (running === undefined) return;
-    stopTurn(scopeKey, running.key).catch(() => toast.error(t("failure.stopFailed")));
+    let stopping: Promise<void> | undefined;
+    if (running) stopping = stopTurn(scopeKey, running.key);
+    else if (writing) stopping = agentApi.cancel(writing.runId);
+    stopping?.catch(() => toast.error(t("failure.stopFailed")));
   };
 
   const reset = () => {
@@ -117,8 +127,8 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     chooseThread(scopeKey, null);
   };
 
-  // Карточки из артефактов ответа приходят с шагом 9b; до него в ответах Leo на API их нет.
-  const addProposal = (_messageId: string, _proposal: LeoProposal) => undefined;
+  // Карточку из пунктов дайджеста сервер кладёт в тот же ответ (AG-R2): история перечитывается и показывает её.
+  const addProposal = () => void queryClient.invalidateQueries({ queryKey: messagesKey(thread.threadId) });
 
   return {
     messages,

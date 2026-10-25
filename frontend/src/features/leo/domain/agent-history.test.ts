@@ -49,4 +49,37 @@ describe("a thread's history", () => {
     ]);
     expect(message.sources?.map((s) => [s.kind, s.space])).toEqual([["task", "Personal"]]);
   });
+
+  it("shows a card on its answer once, hiding the server's note about it", () => {
+    const card = {
+      id: "a1",
+      tool: "tasks.create",
+      title: "Create the task",
+      space: "Personal",
+      origin: { kind: "thread", app: null },
+      reversibility: "reversible",
+      warning: false,
+      taint: null,
+      preview: { kind: "fields", fields: [], body: null },
+      status: "succeeded",
+      outcome: null,
+      nonce: "n",
+      created_at: "2026-10-24T10:00:00Z",
+      expires_at: "2026-10-24T11:00:00Z",
+      resolved_at: "2026-10-24T10:01:00Z",
+    } satisfies AgentMessage["actions"][number];
+    const artifact = { kind: "chat_digest", ref: "d", alt: "Digest", workspace_id: "w", chat_id: "c" } as const;
+    const answer = { ...row("a", "assistant", "done"), actions: [card], artifacts: [artifact] };
+    const note = { ...row("n", "server"), text: "", actions: [card] };
+    const lonely = { ...row("m", "server"), text: "", actions: [{ ...card, id: "a2" }] };
+
+    const conversation = conversationOf([{ items: [lonely, answer, note, row("q", "user")], next_cursor: null }]);
+
+    expect(conversation.map((m) => [m.id, m.role, m.proposals?.map((p) => p.id)])).toEqual([
+      ["q", "user", undefined],
+      ["a", "assistant", ["a1"]],
+      ["m", "assistant", ["a2"]],
+    ]);
+    expect(conversation[1].artifacts).toEqual([artifact]);
+  });
 });

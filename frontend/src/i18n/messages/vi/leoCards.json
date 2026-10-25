@@ -21,6 +21,33 @@
       "rejected": "Đã từ chối",
       "expired": "Đã hết hạn",
       "outcome_unknown": "Có thể đã thực hiện — hãy kiểm tra trước khi thử lại"
+    },
+    "taint": {
+      "mail": "Được chuẩn bị dựa trên một email",
+      "web": "Được chuẩn bị dựa trên một trang web",
+      "fileForeign": "Được chuẩn bị dựa trên tệp của người khác",
+      "fileOwn": "Được chuẩn bị dựa trên một tệp của bạn",
+      "meetingSpeech": "Được chuẩn bị dựa trên những gì được nói trong cuộc họp",
+      "taskForeign": "Được chuẩn bị dựa trên công việc do người khác viết",
+      "memory": "Được chuẩn bị dựa trên những gì Leo nhớ về bạn",
+      "skillUser": "Được chuẩn bị bằng kỹ năng bạn đã thêm",
+      "mcp": "Được chuẩn bị dựa trên văn bản từ {server}",
+      "other": "Được chuẩn bị dựa trên văn bản bên ngoài"
+    },
+    "outcome": {
+      "invalid_arguments": "Thông tin không hợp lệ",
+      "not_found": "Không còn tồn tại",
+      "forbidden": "Không có quyền truy cập",
+      "not_entitled": "Không có trong gói của bạn",
+      "limit_reached": "Vượt giới hạn gói của bạn",
+      "switched_off": "Đã tắt trong cài đặt",
+      "conflict": "Đã có thay đổi trong lúc chờ",
+      "timeout": "Mất quá nhiều thời gian",
+      "unavailable": "Dịch vụ không khả dụng",
+      "rate_limited": "Quá nhiều yêu cầu. Hãy thử lại sau",
+      "failed": "Dịch vụ trả về lỗi",
+      "not_started": "Chưa bắt đầu",
+      "executor_lost": "Bị gián đoạn"
     }
   },
   "diff": {

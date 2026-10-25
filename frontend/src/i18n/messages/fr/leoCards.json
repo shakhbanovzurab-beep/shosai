@@ -21,6 +21,33 @@
       "rejected": "Refusé",
       "expired": "Expiré",
       "outcome_unknown": "Peut-être déjà fait — vérifiez avant de réessayer"
+    },
+    "taint": {
+      "mail": "Préparé à partir d’un e-mail",
+      "web": "Préparé à partir d’une page web",
+      "fileForeign": "Préparé à partir du fichier de quelqu’un d’autre",
+      "fileOwn": "Préparé à partir de l’un de vos fichiers",
+      "meetingSpeech": "Préparé à partir de ce qui a été dit en réunion",
+      "taskForeign": "Préparé à partir d’une tâche écrite par quelqu’un d’autre",
+      "memory": "Préparé à partir de ce que Leo retient de vous",
+      "skillUser": "Préparé avec une compétence que vous avez ajoutée",
+      "mcp": "Préparé à partir d’un texte de {server}",
+      "other": "Préparé à partir d’un texte externe"
+    },
+    "outcome": {
+      "invalid_arguments": "Les informations ne convenaient pas",
+      "not_found": "Cela n’existe plus",
+      "forbidden": "Pas d’accès",
+      "not_entitled": "Non inclus dans votre forfait",
+      "limit_reached": "Au-delà de la limite de votre forfait",
+      "switched_off": "Désactivé dans les paramètres",
+      "conflict": "Quelque chose a changé entre-temps",
+      "timeout": "Trop long",
+      "unavailable": "Le service était indisponible",
+      "rate_limited": "Trop de demandes. Réessayez plus tard",
+      "failed": "Le service a renvoyé une erreur",
+      "not_started": "Pas commencé",
+      "executor_lost": "Interrompu"
     }
   },
   "diff": {

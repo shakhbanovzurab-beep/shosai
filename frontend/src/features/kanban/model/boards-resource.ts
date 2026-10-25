@@ -2,6 +2,7 @@
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
+import { inDomain } from "@/lib/resource-domains";
 
 import { boardsApi } from "../api/boards-api";
 import type { BoardDetail, BoardSummary } from "../domain/boards-contract";
@@ -10,7 +11,10 @@ import { noteServerNow } from "./server-clock";
 const isSyncing = (board: BoardSummary) => board.jira?.sync_status === "syncing";
 
 /** Все доски; опрашиваются, пока доска Jira синхронизируется, чтобы её статус и счётчик обновлялись сами. */
-export const boardsResource = createPollingResource(boardsApi.list, (data) => data.items.some(isSyncing));
+export const boardsResource = inDomain(
+  "tasks",
+  createPollingResource(boardsApi.list, (data) => data.items.some(isSyncing)),
+);
 
 export const useBoards = () => usePollingResource(boardsResource);
 
@@ -20,13 +24,16 @@ const details = new Map<string, PollingResource<BoardDetail>>();
 export function boardResource(id: string) {
   const existing = details.get(id);
   if (existing) return existing;
-  const created = createPollingResource(
-    () =>
-      boardsApi.get(id).then((detail) => {
-        noteServerNow(detail.server_now);
-        return detail;
-      }),
-    (data) => isSyncing(data.board),
+  const created = inDomain(
+    "tasks",
+    createPollingResource(
+      () =>
+        boardsApi.get(id).then((detail) => {
+          noteServerNow(detail.server_now);
+          return detail;
+        }),
+      (data) => isSyncing(data.board),
+    ),
   );
   details.set(id, created);
   return created;

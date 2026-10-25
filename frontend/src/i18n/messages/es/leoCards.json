@@ -21,6 +21,33 @@
       "rejected": "Rechazado",
       "expired": "Vencido",
       "outcome_unknown": "Puede que ya se haya hecho: compruébalo antes de reintentar"
+    },
+    "taint": {
+      "mail": "Preparado a partir de un correo",
+      "web": "Preparado a partir de una página web",
+      "fileForeign": "Preparado a partir del archivo de otra persona",
+      "fileOwn": "Preparado a partir de uno de tus archivos",
+      "meetingSpeech": "Preparado a partir de lo que se dijo en una reunión",
+      "taskForeign": "Preparado a partir de una tarea que escribió otra persona",
+      "memory": "Preparado a partir de lo que Leo recuerda de ti",
+      "skillUser": "Preparado con una habilidad que agregaste",
+      "mcp": "Preparado a partir de texto de {server}",
+      "other": "Preparado a partir de texto externo"
+    },
+    "outcome": {
+      "invalid_arguments": "Los datos no eran válidos",
+      "not_found": "Ya no existe",
+      "forbidden": "Sin acceso",
+      "not_entitled": "No está incluido en tu plan",
+      "limit_reached": "Supera el límite de tu plan",
+      "switched_off": "Desactivado en la configuración",
+      "conflict": "Algo cambió mientras tanto",
+      "timeout": "Tardó demasiado",
+      "unavailable": "El servicio no estaba disponible",
+      "rate_limited": "Demasiadas solicitudes. Inténtalo más tarde",
+      "failed": "El servicio devolvió un error",
+      "not_started": "No se inició",
+      "executor_lost": "Se interrumpió"
     }
   },
   "diff": {

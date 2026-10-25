@@ -3,18 +3,7 @@
 import type { KeyboardEvent, ReactNode } from "react";
 
 import { cn } from "cn";
-import {
-  CircleAlert,
-  CircleCheck,
-  CircleX,
-  Clock,
-  FileText,
-  ListTodo,
-  Mail,
-  MessageSquare,
-  ShieldAlert,
-  Sparkles,
-} from "lucide-react";
+import { Clock, FileText, ListTodo, Mail, MessageSquare, ShieldAlert, Sparkles } from "lucide-react";
 import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
@@ -22,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 
-import { type LeoProposal, type ProposalStatus, proposalCardId } from "../../domain/proposals";
+import { taintOf } from "../../domain/card-labels";
+import { type LeoProposal, proposalCardId } from "../../domain/proposals";
 
 /*
  * Карточка предложенного действия (Leo §13.3: ActionCard Root/Header/Preview/Actions). Превью считает сервер;
@@ -51,8 +41,15 @@ export function ActionCardRoot({
   children: ReactNode;
 }) {
   const keys = (event: KeyboardEvent) => {
-    if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) onApprove();
-    if (event.key === "Escape") onReject();
+    if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      onApprove();
+    }
+    if (event.key === "Escape") {
+      // Esc отклоняет карточку, а не закрывает панель Leo вокруг неё.
+      event.stopPropagation();
+      onReject();
+    }
   };
   return (
     <Card
@@ -99,14 +96,18 @@ export function ActionCardHeader({ proposal }: { proposal: LeoProposal }) {
   );
 }
 
-/** Действие готовилось по внешнему тексту — человек видит, по какому. */
-export function ActionCardTaint({ text }: { text: string | null }) {
-  if (!text) return null;
+/** Действие готовилось после внешнего текста — человек видит, после какого. */
+export function ActionCardTaint({ label }: { label: string | null }) {
+  const t = useTranslations("leoCards");
+  if (!label) return null;
+  const { key, server } = taintOf(label);
   return (
     <CardContent>
       <p className="flex items-start gap-2 text-muted-foreground text-xs">
         <ShieldAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-        <span dir="auto">{text}</span>
+        <span dir="auto">
+          {key === "mcp" ? t("card.taint.mcp", { server: server ?? "MCP" }) : t(`card.taint.${key}`)}
+        </span>
       </p>
     </CardContent>
   );
@@ -160,41 +161,5 @@ export function ActionCardActions({
         </Button>
       </div>
     </CardFooter>
-  );
-}
-
-const DONE: ReadonlySet<ProposalStatus> = new Set(["succeeded", "partially_succeeded"]);
-
-/** Итог: выполнено — зелёная галочка, неизвестно — вопрос к человеку, остальное — крестик. */
-function StatusIcon({ status }: { status: ProposalStatus }) {
-  const base = "mt-0.5 size-4 shrink-0";
-  if (DONE.has(status)) {
-    return <CircleCheck aria-hidden="true" className={cn(base, "text-emerald-600 dark:text-emerald-400")} />;
-  }
-  if (status === "outcome_unknown")
-    return <CircleAlert aria-hidden="true" className={cn(base, "text-muted-foreground")} />;
-  return <CircleX aria-hidden="true" className={cn(base, "text-muted-foreground")} />;
-}
-
-/** Решённое действие одной строкой: что вышло и когда; `outcome_unknown` прямо просит проверить. */
-export function ActionCardResolved({ proposal }: { proposal: LeoProposal }) {
-  const t = useTranslations("leoCards");
-  const format = useFormatter();
-  const now = useNow({ updateInterval: 60_000 });
-  const when = proposal.resolved_at ? format.relativeTime(new Date(proposal.resolved_at), now) : null;
-  return (
-    <div role="status" className="flex items-start gap-2.5 rounded-xl border bg-card px-3 py-2.5 text-sm">
-      <StatusIcon status={proposal.status} />
-      <div className="flex min-w-0 flex-col gap-0.5">
-        <span className="font-medium" dir="auto">
-          {proposal.title}
-        </span>
-        <span className="text-muted-foreground text-xs">
-          {t(`card.status.${proposal.status}`)}
-          {when ? ` · ${when}` : null}
-          {proposal.outcome ? ` · ${proposal.outcome}` : null}
-        </span>
-      </div>
-    </div>
   );
 }

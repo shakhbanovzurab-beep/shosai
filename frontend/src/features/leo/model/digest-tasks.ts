@@ -9,7 +9,7 @@ import { type ApiWords, describeProblem } from "@/features/chats/model/words";
 
 import { proposalsApi } from "../api/proposals-api";
 import { type LeoProposal, proposalCardId } from "../domain/proposals";
-import { proposalArrived } from "./proposals";
+import { proposalArrived } from "./proposal-store";
 
 /*
  * «Сделать задачей» из дайджеста в разговоре Leo (CF-D5, AG-R2): сервер кладёт карточку `tasks.create` в эту же

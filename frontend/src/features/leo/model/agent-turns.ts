@@ -1,18 +1,16 @@
 import type { LiveTurn } from "../domain/live-turns";
 import { applyRunEvent, type NumberedEvent } from "../domain/run-events";
 import type { LeoMessage } from "../domain/types";
+import { flushFrame, onNextFrame } from "./frame-queue";
 
 /*
  * Ходы, которые идут сейчас, по пространству разговора (Personal, workspace): вне React, чтобы закрытая панель не
- * обрывала ход. События потока копятся и применяются один раз за кадр — ответ, приходящий десятками кусков в
- * секунду, перерисовывается не чаще экрана. Начало и конец хода применяются сразу.
+ * обрывала ход. События потока применяются один раз за кадр; начало и конец хода — сразу.
  */
 
 const EMPTY: readonly LiveTurn[] = [];
 const turns = new Map<string, readonly LiveTurn[]>();
 const listeners = new Set<() => void>();
-let queued: Array<() => void> = [];
-let scheduled = false;
 
 export const liveTurns = (scope: string): readonly LiveTurn[] => turns.get(scope) ?? EMPTY;
 
@@ -54,14 +52,6 @@ function applied(turn: LiveTurn, event: NumberedEvent): LiveTurn {
   return { ...turn, seq: event.seq, reply: ended ? { ...reply, durationMs: Date.now() - turn.startedAt } : reply };
 }
 
-function flush() {
-  scheduled = false;
-  const work = queued;
-  queued = [];
-  for (const step of work) step();
-  notify();
-}
-
 export function addTurn(scope: string, turn: LiveTurn) {
   turns.set(scope, [...liveTurns(scope), turn]);
   notify();
@@ -75,17 +65,11 @@ export function updateTurn(scope: string, key: string, update: (turn: LiveTurn) 
 
 /** Событие потока: применится на ближайшем кадре вместе с остальными. */
 export function queueEvent(scope: string, key: string, event: NumberedEvent) {
-  queued.push(() => change(scope, key, (turn) => applied(turn, event)));
-  if (scheduled) return;
-  scheduled = true;
-  if (typeof requestAnimationFrame === "function") requestAnimationFrame(flush);
-  else setTimeout(flush, 0);
+  onNextFrame(() => change(scope, key, (turn) => applied(turn, event)), notify);
 }
 
 /** Применить накопленное сейчас: перед концом хода ответ должен быть целым. */
-export function flushNow() {
-  if (scheduled) flush();
-}
+export const flushNow = flushFrame;
 
 export const turnOf = (scope: string, key: string): LiveTurn | undefined =>
   liveTurns(scope).find((turn) => turn.key === key);

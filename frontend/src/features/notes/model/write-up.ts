@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
+import { inDomain } from "@/lib/resource-domains";
 
 import { contentApi, type WriteUpOut } from "../api/note-content-api";
 import { notesApi, type RunOut } from "../api/notes-api";
@@ -50,11 +51,14 @@ function writeUpResource(id: string) {
   let resource = writeUps.get(id);
   if (!resource) {
     // Записи ещё нет — заметки не написаны: страница скажет об этом сама.
-    resource = createPollingResource(() =>
-      contentApi.writeUp(id).then(writeUpOf, (error: unknown) => {
-        if (isApiCode(error, "write_up_not_found")) return null;
-        throw error;
-      }),
+    resource = inDomain(
+      "notes",
+      createPollingResource(() =>
+        contentApi.writeUp(id).then(writeUpOf, (error: unknown) => {
+          if (isApiCode(error, "write_up_not_found")) return null;
+          throw error;
+        }),
+      ),
     );
     writeUps.set(id, resource);
   }

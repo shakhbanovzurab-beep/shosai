@@ -1,5 +1,6 @@
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
+import { inDomain } from "@/lib/resource-domains";
 
 import { notesApi } from "../api/notes-api";
 import { isBusyCard, type LibraryFolder, type MeetingCard } from "../domain/library";
@@ -48,17 +49,20 @@ function libraryOf(folder: LibraryFolder | undefined): PollingResource<LibraryPa
   const key = folder ?? ALL;
   const existing = libraries.get(key);
   if (existing) return existing;
-  const resource: PollingResource<LibraryPages> = createPollingResource(
-    async () => {
-      const page = await notesApi.page({ folder, limit: PAGE });
-      const state = resource.getSnapshot();
-      return merged(
-        state.status === "ready" ? state.data : null,
-        visible(page.items.map(cardOf)),
-        page.next_cursor ?? null,
-      );
-    },
-    (data) => data.items.some(isBusyCard),
+  const resource: PollingResource<LibraryPages> = inDomain(
+    "notes",
+    createPollingResource(
+      async () => {
+        const page = await notesApi.page({ folder, limit: PAGE });
+        const state = resource.getSnapshot();
+        return merged(
+          state.status === "ready" ? state.data : null,
+          visible(page.items.map(cardOf)),
+          page.next_cursor ?? null,
+        );
+      },
+      (data) => data.items.some(isBusyCard),
+    ),
   );
   libraries.set(key, resource);
   return resource;

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemMedia, ItemTitle } from "@/components/ui/item";
 
 import { isPending, type LeoProposal } from "../domain/proposals";
-import { usePendingProposals } from "../model/proposals";
+import { usePendingProposals } from "../model/proposal-store";
 import { LeoProposalCard } from "./proposal/leo-proposal";
 
 function ProposalRow({ proposal, onOpen }: { proposal: LeoProposal; onOpen: () => void }) {
@@ -50,7 +50,7 @@ export function NeedsYou() {
   const state = usePendingProposals();
   // Открытое предложение держится и после решения: карточка свернётся в строку итога на своём месте.
   const [open, setOpen] = useState<LeoProposal | null>(null);
-  const pending = state.status === "ready" ? state.data.actions.filter(isPending) : [];
+  const pending = state.status === "ready" ? state.data.items.filter(isPending) : [];
   const decided = open && !pending.some((p) => p.id === open.id) ? open : null;
   if (pending.length === 0 && !decided) return null;
 

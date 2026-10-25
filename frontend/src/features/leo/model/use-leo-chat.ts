@@ -19,7 +19,7 @@ import {
   updateMessage,
 } from "./chat-store";
 import type { LeoChat } from "./leo-chat";
-import { proposalArrived } from "./proposals";
+import { proposalArrived } from "./proposal-store";
 
 /**
  * Примерный разговор на `/api/leo`: хаб и админка остаются на нём до своих шагов (agent, шаги 20 и 16). Разговор

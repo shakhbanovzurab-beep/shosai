@@ -2,6 +2,7 @@
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource } from "@/lib/polling-resource";
+import { inDomain } from "@/lib/resource-domains";
 
 import { filesApi } from "../api/files-api";
 import { type FilesResponse, INDEXING } from "../domain/contract";
@@ -46,7 +47,10 @@ function withoutPending(data: FilesResponse): FilesResponse {
   };
 }
 
-export const filesResource = createPollingResource(async () => withoutPending(await filesApi.list()), indexingPoller());
+export const filesResource = inDomain(
+  "files",
+  createPollingResource(async () => withoutPending(await filesApi.list()), indexingPoller()),
+);
 
 export const pendingDeletes = pending;
 

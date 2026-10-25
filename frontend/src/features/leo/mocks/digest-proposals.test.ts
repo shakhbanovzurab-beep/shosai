@@ -6,11 +6,9 @@ import { call, codeOf } from "@/features/chats/mocks/routes/test-client";
 import { RELEASE_CHAT } from "@/features/chats/mocks/seed/connections";
 import { RELEASE_DIGEST } from "@/features/chats/mocks/seed/digests";
 import { resetDemo } from "@/features/chats/mocks/store/state";
-import { demo as kanbanDemo } from "@/features/kanban/mocks/store/state";
 import { LUMEN } from "@/features/workspace/mocks/demo-lumen";
 
 import type { LeoProposal } from "../domain/proposals";
-import { decideProposal } from "./demo-proposals";
 import { pickScenario } from "./demo-scenarios";
 import { digestTaskProposalsRoute } from "./digest-proposals";
 
@@ -46,28 +44,5 @@ describe("Make a task from a chat digest (CF-D5)", () => {
     expect([made.status, codeOf(made)]).toEqual([409, "item_already_proposed"]);
     const unknown = await propose(["nope"]);
     expect([unknown.status, codeOf(unknown)]).toEqual([404, "item_not_found"]);
-  });
-
-  it("creates workspace tasks with the chat source on approval", async () => {
-    const proposal = (await propose(["p6"])).body as LeoProposal;
-    decideProposal(proposal.id, true, 0);
-    const item = (await digest()).promises.find((promise) => promise.id === "p6");
-    if (!item) throw new Error("p6 is missing");
-    const task = kanbanDemo().tasks.get(item.task_id ?? "");
-    expect(task?.space?.workspace_id).toBe(LUMEN);
-    expect(task?.assignee?.name).toBe("Maya Chen");
-    expect(task?.source.kind).toBe("chat");
-    expect(task?.source.chat).toMatchObject({
-      connection_id: RELEASE_CHAT,
-      messenger: "telegram",
-      chat_title: "Release team",
-    });
-    expect(task?.source.chat?.message?.url).toBe(item.message.url);
-  });
-
-  it("frees the items when the card is declined", async () => {
-    const proposal = (await propose(["d1"])).body as LeoProposal;
-    decideProposal(proposal.id, false, 0);
-    expect((await propose(["d1"])).status).toBe(201);
   });
 });

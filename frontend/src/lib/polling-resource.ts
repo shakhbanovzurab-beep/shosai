@@ -49,7 +49,8 @@ export function createPollingResource<T>(load: () => Promise<T>, isBusy: (data: 
           // The screen words the failure itself; this is only the backend's detail, if any.
           const message = error instanceof Error ? error.message : "";
           // Keep showing data we already have; only a first load failing is an error state.
-          state = state.status === "ready" ? { ...state, refreshing: false } : { status: "error", message, cause: error };
+          state =
+            state.status === "ready" ? { ...state, refreshing: false } : { status: "error", message, cause: error };
         },
       )
       .finally(() => {
@@ -80,6 +81,10 @@ export function createPollingResource<T>(load: () => Promise<T>, isBusy: (data: 
     async reload(): Promise<void> {
       if (inFlight !== null) await inFlight;
       await refresh();
+    },
+    /** Перечитывает, только если ресурс сейчас показан: непоказанный и так перечитается при следующем показе. */
+    async refreshIfWatched(): Promise<void> {
+      if (listeners.size > 0) await refresh();
     },
     /** Drops the data (e.g. it belonged to a workspace the user left); it loads afresh when next needed. */
     reset() {

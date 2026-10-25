@@ -1,75 +1,57 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-
 import { toast } from "sonner";
 
 import { digestProposalDecided } from "@/features/chats/model/digests";
-import { usePollingResource } from "@/hooks/use-polling-resource";
 import { apiErrorDescription } from "@/lib/api/error-description";
-import { createPollingResource } from "@/lib/polling-resource";
+import { ApiError } from "@/lib/api/errors";
 
 import { proposalsApi } from "../api/proposals-api";
-import type { LeoProposal } from "../domain/proposals";
+import type { DecidedProposal, LeoProposal } from "../domain/proposals";
+import { markBusy, proposalArrived, receiveCard } from "./proposal-store";
+import { followRun } from "./run-follower";
 
 /*
- * Предложения Leo в двух местах — карточкой в чате и в «Нужны вы» на главной. Решение в одном месте сразу видно
- * в другом: здесь хранится последнее известное состояние каждого предложения и то, что сейчас в работе.
+ * Решение по карточке — из разговора или из «Нужны вы». Ответ сервера — карточка после решения: итог, если действие
+ * успело за 20 с, или `executing`. Одобрение продолжает прогон, и его поток несёт итог и эпилог Leo. Карточка, уже
+ * решённая в другом месте (409 `action_not_pending`), перечитывается и показывает, чем кончилась.
  */
-
-/** Ожидающие решения из чатов, поручений и MCP — список «Нужны вы». */
-export const pendingResource = createPollingResource(proposalsApi.pending);
-
-export const usePendingProposals = () => usePollingResource(pendingResource);
-
-type Snapshot = { latest: ReadonlyMap<string, LeoProposal>; busy: ReadonlySet<string> };
-
-let snapshot: Snapshot = { latest: new Map(), busy: new Set() };
-const listeners = new Set<() => void>();
-
-function set(change: (current: Snapshot) => Snapshot) {
-  snapshot = change(snapshot);
-  for (const listener of listeners) listener();
-}
-
-const subscribe = (listener: () => void) => {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-};
-
-/** Предложение в его последнем состоянии и занято ли оно запросом. */
-export function useProposal(proposal: LeoProposal) {
-  const state = useSyncExternalStore(
-    subscribe,
-    () => snapshot,
-    () => snapshot,
-  );
-  return { proposal: state.latest.get(proposal.id) ?? proposal, busy: state.busy.has(proposal.id) };
-}
-
-/** В чате появилось новое предложение: список «Нужны вы» перечитывается. */
-export const proposalArrived = () => void pendingResource.refresh();
 
 type Words = { failed: string };
 
-async function decide(proposal: LeoProposal, request: () => Promise<LeoProposal>, words: Words) {
-  set((s) => ({ ...s, busy: new Set([...s.busy, proposal.id]) }));
+async function refreshed(proposal: LeoProposal) {
   try {
-    const decided = await request();
-    set((s) => ({ ...s, latest: new Map([...s.latest, [decided.id, decided]]) }));
+    receiveCard(await proposalsApi.card(proposal.id));
+  } catch (error) {
+    // «Нужны вы» всё равно перечитается и уберёт карточку, если она уже не ждёт.
+    console.warn("Leo: решённую карточку не удалось перечитать", error);
+  }
+  proposalArrived();
+}
+
+async function decide(proposal: LeoProposal, request: () => Promise<DecidedProposal>, words: Words) {
+  markBusy(proposal.id, true);
+  try {
+    const { run_id: runId, ...decided } = await request();
+    receiveCard(decided);
     // Карточку могли собрать из пунктов дайджеста: он перечитается и покажет задачи или свободные пункты.
     digestProposalDecided(decided.id);
-    pendingResource.update((page) => ({ ...page, actions: page.actions.filter((a) => a.id !== decided.id) }));
+    return runId;
   } catch (error) {
     toast.error(words.failed, { description: apiErrorDescription(error) });
+    if (error instanceof ApiError && error.code === "action_not_pending") await refreshed(proposal);
+    return null;
   } finally {
-    set((s) => ({ ...s, busy: new Set([...s.busy].filter((id) => id !== proposal.id)) }));
+    markBusy(proposal.id, false);
   }
 }
 
-/** «Одобрить»: для правки текста — только выбранные замены. */
-export const approveProposal = (proposal: LeoProposal, acceptedChanges: number[] | undefined, words: Words) =>
-  decide(proposal, () => proposalsApi.approve(proposal.id, acceptedChanges), words);
+/** «Одобрить»: для правки текста — только выбранные замены. Поток прогона ведёт эпилог. */
+export async function approveProposal(proposal: LeoProposal, acceptedChanges: number[] | undefined, words: Words) {
+  const runId = await decide(proposal, () => proposalsApi.approve(proposal, acceptedChanges), words);
+  if (runId !== null) void followRun(runId, proposal.id);
+}
 
+/** «Отклонить»: прогон закрывается без эпилога, его заметку покажет история. */
 export const rejectProposal = (proposal: LeoProposal, words: Words) =>
-  decide(proposal, () => proposalsApi.reject(proposal.id), words);
+  decide(proposal, () => proposalsApi.reject(proposal), words);

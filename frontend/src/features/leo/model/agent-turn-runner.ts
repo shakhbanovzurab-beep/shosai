@@ -1,15 +1,17 @@
 import { ApiError } from "@/lib/api/errors";
 
 import { agentApi, type TurnBody } from "../api/agent-api";
-import { isTerminal, type NumberedEvent, runEventOf } from "../domain/run-events";
-import { SseParser } from "../domain/sse";
+import { isPause, isTerminal, type NumberedEvent } from "../domain/run-events";
 import type { LeoMessage } from "../domain/types";
 import { dropTurns, failedReply, flushNow, queueEvent, turnOf, updateTurn } from "./agent-turns";
+import { onCardEvent } from "./card-events";
+import { readRun } from "./run-stream";
 
 /*
  * Один ход до его конца: поток открывается запросом хода, а оборвавшийся продолжается с последнего события
  * (`Last-Event-ID`), несколько раз с растущей паузой. Прогон идёт на сервере сам: обрыв сети не обрывает ответ.
  * Журнал, истёкший за час, — повод перечитать историю, а не ошибка. «Стоп» просит сервер остановить прогон.
+ * Карточка ставит прогон на паузу: ход здесь кончается, а после решения поток ведёт эпилог (run-follower).
  */
 
 const RESUME_PAUSES_MS = [500, 1_000, 2_000, 4_000, 8_000];
@@ -30,20 +32,13 @@ export interface TurnRun {
 const stopAsked = new Set<string>();
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function read(stream: ReadableStream<Uint8Array>, run: TurnRun): Promise<boolean> {
-  const reader = stream.getReader();
-  const decoder = new TextDecoder();
-  const parser = new SseParser();
-  for (let chunk = await reader.read(); !chunk.done; chunk = await reader.read()) {
-    for (const sse of parser.push(decoder.decode(chunk.value, { stream: true }))) {
-      const event = runEventOf(sse);
-      if (event === null) continue;
-      handle(run, event);
-      if (isTerminal(event)) return true;
-    }
-  }
-  return false;
-}
+const endsTurn = (event: NumberedEvent) => isTerminal(event) || isPause(event);
+
+const read = (stream: ReadableStream<Uint8Array>, run: TurnRun) =>
+  readRun(stream, (event) => {
+    handle(run, event);
+    return endsTurn(event);
+  });
 
 function handle(run: TurnRun, event: NumberedEvent) {
   if (event.kind === "run.started" && stopAsked.delete(run.key)) {
@@ -54,7 +49,8 @@ function handle(run: TurnRun, event: NumberedEvent) {
   }
   if (event.kind === "client.action" && event.data.navigate) run.onNavigate(event.data.navigate.to);
   queueEvent(run.scope, run.key, event);
-  if (event.kind === "run.started" || isTerminal(event)) flushNow();
+  onCardEvent(event);
+  if (event.kind === "run.started" || endsTurn(event)) flushNow();
 }
 
 const fail = (run: TurnRun, code: string, limit?: string) =>

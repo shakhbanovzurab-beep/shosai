@@ -5,6 +5,7 @@ import type { useTranslations } from "use-intl";
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
+import { inDomain } from "@/lib/resource-domains";
 
 import { tasksApi } from "../api/tasks-api";
 import type { TaskStatus, TodayTask } from "../domain/tasks-contract";
@@ -27,7 +28,10 @@ const lists = new Map<string, PollingResource<TodayTask[]>>();
 export function todayResource(day: string) {
   const existing = lists.get(day);
   if (existing) return existing;
-  const created = createPollingResource(() => tasksApi.today(day).then((list) => list.items));
+  const created = inDomain(
+    "tasks",
+    createPollingResource(() => tasksApi.today(day).then((list) => list.items)),
+  );
   lists.set(day, created);
   return created;
 }

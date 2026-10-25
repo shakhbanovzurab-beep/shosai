@@ -3,7 +3,6 @@ import { DEFAULT_LANGUAGE } from "@/lib/language";
 
 import type { LeoEvent } from "../domain/protocol";
 import type { LeoRequest, LeoTurn } from "../domain/request";
-import { demoProposals } from "./demo-proposals";
 import { type PlannedStep, pickScenario, type Scenario } from "./demo-scenarios";
 import { type KnowledgeScope, knowledgeNote, knowledgeScope, knowledgeStepText } from "./knowledge";
 
@@ -150,10 +149,6 @@ export async function* runAgent(request: LeoTurn, signal: AbortSignal): AsyncGen
     yield { type: "text", delta: token };
   }
   yield { type: "step_end", id: "step-answer", status: "done", durationMs: Date.now() - writeStartedAt };
-  if (scenario?.proposal) {
-    const proposal = scenario.proposal();
-    demoProposals.set(proposal.id, proposal);
-    yield { type: "proposal", proposal };
-  }
+  if (scenario?.proposal) yield { type: "proposal", proposal: scenario.proposal() };
   yield { type: "done", durationMs: Date.now() - startedAt };
 }

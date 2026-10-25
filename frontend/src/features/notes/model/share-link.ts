@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { copyText } from "@/lib/copy-text";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
+import { inDomain } from "@/lib/resource-domains";
 
 import { shareApi } from "../api/share-api";
 import type { ShareLinkResponse, ShareLinkSettings } from "../domain/share-link";
@@ -22,7 +23,10 @@ const links = new Map<string, PollingResource<ShareLinkResponse>>();
 function linkOf(noteId: string): PollingResource<ShareLinkResponse> {
   let resource = links.get(noteId);
   if (!resource) {
-    resource = createPollingResource(() => shareApi.getShareLink(noteId));
+    resource = inDomain(
+      "notes",
+      createPollingResource(() => shareApi.getShareLink(noteId)),
+    );
     links.set(noteId, resource);
   }
   return resource;

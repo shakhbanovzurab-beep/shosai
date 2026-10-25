@@ -12,8 +12,8 @@ The panel talks to the API in Personal and in a workspace (agent steps 7a and 7b
 "Stop", "Regenerate" and "Edit", steps and sources. Every turn names the page and its subject: a note or a meeting,
 a task (`?task=`) or a board (`?board=`); only a UUID is ever sent as a subject's id. Nothing of a conversation is
 kept in the browser; old `leo-chat*` keys are erased. A hub and the admin panel keep the
-sample `/api/leo` (NDJSON) until agent steps 20 and 16; cards and "Needs you" keep their mocks until step 10;
-attachments come with step 12.
+sample `/api/leo` (NDJSON) until agent steps 20 and 16; attachments come with step 12. Since step 10 cards and
+"Needs you" are on the API too, and `/v1/agent/actions*` has no mocks.
 
 Since agent step 9a1 Leo proposes writes: a write call becomes a card (`action.proposed`) and the run pauses
 (`run.paused`); `approve` and `reject` are served, and the card's end follows as `action.updated` on the same run's
@@ -154,6 +154,22 @@ status = proposed | executing | succeeded | partially_succeeded | failed | rejec
 - `outcome_unknown` asks the person to check before retrying: the change may have happened.
 - Text-edit previews (`kind: "diff"` with `accepted_changes`) come with the first tool that edits text; until then
   `accepted_changes` is refused (`422`).
+
+How the cabinet shows them (step 10):
+
+- A turn ends at `run.paused`: its answer stays with the card, and the history, re-read, takes it over. A card shows
+  in its answer once; a server note whose card already stands in its answer is not shown again.
+- An approval follows `run_id` from its first event (`Last-Event-ID: 0`): the answer is rebuilt in place — the words
+  before the card, the card's end, Leo's epilogue — and the history is re-read when the run ends. While the outcome
+  is still on its way the server closes the stream at the card's pause; the cabinet reads it again with a growing
+  pause for about three minutes. A pause on a new card of the epilogue ends the follow: that card is decided later.
+- `action.updated` updates the card wherever it is shown (the panel, "Needs you"), and its `invalidates` re-read the
+  shown screens of those domains — resources tagged with `inDomain` (`src/lib/resource-domains.ts`): `tasks` (boards,
+  a task, Today), `notes` (the library, counts, a meeting, its notes, its share link, recent meetings), `files`
+  (files, storage).
+- `taint` and `outcome` are codes the cabinet words (`leoCards.card.taint`, `leoCards.card.outcome`); an unknown label
+  reads as outside text, an unknown outcome adds nothing to the status.
+- `409 action_not_pending` re-reads the card, which then shows how it ended.
 
 ## Settings › Leo
 

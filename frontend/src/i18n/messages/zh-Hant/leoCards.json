@@ -21,6 +21,33 @@
       "rejected": "已拒絕",
       "expired": "已過期",
       "outcome_unknown": "可能已經執行，重試前請先確認"
+    },
+    "taint": {
+      "mail": "根據一封電子郵件準備",
+      "web": "根據一個網頁準備",
+      "fileForeign": "根據他人的檔案準備",
+      "fileOwn": "根據你的一個檔案準備",
+      "meetingSpeech": "根據會議中的發言準備",
+      "taskForeign": "根據他人撰寫的任務準備",
+      "memory": "根據 Leo 記得的你的資訊準備",
+      "skillUser": "使用你新增的技能準備",
+      "mcp": "根據來自 {server} 的文字準備",
+      "other": "根據外部文字準備"
+    },
+    "outcome": {
+      "invalid_arguments": "資料不符合要求",
+      "not_found": "已不存在",
+      "forbidden": "沒有存取權",
+      "not_entitled": "不包含在你的方案中",
+      "limit_reached": "超出方案上限",
+      "switched_off": "已在設定中關閉",
+      "conflict": "這段期間內容有變更",
+      "timeout": "花費時間過長",
+      "unavailable": "服務無法使用",
+      "rate_limited": "請求過多，請稍後再試",
+      "failed": "服務回傳錯誤",
+      "not_started": "未開始",
+      "executor_lost": "已中斷"
     }
   },
   "diff": {

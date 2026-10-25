@@ -21,6 +21,33 @@
       "rejected": "Afgewezen",
       "expired": "Verlopen",
       "outcome_unknown": "Is misschien al gebeurd: controleer dit voor je het opnieuw probeert"
+    },
+    "taint": {
+      "mail": "Voorbereid op basis van een e-mail",
+      "web": "Voorbereid op basis van een webpagina",
+      "fileForeign": "Voorbereid op basis van het bestand van iemand anders",
+      "fileOwn": "Voorbereid op basis van een van je bestanden",
+      "meetingSpeech": "Voorbereid op basis van wat er in een vergadering is gezegd",
+      "taskForeign": "Voorbereid op basis van een taak die iemand anders schreef",
+      "memory": "Voorbereid op basis van wat Leo over je onthoudt",
+      "skillUser": "Voorbereid met een vaardigheid die je hebt toegevoegd",
+      "mcp": "Voorbereid op basis van tekst uit {server}",
+      "other": "Voorbereid op basis van externe tekst"
+    },
+    "outcome": {
+      "invalid_arguments": "De gegevens klopten niet",
+      "not_found": "Het bestaat niet meer",
+      "forbidden": "Geen toegang",
+      "not_entitled": "Niet inbegrepen in je abonnement",
+      "limit_reached": "Boven de limiet van je abonnement",
+      "switched_off": "Uitgeschakeld in de instellingen",
+      "conflict": "Er is intussen iets veranderd",
+      "timeout": "Duurde te lang",
+      "unavailable": "De dienst was niet beschikbaar",
+      "rate_limited": "Te veel verzoeken. Probeer het later opnieuw",
+      "failed": "De dienst gaf een fout",
+      "not_started": "Niet gestart",
+      "executor_lost": "Onderbroken"
     }
   },
   "diff": {

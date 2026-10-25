@@ -65,37 +65,6 @@ export function addMyTask(workspaceId: string, task: { title: string; due_on: st
   return id;
 }
 
-/**
- * Задача пространства, которую Leo создал из командного чата (TK-D13): исполнитель — участник по аккаунту, если
- * имя сопоставилось, иначе никто; проект — привязка чата.
- */
-export function addWorkspaceTask(
-  workspaceId: string,
-  task: { title: string; due_on: string | null; project_id: string | null; assignee_account: string | null },
-) {
-  const found = activeMembership(workspaceId);
-  if (!found) return null;
-  const member = found.data.members.find((m) => m.account_id === task.assignee_account);
-  const id = `t-${crypto.randomUUID()}`;
-  const { title, due_on, project_id } = task;
-  const created_at = new Date().toISOString();
-  found.data.tasks.push({
-    id,
-    title,
-    status: "todo",
-    assignee_id: member?.id ?? null,
-    due_on,
-    project_id,
-    meeting_id: null,
-    created_at,
-  });
-  return {
-    id,
-    workspace: refOf(found.data),
-    assignee: member ? { user_id: member.account_id, name: member.name } : null,
-  };
-}
-
 /** Meetings others shared with the account, per workspace; its own recordings are in its Notes already. */
 export function myMeetings(): MyMeetingsResponse {
   return {

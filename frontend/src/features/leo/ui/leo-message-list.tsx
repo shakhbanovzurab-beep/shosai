@@ -114,17 +114,18 @@ function AssistantMessage({
   const isStreaming = message.status === "streaming";
   const hasAnswer = message.content.length > 0;
   const artifacts = message.artifacts ?? [];
+  const proposals = message.proposals ?? [];
   const showActions = !isStreaming && (hasAnswer || isLast);
 
   return (
     <div className="flex flex-col gap-3">
       <LeoSteps message={message} />
       {message.status === "error" ? <LeoReplyError failure={message.failure} /> : null}
-      {hasAnswer || showActions || artifacts.length > 0 ? (
+      {hasAnswer || showActions || artifacts.length > 0 || proposals.length > 0 ? (
         <div className="flex flex-col gap-1">
           {hasAnswer ? <AnswerCard text={message.content} sources={message.sources} isStreaming={isStreaming} /> : null}
           {artifacts.length > 0 ? <LeoArtifacts artifacts={artifacts} onProposal={onProposal} /> : null}
-          {message.proposals?.map((proposal) => (
+          {proposals.map((proposal) => (
             <LeoProposalCard key={proposal.id} proposal={proposal} />
           ))}
           {showActions ? (

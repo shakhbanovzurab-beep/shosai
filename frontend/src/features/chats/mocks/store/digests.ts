@@ -29,12 +29,3 @@ export function itemsOf(digest: ChatDigest, ids: readonly string[]): Outcome<Dig
 export function markProposed(items: readonly DigestItem[], proposalId: string) {
   for (const item of items) item.proposal_id = proposalId;
 }
-
-/** Карточку отклонили или она истекла: пункты снова свободны. */
-export function releaseItems(items: readonly DigestItem[]) {
-  for (const item of items) item.proposal_id = null;
-}
-
-export function markTask(item: DigestItem, taskId: string) {
-  item.task_id = taskId;
-}
