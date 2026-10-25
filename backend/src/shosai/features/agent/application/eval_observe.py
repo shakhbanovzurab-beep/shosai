@@ -13,7 +13,7 @@ from pydantic import JsonValue
 
 from shosai.features.agent.application.eval_model import RecordingModel
 from shosai.features.agent.domain.budgets import Segment
-from shosai.features.agent.domain.eval_checks import Observed, ToolRun
+from shosai.features.agent.domain.eval_checks import PAUSED, Card, Observed, ToolRun
 from shosai.features.agent.domain.stream import EventKind, StreamEvent
 
 FAILED: Final = "failed"
@@ -22,11 +22,12 @@ FAILED: Final = "failed"
 def observed_turn(
     events: Sequence[StreamEvent],
     recording: RecordingModel,
-    runs: tuple[ToolRun, ...],
+    calls: tuple[tuple[ToolRun, ...], tuple[ToolRun, ...]],
     context: tuple[Mapping[Segment, int], str, str],
 ) -> Observed:
-    """The turn as it was seen from outside; `context` holds its first call's segments, head
-    and tools."""
+    """The turn as it was seen from outside: `calls` holds the calls that ran and the writes
+    proposed, `context` its first call's segments, head and tools."""
+    runs, proposed = calls
     segments, head, tools_schema = context
     return Observed(
         attempted=tuple(recording.attempted),
@@ -42,6 +43,20 @@ def observed_turn(
         segments=dict(segments),
         head=head,
         tools_schema=tools_schema,
+        cards=tuple(card_of(event) for event in of_kind(events, EventKind.ACTION_PROPOSED)),
+        proposed=proposed,
+    )
+
+
+def card_of(event: StreamEvent) -> Card:
+    """A proposed card as the stream showed it."""
+    action = event.data.get("action")
+    action = action if isinstance(action, dict) else {}
+    taint = action.get("taint")
+    return Card(
+        str(action.get("tool")),
+        action.get("warning") is True,
+        taint if isinstance(taint, str) else None,
     )
 
 
@@ -63,8 +78,11 @@ def to_of(event: StreamEvent) -> str:
 
 
 def outcome_of(events: Sequence[StreamEvent]) -> str | None:
-    """How the run ended: answered or stopped, the failure's code, or None while it runs."""
+    """How the run ended: answered or stopped, paused on its card, the failure's code, or None
+    while it runs."""
     for event in reversed(events):
+        if event.kind is EventKind.RUN_PAUSED:
+            return PAUSED
         if event.kind is EventKind.RUN_COMPLETED:
             return text_in(event.data, "outcome")
         if event.kind is EventKind.RUN_FAILED:

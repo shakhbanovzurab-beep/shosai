@@ -23,10 +23,14 @@ from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.budgets import SEGMENT_CAPS, Segment, estimate_tokens
 from shosai.features.agent.domain.digests import compact
 from shosai.features.agent.domain.preferences import ResponseLength
+from shosai.features.agent.domain.routing import CORE, RouteFacts, ToolsetFacts, route
 from shosai.features.agent.infrastructure.person_records import AgentSettingsRecord
+from shosai.features.agent.infrastructure.prompts import LOADABLE
 from tests.features.agent.test_thread_care import sample
 from tests.features.agent.tool_doubles import FILES_SEARCH, NOTES_SEARCH, calling, saying
 from tests.features.agent.turn_bench import HOME, TurnBench
+
+LOADABLE_TEXT: Final = LOADABLE.removesuffix("{names}.")
 
 # Имена функций у провайдеров: латиница, цифры, «_» и «-», до 64 символов.
 PROVIDER_NAME: Final = re.compile(r"[a-zA-Z0-9_-]{1,64}")
@@ -58,15 +62,15 @@ async def test_a_toolset_routing_left_out_is_loaded_for_the_next_round_and_stick
 
     assert ("archive__search" in before, "archive__search" in after) == (False, True)
     assert turn_bench.tools.ran == ["archive"]
-    assert load.description.endswith("Toolsets you can load: archive.")
+    assert load.description.endswith(f"{LOADABLE_TEXT}archive.")
     assert sample(registry, "shosai_agent_load_toolset_total") == 1
     # Липкий архив занял место сегмента: теперь остальные наборы только названы.
     again = next(t for t in turn_bench.model.calls[0].tools if t.name == "core__load_toolset")
     assert "archive__search" in offered(turn_bench, 0)
-    assert again.description.endswith("Toolsets you can load: notes, tasks, files.")
+    assert again.description.endswith(f"{LOADABLE_TEXT}notes, tasks, files.")
 
 
-async def test_a_switched_off_tool_and_a_write_are_never_offered(turn_bench: TurnBench) -> None:
+async def test_a_switched_off_tool_is_never_offered_and_a_write_is(turn_bench: TurnBench) -> None:
     person = uuid.uuid4()
     thread = await turn_bench.thread(person)
     async with turn_bench.homes.transactions.begin(TenancyScope(HOME, person)) as session:
@@ -76,7 +80,7 @@ async def test_a_switched_off_tool_and_a_write_are_never_offered(turn_bench: Tur
     await turn_bench.ask(person, thread, "Search my files.")
 
     assert "files__search" not in offered(turn_bench, 0)
-    assert "tasks__create" not in offered(turn_bench, 0)
+    assert "tasks__create" in offered(turn_bench, 0)
     assert "notes__search" in offered(turn_bench, 0)
     assert turn_bench.tools.ran == []
 
@@ -90,6 +94,24 @@ def payload(path: str | None, subject: SubjectKind | None = None) -> TurnPayload
         token_route="within_allowance", path=path, subject_kind=subject,
         subject_id=uuid.uuid4() if subject else None,
     )  # fmt: skip
+
+
+def test_reads_of_every_toolset_come_before_the_writes_of_any() -> None:
+    toolsets = (
+        ToolsetFacts(CORE, 500),
+        ToolsetFacts("notes", 2_200, read_tokens=1_000),
+        ToolsetFacts("tasks", 2_900, read_tokens=1_000),
+        ToolsetFacts("files", 1_000, read_tokens=400),
+        ToolsetFacts("account", 450),
+    )
+
+    plain = route(RouteFacts(toolsets))
+    on_board = route(RouteFacts(toolsets, surface=frozenset({"tasks"})))
+
+    assert (plain.selected, plain.reading) == (("core", "files", "account"), ("notes", "tasks"))
+    assert plain.deferred == ("notes", "tasks")
+    assert (on_board.selected, on_board.reading) == (("core", "tasks"), ("files",))
+    assert on_board.deferred == ("notes", "files", "account")
 
 
 def test_a_page_brings_the_toolsets_of_its_section_and_its_subject() -> None:

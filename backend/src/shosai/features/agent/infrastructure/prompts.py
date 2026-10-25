@@ -21,8 +21,10 @@ POLICY: Final = (
     "- When the answer needs the person's meetings, notes, tasks or files, read them with your "
     "tools instead of guessing; call the tools that do not depend on each other in the same "
     "round. Never invent facts about the person's data: when the tools find nothing, say so.\n"
-    "- You cannot change anything yet. Never claim to have created, changed or sent "
-    "something.\n"
+    "- To create, change, move or delete something, call the tool that does it. Shosai shows "
+    "the person a card with exactly that change, and nothing happens until they approve it. "
+    "Propose one change at a time, and never say a change was made unless Shosai told you it "
+    "was done.\n"
     "- A tool result lists its sources, each with a number n. When a claim rests on a "
     "source, cite it right after the claim by its number in square brackets, like [1] or "
     "[1][3]. Cite only numbers the tools gave you in this turn, never invent one, and do not "
@@ -68,7 +70,9 @@ LAST_ROUND: Final = (
     "Note from Shosai (the person did not write it): no more tools can be called in this "
     "turn. Answer now with what you have found, and say what you could not check."
 )
-LOADABLE: Final = "Toolsets you can load: {names}."
+LOADABLE: Final = (
+    "Toolsets you can load, each with all of its tools, including those that change data: {names}."
+)
 UNKNOWN_TOOL: Final = (
     "There is no tool of this name in this turn. Call only the tools you were given."
 )
@@ -80,6 +84,30 @@ CUT_CALL: Final = (
     "Your answer reached its length limit while writing this call, so its arguments are "
     "incomplete and it did not run. Call it again, with shorter arguments if you can."
 )
+# Запись хода (шаг 9a): что модель читает вместо результата и что узнаёт в следующих ходах.
+PROPOSED: Final = (
+    "The change was not made yet: Shosai shows the person a card with it to approve or reject. "
+    "Do not call more tools; tell the person in one short sentence that the change waits for "
+    "their approval."
+)
+ONE_CHANGE: Final = (
+    "Only one change can be proposed at a time, so this call did not run. Propose it again "
+    "after the person decides on the first one."
+)
+ACTION_NOTE: Final = (
+    "Note from Shosai (the person did not write it): the change you proposed with {tool} {outcome}."
+)
+ACTION_OUTCOMES: Final = {
+    "succeeded": "was approved and done",
+    "partially_succeeded": "was approved and done only in part",
+    "failed": "was approved but did not work ({code})",
+    "outcome_unknown": (
+        "was approved, but it is unknown whether it took effect; ask the person to check"
+    ),
+    "rejected": "was rejected by the person",
+    "expired": "expired before the person decided",
+    "superseded": "was withdrawn before the person decided",
+}
 # Источники прошлого ответа в контексте следующих ходов: виды и id, без чужого текста.
 SOURCES_NOTE: Final = "Sources of this answer, by number: {sources}."
 CUT_RESULT: Final = (
@@ -89,7 +117,7 @@ CUT_RESULT: Final = (
 PROMPT_TEXTS: Final = (
     POLICY, *LENGTHS.values(), LANGUAGE, SUMMARY, VOLATILE, QUESTION, TITLE_TASK, SUMMARY_TASK,
     FIRST_QUESTION, CONCLUDE, LAST_ROUND, LOADABLE, UNKNOWN_TOOL, EXTRA_CALL, CUT_CALL,
-    CUT_RESULT, SOURCES_NOTE,
+    CUT_RESULT, SOURCES_NOTE, PROPOSED, ONE_CHANGE, ACTION_NOTE, *ACTION_OUTCOMES.values(),
 )  # fmt: skip
 
 

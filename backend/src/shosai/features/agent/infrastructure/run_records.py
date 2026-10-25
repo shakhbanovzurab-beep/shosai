@@ -31,6 +31,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from shosai.core.db.model_base import ModelBase
 from shosai.core.db.partitions.policy import monthly_partition_range
+from shosai.features.agent.domain.actions import AuditEvent
 
 RUN_STATUSES: Final = "'running', 'paused', 'completed', 'failed', 'cancelled'"
 CHANNELS: Final = "'web', 'admin'"
@@ -40,10 +41,7 @@ ACTION_STATUSES: Final = (
 )
 ORIGINS: Final = "'turn', 'proposal_port'"
 VIAS: Final = "'web', 'inbox'"
-AUDIT_EVENTS: Final = (
-    "'proposed', 'approved', 'rejected', 'expired', 'superseded', 'executed', 'failed', "
-    "'outcome_unknown'"
-)
+AUDIT_EVENTS: Final = ", ".join(f"'{event.value}'" for event in AuditEvent)
 CODE_FORM: Final = "~ '^[a-z0-9_.:-]{1,64}$'"
 
 

@@ -15,6 +15,14 @@ kept in the browser; old `leo-chat*` keys are erased. A hub and the admin panel 
 sample `/api/leo` (NDJSON) until agent steps 20 and 16; cards and "Needs you" keep their mocks until step 10;
 attachments come with step 12.
 
+Since agent step 9a1 Leo proposes writes: a write call becomes a card (`action.proposed`) and the run pauses
+(`run.paused`); `approve` and `reject` are served, and the card's end follows as `action.updated` and
+`run.completed` on the same run's stream. Until step 9b a card carries `{id, tool, status, outcome, nonce, warning,
+taint, reversibility, created_at, expires_at, resolved_at}` (`taint` is a label such as `task:foreign`; `run_id` is
+added to the decision's answer); step 9b adds `title`, `space`, `origin` and `preview` in the person's language, and
+the inbox's `GET` routes. A decided card adds a server note to the thread (`role: server`, empty `text`) that
+the cabinet renders from the card; Leo's next turns read it in plain words.
+
 ## Conversations
 
 | Method | Path | Body | Response |

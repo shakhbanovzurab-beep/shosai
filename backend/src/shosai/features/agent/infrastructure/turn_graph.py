@@ -1,17 +1,19 @@
 """The frame of a turn in LangGraph (ADR 0068 AG-D14): nodes, edges and the state between them.
 
 LangGraph only moves a turn from node to node: `context → model`, then `tools → model` for as
-long as the model calls tools, and `respond` once it answers; the pause for an approval (step
-9a) joins the same frame. What each node does is ours and comes in as the run's steps: the
-context we build, the model call through the provider port — which decides what each round
-may call, so the tenth has no tools and the loop always ends — the calls we run, the answer we
-keep. Nothing of LangGraph's ready agents, tool nodes, model clients, savers or memory is used;
-without a pause there is nothing to save, so the graph is compiled without a checkpointer, once
-per process.
+long as the model calls tools, and `respond` once it answers — or once a round proposed a
+write, whose card the person now decides (step 9a): the turn then ends paused. What each node
+does is ours and comes in as the run's steps: the context we build, the model call through the
+provider port — which decides what each round may call, so the tenth has no tools and the loop
+always ends — the calls we run, the answer we keep. Nothing of LangGraph's ready agents, tool
+nodes, model clients, savers or memory is used; a paused turn keeps nothing in the frame — its
+action and its rows are in the database — so the graph is compiled without a checkpointer,
+once per process.
 """
 
 from dataclasses import dataclass
 from typing import Protocol, TypedDict
+from uuid import UUID
 
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
@@ -43,10 +45,12 @@ class ModelAnswer:
 
 @dataclass(frozen=True, slots=True)
 class TurnAnswer:
-    """The answer a turn keeps: the model's, and whether a token limit cut it."""
+    """The answer a turn keeps: the model's, whether a token limit cut it, and the action
+    the turn paused for."""
 
     model: ModelAnswer
     truncated: bool
+    paused: UUID | None = None
 
 
 class TurnSteps(Protocol):
@@ -64,6 +68,10 @@ class TurnSteps(Protocol):
         """Run the calls of the answer; the conversation with them and their results."""
         ...
 
+    def paused(self) -> UUID | None:
+        """The action the turn proposed and now waits for, if it did."""
+        ...
+
 
 @dataclass(frozen=True, slots=True)
 class TurnContext:
@@ -78,6 +86,7 @@ class TurnState(TypedDict, total=False):
     request: ChatRequest
     answer: ModelAnswer
     kept: TurnAnswer
+    paused: UUID | None
 
 
 async def context_node(state: TurnState, runtime: Runtime[TurnContext]) -> TurnState:
@@ -92,8 +101,15 @@ async def model_node(state: TurnState, runtime: Runtime[TurnContext]) -> TurnSta
 
 
 async def tools_node(state: TurnState, runtime: Runtime[TurnContext]) -> TurnState:
-    """Run the tools the model called."""
-    return {"request": await runtime.context.steps.tools(state["request"], state["answer"])}
+    """Run the tools the model called; note the action a write call proposed."""
+    steps = runtime.context.steps
+    request = await steps.tools(state["request"], state["answer"])
+    return {"request": request, "paused": steps.paused()}
+
+
+def after_tools(state: TurnState) -> str:
+    """Back to the model, or to the answer when a write waits for the person."""
+    return "respond" if state.get("paused") else "model"
 
 
 def after_model(state: TurnState) -> str:
@@ -102,9 +118,10 @@ def after_model(state: TurnState) -> str:
 
 
 async def respond_node(state: TurnState) -> TurnState:
-    """Keep the answer, noting a cut by the token limit."""
+    """Keep the answer, noting a cut by the token limit and the action it waits for."""
     answer = state["answer"]
-    return {"kept": TurnAnswer(answer, truncated=answer.finish_reason == LENGTH_FINISH)}
+    truncated = answer.finish_reason == LENGTH_FINISH
+    return {"kept": TurnAnswer(answer, truncated=truncated, paused=state.get("paused"))}
 
 
 type TurnGraph = CompiledStateGraph[TurnState, TurnContext, TurnState, TurnState]
@@ -120,7 +137,7 @@ def turn_graph() -> TurnGraph:
     graph.add_edge(START, "context")
     graph.add_edge("context", "model")
     graph.add_conditional_edges("model", after_model, ["tools", "respond"])
-    graph.add_edge("tools", "model")
+    graph.add_conditional_edges("tools", after_tools, ["model", "respond"])
     graph.add_edge("respond", END)
     return graph.compile()
 

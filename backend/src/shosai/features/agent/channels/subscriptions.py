@@ -1,14 +1,17 @@
 """Agent's consumers of events, by names that never change: a workspace's departure marks the
 person's threads of it and its deletion erases them all (agent plan §3.5 flow 5, step 4); the
-slice's own completed turn sends its thread's title and compaction when due (step 5b)."""
+slice's own completed turn sends its thread's title and compaction when due (step 5b); an
+approved item's effect in its slice joins the action's audit trail (step 9a)."""
 
 from datetime import timedelta
 from typing import Any, Final
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.agent_tools.events import ActionItemExecuted
 from shosai.core.events.subscriptions import EventSubscription, ReceivedEvent
 from shosai.core.tasks.queues import TaskQueue
+from shosai.features.agent.application.action_audit import audit_item
 from shosai.features.agent.application.after_turn import AfterTurn
 from shosai.features.agent.application.departures import Departures, scope_of_departure
 from shosai.features.agent.contracts.events import TurnCompleted
@@ -52,6 +55,13 @@ def subscriptions(
             queue=TaskQueue.DEFAULT,
             deadline=DEADLINE,
             handle=follow_turn,
+        ),
+        EventSubscription(
+            consumer="agent.audit_action_item",
+            event=ActionItemExecuted,
+            queue=TaskQueue.DEFAULT,
+            deadline=DEADLINE,
+            handle=audit_item,
         ),
         EventSubscription(
             consumer="agent.erase_with_workspace",

@@ -19,6 +19,8 @@ READ_TOOL_TIMEOUT: Final = timedelta(seconds=20)
 LEASE_TTL: Final = timedelta(seconds=30)
 LEASE_RENEWAL: Final = timedelta(seconds=10)
 EVENT_LOG_TTL: Final = timedelta(hours=1)
+# Журнал прогона на паузе живёт дольше карточки: решение пишет в него исход и конец прогона.
+PAUSED_LOG: Final = timedelta(hours=1, minutes=15)
 EVENT_LOG_MAX: Final = 2_000
 HEARTBEAT: Final = timedelta(seconds=15)
 RUNS_PER_PERSON: Final = 2

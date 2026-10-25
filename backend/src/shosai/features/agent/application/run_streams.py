@@ -20,14 +20,14 @@ from sqlalchemy import select
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.errors import AppError
 from shosai.core.kv.connection import REDIS_FAILURES
-from shosai.features.agent.domain.endings import recorded
+from shosai.features.agent.domain.endings import paused, recorded
 from shosai.features.agent.domain.runs import STREAM_STALL, RunStatus
 from shosai.features.agent.domain.stream import StreamEvent
 from shosai.features.agent.domain.threads import MessageRole
 from shosai.features.agent.infrastructure.log_tail import LogTail, Silence
 from shosai.features.agent.infrastructure.run_log import RunLog
 from shosai.features.agent.infrastructure.run_metrics import RunMetrics
-from shosai.features.agent.infrastructure.run_records import AgentRunRecord
+from shosai.features.agent.infrastructure.run_records import AgentActionRecord, AgentRunRecord
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 from shosai.features.agent.infrastructure.thread_records import AgentMessageRecord
 from shosai.features.identity.contracts import Principal
@@ -110,11 +110,26 @@ class RunStreams:
 
     async def _ended(self, principal: Principal, run_id: UUID, seq: int) -> StreamEvent | None:
         run = await self.owned(principal, run_id)
+        if run.status is RunStatus.PAUSED:
+            action_id = await self._awaited(principal, run)
+            if action_id is None:
+                return None
+            return StreamEvent(seq + 1, *paused(action_id).terminal(None))
         ending = recorded(run.status, run.code)
         if ending is None:
             return None
         kind, data = ending.terminal(await self._answer_id(principal, run))
         return StreamEvent(seq + 1, kind, data)
+
+    async def _awaited(self, principal: Principal, run: RunRecord) -> UUID | None:
+        """The action a paused run waits for."""
+        async with self._transactions.begin(principal.scope(), read_only=True) as session:
+            return await session.scalar(
+                select(AgentActionRecord.id)
+                .where(AgentActionRecord.run_id == run.run_id)
+                .order_by(AgentActionRecord.created_at.desc())
+                .limit(1)
+            )
 
     async def _answer_id(self, principal: Principal, run: RunRecord) -> UUID | None:
         message = AgentMessageRecord

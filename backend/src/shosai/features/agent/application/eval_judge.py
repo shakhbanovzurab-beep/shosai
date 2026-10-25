@@ -1,7 +1,8 @@
 """The live suite's judge: a model grades each answer (Leo §11.4, AG-D8).
 
 The judge reads the question, the language the answer was due in, what the tools that ran
-returned, and the answer, and grades the language, the grounding and the help. Its call is the
+returned, the cards the turn proposed with their values, and the answer, and grades the
+language, the grounding and the help. Its call is the
 platform's own, paid by the system account, under its own effect key. A judge that fails or
 answers outside its format leaves the case ungraded, which the report counts apart — it never
 passes or fails a case it did not grade.
@@ -28,10 +29,12 @@ from shosai.features.agent.domain.eval_cases import EvalScenario
 from shosai.features.agent.domain.eval_checks import Observed
 from shosai.features.agent.domain.eval_report import JudgeGrade
 from shosai.features.agent.infrastructure.eval_prompts import (
+    CARD,
     JUDGE,
     JUDGE_CASE,
     KNOWN,
     KNOWN_PAGE,
+    NO_CARDS,
     NO_RESULTS,
 )
 
@@ -90,6 +93,15 @@ def tool_results(scenario: EvalScenario, observed: Observed) -> str:
     return "\n".join(parts)[:RESULTS_CHARS] or NO_RESULTS
 
 
+def proposed_cards(observed: Observed) -> str:
+    """The writes the turn proposed as cards, with the values the person would approve."""
+    lines = [
+        CARD.format(tool=run.tool, arguments=json.dumps(run.arguments, ensure_ascii=False))
+        for run in observed.proposed
+    ]
+    return "\n".join(lines)[:RESULTS_CHARS] or NO_CARDS
+
+
 def known_before(scenario: EvalScenario, now: datetime) -> str:
     """What Leo knew before any tool: the person's profile, the time and the page's subject."""
     moment = now.astimezone(ZoneInfo(TIME_ZONE)).strftime(MOMENT)
@@ -124,6 +136,7 @@ class Judge:
             known=known_before(scenario, self._clock()),
             question=scenario.question(language),
             results=tool_results(scenario, observed),
+            cards=proposed_cards(observed),
             answer=observed.answer,
         )
         request = ChatRequest(

@@ -26,6 +26,7 @@ from shosai.features.agent.domain.eval_checks import (
     Observed,
     answer_problems,
     budget_problems,
+    not_run,
     tool_problems,
     trajectory_verdict,
     unstable_prefix,
@@ -34,7 +35,8 @@ from shosai.features.agent.domain.eval_report import LiveCase
 from shosai.features.agent.domain.eval_safety import UNSAFE_EFFECTS, injection_cases, violations
 
 ENGLISH: Final = "en"
-PREFIX_TURNS: Final = 2
+PREFIX_TURNS: Final = 3
+LOAD_TOOLSET: Final = "core.load_toolset"
 
 
 @dataclass(frozen=True, slots=True)
@@ -50,6 +52,11 @@ def scripted(scenario: EvalScenario) -> Callable[[], ModelStreams]:
     return lambda: ScriptedRounds(scenario.script)
 
 
+def expected_reads(scenario: EvalScenario) -> list[str]:
+    """The expected calls the scenario's tools answer: each must have run."""
+    return [tool for tool in scenario.expect.calls if tool in scenario.fixtures]
+
+
 def unsafe_runs(observed: Observed) -> list[str]:
     """Writes and egress that ran: never, while nothing approves them."""
     return [
@@ -58,15 +65,19 @@ def unsafe_runs(observed: Observed) -> list[str]:
 
 
 async def scripted_trajectory(runner: EvalRunner, scenario: EvalScenario) -> ScriptedOutcome:
-    """The scenario in English, twice in one thread: the trajectory, the budgets, the stable
-    head, and the first turn's cost."""
+    """The scenario in English, three times in one thread: the trajectory, the budgets, the
+    cached head the same on every turn — from the second once the first loaded a toolset or
+    proposed a write — and the first turn's cost."""
     turns = await runner.run(scenario, ENGLISH, scripted(scenario), turns=PREFIX_TURNS)
     first = turns[0]
+    # Загруженный или записанный набор остаётся со второго хода: голова меняется один раз.
+    settled = turns[1:] if first.cards or LOAD_TOOLSET in first.attempted else turns
     problems = [
         *trajectory_verdict(scenario.expect, first, exact=True).problems,
+        *not_run(expected_reads(scenario), first),
         *unsafe_runs(first),
         *(problem for turn in turns for problem in budget_problems(turn)),
-        *unstable_prefix(turns),
+        *unstable_prefix(settled),
     ]
     return ScriptedOutcome(tuple(problems), CostLine.of(turns[:1]))
 
@@ -135,7 +146,11 @@ class LiveSuite:
         return LiveCase(
             scenario=scenario.id,
             language=language,
-            tool_problems=(*tool_problems(scenario.expect, turn, exact=False), *unsafe_runs(turn)),
+            tool_problems=(
+                *tool_problems(scenario.expect, turn, exact=False),
+                *not_run(expected_reads(scenario), turn),
+                *unsafe_runs(turn),
+            ),
             answer_problems=tuple(answer_problems(scenario.expect, turn)),
             judge=grade,
             cost=CostLine.of([turn]),

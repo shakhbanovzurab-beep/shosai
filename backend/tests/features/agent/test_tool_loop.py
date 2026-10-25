@@ -75,7 +75,7 @@ async def test_leo_reads_with_a_tool_and_answers_from_what_it_returned(
     )
     assert {tool.name for tool in first.tools} == {
         "core__read_result", "core__load_toolset", "core__navigate", "notes__search",
-        "notes__wait", "notes__fail", "tasks__search", "files__search",
+        "notes__wait", "notes__fail", "tasks__search", "tasks__create", "files__search",
     }  # fmt: skip
     assert second.messages[-2].tool_calls[0].name == "notes__search"
     assert marker.startswith("<<untrusted source=meeting:speech id=")
@@ -88,8 +88,9 @@ async def test_leo_reads_with_a_tool_and_answers_from_what_it_returned(
     assert rows[2]["text"] == "Let me look.\n\nTravel was cut."
     assert await run_row(turn_bench, run_id) == {
         "rounds": 2, "tool_calls": 1,
-        "routing": {"rule": "rules_v1", "selected": ["core", "notes", "tasks", "files"],
-                    "deferred": ["archive"], "loaded": [], "used": ["notes"]},
+        "routing": {"rule": "rules_v2", "selected": ["core", "notes", "tasks", "files"],
+                    "reading": [], "deferred": ["archive"], "loaded": [], "used": ["notes"],
+                    "wrote": []},
     }  # fmt: skip
     traced = dict(spans["tool.notes.search"].attributes or {})
     assert (traced["tool.effect"], traced["tool.outcome"]) == ("read", "ok")

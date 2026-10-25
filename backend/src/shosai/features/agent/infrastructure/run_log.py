@@ -8,6 +8,7 @@ not the log, says how a run ended.
 
 import json
 from collections.abc import Mapping, Sequence
+from datetime import timedelta
 from typing import Final
 from uuid import UUID
 
@@ -90,6 +91,10 @@ class RunLog:
                 )
             await pipeline.expire(key, EVENT_LOG_TTL)
             await pipeline.execute()
+
+    async def hold(self, run_id: UUID, ttl: timedelta) -> None:
+        """Keep the run's log for `ttl` from now: a paused run's log waits for its decision."""
+        await self._valkey.expire(log_key(run_id), ttl)
 
     async def after(self, run_id: UUID, seq: int) -> list[StreamEvent]:
         """The events after number `seq`, oldest first."""

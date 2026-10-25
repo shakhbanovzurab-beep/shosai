@@ -50,7 +50,7 @@ async def test_a_call_that_cannot_run_is_answered_with_an_error_and_never_runs(
             ("mail__send", "{}"),
             ("notes__search", '{"q": 1}'),
             ("core__load_toolset", '{"name": "mail"}'),
-            ("tasks__create", '{"query": "x"}'),
+            ("tasks__delete", '{"query": "x"}'),
             SEARCH,
         ),
     )

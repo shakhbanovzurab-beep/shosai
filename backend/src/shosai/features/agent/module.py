@@ -21,11 +21,16 @@ from shosai.core.db.engines import DATABASE_PROFILES
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, QueueCompanion
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.agent.application.account_data import ACCOUNT_DATA, AgentAccountData
+from shosai.features.agent.application.action_decisions import ActionDecisions
+from shosai.features.agent.application.action_execution import ActionExecution
+from shosai.features.agent.application.action_proposal import ActionProposer
+from shosai.features.agent.application.action_sweeps import ActionSweeps
 from shosai.features.agent.application.after_turn import AfterTurn
 from shosai.features.agent.application.departures import Departures
 from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.lost_runs import LostRuns
+from shosai.features.agent.application.paused_runs import PausedRuns
 from shosai.features.agent.application.preferences import AgentPreferences
 from shosai.features.agent.application.result_pages import ResultPages
 from shosai.features.agent.application.run_context import ContextBuilder
@@ -43,12 +48,14 @@ from shosai.features.agent.application.tool_round import ToolParts
 from shosai.features.agent.application.turn_commit import TurnParts
 from shosai.features.agent.application.turn_start import TurnStarter
 from shosai.features.agent.channels.agent_tools import CORE_TOOLS, core_tools
+from shosai.features.agent.channels.http.actions import build_actions_router
 from shosai.features.agent.channels.http.settings import build_settings_router
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
 from shosai.features.agent.channels.subscriptions import subscriptions
-from shosai.features.agent.channels.tasks import PERIODIC_JOBS, task_handlers
+from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_handlers
 from shosai.features.agent.contracts.events import TurnCompleted
+from shosai.features.agent.infrastructure.action_metrics import ActionMetrics
 from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.person_records import PERSON_MODELS
@@ -93,7 +100,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     telemetry, pages = RunTelemetry(metrics, tracer), ResultPages(transactions, ports)
     tools = ToolParts(
         pages, RunSources(transactions, ports), tool_bulkhead(services.role),
-        ToolMetrics(services.registry), tracer,
+        ToolMetrics(services.registry), tracer, ActionProposer(transactions),
     )  # fmt: skip
     routing = TurnRouting(ToolRegistry(services.agent_tools), ports)
     engine = RunEngine(
@@ -112,14 +119,24 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     streams = RunStreams(transactions, (run_log, tail), leases, metrics)
     lost_runs = LostRuns(transactions, (run_log, leases, fleet), metrics)
     care = ThreadCare(transactions, (services.ai, settings.utility_route()), ports)
+    paused, action_metrics = (
+        PausedRuns((transactions, services.outbox), run_log),
+        ActionMetrics(services.registry),
+    )
+    decisions = ActionDecisions(transactions, (services.tasks, paused, action_metrics))
+    actions = (
+        ActionExecution(transactions, (services.agent_tools, paused, action_metrics)),
+        ActionSweeps(transactions, (services.tasks, paused, action_metrics)),
+    )
     try:
         yield FeatureParts(
             http_routers=(
                 build_settings_router(preferences, ports),
                 build_threads_router((threads, History(transactions, threads)), ports),
                 build_turns_router((starter, streams), ports),
+                build_actions_router(decisions, ports),
             ),
-            task_handlers=task_handlers(departures, lost_runs, engine, care),
+            task_handlers=task_handlers(Handlers(departures, lost_runs, engine, care, actions)),
             subscriptions=subscriptions(departures, AfterTurn(services.tasks)),
             periodic_jobs=PERIODIC_JOBS,
             agent_tools=core_tools(pages),

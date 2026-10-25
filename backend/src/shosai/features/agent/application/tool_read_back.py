@@ -27,7 +27,7 @@ from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.budgets import estimate_tokens, over_budget
 from shosai.features.agent.domain.core_tools import READ_RESULT
 from shosai.features.agent.domain.digests import compact
-from shosai.features.agent.domain.wrapper import Label, taint_after, wrap
+from shosai.features.agent.domain.wrapper import Label, wrap
 
 
 @dataclass(frozen=True, slots=True)
@@ -73,7 +73,7 @@ class ResultReader:
         if provenance is not None:
             label = Label.of(provenance)
             text = wrap(text, label, self._work.token)
-            self._work.taint = taint_after(self._work.taint, label)
+            self._work.read_wrapped(label)
         return ReadBack(text, result_id, grew)
 
     @staticmethod

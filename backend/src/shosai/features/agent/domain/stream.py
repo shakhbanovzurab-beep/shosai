@@ -3,9 +3,10 @@
 Every event carries the next number of its run, so a client resumes after the last it saw
 and never sees one twice. A run ends with exactly one terminal event — `run.completed` or
 `run.failed` — after which it streams nothing; `run.paused` is not an end, since an approval
-resumes the same run. A step opens once and closes once, with the activity it showed; the
-activity is a tool's name or one of the reasoning codes, and the cabinet words it, falling
-back to a generic line for one it does not know.
+resumes the same run, but it ends a follower's stream when nothing follows it yet. A step
+opens once and closes once, with the activity it showed; the activity is a tool's name or one
+of the reasoning codes, and the cabinet words it, falling back to a generic line for one it
+does not know.
 """
 
 from collections.abc import Mapping
@@ -37,6 +38,16 @@ class EventKind(StrEnum):
 
 
 TERMINAL: Final = frozenset({EventKind.RUN_COMPLETED, EventKind.RUN_FAILED})
+
+
+def closes_stream(event: StreamEvent, *, followed: bool) -> bool:
+    """Whether a follower stops at the event: at the run's end, or at a pause nothing follows
+    yet — the approval's events come later, on the same run, to a new follower."""
+    if event.kind in TERMINAL:
+        return True
+    return event.kind is EventKind.RUN_PAUSED and not followed
+
+
 _STEP_ENDS: Final = frozenset({EventKind.STEP_COMPLETED, EventKind.STEP_FAILED})
 
 

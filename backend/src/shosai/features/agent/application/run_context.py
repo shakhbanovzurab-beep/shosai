@@ -5,11 +5,12 @@ thread byte for byte, so a provider's prefix cache keeps it; the tools' schemas 
 beside it in the request, in a fixed order (step 6), and a skill (3) joins it with its step.
 Then the thread's summary (5), the newest questions and answers before the question that fit
 5 000 tokens, oldest first (6) — a failed answer's text is left out, a regenerated question's
-earlier answers too, and earlier turns' tool rounds always — and last the volatile part (7:
-the time to the minute in the person's zone, the page and what it shows) with the question
-(8); a page's subject someone else wrote taints the run like a tool's result. The thread and
-the run are read as the person: a deleted thread ends the run before the model is asked, and
-so does a run the sweep ended while it waited for a worker.
+earlier answers too, and earlier turns' tool rounds always; a decided card is a server note
+in registered words — and last the volatile part (7: the time to the minute in the person's
+zone, the page and what it shows) with the question (8); a page's subject someone else wrote
+taints the run like a tool's result. The thread and the run are read as the person: a deleted
+thread ends the run before the model is asked, and so does a run the sweep ended while it
+waited for a worker.
 """
 
 import secrets
@@ -59,7 +60,12 @@ MAX_OUTPUT_TOKENS: Final = 4_096
 HISTORY_ROWS: Final = 60
 # Сколько источников прошлого ответа называется в контексте: остальные — за пределами окна.
 NOTED_SOURCES: Final = 10
-ROLES: Final = {MessageRole.USER.value: Role.USER, MessageRole.ASSISTANT.value: Role.ASSISTANT}
+# Заметка сервера о решении по карточке читается моделью как сообщение-примечание Shosai.
+ROLES: Final = {
+    MessageRole.USER.value: Role.USER,
+    MessageRole.ASSISTANT.value: Role.ASSISTANT,
+    MessageRole.SERVER.value: Role.USER,
+}
 UTC_ZONE: Final = "UTC"
 
 
@@ -183,13 +189,20 @@ class ContextBuilder:
             conditions.append(MESSAGE.id != thread.summary_upto)
         rows = (
             await session.execute(
-                select(MESSAGE.id, MESSAGE.role, MESSAGE.text, MESSAGE.tokens, MESSAGE.sources)
+                select(
+                    MESSAGE.id,
+                    MESSAGE.role,
+                    MESSAGE.text,
+                    MESSAGE.tokens,
+                    MESSAGE.sources,
+                    MESSAGE.digest,
+                )
                 .where(*conditions)
                 .order_by(MESSAGE.created_at.desc(), MESSAGE.id.desc())
                 .limit(HISTORY_ROWS)
             )
         ).all()
-        texts = [with_sources(row.text, row.sources) for row in rows]
+        texts = [said(row.role, row.text, row.digest, row.sources) for row in rows]
         sizes = [row.tokens + estimate_tokens(text) - estimate_tokens(row.text)
                  for row, text in zip(rows, texts, strict=True)]  # fmt: skip
         kept = recent_window(sizes, cap(6))
@@ -218,6 +231,15 @@ class ContextBuilder:
                 if digest.label is not None and labels is not None:
                     labels.append(digest.label)
         return VOLATILE.format(context=clip("\n".join(lines), cap(7)))
+
+
+def said(role: str, text: str, digest: dict[str, Any] | None, sources: list[dict[str, Any]]) -> str:
+    """A message as the model reads it again: a server note in its registered words, an answer
+    with what its numbers stood for."""
+    if role == MessageRole.SERVER.value:
+        note = (digest or {}).get("text")
+        return note if isinstance(note, str) else ""
+    return with_sources(text, sources)
 
 
 def with_sources(text: str, sources: list[dict[str, Any]]) -> str:

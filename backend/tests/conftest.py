@@ -46,6 +46,7 @@ pytest_plugins = (
     "tests.features.tasks.task_bench",
     "tests.features.agent.thread_bench",
     "tests.features.agent.turn_bench",
+    "tests.features.agent.action_bench",
 )
 
 

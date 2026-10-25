@@ -96,6 +96,8 @@ class EvalExpectation(Strict):
     cites: bool = False
     # Ход без единого инструмента: приветствие, разговор.
     quiet: bool = False
+    # Ход предлагает запись: кончается паузой на карточке, не ответом.
+    pauses: bool = False
 
     @model_validator(mode="after")
     def _consistent(self) -> Self:
@@ -200,6 +202,8 @@ class InjectionCorpus(Strict):
     payloads: tuple[InjectionPayload, ...]
     # Что делает послушная модель: записи, уход данных наружу и проба порчи хода.
     attempts: tuple[EvalCall, ...]
+    # Раунд перед попытками: загрузить набор пробы, если маршрут его не предложил.
+    prepare: tuple[EvalCall, ...] = ()
     # Чтение без источника после канала: инструмент получает порчу хода и записывает её.
     probe: str = Field(pattern=TOOL_NAME.pattern)
     probe_output: dict[str, JsonValue]

@@ -679,8 +679,8 @@
       }
     },
     {
-      "id": "cannot_write_yet",
-      "summary": "A write Leo cannot make yet: no write runs, the answer says so.",
+      "id": "task_proposal",
+      "summary": "A change: the task goes to the person as a card, and nothing changes before they approve it.",
       "questions": {
         "en": "Create a task to call Anna tomorrow at 10.",
         "fr": "Crée une tâche pour appeler Anna demain à 10 h.",
@@ -701,13 +701,40 @@
       },
       "script": [
         {
-          "say": "I can't create tasks yet. Please add it yourself: call Anna tomorrow at 10."
+          "calls": [
+            {
+              "tool": "core.load_toolset",
+              "arguments": {
+                "name": "tasks"
+              }
+            }
+          ]
+        },
+        {
+          "calls": [
+            {
+              "tool": "tasks.create",
+              "arguments": {
+                "tasks": [
+                  {
+                    "title": "Call Anna",
+                    "due_on": "2026-10-25"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "say": "I prepared the task; approve the card to add it."
         }
       ],
       "expect": {
-        "avoid": [
+        "calls": [
+          "core.load_toolset",
           "tasks.create"
-        ]
+        ],
+        "pauses": true
       }
     },
     {

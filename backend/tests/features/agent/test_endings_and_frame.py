@@ -4,6 +4,7 @@ import ast
 import uuid
 from pathlib import Path
 from typing import Final
+from uuid import UUID
 
 from hypothesis import given
 from hypothesis import strategies as st
@@ -81,6 +82,9 @@ class Steps:
         self.order.append("tools")
         assert answer.tool_calls == (CALL,)
         return request
+
+    def paused(self) -> UUID | None:
+        return None
 
 
 async def test_the_frame_loops_through_tools_until_the_model_answers() -> None:

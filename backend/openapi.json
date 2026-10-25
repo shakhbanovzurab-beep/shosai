@@ -11854,6 +11854,146 @@
           }
         }
       }
+    },
+    "/v1/agent/actions/{action_id}/approve": {
+      "post": {
+        "tags": [
+          "agent"
+        ],
+        "summary": "Approve Action",
+        "description": "Approve the card; its outcome within 20 s, or `executing`.",
+        "operationId": "approve_action_v1_agent_actions__action_id__approve_post",
+        "parameters": [
+          {
+            "name": "action_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Action Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent/actions/{action_id}/reject": {
+      "post": {
+        "tags": [
+          "agent"
+        ],
+        "summary": "Reject Action",
+        "description": "Reject the card; nothing is changed.",
+        "operationId": "reject_action_v1_agent_actions__action_id__reject_post",
+        "parameters": [
+          {
+            "name": "action_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Action Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -11942,6 +12082,111 @@
         ],
         "title": "ActionItemOut",
         "description": "An action item of Leo's write-up."
+      },
+      "ActionOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "tool": {
+            "type": "string",
+            "title": "Tool"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PublicStatus"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome",
+            "description": "The code of an item that did not succeed."
+          },
+          "nonce": {
+            "type": "string",
+            "title": "Nonce"
+          },
+          "warning": {
+            "type": "boolean",
+            "title": "Warning",
+            "description": "Approve on the screen only, after a careful look."
+          },
+          "taint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Taint",
+            "description": "The label of the text the run read before it."
+          },
+          "reversibility": {
+            "type": "string",
+            "title": "Reversibility"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "resolved_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved At"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id",
+            "description": "The run whose stream carries the outcome."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "tool",
+          "status",
+          "outcome",
+          "nonce",
+          "warning",
+          "taint",
+          "reversibility",
+          "created_at",
+          "expires_at",
+          "resolved_at",
+          "run_id"
+        ],
+        "title": "ActionOut",
+        "description": "A card as it stands after the decision."
       },
       "ActionReason": {
         "properties": {
@@ -13971,6 +14216,23 @@
         ],
         "title": "DayRule",
         "description": "Every day."
+      },
+      "DecisionBody": {
+        "properties": {
+          "nonce": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Nonce"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nonce"
+        ],
+        "title": "DecisionBody",
+        "description": "The nonce of the card the person decided on."
       },
       "DeletionRequest": {
         "properties": {
@@ -18782,6 +19044,21 @@
         ],
         "title": "ProvidersAnswer",
         "description": "The providers this visitor sees, and what their widgets need."
+      },
+      "PublicStatus": {
+        "type": "string",
+        "enum": [
+          "proposed",
+          "executing",
+          "succeeded",
+          "partially_succeeded",
+          "failed",
+          "rejected",
+          "expired",
+          "outcome_unknown"
+        ],
+        "title": "PublicStatus",
+        "description": "The status the cabinet's card shows (`LeoProposal.status`)."
       },
       "QuotaSnapshot": {
         "properties": {

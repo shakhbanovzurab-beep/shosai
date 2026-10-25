@@ -34,6 +34,7 @@ from shosai.core.kernel.ids import new_id
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.tasks.declaration import TaskDeclaration
+from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.eval_model import RecordingModel, tools_text
 from shosai.features.agent.application.eval_observe import observed_turn
 from shosai.features.agent.application.eval_stage import EvalStage, EvalTools, scenario_problems
@@ -148,7 +149,7 @@ class EvalRunner:
         self._telemetry = EvalTelemetry()
         tools = ToolParts(
             pages, RunSources(transactions, ports), asyncio.Semaphore(services.tool_calls_at_once),
-            ToolMetrics(CollectorRegistry()), NoOpTracer(),
+            ToolMetrics(CollectorRegistry()), NoOpTracer(), ActionProposer(transactions),
         )  # fmt: skip
         # Модель у каждого хода своя, за записью; остальное движку оценки общее.
         self._parts_with = partial(
@@ -218,14 +219,14 @@ class EvalRunner:
             Subject(SubjectKind(subject.kind), subject.id) if subject is not None else None,
         )
         request = TurnRequest(scenario.question(language), language, supersede=False, page=page)
-        before = len(staged.runs)
+        before, proposed = len(staged.runs), len(staged.proposed)
         run_id = await self._starter.start(principal, thread_id, request, new_id().hex)
         events = await self._run_log.after(run_id, 0)
         first = recording.requests[0] if recording.requests else None
         return observed_turn(
             events,
             recording,
-            tuple(staged.runs[before:]),
+            (tuple(staged.runs[before:]), tuple(staged.proposed[proposed:])),
             (
                 self._telemetry.sizes.pop(run_id, {}),
                 text_of(first.messages[0]) if first is not None else "",

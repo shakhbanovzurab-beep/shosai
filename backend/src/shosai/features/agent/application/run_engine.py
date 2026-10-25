@@ -29,8 +29,15 @@ from shosai.features.agent.application.run_steps import RunState, RunSteps
 from shosai.features.agent.application.run_telemetry import TurnTimes
 from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
-from shosai.features.agent.domain.endings import Ending, answered, cancelled, failed, stopped
-from shosai.features.agent.domain.runs import TURN_DEADLINE, RunFailure
+from shosai.features.agent.domain.endings import (
+    Ending,
+    answered,
+    cancelled,
+    failed,
+    paused,
+    stopped,
+)
+from shosai.features.agent.domain.runs import PAUSED_LOG, TURN_DEADLINE, RunFailure, RunStatus
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.turn_graph import TurnAnswer, run_turn
 
@@ -123,6 +130,8 @@ class RunEngine:
             if work.cancelled() and current is not None and current.cancelling() == 0:
                 return stopped()
             raise
+        if kept.paused is not None:
+            return paused(kept.paused)
         return answered(truncated=kept.truncated)
 
     async def _finish(self, state: RunState, ending: Ending) -> None:
@@ -141,6 +150,9 @@ class RunEngine:
             if recorded is not None:
                 self._parts.telemetry.ended(payload, (recorded, answer), times, now)
                 await state.emitter.emit(*recorded.terminal(payload.reply_id))
+                if recorded.status is RunStatus.PAUSED:
+                    # Решение по карточке продолжит тот же журнал: он живёт, пока карточка ждёт.
+                    await self._parts.run_log.hold(payload.run_id, PAUSED_LOG)
         except REDIS_FAILURES as error:
             # Конец записан в базе; поток клиента возьмёт его оттуда, если журнал недоступен.
             log.warning("Конец хода Leo не попал в журнал", error_type=type(error).__name__)

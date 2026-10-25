@@ -22,7 +22,7 @@ from shosai.core.ai.requests import ToolCall
 from shosai.core.ai.results import Usage
 from shosai.features.agent.application.tool_offer import TurnOffer
 from shosai.features.agent.domain.sources import SourceLedger
-from shosai.features.agent.domain.wrapper import BOUNDARY_BYTES, boundary
+from shosai.features.agent.domain.wrapper import BOUNDARY_BYTES, Label, boundary, taint_after
 from shosai.features.agent.infrastructure.turn_graph import ModelAnswer
 
 DETAIL_MAX: Final = 80
@@ -94,6 +94,10 @@ class RunWork:
     token: str = field(default_factory=lambda: boundary(secrets.token_bytes(BOUNDARY_BYTES)))
     offer: TurnOffer | None = None
     taint: Taint = Taint.NONE
+    # Метки обёрнутого текста, который прочёл ход: из них карточка называет, по чему готовилась.
+    taint_sources: list[str] = field(default_factory=list)
+    # Предложенная запись: ход встаёт на паузу до решения человека.
+    proposed: UUID | None = None
     answers: list[ModelAnswer] = field(default_factory=list)
     rounds: list[Round] = field(default_factory=list)
     steps: list[Step] = field(default_factory=list)
@@ -102,6 +106,12 @@ class RunWork:
     spaces: dict[UUID, str] | None = None
     spaces_read: asyncio.Lock = field(default_factory=asyncio.Lock)
     opened: int = field(default=0, init=False)
+
+    def read_wrapped(self, label: Label) -> None:
+        """Wrapped text entered the context: the run's taint rises, the label is noted."""
+        self.taint = taint_after(self.taint, label)
+        if label.text not in self.taint_sources:
+            self.taint_sources.append(label.text)
 
     def open_step(self) -> int:
         """The next step's number."""

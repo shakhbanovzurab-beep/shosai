@@ -23,6 +23,7 @@ from shosai.features.agent.domain.eval_cases import EvalExpectation
 FIRST_ROUND_TOKENS: Final = 12_000
 COST_TOLERANCE: Final = 0.10
 ANSWERED: Final = "answered"
+PAUSED: Final = "paused"
 CITATION: Final = re.compile(r"\[\d{1,2}\]")
 
 
@@ -48,6 +49,15 @@ class ModelCall:
 
 
 @dataclass(frozen=True, slots=True)
+class Card:
+    """A card the turn proposed, as its stream showed it."""
+
+    tool: str
+    warning: bool
+    taint: str | None
+
+
+@dataclass(frozen=True, slots=True)
 class Observed:
     """One turn of a scenario, seen from outside."""
 
@@ -65,6 +75,10 @@ class Observed:
     # Голова контекста и схемы инструментов первого вызова: стабильны от хода к ходу.
     head: str = ""
     tools_schema: str = ""
+    # Карточки, которые ход предложил: инструмент, предупреждение и метка порчи.
+    cards: tuple[Card, ...] = ()
+    # Записи, которые срез спланировал для карточек, с аргументами: их видит судья.
+    proposed: tuple[ToolRun, ...] = ()
 
     def ran(self, tool: str) -> tuple[ToolRun, ...]:
         """The calls of a tool that ran."""
@@ -113,6 +127,15 @@ def tool_problems(expect: EvalExpectation, observed: Observed, *, exact: bool) -
     return problems
 
 
+def not_run(reads: Sequence[str], observed: Observed) -> list[str]:
+    """Expected reads the model called but no tool answered: refused, never offered."""
+    return [
+        f"{tool} was called but did not run"
+        for tool in reads
+        if tool in observed.attempted and not observed.ran(tool)
+    ]
+
+
 def argument_problems(expect: EvalExpectation, observed: Observed) -> list[str]:
     """Fields of the first run of each tool that differ from what the scenario expects."""
     problems = []
@@ -135,11 +158,15 @@ def same_value(got: JsonValue, wanted: JsonValue) -> bool:
 
 
 def answer_problems(expect: EvalExpectation, observed: Observed) -> list[str]:
-    """What the answer lacks: an end as answered, its words, its citations."""
+    """What the answer lacks: an end as answered — or paused on its card when the scenario
+    proposes a write — its words, its citations."""
     problems = []
-    if observed.outcome != ANSWERED:
+    if expect.pauses:
+        if observed.outcome != PAUSED or not observed.cards:
+            problems.append(f"turn ended {observed.outcome} without its card")
+    elif observed.outcome != ANSWERED:
         problems.append(f"turn ended {observed.outcome}")
-    if not observed.answer.strip():
+    if not expect.pauses and not observed.answer.strip():
         problems.append("empty answer")
     text = observed.answer.casefold()
     absent = [word for word in expect.mentions if word.casefold() not in text]

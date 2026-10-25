@@ -33,6 +33,7 @@ from shosai.core.pagination.cursor import CursorCodec
 from shosai.core.pagination.keyset import Keyset
 from shosai.core.pagination.page import Page, PageRequest, page_of
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.agent.application.action_rows import supersede_cards
 from shosai.features.agent.domain.threads import (
     ScopeKind,
     ThreadRuleError,
@@ -241,6 +242,7 @@ async def erase_threads(session: AsyncSession, user_id: UUID, thread_ids: Collec
     """Delete a person's threads with what goes with them; how many went."""
     if not thread_ids:
         return 0
+    await supersede_cards(session, user_id, thread_ids)
     runs = select(AgentRunRecord.id).where(AgentRunRecord.thread_id.in_(thread_ids))
     results = AgentToolResultRecord
     await session.execute(

@@ -2928,6 +2928,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agent/actions/{action_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Approve Action
+         * @description Approve the card; its outcome within 20 s, or `executing`.
+         */
+        post: operations["approve_action_v1_agent_actions__action_id__approve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/actions/{action_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reject Action
+         * @description Reject the card; nothing is changed.
+         */
+        post: operations["reject_action_v1_agent_actions__action_id__reject_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2976,6 +3016,56 @@ export interface components {
             done: boolean;
             /** Sourcesegmentid */
             sourceSegmentId: string | null;
+        };
+        /**
+         * ActionOut
+         * @description A card as it stands after the decision.
+         */
+        ActionOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Tool */
+            tool: string;
+            status: components["schemas"]["PublicStatus"];
+            /**
+             * Outcome
+             * @description The code of an item that did not succeed.
+             */
+            outcome: string | null;
+            /** Nonce */
+            nonce: string;
+            /**
+             * Warning
+             * @description Approve on the screen only, after a careful look.
+             */
+            warning: boolean;
+            /**
+             * Taint
+             * @description The label of the text the run read before it.
+             */
+            taint: string | null;
+            /** Reversibility */
+            reversibility: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Resolved At */
+            resolved_at: string | null;
+            /**
+             * Run Id
+             * @description The run whose stream carries the outcome.
+             */
+            run_id: string | null;
         };
         /**
          * ActionReason
@@ -3793,6 +3883,14 @@ export interface components {
              * @enum {string}
              */
             every: "day";
+        };
+        /**
+         * DecisionBody
+         * @description The nonce of the card the person decided on.
+         */
+        DecisionBody: {
+            /** Nonce */
+            nonce: string;
         };
         /**
          * DeletionRequest
@@ -5679,6 +5777,12 @@ export interface components {
             /** Vk Client Id */
             vk_client_id?: string | null;
         };
+        /**
+         * PublicStatus
+         * @description The status the cabinet's card shows (`LeoProposal.status`).
+         * @enum {string}
+         */
+        PublicStatus: "proposed" | "executing" | "succeeded" | "partially_succeeded" | "failed" | "rejected" | "expired" | "outcome_unknown";
         /**
          * QuotaSnapshot
          * @description Recording minutes left; billing fills it.
@@ -14015,6 +14119,80 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    approve_action_v1_agent_actions__action_id__approve_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                action_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisionBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActionOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    reject_action_v1_agent_actions__action_id__reject_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                action_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisionBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActionOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

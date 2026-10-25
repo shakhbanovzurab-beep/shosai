@@ -83,6 +83,8 @@ _TRANSITIONS: Final[dict[tuple[ActionStatus, ActionEvent], ActionStatus]] = {
     (ActionStatus.EXECUTING, ActionEvent.LOSE): ActionStatus.OUTCOME_UNKNOWN,
     # Исполнитель не взял одобренное (процесс упал до захвата): исход неизвестен, не повтор.
     (ActionStatus.APPROVED, ActionEvent.LOSE): ActionStatus.OUTCOME_UNKNOWN,
+    # Одобренное так и не взяли за отведённое время: ничего не начиналось — это отказ.
+    (ActionStatus.APPROVED, ActionEvent.FAIL): ActionStatus.FAILED,
 }
 
 
@@ -119,6 +121,20 @@ def finishing_event(outcomes: Collection[ItemOutcome]) -> ActionEvent:
     if succeeded == len(outcomes):
         return ActionEvent.SUCCEED
     return ActionEvent.SUCCEED_PARTLY if succeeded else ActionEvent.FAIL
+
+
+class AuditEvent(StrEnum):
+    """What an action's audit row records (`agent_audit.event`)."""
+
+    PROPOSED = "proposed"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+    EXPIRED = "expired"
+    SUPERSEDED = "superseded"
+    # Пункт подействовал: строку пишет событие среза `agent.action_item.executed`.
+    EXECUTED = "executed"
+    FAILED = "failed"
+    OUTCOME_UNKNOWN = "outcome_unknown"
 
 
 class ProposalOrigin(StrEnum):

@@ -3,7 +3,8 @@
 The model is offered the slices' real tools — their specs, schemas and descriptions, exactly as
 a turn offers them — but a call reaches the scenario instead of the slice: its arguments are
 checked by the real input schema, its answer by the real output schema, and every call that
-reaches a tool is recorded with the run's taint at that moment. A write runs only if the
+reaches a tool is recorded with the run's taint at that moment. A write call is recorded as
+proposed once its slice plans it — the card the person would decide on — and runs only if the
 Action Gateway executes it; the eval never approves one, so an executed write is a finding.
 A scenario's data is checked against the specs before it runs, so a stale scenario fails
 loudly instead of quietly answering with an error.
@@ -37,11 +38,13 @@ EVAL_PREVIEW = "agent.eval.write"
 
 @dataclass
 class Staged:
-    """One person's run: the scenario, the language, and the calls that reached a tool."""
+    """One person's run: the scenario, the language, the calls that reached a tool and the
+    writes proposed as cards."""
 
     scenario: EvalScenario
     language: str
     runs: list[ToolRun] = field(default_factory=list)
+    proposed: list[ToolRun] = field(default_factory=list)
 
 
 class EvalStage:
@@ -91,16 +94,17 @@ class EvalTools:
     def _staged(
         self, context: ToolContext, spec: ToolSpec[Any, Any], arguments: BaseModel
     ) -> Staged:
-        """The caller's run, with this call recorded."""
+        """The caller's run, with this call recorded as run."""
+        staged = self._caller(context, spec)
+        staged.runs.append(call_of(spec, arguments, context))
+        return staged
+
+    def _caller(self, context: ToolContext, spec: ToolSpec[Any, Any]) -> Staged:
         person = context.scope.user_id
         staged = self._stage.of(person) if person is not None else None
         if staged is None:
             message = f"инструмент {spec.name} вызван вне оценки"
             raise LookupError(message)
-        argument_values = arguments.model_dump(mode="json")
-        staged.runs.append(
-            ToolRun(spec.name, spec.effect.value, argument_values, int(context.taint))
-        )
         return staged
 
     def _run(self, spec: ToolSpec[Any, Any]) -> RunHandler[Any, Any]:
@@ -119,7 +123,7 @@ class EvalTools:
 
     def _write(self, spec: ToolSpec[Any, Any]) -> WriteTool[Any, Any]:
         async def plan(arguments: BaseModel, context: ToolContext) -> PlannedEffect | ToolError:
-            del context
+            self._caller(context, spec).proposed.append(call_of(spec, arguments, context))
             return PlannedEffect(targets=(spec.name,), data=arguments.model_dump(mode="json"))
 
         async def preview(planned: PlannedEffect, context: ToolContext) -> Preview:
@@ -134,6 +138,13 @@ class EvalTools:
             return ToolResult.failed(ToolErrorCode.FAILED)
 
         return WriteTool(spec, plan, preview, execute)
+
+
+def call_of(spec: ToolSpec[Any, Any], arguments: BaseModel, context: ToolContext) -> ToolRun:
+    """A call as the eval records it: its arguments as validated, the run's taint."""
+    return ToolRun(
+        spec.name, spec.effect.value, arguments.model_dump(mode="json"), int(context.taint)
+    )
 
 
 def scenario_problems(scenario: EvalScenario, tools: Mapping[str, AgentTool]) -> list[str]:

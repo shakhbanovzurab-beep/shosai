@@ -1,0 +1,94 @@
+"""A write the model calls, proposed as a card for the person to decide (Leo §5.3, §8.4).
+
+The write's slice plans it — freezing the exact targets and the data its `execute` reads back,
+or refusing with a typed error the model can act on — and previews it for the card. The card's
+friction follows AG-D7's rule: a warning, approved on the screen only, when the run read text
+someone else wrote or the write cannot be undone. One transaction stores the action as
+`proposed` with its nonce and its hour, and audits the proposal; nothing is written to the
+slice's data until the person approves.
+"""
+
+import secrets
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import UTC, datetime
+from typing import Any
+
+from pydantic import BaseModel
+
+from shosai.core.agent_tools.bindings import WriteTool
+from shosai.core.agent_tools.context import ToolContext
+from shosai.core.agent_tools.results import ToolError
+from shosai.core.agent_tools.spec import Reversibility
+from shosai.core.db.transactions import HomeTransactions
+from shosai.core.kernel.ids import new_id
+from shosai.features.agent.application.action_rows import AuditEntry, audit
+from shosai.features.agent.application.run_work import RunWork
+from shosai.features.agent.application.turn_task import TurnPayload
+from shosai.features.agent.domain.action_items import ActionItem, redacted
+from shosai.features.agent.domain.actions import (
+    NONCE_BYTES,
+    ActionStatus,
+    AuditEvent,
+    ProposalOrigin,
+    expires_at,
+)
+from shosai.features.agent.domain.friction import friction_rule
+from shosai.features.agent.infrastructure.run_records import AgentActionRecord
+
+
+@dataclass(frozen=True, slots=True)
+class Proposed:
+    """The stored action and its one item."""
+
+    record: AgentActionRecord
+    item: ActionItem
+
+
+class ActionProposer:
+    """Turns a model's write call into a stored proposal."""
+
+    def __init__(
+        self,
+        transactions: HomeTransactions,
+        clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+    ) -> None:
+        self._transactions = transactions
+        self._clock = clock
+
+    async def propose(
+        self,
+        write: WriteTool[Any, Any],
+        arguments: BaseModel,
+        context: ToolContext,
+        run: tuple[TurnPayload, RunWork],
+    ) -> Proposed | ToolError:
+        """The stored proposal, or the slice's refusal to plan it."""
+        payload, work = run
+        spec = write.spec
+        planned = await write.plan(arguments, context)
+        if isinstance(planned, ToolError):
+            return planned
+        preview = await write.preview(planned, context)
+        reversibility = spec.reversibility or Reversibility.REVERSIBLE
+        item = ActionItem(
+            tool=spec.name, targets=planned.targets, plan=dict(planned.data),
+            fields=redacted(arguments.model_dump(mode="json")), preview_key=preview.key,
+            preview_params=dict(preview.params), reversibility=reversibility.value,
+        )  # fmt: skip
+        now = self._clock()
+        record = AgentActionRecord(
+            id=new_id(), user_id=payload.user_id, org_id=None, thread_id=payload.thread_id,
+            run_id=payload.run_id, message_id=payload.reply_id,
+            origin=ProposalOrigin.TURN.value, origin_key=None,
+            status=ActionStatus.PROPOSED.value, nonce=secrets.token_urlsafe(NONCE_BYTES),
+            items=[item.stored()], friction=int(friction_rule(work.taint, reversibility)),
+            taint=int(work.taint), taint_sources=list(work.taint_sources), not_before=None,
+            expires_at=expires_at(now, ProposalOrigin.TURN), created_at=now, updated_at=now,
+        )  # fmt: skip
+        async with self._transactions.begin(payload.scope()) as session:
+            session.add(record)
+            await session.flush()
+            entry = AuditEntry(AuditEvent.PROPOSED, tool=spec.name, targets=len(item.targets))
+            audit(session, record, entry, now)
+        return Proposed(record, item)

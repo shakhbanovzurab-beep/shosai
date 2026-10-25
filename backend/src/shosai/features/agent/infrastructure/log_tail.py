@@ -24,7 +24,7 @@ from redis.asyncio import Redis
 from redis.typing import KeyT, StreamIdT
 
 from shosai.core.kv.connection import REDIS_FAILURES
-from shosai.features.agent.domain.stream import TERMINAL, StreamEvent
+from shosai.features.agent.domain.stream import StreamEvent, closes_stream
 from shosai.features.agent.infrastructure.run_keys import log_key, wake_key
 from shosai.features.agent.infrastructure.run_log import RunLog, entry_id, event_of, streams_of
 
@@ -66,13 +66,15 @@ class LogTail:
     async def follow(
         self, run_id: UUID, after: int, silence: Silence | None = None
     ) -> AsyncIterator[StreamEvent]:
-        """The run's events after number `after`, until its terminal event; after each
-        `silence.after` without one, `silence.ask` may end the stream with an event."""
+        """The run's events after number `after`, until its terminal event or a pause nothing
+        follows yet; after each `silence.after` without one, `silence.ask` may end the stream
+        with an event."""
         follower = Follower(run_id, after)
-        for event in await self._log.after(run_id, after):
+        kept = await self._log.after(run_id, after)
+        for index, event in enumerate(kept):
             follower.seq = event.seq
             yield event
-            if event.kind in TERMINAL:
+            if closes_stream(event, followed=index < len(kept) - 1):
                 return
         self._followers.add(follower)
         try:
@@ -82,7 +84,7 @@ class LogTail:
                 if came is None:
                     continue
                 yield came
-                if came.kind in TERMINAL:
+                if closes_stream(came, followed=False):
                     return
         finally:
             self._followers.discard(follower)

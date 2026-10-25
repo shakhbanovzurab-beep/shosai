@@ -76,10 +76,11 @@ class RunEmitter:
     order, since the log takes each number only after the one before.
     """
 
-    def __init__(self, run_log: RunLog, run_id: UUID) -> None:
+    def __init__(self, run_log: RunLog, run_id: UUID, after: int = 1) -> None:
         self._log = run_log
         self._run_id = run_id
-        self._ledger = StreamLedger(seq=1)
+        # Номер последнего события журнала: `run.started` для нового хода, больше — для решения.
+        self._ledger = StreamLedger(seq=after)
         self._order = asyncio.Lock()
 
     async def emit(self, kind: EventKind, data: EventData) -> StreamEvent:

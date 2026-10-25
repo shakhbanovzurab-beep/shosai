@@ -35,6 +35,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kv.metrics import KeyValueMetrics
 from shosai.core.kv.rate_limits import RateLimit, RateLimiter
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.model_stream import Pace
 from shosai.features.agent.application.result_pages import ResultPages
@@ -118,6 +119,7 @@ class TurnBench:
     # Реестр метрик стенда и снятые спаны: тесты телеметрии читают их.
     observed: tuple[CollectorRegistry, InMemorySpanExporter]
     tools: ProbeTools
+    catalog: AgentToolCatalog
 
     @property
     def connection(self) -> Connection:
@@ -205,7 +207,10 @@ async def turn_bench(
     catalog = AgentToolCatalog()
     catalog.install([*core_tools(pages), *tools.bound()])
     sources = RunSources(homes.transactions, ports)
-    tool_parts = ToolParts(pages, sources, asyncio.Semaphore(4), ToolMetrics(registry), tracer)
+    tool_parts = ToolParts(
+        pages, sources, asyncio.Semaphore(4), ToolMetrics(registry), tracer,
+        ActionProposer(homes.transactions),
+    )  # fmt: skip
     parts = EngineParts(
         homes.transactions, model, ROUTE, run_log, leases, fleet, runs, outbox, turn_graph(),
         ContextBuilder(ports), TurnRouting(ToolRegistry(catalog), ports), tool_parts, telemetry,
@@ -232,7 +237,7 @@ async def turn_bench(
         async with client_of(build_probe_app(extra=routers).app) as http:
             yield TurnBench(
                 http, homes, valkey, model, queue, terms, parts, run_slot, meetings,
-                (registry, spans), tools,
+                (registry, spans), tools, catalog,
             )  # fmt: skip
             await queue.settle()
     finally:

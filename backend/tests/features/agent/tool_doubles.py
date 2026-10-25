@@ -18,7 +18,13 @@ from pydantic import BaseModel, ConfigDict, Field, create_model
 from shosai.core.agent_tools.bindings import AgentTool, ReadTool, WriteTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.provenance import Provenance
-from shosai.core.agent_tools.results import PlannedEffect, Preview, ToolResult
+from shosai.core.agent_tools.results import (
+    PlannedEffect,
+    Preview,
+    ToolError,
+    ToolErrorCode,
+    ToolResult,
+)
 from shosai.core.agent_tools.sources import SourceRef
 from shosai.core.agent_tools.spec import Reversibility, ToolEffect, ToolSpec
 from shosai.core.ai.calls import ModelRef, Provider
@@ -100,6 +106,11 @@ class ProbeTools:
 
     items: list[str] = field(default_factory=lambda: ["Budget review: travel cut by 20%"])
     ran: list[str] = field(default_factory=list)
+    # Ключи пунктов, которые запись действительно применила.
+    executed: list[str] = field(default_factory=list)
+    # Ворота записи: тест держит её посреди эффекта, чтобы «уронить» исполнителя.
+    effect_gate: asyncio.Event = field(default_factory=asyncio.Event)
+    refuse_plan: bool = False
     # Источники, которые называет каждый поиск.
     sources: list[SourceRef] = field(default_factory=list)
 
@@ -127,22 +138,30 @@ class ProbeTools:
         message = "сбой инструмента-зонда"
         raise RuntimeError(message)
 
+    def __post_init__(self) -> None:
+        self.effect_gate.set()
+
     def bound(self) -> tuple[AgentTool, ...]:
         """Every probe tool with its handler."""
 
-        async def plan(arguments: Query, context: ToolContext) -> PlannedEffect:
-            del arguments, context
-            return PlannedEffect(targets=("probe",))
+        async def plan(arguments: Query, context: ToolContext) -> PlannedEffect | ToolError:
+            del context
+            if self.refuse_plan:
+                return ToolError(ToolErrorCode.FORBIDDEN)
+            return PlannedEffect(targets=("probe",), data={"query": arguments.query})
 
         async def preview(planned: PlannedEffect, context: ToolContext) -> Preview:
             del planned, context
-            return Preview("agent.tasks.probe")
+            return Preview("agent.tasks.probe", {"count": 1})
 
         async def execute(
             planned: PlannedEffect, context: ToolContext, key: str
         ) -> ToolResult[Found]:
-            del planned, context, key
-            return ToolResult(Found(items=[]))
+            del context
+            await self.effect_gate.wait()
+            if key not in self.executed:
+                self.executed.append(key)
+            return ToolResult(Found(items=[str(planned.data.get("query"))]))
 
         searches = (NOTES_SEARCH, TASKS_SEARCH, FILES_SEARCH)
         return (

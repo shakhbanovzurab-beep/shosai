@@ -4,16 +4,17 @@ Every bound tool of the process is in core's catalog, installed once all slices 
 registry reads it on the first turn and groups the tools by toolset in a fixed order — core,
 notes, tasks, files, account, then any other in the order it was bound — at most eight to a
 toolset. Each name is spelled for the wire (`notes__search`: providers allow no dot), and its
-schema is measured once. Until the Action Gateway (step 9a) only reads and cabinet actions are
-offered: a write needs its card, and an egress tool its card once the run is tainted. A tool
-behind a switch the person turned off, or an entitlement their plan lacks, is never offered.
+schema is measured once. Reads, cabinet actions and writes are offered; a write's call becomes
+a card through the Action Gateway (step 9a), never an effect, and egress tools wait for their
+card once the run is tainted. A tool behind a switch the person turned off, or an entitlement
+their plan lacks, is never offered.
 """
 
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any, Final
 
-from shosai.core.agent_tools.bindings import AgentTool
+from shosai.core.agent_tools.bindings import AgentTool, WriteTool
 from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.agent_tools.spec import ToolEffect, ToolSpec
 from shosai.core.ai.requests import ToolSchema
@@ -23,7 +24,7 @@ from shosai.features.agent.domain.routing import CORE
 
 TOOLSET_ORDER: Final[tuple[str, ...]] = (CORE, "notes", "tasks", "files", "account")
 TOOLS_PER_TOOLSET: Final = 8
-OFFERED_EFFECTS: Final = frozenset({ToolEffect.READ, ToolEffect.CLIENT})
+OFFERED_EFFECTS: Final = frozenset({ToolEffect.READ, ToolEffect.CLIENT, ToolEffect.WRITE})
 WIRE_DOT: Final = "__"
 SOURCES_FIELD: Final = "sources"
 
@@ -124,6 +125,11 @@ def toolsets_of(catalog: AgentToolCatalog) -> Toolsets:
             offered(tool) for tool in tools if tool.spec.effect in OFFERED_EFFECTS
         )
     return Toolsets(by_name)
+
+
+def is_write(offered: OfferedTool | None) -> bool:
+    """Whether an offered tool changes data: its call becomes a proposal."""
+    return offered is not None and isinstance(offered.tool, WriteTool)
 
 
 def offered(tool: AgentTool) -> OfferedTool:

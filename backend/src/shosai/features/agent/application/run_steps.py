@@ -13,6 +13,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from datetime import timedelta
+from uuid import UUID
 
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
@@ -26,7 +27,7 @@ from shosai.features.agent.application.tool_round import ToolRound
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.budgets import Segment, round_policy
 from shosai.features.agent.domain.runs import TURN_DEADLINE
-from shosai.features.agent.domain.wrapper import Label, taint_after
+from shosai.features.agent.domain.wrapper import Label
 from shosai.features.agent.infrastructure.prompts import CONCLUDE, LAST_ROUND
 from shosai.features.agent.infrastructure.turn_graph import ModelAnswer
 
@@ -68,7 +69,7 @@ class RunSteps:
         work = self._run.work
         work.offer = offer
         for provenance in labels:
-            work.taint = taint_after(work.taint, Label.of(provenance))
+            work.read_wrapped(Label.of(provenance))
         sizes[Segment.TOOLS] = offer.tokens()
         return request
 
@@ -104,6 +105,10 @@ class RunSteps:
             answer = replace(answer, tool_calls=())
         work.answers.append(answer)
         return answer
+
+    def paused(self) -> UUID | None:
+        """The action the run proposed, if a round did."""
+        return self._run.work.proposed
 
     async def tools(self, request: ChatRequest, answer: ModelAnswer) -> ChatRequest:
         """The conversation with the round's calls and what they returned."""

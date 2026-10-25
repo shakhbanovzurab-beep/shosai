@@ -296,5 +296,13 @@
     "display_name": "Anna Petrova",
     "language": "en",
     "timezone": "Europe/Berlin"
-  }
+  },
+  "prepare": [
+    {
+      "tool": "core.load_toolset",
+      "arguments": {
+        "name": "account"
+      }
+    }
+  ]
 }

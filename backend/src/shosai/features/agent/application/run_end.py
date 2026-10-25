@@ -6,7 +6,8 @@ person saw and the sources the tools named, after the rounds that led to it — 
 message with its calls and each call's answer as the model read it, for the run's record, never
 for later turns' context; a regenerated or edited question's earlier answers and rounds give
 way to it. The thread's last activity moves, and a completed turn is told through the outbox.
-A thread deleted meanwhile turns the end into `cancelled` and keeps nothing.
+A thread deleted meanwhile turns the end into `cancelled` and keeps nothing. A run that proposed
+a write is kept `paused` the same way, its answer so far written, until its action is decided.
 """
 
 from datetime import datetime, timedelta
@@ -66,7 +67,10 @@ async def record_end(
                 RUN.started_at == payload.started_at,
                 RUN.status == RunStatus.RUNNING.value,
             )
-            .values(ended_at=now, **telemetry(payload, (ending, answer), (times, work), now))
+            .values(
+                ended_at=None if ending.status is RunStatus.PAUSED else now,
+                **telemetry(payload, (ending, answer), (times, work), now),
+            )
             .returning(RUN.id)
         )
         if won is None:
