@@ -106,6 +106,7 @@ async def test_a_batch_is_made_whole_once_on_top_of_the_board(task_bench: TaskBe
 
     plan = planned(await tools.creates.plan(args, context(me)))
     preview = await tools.creates.preview(plan, context(me))
+    before = await task_bench.revision(me, uuid.UUID(board_id))
     first = await tools.creates.execute(plan, context(me), "item-1")
     again = await tools.creates.execute(plan, context(me), "item-1")
 
@@ -123,6 +124,8 @@ async def test_a_batch_is_made_whole_once_on_top_of_the_board(task_bench: TaskBe
     assert cards_of(await board(task_bench, me, board_id), 0) == [
         str(t) for t in first.output.task_ids
     ]
+    # Открытая доска принимает её новую версию только с выросшей ревизией.
+    assert await task_bench.revision(me, uuid.UUID(board_id)) == before + 1
 
 
 async def test_one_invalid_task_stops_the_whole_batch(task_bench: TaskBench) -> None:

@@ -30,7 +30,7 @@ from shosai.features.tasks.application.placements import (
     first_column_of,
     place,
 )
-from shosai.features.tasks.application.scoping import rule_failure
+from shosai.features.tasks.application.scoping import raise_revisions, rule_failure
 from shosai.features.tasks.application.task_edits import Edit, TaskEdits
 from shosai.features.tasks.application.task_writes import NewTask, TaskWrites, checked_draft
 from shosai.features.tasks.domain.boards import BOARD_OPEN_CARDS_MAX
@@ -106,7 +106,8 @@ async def make_batch(
 async def _put_on_board(
     session: AsyncSession, viewer: UUID, board_id: UUID, task_ids: Sequence[UUID], now: datetime
 ) -> None:
-    """The new tasks on top of the board's first to-do column, the first of them topmost."""
+    """The new tasks on top of the board's first to-do column, the first of them topmost; the
+    board's revision goes up."""
     column_id = await first_column_of(session, board_id, TaskStatus.TODO)
     if column_id is None:
         message = "у доски нет колонки «к выполнению»"
@@ -116,6 +117,8 @@ async def _put_on_board(
         record = await session.get(TaskRecord, task_id)
         if record is not None:
             await clock_rules.arrived(session, record, (board_id, column_id), now)
+    # Новые карточки — изменение доски: открытая доска примет её версию только с выросшей ревизией.
+    await raise_revisions(session, viewer, task_ids, now)
 
 
 async def _room(session: AsyncSession, viewer: UUID, board_id: UUID, adding: int) -> None:

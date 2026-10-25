@@ -36,7 +36,13 @@ from shosai.features.tasks.application.placements import (
     place,
 )
 from shosai.features.tasks.application.recurring import copy_checklist
-from shosai.features.tasks.application.scoping import Scoping, locked_task, rule_failure, scope_in
+from shosai.features.tasks.application.scoping import (
+    Scoping,
+    locked_task,
+    raise_revisions,
+    rule_failure,
+    scope_in,
+)
 from shosai.features.tasks.application.task_edits import Edit, TaskEdits
 from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import NewTask, TaskWrites
@@ -128,6 +134,8 @@ class Cards:
             made = await session.get(TaskRecord, task_id)
             if made is not None:
                 await clock_rules.arrived(session, made, (board_id, new.column_id), now)
+            # Другая вкладка или устройство увидят новую карточку только по выросшей ревизии.
+            await raise_revisions(session, viewer, [task_id], now)
             view = await self._reads.view(session, viewer, task_id)
         return await self._reads.signed(principal, view)
 

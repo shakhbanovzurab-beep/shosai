@@ -53,9 +53,12 @@ async def test_a_card_is_put_copied_and_moved_with_its_status(task_bench: TaskBe
     todo, doing, done = column_ids(await board(task_bench, me, board_id))
     path = f"/v1/boards/{board_id}/cards"
 
+    before = await task_bench.revision(me, uuid.UUID(board_id))
     first = await task_bench.call(
         me, "POST", path, {"title": "Первая", "column_id": todo, "position": 0}
     )
+    # Новая карточка видна другой вкладке: ревизия доски растёт.
+    assert await task_bench.revision(me, uuid.UUID(board_id)) == before + 1
     on_top = await task_bench.call(
         me, "POST", path, {"title": "Верхняя", "column_id": todo, "position": 0}
     )
