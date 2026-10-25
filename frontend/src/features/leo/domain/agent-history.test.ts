@@ -11,6 +11,7 @@ const row = (id: string, role: AgentMessage["role"], status: AgentMessage["statu
   duration_ms: null,
   steps: [],
   sources: [],
+  artifacts: [],
   actions: [],
 });
 

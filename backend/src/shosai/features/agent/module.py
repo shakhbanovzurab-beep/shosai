@@ -35,6 +35,7 @@ from shosai.features.agent.application.history import History
 from shosai.features.agent.application.lost_runs import LostRuns
 from shosai.features.agent.application.paused_runs import PausedRuns
 from shosai.features.agent.application.preferences import AgentPreferences
+from shosai.features.agent.application.proposal_port import PortProposals
 from shosai.features.agent.application.result_pages import ResultPages
 from shosai.features.agent.application.run_context import ContextBuilder
 from shosai.features.agent.application.run_engine import RunEngine
@@ -57,6 +58,7 @@ from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
 from shosai.features.agent.channels.subscriptions import subscriptions
 from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_handlers
+from shosai.features.agent.contracts import ACTION_PROPOSALS
 from shosai.features.agent.contracts.events import TurnCompleted
 from shosai.features.agent.infrastructure.action_metrics import ActionMetrics
 from shosai.features.agent.infrastructure.fleet import Fleet
@@ -149,6 +151,9 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             queue_companions=(QueueCompanion(TaskQueue.AGENT, lambda: present_in_fleet(fleet)),),
             provides=(
                 ACCOUNT_DATA_HANDLERS.bind(AgentAccountData(transactions, valkey)),
+                ACTION_PROPOSALS.bind(
+                    PortProposals(transactions, (services.agent_tools, cards, threads))
+                ),
                 ME_CONTRIBUTIONS.bind(preferences),
             ),
         )

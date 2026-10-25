@@ -97,6 +97,7 @@ class EarlierWork:
     messages: tuple[ChatMessage, ...] = ()
     text: str = ""
     cards: tuple[UUID, ...] = ()
+    artifacts: tuple[dict[str, JsonValue], ...] = ()
     steps: tuple[Step, ...] = ()
     sources: tuple[SourceRef, ...] = ()
     rounds: int = 0
@@ -119,6 +120,8 @@ class RunWork:
     proposed: UUID | None = None
     # Карточки прогона, прежние вместе: ответ показывает их в истории.
     cards: list[UUID] = field(default_factory=list)
+    # Артефакты, которые отдали инструменты (AG-R1): ссылки, не содержимое.
+    artifacts: list[dict[str, JsonValue]] = field(default_factory=list)
     answers: list[ModelAnswer] = field(default_factory=list)
     rounds: list[Round] = field(default_factory=list)
     steps: list[Step] = field(default_factory=list)
@@ -144,6 +147,7 @@ class RunWork:
         self.opened = max((step.seq for step in earlier.steps), default=0)
         self.sources = SourceLedger(earlier.sources)
         self.cards = list(earlier.cards)
+        self.artifacts = list(earlier.artifacts)
         self.taint = max(self.taint, earlier.taint)
         for label in earlier.taint_sources:
             if label not in self.taint_sources:

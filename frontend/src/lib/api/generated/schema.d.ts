@@ -3266,6 +3266,37 @@ export interface components {
          */
         AnswerStatus: "done" | "stopped" | "failed";
         /**
+         * ArtifactOut
+         * @description A result read apart from the answer: a team chat's digest, by its reference (AG-R1).
+         */
+        ArtifactOut: {
+            /**
+             * Kind
+             * @constant
+             */
+            kind: "chat_digest";
+            /**
+             * Ref
+             * @description The digest's id; the cabinet reads it from chats.
+             */
+            ref: string;
+            /**
+             * Alt
+             * @description What it is, for those who do not see it.
+             */
+            alt: string;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+            /**
+             * Chat Id
+             * Format: uuid
+             */
+            chat_id: string;
+        };
+        /**
          * AssigneeOut
          * @description Who does the task: a member by id and name, or a name as written.
          */
@@ -5161,6 +5192,11 @@ export interface components {
              * @description The cards the answer proposed, as they stand.
              */
             actions: components["schemas"]["ProposalOut"][];
+            /**
+             * Artifacts
+             * @description What the tools handed over, by reference.
+             */
+            artifacts: components["schemas"]["ArtifactOut"][];
         };
         /**
          * Messenger

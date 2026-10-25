@@ -1,8 +1,9 @@
 """A paused run once its card is decided: its epilogue, or its close (Leo §5.3; steps 9a1, 9a2).
 
 Whatever the person decides — approve, reject, or let the card expire — the action lives in
-the database and ends there, and a server note joins the thread in the same transaction: the
-person's history shows the card's end, and Leo reads what happened in plain words. An action
+the database and ends there, and a server note joins the thread in the same transaction — for
+a card a slice put there without a run too: the person's history shows the card's end, and
+Leo reads what happened in plain words. An action
 that ended after an approval hands its paused run to the `agent` queue, which resumes the
 frame for the epilogue; a rejected or expired card closes the run `completed` (`decided`), and
 so does a hand-over that cannot be sent (`checkpoint_lost`). A run a new turn closed already is
@@ -115,7 +116,7 @@ class PausedRuns:
     async def settle(self, session: AsyncSession, record: AgentActionRecord) -> Settled:
         """In the decider's transaction: the note, then the run left for its epilogue or
         closed."""
-        if record.run_id is None or record.thread_id is None:
+        if record.thread_id is None:
             return Settled()
         thread = await session.scalar(
             select(AgentThreadRecord).where(AgentThreadRecord.id == record.thread_id)
@@ -132,6 +133,9 @@ class PausedRuns:
             )
         )  # fmt: skip
         thread.last_activity_at = now
+        if record.run_id is None:
+            # Карточку положил срез без хода (AG-R2): прогона нет, заметка — его конец.
+            return Settled(note_id)
         if resumable(record):
             paused = await session.scalar(
                 select(RUN.id).where(RUN.id == record.run_id, RUN.status == RunStatus.PAUSED.value)

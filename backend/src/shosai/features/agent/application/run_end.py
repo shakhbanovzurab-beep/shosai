@@ -100,6 +100,7 @@ async def record_end(
                         text=text, steps=work.ordered_steps(),
                         sources=kept(work, payload.language), tokens=estimate_tokens(text),
                         duration_ms=millis(now - times.began), action_ids=list(work.cards),
+                        artifacts=list(work.artifacts),
                     )
                 )  # fmt: skip
             thread.last_activity_at = now

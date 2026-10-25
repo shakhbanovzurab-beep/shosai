@@ -26,7 +26,7 @@ from shosai.core.agent_tools.results import (
     ToolErrorCode,
     ToolResult,
 )
-from shosai.core.agent_tools.sources import SourceRef
+from shosai.core.agent_tools.sources import ArtifactRef, SourceRef
 from shosai.core.agent_tools.spec import Reversibility, ToolEffect, ToolSpec
 from shosai.core.ai.calls import ModelRef, Provider
 from shosai.core.ai.requests import ToolCall
@@ -121,12 +121,18 @@ class ProbeTools:
     refuse_plan: bool = False
     # Источники, которые называет каждый поиск.
     sources: list[SourceRef] = field(default_factory=list)
+    # Артефакты, которые отдаёт каждый поиск (AG-R1).
+    artifacts: list[ArtifactRef] = field(default_factory=list)
 
     async def search(self, arguments: Query, context: ToolContext) -> ToolResult[Found]:
         """The items and the sources, once per call."""
         del context
         self.ran.append(arguments.query)
-        return ToolResult(Found(items=list(self.items)), sources=tuple(self.sources))
+        return ToolResult(
+            Found(items=list(self.items)),
+            sources=tuple(self.sources),
+            artifacts=tuple(self.artifacts),
+        )
 
     async def archive(self, arguments: BaseModel, context: ToolContext) -> ToolResult[Found]:
         """The archive's items, noted as one run."""

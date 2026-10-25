@@ -12768,6 +12768,45 @@
         "title": "AnswerStatus",
         "description": "How an answer ended; a failure is never written into the text."
       },
+      "ArtifactOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "chat_digest",
+            "title": "Kind"
+          },
+          "ref": {
+            "type": "string",
+            "title": "Ref",
+            "description": "The digest's id; the cabinet reads it from chats."
+          },
+          "alt": {
+            "type": "string",
+            "title": "Alt",
+            "description": "What it is, for those who do not see it."
+          },
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "chat_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Chat Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "ref",
+          "alt",
+          "workspace_id",
+          "chat_id"
+        ],
+        "title": "ArtifactOut",
+        "description": "A result read apart from the answer: a team chat's digest, by its reference (AG-R1)."
+      },
       "AssigneeOut": {
         "properties": {
           "user_id": {
@@ -17245,6 +17284,14 @@
             "type": "array",
             "title": "Actions",
             "description": "The cards the answer proposed, as they stand."
+          },
+          "artifacts": {
+            "items": {
+              "$ref": "#/components/schemas/ArtifactOut"
+            },
+            "type": "array",
+            "title": "Artifacts",
+            "description": "What the tools handed over, by reference."
           }
         },
         "type": "object",
@@ -17257,7 +17304,8 @@
           "duration_ms",
           "steps",
           "sources",
-          "actions"
+          "actions",
+          "artifacts"
         ],
         "title": "MessageOut",
         "description": "A row of the history: a question, an answer (with how it ended, the steps it took, its\nsources and its cards) or a server's note (with the card it tells about)."

@@ -81,12 +81,16 @@ class ActionCards:
         self._ports = ports
 
     async def cards(
-        self, session: AsyncSession, records: Sequence[AgentActionRecord]
+        self,
+        session: AsyncSession,
+        records: Sequence[AgentActionRecord],
+        language: str | None = None,
     ) -> list[dict[str, JsonValue]]:
-        """The cards of one person's actions, in the order given, read in their transaction."""
+        """The cards of one person's actions, in the order given, read in their transaction —
+        in their profile's language, or in the one a caller asks for."""
         if not records:
             return []
-        language = await self._language(session, records[0].user_id)
+        language = language or await self._language(session, records[0].user_id)
         spaces = await self._spaces(session, {r.org_id for r in records if r.org_id is not None})
         return [
             card_of(

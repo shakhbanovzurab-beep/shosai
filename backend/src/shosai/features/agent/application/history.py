@@ -4,10 +4,10 @@ History is the person's questions, Leo's answers and the server's notes; tool ro
 run's record and are never listed. A page reads the thread's monthly partitions from the
 thread's creation on, so older months are pruned, walks the thread's index by moment and
 id, and reads only the columns it shows. An answer lists the steps the person saw and the
-sources the tools named (step 6), and the cards it proposed — a server's note the card it
-tells about — rendered in the person's language, read with the page in one query (step 9b);
-its artifacts join it with 9b, its rating with 11 and its attachments with 12: each with the
-step that writes it.
+sources the tools named (step 6), the artifacts the tools handed over by reference (AG-R1),
+and the cards it proposed — a server's note the card it tells about — rendered in the person's
+language, read with the page in one query (step 9b); its rating joins it with 11 and its
+attachments with 12: each with the step that writes it.
 """
 
 from dataclasses import dataclass, replace
@@ -39,7 +39,7 @@ NEWEST: Final = Keyset((MESSAGE.created_at.expression, MESSAGE.id.expression), d
 # Только показываемые столбцы: вызовы раунда и дайджесты в страницу не читаются.
 SHOWN: Final = load_only(
     MESSAGE.id, MESSAGE.created_at, MESSAGE.role, MESSAGE.text, MESSAGE.status,
-    MESSAGE.duration_ms, MESSAGE.steps, MESSAGE.sources, MESSAGE.action_ids,
+    MESSAGE.duration_ms, MESSAGE.steps, MESSAGE.sources, MESSAGE.action_ids, MESSAGE.artifacts,
 )  # fmt: skip
 
 
@@ -115,6 +115,7 @@ class MessageView:
     steps: tuple[StepView, ...] = ()
     sources: tuple[SourceView, ...] = ()
     actions: tuple[dict[str, JsonValue], ...] = ()
+    artifacts: tuple[dict[str, JsonValue], ...] = ()
 
 
 def view_of(record: AgentMessageRecord) -> MessageView:
@@ -124,6 +125,7 @@ def view_of(record: AgentMessageRecord) -> MessageView:
         id=record.id, role=HistoryRole(record.role), text=record.text, status=status,
         created_at=record.created_at, duration_ms=record.duration_ms,
         steps=steps_of(record.steps), sources=sources_of(record.sources),
+        artifacts=tuple(record.artifacts),
     )  # fmt: skip
 
 

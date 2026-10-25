@@ -70,6 +70,7 @@ def answer_so_far(reply: AgentMessageRecord | None) -> EarlierWork:
     return EarlierWork(
         text=reply.text,
         cards=tuple(reply.action_ids),
+        artifacts=tuple(reply.artifacts),
         steps=tuple(step_of(each) for each in reply.steps),
         sources=tuple(source_of(each) for each in reply.sources),
     )

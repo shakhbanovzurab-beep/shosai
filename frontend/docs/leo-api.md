@@ -55,8 +55,11 @@ Message = {id, role: user | assistant | server, text, status: done | stopped | f
   renames or deletes them. Nothing of a thread is kept in the browser's storage.
 - A message carries what exists when its step ships: now `id`, `role`, `text`, `status` (null for a question or a
   server note), `created_at`, `duration_ms`, `steps` (an answer's tool calls; empty otherwise, `status` `done`
-  or `failed`) and `sources` (an answer's, as the `sources` event left them); `artifacts` and `actions` come with
-  the cards, `feedback` with the rating and `attachments` with uploads. The model's tool rounds are never listed.
+  or `failed`), `sources` (an answer's, as the `sources` event left them), `artifacts` (what the tools handed over,
+  by reference — a team chat's digest) and `actions` (the cards an answer proposed, or the card a server note tells
+  about, as they stand); `feedback` comes with the rating and `attachments` with uploads. The model's tool rounds
+  are never listed. A card a slice put into the thread (a digest's "Make a task", AG-R2) joins the answer it belongs
+  to in `actions` and the inbox, with no run.
 - `POST` with a workspace the person is not in is `404 workspace_not_found`; a workspace scope without
   `workspace_id`, or Personal with one, is `422 scope_invalid`.
 - A workspace's threads disappear the moment the person's membership ends (`404 thread_not_found`); they are erased

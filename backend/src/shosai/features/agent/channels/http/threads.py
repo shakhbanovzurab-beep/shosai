@@ -10,7 +10,7 @@ Errors use the platform's envelope with the codes the cabinet words: `thread_not
 
 from datetime import datetime
 from http import HTTPStatus
-from typing import Annotated
+from typing import Annotated, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, Response
@@ -99,6 +99,16 @@ class AnswerSourceOut(Out):
     highlight: list[str]
 
 
+class ArtifactOut(Out):
+    """A result read apart from the answer: a team chat's digest, by its reference (AG-R1)."""
+
+    kind: Literal["chat_digest"]
+    ref: str = Field(description="The digest's id; the cabinet reads it from chats.")
+    alt: str = Field(description="What it is, for those who do not see it.")
+    workspace_id: UUID
+    chat_id: UUID
+
+
 class MessageOut(Out):
     """A row of the history: a question, an answer (with how it ended, the steps it took, its
     sources and its cards) or a server's note (with the card it tells about)."""
@@ -112,6 +122,7 @@ class MessageOut(Out):
     steps: list[StepOut]
     sources: list[AnswerSourceOut]
     actions: list[ProposalOut] = Field(description="The cards the answer proposed, as they stand.")
+    artifacts: list[ArtifactOut] = Field(description="What the tools handed over, by reference.")
 
 
 def scope_of(kind: ScopeKind, workspace_id: UUID | None) -> ThreadScope:
@@ -153,6 +164,7 @@ def message_out(view: MessageView) -> MessageOut:
             for source in view.sources
         ],
         actions=[ProposalOut.model_validate(card) for card in view.actions],
+        artifacts=[ArtifactOut.model_validate(artifact) for artifact in view.artifacts],
     )  # fmt: skip
 
 

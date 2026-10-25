@@ -10,7 +10,8 @@ through a bulkhead kept below the process's database pool, so a burst of calls w
 connection instead of failing for one; a failure is the model's to explain, never the run's
 end. What the model reads of a result — its numbered sources, a digest of one over budget,
 the wrapper of its label — is `tool_read_back`'s. The person sees each call that runs as a
-step, and the run's list of sources whenever a result adds to it.
+step, the run's list of sources whenever a result adds to it, and each artifact a result hands
+over by its reference (`artifact`, AG-R1), which the answer keeps.
 """
 
 import asyncio
@@ -28,6 +29,7 @@ from shosai.core.agent_tools.arguments import parse_arguments
 from shosai.core.agent_tools.bindings import ReadTool, WriteTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolError, ToolErrorCode, ToolResult
+from shosai.core.agent_tools.sources import ArtifactRef
 from shosai.core.ai.requests import ChatMessage, Role, TextPart, ToolCall
 from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.result_pages import ResultPages
@@ -73,6 +75,16 @@ class ToolParts:
     metrics: ToolMetrics
     tracer: Tracer
     proposer: ActionProposer
+
+
+def artifact_of(artifact: ArtifactRef) -> dict[str, JsonValue]:
+    """An artifact as the stream and the answer carry it: its reference, never its content."""
+    return {
+        "kind": artifact.kind.value,
+        "ref": artifact.ref,
+        "alt": artifact.alt,
+        **artifact.fields,
+    }
 
 
 class ToolRound:
@@ -181,6 +193,10 @@ class ToolRound:
         if result.error is None:
             await self._emitter.emit(EventKind.STEP_COMPLETED, closed)
             await self._follow(offer, spec.name, result.output)
+            for artifact in result.artifacts:
+                handed = artifact_of(artifact)
+                self._work.artifacts.append(handed)
+                await self._emitter.emit(EventKind.ARTIFACT, handed)
         else:
             await self._emitter.emit(EventKind.STEP_FAILED, closed | {"code": outcome})
         if read.new_sources:
