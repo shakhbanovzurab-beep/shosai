@@ -35,6 +35,8 @@
     "GET /v1/admin/users/{user_id}",
     "GET /v1/admin/users/{user_id}/files",
     "GET /v1/admin/users/{user_id}/notes",
+    "GET /v1/agent/actions",
+    "GET /v1/agent/actions/{action_id}",
     "GET /v1/agent/runs/{run_id}/events",
     "GET /v1/agent/settings",
     "GET /v1/agent/threads",

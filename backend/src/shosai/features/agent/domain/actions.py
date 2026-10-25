@@ -177,6 +177,11 @@ def public_status(status: ActionStatus) -> PublicStatus:
     return _PUBLIC.get(status) or PublicStatus(status.value)
 
 
+def internal_statuses(public: PublicStatus) -> tuple[str, ...]:
+    """The stored statuses a card of the public one may have."""
+    return tuple(status.value for status in ActionStatus if public_status(status) is public)
+
+
 def expires_at(created_at: datetime, origin: ProposalOrigin) -> datetime:
     """When a proposal can no longer be approved: an hour for every origin built so far."""
     match origin:

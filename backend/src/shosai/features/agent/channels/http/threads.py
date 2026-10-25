@@ -14,6 +14,7 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, Response
+from pydantic import Field
 
 from shosai.core.agent_tools.sources import SourceKind
 from shosai.core.idempotency.http import IdempotencyKeyHeader
@@ -22,6 +23,7 @@ from shosai.core.pagination.page import Page, PageParameters
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.history import History, MessageView
 from shosai.features.agent.application.threads import Threads, ThreadView
+from shosai.features.agent.channels.http.actions import ProposalOut
 from shosai.features.agent.channels.http.shapes import Out, Strict
 from shosai.features.agent.domain.threads import (
     AnswerStatus,
@@ -98,8 +100,8 @@ class AnswerSourceOut(Out):
 
 
 class MessageOut(Out):
-    """A row of the history: a question, an answer (with how it ended, the steps it took and
-    its sources) or a server's note."""
+    """A row of the history: a question, an answer (with how it ended, the steps it took, its
+    sources and its cards) or a server's note (with the card it tells about)."""
 
     id: UUID
     role: HistoryRole
@@ -109,6 +111,7 @@ class MessageOut(Out):
     duration_ms: int | None
     steps: list[StepOut]
     sources: list[AnswerSourceOut]
+    actions: list[ProposalOut] = Field(description="The cards the answer proposed, as they stand.")
 
 
 def scope_of(kind: ScopeKind, workspace_id: UUID | None) -> ThreadScope:
@@ -149,6 +152,7 @@ def message_out(view: MessageView) -> MessageOut:
             )
             for source in view.sources
         ],
+        actions=[ProposalOut.model_validate(card) for card in view.actions],
     )  # fmt: skip
 
 

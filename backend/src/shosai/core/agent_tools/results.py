@@ -14,6 +14,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Final
+from uuid import UUID
 
 from pydantic import BaseModel, JsonValue
 
@@ -105,7 +106,9 @@ class ToolResult[O: BaseModel]:
 
 @dataclass(frozen=True, slots=True)
 class PlannedEffect:
-    """A write as proposed: the exact targets and what the slice needs to apply it.
+    """A write as proposed: the exact targets, what the slice needs to apply it, and the
+    workspace the change goes to — None for the person's own data, which the card names their
+    Personal space.
 
     `data` is JSON, since the agent keeps the plan in its action row until approval; the
     slice reads it back with its own model in `execute`.
@@ -113,6 +116,7 @@ class PlannedEffect:
 
     targets: tuple[str, ...]
     data: Mapping[str, JsonValue] = field(default_factory=dict)
+    org_id: UUID | None = None
 
 
 @dataclass(frozen=True, slots=True)

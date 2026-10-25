@@ -19,8 +19,10 @@ from prometheus_client import CollectorRegistry
 
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.tasks.declaration import TaskDeclaration
+from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.action_decisions import ActionDecisions, ActionPayload
 from shosai.features.agent.application.action_execution import ActionExecution
+from shosai.features.agent.application.action_inbox import ActionInbox
 from shosai.features.agent.application.action_sweeps import ActionSweeps
 from shosai.features.agent.application.paused_runs import PausedRuns
 from shosai.features.agent.application.run_engine import RunEngine
@@ -121,8 +123,9 @@ async def action_bench(turn_bench: TurnBench) -> AsyncIterator[ActionBench]:
     registry = CollectorRegistry()
     metrics = ActionMetrics(registry)
     queue = InlineActions(engine=turn_bench.queue.engine)
+    cards = ActionCards(turn_bench.catalog, turn_bench.ports)
     paused = PausedRuns(
-        (turn_bench.homes.transactions, parts.outbox), (parts.run_log, parts.frames), queue
+        (turn_bench.homes.transactions, parts.outbox), (parts.run_log, parts.frames), (queue, cards)
     )
     transactions = turn_bench.homes.transactions
     execution = ActionExecution(transactions, (turn_bench.catalog, paused, metrics))
@@ -130,7 +133,8 @@ async def action_bench(turn_bench: TurnBench) -> AsyncIterator[ActionBench]:
     decisions = ActionDecisions(transactions, (queue, paused, metrics), wait=WAIT)
     ports = PortDirectory()
     ports.install([AUTHENTICATOR.bind(BearerOfTheTest())])
-    app = build_probe_app(extra=(build_actions_router(decisions, ports),)).app
+    inbox = ActionInbox(transactions, cards)
+    app = build_probe_app(extra=(build_actions_router((decisions, inbox), ports),)).app
     async with client_of(app) as http:
         yield ActionBench(turn_bench, http, execution, queue, (queue, paused, metrics), registry)
         await queue.settle()

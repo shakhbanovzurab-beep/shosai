@@ -9,7 +9,6 @@ chat's message is planned by the server (`plan_from_chat`), which freezes the ch
 
 from collections.abc import Callable, Mapping
 from datetime import UTC, date, datetime
-from typing import Final
 from uuid import UUID
 
 from pydantic import JsonValue
@@ -17,13 +16,20 @@ from sqlalchemy import select
 
 from shosai.core.agent_tools.bindings import WriteTool
 from shosai.core.agent_tools.context import ToolContext
-from shosai.core.agent_tools.results import PlannedEffect, Preview, ToolError, ToolResult
+from shosai.core.agent_tools.results import (
+    PlannedEffect,
+    Preview,
+    PreviewParam,
+    ToolError,
+    ToolResult,
+)
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.idempotency.action_items import ActionItems
 from shosai.core.kernel.errors import AppError
 from shosai.features.tasks.application.leo_writes import LeoBatch, checked_batch, make_batch
 from shosai.features.tasks.application.scoping import scope_in
 from shosai.features.tasks.application.task_writes import NewTask, TaskWrites
+from shosai.features.tasks.channels import agent_previews as words
 from shosai.features.tasks.channels.agent_tool_errors import person, tool_error
 from shosai.features.tasks.channels.agent_write_tools import (
     CREATE,
@@ -34,8 +40,6 @@ from shosai.features.tasks.channels.agent_write_tools import (
 from shosai.features.tasks.domain.chat_source import ChatOrigin, Messenger
 from shosai.features.tasks.domain.tasks import Assignee, Priority
 from shosai.features.tasks.infrastructure.board_records import BoardRecord
-
-PREVIEW_KEY: Final = "agent.tasks.create"
 
 
 def batch_of(args: CreateTasks, chat: ChatOrigin | None = None) -> LeoBatch:
@@ -62,7 +66,7 @@ def frozen(batch: LeoBatch) -> PlannedEffect:
         "tasks": [_draft_json(draft) for draft in batch.drafts],
         "chat": None if batch.chat is None else _chat_json(batch.chat),
     }
-    return PlannedEffect((target,), data)
+    return PlannedEffect((target,), data, org_id=batch.workspace_id)
 
 
 def thawed(planned: PlannedEffect) -> LeoBatch:
@@ -168,7 +172,7 @@ class TaskCreates:
         return frozen(checked)
 
     async def preview(self, planned: PlannedEffect, context: ToolContext) -> Preview:
-        """The card: how many tasks, the first one's title, and the board."""
+        """The card: the one task with its day, priority and board, or how many and the first."""
         batch = thawed(planned)
         principal = person(context)
         board = None
@@ -177,10 +181,18 @@ class TaskCreates:
                 board = await session.scalar(
                     select(BoardRecord.name).where(BoardRecord.id == batch.board_id)
                 )
-        first = batch.drafts[0].title if batch.drafts else None
-        params = {"count": len(batch.drafts), "first": first, "board": board,
-                  "workspace": batch.workspace_id is not None}  # fmt: skip
-        return Preview(PREVIEW_KEY, params)
+        if len(batch.drafts) > 1:
+            first = batch.drafts[0].title
+            return Preview(
+                words.CREATE_MANY.key, {"count": len(batch.drafts), "first": first, "board": board}
+            )
+        (draft,) = batch.drafts
+        params: dict[str, PreviewParam] = {
+            "title": draft.title, "board": board,
+            "due_on": None if draft.due_on is None else draft.due_on.isoformat(),
+            "priority": None if draft.priority is None else draft.priority.value,
+        }  # fmt: skip
+        return Preview(words.CREATE_ONE.key, params)
 
     async def execute(
         self, planned: PlannedEffect, context: ToolContext, key: str

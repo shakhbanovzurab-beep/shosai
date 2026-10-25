@@ -31,6 +31,7 @@ from shosai.features.tasks.channels.agent_write_tools import (
     UpdateTask,
 )
 from shosai.features.tasks.contracts import ChatOrigin, Messenger
+from shosai.features.tasks.domain.tasks import Priority
 from shosai.features.tasks.infrastructure.task_records import TaskRecord
 from shosai.features.tasks.module import TASKS
 from shosai.features.workspaces.module import WORKSPACES
@@ -109,10 +110,11 @@ async def test_a_batch_is_made_whole_once_on_top_of_the_board(task_bench: TaskBe
     again = await tools.creates.execute(plan, context(me), "item-1")
 
     assert (preview.key, preview.params["count"], preview.params["board"]) == (
-        "agent.tasks.create",
+        "agent.tasks.create_many",
         3,
         "Работа",
     )
+    assert preview.params["first"] == "Первая"
     assert first.output is not None
     assert again.output == first.output
     made_rows = await rows(task_bench, me)
@@ -168,9 +170,9 @@ async def test_a_change_a_tick_and_a_move_act_on_the_planned_task_only(
     other = await task_bench.task(me, title="Другая")
     tools = writes(task_bench)
 
-    update = planned(
-        await tools.changes.plan_update(UpdateTask(task_id=task, due_on=None), context(me))
-    )
+    change = UpdateTask(task_id=task, due_on=None, priority=Priority.HIGH, description="Подробно")
+    update = planned(await tools.changes.plan_update(change, context(me)))
+    card = await tools.changes.preview_update(update, context(me))
     await tools.changes.execute_update(update, context(me), "item-u")
     move = planned(await tools.changes.plan_move(
         MoveTask(task_id=task, board_id=uuid.UUID(board_id), column_id=uuid.UUID(done)), context(me)
@@ -180,6 +182,7 @@ async def test_a_change_a_tick_and_a_move_act_on_the_planned_task_only(
         await tools.changes.plan_complete(CompleteTask(task_id=task, done=False), context(me))
     )
     reopened = await tools.changes.execute_complete(reopen, context(me), "item-c")
+    reopen_card = await tools.changes.preview_complete(reopen, context(me))
 
     by_id = {r.id: r for r in await rows(task_bench, me)}
     assert by_id[task].due_on is None
@@ -188,6 +191,12 @@ async def test_a_change_a_tick_and_a_move_act_on_the_planned_task_only(
     assert reopened.output is not None
     assert reopened.output.status == "todo"
     assert (by_id[other].title, by_id[other].status) == ("Другая", "todo")
+    assert (card.key, dict(card.params)) == ("agent.tasks.update", {
+        "title": "Отчёт", "new_title": None, "due_on": "none", "starts_on": None,
+        "priority": "high", "assignee": None, "details": "changed",
+    })  # fmt: skip
+    assert (reopen_card.key, reopen_card.params["title"]) == ("agent.tasks.reopen", "Отчёт")
+    assert update.org_id is None
 
 
 async def test_a_jira_card_and_a_task_out_of_reach_are_refused(task_bench: TaskBench) -> None:

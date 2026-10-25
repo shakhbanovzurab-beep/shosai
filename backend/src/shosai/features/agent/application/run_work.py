@@ -96,6 +96,7 @@ class EarlierWork:
 
     messages: tuple[ChatMessage, ...] = ()
     text: str = ""
+    cards: tuple[UUID, ...] = ()
     steps: tuple[Step, ...] = ()
     sources: tuple[SourceRef, ...] = ()
     rounds: int = 0
@@ -116,6 +117,8 @@ class RunWork:
     taint_sources: list[str] = field(default_factory=list)
     # Предложенная запись: ход встаёт на паузу до решения человека.
     proposed: UUID | None = None
+    # Карточки прогона, прежние вместе: ответ показывает их в истории.
+    cards: list[UUID] = field(default_factory=list)
     answers: list[ModelAnswer] = field(default_factory=list)
     rounds: list[Round] = field(default_factory=list)
     steps: list[Step] = field(default_factory=list)
@@ -140,6 +143,7 @@ class RunWork:
         self.steps = list(earlier.steps)
         self.opened = max((step.seq for step in earlier.steps), default=0)
         self.sources = SourceLedger(earlier.sources)
+        self.cards = list(earlier.cards)
         self.taint = max(self.taint, earlier.taint)
         for label in earlier.taint_sources:
             if label not in self.taint_sources:

@@ -179,7 +179,9 @@ async def test_a_folder_switch_by_leo_makes_its_files_used(file_bench: FileBench
     await writes.execute_leo_use(plan, context(who), f"{uuid.uuid4()}:0")
     _, [view] = await file_bench.manager.listing(who)
 
-    assert dict(preview.params) == {"target": "folder", "use": True, "name": "Research"}
+    assert (preview.key, dict(preview.params)) == (
+        "agent.files.leo_use_on", {"target": "folder", "name": "Research"},
+    )  # fmt: skip
     assert view.leo is not None
     assert view.leo.via is LeoVia.FOLDER
 

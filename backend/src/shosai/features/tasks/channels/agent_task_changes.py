@@ -8,8 +8,7 @@ presence, Leo's marks, the next recurring task, the stopwatch, the boards' revis
 """
 
 from collections.abc import Awaitable, Callable
-from datetime import UTC, date, datetime
-from typing import Final
+from datetime import UTC, datetime
 from uuid import UUID
 
 from pydantic import BaseModel, JsonValue
@@ -23,11 +22,20 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.idempotency.action_items import ActionItems
 from shosai.core.kernel.errors import AppError
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER
 from shosai.features.tasks.application.board_access import owned_board
 from shosai.features.tasks.application.leo_writes import jira_refused, move_card
 from shosai.features.tasks.application.placements import CardSpot, column_kind
 from shosai.features.tasks.application.scoping import Scoping, locked_task, rule_failure
 from shosai.features.tasks.application.task_edits import Edit, TaskEdits
+from shosai.features.tasks.channels import agent_previews as words
+from shosai.features.tasks.channels.agent_previews import CLEARED
+from shosai.features.tasks.channels.agent_task_change_fields import (
+    change_of,
+    changed,
+    sent_of,
+    update_params,
+)
 from shosai.features.tasks.channels.agent_tool_errors import person, tool_error
 from shosai.features.tasks.channels.agent_write_tools import (
     COMPLETE,
@@ -40,68 +48,17 @@ from shosai.features.tasks.channels.agent_write_tools import (
     UpdateTask,
 )
 from shosai.features.tasks.domain.changes import (
-    UNSET,
     Schedule,
     TaskChange,
-    Unset,
     checked_change,
     schedule_after,
 )
-from shosai.features.tasks.domain.tasks import Assignee, Priority, TaskRuleError, TaskStatus
+from shosai.features.tasks.domain.tasks import Assignee, TaskRuleError, TaskStatus
 from shosai.features.tasks.infrastructure.board_records import BoardColumnRecord, BoardRecord
 from shosai.features.tasks.infrastructure.task_records import TASK_RESOURCE, TaskRecord
 from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
 
-FIELDS: Final = ("title", "description", "due_on", "starts_on", "priority", "assignee_id",
-                 "assignee_name")  # fmt: skip
-
 type Effect[O] = Callable[[AsyncSession, TaskRecord], Awaitable[O]]
-
-
-def change_of(sent: dict[str, JsonValue]) -> tuple[TaskChange, Edit]:
-    """The change and the edit a plan's fields make; absent fields stay."""
-
-    def day(name: str) -> date | None:
-        raw = sent[name]
-        return None if raw is None else date.fromisoformat(str(raw))
-
-    assignee: Assignee | Unset = UNSET
-    if "assignee_id" in sent:
-        raw = sent["assignee_id"]
-        assignee = Assignee(user_id=None if raw is None else UUID(str(raw)))
-    elif "assignee_name" in sent:
-        raw = sent["assignee_name"]
-        assignee = Assignee(name=None if raw is None else str(raw))
-    priority = sent.get("priority")
-    change = TaskChange(
-        title=str(sent["title"]) if "title" in sent else UNSET,
-        description=str(sent["description"]) if "description" in sent else UNSET,
-        due_on=day("due_on") if "due_on" in sent else UNSET,
-        starts_on=day("starts_on") if "starts_on" in sent else UNSET,
-        priority=(None if priority is None else Priority(str(priority)))
-        if "priority" in sent else UNSET,
-        assignee=assignee,
-    )  # fmt: skip
-    edit = Edit(
-        change=change, sent_assignee_id="assignee_id" in sent,
-        sent_assignee_name="assignee_name" in sent,
-    )  # fmt: skip
-    return change, edit
-
-
-def sent_of(args: UpdateTask) -> dict[str, JsonValue]:
-    """The fields the model sent, as the plan keeps them."""
-    dumped = args.model_dump(mode="json")
-    return {name: dumped[name] for name in FIELDS if name in args.model_fields_set}
-
-
-def changed(record: TaskRecord) -> TaskChanged:
-    """The task as a change leaves it."""
-    priority = None if record.priority is None else Priority(record.priority)
-    return TaskChanged(
-        task_id=record.id, title=record.title, status=TaskStatus(record.status),
-        due_on=record.due_on, priority=priority,
-    )  # fmt: skip
 
 
 class TaskChanges:
@@ -151,11 +108,20 @@ class TaskChanges:
         return await self._plan(args.task_id, context, check, {"fields": sent})
 
     async def preview_update(self, planned: PlannedEffect, context: ToolContext) -> Preview:
-        """The card: which task, and which fields change."""
+        """The card: which task, and what each sent field becomes."""
         raw = planned.data["fields"]
-        names = sorted(raw) if isinstance(raw, dict) else []
+        sent = raw if isinstance(raw, dict) else {}
         title = await self._title(context, UUID(planned.targets[0]))
-        return Preview("agent.tasks.update", {"title": title, "fields": ",".join(names)})
+        assignee = sent.get("assignee_name")
+        if sent.get("assignee_id") is not None:
+            member = UUID(str(sent["assignee_id"]))
+            async with self._transactions.begin(person(context).scope(), read_only=True) as session:
+                names = await self._ports.get(ACCOUNT_PROFILE_READER).names(session, [member])
+            assignee = names.get(member)
+        elif ("assignee_id" in sent or "assignee_name" in sent) and assignee is None:
+            assignee = CLEARED
+        params = update_params(title, sent, None if assignee is None else str(assignee))
+        return Preview(words.UPDATE.key, params)
 
     async def execute_update(
         self, planned: PlannedEffect, context: ToolContext, key: str
@@ -183,7 +149,8 @@ class TaskChanges:
     async def preview_complete(self, planned: PlannedEffect, context: ToolContext) -> Preview:
         """The card: which task, done or open again."""
         title = await self._title(context, UUID(planned.targets[0]))
-        return Preview("agent.tasks.complete", {"title": title, "done": bool(planned.data["done"])})
+        wording = words.COMPLETE if planned.data["done"] else words.REOPEN
+        return Preview(wording.key, {"title": title})
 
     async def execute_complete(
         self, planned: PlannedEffect, context: ToolContext, key: str
@@ -226,7 +193,7 @@ class TaskChanges:
             column = await session.scalar(
                 select(BoardColumnRecord.title).where(BoardColumnRecord.id == column_id)
             )
-        return Preview("agent.tasks.move", {"title": title, "board": board, "column": column})
+        return Preview(words.MOVE.key, {"title": title, "board": board, "column": column})
 
     async def execute_move(
         self, planned: PlannedEffect, context: ToolContext, key: str
@@ -264,7 +231,7 @@ class TaskChanges:
                 await check(session, record)
         except AppError as error:
             return tool_error(error)
-        return PlannedEffect((str(task_id),), data)
+        return PlannedEffect((str(task_id),), data, org_id=record.org_id)
 
     async def _execute[O: BaseModel](
         self,

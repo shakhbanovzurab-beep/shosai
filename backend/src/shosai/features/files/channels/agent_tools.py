@@ -16,6 +16,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.spec import Reversibility, ToolEffect, ToolSpec
+from shosai.features.files.channels import agent_previews as words
 from shosai.features.files.domain.kinds import FileKind
 from shosai.features.files.domain.leo import LeoVia
 
@@ -194,6 +195,7 @@ SET_LEO_USE: Final = ToolSpec(
     effect=ToolEffect.WRITE,
     reversibility=Reversibility.REVERSIBLE,
     invalidates=FILES_DOMAIN,
+    previews=(words.LEO_USE_ON, words.LEO_USE_OFF),
 )
 MOVE: Final = ToolSpec(
     name="files.move",
@@ -207,6 +209,7 @@ MOVE: Final = ToolSpec(
     effect=ToolEffect.WRITE,
     reversibility=Reversibility.REVERSIBLE,
     invalidates=FILES_DOMAIN,
+    previews=(words.MOVE, words.MOVE_TO_ROOT),
 )
 DELETE: Final = ToolSpec(
     name="files.delete",
@@ -220,5 +223,6 @@ DELETE: Final = ToolSpec(
     effect=ToolEffect.WRITE,
     reversibility=Reversibility.IRREVERSIBLE,
     invalidates=FILES_DOMAIN,
+    previews=(words.DELETE,),
 )
 FILES_TOOLS: Final = (SEARCH, READ, SET_LEO_USE, MOVE, DELETE)

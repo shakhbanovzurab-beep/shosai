@@ -32,7 +32,7 @@ from shosai.core.agent_tools.spec import ToolEffect, ToolSpec
 from shosai.features.agent.domain.eval_cases import EvalScenario, EvalSubject
 from shosai.features.agent.domain.eval_checks import ToolRun
 
-# Ключ предпросмотра записи в оценке: карточку никто не показывает и не одобряет.
+# Ключ превью записи без формулировок среза: такую запись агент не предложит.
 EVAL_PREVIEW = "agent.eval.write"
 
 
@@ -128,7 +128,11 @@ class EvalTools:
 
         async def preview(planned: PlannedEffect, context: ToolContext) -> Preview:
             del planned, context
-            return Preview(EVAL_PREVIEW)
+            if not spec.previews:
+                return Preview(EVAL_PREVIEW)
+            # Карточку оценки никто не читает: ключ среза, значения пустые.
+            wording = spec.previews[0]
+            return Preview(wording.key, dict.fromkeys(wording.params))
 
         async def execute(
             planned: PlannedEffect, context: ToolContext, key: str

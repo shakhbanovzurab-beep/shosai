@@ -25,10 +25,11 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
+from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.kv.connection import REDIS_FAILURES
 from shosai.core.tasks.declaration import TaskDeclaration
 from shosai.core.tasks.errors import TaskQueueUnavailableError
-from shosai.features.agent.application.action_cards import action_card
+from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.action_rows import items_of
 from shosai.features.agent.application.run_close import RunCloser
 from shosai.features.agent.application.run_resumption import RESUME_RUN, ResumePayload
@@ -98,12 +99,12 @@ class PausedRuns:
         self,
         writers: tuple[HomeTransactions, EventOutbox],
         keys: tuple[RunLog, TurnSaver],
-        queue: ResumeQueue,
+        parts: tuple[ResumeQueue, ActionCards],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
-        self._log = keys[0]
+        self._transactions, self._log = writers[0], keys[0]
         self._closer = RunCloser(writers, keys, clock)
-        self._queue = queue
+        self._queue, self._cards = parts
         self._clock = clock
 
     @property
@@ -150,10 +151,13 @@ class PausedRuns:
         hand-over for the epilogue. A log gone with its hour is left gone: the cabinet reloads."""
         if record.run_id is None:
             return
+        scope = TenancyScope(home, record.user_id)
+        async with self._transactions.begin(scope, read_only=True) as session:
+            (card,) = await self._cards.cards(session, [record])
         try:
             last = await self._log.last(record.run_id)
             if last is not None:
-                updated: dict[str, JsonValue] = {"action": action_card(record)}
+                updated: dict[str, JsonValue] = {"action": card}
                 if invalidates:
                     updated["invalidates"] = list(invalidates)
                 emitter = RunEmitter(self._log, record.run_id, after=last.seq)

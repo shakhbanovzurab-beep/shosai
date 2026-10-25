@@ -16,16 +16,20 @@ sample `/api/leo` (NDJSON) until agent steps 20 and 16; cards and "Needs you" ke
 attachments come with step 12.
 
 Since agent step 9a1 Leo proposes writes: a write call becomes a card (`action.proposed`) and the run pauses
-(`run.paused`); `approve` and `reject` are served, and the card's end follows as `action.updated` and
-`run.completed` on the same run's stream. Until step 9b a card carries `{id, tool, status, outcome, nonce, warning,
-taint, reversibility, created_at, expires_at, resolved_at}` (`taint` is a label such as `task:foreign`; `run_id` is
-added to the decision's answer); step 9b adds `title`, `space`, `origin` and `preview` in the person's language, and
-the inbox's `GET` routes. A decided card adds a server note to the thread (`role: server`, empty `text`) that
-the cabinet renders from the card; Leo's next turns read it in plain words. Since step 9a2 an approved card's run
-resumes: after the two `action.updated` (`executing`, then the end with `invalidates`) the same run's stream carries
-the epilogue — `text.delta`, steps, `sources` — and `run.completed`, and the answer, epilogue included, follows the
-note in the history. A rejected or expired card, or a run a new turn closed, gets no epilogue: `action.updated` and,
-for a run still paused, `run.completed`.
+(`run.paused`); `approve` and `reject` are served, and the card's end follows as `action.updated` on the same run's
+stream. Since step 9b1 a card is the whole `LeoProposal` in the person's language (their profile's): `{id, tool,
+title, space, origin {kind, app}, reversibility, warning, taint, preview {kind: "fields", fields [{label, value}],
+body}, status, outcome, nonce, created_at, expires_at, resolved_at}` — the title and the fields are the slice's
+words, `space` is Personal or the workspace's name — the same in the stream, in the decision's answer (which adds
+`run_id`), in the inbox and in the history, where an answer and a server note carry their cards in `actions`.
+`GET /v1/agent/actions?status=&cursor=&limit=` lists the person's cards newest first ("Needs you" reads
+`status=proposed`: only cards still within their hour) and `GET /v1/agent/actions/{id}` reads one. A decided card
+adds a server note to the thread (`role: server`, empty `text`) that the cabinet renders from its card; Leo's next
+turns read it in plain words. Since step 9a2 an approved card's run resumes: after the two `action.updated`
+(`executing`, then the end with `invalidates`) the same run's stream carries the epilogue — `text.delta`, steps,
+`sources` — and `run.completed`, and the answer, epilogue included, follows the note in the history. A rejected or
+expired card, or a run a new turn closed, gets no epilogue: `action.updated` and, for a run still paused,
+`run.completed`.
 
 ## Conversations
 

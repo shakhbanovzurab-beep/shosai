@@ -99,7 +99,7 @@ async def record_end(
                         role=MessageRole.ASSISTANT.value, status=ending.answer.value,
                         text=text, steps=work.ordered_steps(),
                         sources=kept(work, payload.language), tokens=estimate_tokens(text),
-                        duration_ms=millis(now - times.began),
+                        duration_ms=millis(now - times.began), action_ids=list(work.cards),
                     )
                 )  # fmt: skip
             thread.last_activity_at = now

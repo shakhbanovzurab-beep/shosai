@@ -17,6 +17,7 @@ from pydantic import BaseModel, ConfigDict, Field, create_model
 
 from shosai.core.agent_tools.bindings import AgentTool, ReadTool, WriteTool
 from shosai.core.agent_tools.context import ToolContext
+from shosai.core.agent_tools.previews import LANGUAGES, PreviewField, PreviewWording
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import (
     PlannedEffect,
@@ -94,9 +95,16 @@ NOTES_FAIL: Final = read("notes.fail")
 TASKS_SEARCH: Final = read("tasks.search")
 FILES_SEARCH: Final = read("files.search", Gates(switch="agent.knowledge_base_search"))
 ARCHIVE_SEARCH: Final = read("archive.search", Gates(input=WIDE, step_detail=None))
+# Слова пробной записи: на всех языках одни, у карточки — заголовок и число.
+PROBE_WORDING: Final = PreviewWording(
+    key="agent.tasks.probe",
+    params=("count",),
+    title=dict.fromkeys(LANGUAGES, "Probe write"),
+    fields=(PreviewField("count", dict.fromkeys(LANGUAGES, "Tasks")),),
+)
 TASKS_CREATE: Final = ToolSpec(
     name="tasks.create", toolset="tasks", description="Probe write.", input=Query, output=Found,
-    effect=ToolEffect.WRITE, reversibility=Reversibility.REVERSIBLE,
+    effect=ToolEffect.WRITE, reversibility=Reversibility.REVERSIBLE, previews=(PROBE_WORDING,),
 )  # fmt: skip
 
 

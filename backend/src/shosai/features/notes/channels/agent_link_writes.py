@@ -22,6 +22,7 @@ from shosai.core.agent_tools.results import (
 )
 from shosai.core.kernel.errors import AppError
 from shosai.features.notes.application.share_links import ShareLinks
+from shosai.features.notes.channels import agent_previews as words
 from shosai.features.notes.channels.agent_tool_writes import WriteSteps, person, tool_error
 from shosai.features.notes.channels.agent_write_tools import (
     REVOKE_SHARE_LINK,
@@ -80,7 +81,7 @@ class LinkWrites:
             "show_transcript": arguments.show_transcript, "show_names": arguments.show_names,
             "allow_comments": arguments.allow_comments, "expiry": arguments.expiry.value,
         }  # fmt: skip
-        return PlannedEffect((str(meeting.id),), settings)
+        return PlannedEffect((str(meeting.id),), settings, org_id=meeting.org_id)
 
     async def preview_set(self, planned: PlannedEffect, context: ToolContext) -> Preview:
         """The card: which meeting, whether the link is new, and what its page shows."""
@@ -93,7 +94,7 @@ class LinkWrites:
             "show_names": settings.show_names, "allow_comments": settings.allow_comments,
             "expiry": settings.expiry.value,
         }  # fmt: skip
-        return Preview("agent.notes.set_share_link", params)
+        return Preview(words.SET_SHARE_LINK.key, params)
 
     async def execute_set(
         self, planned: PlannedEffect, context: ToolContext, key: str
@@ -124,7 +125,7 @@ class LinkWrites:
             return meeting
         if await self._link(context, meeting.id) is None:
             return ToolError(ToolErrorCode.NOT_FOUND)
-        return PlannedEffect((str(meeting.id),))
+        return PlannedEffect((str(meeting.id),), org_id=meeting.org_id)
 
     async def preview_revoke(self, planned: PlannedEffect, context: ToolContext) -> Preview:
         """The card: which meeting, and how many comments are deleted with its link."""
@@ -143,7 +144,8 @@ class LinkWrites:
                 )
                 comments = int(counted or 0)
         title = await self._steps.title(context, meeting_id)
-        return Preview("agent.notes.revoke_share_link", {"title": title, "comments": comments})
+        params = {"title": title, "comments": comments or None}
+        return Preview(words.REVOKE_SHARE_LINK.key, params)
 
     async def execute_revoke(
         self, planned: PlannedEffect, context: ToolContext, key: str

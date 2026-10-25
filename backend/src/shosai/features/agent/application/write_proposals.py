@@ -19,7 +19,6 @@ from shosai.core.agent_tools.bindings import WriteTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolError, ToolErrorCode
 from shosai.core.ai.requests import ToolCall
-from shosai.features.agent.application.action_cards import action_card
 from shosai.features.agent.application.action_proposal import ActionProposer, Proposed
 from shosai.features.agent.application.run_work import CallAnswer, RunWork, Step
 from shosai.features.agent.application.tool_answers import error_content, step_detail
@@ -74,10 +73,9 @@ class WriteProposals:
             await self._emitter.emit(EventKind.STEP_FAILED, closed | {"code": outcome})
             return CallAnswer(call.call_id, spec.name, error_content(proposed))
         work.proposed = proposed.record.id
+        work.cards.append(proposed.record.id)
         await self._emitter.emit(EventKind.STEP_COMPLETED, closed)
-        await self._emitter.emit(
-            EventKind.ACTION_PROPOSED, {"action": action_card(proposed.record)}
-        )
+        await self._emitter.emit(EventKind.ACTION_PROPOSED, {"action": proposed.card})
         return CallAnswer(call.call_id, spec.name, PROPOSED)
 
     async def _proposed(

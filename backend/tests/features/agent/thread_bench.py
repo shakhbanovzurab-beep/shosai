@@ -15,12 +15,14 @@ import httpx
 import pytest_asyncio
 from prometheus_client import CollectorRegistry
 
+from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.config.roles import ProcessRole
 from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.departures import Departures
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.threads import Threads
@@ -168,6 +170,8 @@ async def thread_bench(homes: DatabaseAccess, run_slot: RunSlot) -> AsyncIterato
     clock = TestClock()
     effects = EffectLedger(EffectKeyMetrics(CollectorRegistry()))
     threads = Threads(homes.transactions, (ports, effects), clock)
-    router = build_threads_router((threads, History(homes.transactions, threads)), ports)
+    # Тредам без хода карточки не нужны: каталог инструментов пуст.
+    cards = ActionCards(AgentToolCatalog(), ports)
+    router = build_threads_router((threads, History(homes.transactions, threads, cards)), ports)
     async with client_of(build_probe_app(extra=(router,)).app) as http:
         yield ThreadBench(http, homes, run_slot, ports, clock)

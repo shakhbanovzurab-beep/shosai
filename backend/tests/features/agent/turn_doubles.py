@@ -117,14 +117,16 @@ class Terms:
 
 @dataclass
 class Profiles:
-    """Each person's profile as identity gives it: a name and a time zone."""
+    """Each person's profile as identity gives it: a name, a language and a time zone."""
 
     zones: dict[uuid.UUID, str] = field(default_factory=dict)
+    languages: dict[uuid.UUID, str] = field(default_factory=dict)
 
     async def profile(self, session: AsyncSession, user_id: uuid.UUID) -> AccountProfile | None:
         """The person's profile."""
         del session
-        return AccountProfile("Anna Petrova", "en", self.zones.get(user_id, "Europe/Berlin"))
+        language = self.languages.get(user_id, "en")
+        return AccountProfile("Anna Petrova", language, self.zones.get(user_id, "Europe/Berlin"))
 
     async def names(
         self, session: AsyncSession, user_ids: Collection[uuid.UUID]

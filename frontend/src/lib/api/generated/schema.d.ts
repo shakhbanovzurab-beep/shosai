@@ -2928,6 +2928,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agent/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Actions
+         * @description A page of the person's cards, newest first.
+         */
+        get: operations["list_actions_v1_agent_actions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/actions/{action_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Action
+         * @description One of the person's cards.
+         */
+        get: operations["get_action_v1_agent_actions__action_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/agent/actions/{action_id}/approve": {
         parameters: {
             query?: never;
@@ -3016,56 +3056,6 @@ export interface components {
             done: boolean;
             /** Sourcesegmentid */
             sourceSegmentId: string | null;
-        };
-        /**
-         * ActionOut
-         * @description A card as it stands after the decision.
-         */
-        ActionOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Tool */
-            tool: string;
-            status: components["schemas"]["PublicStatus"];
-            /**
-             * Outcome
-             * @description The code of an item that did not succeed.
-             */
-            outcome: string | null;
-            /** Nonce */
-            nonce: string;
-            /**
-             * Warning
-             * @description Approve on the screen only, after a careful look.
-             */
-            warning: boolean;
-            /**
-             * Taint
-             * @description The label of the text the run read before it.
-             */
-            taint: string | null;
-            /** Reversibility */
-            reversibility: string;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-            /**
-             * Expires At
-             * Format: date-time
-             */
-            expires_at: string;
-            /** Resolved At */
-            resolved_at: string | null;
-            /**
-             * Run Id
-             * @description The run whose stream carries the outcome.
-             */
-            run_id: string | null;
         };
         /**
          * ActionReason
@@ -3885,6 +3875,68 @@ export interface components {
             every: "day";
         };
         /**
+         * DecidedOut
+         * @description A card as it stands after the decision.
+         */
+        DecidedOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Tool */
+            tool: string;
+            /** Title */
+            title: string;
+            /**
+             * Space
+             * @description Personal, or the workspace's name.
+             */
+            space: string;
+            origin: components["schemas"]["OriginOut"];
+            /**
+             * Reversibility
+             * @enum {string}
+             */
+            reversibility: "reversible" | "compensable" | "irreversible";
+            /**
+             * Warning
+             * @description Approve on the screen only, after a careful look.
+             */
+            warning: boolean;
+            /**
+             * Taint
+             * @description The label of the text the run read before it.
+             */
+            taint: string | null;
+            preview: components["schemas"]["PreviewOut"];
+            status: components["schemas"]["PublicStatus"];
+            /**
+             * Outcome
+             * @description The code of an item that did not succeed.
+             */
+            outcome: string | null;
+            /** Nonce */
+            nonce: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Resolved At */
+            resolved_at: string | null;
+            /**
+             * Run Id
+             * @description The run whose stream carries the outcome.
+             */
+            run_id: string | null;
+        };
+        /**
          * DecisionBody
          * @description The nonce of the card the person decided on.
          */
@@ -4198,6 +4250,16 @@ export interface components {
              * @default 0
              */
             premium_credit_amount: number;
+        };
+        /**
+         * FieldOut
+         * @description One row of a card.
+         */
+        FieldOut: {
+            /** Label */
+            label: string;
+            /** Value */
+            value: string;
         };
         /**
          * FileFolder
@@ -5070,8 +5132,8 @@ export interface components {
         };
         /**
          * MessageOut
-         * @description A row of the history: a question, an answer (with how it ended, the steps it took and
-         *     its sources) or a server's note.
+         * @description A row of the history: a question, an answer (with how it ended, the steps it took, its
+         *     sources and its cards) or a server's note (with the card it tells about).
          */
         MessageOut: {
             /**
@@ -5094,6 +5156,11 @@ export interface components {
             steps: components["schemas"]["StepOut"][];
             /** Sources */
             sources: components["schemas"]["AnswerSourceOut"][];
+            /**
+             * Actions
+             * @description The cards the answer proposed, as they stand.
+             */
+            actions: components["schemas"]["ProposalOut"][];
         };
         /**
          * Messenger
@@ -5206,6 +5273,22 @@ export interface components {
         NumberValueBody: {
             /** Number */
             number: number | string;
+        };
+        /**
+         * OriginOut
+         * @description Where the proposal came from.
+         */
+        OriginOut: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "thread" | "errand" | "mcp";
+            /**
+             * App
+             * @description An outside client's name, for `mcp`.
+             */
+            app: string | null;
         };
         /**
          * OtherValueOut
@@ -5322,6 +5405,13 @@ export interface components {
         Page_MessageOut_: {
             /** Items */
             items: components["schemas"]["MessageOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** Page[ProposalOut] */
+        Page_ProposalOut_: {
+            /** Items */
+            items: components["schemas"]["ProposalOut"][];
             /** Next Cursor */
             next_cursor: string | null;
         };
@@ -5604,6 +5694,24 @@ export interface components {
             updated_at: string;
         };
         /**
+         * PreviewOut
+         * @description What the change does, worded by its slice.
+         */
+        PreviewOut: {
+            /**
+             * Kind
+             * @constant
+             */
+            kind: "fields";
+            /** Fields */
+            fields: components["schemas"]["FieldOut"][];
+            /**
+             * Body
+             * @description A text the change sends or writes, shown as is.
+             */
+            body: string | null;
+        };
+        /**
          * PriceSet
          * @description A period's price in minor units in every currency.
          */
@@ -5756,6 +5864,63 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+        };
+        /**
+         * ProposalOut
+         * @description A card, in the person's language (`LeoProposal`).
+         */
+        ProposalOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Tool */
+            tool: string;
+            /** Title */
+            title: string;
+            /**
+             * Space
+             * @description Personal, or the workspace's name.
+             */
+            space: string;
+            origin: components["schemas"]["OriginOut"];
+            /**
+             * Reversibility
+             * @enum {string}
+             */
+            reversibility: "reversible" | "compensable" | "irreversible";
+            /**
+             * Warning
+             * @description Approve on the screen only, after a careful look.
+             */
+            warning: boolean;
+            /**
+             * Taint
+             * @description The label of the text the run read before it.
+             */
+            taint: string | null;
+            preview: components["schemas"]["PreviewOut"];
+            status: components["schemas"]["PublicStatus"];
+            /**
+             * Outcome
+             * @description The code of an item that did not succeed.
+             */
+            outcome: string | null;
+            /** Nonce */
+            nonce: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Resolved At */
+            resolved_at: string | null;
         };
         /**
          * Provider
@@ -14132,6 +14297,77 @@ export interface operations {
             };
         };
     };
+    list_actions_v1_agent_actions_get: {
+        parameters: {
+            query?: {
+                /** @description Only cards in this state. */
+                status?: components["schemas"]["PublicStatus"] | null;
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_ProposalOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_action_v1_agent_actions__action_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                action_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProposalOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     approve_action_v1_agent_actions__action_id__approve_post: {
         parameters: {
             query?: never;
@@ -14155,7 +14391,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ActionOut"];
+                    "application/json": components["schemas"]["DecidedOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
@@ -14192,7 +14428,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ActionOut"];
+                    "application/json": components["schemas"]["DecidedOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

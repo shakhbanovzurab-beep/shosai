@@ -13,7 +13,9 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 
+from shosai.core.agent_tools.previews import PreviewWording
 from shosai.core.agent_tools.spec import Reversibility, ToolEffect, ToolSpec
+from shosai.features.tasks.channels import agent_previews as words
 from shosai.features.tasks.channels.agent_tool_models import Strict
 from shosai.features.tasks.domain.tasks import Priority, TaskStatus
 
@@ -121,13 +123,18 @@ class TaskMoved(BaseModel):
 
 
 def write_spec[I: BaseModel, O: BaseModel](
-    name: str, description: str, models: tuple[type[I], type[O]], reversibility: Reversibility
+    name: str,
+    description: str,
+    models: tuple[type[I], type[O]],
+    card: tuple[Reversibility, tuple[PreviewWording, ...]],
 ) -> ToolSpec[I, O]:
-    """A write of the toolset."""
+    """A write of the toolset, with how it can be undone and the words of its cards."""
+    reversibility, previews = card
     return ToolSpec(
         name=name, toolset=TOOLSET, description=description, input=models[0],
         output=models[1], effect=ToolEffect.WRITE, reversibility=reversibility,
         result_budget=600, timeout=timedelta(seconds=10), invalidates=TASKS_DOMAIN,
+        previews=previews,
     )  # fmt: skip
 
 
@@ -137,27 +144,27 @@ CREATE: Final = write_spec(
     " the user's boards. Every task is checked before the user approves; if one is not valid,"
     " none is made. The user approves the batch first.",
     (CreateTasks, TasksCreated),
-    Reversibility.COMPENSABLE,
+    (Reversibility.COMPENSABLE, (words.CREATE_ONE, words.CREATE_MANY)),
 )
 UPDATE: Final = write_spec(
     "tasks.update",
     "Change a task's title, details, days, priority or who does it. Only the fields given"
     " change; null clears one. The user approves the change first.",
     (UpdateTask, TaskChanged),
-    Reversibility.REVERSIBLE,
+    (Reversibility.REVERSIBLE, (words.UPDATE,)),
 )
 COMPLETE: Final = write_spec(
     "tasks.complete",
     "Mark a task done, or open it again. A recurring task's next one is made when it is done."
     " The user approves it first.",
     (CompleteTask, TaskChanged),
-    Reversibility.REVERSIBLE,
+    (Reversibility.REVERSIBLE, (words.COMPLETE, words.REOPEN)),
 )
 MOVE: Final = write_spec(
     "tasks.move",
     "Move the user's card of a task to a column of one of their boards; the column's kind"
     " becomes the task's status. The user approves the move first.",
     (MoveTask, TaskMoved),
-    Reversibility.REVERSIBLE,
+    (Reversibility.REVERSIBLE, (words.MOVE,)),
 )
 WRITE_TOOLS: Final = (CREATE, UPDATE, COMPLETE, MOVE)

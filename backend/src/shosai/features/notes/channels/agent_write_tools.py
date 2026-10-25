@@ -15,6 +15,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field
 
 from shosai.core.agent_tools.spec import CostClass, Reversibility, ToolEffect, ToolSpec
+from shosai.features.notes.channels import agent_previews as words
 from shosai.features.notes.channels.agent_tools import Strict
 from shosai.features.notes.domain.sharing import ShareExpiry
 
@@ -118,6 +119,7 @@ MOVE_TO_FOLDER: Final = ToolSpec(
     ),
     input=MoveToFolder, output=MovedToFolder, effect=ToolEffect.WRITE,
     reversibility=Reversibility.REVERSIBLE, result_budget=300, invalidates=NOTES_DOMAIN,
+    previews=(words.MOVE_TO_FOLDER, words.REMOVE_FROM_FOLDER),
 )  # fmt: skip
 REGENERATE_NOTES: Final = ToolSpec(
     name="notes.regenerate_notes",
@@ -130,6 +132,7 @@ REGENERATE_NOTES: Final = ToolSpec(
     input=RegenerateNotes, output=NotesRegenerating, effect=ToolEffect.WRITE,
     reversibility=Reversibility.IRREVERSIBLE, cost_class=CostClass.METERED, result_budget=300,
     invalidates=NOTES_DOMAIN,
+    previews=(words.REGENERATE_NOTES,),
 )  # fmt: skip
 SET_SHARE_LINK: Final = ToolSpec(
     name="notes.set_share_link",
@@ -141,6 +144,7 @@ SET_SHARE_LINK: Final = ToolSpec(
     ),
     input=SetShareLink, output=ShareLinkSet, effect=ToolEffect.WRITE,
     reversibility=Reversibility.COMPENSABLE, result_budget=300, invalidates=NOTES_DOMAIN,
+    previews=(words.SET_SHARE_LINK,),
 )  # fmt: skip
 REVOKE_SHARE_LINK: Final = ToolSpec(
     name="notes.revoke_share_link",
@@ -151,5 +155,6 @@ REVOKE_SHARE_LINK: Final = ToolSpec(
     ),
     input=RevokeShareLink, output=ShareLinkRevoked, effect=ToolEffect.WRITE,
     reversibility=Reversibility.IRREVERSIBLE, result_budget=300, invalidates=NOTES_DOMAIN,
+    previews=(words.REVOKE_SHARE_LINK,),
 )  # fmt: skip
 WRITE_TOOLS: Final = (MOVE_TO_FOLDER, REGENERATE_NOTES, SET_SHARE_LINK, REVOKE_SHARE_LINK)

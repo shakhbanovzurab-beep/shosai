@@ -4,17 +4,20 @@ History is the person's questions, Leo's answers and the server's notes; tool ro
 run's record and are never listed. A page reads the thread's monthly partitions from the
 thread's creation on, so older months are pruned, walks the thread's index by moment and
 id, and reads only the columns it shows. An answer lists the steps the person saw and the
-sources the tools named (step 6); its artifacts and cards join it with 9b, its rating with 11
-and its attachments with 12: each with the step that writes it.
+sources the tools named (step 6), and the cards it proposed — a server's note the card it
+tells about — rendered in the person's language, read with the page in one query (step 9b);
+its artifacts join it with 9b, its rating with 11 and its attachments with 12: each with the
+step that writes it.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime
 from typing import Any, Final
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, JsonValue
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import load_only
 
 from shosai.core.agent_tools.sources import SourceKind
@@ -22,18 +25,21 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.pagination.cursor import CursorCodec
 from shosai.core.pagination.keyset import Keyset
 from shosai.core.pagination.page import Page, PageRequest, page_of
+from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.threads import Threads
 from shosai.features.agent.domain.threads import AnswerStatus, HistoryRole
+from shosai.features.agent.infrastructure.run_records import AgentActionRecord
 from shosai.features.agent.infrastructure.thread_records import SPOKEN, AgentMessageRecord
 from shosai.features.identity.contracts import Principal
 
 MESSAGE = AgentMessageRecord
+ACTION = AgentActionRecord
 LISTED: Final = tuple(role.value for role in HistoryRole)
 NEWEST: Final = Keyset((MESSAGE.created_at.expression, MESSAGE.id.expression), descending=True)
 # Только показываемые столбцы: вызовы раунда и дайджесты в страницу не читаются.
 SHOWN: Final = load_only(
     MESSAGE.id, MESSAGE.created_at, MESSAGE.role, MESSAGE.text, MESSAGE.status,
-    MESSAGE.duration_ms, MESSAGE.steps, MESSAGE.sources,
+    MESSAGE.duration_ms, MESSAGE.steps, MESSAGE.sources, MESSAGE.action_ids,
 )  # fmt: skip
 
 
@@ -108,6 +114,7 @@ class MessageView:
     duration_ms: int | None
     steps: tuple[StepView, ...] = ()
     sources: tuple[SourceView, ...] = ()
+    actions: tuple[dict[str, JsonValue], ...] = ()
 
 
 def view_of(record: AgentMessageRecord) -> MessageView:
@@ -128,9 +135,12 @@ def position_of(record: AgentMessageRecord) -> MessagePosition:
 class History:
     """The pages of a thread's conversation."""
 
-    def __init__(self, transactions: HomeTransactions, threads: Threads) -> None:
+    def __init__(
+        self, transactions: HomeTransactions, threads: Threads, cards: ActionCards
+    ) -> None:
         self._transactions = transactions
         self._threads = threads
+        self._cards = cards
 
     async def page(
         self, principal: Principal, thread_id: UUID, request: PageRequest
@@ -152,4 +162,25 @@ class History:
                 )
             )
             rows = list(await session.scalars(NEWEST.page(statement, after, request.limit)))
-        return page_of(rows, request, CODEC, view_of, position_of)
+            cards = await self._cards_of(session, principal, rows[: request.limit])
+        page = page_of(rows, request, CODEC, view_of, position_of)
+        items = [
+            replace(view, actions=tuple(cards[i] for i in row.action_ids if i in cards))
+            for view, row in zip(page.items, rows, strict=False)
+        ]
+        return Page(items=items, next_cursor=page.next_cursor)
+
+    async def _cards_of(
+        self, session: AsyncSession, principal: Principal, rows: list[AgentMessageRecord]
+    ) -> dict[UUID, dict[str, JsonValue]]:
+        """The cards the page's messages name, by id."""
+        ids = {action_id for row in rows for action_id in row.action_ids}
+        if not ids:
+            return {}
+        records = list(
+            await session.scalars(
+                select(ACTION).where(ACTION.id.in_(ids), ACTION.user_id == principal.user_id)
+            )
+        )
+        cards = await self._cards.cards(session, records)
+        return {record.id: card for record, card in zip(records, cards, strict=True)}

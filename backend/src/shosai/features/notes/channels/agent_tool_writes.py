@@ -36,6 +36,7 @@ from shosai.features.notes.application.library import MeetingLibrary
 from shosai.features.notes.application.visibility import meeting_for, meeting_scope
 from shosai.features.notes.application.write_up_layout import layout_of
 from shosai.features.notes.application.write_up_rewrites import RewriteRequest, WriteUpRewrites
+from shosai.features.notes.channels import agent_previews as words
 from shosai.features.notes.channels.agent_write_tools import (
     MOVE_TO_FOLDER,
     REGENERATE_NOTES,
@@ -178,7 +179,7 @@ class NoteWrites:
         if isinstance(folder, ToolError):
             return folder
         planned = None if folder is None else str(folder)
-        return PlannedEffect((str(meeting.id),), {"folder_id": planned})
+        return PlannedEffect((str(meeting.id),), {"folder_id": planned}, org_id=meeting.org_id)
 
     async def preview_move(self, planned: PlannedEffect, context: ToolContext) -> Preview:
         """The card: which meeting, into which folder or out of its folder."""
@@ -189,7 +190,9 @@ class NoteWrites:
                 record = await session.get(FolderRecord, UUID(str(raw)))
                 folder = None if record is None else record.name
         title = await self._steps.title(context, UUID(planned.targets[0]))
-        return Preview("agent.notes.move_to_folder", {"title": title, "folder": folder})
+        if raw is None:
+            return Preview(words.REMOVE_FROM_FOLDER.key, {"title": title})
+        return Preview(words.MOVE_TO_FOLDER.key, {"title": title, "folder": folder})
 
     async def execute_move(
         self, planned: PlannedEffect, context: ToolContext, key: str
@@ -226,7 +229,7 @@ class NoteWrites:
             template = chosen.value if chosen is not None else meeting.template_id or ENHANCED
             if await layout_of(session, template) is None:
                 return ToolError(ToolErrorCode.NOT_FOUND)
-        return PlannedEffect((str(meeting.id),), {"template_id": template})
+        return PlannedEffect((str(meeting.id),), {"template_id": template}, org_id=meeting.org_id)
 
     async def preview_regenerate(self, planned: PlannedEffect, context: ToolContext) -> Preview:
         """The card: which meeting, by which template — a shipped code or the person's name."""
@@ -241,7 +244,7 @@ class NoteWrites:
             name = own or ""
         title = await self._steps.title(context, UUID(planned.targets[0]))
         params = {"title": title, "template": name, "shipped": shipped}
-        return Preview("agent.notes.regenerate_notes", params)
+        return Preview(words.REGENERATE_NOTES.key, params)
 
     async def execute_regenerate(
         self, planned: PlannedEffect, context: ToolContext, key: str

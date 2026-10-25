@@ -34,6 +34,7 @@ from shosai.core.kernel.ids import new_id
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.tasks.declaration import TaskDeclaration
+from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.eval_model import RecordingModel, tools_text
 from shosai.features.agent.application.eval_observe import observed_turn
@@ -151,7 +152,8 @@ class EvalRunner:
         self._telemetry = EvalTelemetry()
         tools = ToolParts(
             pages, RunSources(transactions, ports), asyncio.Semaphore(services.tool_calls_at_once),
-            ToolMetrics(CollectorRegistry()), NoOpTracer(), ActionProposer(transactions),
+            ToolMetrics(CollectorRegistry()), NoOpTracer(),
+            ActionProposer(transactions, ActionCards(catalog, ports)),
         )  # fmt: skip
         # Модель у каждого хода своя, за записью; остальное движку оценки общее.
         self._parts_with = partial(

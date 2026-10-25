@@ -149,7 +149,7 @@ Every recorded meeting becomes something the person never has to hold in their h
 ## Leo's write tools (step 16)
 
 - `channels/agent_write_tools.py` — `notes.move_to_folder`, `notes.regenerate_notes`, `notes.set_share_link`, `notes.revoke_share_link`: English specs with their reversibility and cost class; a folder is named as the person calls it (no tool lists folder ids), a template is a shipped one's code or the meeting's own.
-- `channels/agent_tool_writes.py`, `channels/agent_link_writes.py` — `plan` reads the meeting the person may manage and freezes it; `preview` gives an `agent.notes.*` key with the title and what changes; `execute` runs in the meeting's scope through `ActionItems`, over the session-level services the routes call as well (`MeetingLibrary.file_in`, `WriteUpRewrites.start_in`, `ShareLinks.put_in` and `remove_in`); refusals are the closed set of tool errors.
+- `channels/agent_tool_writes.py`, `channels/agent_link_writes.py` — `plan` reads the meeting the person may manage and freezes it; `preview` gives an `agent.notes.*` key with the title and what changes — `move_to_folder` or `remove_from_folder`, `regenerate_notes` (a shipped template named as the gallery names it), `set_share_link`, `revoke_share_link` — worded in the 16 languages in `channels/agent_previews.py`, `agent_card_words.py` and `agent_template_names.py` (agent step 9b), and a plan names the meeting's workspace; `execute` runs in the meeting's scope through `ActionItems`, over the session-level services the routes call as well (`MeetingLibrary.file_in`, `WriteUpRewrites.start_in`, `ShareLinks.put_in` and `remove_in`); refusals are the closed set of tool errors.
 
 ## The transcript archive (step 20)
 

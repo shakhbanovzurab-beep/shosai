@@ -4,8 +4,9 @@ The write's slice plans it — freezing the exact targets and the data its `exec
 or refusing with a typed error the model can act on — and previews it for the card. The card's
 friction follows AG-D7's rule: a warning, approved on the screen only, when the run read text
 someone else wrote or the write cannot be undone. One transaction stores the action as
-`proposed` with its nonce and its hour, and audits the proposal; nothing is written to the
-slice's data until the person approves.
+`proposed` with its nonce, its hour and the space the change goes to, audits the proposal and
+renders its card in the person's language; a preview its slice has no words for is refused,
+since no card could show it. Nothing is written to the slice's data until the person approves.
 """
 
 import secrets
@@ -14,14 +15,16 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
 
-from pydantic import BaseModel
+import structlog
+from pydantic import BaseModel, JsonValue
 
 from shosai.core.agent_tools.bindings import WriteTool
 from shosai.core.agent_tools.context import ToolContext
-from shosai.core.agent_tools.results import ToolError
+from shosai.core.agent_tools.results import ToolError, ToolErrorCode
 from shosai.core.agent_tools.spec import Reversibility
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.ids import new_id
+from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.action_rows import AuditEntry, audit
 from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.turn_task import TurnPayload
@@ -36,13 +39,16 @@ from shosai.features.agent.domain.actions import (
 from shosai.features.agent.domain.friction import friction_rule
 from shosai.features.agent.infrastructure.run_records import AgentActionRecord
 
+log = structlog.stdlib.get_logger(__name__)
+
 
 @dataclass(frozen=True, slots=True)
 class Proposed:
-    """The stored action and its one item."""
+    """The stored action, its one item and its card."""
 
     record: AgentActionRecord
     item: ActionItem
+    card: dict[str, JsonValue]
 
 
 class ActionProposer:
@@ -51,9 +57,11 @@ class ActionProposer:
     def __init__(
         self,
         transactions: HomeTransactions,
+        cards: ActionCards,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
+        self._cards = cards
         self._clock = clock
 
     async def propose(
@@ -70,6 +78,9 @@ class ActionProposer:
         if isinstance(planned, ToolError):
             return planned
         preview = await write.preview(planned, context)
+        if self._cards.wording(spec.name, preview.key) is None:
+            log.error("Превью записи Leo без формулировки", tool=spec.name, key=preview.key)
+            return ToolError(ToolErrorCode.FAILED)
         reversibility = spec.reversibility or Reversibility.REVERSIBLE
         item = ActionItem(
             tool=spec.name, targets=planned.targets, plan=dict(planned.data),
@@ -78,8 +89,8 @@ class ActionProposer:
         )  # fmt: skip
         now = self._clock()
         record = AgentActionRecord(
-            id=new_id(), user_id=payload.user_id, org_id=None, thread_id=payload.thread_id,
-            run_id=payload.run_id, message_id=payload.reply_id,
+            id=new_id(), user_id=payload.user_id, org_id=planned.org_id,
+            thread_id=payload.thread_id, run_id=payload.run_id, message_id=payload.reply_id,
             origin=ProposalOrigin.TURN.value, origin_key=None,
             status=ActionStatus.PROPOSED.value, nonce=secrets.token_urlsafe(NONCE_BYTES),
             items=[item.stored()], friction=int(friction_rule(work.taint, reversibility)),
@@ -91,4 +102,5 @@ class ActionProposer:
             await session.flush()
             entry = AuditEntry(AuditEvent.PROPOSED, tool=spec.name, targets=len(item.targets))
             audit(session, record, entry, now)
-        return Proposed(record, item)
+            (card,) = await self._cards.cards(session, [record])
+        return Proposed(record, item, card)

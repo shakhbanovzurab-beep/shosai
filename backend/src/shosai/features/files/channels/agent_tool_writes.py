@@ -29,6 +29,7 @@ from shosai.core.kernel.errors import AppError
 from shosai.features.files.application.file_edits import FileChanges, FileEdits
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.application.leo_use import LeoUse, own_folders
+from shosai.features.files.channels import agent_previews as words
 from shosai.features.files.channels.agent_tools import (
     DELETE,
     MOVE,
@@ -124,7 +125,8 @@ class FileWrites:
         target, target_id = LeoTarget(str(planned.data["target"])), UUID(planned.targets[0])
         params = {"target": target.value, "use": bool(planned.data["use"])}
         name = await self._name(context, target, target_id)
-        return Preview("agent.files.set_leo_use", {**params, "name": name})
+        wording = words.LEO_USE_ON if params["use"] else words.LEO_USE_OFF
+        return Preview(wording.key, {"name": name, "target": params["target"]})
 
     async def execute_leo_use(
         self, planned: PlannedEffect, context: ToolContext, key: str
@@ -167,7 +169,9 @@ class FileWrites:
         folder = (
             None if raw is None else await self._name(context, LeoTarget.FOLDER, UUID(str(raw)))
         )
-        return Preview("agent.files.move", {"name": name, "folder": folder})
+        if folder is None:
+            return Preview(words.MOVE_TO_ROOT.key, {"name": name})
+        return Preview(words.MOVE.key, {"name": name, "folder": folder})
 
     async def execute_move(
         self, planned: PlannedEffect, context: ToolContext, key: str
@@ -199,7 +203,7 @@ class FileWrites:
     async def preview_delete(self, planned: PlannedEffect, context: ToolContext) -> Preview:
         """The card: which file goes."""
         name = await self._name(context, LeoTarget.FILE, UUID(planned.targets[0]))
-        return Preview("agent.files.delete", {"name": name})
+        return Preview(words.DELETE.key, {"name": name})
 
     async def execute_delete(
         self, planned: PlannedEffect, context: ToolContext, key: str

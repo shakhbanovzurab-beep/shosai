@@ -21,8 +21,10 @@ from shosai.core.db.engines import DATABASE_PROFILES
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, QueueCompanion
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.agent.application.account_data import ACCOUNT_DATA, AgentAccountData
+from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.action_decisions import ActionDecisions
 from shosai.features.agent.application.action_execution import ActionExecution
+from shosai.features.agent.application.action_inbox import ActionInbox
 from shosai.features.agent.application.action_invariants import ActionInvariants
 from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.action_sweeps import ActionSweeps
@@ -100,9 +102,10 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         services.tracer_provider.get_tracer(TRACER_NAME),
     )
     telemetry, pages = RunTelemetry(metrics, tracer), ResultPages(transactions, ports)
+    cards = ActionCards(services.agent_tools, ports)
     tools = ToolParts(
         pages, RunSources(transactions, ports), tool_bulkhead(services.role),
-        ToolMetrics(services.registry), tracer, ActionProposer(transactions),
+        ToolMetrics(services.registry), tracer, ActionProposer(transactions, cards),
     )  # fmt: skip
     routing, frames = TurnRouting(ToolRegistry(services.agent_tools), ports), TurnSaver(valkey)
     engine = RunEngine(
@@ -122,7 +125,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     lost_runs = LostRuns(transactions, (run_log, leases, fleet), metrics)
     care = ThreadCare(transactions, (services.ai, settings.utility_route()), ports)
     paused, action_metrics = (
-        PausedRuns((transactions, services.outbox), (run_log, frames), services.tasks),
+        PausedRuns((transactions, services.outbox), (run_log, frames), (services.tasks, cards)),
         ActionMetrics(services.registry),
     )
     decisions = ActionDecisions(transactions, (services.tasks, paused, action_metrics))
@@ -135,9 +138,9 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         yield FeatureParts(
             http_routers=(
                 build_settings_router(preferences, ports),
-                build_threads_router((threads, History(transactions, threads)), ports),
+                build_threads_router((threads, History(transactions, threads, cards)), ports),
                 build_turns_router((starter, streams), ports),
-                build_actions_router(decisions, ports),
+                build_actions_router((decisions, ActionInbox(transactions, cards)), ports),
             ),
             task_handlers=task_handlers(Handlers(departures, lost_runs, engine, care, actions)),
             subscriptions=subscriptions(departures, AfterTurn(services.tasks)),
