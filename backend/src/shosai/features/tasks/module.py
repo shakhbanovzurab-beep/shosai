@@ -17,6 +17,7 @@ from shosai.core.idempotency.action_items import ActionItems
 from shosai.features.tasks.application.account_data import ACCOUNT_DATA, TasksAccountData
 from shosai.features.tasks.application.attachment_releases import AttachmentReleases
 from shosai.features.tasks.application.attachments import Attachments
+from shosai.features.tasks.application.board_facts import BoardFactsReader
 from shosai.features.tasks.application.board_reads import BoardReads
 from shosai.features.tasks.application.board_stickers import BoardStickers
 from shosai.features.tasks.application.boards import BoardWrites
@@ -48,7 +49,7 @@ from shosai.features.tasks.channels.http.tasks import build_tasks_router
 from shosai.features.tasks.channels.http.threads import build_threads_router
 from shosai.features.tasks.channels.subscriptions import subscriptions
 from shosai.features.tasks.channels.tasks import PERIODIC_JOBS, task_handlers
-from shosai.features.tasks.contracts import TASK_READER
+from shosai.features.tasks.contracts import BOARD_READER, TASK_READER
 from shosai.features.tasks.contracts.events import (
     TaskAssigned,
     TaskCompleted,
@@ -118,6 +119,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         provides=(
             ACCOUNT_DATA_HANDLERS.bind(TasksAccountData(transactions, ports)),
             TASK_READER.bind(reads),
+            BOARD_READER.bind(BoardFactsReader()),
         ),
     )
 
