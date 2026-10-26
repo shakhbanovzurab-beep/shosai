@@ -1,12 +1,14 @@
 "use client";
 
 import { Mic, MicOff, X } from "lucide-react";
-import { ThinkingOrb } from "thinking-orbs";
 import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 
 import type { useLeoVoice } from "../model/use-leo-voice";
+import { LeoVoiceOrb } from "./leo-voice-orb";
+
+const ORB_SIZE = 160;
 
 const PHASE_ORBS = {
   off: "breathing",
@@ -32,8 +34,8 @@ export function LeoVoiceMode({ voice }: { readonly voice: ReturnType<typeof useL
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-between gap-6 px-6 py-8">
       <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center">
-        <span className="flex [&_canvas]:size-40!" aria-hidden="true">
-          <ThinkingOrb state={muted ? "breathing" : PHASE_ORBS[phase]} size={64} />
+        <span className="flex" aria-hidden="true">
+          <LeoVoiceOrb state={muted ? "breathing" : PHASE_ORBS[phase]} size={ORB_SIZE} />
         </span>
         <div className="flex flex-col gap-2" aria-live="polite">
           <p className="font-medium text-base">{label}</p>
