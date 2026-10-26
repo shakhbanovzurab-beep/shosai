@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+
 import { MODE_FRAMES, type OrbState, paintFrame, resolvePreset } from "thinking-orbs/engine";
 
 import { usePreferencesStore } from "@/features/preferences/model/preferences-provider";
