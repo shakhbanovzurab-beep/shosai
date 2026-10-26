@@ -104,11 +104,16 @@ class HomeTransactions:
         """A session in a transaction of the scope's home; commit on exit, rollback on error.
 
         `sweep` runs the transaction as the sweep role, which row-level security lets see
-        every tenant's rows (ADR 0053 point 2); only the workers' and the scheduler's
-        profiles allow it, so a request handler can never open one.
+        every tenant's rows (ADR 0053 point 2); only the workers' and the scheduler's profiles
+        allow it, and the agent's engineer command for reading only, so a request handler can
+        never open one.
         """
-        if sweep and not self._databases.profile.sweeps:
+        profile = self._databases.profile
+        if sweep and not profile.sweeps:
             message = "обход по всем тенантам разрешён только воркерам и планировщику"
+            raise SweepNotAllowedError(message)
+        if sweep and profile.sweeps_read_only and not read_only:
+            message = "обход этой роли — только на чтение"
             raise SweepNotAllowedError(message)
         await self._gate.ensure_open(scope.home)
         factory = self._databases.sessions(scope.home)

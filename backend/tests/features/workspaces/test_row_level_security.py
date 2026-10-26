@@ -135,6 +135,22 @@ async def test_a_request_process_cannot_open_a_sweep(homes: DatabaseAccess) -> N
             pass
 
 
+async def test_the_agent_command_sweeps_only_to_read(run_slot: RunSlot) -> None:
+    engineer = ProcessShape(role=ProcessRole.AGENT)
+
+    async with open_database_access(slot_urls(run_slot), engineer) as access:
+        await access.gate.verify_at_start()
+        async with access.transactions.begin(
+            TenancyScope(Home.EU), read_only=True, sweep=True
+        ) as session:
+            seen = await session.scalar(sa.text("SELECT count(*) FROM teams"))
+        with pytest.raises(SweepNotAllowedError):
+            async with access.transactions.begin(TenancyScope(Home.EU), sweep=True):
+                pass
+
+    assert seen is not None
+
+
 async def test_the_audit_log_only_grows(homes: DatabaseAccess, run_slot: RunSlot) -> None:
     world = await world_in(run_slot, Home.RU)
     scope = TenancyScope(Home.RU, world.person, world.org_a)

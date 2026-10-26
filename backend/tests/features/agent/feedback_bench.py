@@ -17,12 +17,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.config.roles import ProcessRole
+from shosai.core.events.catalog import EventTypes
+from shosai.core.events.outbox import EventOutbox
 from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.case_care import CasePurge
+from shosai.features.agent.application.case_reads import CaseReads
 from shosai.features.agent.application.feedback import Feedback
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.threads import Threads
@@ -31,10 +34,13 @@ from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.infrastructure.feedback_metrics import FeedbackMetrics
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.thread_records import AgentMessageRecord
+from shosai.features.identity.application.operator_journal import OperatorJournal
 from shosai.features.identity.contracts import (
     ACCOUNT_PROFILE_READER,
     AUTHENTICATOR,
     CONSENT_READER,
+    IDENTITY_EVENTS,
+    OPERATOR_AUDIT,
     AccountProfile,
 )
 from shosai.features.workspaces.contracts import MEMBERSHIP_READER
@@ -153,6 +159,13 @@ class FeedbackBench(ThreadBench):
         async with open_database_access(slot_urls(self.run_slot), shape) as workers:
             yield CasePurge(workers.transactions, self.clock)
 
+    @asynccontextmanager
+    async def reads(self) -> AsyncIterator[CaseReads]:
+        """The host's reads of the cases: their listings take the sweep role."""
+        shape = ProcessShape(role=ProcessRole.WORKERS)
+        async with open_database_access(slot_urls(self.run_slot), shape) as workers:
+            yield CaseReads(workers.transactions, self.ports)
+
 
 @pytest_asyncio.fixture
 async def feedback_bench(homes: DatabaseAccess, run_slot: RunSlot) -> AsyncIterator[FeedbackBench]:
@@ -165,6 +178,7 @@ async def feedback_bench(homes: DatabaseAccess, run_slot: RunSlot) -> AsyncItera
             MEMBERSHIP_READER.bind(MembershipDirectory()),
             CONSENT_READER.bind(people),
             ACCOUNT_PROFILE_READER.bind(people),
+            OPERATOR_AUDIT.bind(OperatorJournal(EventOutbox(EventTypes(list(IDENTITY_EVENTS))))),
         ]
     )
     clock = TestClock()

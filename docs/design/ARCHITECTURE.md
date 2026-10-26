@@ -212,7 +212,7 @@
   - each transaction starts with `SET LOCAL app.org_id` (and `app.user_id`); the same statement turns JIT compilation off, since the policy's predicates make the planner overestimate short reads and compiling cost more than running them (notes plan step 7a: 74 of 106 ms for a library page);
   - policies on company-scoped tables reject foreign rows: a row is read when it has no company, belongs to the company of the scope, or belongs to a company the person is an active member of (`app_member_org_ids()`, once per statement, never cached); it is written only into the company of the scope;
   - tables that are personal by nature and never shared reject other people's rows (`user_id = app_user_id()`); shareable tables guard their personal rows by the access policy and the isolation tests; identity's account tables, read before a principal exists, have no policy;
-  - migrations run as the migration role; cross-tenant sweeps switch to the `shosai_sweeper` role inside their transaction (`SET LOCAL ROLE`, one pool), only in the `workers` and `scheduler` roles.
+  - migrations run as the migration role; cross-tenant sweeps switch to the `shosai_sweeper` role inside their transaction (`SET LOCAL ROLE`, one pool), only in the `workers` and `scheduler` roles, and read-only in the `agent` engineer command on the host, which lists Leo's donated evaluation cases (ADR 0053 point 2, amended by the owner on 2026-10-26).
 - **Search and Leo:**
   - Qdrant filters by tenant (`o_<id>` or `u_<id>`) and by the requester's access;
   - every hit is re-checked against PostgreSQL before it is returned, because index payload lags access changes by seconds;

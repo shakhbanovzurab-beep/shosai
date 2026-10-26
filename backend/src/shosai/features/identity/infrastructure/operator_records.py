@@ -25,7 +25,7 @@ from shosai.core.kernel.homes import Home
 ACTIONS = (
     "'operator_roles_changed', 'account_blocked', 'account_unblocked', 'account_banned', "
     "'account_transfer_requested', 'account_transfer_cancelled', 'files_listed', 'file_restored', "
-    "'meetings_listed', 'meeting_restored'"
+    "'meetings_listed', 'meeting_restored', 'eval_case_read'"
 )
 
 

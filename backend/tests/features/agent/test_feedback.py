@@ -9,6 +9,7 @@ import httpx
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.agent.application.case_care import consent_changed
 from shosai.features.agent.application.eval_cases import PROMPT_VERSION
+from shosai.features.agent.domain.feedback import Rating
 from shosai.features.identity.contracts import ConsentChanged
 from tests.features.agent.feedback_bench import FeedbackBench, RunFacts
 from tests.features.agent.thread_bench import HOME
@@ -205,3 +206,36 @@ async def test_the_daily_purge_erases_cases_past_their_year(feedback_bench: Feed
     assert (erased, again) == (1, 0)
     assert (await cases(feedback_bench, old), len(await cases(feedback_bench, recent))) == ([], 1)
     assert await shared(feedback_bench, old) == [False]
+
+
+async def test_the_host_counts_cases_without_text_and_every_read_is_audited(
+    feedback_bench: FeedbackBench,
+) -> None:
+    person = uuid.uuid4()
+    feedback_bench.people.improving.add(person)
+    thread = await feedback_bench.thread(person)
+    answer, _ = await feedback_bench.turn(person, thread, WORDS, RunFacts(language="ru"))
+    await rate(feedback_bench, person, answer, "not_useful")
+
+    async with feedback_bench.reads() as reads:
+        counts = await reads.counts()
+        refs = await reads.refs(Rating.NOT_USEFUL, "ru", 10)
+        none = await reads.refs(Rating.USEFUL, None, 10)
+        found = await reads.find(refs[0].case_id)
+        stored = await reads.read(refs[0])
+        unknown = await reads.find(uuid.uuid4())
+    audited = await fetch_rows(
+        feedback_bench.connection,
+        "SELECT payload FROM outbox_messages WHERE event_type = 'identity.operator.acted'",
+    )
+
+    mine = [count for count in counts if count.language == "ru"]
+    assert [(count.rating, count.cases) for count in mine] == [(Rating.NOT_USEFUL, 1)]
+    assert (len(refs), none, found == refs[0], unknown) == (1, [], True, None)
+    assert stored is not None
+    assert stored.case["answer"] == WORDS[2]
+    assert [
+        (row["payload"]["action"], row["payload"]["subject_id"])
+        for row in audited
+        if row["payload"]["target_user_id"] == str(person)
+    ] == [("eval_case_read", str(stored.id))]

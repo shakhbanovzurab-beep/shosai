@@ -3,7 +3,8 @@
 import pytest
 
 from shosai.core.tasks.queues import TaskQueue
-from shosai.entrypoints.cli import agent_eval_command, build_parser, command
+from shosai.entrypoints.cli import agent_cases_command, agent_eval_command, build_parser, command
+from shosai.features.agent.domain.feedback import Rating
 
 USAGE_ERROR = 2
 
@@ -77,3 +78,23 @@ def test_an_evaluation_names_its_scenarios_languages_and_report() -> None:
         with pytest.raises(SystemExit) as raised:
             parser.parse_args(argv)
         assert raised.value.code == USAGE_ERROR
+
+
+def test_the_cases_of_the_host_are_listed_shown_or_replayed() -> None:
+    parser = build_parser()
+    case_id = "0190a3f2-0000-7000-8000-000000000001"
+
+    listed = agent_cases_command(parser.parse_args(["agent", "eval", "cases", "list"]))
+    shown = agent_cases_command(parser.parse_args(["agent", "eval", "cases", "show", case_id]))
+    replay = agent_cases_command(
+        parser.parse_args(
+            ["agent", "eval", "cases", "replay", "--rating", "useful", "--language", "ja",
+             "--limit", "20", "--report", "out"]
+        )
+    )  # fmt: skip
+
+    assert (listed.action, listed.case_id, listed.limit) == ("list", None, 0)
+    assert (shown.action, str(shown.case_id)) == ("show", case_id)
+    assert (replay.rating, replay.language, replay.limit) == (Rating.USEFUL, "ja", 20)
+    assert str(replay.report) == "out"
+    assert parser.parse_args(["agent", "eval", "--scripted"]).cases is None

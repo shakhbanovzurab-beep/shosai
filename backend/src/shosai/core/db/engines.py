@@ -46,8 +46,10 @@ class DatabaseProfile:
     pool_size: int
     statement_timeout: timedelta
     pool_timeout: timedelta = timedelta(seconds=2)
-    # Обходы по всем тенантам под ролью shosai_sweeper — только у воркеров и планировщика.
+    # Обходы по всем тенантам под ролью shosai_sweeper — у воркеров и планировщика (ADR 0053 п. 2).
     sweeps: bool = False
+    # Обход только на чтение: инженерная команда агента листает оценочные случаи, ничего не меняя.
+    sweeps_read_only: bool = False
 
 
 DATABASE_PROFILES: Final[Mapping[ProcessRole, DatabaseProfile]] = MappingProxyType(
@@ -64,8 +66,14 @@ DATABASE_PROFILES: Final[Mapping[ProcessRole, DatabaseProfile]] = MappingProxyTy
         ProcessRole.AI: DatabaseProfile(pool_size=1, statement_timeout=timedelta(seconds=60)),
         # Разовые команды аккаунтов: несколько коротких запросов к каждому дому.
         ProcessRole.IDENTITY: DatabaseProfile(pool_size=1, statement_timeout=timedelta(seconds=10)),
-        # Оценка Leo: ходы идут, как у воркера агента, по нескольку разом.
-        ProcessRole.AGENT: DatabaseProfile(pool_size=5, statement_timeout=timedelta(seconds=60)),
+        # Оценка Leo: ходы идут, как у воркера агента, по нескольку разом; оценочные случаи людей
+        # листаются обходом только на чтение (ADR 0053 п. 2, поправка владельца 2026-10-26).
+        ProcessRole.AGENT: DatabaseProfile(
+            pool_size=5,
+            statement_timeout=timedelta(seconds=60),
+            sweeps=True,
+            sweeps_read_only=True,
+        ),
     }
 )
 

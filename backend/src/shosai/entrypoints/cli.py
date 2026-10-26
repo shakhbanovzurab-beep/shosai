@@ -14,6 +14,7 @@
     shosai files bucket-rules [--home ru|eu]   put ADR 0055's bucket lifecycle and CORS rules
     shosai agent eval [--scripted] [--scenario ID] [--language CODE] [--record REASON]
                                    Leo's evaluation suites, in development only
+    shosai agent eval cases list|show ID|replay   donated cases on the host, every read audited
 
 Every long-running role also serves `/livez`, `/readyz` and `/metrics` on OPS_PORT. The
 settings come from the environment only (`.env.example`, section 2). One process runs
@@ -29,6 +30,7 @@ from uuid import UUID
 
 import uvloop
 
+from shosai.composition.agent_cases_command import AgentCasesCommand, run_agent_cases
 from shosai.composition.agent_eval_command import (
     AgentEvalCommand,
     default_report,
@@ -49,6 +51,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.observability.debug_logs import DebugScope
 from shosai.core.observability.debug_switches import LONGEST
 from shosai.core.tasks.queues import TaskQueue
+from shosai.features.agent.domain.feedback import Rating
 
 PROGRAM = "shosai"
 
@@ -146,6 +149,23 @@ def add_agent(roles: argparse._SubParsersAction[argparse.ArgumentParser]) -> Non
     )  # fmt: skip
     evaluation.add_argument("--report", type=Path, help="the report's directory")
     evaluation.add_argument("--record", metavar="REASON", help="also write the new baseline")
+    add_cases(evaluation)
+
+
+def add_cases(evaluation: argparse.ArgumentParser) -> None:
+    """`shosai agent eval cases`: the donated cases where they live (AG-D13)."""
+    kinds = evaluation.add_subparsers(dest="cases", required=False, metavar="cases")
+    cases = kinds.add_parser("cases", help="donated cases on the host; every read is audited")
+    actions = cases.add_subparsers(dest="action", required=True, metavar="ACTION")
+    actions.add_parser("list", help="counts by home, rating, language and model")
+    show = actions.add_parser("show", help="one case as JSON")
+    show.add_argument("case_id", type=UUID)
+    replay = actions.add_parser("replay", help="ask today's model again and judge; scores only")
+    replay.add_argument("--rating", choices=[rating.value for rating in Rating])
+    replay.add_argument("--language", choices=SUPPORTED_LANGUAGES)
+    replay.add_argument("--limit", type=int, default=50, choices=range(1, 501), metavar="1..500")
+    replay.add_argument("--judge-model", help="the judge's model; the standard model if omitted")
+    replay.add_argument("--report", type=Path, help="the report's directory")
 
 
 def agent_eval_command(arguments: argparse.Namespace) -> AgentEvalCommand:
@@ -159,6 +179,20 @@ def agent_eval_command(arguments: argparse.Namespace) -> AgentEvalCommand:
         concurrency=arguments.concurrency,
         report=arguments.report or default_report(),
         record=arguments.record,
+    )
+
+
+def agent_cases_command(arguments: argparse.Namespace) -> AgentCasesCommand:
+    """The cases command from the parsed arguments."""
+    replay = arguments.action == "replay"
+    return AgentCasesCommand(
+        action=arguments.action,
+        case_id=getattr(arguments, "case_id", None),
+        rating=Rating(arguments.rating) if replay and arguments.rating else None,
+        language=arguments.language if replay else None,
+        limit=arguments.limit if replay else 0,
+        judge_model=arguments.judge_model if replay else None,
+        report=(arguments.report if replay else None) or default_report(),
     )
 
 
@@ -201,6 +235,8 @@ def engineer_command(
     role: ProcessRole, arguments: argparse.Namespace, environ: Mapping[str, str]
 ) -> Coroutine[Any, Any, int]:
     """The coroutine of a debug switch or of Leo's evaluation."""
+    if role is ProcessRole.AGENT and arguments.cases is not None:
+        return run_agent_cases(environ, agent_cases_command(arguments))
     if role is ProcessRole.AGENT:
         return run_agent_eval(environ, agent_eval_command(arguments))
     return run_debug_switch(environ, debug_command(arguments))

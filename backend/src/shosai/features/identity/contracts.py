@@ -61,6 +61,8 @@ class OperatorAction(StrEnum):
     FILE_RESTORED = "file_restored"
     MEETINGS_LISTED = "meetings_listed"
     MEETING_RESTORED = "meeting_restored"
+    # Владелец прочёл оценочный случай Leo на хосте (AG-D13): строка называет случай, не его текст.
+    EVAL_CASE_READ = "eval_case_read"
 
 
 class Authenticator(Protocol):

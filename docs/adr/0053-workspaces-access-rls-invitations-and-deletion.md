@@ -28,7 +28,7 @@
      - the application role may `SET ROLE` to it (`WITH INHERIT FALSE, SET TRUE`);
      - its policies are `TO shosai_sweeper USING (true)`;
      - `HomeTransactions.begin(scope, sweep=True)` sets it inside the transaction, with one pool;
-     - it is allowed only in the `workers` and `scheduler` roles.
+     - it is allowed only in the `workers` and `scheduler` roles, and read-only in the `agent` engineer command: a one-shot command on the host that serves no request and lists Leo's donated evaluation cases, each read of a case audited (ADR 0068 AG-D13; **amended by the owner on 2026-10-26**).
 3. **Invitations and domain join (WS-D3).**
    - Invitations are by email only. Each one is a one-time link: 32 bytes, SHA-256 stored, 14 days, rotated on resend, bound to the invited address and to the workspace's home.
    - There is no reusable link at launch.
