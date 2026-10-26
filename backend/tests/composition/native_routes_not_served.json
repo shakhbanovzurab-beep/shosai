@@ -4,8 +4,6 @@
   "GET /v1/me/hotkeys",
   "GET /{full_path:path}",
   "PATCH /v1/me/sessions/{session_id}/note/action-items/{item_id}",
-  "POST /v1/ai/chat/stream",
-  "POST /v1/ai/vision/analyze",
   "POST /v1/ai/voice-translate/token",
   "POST /v1/ai/voice-translate/usage",
   "POST /v1/analytics/collect",

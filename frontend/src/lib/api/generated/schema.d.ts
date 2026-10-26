@@ -3032,6 +3032,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/ai/chat/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Chat Stream
+         * @description Answer a live conversation briefly, as a stream of OpenAI-style chunks.
+         */
+        post: operations["chat_stream_v1_ai_chat_stream_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/vision/analyze": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Vision Analyze
+         * @description Solve the task on screenshots, as a stream of OpenAI-style chunks.
+         */
+        post: operations["vision_analyze_v1_ai_vision_analyze_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -6027,6 +6067,81 @@ export interface components {
             google_client_id: string | null;
             /** Vk Client Id */
             vk_client_id?: string | null;
+        };
+        /**
+         * ProxyChatRequest
+         * @description A live conversation to answer briefly.
+         */
+        ProxyChatRequest: {
+            /**
+             * Role
+             * @description responses — the only role served.
+             * @default responses
+             */
+            role: string;
+            /** Messages */
+            messages: components["schemas"]["ProxyMessageIn"][];
+            /**
+             * Temperature
+             * @description Held to 0–2.
+             */
+            temperature?: number | null;
+            /**
+             * Max Tokens
+             * @description At most 4096 are used.
+             */
+            max_tokens?: number | null;
+            /**
+             * Use Kb
+             * @description Accepted; searched once knowledge is.
+             * @default false
+             */
+            use_kb: boolean;
+        };
+        /**
+         * ProxyMessageIn
+         * @description One message of the conversation as the client keeps it.
+         */
+        ProxyMessageIn: {
+            /**
+             * Role
+             * @description Who said it.
+             */
+            role: string;
+            /**
+             * Content
+             * @description What was said; an empty system message is ignored.
+             */
+            content: string;
+        };
+        /**
+         * ProxyVisionRequest
+         * @description Screenshots of a task, with the person's question or without one.
+         */
+        ProxyVisionRequest: {
+            /**
+             * Image Base64
+             * @description One screenshot, the older field.
+             * @default
+             */
+            image_base64: string;
+            /**
+             * Images
+             * @description Screenshots as base64; the first six that decode are read.
+             */
+            images?: string[] | null;
+            /**
+             * Prompt
+             * @description The question; empty asks to solve the task.
+             * @default
+             */
+            prompt: string;
+            /**
+             * Use Kb
+             * @description Accepted; searched once knowledge is.
+             * @default false
+             */
+            use_kb: boolean;
         };
         /**
          * PublicStatus
@@ -14620,6 +14735,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    chat_stream_v1_ai_chat_stream_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProxyChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": unknown;
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    vision_analyze_v1_ai_vision_analyze_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProxyVisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": unknown;
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": components["schemas"]["ErrorResponse"];
                 };
             };
         };

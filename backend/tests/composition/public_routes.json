@@ -121,6 +121,8 @@
     "POST /v1/agent/runs/{run_id}/cancel",
     "POST /v1/agent/threads",
     "POST /v1/agent/threads/{thread_id}/turns",
+    "POST /v1/ai/chat/stream",
+    "POST /v1/ai/vision/analyze",
     "POST /v1/auth/desktop/code",
     "POST /v1/auth/desktop/exchange",
     "POST /v1/auth/desktop/refresh",

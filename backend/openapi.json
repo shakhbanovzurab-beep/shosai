@@ -12276,6 +12276,156 @@
           }
         }
       }
+    },
+    "/v1/ai/chat/stream": {
+      "post": {
+        "tags": [
+          "native"
+        ],
+        "summary": "Chat Stream",
+        "description": "Answer a live conversation briefly, as a stream of OpenAI-style chunks.",
+        "operationId": "chat_stream_v1_ai_chat_stream_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProxyChatRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/event-stream": {
+                "itemSchema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string"
+                    },
+                    "event": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "retry": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ai/vision/analyze": {
+      "post": {
+        "tags": [
+          "native"
+        ],
+        "summary": "Vision Analyze",
+        "description": "Solve the task on screenshots, as a stream of OpenAI-style chunks.",
+        "operationId": "vision_analyze_v1_ai_vision_analyze_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProxyVisionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/event-stream": {
+                "itemSchema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string"
+                    },
+                    "event": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "retry": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -19691,6 +19841,124 @@
         ],
         "title": "ProvidersAnswer",
         "description": "The providers this visitor sees, and what their widgets need."
+      },
+      "ProxyChatRequest": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "title": "Role",
+            "description": "responses — the only role served.",
+            "default": "responses"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/ProxyMessageIn"
+            },
+            "type": "array",
+            "maxItems": 500,
+            "title": "Messages"
+          },
+          "temperature": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Temperature",
+            "description": "Held to 0–2."
+          },
+          "max_tokens": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 32768.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Tokens",
+            "description": "At most 4096 are used."
+          },
+          "use_kb": {
+            "type": "boolean",
+            "title": "Use Kb",
+            "description": "Accepted; searched once knowledge is.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "title": "ProxyChatRequest",
+        "description": "A live conversation to answer briefly."
+      },
+      "ProxyMessageIn": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "pattern": "^(system|user|assistant)$",
+            "title": "Role",
+            "description": "Who said it."
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "What was said; an empty system message is ignored."
+          }
+        },
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ],
+        "title": "ProxyMessageIn",
+        "description": "One message of the conversation as the client keeps it."
+      },
+      "ProxyVisionRequest": {
+        "properties": {
+          "image_base64": {
+            "type": "string",
+            "title": "Image Base64",
+            "description": "One screenshot, the older field.",
+            "default": ""
+          },
+          "images": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Images",
+            "description": "Screenshots as base64; the first six that decode are read."
+          },
+          "prompt": {
+            "type": "string",
+            "title": "Prompt",
+            "description": "The question; empty asks to solve the task.",
+            "default": ""
+          },
+          "use_kb": {
+            "type": "boolean",
+            "title": "Use Kb",
+            "description": "Accepted; searched once knowledge is.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "ProxyVisionRequest",
+        "description": "Screenshots of a task, with the person's question or without one."
       },
       "PublicStatus": {
         "type": "string",

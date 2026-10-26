@@ -39,6 +39,7 @@ from shosai.core.tasks.errors import TaskQueueUnavailableError
 from shosai.core.web.rate_limit import RateLimitedError
 from shosai.features.agent.application.preferences import preferences_of
 from shosai.features.agent.application.surface_digest import Subject
+from shosai.features.agent.application.token_admission import standard_tokens
 from shosai.features.agent.application.turn_commit import (
     TurnMade,
     TurnParts,
@@ -50,12 +51,6 @@ from shosai.features.agent.domain.preferences import Switch, answer_language
 from shosai.features.agent.domain.threads import ThreadRuleError, TurnKind, check_question
 from shosai.features.agent.infrastructure.fleet import Admission
 from shosai.features.agent.infrastructure.person_records import AgentSettingsRecord
-from shosai.features.billing.contracts import (
-    TOKEN_ALLOWANCE,
-    EntitlementsUnavailableError,
-    ModelTier,
-    TokenRoute,
-)
 from shosai.features.identity.contracts import CONSENT_READER, Principal
 
 TURN_LIMIT: Final = RateLimit("agent.turn", 20, timedelta(minutes=1), 5)
@@ -155,7 +150,7 @@ class TurnStarter:
             stored = await session.get(AgentSettingsRecord, principal.user_id)
         if principal.home is Home.RU and not consent:
             raise AppError("consent_required", HTTPStatus.FORBIDDEN)
-        route = await self._token_route(principal)
+        route = await standard_tokens(self._parts.ports, principal)
         await self._within_rate(principal)
         preferences = preferences_of(stored)
         page, again = request.page, request.again
@@ -210,19 +205,6 @@ class TurnStarter:
             await self._let_go(principal.user_id, terms)
             raise unavailable() from error
         return terms.run_id
-
-    async def _token_route(self, principal: Principal) -> TokenRoute:
-        reader = self._parts.ports.get(TOKEN_ALLOWANCE)
-        try:
-            decision = await reader.decision(principal.home, principal.user_id, ModelTier.STANDARD)
-        except EntitlementsUnavailableError as error:
-            raise AppError("entitlements_unavailable", HTTPStatus.SERVICE_UNAVAILABLE) from error
-        if decision.route is TokenRoute.STOP:
-            limit = (
-                decision.reason.value if decision.reason is not None else "standard_daily_tokens"
-            )
-            raise AppError("token_limit", HTTPStatus.PAYMENT_REQUIRED, params={"limit": limit})
-        return decision.route
 
     async def _within_rate(self, principal: Principal) -> None:
         verdict = await self._parts.limiter.check(self._limit, str(principal.user_id))

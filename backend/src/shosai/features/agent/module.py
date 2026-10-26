@@ -37,6 +37,7 @@ from shosai.features.agent.application.feedback import Feedback
 from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.lost_runs import LostRuns
+from shosai.features.agent.application.native_proxy import NativeProxy
 from shosai.features.agent.application.paused_runs import PausedRuns
 from shosai.features.agent.application.preferences import AgentPreferences
 from shosai.features.agent.application.proposal_port import PortProposals
@@ -59,6 +60,7 @@ from shosai.features.agent.application.turn_start import TurnStarter
 from shosai.features.agent.channels.agent_tools import CORE_TOOLS, core_tools
 from shosai.features.agent.channels.http.actions import build_actions_router
 from shosai.features.agent.channels.http.feedback import build_feedback_router
+from shosai.features.agent.channels.http.native_proxy import build_native_proxy_router
 from shosai.features.agent.channels.http.settings import build_settings_router
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
@@ -72,6 +74,7 @@ from shosai.features.agent.infrastructure.feedback_metrics import FeedbackMetric
 from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.person_records import PERSON_MODELS
+from shosai.features.agent.infrastructure.proxy_metrics import ProxyMetrics
 from shosai.features.agent.infrastructure.run_log import RunLog
 from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.run_records import RUN_MODELS
@@ -114,6 +117,15 @@ def action_gateway(
         executor,
         ActionSweeps(transactions, (services.tasks, paused, metrics)),
         ActionInvariants(transactions, metrics),
+    )
+
+
+def native_proxy(services: CoreServices, settings: AgentSettings) -> NativeProxy:
+    """The shipped clients' model proxy over the standard model (step 14)."""
+    return NativeProxy(
+        (services.transactions, services.ports, services.ai, services.rate_limiter),
+        settings.standard_route,
+        ProxyMetrics(services.registry),
     )
 
 
@@ -166,6 +178,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 build_turns_router((starter, streams), ports),
                 build_actions_router((decisions, ActionInbox(transactions, cards)), ports),
                 build_feedback_router(feedback, ports),
+                build_native_proxy_router(native_proxy(services, settings), ports),
             ),
             task_handlers=task_handlers(
                 Handlers(departures, lost_runs, engine, care, actions, CasePurge(transactions))
