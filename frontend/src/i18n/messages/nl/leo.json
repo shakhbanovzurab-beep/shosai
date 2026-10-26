@@ -183,5 +183,9 @@
     "deleteDescription": "De chat en al zijn berichten worden definitief verwijderd.",
     "renameFailed": "De naam van de chat kon niet worden gewijzigd.",
     "deleteFailed": "De chat kon niet worden verwijderd."
+  },
+  "diagram": {
+    "label": "Diagram",
+    "failed": "Het diagram kon niet worden getekend. Hier is de broncode."
   }
 }

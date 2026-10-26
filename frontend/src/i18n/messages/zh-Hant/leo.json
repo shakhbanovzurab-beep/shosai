@@ -183,5 +183,9 @@
     "deleteDescription": "這個對話及其所有訊息將永久刪除。",
     "renameFailed": "無法重新命名對話。",
     "deleteFailed": "無法刪除對話。"
+  },
+  "diagram": {
+    "label": "圖表",
+    "failed": "無法繪製圖表。以下是原始碼。"
   }
 }

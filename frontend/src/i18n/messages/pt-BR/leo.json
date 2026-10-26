@@ -183,5 +183,9 @@
     "deleteDescription": "O chat e todas as mensagens dele serão excluídos para sempre.",
     "renameFailed": "Não foi possível renomear o chat.",
     "deleteFailed": "Não foi possível excluir o chat."
+  },
+  "diagram": {
+    "label": "Diagrama",
+    "failed": "Não foi possível desenhar o diagrama. Aqui está o código."
   }
 }

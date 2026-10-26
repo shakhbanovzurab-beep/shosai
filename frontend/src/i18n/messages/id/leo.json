@@ -183,5 +183,9 @@
     "deleteDescription": "Chat dan semua pesannya akan dihapus secara permanen.",
     "renameFailed": "Chat tidak dapat diganti namanya.",
     "deleteFailed": "Chat tidak dapat dihapus."
+  },
+  "diagram": {
+    "label": "Diagram",
+    "failed": "Diagram tidak dapat digambar. Berikut sumbernya."
   }
 }

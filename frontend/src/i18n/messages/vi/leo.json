@@ -183,5 +183,9 @@
     "deleteDescription": "Cuộc trò chuyện và mọi tin nhắn trong đó sẽ bị xóa vĩnh viễn.",
     "renameFailed": "Không đổi tên được cuộc trò chuyện.",
     "deleteFailed": "Không xóa được cuộc trò chuyện."
+  },
+  "diagram": {
+    "label": "Sơ đồ",
+    "failed": "Không thể vẽ sơ đồ. Đây là mã nguồn của nó."
   }
 }

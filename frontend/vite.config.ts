@@ -6,6 +6,7 @@ import { defineConfig } from "vitest/config";
 import { bootScripts } from "./tooling/boot-script";
 import { cabinetPaths } from "./tooling/cabinet-paths";
 import { i18nCatalogues } from "./tooling/i18n-catalogues";
+import { mermaidWithoutElk } from "./tooling/mermaid-without-elk";
 import { messageTypes } from "./tooling/message-types";
 import { mockWorker } from "./tooling/mock-worker";
 import { fileURLToPath } from "node:url";
@@ -25,6 +26,7 @@ export default defineConfig(({ mode }) => ({
     bootScripts(),
     mockWorker(),
     cabinetPaths(),
+    mermaidWithoutElk(),
   ],
   resolve: { alias: { "@": path("./src") } },
   server: {

@@ -183,5 +183,9 @@
     "deleteDescription": "The chat and all its messages will be deleted for good.",
     "renameFailed": "Couldn’t rename the chat.",
     "deleteFailed": "Couldn’t delete the chat."
+  },
+  "diagram": {
+    "label": "Diagram",
+    "failed": "Couldn’t draw the diagram. Here is its source."
   }
 }

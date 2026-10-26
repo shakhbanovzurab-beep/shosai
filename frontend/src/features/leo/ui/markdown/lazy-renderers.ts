@@ -45,3 +45,6 @@ export const useHighlighter = lazyModule(() => import("./code-highlight"), "Leo:
 
 /** Формулы KaTeX; null — пока грузятся или не загрузились. */
 export const useMath = lazyModule(() => import("./math-render"), "Leo: формулы не загрузились");
+
+/** Диаграммы Mermaid; null — пока грузятся или не загрузились. */
+export const useDiagrams = lazyModule(() => import("./diagram-render"), "Leo: диаграммы не загрузились");

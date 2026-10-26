@@ -183,5 +183,9 @@
     "deleteDescription": "Sohbet ve tüm mesajları kalıcı olarak silinecek.",
     "renameFailed": "Sohbet yeniden adlandırılamadı.",
     "deleteFailed": "Sohbet silinemedi."
+  },
+  "diagram": {
+    "label": "Diyagram",
+    "failed": "Diyagram çizilemedi. İşte kaynak metni."
   }
 }

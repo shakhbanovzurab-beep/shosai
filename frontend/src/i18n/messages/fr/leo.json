@@ -183,5 +183,9 @@
     "deleteDescription": "Le chat et tous ses messages seront supprimés définitivement.",
     "renameFailed": "Impossible de renommer le chat.",
     "deleteFailed": "Impossible de supprimer le chat."
+  },
+  "diagram": {
+    "label": "Diagramme",
+    "failed": "Impossible de dessiner le diagramme. Voici sa source."
   }
 }

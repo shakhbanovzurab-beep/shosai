@@ -3,9 +3,24 @@
 import type { MdBlock } from "../../domain/markdown";
 import { CopyAction } from "../leo-message-actions";
 import { useHighlighter } from "./lazy-renderers";
+import { MdDiagram } from "./md-diagram";
 
-/** Блок кода ответа: язык и «Копировать» в шапке, код с подсветкой; пока подсветка грузится — тем же текстом. */
-export function MdCode({ block }: { readonly block: Extract<MdBlock, { type: "code" }> }) {
+type CodeBlock = Extract<MdBlock, { type: "code" }>;
+
+/** Блок кода ответа; закрытый блок `mermaid` — диаграмма, а пока он пишется — код, как модель его пишет. */
+export function MdCode({ block }: { readonly block: CodeBlock }) {
+  if (block.lang.toLowerCase() === "mermaid" && block.closed) {
+    return (
+      <MdDiagram source={block.text}>
+        <CodeListing block={block} />
+      </MdDiagram>
+    );
+  }
+  return <CodeListing block={block} />;
+}
+
+/** Язык и «Копировать» в шапке, код с подсветкой; пока подсветка грузится — тем же текстом. */
+function CodeListing({ block }: { readonly block: CodeBlock }) {
   const highlighter = useHighlighter();
   const highlighted = highlighter?.highlightedCode(block.lang, block.text) ?? null;
 

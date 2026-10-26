@@ -183,5 +183,9 @@
     "deleteDescription": "채팅과 모든 메시지가 영구적으로 삭제됩니다.",
     "renameFailed": "채팅 이름을 바꾸지 못했습니다.",
     "deleteFailed": "채팅을 삭제하지 못했습니다."
+  },
+  "diagram": {
+    "label": "다이어그램",
+    "failed": "다이어그램을 그리지 못했어요. 원본은 다음과 같아요."
   }
 }
