@@ -1,6 +1,6 @@
 # Leo — agent architecture
 
-- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md). Amended on 2026-10-13 by the [slice map](../../plan/SLICE_MAP.md): the `models` slice is absorbed by `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)); Leo is one per person across Personal and every workspace ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)); package ids S01–S17 are replaced by slice names. Amended on 2026-10-23 by the [`agent` slice plan](../../plan/slices/agent.md) ([ADR 0068](../../adr/0068-leo-agent-slice.md)): sources from tools (§13.2), LangGraph's boundary (§3.3), rules before Jev (§6.3), parts built with their first consumer (§8.2, §8.4, §13.2), feedback and donated evaluation cases (§11.4), the cabinet's renderer (§17 Q-2), and turns run by worker processes of a dedicated `agent` queue, the API only streaming them (§3.1, §11.1, §12). Amended on 2026-10-26 by agent step 11c (agent-derived): donated cases are replayed on the host by `shosai agent eval cases replay`, every read audited (§11.4).
+- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md). Amended on 2026-10-13 by the [slice map](../../plan/SLICE_MAP.md): the `models` slice is absorbed by `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)); Leo is one per person across Personal and every workspace ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)); package ids S01–S17 are replaced by slice names. Amended on 2026-10-23 by the [`agent` slice plan](../../plan/slices/agent.md) ([ADR 0068](../../adr/0068-leo-agent-slice.md)): sources from tools (§13.2), LangGraph's boundary (§3.3), rules before Jev (§6.3), parts built with their first consumer (§8.2, §8.4, §13.2), feedback and donated evaluation cases (§11.4), the cabinet's renderer (§17 Q-2), and turns run by worker processes of a dedicated `agent` queue, the API only streaming them (§3.1, §11.1, §12). Amended on 2026-10-26 by agent step 11c (agent-derived): donated cases are replayed on the host by `shosai agent eval cases replay`, every read audited (§11.4). Amended on 2026-10-26 by the [`decisions` slice plan](../../plan/slices/decisions.md) ([ADR 0069](../../adr/0069-decision-layer-slice.md)): Jev under Leo's cross-border consent while its endpoint stays zero-retention (§6.1, §17 Q-3), the first scope of three points (§6.3), a human reference set (§6.4), records and outcomes (§6.5, §10, §13.1).
 - **Scope:** Leo, the proactive AI agent at the centre of the workspace (brand Shosai). The slices `agent`, `decisions`, `memory`, `proactive` and `errands`, and the agent-facing parts of `capture` (voice), `mcp`, `connectors` and `studio` (models and prompts).
 - **Inputs:** [AUDIT.md](AUDIT.md) (the draft's Leo); target architecture §1–§22; the new cabinet design in `frontend/src/features/leo`; the D1 contract (`contracts/draft/`); [Jev](#6-decision-layer-and-jev) public documentation as of 2026-10-08.
 - **Diagram:** [architecture.html](architecture.html) — components and layers, the turn and approval path, the proactive pipeline.
@@ -286,7 +286,7 @@ Jev is a **decision model** by TypeSafe AI, released on 2026-09-15. It is not a 
 | Weak at arithmetic, dates, counting, negation | **Features are computed in code** (minutes to the meeting, counts, ages) and given as values; questions avoid negations |
 | 32 K context for state plus questions | The state builder has a hard budget, about 2 K tokens by default |
 | $0.042 per M input tokens, output free; ≈ 160–300 ms per call by the published measurements (vendor or early figures) | Affordable on every turn; **latency is budgeted**, run in parallel, never sequential on the hot path |
-| Early access, `alpha` endpoint, proprietary; data retention and DPA not published on the pages read | Contract test on the response shape; pinned snapshot; legal review before personal data is sent (§17 Q-3); a deterministic fallback for every policy |
+| Early access, `alpha` endpoint, proprietary; data retention and DPA not published on the pages read | Contract test on the response shape; pinned snapshot; a deterministic fallback for every policy. Personal data under Leo's cross-border consent, since Jev's published terms are no worse than Leo's models' (§17 Q-3, ADR 0069); every point runs its rule when its endpoint leaves OpenRouter's zero-data-retention list |
 | Language coverage not published | Every policy passes an evaluation in **all 16 platform languages** before it is enabled for anyone; otherwise it runs on its fallback for everyone (no branch by language, CLAUDE.md) |
 
 **Exit path.** Open-weight decision models, Laya (multilingual, Apache-2.0) and Kev, expose the same `/v1/systemone` request shape through the Ollaya runtime. The adapter speaks that shape, so a self-hosted model behind the provider port is a configuration change plus an evaluation, not a redesign.
@@ -327,9 +327,17 @@ caller ──decide(point, subject, features, snippets)──► Decision Servic
 
 `turn.route` replaces sending 130 schemas every round. Its miss rate is measured, and the model can recover a missed toolset with the meta-tool `load_toolset` (§8.2).
 
+**First scope of the points built by the `decisions` plan** ([ADR 0069](../../adr/0069-decision-layer-slice.md)):
+
+- `turn.route@1` ranks only the room the rule leaves (ADR 0068 AG-D7's forced part stays) and is not asked while every allowed toolset fits; toolsets it brings in stay three turns, for the prefix cache. Skill, tier and clarify come with studio and the `ask_user` UI.
+- `action.friction@1` is asked only when the rule says standard and may only turn the card into a warning; "refuse and explain" is not used.
+- `content.injection@1` judges every piece entering a run under an untrusted label — the person's uploads and attachments (`file:own`) included; never the person's own words (their messages, notes, tasks). It runs off the round's path and is awaited before a write's card and at the run's end; a suspicious run's card says so.
+- A decision is paid by the person it serves as background work (outside their Leo tokens); its cost row goes through F6's deferred-record path, off the hot path.
+
 ### 6.4 Calibration, shadow, replay
 
 - **Offline calibration.** Each policy ships labelled synthetic datasets in all 16 languages. Its thresholds are fitted for a target precision per band. Release gates: per-language accuracy floor, expected calibration error ≤ 0.05, and no band with fewer than 50 examples.
+- **Human reference** ([ADR 0069](../../adr/0069-decision-layer-slice.md)). Each point also has a reference set labelled blind by a person — at least 50 cases in Russian and 50 in English, never a person's data. The generator's labels must agree with the human ones on ≥ 90% of it, and a policy is released (shadow or active) only when its outcomes agree with the reference at its accuracy floor, within 10 points of its synthetic accuracy.
 - **Shadow.** A new policy version runs next to the active one on live traffic, is recorded, and acts on nothing. It is promoted when it matches or beats the active one on the online metrics of its point. The window is two weeks, or 5 000 decisions, whichever comes later.
 - **Online calibration.** The decision record (probability, band) joins with the outcome the user gave: acted, dismissed, approved, rejected, corrected the memory. Reliability curves per policy and band are computed from ids and numbers only. No text leaves the home or enters the eval store.
 - **Replay.** A record keeps the features and the hash of the state, not the state text. Changing thresholds can therefore be replayed exactly over past probabilities. Changing questions needs the synthetic sets.
@@ -342,6 +350,8 @@ caller ──decide(point, subject, features, snippets)──► Decision Servic
 - `state_hash`, `probabilities`, `outcome`, `source`, `latency_ms`, `cost`, `jev_request_id`, `created_at`.
 
 Neither prompts nor state text are stored, per §16.8.
+
+**As built by the `decisions` plan** ([ADR 0069](../../adr/0069-decision-layer-slice.md)): a record also keeps the threshold revision, the shadow flag, the rule's outcome beside the final one and the reason; it holds no person id, so it expires with its partition rather than being erased per person; `state_hash` is keyed (HMAC with the home's key); the cost is the `provider_costs` row of the decision's effect key, not a column. Every consulted decision is recorded, a pre-rule short-circuit only counted. The consumer reports the outcome it observes into `agent_decision_outcomes`; a daily pass per home aggregates reliability per band, as counts, into the EU home's `decision_reliability`.
 
 **Cost at the design point:**
 
@@ -734,9 +744,9 @@ If any check fails, the errand becomes a **new proposal** delivered to the user,
 | home PostgreSQL | `memory_facts` with pgvector embeddings (ADR 0033) | authoritative | home | user controls; forgotten → purge 180 d | — |
 | home PostgreSQL | `agent_suggestions`, `suggestion_deliveries`, `suggestion_feedback`, `proactive_triggers`, `proactive_settings`, `push_subscriptions` | authoritative | home | suggestions 90 d; feedback 12 months | — |
 | home PostgreSQL | `errands` | authoritative | home | finished 24 h, failed 30 d | — |
-| home PostgreSQL | `agent_decisions` (partitions) | telemetry | home | 90 d | — |
+| home PostgreSQL | `agent_decisions`, `agent_decision_outcomes` (partitions; no person id, ADR 0069) | telemetry | home | 90 d | — |
 | home PostgreSQL | `agent_skills` (user-installed) | authoritative | home | with the user | — |
-| EU home (platform) | prompts, skills catalogue, model registry, `decision_policies`, `decision_thresholds` | platform data without owner (§6) | EU | versions retired, not deleted | — |
+| EU home (platform) | prompts, skills catalogue, model registry, `decision_policies`, `decision_thresholds`, `decision_reliability` (counts only) | platform data without owner (§6) | EU | versions retired, not deleted | — |
 | Valkey | thread leases; run checkpoints of **active and paused runs only**; run event logs (stream per run, ≤ 2 000 events, TTL 1 h); vault; user state; "has memories" bits | derived, ≤ 24 h | EU (accepted exception, §6) | TTL | in-flight runs fail; paused actions survive in the DB |
 | Qdrant | knowledge and meeting windows (`knowledge`, `notes`) | derived | EU | — | rebuild |
 
@@ -923,7 +933,7 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 | uses | search; people and commitments | `knowledge`; `commitments` | `workspace.search`, knowledge, people and commitments |
 | provides | memory port: `record_recollections(meeting)` | memory → `notes` | meeting facts with provenance |
 | provides | agent port: `run_voice_turn`, `confirm_by_voice` | agent → `capture` | one thread for text and voice |
-| provides | decision port: `decide(point, …)` | decisions → any slice | mail triage (`mail`), hub signal (`hubs`) |
+| provides | decision port: `decide(point, …)`, `observe(decision_id, …)` (ADR 0069) | decisions → any slice | routing, friction and injection (`agent`, through its ports), memory admission (`memory`), initiative (`proactive`), mail triage (`mail`), hub signal (`hubs`) |
 | provides | registry projection for MCP | agent → `mcp` | external MCP tools under the same gateway |
 | provides | user-context port for live answers | memory → `capture` | profile core for `/v1/ws/realtime` `ask` |
 
@@ -1027,6 +1037,7 @@ This design turns that into a real client and adds what is missing. The frontend
 | [0031](../../adr/0031-leo-context-budget-and-compaction.md) | Budgeted, cache-stable context with digests, `read_result` and background compaction | message-count cap, unbounded context files |
 | [0032](../../adr/0032-leo-stream-protocol-v2.md) | `/v1/agent/*` with SSE events with ids and resume; native routes kept | `/v1/ai/agent/*` without resume; NDJSON mock |
 | [0068](../../adr/0068-leo-agent-slice.md) | The agent slice's decisions: sources from tools, past conversations, a workspace's threads after membership ends, routes before studio, Leo in the admin panel, the cabinet's Markdown renderer, rules before Jev, eval gates, parts built with their consumer, skills, feedback and donated cases, LangGraph's boundary; turns on a dedicated `agent` queue's workers | sources on sample data; client-held history; no rating |
+| [0069](../../adr/0069-decision-layer-slice.md) | The Decision Layer slice: Jev under Leo's cross-border consent while its endpoint stays zero-retention, a decision paid as background work with its cost row off the path, the first scope of routing, friction and injection, records without a person id and outcomes from the consumer, a human reference set beside the synthetic ones | the draft's scattered rules, unmeasured |
 
 ---
 
@@ -1078,7 +1089,7 @@ Accepted by the owner on 2026-10-08 and applied to [ARCHITECTURE.md](../ARCHITEC
 |---|---|---|---|
 | Q-1 | Where do memory vectors live: pgvector in the home DB or Qdrant? | **Decided 2026-10-08:** pgvector in the home DB for memory; Qdrant for knowledge and meetings ([ADR 0033](../../adr/0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md)) | — |
 | Q-2 | Streaming Markdown in the cabinet: `streamdown`, another library, or our own incremental renderer? (CLAUDE.md "Undecided") | **Decided 2026-10-23:** our own incremental renderer on `marked`'s lexer, with no raw HTML, allowed link schemes only and tests on unfinished Markdown and XSS; measured on a long answer in the agent plan's step 7 ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D6) | — |
-| Q-3 | Jev legal and contract: TypeSafe's retention and DPA are not published on the pages read; the endpoint is `alpha` | until resolved, Jev runs only on synthetic data and in shadow over features without text; every policy runs on its fallback | phase 4 activation |
+| Q-3 | Jev legal and contract: TypeSafe's retention and DPA are not published on the pages read; the endpoint is `alpha` | **Decided 2026-10-26 by the owner's rule** ([ADR 0069](../../adr/0069-decision-layer-slice.md)): Jev's published terms are no worse than those of Leo's models through OpenRouter — no training, its only endpoint zero-retention, the same transfer out of Russia — so Jev reads personal data under Leo's cross-border consent once a policy passes its gates and two weeks of shadow; it falls back to the rules when its endpoint leaves the zero-retention list. *As first written: until resolved, Jev runs only on synthetic data and in shadow over features without text* | — |
 | Q-4 | Standing approvals (a confirmation given once for a class of writes)? | not now; revisit with acceptance data from phase 7, as an explicit amendment of inv-12 if ever | — |
 | Q-5 | The agent's name after the rebrand: does "Leo" stay? | keep "Leo" in code and prompts (`agent` slice); the visible name is i18n | copy only |
 | Q-6 | Voice approval of reversible actions by the server-verified transcript (§8.4) — acceptable, or screen-only for every write? | accept for reversible and compensable actions; screen for the rest | phase 10 |

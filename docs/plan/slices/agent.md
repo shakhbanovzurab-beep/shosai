@@ -146,6 +146,7 @@ frontend/src/features/leo/   # panel, run store, stream client, Markdown, cards,
 |---|---|---|
 | `ActionProposals.propose(session, principal, thread_id, message_id, tool, args, origin)` → the stored proposal in the cabinet's `LeoProposal` shape | port (AG-R2): plans one write through its slice's `plan` and `preview` in the person's scope, without a model round; refusals are the tool's error codes | chats (a digest's task proposals); later errands and proactive (A3) |
 | `TurnRouter`, `FrictionJudge` | ports with the deterministic defaults of AG-D7; a bound judge may only add friction | decisions (`turn.route`, `action.friction`) |
+| `InjectionJudge`, and outcome reports to decisions' `observe` | added by the [decisions plan](decisions.md) (ADR 0069; its steps 5–7): a consumer-defined port asked per piece entering a run under an untrusted label (`file:own` included), awaited before a write's card and at the run's end; the toolsets a run called and a card's approval, rejection or expiry reported to the decision that shaped them; the card's additive `suspicious` field | decisions (`content.injection`) |
 | `MemoryRecall`, `ProfileFacts` | consumer-defined ports, empty until bound (as billing's `MEETING_MINUTES`) | memory (recall, the profile core) |
 | `SkillReader.skills(session, user_id, ids)` | port: installed skills' bodies and pins | studio (AG-D11) |
 | `AccountDataSpec("agent", …)` | export of threads, messages, ratings, settings and skills; erasure of every row, evaluation cases included, and the Valkey keys; transfer between homes | identity |
