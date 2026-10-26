@@ -126,8 +126,10 @@ LeoSource = {id, kind: meeting | file | task | note | mail | web, title, space, 
 ```
 
 The answer cites `[n]`, the n-th source counting from one. Sources come from the tools Leo used, never from the
-model; `space` is "Personal" in the person's language or the workspace's name. `highlight` stays empty for now —
-the quote is shown whole. A marker for a number the list does not have is not drawn.
+model; `space` is "Personal" in the person's language or the workspace's name. A page `web.search` found
+(agent step 13) is a `web` source: `id` is the page's `http(s)` address, `space` its site, `locator` null, `quote`
+the passage used; the cabinet opens it in a new tab, and only at an `http(s)` address. `highlight` stays empty for
+now — the quote is shown whole. A marker for a number the list does not have is not drawn.
 
 ## Artifacts
 

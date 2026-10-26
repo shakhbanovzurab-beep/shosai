@@ -75,5 +75,8 @@
     "read_result": "Ik lees de rest van een resultaat",
     "load_toolset": "Ik laad meer tools",
     "navigate": "Ik open een pagina"
+  },
+  "web": {
+    "search": "Ik zoek op internet"
   }
 }

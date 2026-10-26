@@ -2,9 +2,10 @@
 
 An estimate errs high, never low: it reserves room under the ceilings, and the recorded
 cost replaces it. Text counts four characters a token; an image 765 input tokens (a 512-px
-tile of the vision models); output is the request's own bound. Speech counts its seconds
-and, for token-billed models, 10 input and 3 output tokens a second; a live minute 25 audio
-tokens a second each way. A document whose pages are not named counts a page per 150 KB.
+tile of the vision models), and a page a web search may bring 1 500 input tokens. Output is
+the request's own bound. Speech counts its seconds and, for token-billed models, 10 input
+and 3 output tokens a second; a live minute 25 audio tokens a second each way. A document
+whose pages are not named counts a page per 150 KB.
 """
 
 import json
@@ -25,6 +26,7 @@ from shosai.core.ai.results import Unit, Usage
 
 CHARS_PER_TOKEN: Final = 4
 IMAGE_TOKENS: Final = 765
+WEB_PAGE_TOKENS: Final = 1_500
 SPEECH_IN_TOKENS: Final = 10
 SPEECH_OUT_TOKENS: Final = 3
 AUDIO_TOKENS: Final = 25
@@ -38,11 +40,16 @@ def tokens_of(text: str) -> int:
 
 
 def chat_estimate(request: ChatRequest) -> Usage:
-    """Input of every message and image, and the whole output bound."""
+    """Input of every message, image and web page the search may bring, and the whole output
+    bound."""
     parts = [part for message in request.messages for part in message.parts]
     text = sum(tokens_of(part.text) for part in parts if isinstance(part, TextPart))
     images = sum(1 for part in parts if isinstance(part, ImagePart))
-    return Usage(input_tokens=text + images * IMAGE_TOKENS, output_tokens=request.max_output_tokens)
+    pages = request.web_search_results * WEB_PAGE_TOKENS
+    return Usage(
+        input_tokens=text + images * IMAGE_TOKENS + pages,
+        output_tokens=request.max_output_tokens,
+    )
 
 
 def embedding_estimate(request: EmbeddingRequest) -> Usage:

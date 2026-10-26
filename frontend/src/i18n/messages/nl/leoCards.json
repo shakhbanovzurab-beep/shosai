@@ -69,6 +69,7 @@
     "at": "{space} · {locator}",
     "copy": "Citaat kopiëren",
     "copied": "Citaat gekopieerd",
-    "copyFailed": "Kan het citaat niet kopiëren"
+    "copyFailed": "Kan het citaat niet kopiëren",
+    "open": "Pagina openen"
   }
 }

@@ -69,6 +69,7 @@
     "at": "{space} · {locator}",
     "copy": "인용 복사",
     "copied": "인용을 복사했어요",
-    "copyFailed": "인용을 복사하지 못했어요"
+    "copyFailed": "인용을 복사하지 못했어요",
+    "open": "페이지 열기"
   }
 }

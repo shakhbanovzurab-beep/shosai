@@ -69,6 +69,7 @@
     "at": "{space} · {locator}",
     "copy": "Sao chép trích dẫn",
     "copied": "Đã sao chép trích dẫn",
-    "copyFailed": "Không sao chép được trích dẫn"
+    "copyFailed": "Không sao chép được trích dẫn",
+    "open": "Mở trang"
   }
 }

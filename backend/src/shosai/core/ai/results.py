@@ -42,14 +42,25 @@ class Usage:
 
 
 @dataclass(frozen=True, slots=True)
+class Citation:
+    """A web page a web search answer rests on: its address, title and the passage used."""
+
+    url: str
+    title: str
+    snippet: str = ""
+
+
+@dataclass(frozen=True, slots=True)
 class ChatResult:
-    """The model's answer: its text, the tools it asked to call, and why it stopped."""
+    """The model's answer: its text, the tools it asked to call, why it stopped, and the web
+    pages a web search found for it."""
 
     text: str
     tool_calls: tuple[ToolCall, ...]
     finish_reason: str | None
     model: ModelRef
     usage: Usage
+    citations: tuple[Citation, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

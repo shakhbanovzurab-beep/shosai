@@ -69,6 +69,7 @@
     "at": "{space} · {locator}",
     "copy": "複製引文",
     "copied": "已複製引文",
-    "copyFailed": "無法複製引文"
+    "copyFailed": "無法複製引文",
+    "open": "開啟頁面"
   }
 }

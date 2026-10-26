@@ -76,6 +76,25 @@ async def test_a_request_carries_images_tools_and_web_search(homes: DatabaseAcce
     assert (body["model"], body["max_tokens"], body["stream"]) == ("probe/chat", 50, False)
 
 
+async def test_a_web_answer_brings_the_pages_it_cites(homes: DatabaseAccess) -> None:
+    bench = await priced_bench(homes)
+    page = {"url": "https://news.example/launch", "title": "Launch", "content": "In May."}
+    bench.openrouter.answer(
+        "chat/completions",
+        chat_answer(
+            "It moved to May.", usage(900, 20, cost=0.0213),
+            annotations=[{"type": "url_citation", "url_citation": page}],
+        ),
+    )  # fmt: skip
+
+    answer = await bench.providers.chat(context(), ROUTE, QUESTION)
+
+    assert [(c.url, c.title, c.snippet) for c in answer.citations] == [
+        ("https://news.example/launch", "Launch", "In May.")
+    ]
+    assert answer.usage.reported_cost_usd is not None
+
+
 async def test_a_stream_records_its_cost_once_when_the_usage_arrives(
     homes: DatabaseAccess, run_slot: RunSlot
 ) -> None:

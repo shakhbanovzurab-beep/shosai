@@ -69,6 +69,7 @@
     "at": "{space} · {locator}",
     "copy": "Alıntıyı kopyala",
     "copied": "Alıntı kopyalandı",
-    "copyFailed": "Alıntı kopyalanamadı"
+    "copyFailed": "Alıntı kopyalanamadı",
+    "open": "Sayfayı aç"
   }
 }

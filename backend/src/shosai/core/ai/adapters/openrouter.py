@@ -30,6 +30,7 @@ from shosai.core.ai.adapters.openrouter_decisions import (
 from shosai.core.ai.adapters.openrouter_wire import (
     StreamedToolCalls,
     chat_body,
+    citations_of,
     data_url,
     first_choice,
     image_of,
@@ -94,6 +95,7 @@ class OpenRouter:
             finish_reason=choice.get("finish_reason"),
             model=model,
             usage=usage_of(answer.get("usage")),
+            citations=citations_of(message),
         )
 
     async def stream_chat(self, model: ModelRef, request: ChatRequest) -> AsyncGenerator[ChatDelta]:

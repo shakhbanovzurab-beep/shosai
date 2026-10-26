@@ -2,11 +2,16 @@
 
 A workspace's source shows the workspace's name; one of the person's own data shows their
 Personal space, in the language of the answer — the words of the cabinet's space switcher, so
-the panel and the switcher agree. A language the platform does not have reads in English.
+the panel and the switcher agree. A language the platform does not have reads in English. A
+page of the web is of no space of the person's: it shows its site.
 """
 
 from collections.abc import Mapping
 from typing import Final
+from urllib.parse import urlsplit
+from uuid import UUID
+
+from shosai.core.agent_tools.sources import SourceKind, SourceRef
 
 PERSONAL_SPACE: Final[Mapping[str, str]] = {
     "en": "Personal", "fr": "Personnel", "de": "Persönlich", "ru": "Личное",
@@ -20,3 +25,12 @@ FALLBACK_LANGUAGE: Final = "en"
 def personal_space(language: str) -> str:
     """The Personal space's name in the language, English for one the platform lacks."""
     return PERSONAL_SPACE.get(language, PERSONAL_SPACE[FALLBACK_LANGUAGE])
+
+
+def space_of(ref: SourceRef, language: str, workspaces: Mapping[UUID, str]) -> str:
+    """The space a source is listed with: its site, its workspace's name, or Personal."""
+    if ref.kind is SourceKind.WEB:
+        return urlsplit(ref.id).hostname or ref.id
+    if ref.org_id is None:
+        return personal_space(language)
+    return workspaces[ref.org_id]

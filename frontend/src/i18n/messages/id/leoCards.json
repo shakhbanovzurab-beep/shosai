@@ -69,6 +69,7 @@
     "at": "{space} · {locator}",
     "copy": "Salin kutipan",
     "copied": "Kutipan disalin",
-    "copyFailed": "Tidak dapat menyalin kutipan"
+    "copyFailed": "Tidak dapat menyalin kutipan",
+    "open": "Buka halaman"
   }
 }

@@ -7,6 +7,7 @@ import pytest
 
 from shosai.core.ai.adapters.openrouter_wire import (
     StreamedToolCalls,
+    citations_of,
     image_of,
     message_body,
     reported_cost,
@@ -16,7 +17,7 @@ from shosai.core.ai.adapters.openrouter_wire import (
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, PlatformAccount
 from shosai.core.ai.errors import AiCallError
 from shosai.core.ai.requests import ChatMessage, Role, TextPart, ToolCall
-from shosai.core.ai.results import Unit
+from shosai.core.ai.results import Citation, Unit
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from tests.core.ai.bench import USER_ID
@@ -133,3 +134,29 @@ def test_a_round_of_calls_and_its_answer_are_sent_in_the_provider_shape() -> Non
     assert message_body(answer) == {
         "role": "tool", "content": '{"meetings": []}', "tool_call_id": "a",
     }  # fmt: skip
+
+
+def test_a_web_answer_cites_each_web_page_once_in_the_order_cited() -> None:
+    def cited(url: object, title: object = None, content: object = None) -> object:
+        return {
+            "type": "url_citation",
+            "url_citation": {"url": url, "title": title, "content": content},
+        }
+
+    message = {
+        "annotations": [
+            cited("https://a.example/news", "Launch moved", "May, not April."),
+            "broken",
+            {"type": "file", "file": {"name": "x"}},
+            cited("javascript:alert(1)", "Bad"),
+            cited("https://a.example/news", "Again"),
+            cited("http://b.example/"),
+            {"type": "url_citation", "url_citation": "broken"},
+        ]
+    }
+
+    assert citations_of(message) == (
+        Citation("https://a.example/news", "Launch moved", "May, not April."),
+        Citation("http://b.example/", "http://b.example/", ""),
+    )
+    assert citations_of({"content": "no search"}) == ()

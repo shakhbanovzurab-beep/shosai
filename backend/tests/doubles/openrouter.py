@@ -62,11 +62,19 @@ def usage(prompt: int = 0, completion: int = 0, cached: int = 0, cost: float | N
     return body
 
 
-def chat_answer(text: str, used: Json, *, tool_calls: list[Json] | None = None) -> httpx.Response:
-    """A non-streamed chat answer."""
+def chat_answer(
+    text: str,
+    used: Json,
+    *,
+    tool_calls: list[Json] | None = None,
+    annotations: list[Json] | None = None,
+) -> httpx.Response:
+    """A non-streamed chat answer, with the tool calls and the web pages it cites."""
     message: Json = {"role": "assistant", "content": text}
     if tool_calls:
         message["tool_calls"] = tool_calls
+    if annotations:
+        message["annotations"] = annotations
     return httpx.Response(
         200,
         json={"choices": [{"message": message, "finish_reason": "stop"}], "usage": used},

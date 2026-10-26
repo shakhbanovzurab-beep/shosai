@@ -75,5 +75,8 @@
     "read_result": "正在閱讀結果的其餘部分",
     "load_toolset": "正在載入更多工具",
     "navigate": "正在開啟頁面"
+  },
+  "web": {
+    "search": "正在搜尋網路"
   }
 }

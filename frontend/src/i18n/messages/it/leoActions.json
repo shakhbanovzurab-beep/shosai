@@ -75,5 +75,8 @@
     "read_result": "Leggo il resto di un risultato",
     "load_toolset": "Carico altri strumenti",
     "navigate": "Apro una pagina"
+  },
+  "web": {
+    "search": "Cerco sul web"
   }
 }

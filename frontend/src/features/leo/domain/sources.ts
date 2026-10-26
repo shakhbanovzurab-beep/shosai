@@ -21,6 +21,13 @@ export type LeoSource = {
 
 export type QuotePart = { text: string; at: number; lit: boolean };
 
+const WEB_PAGE = /^https?:\/\//i;
+
+/** Адрес, по которому открывается страница сети; у источника не из сети и у иной схемы адреса — null. */
+export function pageHref(source: Pick<LeoSource, "kind" | "id">): string | null {
+  return source.kind === "web" && WEB_PAGE.test(source.id) ? source.id : null;
+}
+
 /** Фразы по первой букве, длинные раньше коротких: на каждой позиции отрывка сравниваются только подходящие. */
 function phrasesByFirstLetter(highlight: readonly string[]): Map<string, string[]> {
   const byFirst = new Map<string, string[]>();

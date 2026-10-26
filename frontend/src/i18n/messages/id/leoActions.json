@@ -75,5 +75,8 @@
     "read_result": "Membaca sisa hasil",
     "load_toolset": "Memuat alat lain",
     "navigate": "Membuka halaman"
+  },
+  "web": {
+    "search": "Mencari di web"
   }
 }

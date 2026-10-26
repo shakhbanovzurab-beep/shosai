@@ -75,5 +75,8 @@
     "read_result": "Bir sonucun devamını okuyorum",
     "load_toolset": "Başka araçlar yüklüyorum",
     "navigate": "Bir sayfa açıyorum"
+  },
+  "web": {
+    "search": "İnternette arıyorum"
   }
 }

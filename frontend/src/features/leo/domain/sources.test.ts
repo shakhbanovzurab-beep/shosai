@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { appliedText, changeIndexes, type DiffSegment, segmentKeys } from "./proposals";
-import { quoteParts } from "./sources";
+import { pageHref, quoteParts } from "./sources";
 
 describe("a cited answer", () => {
   it("marks the words of a quote that back the answer, whatever their case", () => {
@@ -17,6 +17,19 @@ describe("a cited answer", () => {
       { text: " (a+b)*", at: 12, lit: false },
     ]);
     expect(quoteParts("seat (a+b)*", ["seat", "seat (a+b)*"])).toEqual([{ text: "seat (a+b)*", at: 0, lit: true }]);
+  });
+});
+
+describe("a web source", () => {
+  it("opens only a web page, and only at an http(s) address", () => {
+    expect(pageHref({ kind: "web", id: "https://news.example/launch" })).toBe("https://news.example/launch");
+    expect(pageHref({ kind: "web", id: "HTTP://old.example/" })).toBe("HTTP://old.example/");
+    expect(
+      ["javascript:alert(1)", "//evil.example", "data:text/html,x", "/app/notes"].map((id) =>
+        pageHref({ kind: "web", id }),
+      ),
+    ).toEqual([null, null, null, null]);
+    expect(pageHref({ kind: "file", id: "https://files.example/1" })).toBeNull();
   });
 });
 

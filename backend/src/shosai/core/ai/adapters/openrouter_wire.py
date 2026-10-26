@@ -29,7 +29,7 @@ from shosai.core.ai.requests import (
     TextPart,
     ToolCall,
 )
-from shosai.core.ai.results import Unit, Usage
+from shosai.core.ai.results import Citation, Unit, Usage
 
 DATA_URL: Final = re.compile(r"data:([\w.+-]+/[\w.+-]+);base64,(.*)", re.DOTALL)
 WEB_SEARCH_TOOL: Final = "openrouter:web_search"
@@ -127,6 +127,23 @@ def tool_calls_of(message: Json) -> tuple[ToolCall, ...]:
         for call in calls
         if isinstance(call, dict)
     )
+
+
+def citations_of(message: Json) -> tuple[Citation, ...]:
+    """The web pages a web search answer cites, each once, in the order they are cited."""
+    found: dict[str, Citation] = {}
+    for annotation in message.get("annotations") or []:
+        if not isinstance(annotation, dict) or annotation.get("type") != "url_citation":
+            continue
+        cited = annotation.get("url_citation") or {}
+        url = str(cited.get("url") or "") if isinstance(cited, dict) else ""
+        if url.startswith(("https://", "http://")) and url not in found:
+            found[url] = Citation(
+                url=url,
+                title=str(cited.get("title") or url),
+                snippet=str(cited.get("content") or ""),
+            )
+    return tuple(found.values())
 
 
 class StreamedToolCalls:

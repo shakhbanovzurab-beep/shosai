@@ -75,5 +75,8 @@
     "read_result": "Đang đọc phần còn lại của kết quả",
     "load_toolset": "Đang tải thêm công cụ",
     "navigate": "Đang mở trang"
+  },
+  "web": {
+    "search": "Đang tìm kiếm trên web"
   }
 }

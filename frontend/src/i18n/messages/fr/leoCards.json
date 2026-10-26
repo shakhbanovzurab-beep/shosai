@@ -69,6 +69,7 @@
     "at": "{space} · {locator}",
     "copy": "Copier la citation",
     "copied": "Citation copiée",
-    "copyFailed": "Impossible de copier la citation"
+    "copyFailed": "Impossible de copier la citation",
+    "open": "Ouvrir la page"
   }
 }

@@ -75,5 +75,8 @@
     "read_result": "Reading the rest of a result",
     "load_toolset": "Getting more tools",
     "navigate": "Opening a page"
+  },
+  "web": {
+    "search": "Searching the web"
   }
 }

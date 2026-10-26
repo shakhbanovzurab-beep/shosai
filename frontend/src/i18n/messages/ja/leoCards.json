@@ -69,6 +69,7 @@
     "at": "{space} · {locator}",
     "copy": "引用をコピー",
     "copied": "引用をコピーしました",
-    "copyFailed": "引用をコピーできませんでした"
+    "copyFailed": "引用をコピーできませんでした",
+    "open": "ページを開く"
   }
 }

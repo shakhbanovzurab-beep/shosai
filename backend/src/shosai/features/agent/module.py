@@ -63,6 +63,7 @@ from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
 from shosai.features.agent.channels.subscriptions import subscriptions
 from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_handlers
+from shosai.features.agent.channels.web_tools import WEB_TOOLS, web_tools
 from shosai.features.agent.contracts import ACTION_PROPOSALS
 from shosai.features.agent.contracts.events import TurnCompleted
 from shosai.features.agent.infrastructure.action_metrics import ActionMetrics
@@ -158,7 +159,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             ),
             subscriptions=subscriptions(departures, AfterTurn(services.tasks)),
             periodic_jobs=PERIODIC_JOBS,
-            agent_tools=core_tools(pages),
+            agent_tools=(*core_tools(pages), *web_tools(services.ai, settings.standard_route)),
             queue_companions=(QueueCompanion(TaskQueue.AGENT, lambda: present_in_fleet(fleet)),),
             provides=(
                 ACCOUNT_DATA_HANDLERS.bind(AgentAccountData(transactions, valkey)),
@@ -180,7 +181,7 @@ AGENT = FeatureModule(
     events=(TurnCompleted,),
     settings=(AgentSettings,),
     production_checks=(agent_model_set,),
-    agent_tools=CORE_TOOLS,
+    agent_tools=(*CORE_TOOLS, *WEB_TOOLS),
     objectives=AGENT_OBJECTIVES,
     monitors=AGENT_MONITORS,
     account_data=(ACCOUNT_DATA,),

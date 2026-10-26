@@ -19,7 +19,7 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.turn_task import TurnPayload
-from shosai.features.agent.domain.spaces import personal_space
+from shosai.features.agent.domain.spaces import space_of
 from shosai.features.workspaces.contracts import MEMBERSHIP_READER, WORKSPACE_READER
 
 log = structlog.stdlib.get_logger(__name__)
@@ -79,7 +79,7 @@ def listed(work: RunWork, language: str) -> list[dict[str, JsonValue]]:
         {
             "id": ref.id, "kind": ref.kind.value, "title": ref.title,
             # Источник workspace допущен, только если его имя прочитано: оно всегда есть.
-            "space": personal_space(language) if ref.org_id is None else spaces[ref.org_id],
+            "space": space_of(ref, language, spaces),
             "locator": ref.locator, "quote": ref.quote, "highlight": [],
         }
         for ref in work.sources.sources

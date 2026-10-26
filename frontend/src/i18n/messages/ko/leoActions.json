@@ -75,5 +75,8 @@
     "read_result": "결과의 나머지 읽는 중",
     "load_toolset": "도구 더 불러오는 중",
     "navigate": "페이지 여는 중"
+  },
+  "web": {
+    "search": "웹 검색 중"
   }
 }
