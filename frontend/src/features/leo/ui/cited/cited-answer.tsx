@@ -6,6 +6,7 @@ import { cn } from "cn";
 import { useTranslations } from "use-intl";
 
 import { citesIn } from "../../domain/markdown-cites";
+import { shownTitle } from "../../domain/report-titles";
 import type { LeoSource } from "../../domain/sources";
 import { type Citations, CitationsContext } from "../markdown/citations";
 import { LeoMarkdown, type PartMark } from "../markdown/leo-markdown";
@@ -32,7 +33,7 @@ function Marker({
   return (
     <button
       type="button"
-      aria-label={t("sources.marker", { index: n, title: source.title })}
+      aria-label={t("sources.marker", { index: n, title: shownTitle(source) })}
       aria-expanded={focus.open === n}
       onMouseEnter={() => onLight(n)}
       onMouseLeave={() => onLight(null)}
@@ -102,7 +103,7 @@ export function CitedAnswer({
                   >
                     <Icon className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
                     <span className="truncate" dir="auto">
-                      {source.title}
+                      {shownTitle(source)}
                     </span>
                     <span className="text-muted-foreground tabular-nums">{n}</span>
                   </button>

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import type { useTranslations } from "use-intl";
 
+import { PLATFORM_PLACE } from "../domain/admin-suggestions";
 import type { LeoContext } from "../domain/context";
 
 /** Leo's translator, for wording outside a component. */
@@ -24,5 +25,6 @@ export function leoPlace(t: LeoT, context: LeoContext, notice: ReactNode): LeoPl
       notice,
     };
   }
+  if (context.kind === "platform") return { ...PLATFORM_PLACE, caption: null, notice };
   return { label: t("place.personal"), scope: t("place.scopePersonal"), caption: null, notice };
 }

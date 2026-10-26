@@ -9,6 +9,7 @@ import { useTranslations } from "use-intl";
 import { Button } from "@/components/ui/button";
 import { copyText } from "@/lib/copy-text";
 
+import { shownTitle } from "../../domain/report-titles";
 import { type LeoSource, pageHref, quoteParts } from "../../domain/sources";
 import { SOURCE_ICONS } from "./source-icons";
 
@@ -59,14 +60,14 @@ export function SourcePreview({ source, index, onClose }: { source: LeoSource; i
   };
   return (
     <section
-      aria-label={t("sources.marker", { index, title: source.title })}
+      aria-label={t("sources.marker", { index, title: shownTitle(source) })}
       className="flex flex-col gap-2 rounded-xl border bg-muted/30 p-3"
     >
       <div className="flex items-start gap-2">
         <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
         <div className="flex min-w-0 flex-1 flex-col">
           <span className="font-medium text-sm" dir="auto">
-            {source.title}
+            {shownTitle(source)}
           </span>
           <span className="text-muted-foreground text-xs">
             {source.locator ? t("sources.at", { space: source.space, locator: source.locator }) : source.space}

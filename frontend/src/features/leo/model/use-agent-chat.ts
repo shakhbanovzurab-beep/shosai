@@ -7,13 +7,14 @@ import { useTranslations } from "use-intl";
 import { useUiLanguage } from "@/hooks/use-ui-language";
 import { useRouter } from "@/lib/navigation";
 
-import { agentApi, type TurnBody } from "../api/agent-api";
+import type { TurnBody } from "../api/agent-api";
 import { lastQuestion } from "../domain/agent-history";
 import { contextKey, type LeoContext } from "../domain/context";
 import { withEpilogues } from "../domain/epilogues";
 import { isRecorded, type LiveTurn, mergedConversation, type TurnKind } from "../domain/live-turns";
 import { pageSubject } from "../domain/page-subject";
 import type { LeoMessage } from "../domain/types";
+import { channelOf, shownIn } from "./agent-channel";
 import { chooseThread, messagesKey, scopeOf, threadsKey, useAgentThread } from "./agent-thread";
 import { refusal, runTurn, stopTurn } from "./agent-turn-runner";
 import { addTurn, dropTurns, failedReply, liveTurns, subscribeTurns, updateTurn } from "./agent-turns";
@@ -23,10 +24,11 @@ import type { LeoChat } from "./leo-chat";
 import { useAgentThreads } from "./use-agent-threads";
 import { useSettledEpilogues } from "./use-settled-epilogues";
 
-/** Leo на настоящем API (`/v1/agent/*`): разговор пространства, его ходы, «Стоп», «Ещё раз» и правка. */
+/** Leo на настоящем API: разговор пространства человека или платформы, его ходы, «Стоп», «Ещё раз» и правка. */
 export function useAgentChat({ page, context }: { page: string; context: LeoContext }): LeoChat {
   const scopeKey = contextKey(context);
   const scope = scopeOf(context);
+  const channel = channelOf(context);
   const locale = useUiLanguage();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -38,14 +40,14 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
   );
   const epilogues = React.useSyncExternalStore(subscribeEpilogues, liveEpilogues, liveEpilogues);
   const asking = turns.some((turn) => turn.reply.status === "streaming");
-  const thread = useAgentThread(scopeKey, scope, !asking);
-  const threads = useAgentThreads(scopeKey, scope, thread.threadId);
+  const thread = useAgentThread(channel.routes, scopeKey, scope, !asking);
+  const threads = useAgentThreads(channel.routes, scopeKey, scope, thread.threadId);
   const visible = turns.filter((turn) => turn.threadId === thread.threadId || turn.threadId === null);
   // Эпилог после одобрения идёт в своём треде: пока он пишет, новый вопрос ждёт, а «Стоп» останавливает его.
   const shown = epilogues.filter((epilogue) => epilogue.threadId !== null && epilogue.threadId === thread.threadId);
   const writing = shown.find((epilogue) => epilogue.reply?.status === "streaming");
   const isBusy = asking || writing !== undefined;
-  const messages = withEpilogues(mergedConversation(thread.conversation, visible), shown);
+  const messages = shownIn(channel, withEpilogues(mergedConversation(thread.conversation, visible), shown));
   useSettledEpilogues(epilogues);
 
   // Записанный историей ход больше не нужен: его ответ уже в ней.
@@ -75,7 +77,7 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     let threadId = thread.threadId;
     if (threadId === null) {
       try {
-        threadId = (await agentApi.createThread(scope, `${key}:thread`)).id;
+        threadId = (await channel.routes.createThread(scope, `${key}:thread`)).id;
       } catch (error) {
         updateTurn(scopeKey, key, (live) => ({ ...live, reply: failedReply(live.reply, ...refusal(error)) }));
         return turnOfKey(key)?.reply;
@@ -95,6 +97,7 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     }
     const settledThread = threadId;
     return runTurn({
+      routes: channel.routes,
       scope: scopeKey,
       key,
       threadId,
@@ -144,8 +147,8 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
   const stop = () => {
     const running = turns.find((turn) => turn.reply.status === "streaming");
     let stopping: Promise<void> | undefined;
-    if (running) stopping = stopTurn(scopeKey, running.key);
-    else if (writing) stopping = agentApi.cancel(writing.runId);
+    if (running) stopping = stopTurn(channel.routes, scopeKey, running.key);
+    else if (writing) stopping = channel.routes.cancel(writing.runId);
     stopping?.catch(() => toast.error(t("failure.stopFailed")));
   };
 
@@ -168,7 +171,8 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     addProposal,
     reset,
     earlier: thread.earlier,
-    attachments: true,
+    attachments: channel.attachments,
+    owner: channel.owner,
     threads,
   };
 }

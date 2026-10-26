@@ -120,5 +120,17 @@ export function useLeoChat({ page, context }: { page: string; context: LeoContex
     setMessages(key, () => []);
   }, [key]);
 
-  return { messages, isBusy, loading: false, send, stop, regenerate, editLast, addProposal, reset, attachments: true };
+  return {
+    messages,
+    isBusy,
+    loading: false,
+    send,
+    stop,
+    regenerate,
+    editLast,
+    addProposal,
+    reset,
+    attachments: true,
+    owner: "person",
+  };
 }

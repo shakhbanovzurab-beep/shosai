@@ -210,9 +210,16 @@ cancel, the same shapes — behind the admin's session cookie (ADR 0049), not a 
 person's token opens none of them and the admin's cookie none of `/v1/agent/*`. The operator's threads are their
 own (`scope=personal`); a turn takes no `upload_ids` (422 `attachments_not_allowed`) and is answered in Russian.
 There are no cards, no ratings and no attachments. The operator's tools read platform aggregates — AI spend, the
-OpenRouter balance, answer ratings — and cite them as `report` sources, whose `id` names the report
-(`spend.summary:month:model`, `spend.daily:30`, `spend.forecast`, `openrouter.balance`, `ratings:30`) and whose
-`space` is "Платформа". A series also comes as a `chart` artifact — `{kind: "chart", ref: "chart:<report id>", alt,
-spec: {shape: bar | line, x, stacked, series: [{key, label}], rows}}`, at most 100 rows computed by the tool —
-which the admin's widget draws; a person's panel never receives one.
+OpenRouter balance, answer ratings, plans and promo codes, account counts — and cite them as `report` sources, whose
+`id` names the report (`spend.summary:month:model`, `spend.daily:30`, `spend.forecast`, `openrouter.balance`,
+`ratings:30`, `billing.plans`, `billing.promo_codes`, `identity.accounts:30`) and whose `space` is "Платформа". The
+source's `title` is English (the model reads it); the admin's widget names a known report in Russian by its `id`
+(`domain/report-titles.ts`) and falls back to the `title`. A series of at least two rows also comes as a `chart`
+artifact — `{kind: "chart", ref: "chart:<report id>", alt, spec: {shape: bar | line, x, stacked, series: [{key,
+label}], rows}}`, at most 100 rows computed by the tool, every day of a daily series present (a day without calls is
+0) — which the admin's widget draws, with a table of the same rows a click away; a person's panel never receives one.
+
+In the cabinet the admin panel's Leo is `AgentLeo` in the `platform` context (agent step 16c): `channelOf` picks the
+operator's routes, no attachments and no rating buttons, and its panel never reads Settings › Leo (a person's): voice
+mode is on and the answer is read out in the admin panel's language.
 

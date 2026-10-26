@@ -8,7 +8,6 @@ import { useTranslations } from "use-intl";
 import { useUiLanguage } from "@/hooks/use-ui-language";
 
 import type { LeoMessage } from "../domain/types";
-import { useLeoAnswerLanguage } from "./use-leo-answer-language";
 
 // The Web Speech recognition API is not in TypeScript's DOM lib yet; this is the subset Leo uses.
 interface SpeechRecognitionLike extends EventTarget {
@@ -37,13 +36,14 @@ export type LeoVoicePhase = "off" | "unavailable" | "listening" | "thinking" | "
 interface UseLeoVoiceOptions {
   // Resolves with Leo's finished reply, so voice mode can read it out as soon as it is ready.
   readonly onSend: (content: string) => Promise<LeoMessage | undefined>;
+  /** The language Leo's answers are written in: the reply is read out in it. */
+  readonly answerLanguage: string;
 }
 
-export function useLeoVoice({ onSend }: UseLeoVoiceOptions) {
+export function useLeoVoice({ onSend, answerLanguage }: UseLeoVoiceOptions) {
   const t = useTranslations("leo");
   // The user is heard in the interface language; Leo's answer is read out in the language it is written in.
   const speechLanguage = useUiLanguage();
-  const answerLanguage = useLeoAnswerLanguage();
   const [phase, setPhase] = React.useState<LeoVoicePhase>("off");
   const [transcript, setTranscript] = React.useState("");
   const [muted, setMuted] = React.useState(false);

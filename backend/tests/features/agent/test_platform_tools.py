@@ -10,6 +10,7 @@ from decimal import Decimal
 from typing import Any, cast
 
 import pytest
+from pydantic import JsonValue
 
 from shosai.core.agent_tools.bindings import ReadTool
 from shosai.core.agent_tools.context import ToolContext
@@ -26,6 +27,7 @@ from shosai.features.agent.application.platform_ratings import PlatformRatings
 from shosai.features.agent.channels.platform_reads import PlatformReads
 from shosai.features.agent.channels.platform_specs import DaysIn, NothingIn, SpendSummaryIn
 from shosai.features.agent.channels.platform_tools import platform_tools
+from shosai.features.agent.domain.charts import Series, Shape, chart
 from shosai.features.agent.domain.operator import operator_scope
 from shosai.features.agent.domain.spaces import space_of
 from shosai.features.agent.infrastructure.person_records import AgentFeedbackRecord
@@ -58,6 +60,9 @@ class Reports:
             SummaryRow("google/gemini", 12, Decimal("1.234"), Decimal("101.5"), 0),
             SummaryRow("anthropic/haiku", 3, Decimal("0.5"), Decimal("41"), 1),
         )
+
+    def days(self, at: datetime, days: int = 30) -> tuple[date, ...]:
+        return tuple(at.date() - timedelta(days=back) for back in range(days - 1, -1, -1))
 
     async def daily(self, at: datetime, days: int = 30) -> tuple[DailyRow, ...]:
         return (
@@ -139,7 +144,7 @@ async def test_spend_is_read_from_f6_s_reports_and_names_its_report(homes: Datab
     summary = await found["platform.spend_summary"].run(
         SpendSummaryIn(period="month", group="model"), operator
     )
-    daily = await found["platform.spend_daily"].run(DaysIn(days=2), operator)
+    daily = await found["platform.spend_daily"].run(DaysIn(days=3), operator)
     forecast = await found["platform.spend_forecast"].run(NothingIn(), operator)
     balance = await found["platform.openrouter_balance"].run(NothingIn(), operator)
 
@@ -151,8 +156,9 @@ async def test_spend_is_read_from_f6_s_reports_and_names_its_report(homes: Datab
     ]
     assert space_of(summary.sources[0], "ru", {}) == "Платформа"
     assert daily.output is not None
+    # День без вызовов остаётся в ряду нулём.
     assert [(d.day, d.calls, d.cost_usd) for d in daily.output.days] == [
-        ("2026-10-25", 3, 0.5), ("2026-10-26", 4, 0.4),
+        ("2026-10-24", 0, 0.0), ("2026-10-25", 3, 0.5), ("2026-10-26", 4, 0.4),
     ]  # fmt: skip
     assert [m.key for m in daily.output.top_models] == ["a", "b"]
     assert forecast.output is not None
@@ -253,3 +259,18 @@ async def test_a_series_comes_with_its_chart_computed_from_the_same_rows(
     assert spec["rows"] == [
         {"day": "2026-10-25", "cost_usd": 0.5}, {"day": "2026-10-26", "cost_usd": 0.4},
     ]  # fmt: skip
+
+
+def test_fewer_than_two_rows_make_no_chart() -> None:
+    drawn: tuple[Shape, str, tuple[Series, ...]] = (
+        "bar",
+        "name",
+        (Series("subscribers", "Подписчики"),),
+    )
+
+    def rows(count: int) -> list[dict[str, JsonValue]]:
+        return [{"name": f"plan {n}", "subscribers": n} for n in range(count)]
+
+    assert chart("billing.plans", "Подписчики", drawn, rows(0)) == ()
+    assert chart("billing.plans", "Подписчики", drawn, rows(1)) == ()
+    assert len(chart("billing.plans", "Подписчики", drawn, rows(2))) == 1

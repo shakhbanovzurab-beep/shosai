@@ -119,12 +119,17 @@ class SpendReports:
         rows = [SummaryRow(key, *values) for key, values in totals.items()]
         return tuple(sorted(rows, key=lambda row: row.cost_usd, reverse=True))
 
+    def days(self, at: datetime, days: int = 30) -> tuple[date, ...]:
+        """The business dates `daily` covers, oldest first, today included."""
+        today = self._business.date_of(at)
+        return tuple(today - timedelta(days=back) for back in range(days - 1, -1, -1))
+
     async def daily(self, at: datetime, days: int = 30) -> tuple[DailyRow, ...]:
-        """Each model's days over the last `days`, oldest first."""
+        """Each model's days over the last `days`, oldest first; a day without calls has no row."""
         # Сутки делового пояса, как у счётчиков, а не по часовому поясу сеанса базы.
         zone = self._business.zone
         day = func.date_trunc("day", ProviderCost.created_at, self._business.zone_name)
-        first = self._business.midnight(self._business.date_of(at) - timedelta(days=days - 1))
+        first = self._business.midnight(self.days(at, days)[0])
         statement = (
             select(
                 day,

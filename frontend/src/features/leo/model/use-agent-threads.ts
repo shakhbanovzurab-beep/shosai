@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 
-import { type AgentScope, agentApi } from "../api/agent-api";
+import type { AgentRoutes, AgentScope } from "../api/agent-api";
 import type { AgentThread } from "../domain/agent-history";
 import { chooseThread, messagesKey, threadsKey } from "./agent-thread";
 
@@ -28,12 +28,17 @@ export interface LeoThreads {
 
 const listKey = (scope: string) => ["agent", "threads", "list", scope] as const;
 
-export function useAgentThreads(scopeKey: string, scope: AgentScope, current: string | null): LeoThreads {
+export function useAgentThreads(
+  routes: AgentRoutes,
+  scopeKey: string,
+  scope: AgentScope,
+  current: string | null,
+): LeoThreads {
   const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
   const list = useInfiniteQuery({
     queryKey: listKey(scopeKey),
-    queryFn: ({ pageParam }) => agentApi.threads(scope, pageParam),
+    queryFn: ({ pageParam }) => routes.threads(scope, pageParam),
     initialPageParam: null as string | null,
     getNextPageParam: (page) => page.next_cursor,
     enabled: open,
@@ -57,11 +62,11 @@ export function useAgentThreads(scopeKey: string, scope: AgentScope, current: st
       setOpen(false);
     },
     rename: async (threadId, title) => {
-      await agentApi.rename(threadId, title);
+      await routes.rename(threadId, title);
       refresh();
     },
     remove: async (threadId) => {
-      await agentApi.remove(threadId);
+      await routes.remove(threadId);
       if (threadId === current) chooseThread(scopeKey, null);
       queryClient.removeQueries({ queryKey: messagesKey(threadId) });
       refresh();

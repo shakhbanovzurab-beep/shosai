@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { type InfiniteData, useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-import { type AgentScope, agentApi } from "../api/agent-api";
+import type { AgentRoutes, AgentScope } from "../api/agent-api";
 import { type AgentMessage, type AgentPage, conversationOf } from "../domain/agent-history";
 import type { LeoContext } from "../domain/context";
 
@@ -36,6 +36,7 @@ function subscribeChosen(listener: () => void) {
   };
 }
 
+/** Пространство тредов на сервере: у оператора платформы оно его собственное, личное (AG-D5). */
 export function scopeOf(context: LeoContext): AgentScope {
   return context.kind === "workspace" ? { kind: "workspace", workspace_id: context.id } : { kind: "personal" };
 }
@@ -51,7 +52,7 @@ function waitsForAnswer(data: History | undefined): boolean {
 }
 
 /** Тред пространства и разговор в нём, старыми вперёд; `idle` — ход не идёт в этой панели. */
-export function useAgentThread(scopeKey: string, scope: AgentScope, idle: boolean) {
+export function useAgentThread(routes: AgentRoutes, scopeKey: string, scope: AgentScope, idle: boolean) {
   const picked = React.useSyncExternalStore(
     subscribeChosen,
     () => chosenThread(scopeKey),
@@ -59,7 +60,7 @@ export function useAgentThread(scopeKey: string, scope: AgentScope, idle: boolea
   );
   const latest = useQuery({
     queryKey: threadsKey(scopeKey),
-    queryFn: () => agentApi.latestThread(scope),
+    queryFn: () => routes.latestThread(scope),
     enabled: picked === undefined,
   });
   // null выбранного треда — новый чат, а не «нет выбора»: последний тред подставляется только без выбора.
@@ -67,7 +68,7 @@ export function useAgentThread(scopeKey: string, scope: AgentScope, idle: boolea
   if (picked !== undefined) threadId = picked;
   const history = useInfiniteQuery({
     queryKey: messagesKey(threadId),
-    queryFn: ({ pageParam }) => agentApi.messages(threadId ?? "", pageParam),
+    queryFn: ({ pageParam }) => routes.messages(threadId ?? "", pageParam),
     initialPageParam: null as string | null,
     getNextPageParam: (page) => page.next_cursor,
     enabled: threadId !== null,

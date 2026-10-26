@@ -113,16 +113,22 @@ class PlatformReads:
                       [{"key": line.key, "cost_usd": line.cost_usd} for line in lines])  # fmt: skip
         source = report(report_id, f"AI spend, {arguments.period}, by {arguments.group}")
         output = SpendSummaryOut(total_usd=total, rows=lines)
-        return ToolResult(output, sources=source, artifacts=(drawn,))
+        return ToolResult(output, sources=source, artifacts=drawn)
 
     async def spend_daily(self, arguments: DaysIn, context: ToolContext) -> ToolResult[Any]:
         """Each day's spend over every model, and the costliest models of the period."""
         del context
-        rows = await self._spend.reports.daily(self._clock(), arguments.days)
-        days: dict[str, list[Decimal]] = defaultdict(lambda: [Decimal(0), Decimal(0)])
+        at = self._clock()
+        rows = await self._spend.reports.daily(at, arguments.days)
+        # Каждый день периода, и день без вызовов — нулём: ось времени графика не пропускает дней.
+        days = {
+            day.isoformat(): [Decimal(0), Decimal(0)]
+            for day in self._spend.reports.days(at, arguments.days)
+        }
         models: dict[str, list[Decimal]] = defaultdict(lambda: [Decimal(0), Decimal(0)])
         for row in rows:
-            for bucket in (days[row.day.isoformat()], models[row.model]):
+            zero = [Decimal(0), Decimal(0)]
+            for bucket in (days.setdefault(row.day.isoformat(), zero), models[row.model]):
                 bucket[0] += row.calls
                 bucket[1] += row.cost_usd
         costliest = sorted(models.items(), key=lambda item: item[1][1], reverse=True)[:TOP_MODELS]
@@ -137,7 +143,7 @@ class PlatformReads:
         drawn = chart(report_id, heading, ("line", "day", (USD,)),
                       [{"day": d.day, "cost_usd": d.cost_usd} for d in output.days])  # fmt: skip
         title = f"AI spend per day, last {arguments.days} days"
-        return ToolResult(output, sources=report(report_id, title), artifacts=(drawn,))
+        return ToolResult(output, sources=report(report_id, title), artifacts=drawn)
 
     async def spend_forecast(self, arguments: NothingIn, context: ToolContext) -> ToolResult[Any]:
         """The month so far and its end at the same pace."""
@@ -183,7 +189,7 @@ class PlatformReads:
         drawn = chart(report_id, heading, ("bar", "model", series),
                       [line.model_dump() for line in lines], stacked=True)  # fmt: skip
         title = f"Ratings of Leo's answers, last {arguments.days} days"
-        return ToolResult(output, sources=report(report_id, title), artifacts=(drawn,))
+        return ToolResult(output, sources=report(report_id, title), artifacts=drawn)
 
     async def plans(self, arguments: NothingIn, context: ToolContext) -> ToolResult[Any]:
         """The catalogue's plans with their prices and subscribers."""
@@ -201,7 +207,7 @@ class PlatformReads:
         drawn = chart("billing.plans", "Подписчики по тарифам",
                       ("bar", "name", (Series("subscribers", "Подписчики"),)), rows)  # fmt: skip
         source = report("billing.plans", "Plans and subscribers")
-        return ToolResult(PlansOut(plans=lines), sources=source, artifacts=(drawn,))
+        return ToolResult(PlansOut(plans=lines), sources=source, artifacts=drawn)
 
     async def promo_codes(self, arguments: NothingIn, context: ToolContext) -> ToolResult[Any]:
         """Every promo code with its status today."""
@@ -233,4 +239,4 @@ class PlatformReads:
                         "registered": line.registered} for line in lines])  # fmt: skip
         title = f"Accounts by data home, last {arguments.days} days"
         source = report(f"identity.accounts:{arguments.days}", title)
-        return ToolResult(AccountsOut(homes=lines), sources=source, artifacts=(drawn,))
+        return ToolResult(AccountsOut(homes=lines), sources=source, artifacts=drawn)

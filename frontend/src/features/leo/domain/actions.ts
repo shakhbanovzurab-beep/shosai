@@ -2,7 +2,7 @@
 // `access` describes the effect on the user's data: reasoning steps touch nothing, `read` only looks,
 // `write` changes data, and `approval` changes data in a way that must be confirmed by the user first.
 
-export type LeoActionCategory = "reasoning" | "web" | "workspace" | "admin" | "compute" | "memory";
+export type LeoActionCategory = "reasoning" | "web" | "workspace" | "compute" | "memory";
 export type LeoActionAccess = "none" | "read" | "write" | "approval";
 
 /** What an action is; its words ("Searching the web") are in the `leoActions` messages, keyed by its id. */
@@ -74,13 +74,6 @@ export const LEO_ACTIONS = {
   read_context: { category: "workspace", access: "read" },
   compare_models: { category: "workspace", access: "read" },
   update_prompt: { category: "workspace", access: "write" },
-
-  // Admin
-  query_analytics: { category: "admin", access: "read" },
-  query_crm: { category: "admin", access: "read" },
-  search_people: { category: "admin", access: "read" },
-  update_user: { category: "admin", access: "approval" },
-  update_role: { category: "admin", access: "approval" },
 
   // Compute
   run_code: { category: "compute", access: "none" },

@@ -67,5 +67,8 @@ export const LOCALIZED_SOURCES = [
 export const ADMIN_ONLY_SOURCES = [
   "src/features/shell/ui/admin-navigation.ts",
   "src/features/leo/domain/admin-suggestions.ts",
+  "src/features/leo/domain/chart-values.ts",
+  "src/features/leo/domain/report-titles.ts",
+  "src/features/leo/ui/chart/leo-chart.tsx",
   "src/features/workspace/mocks/control.ts",
 ];

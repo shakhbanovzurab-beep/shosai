@@ -81,6 +81,7 @@ async def test_a_daily_series_carries_each_model_s_tokens(homes: DatabaseAccess)
     reports = await seeded(homes)
 
     series = await reports.daily(AT, days=3)
+    covered = reports.days(AT, days=3)
 
     by_day = {(r.day, r.model): (r.calls, r.input_tokens, r.cost_usd) for r in series}
     assert by_day[(AT.date(), "probe/chat")] == (2, 200, Decimal("0.40"))
@@ -89,6 +90,7 @@ async def test_a_daily_series_carries_each_model_s_tokens(homes: DatabaseAccess)
     # строки — московские (ADR 0058).
     assert (BASE + timedelta(hours=1)).astimezone(UTC).day != 1
     assert by_day[(BASE.date(), "probe/chat")] == (1, 100, Decimal("0.50"))
+    assert covered == tuple(AT.date() - timedelta(days=back) for back in (2, 1, 0))
 
 
 async def test_the_forecast_runs_the_month_at_its_pace(homes: DatabaseAccess) -> None:

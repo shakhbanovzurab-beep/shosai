@@ -8,7 +8,7 @@ import { type LeoContext, PERSONAL_CONTEXT } from "../domain/context";
 import { useLeoChat } from "../model/use-leo-chat";
 import { LeoWidget } from "./leo-widget";
 
-/** Leo на примерном `/api/leo`: хаб и админка — до своих шагов (agent, шаги 20 и 16). */
+/** Leo на примерном `/api/leo`: хаб — до своего шага (agent, шаг 20). */
 export function SampleLeo({
   context = PERSONAL_CONTEXT,
   notice = null,

@@ -9,8 +9,10 @@ import { useTranslations } from "use-intl";
 
 import { Separator } from "@/components/ui/separator";
 import { useVoiceModeEnabled } from "@/features/settings/model/leo-settings";
+import { useUiLanguage } from "@/hooks/use-ui-language";
 
 import type { LeoChat } from "../model/leo-chat";
+import { useLeoAnswerLanguage } from "../model/use-leo-answer-language";
 import { useLeoAttachments } from "../model/use-leo-attachments";
 import { useLeoVoice } from "../model/use-leo-voice";
 import { LeoComposer } from "./leo-composer";
@@ -36,7 +38,26 @@ interface LeoPanelProps {
   readonly onClose: () => void;
 }
 
-export function LeoPanel({
+/** Голос панели: включён ли голосовой режим и на каком языке написан ответ, который Leo прочтёт вслух. */
+type VoiceSettings = { readonly enabled: boolean; readonly answerLanguage: string };
+
+/** Панель Leo; настройки Leo (Settings › Leo) читаются только в разговоре человека. */
+export function LeoPanel(props: LeoPanelProps) {
+  return props.chat.owner === "operator" ? <OperatorPanel {...props} /> : <PersonPanel {...props} />;
+}
+
+function PersonPanel(props: LeoPanelProps) {
+  const settings = { enabled: useVoiceModeEnabled(), answerLanguage: useLeoAnswerLanguage() };
+  return <PanelView {...props} voiceSettings={settings} />;
+}
+
+// У оператора настроек Leo нет: голос включён, а ответ пишется на языке админки.
+function OperatorPanel(props: LeoPanelProps) {
+  const settings = { enabled: true, answerLanguage: useUiLanguage() };
+  return <PanelView {...props} voiceSettings={settings} />;
+}
+
+function PanelView({
   chat,
   draft,
   place,
@@ -45,12 +66,13 @@ export function LeoPanel({
   onToggleExpanded,
   onCollapse,
   onClose,
-}: LeoPanelProps) {
+  voiceSettings,
+}: LeoPanelProps & { readonly voiceSettings: VoiceSettings }) {
   const t = useTranslations("leo");
   const { messages, isBusy, send, stop, reset } = chat;
   const attachments = useLeoAttachments();
-  const voice = useLeoVoice({ onSend: send });
-  const voiceEnabled = useVoiceModeEnabled();
+  const voice = useLeoVoice({ onSend: send, answerLanguage: voiceSettings.answerLanguage });
+  const voiceEnabled = voiceSettings.enabled;
 
   // Switching Voice mode off in Settings mid-conversation hangs up, so the microphone stops listening.
   React.useEffect(() => {

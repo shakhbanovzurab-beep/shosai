@@ -133,7 +133,7 @@ async def test_a_chart_reaches_the_stream_and_the_history_as_its_spec(
     drawn = chart(
         "spend.daily:2", "Расходы по дням", ("line", "day", (Series("cost_usd", "USD"),)), rows
     )
-    turn_bench.tools.artifacts = [drawn]
+    turn_bench.tools.artifacts = list(drawn)
     turn_bench.model.scripts = [calling(("platform__probe", '{"query": "spend"}')), saying("Вот.")]
 
     events = stream_of(await operator_asks(turn_bench.http, thread, "Расходы по дням?"))

@@ -38,18 +38,6 @@ const SOURCE_RULES: { pattern: RegExp; steps: (query: string) => PlannedStep[] }
     steps: (query) => [{ action: "search_files", detail: query, result: NOT_CONNECTED, ms: 800 }],
   },
   {
-    pattern: /\b(user|users|people|member|members|role|roles)\b/i,
-    steps: (query) => [{ action: "search_people", detail: query, result: NOT_CONNECTED, ms: 700 }],
-  },
-  {
-    pattern: /\b(metric|metrics|analytics|traffic|revenue|growth)\b/i,
-    steps: () => [{ action: "query_analytics", detail: "Last 30 days", result: NOT_CONNECTED, ms: 1000 }],
-  },
-  {
-    pattern: /\b(crm|deal|deals|lead|leads|pipeline)\b/i,
-    steps: (query) => [{ action: "query_crm", detail: query, result: NOT_CONNECTED, ms: 900 }],
-  },
-  {
     pattern: /\b(prompt|prompts|model|models|context)\b/i,
     steps: (query) => [{ action: "search_prompts", detail: query, result: NOT_CONNECTED, ms: 700 }],
   },
