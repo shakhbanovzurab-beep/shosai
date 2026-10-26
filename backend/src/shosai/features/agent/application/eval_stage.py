@@ -29,8 +29,10 @@ from shosai.core.agent_tools.results import (
 )
 from shosai.core.agent_tools.sources import SourceRef
 from shosai.core.agent_tools.spec import ToolEffect, ToolSpec
+from shosai.core.features import FeatureModule
 from shosai.features.agent.domain.eval_cases import EvalScenario, EvalSubject
 from shosai.features.agent.domain.eval_checks import ToolRun
+from shosai.features.agent.domain.routing import CORE
 
 # Ключ превью записи без формулировок среза: такую запись агент не предложит.
 EVAL_PREVIEW = "agent.eval.write"
@@ -74,6 +76,14 @@ class EvalStage:
         if subject is None or subject.kind != kind or subject.id not in ids:
             return None
         return subject
+
+
+def answered_specs(features: Iterable[FeatureModule]) -> tuple[ToolSpec[Any, Any], ...]:
+    """The tools a scenario answers: every slice's, and the agent's own but its core toolset,
+    which runs for real."""
+    return tuple(
+        spec for feature in features for spec in feature.agent_tools if spec.toolset != CORE
+    )
 
 
 class EvalTools:

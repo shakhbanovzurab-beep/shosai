@@ -16,6 +16,7 @@ from datetime import timedelta
 from typing import Any, Final
 
 import httpx
+import pytest
 import pytest_asyncio
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
@@ -201,9 +202,19 @@ def stream_of(answer: httpx.Response) -> list[tuple[str, int, Mapping[str, Any]]
     return events
 
 
+@pytest.fixture
+def probe_tools() -> ProbeTools:
+    """The probe's tools; a module that needs others overrides this fixture."""
+    return ProbeTools()
+
+
 @pytest_asyncio.fixture
 async def turn_bench(
-    homes: DatabaseAccess, valkey: Redis, run_slot: RunSlot, upload_bench: UploadBench
+    homes: DatabaseAccess,
+    valkey: Redis,
+    run_slot: RunSlot,
+    upload_bench: UploadBench,
+    probe_tools: ProbeTools,
 ) -> AsyncIterator[TurnBench]:
     """Turns over the slot's homes and Valkey, with one agent worker alive in the fleet."""
     terms, model, queue, meetings = Terms(), ScriptedModel(), InlineQueue(), Meetings()
@@ -230,7 +241,7 @@ async def turn_bench(
     tracing.add_span_processor(SimpleSpanProcessor(spans))
     tracer = tracing.get_tracer("shosai.agent")
     telemetry = RunTelemetry(metrics, tracer)
-    pages, tools = ResultPages(homes.transactions, ports), ProbeTools()
+    pages, tools = ResultPages(homes.transactions, ports), probe_tools
     catalog = AgentToolCatalog()
     catalog.install([*core_tools(pages), *tools.bound()])
     sources = RunSources(homes.transactions, ports)

@@ -23,15 +23,14 @@ from shosai.core.kv.rate_limits import RateLimiter
 from shosai.features.agent.application.account_data import AgentAccountData
 from shosai.features.agent.application.eval_model import SCRIPTED_ROUTE
 from shosai.features.agent.application.eval_runner import EvalRunner, EvalServices
+from shosai.features.agent.application.eval_stage import answered_specs
 from shosai.features.agent.module import AGENT
 from tests.harness.database_access import DatabaseAccess
 
 
 def slice_specs() -> tuple[ToolSpec[Any, Any], ...]:
-    """Every tool the other slices declare."""
-    return tuple(
-        spec for feature in FEATURES if feature.name != AGENT.name for spec in feature.agent_tools
-    )
+    """Every tool a scenario answers: the slices' and the agent's own but core's."""
+    return answered_specs(FEATURES)
 
 
 def eval_services(homes: DatabaseAccess, valkey: Redis) -> EvalServices:

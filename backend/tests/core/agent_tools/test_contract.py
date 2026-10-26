@@ -12,6 +12,7 @@ from shosai.core.agent_tools.arguments import parse_arguments
 from shosai.core.agent_tools.bindings import ReadTool, WriteTool
 from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.agent_tools.context import Taint, ToolContext
+from shosai.core.agent_tools.previews import LANGUAGES, PreviewWording
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import (
     TOOL_ERROR_TEXTS,
@@ -64,11 +65,31 @@ def test_a_malformed_spec_is_refused_when_declared(changes: dict[str, Any]) -> N
         replace(SEARCH, **changes)
 
 
-def test_a_write_names_its_reversibility_and_egress_is_metered() -> None:
+def card_words(*params: str) -> PreviewWording:
+    """A web card's wording over the given arguments."""
+    return PreviewWording(
+        key="agent.web.search", params=params, title=dict.fromkeys(LANGUAGES, "Search the web")
+    )
+
+
+def test_a_write_names_its_reversibility_and_egress_is_metered_with_one_card() -> None:
     with pytest.raises(ValueError, match="обратимость"):
         replace(ARCHIVE, reversibility=None)
 
-    web = replace(SEARCH, name="web.search", effect=ToolEffect.EGRESS, cost_class=CostClass.METERED)
+    def egress(*previews: PreviewWording) -> object:
+        return replace(
+            SEARCH, name="web.search", effect=ToolEffect.EGRESS, cost_class=CostClass.METERED,
+            previews=previews,
+        )  # fmt: skip
+
+    for previews in ((), (card_words("query"), card_words("limit")), (card_words("folder"),)):
+        with pytest.raises(ValueError, match="одна формулировка"):
+            egress(*previews)
+
+    web = replace(
+        SEARCH, name="web.search", effect=ToolEffect.EGRESS, cost_class=CostClass.METERED,
+        previews=(card_words("query"),),
+    )  # fmt: skip
 
     assert web.effect is ToolEffect.EGRESS
 

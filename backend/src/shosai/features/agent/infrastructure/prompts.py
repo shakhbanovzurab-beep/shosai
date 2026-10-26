@@ -90,13 +90,24 @@ PROPOSED: Final = (
     "Do not call more tools; tell the person in one short sentence that the change waits for "
     "their approval."
 )
+# Вызов наружу в заражённом прогоне ждёт карточки (Leo §7.4, шаг 13b).
+CALL_PROPOSED: Final = (
+    "The call did not run yet: it sends data outside Shosai after this conversation read text "
+    "from outside, so Shosai shows the person a card with it to approve or reject. Do not call "
+    "more tools; tell the person in one short sentence that it waits for their approval."
+)
 ONE_CHANGE: Final = (
-    "Only one change can be proposed at a time, so this call did not run. Propose it again "
-    "after the person decides on the first one."
+    "Only one call can wait for the person's approval at a time, so this call did not run. "
+    "Make it again after the person decides on the first one."
 )
 ACTION_NOTE: Final = (
     "Note from Shosai (the person did not write it): the change you proposed with {tool} {outcome}."
 )
+CALL_NOTE: Final = (
+    "Note from Shosai (the person did not write it): the {tool} call you asked the person to "
+    "approve {outcome}."
+)
+CALL_ANSWERED: Final = "Its result is now that call's answer."
 ACTION_OUTCOMES: Final = {
     "succeeded": "was approved and done",
     "partially_succeeded": "was approved and done only in part",
@@ -135,7 +146,8 @@ WEB_SEARCH: Final = (
 PROMPT_TEXTS: Final = (
     POLICY, *LENGTHS.values(), LANGUAGE, SUMMARY, VOLATILE, QUESTION, TITLE_TASK, SUMMARY_TASK,
     FIRST_QUESTION, CONCLUDE, LAST_ROUND, LOADABLE, UNKNOWN_TOOL, EXTRA_CALL, CUT_CALL,
-    CUT_RESULT, SOURCES_NOTE, PROPOSED, ONE_CHANGE, ACTION_NOTE, *ACTION_OUTCOMES.values(),
+    CUT_RESULT, SOURCES_NOTE, PROPOSED, CALL_PROPOSED, ONE_CHANGE, ACTION_NOTE, CALL_NOTE,
+    CALL_ANSWERED, *ACTION_OUTCOMES.values(),
     ATTACHED_TEXT, ATTACHED_MORE, ATTACHED_IMAGE, ATTACHED_UNREADABLE, WEB_SEARCH,
 )  # fmt: skip
 

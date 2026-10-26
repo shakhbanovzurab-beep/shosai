@@ -7,7 +7,8 @@ person; wrapped text in the context — a page's subject someone else wrote, an 
 text — taints the run before the first round.
 The conversation lives here, never in the frame's state: a resumed run reads it back from the
 database — the context, its own rounds before the card and the server note on what became of
-the action — and goes on with its steps, sources, taint and toolsets as they were. Each round
+the action, with an approved call's result as that call's answer — and goes on with its
+steps, sources, taint and toolsets as they were. Each round
 asks the model through the provider port under its own effect key, with the tools its number
 allows (Leo §8.3): from the fifth the model is asked to conclude, and the tenth offers no tools
 and tells it so, so the loop always ends; a call the model makes anyway in a round without
@@ -24,6 +25,7 @@ from uuid import UUID
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
 from shosai.core.ai.requests import ChatMessage, ChatRequest, ImagePart, Role
+from shosai.features.agent.application.egress_answers import EgressAnswers, kept_call
 from shosai.features.agent.application.model_stream import AnswerBuffer, stream_answer
 from shosai.features.agent.application.run_context import text_message
 from shosai.features.agent.application.run_earlier import earlier_work
@@ -31,6 +33,7 @@ from shosai.features.agent.application.run_engine_parts import EngineParts
 from shosai.features.agent.application.run_telemetry import TurnTimes
 from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.tool_offer import TurnOffer
+from shosai.features.agent.application.tool_read_back import ResultReader
 from shosai.features.agent.application.tool_round import ToolRound
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.budgets import Segment, round_policy
@@ -98,12 +101,23 @@ class RunSteps:
                 request = await self._parts.context.request(session, payload, sizes, labels)
                 offer = await self._parts.routing.offer(session, payload)
                 earlier = await earlier_work(session, payload, action_id)
+                kept = await kept_call(session, payload, action_id)
         offer.restore(earlier.routing)
         work.resume_from(earlier)
         if any(source.org_id is not None for source in earlier.sources):
             await self._parts.tools.sources.admit(work, payload, ())
+        if kept is not None:
+            earlier = await self._answers().fold(earlier, offer, kept)
         self._run.buffer.restore(earlier.text)
         self._begin(request, offer, labels, earlier.messages)
+
+    def _answers(self) -> EgressAnswers:
+        """What puts an approved call's result in place of its waiting answer."""
+        tools, run = self._parts.tools, self._run
+        reader = ResultReader((tools.pages, tools.sources, tools.bulkhead), (run.payload, run.work))
+        return EgressAnswers(
+            (self._parts.transactions, reader), (run.payload, run.work, run.emitter)
+        )
 
     def _begin(
         self,

@@ -24,7 +24,9 @@ from shosai.features.agent.application.action_decisions import ActionDecisions, 
 from shosai.features.agent.application.action_execution import ActionExecution
 from shosai.features.agent.application.action_inbox import ActionInbox
 from shosai.features.agent.application.action_sweeps import ActionSweeps
+from shosai.features.agent.application.egress_calls import EgressCalls
 from shosai.features.agent.application.paused_runs import PausedRuns
+from shosai.features.agent.application.result_pages import ResultPages
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.run_resumption import ResumePayload
 from shosai.features.agent.channels.http.actions import build_actions_router
@@ -128,7 +130,8 @@ async def action_bench(turn_bench: TurnBench) -> AsyncIterator[ActionBench]:
         (turn_bench.homes.transactions, parts.outbox), (parts.run_log, parts.frames), (queue, cards)
     )
     transactions = turn_bench.homes.transactions
-    execution = ActionExecution(transactions, (turn_bench.catalog, paused, metrics))
+    egress = EgressCalls(ResultPages(transactions, turn_bench.ports))
+    execution = ActionExecution(transactions, (turn_bench.catalog, paused, metrics, egress))
     queue.execution = execution
     decisions = ActionDecisions(transactions, (queue, paused, metrics), wait=WAIT)
     ports = PortDirectory()

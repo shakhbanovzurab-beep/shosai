@@ -22,6 +22,7 @@ from pydantic import JsonValue
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.agent_tools.spec import ToolEffect
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.homes import Home
@@ -39,7 +40,12 @@ from shosai.features.agent.domain.actions import ActionStatus
 from shosai.features.agent.domain.runs import CloseReason, RunStatus
 from shosai.features.agent.domain.stream import EventKind
 from shosai.features.agent.domain.threads import MessageRole
-from shosai.features.agent.infrastructure.prompts import ACTION_NOTE, ACTION_OUTCOMES
+from shosai.features.agent.infrastructure.prompts import (
+    ACTION_NOTE,
+    ACTION_OUTCOMES,
+    CALL_ANSWERED,
+    CALL_NOTE,
+)
 from shosai.features.agent.infrastructure.run_log import RunLog
 from shosai.features.agent.infrastructure.run_records import AgentActionRecord, AgentRunRecord
 from shosai.features.agent.infrastructure.thread_records import (
@@ -85,7 +91,12 @@ def action_note(record: AgentActionRecord) -> str:
     items = items_of(record)
     code = next((item.code for item in items if item.code), None) or NO_CODE
     outcome = ACTION_OUTCOMES[record.status].format(code=code)
-    return ACTION_NOTE.format(tool=items[0].tool, outcome=outcome)
+    first = items[0]
+    if first.effect != ToolEffect.EGRESS.value:
+        return ACTION_NOTE.format(tool=first.tool, outcome=outcome)
+    note = CALL_NOTE.format(tool=first.tool, outcome=outcome)
+    # Результат одобренного вызова эпилог ставит ответом на сам вызов (`egress_answers`).
+    return f"{note} {CALL_ANSWERED}" if first.result is not None else note
 
 
 def resumable(record: AgentActionRecord) -> bool:

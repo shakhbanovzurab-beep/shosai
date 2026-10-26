@@ -9,7 +9,8 @@ no code: the slice binds handlers to it when it is built (`bindings`). A slice d
 specs on its `FeatureModule`, so the model-facing English test reads every description and
 schema without starting anything. A spec also names the one argument a step line shows
 (`step_detail`) and, for a write, the wording of the preview keys it returns (`previews`,
-ADR 0068): the person's words, never the model's.
+ADR 0068): the person's words, never the model's. An egress tool has one wording, which the
+agent fills from the call's arguments when the call waits for a card (Leo §7.4).
 
 Rules are checked when a spec is built: a malformed spec stops composition, not a turn.
 The input model forbids extra fields: an argument the schema lacks is one the model made up.
@@ -46,6 +47,10 @@ class ToolEffect(StrEnum):
     WRITE = "write"
     # Действие в кабинете: навигация, тема.
     CLIENT = "client"
+
+
+# Вызовы, которые ждут карточки человека: запись всегда, выход наружу — в заражённом прогоне.
+CARD_EFFECTS: Final = frozenset({ToolEffect.WRITE, ToolEffect.EGRESS})
 
 
 class Reversibility(StrEnum):
@@ -142,8 +147,13 @@ def _card_problems(spec: ToolSpec[Any, Any]) -> list[str]:
     problems: list[str] = []
     if spec.step_detail is not None and spec.step_detail not in spec.input.model_fields:
         problems.append("step_detail — имя поля модели входа")
-    if spec.previews and spec.effect is not ToolEffect.WRITE:
-        problems.append("формулировки превью есть только у записи")
+    if spec.previews and spec.effect not in CARD_EFFECTS:
+        problems.append("формулировки превью есть только у записи и выхода наружу")
+    # Карточку вызова наружу агент заполняет его аргументами: одна формулировка, поля входа.
+    if spec.effect is ToolEffect.EGRESS and (
+        len(spec.previews) != 1 or not set(spec.previews[0].params) <= set(spec.input.model_fields)
+    ):
+        problems.append("у выхода наружу одна формулировка карточки, её параметры — поля входа")
     keys = [wording.key for wording in spec.previews]
     prefix = f"agent.{spec.name.split('.', 1)[0]}."
     if len(set(keys)) != len(keys) or not all(key.startswith(prefix) for key in keys):

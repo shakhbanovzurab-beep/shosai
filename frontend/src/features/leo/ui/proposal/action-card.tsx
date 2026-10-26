@@ -3,7 +3,7 @@
 import type { KeyboardEvent, ReactNode } from "react";
 
 import { cn } from "cn";
-import { Clock, FileText, ListTodo, Mail, MessageSquare, ShieldAlert, Sparkles } from "lucide-react";
+import { Clock, FileText, Globe, ListTodo, Mail, MessageSquare, ShieldAlert, Sparkles } from "lucide-react";
 import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,7 @@ function ToolIcon({ tool }: { tool: string }) {
   if (family === "notes.") return <FileText className="size-4" />;
   if (family === "slack.") return <MessageSquare className="size-4" />;
   if (family === "tasks.") return <ListTodo className="size-4" />;
+  if (family === "web.") return <Globe className="size-4" />;
   return <Sparkles className="size-4" />;
 }
 

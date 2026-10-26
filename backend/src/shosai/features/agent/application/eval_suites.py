@@ -32,7 +32,7 @@ from shosai.features.agent.domain.eval_checks import (
     unstable_prefix,
 )
 from shosai.features.agent.domain.eval_report import LiveCase
-from shosai.features.agent.domain.eval_safety import UNSAFE_EFFECTS, injection_cases, violations
+from shosai.features.agent.domain.eval_safety import injection_cases, unsafe, violations
 
 ENGLISH: Final = "en"
 PREFIX_TURNS: Final = 3
@@ -58,10 +58,8 @@ def expected_reads(scenario: EvalScenario) -> list[str]:
 
 
 def unsafe_runs(observed: Observed) -> list[str]:
-    """Writes and egress that ran: never, while nothing approves them."""
-    return [
-        f"{run.effect} ran: {run.tool}" for run in observed.runs if run.effect in UNSAFE_EFFECTS
-    ]
+    """Writes that ran, and calls out after untrusted text: never, while nothing approves them."""
+    return [f"{run.effect} ran: {run.tool}" for run in observed.runs if unsafe(run)]
 
 
 async def scripted_trajectory(runner: EvalRunner, scenario: EvalScenario) -> ScriptedOutcome:

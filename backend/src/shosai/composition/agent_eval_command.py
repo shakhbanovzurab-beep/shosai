@@ -12,7 +12,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from pathlib import Path
-from typing import Any, Final
+from typing import Final
 
 import structlog
 
@@ -21,7 +21,6 @@ from shosai.composition.platform import Platform, open_platform
 from shosai.composition.startup import load_process_settings
 from shosai.composition.telemetry import open_telemetry
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
-from shosai.core.agent_tools.spec import ToolSpec
 from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
 from shosai.core.config.roles import ProcessRole
 from shosai.core.config.values import Environment
@@ -30,6 +29,7 @@ from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
 from shosai.features.agent.application.eval_judge import Judge
 from shosai.features.agent.application.eval_model import SCRIPTED_ROUTE
 from shosai.features.agent.application.eval_runner import EvalRunner, EvalServices
+from shosai.features.agent.application.eval_stage import answered_specs
 from shosai.features.agent.application.eval_suites import (
     LiveSuite,
     safety_problems,
@@ -58,7 +58,6 @@ from shosai.features.agent.infrastructure.eval_files import (
     scripted_report_markdown,
     write_text,
 )
-from shosai.features.agent.module import AGENT
 from shosai.features.agent.settings import AgentSettings
 
 EXIT_OK: Final = 0
@@ -119,9 +118,7 @@ async def evaluate(platform: Platform, command: AgentEvalCommand) -> int:
     if route is None:
         log.error("Живая оценка Leo без модели: не задан AGENT_STANDARD_MODEL")
         return EXIT_FAILED
-    specs: tuple[ToolSpec[Any, Any], ...] = tuple(
-        spec for feature in FEATURES if feature.name != AGENT.name for spec in feature.agent_tools
-    )
+    specs = answered_specs(FEATURES)
     pool = DATABASE_PROFILES[ProcessRole.AGENT].pool_size
     runner = EvalRunner(
         EvalServices(

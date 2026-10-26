@@ -1,11 +1,12 @@
-"""Leo's `web` toolset: `web.search` (Leo §8.1, §7.4; agent step 13).
+"""Leo's `web` toolset: `web.search` (Leo §8.1, §7.4; agent steps 13a, 13b).
 
 The search runs through the provider port's own web search: a short model call reads the pages
 the search found and answers from them, and each page is a source of the answer, numbered with
 the others, its site as its space. Text from the web is untrusted: the result is wrapped as
 `web` and raises the run's taint. The tool sends the query outside Shosai, so it is `egress`,
-metered — the call's cost lands on the person's turn like the turn's own — and offered only while
-the person keeps "Web search" on in Settings > Leo.
+metered — the call's cost lands on the person's turn like the turn's own — offered only while
+the person keeps "Web search" on in Settings > Leo, and, once the run has read text from
+outside, a card the person approves first, worded here with the query.
 """
 
 from collections.abc import Callable, Mapping
@@ -18,6 +19,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from shosai.core.agent_tools.bindings import AgentTool, ReadTool
 from shosai.core.agent_tools.context import ToolContext
+from shosai.core.agent_tools.previews import PreviewField, PreviewWording
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import ToolErrorCode, ToolResult
 from shosai.core.agent_tools.sources import SOURCE_ID_MAX, TITLE_MAX, SourceKind, SourceRef
@@ -73,6 +75,26 @@ class WebSearchOutput(BaseModel):
     pages: list[WebHit] = Field(description="The pages found, in the order they are cited.")
 
 
+# Карточка поиска в заражённом прогоне: что уйдёт наружу — сам запрос.
+SEARCH_CARD: Final = PreviewWording(
+    key="agent.web.search",
+    params=("query",),
+    title={
+        "en": "Search the web", "fr": "Rechercher sur le Web", "de": "Im Web suchen",
+        "ru": "Поискать в интернете", "nl": "Zoeken op internet", "it": "Cerca sul web",
+        "es": "Buscar en la web", "pt-BR": "Pesquisar na web", "ar": "البحث في الويب",
+        "tr": "İnternette ara", "ko": "웹 검색", "hi": "वेब पर खोजें", "vi": "Tìm kiếm trên web",
+        "zh-Hant": "搜尋網路", "ja": "ウェブを検索", "id": "Cari di web",
+    },
+    fields=(
+        PreviewField("query", {
+            "en": "Query", "fr": "Requête", "de": "Suchanfrage", "ru": "Запрос",
+            "nl": "Zoekopdracht", "it": "Ricerca", "es": "Consulta", "pt-BR": "Consulta",
+            "ar": "عبارة البحث", "tr": "Arama sorgusu", "ko": "검색어", "hi": "खोज",
+            "vi": "Truy vấn", "zh-Hant": "搜尋字詞", "ja": "検索語句", "id": "Kueri",
+        }),
+    ),
+)  # fmt: skip
 WEB_SEARCH_SPEC: Final = ToolSpec(
     name="web.search",
     toolset="web",
@@ -90,6 +112,7 @@ WEB_SEARCH_SPEC: Final = ToolSpec(
     timeout=SEARCH_TIMEOUT,
     provenance=Provenance.WEB,
     step_detail="query",
+    previews=(SEARCH_CARD,),
 )
 WEB_TOOLS: Final = (WEB_SEARCH_SPEC,)
 

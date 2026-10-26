@@ -32,6 +32,7 @@ from shosai.features.agent.application.action_sweeps import ActionSweeps
 from shosai.features.agent.application.after_turn import AfterTurn
 from shosai.features.agent.application.case_care import CasePurge
 from shosai.features.agent.application.departures import Departures
+from shosai.features.agent.application.egress_calls import EgressCalls
 from shosai.features.agent.application.feedback import Feedback
 from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.history import History
@@ -95,6 +96,27 @@ def tool_bulkhead(role: ProcessRole) -> asyncio.Semaphore:
     return asyncio.Semaphore(max(profile.pool_size - SPARE_CONNECTIONS, 1))
 
 
+def action_gateway(
+    services: CoreServices,
+    cards: ActionCards,
+    keys: tuple[RunLog, TurnSaver],
+    pages: ResultPages,
+) -> tuple[ActionDecisions, tuple[ActionExecution, ActionSweeps, ActionInvariants]]:
+    """The Action Gateway: decisions, the executor, the sweeps and the invariants, over one
+    settler of paused runs."""
+    transactions = services.transactions
+    paused = PausedRuns((transactions, services.outbox), keys, (services.tasks, cards))
+    metrics = ActionMetrics(services.registry)
+    executor = ActionExecution(
+        transactions, (services.agent_tools, paused, metrics, EgressCalls(pages))
+    )
+    return ActionDecisions(transactions, (services.tasks, paused, metrics)), (
+        executor,
+        ActionSweeps(transactions, (services.tasks, paused, metrics)),
+        ActionInvariants(transactions, metrics),
+    )
+
+
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """Settings > Leo, threads and their history, turns and runs, departures, and the
@@ -134,17 +156,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     streams = RunStreams(transactions, (run_log, tail), leases, metrics)
     lost_runs = LostRuns(transactions, (run_log, leases, fleet), metrics)
     care = ThreadCare(transactions, (services.ai, settings.utility_route()), ports)
-    paused, action_metrics = (
-        PausedRuns((transactions, services.outbox), (run_log, frames), (services.tasks, cards)),
-        ActionMetrics(services.registry),
-    )
-    decisions = ActionDecisions(transactions, (services.tasks, paused, action_metrics))
+    decisions, actions = action_gateway(services, cards, (run_log, frames), pages)
     feedback = Feedback((transactions, ports, threads), FeedbackMetrics(services.registry))
-    actions = (
-        ActionExecution(transactions, (services.agent_tools, paused, action_metrics)),
-        ActionSweeps(transactions, (services.tasks, paused, action_metrics)),
-        ActionInvariants(transactions, action_metrics),
-    )
     try:
         yield FeatureParts(
             http_routers=(

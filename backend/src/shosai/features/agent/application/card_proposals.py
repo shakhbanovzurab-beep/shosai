@@ -1,21 +1,22 @@
-"""A write call in a round: proposed as a card, never run (Leo §5.3; agent step 9a).
+"""A call in a round that waits for the person: proposed as a card, never run (Leo §5.3, §7.4;
+agent steps 9a, 13b).
 
-The person sees the proposal as a step; the slice plans and previews it within the tool's
-timeout and the turn's deadline, and a refusal — arguments the slice cannot plan, a target the
-person may not touch — goes back to the model as a typed error it can act on, with no card.
-A planned write is stored as an action, announced by `action.proposed` with its card, and the
-run pauses after the round: the model reads only that the person now decides.
+A write always waits; a call that sends data out waits once the run has read text from
+outside Shosai. The person sees the proposal as a step; a write's slice plans and previews it
+within the tool's timeout and the turn's deadline, and a refusal — arguments the slice cannot
+plan, a target the person may not touch — goes back to the model as a typed error it can act
+on, with no card. A proposal is stored as an action, announced by `action.proposed` with its
+card, and the run pauses after the round: the model reads only that the person now decides.
 """
 
 import asyncio
 import time
 from collections.abc import Callable
-from typing import Any
 
 import structlog
 from pydantic import BaseModel, JsonValue
 
-from shosai.core.agent_tools.bindings import WriteTool
+from shosai.core.agent_tools.bindings import AgentTool, ReadTool, WriteTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolError, ToolErrorCode
 from shosai.core.ai.requests import ToolCall
@@ -25,15 +26,15 @@ from shosai.features.agent.application.tool_answers import error_content, step_d
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.stream import EventKind
 from shosai.features.agent.domain.threads import StepStatus
-from shosai.features.agent.infrastructure.prompts import PROPOSED
+from shosai.features.agent.infrastructure.prompts import CALL_PROPOSED, PROPOSED
 from shosai.features.agent.infrastructure.tool_metrics import ToolMetrics
 
 OUTCOME_PROPOSED = "proposed"
 log = structlog.stdlib.get_logger(__name__)
 
 
-class WriteProposals:
-    """Proposes the write calls of one round."""
+class CardProposals:
+    """Proposes the calls of one round that wait for the person."""
 
     def __init__(
         self,
@@ -48,18 +49,18 @@ class WriteProposals:
     async def answer(
         self,
         call: ToolCall,
-        write: WriteTool[Any, Any],
+        tool: AgentTool,
         arguments: BaseModel,
         context: ToolContext,
     ) -> CallAnswer:
-        """What the model reads back for its write call: the card is up, or why not."""
-        spec, work = write.spec, self._work
+        """What the model reads back for its call: the card is up, or why not."""
+        spec, work = tool.spec, self._work
         seq = work.open_step()
         opened: dict[str, JsonValue] = {"id": f"step-{seq}", "seq": seq, "activity": spec.name}
         detail = step_detail(spec, arguments)
         await self._emitter.emit(EventKind.STEP_STARTED, opened | {"detail": detail})
         began = self._clock()
-        proposed = await self._proposed(write, arguments, context)
+        proposed = await self._proposed(tool, arguments, (call.call_id, context))
         seconds = self._clock() - began
         outcome = OUTCOME_PROPOSED if isinstance(proposed, Proposed) else proposed.code.value
         self._metrics.called(spec.toolset, spec.effect.value, outcome, seconds)
@@ -76,21 +77,24 @@ class WriteProposals:
         work.cards.append(proposed.record.id)
         await self._emitter.emit(EventKind.STEP_COMPLETED, closed)
         await self._emitter.emit(EventKind.ACTION_PROPOSED, {"action": proposed.card})
-        return CallAnswer(call.call_id, spec.name, PROPOSED)
+        waiting = PROPOSED if isinstance(tool, WriteTool) else CALL_PROPOSED
+        return CallAnswer(call.call_id, spec.name, waiting)
 
     async def _proposed(
-        self, write: WriteTool[Any, Any], arguments: BaseModel, context: ToolContext
+        self, tool: AgentTool, arguments: BaseModel, call: tuple[str, ToolContext]
     ) -> Proposed | ToolError:
         """The proposal within the tool's timeout; a slice's failure as a typed error."""
-        limit = min(write.spec.timeout.total_seconds(), context.remaining_seconds())
+        call_id, context = call
+        run = (self._payload, self._work)
+        if isinstance(tool, ReadTool):
+            return await self._proposer.propose_call(tool, arguments, call_id, run)
+        limit = min(tool.spec.timeout.total_seconds(), context.remaining_seconds())
         try:
             async with asyncio.timeout(max(limit, 0.0)):
-                return await self._proposer.propose(
-                    write, arguments, context, (self._payload, self._work)
-                )
+                return await self._proposer.propose(tool, arguments, context, run)
         except TimeoutError:
             return ToolError(ToolErrorCode.TIMEOUT)
         # Сбой среза при планировании — ошибка для модели, не конец хода; стек — в журнал.
         except Exception:
-            log.exception("Запись Leo не спланирована", tool=write.spec.name)
+            log.exception("Запись Leo не спланирована", tool=tool.spec.name)
             return ToolError(ToolErrorCode.FAILED)

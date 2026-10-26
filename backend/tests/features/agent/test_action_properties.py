@@ -14,6 +14,8 @@ from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
 from shosai.features.agent.application.action_execution import ActionExecution, Claimed
+from shosai.features.agent.application.egress_calls import EgressCalls
+from shosai.features.agent.application.result_pages import ResultPages
 from shosai.features.agent.domain.action_items import ActionItem
 from tests.features.agent.action_bench import ActionBench
 from tests.features.agent.turn_bench import HOME
@@ -49,7 +51,9 @@ class Crashing(ActionExecution):
 
     def __init__(self, bench: ActionBench, at: str) -> None:
         _, paused, metrics = bench.parts
-        super().__init__(bench.turns.homes.transactions, (bench.turns.catalog, paused, metrics))
+        transactions = bench.turns.homes.transactions
+        egress = EgressCalls(ResultPages(transactions, bench.turns.ports))
+        super().__init__(transactions, (bench.turns.catalog, paused, metrics, egress))
         self._at = at
         self._stores = 0
 

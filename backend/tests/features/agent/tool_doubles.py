@@ -27,7 +27,7 @@ from shosai.core.agent_tools.results import (
     ToolResult,
 )
 from shosai.core.agent_tools.sources import ArtifactRef, SourceRef
-from shosai.core.agent_tools.spec import Reversibility, ToolEffect, ToolSpec
+from shosai.core.agent_tools.spec import CostClass, Reversibility, ToolEffect, ToolSpec
 from shosai.core.ai.calls import ModelRef, Provider
 from shosai.core.ai.requests import ToolCall
 from shosai.core.ai.results import ChatDelta, Usage
@@ -102,6 +102,19 @@ PROBE_WORDING: Final = PreviewWording(
     title=dict.fromkeys(LANGUAGES, "Probe write"),
     fields=(PreviewField("count", dict.fromkeys(LANGUAGES, "Tasks")),),
 )
+# Пробный поиск в сети: выход наружу за переключателем, со своей карточкой.
+WEB_LOOKUP: Final = ToolSpec(
+    name="web.lookup", toolset="web", description="Probe egress.", input=Query, output=Found,
+    effect=ToolEffect.EGRESS, cost_class=CostClass.METERED, switch="agent.web_search",
+    provenance=Provenance.WEB, step_detail="query",
+    previews=(
+        PreviewWording(
+            key="agent.web.lookup", params=("query",),
+            title=dict.fromkeys(LANGUAGES, "Probe search"),
+            fields=(PreviewField("query", dict.fromkeys(LANGUAGES, "Query")),),
+        ),
+    ),
+)  # fmt: skip
 TASKS_CREATE: Final = ToolSpec(
     name="tasks.create", toolset="tasks", description="Probe write.", input=Query, output=Found,
     effect=ToolEffect.WRITE, reversibility=Reversibility.REVERSIBLE, previews=(PROBE_WORDING,),
@@ -123,6 +136,8 @@ class ProbeTools:
     sources: list[SourceRef] = field(default_factory=list)
     # Артефакты, которые отдаёт каждый поиск (AG-R1).
     artifacts: list[ArtifactRef] = field(default_factory=list)
+    # Страницы пробного поиска в сети; None — набора `web` у зонда нет.
+    pages: list[SourceRef] | None = None
 
     async def search(self, arguments: Query, context: ToolContext) -> ToolResult[Found]:
         """The items and the sources, once per call."""
@@ -133,6 +148,13 @@ class ProbeTools:
             sources=tuple(self.sources),
             artifacts=tuple(self.artifacts),
         )
+
+    async def lookup(self, arguments: Query, context: ToolContext) -> ToolResult[Found]:
+        """The pages found, noted as a search of the web."""
+        del context
+        self.ran.append(f"web:{arguments.query}")
+        pages = self.pages or []
+        return ToolResult(Found(items=[page.title for page in pages]), sources=tuple(pages))
 
     async def archive(self, arguments: BaseModel, context: ToolContext) -> ToolResult[Found]:
         """The archive's items, noted as one run."""
@@ -184,6 +206,7 @@ class ProbeTools:
             ReadTool(NOTES_WAIT, self.wait),
             ReadTool(NOTES_FAIL, self.fail),
             WriteTool(TASKS_CREATE, plan, preview, execute),
+            *((ReadTool(WEB_LOOKUP, self.lookup),) if self.pages is not None else ()),
         )
 
 

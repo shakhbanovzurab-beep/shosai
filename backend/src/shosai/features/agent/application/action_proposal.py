@@ -7,6 +7,8 @@ someone else wrote or the write cannot be undone. One transaction stores the act
 `proposed` with its nonce, its hour and the space the change goes to, audits the proposal and
 renders its card in the person's language; a preview its slice has no words for is refused,
 since no card could show it. Nothing is written to the slice's data until the person approves.
+A call that sends data out of a tainted run is proposed the same way, its card worded from
+its arguments by its tool's one wording (`egress_calls`).
 """
 
 import secrets
@@ -14,11 +16,12 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
+from uuid import UUID
 
 import structlog
 from pydantic import BaseModel, JsonValue
 
-from shosai.core.agent_tools.bindings import WriteTool
+from shosai.core.agent_tools.bindings import ReadTool, WriteTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolError, ToolErrorCode
 from shosai.core.agent_tools.spec import Reversibility
@@ -26,6 +29,7 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.ids import new_id
 from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.action_rows import AuditEntry, audit
+from shosai.features.agent.application.egress_calls import egress_item
 from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.action_items import ActionItem, redacted
@@ -72,7 +76,6 @@ class ActionProposer:
         run: tuple[TurnPayload, RunWork],
     ) -> Proposed | ToolError:
         """The stored proposal, or the slice's refusal to plan it."""
-        payload, work = run
         spec = write.spec
         planned = await write.plan(arguments, context)
         if isinstance(planned, ToolError):
@@ -87,20 +90,42 @@ class ActionProposer:
             fields=redacted(arguments.model_dump(mode="json")), preview_key=preview.key,
             preview_params=dict(preview.params), reversibility=reversibility.value,
         )  # fmt: skip
+        return await self._stored(item, planned.org_id, run)
+
+    async def propose_call(
+        self,
+        tool: ReadTool[Any, Any],
+        arguments: BaseModel,
+        call_id: str,
+        run: tuple[TurnPayload, RunWork],
+    ) -> Proposed | ToolError:
+        """The stored proposal of a call that sends data out, worded from its arguments."""
+        item = egress_item(tool.spec, arguments, call_id)
+        if item is None:
+            log.error("Вызов наружу без формулировки карточки", tool=tool.spec.name)
+            return ToolError(ToolErrorCode.FAILED)
+        return await self._stored(item, None, run)
+
+    async def _stored(
+        self, item: ActionItem, org_id: UUID | None, run: tuple[TurnPayload, RunWork]
+    ) -> Proposed:
+        """The action stored as `proposed`, audited, with its card."""
+        payload, work = run
         now = self._clock()
         record = AgentActionRecord(
-            id=new_id(), user_id=payload.user_id, org_id=planned.org_id,
+            id=new_id(), user_id=payload.user_id, org_id=org_id,
             thread_id=payload.thread_id, run_id=payload.run_id, message_id=payload.reply_id,
             origin=ProposalOrigin.TURN.value, origin_key=None,
             status=ActionStatus.PROPOSED.value, nonce=secrets.token_urlsafe(NONCE_BYTES),
-            items=[item.stored()], friction=int(friction_rule(work.taint, reversibility)),
+            items=[item.stored()],
+            friction=int(friction_rule(work.taint, Reversibility(item.reversibility))),
             taint=int(work.taint), taint_sources=list(work.taint_sources), not_before=None,
             expires_at=expires_at(now, ProposalOrigin.TURN), created_at=now, updated_at=now,
         )  # fmt: skip
         async with self._transactions.begin(payload.scope()) as session:
             session.add(record)
             await session.flush()
-            entry = AuditEntry(AuditEvent.PROPOSED, tool=spec.name, targets=len(item.targets))
+            entry = AuditEntry(AuditEvent.PROPOSED, tool=item.tool, targets=len(item.targets))
             audit(session, record, entry, now)
             (card,) = await self._cards.cards(session, [record])
         return Proposed(record, item, card)

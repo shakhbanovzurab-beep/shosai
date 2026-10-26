@@ -2,8 +2,9 @@
 
 The model's calls of a round run in parallel, at most eight; the rest are refused, and so is
 the last call of an answer the token limit cut, whose arguments may be incomplete. A write is
-never run here: the first of the round is proposed as a card and pauses the run, any other is
-refused until the person decides (`write_proposals`). A call of
+never run here, nor a call that sends data out once the run is tainted: the first such call of
+the round is proposed as a card and pauses the run, any other is refused until the person
+decides (`card_proposals`). A call of
 a tool not offered, or with arguments its schema refuses, is answered with an error the model
 can act on and never runs. A call runs within its tool's timeout and the turn's deadline,
 through a bulkhead kept below the process's database pool, so a burst of calls waits for a
@@ -26,12 +27,13 @@ from opentelemetry.trace import Tracer
 from pydantic import BaseModel, JsonValue
 
 from shosai.core.agent_tools.arguments import parse_arguments
-from shosai.core.agent_tools.bindings import ReadTool, WriteTool
+from shosai.core.agent_tools.bindings import ReadTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolError, ToolErrorCode, ToolResult
 from shosai.core.agent_tools.sources import ArtifactRef
 from shosai.core.ai.requests import ChatMessage, Role, TextPart, ToolCall
 from shosai.features.agent.application.action_proposal import ActionProposer
+from shosai.features.agent.application.card_proposals import CardProposals
 from shosai.features.agent.application.result_pages import ResultPages
 from shosai.features.agent.application.run_sources import RunSources, listed
 from shosai.features.agent.application.run_work import CallAnswer, Round, RunWork, Step
@@ -43,9 +45,8 @@ from shosai.features.agent.application.tool_answers import (
 )
 from shosai.features.agent.application.tool_offer import TurnOffer
 from shosai.features.agent.application.tool_read_back import ResultReader
-from shosai.features.agent.application.tool_registry import OfferedTool, is_write
+from shosai.features.agent.application.tool_registry import OfferedTool, waits_for_card
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
-from shosai.features.agent.application.write_proposals import WriteProposals
 from shosai.features.agent.domain.budgets import CALLS_PER_ROUND, estimate_tokens
 from shosai.features.agent.domain.core_tools import LOAD_TOOLSET, NAVIGATE
 from shosai.features.agent.domain.runs import TURN_DEADLINE
@@ -112,13 +113,17 @@ class ToolRound:
             self._payload.scope(), self._payload.run_id,
             self._payload.started_at + TURN_DEADLINE, self._work.taint,
         )  # fmt: skip
-        writes = [i for i, call in enumerate(calls) if is_write(offer.tool(call.name))]
+        # Заражение — на начало раунда: аргументы вызовов написаны до того, что раунд прочтёт.
+        cards = [
+            i for i, c in enumerate(calls) if waits_for_card(offer.tool(c.name), context.taint)
+        ]
         answers = await asyncio.gather(
             *(
                 self._answer(
                     offer, call, context,
                     refused=self._refusal(offer, calls, index, cut=cut)
-                    or (refusal_content("one_change", ONE_CHANGE) if index in writes[1:] else None),
+                    or (refusal_content("one_change", ONE_CHANGE) if index in cards[1:] else None),
+                    card=index in cards[:1],
                 )
                 for index, call in enumerate(calls)
             )
@@ -152,7 +157,13 @@ class ToolRound:
         return None
 
     async def _answer(
-        self, offer: TurnOffer, call: ToolCall, context: ToolContext, *, refused: str | None
+        self,
+        offer: TurnOffer,
+        call: ToolCall,
+        context: ToolContext,
+        *,
+        refused: str | None,
+        card: bool,
     ) -> CallAnswer:
         offered = offer.tool(call.name)
         if refused is not None or offered is None:
@@ -161,10 +172,10 @@ class ToolRound:
         arguments = parse_arguments(spec, call.arguments)
         if isinstance(arguments, ToolError):
             return CallAnswer(call.call_id, spec.name, error_content(arguments))
-        if isinstance(offered.tool, WriteTool):
+        if card:
             offer.called(offered)
             parts = (self._parts.proposer, self._parts.metrics)
-            proposals = WriteProposals(parts, (self._payload, self._work, self._emitter))
+            proposals = CardProposals(parts, (self._payload, self._work, self._emitter))
             return await proposals.answer(call, offered.tool, arguments, context)
         if spec.name == LOAD_TOOLSET and not offer.may_load(str(getattr(arguments, "name", ""))):
             invalid = ToolError(ToolErrorCode.INVALID_ARGUMENTS, {"fields": "name"})

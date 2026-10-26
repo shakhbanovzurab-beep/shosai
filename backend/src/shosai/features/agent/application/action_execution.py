@@ -5,7 +5,8 @@ the task only one goes on — and applies its items in order. Each item is marke
 its own commit before its slice is called, then its outcome in the next: the slice applies the
 effect once per key `action:index` in its own transaction, with its audit event. A typed refusal
 fails the item; a timeout or an unexpected error leaves its outcome unknown, since the effect
-may have committed — it is never retried. The action ends with its items' honest outcome and
+may have committed — it is never retried. An approved call out of a tainted run runs once, its
+result kept for the epilogue (`egress_calls`). The action ends with its items' honest outcome and
 a note in its thread, its paused run goes back to the `agent` queue for the epilogue, and the
 cabinet sees the card's end and what to refresh.
 """
@@ -14,11 +15,12 @@ import asyncio
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from typing import Any
 from uuid import UUID
 
 import structlog
 
-from shosai.core.agent_tools.bindings import WriteTool
+from shosai.core.agent_tools.bindings import ReadTool, WriteTool
 from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.agent_tools.context import Taint, ToolContext
 from shosai.core.agent_tools.results import PlannedEffect
@@ -32,6 +34,7 @@ from shosai.features.agent.application.action_rows import (
     moved,
     store_items,
 )
+from shosai.features.agent.application.egress_calls import EgressCalls, is_egress
 from shosai.features.agent.application.paused_runs import PausedRuns
 from shosai.features.agent.domain.action_items import ActionItem, ItemState
 from shosai.features.agent.domain.actions import (
@@ -69,11 +72,11 @@ class ActionExecution:
     def __init__(
         self,
         transactions: HomeTransactions,
-        parts: tuple[AgentToolCatalog, PausedRuns, ActionMetrics],
+        parts: tuple[AgentToolCatalog, PausedRuns, ActionMetrics, EgressCalls],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._catalog, self._paused, self._metrics = parts
+        self._catalog, self._paused, self._metrics, self._egress = parts
         self._clock = clock
 
     async def run(self, home: Home, user_id: UUID, action_id: UUID) -> None:
@@ -109,21 +112,32 @@ class ActionExecution:
         """The item's outcome: its slice applied it, refused it, or nobody can tell."""
         record = claimed.record
         tool = self._catalog.tool(item.tool)
+        if tool is None:
+            return item.with_state(ItemState.FAILED, TOOL_UNAVAILABLE)
+        context = ToolContext(
+            claimed.scope, record.run_id or record.id, self._clock() + tool.spec.timeout,
+            Taint(record.taint),
+        )  # fmt: skip
+        if isinstance(tool, ReadTool) and is_egress(tool.spec):
+            return await self._egress.run(tool, item, context)
         if not isinstance(tool, WriteTool):
             return item.with_state(ItemState.FAILED, TOOL_UNAVAILABLE)
-        timeout = tool.spec.timeout
-        context = ToolContext(
-            claimed.scope, record.run_id or record.id, self._clock() + timeout, Taint(record.taint)
-        )
+        return await self._write(tool, item, context, item_key(str(record.id), index))
+
+    @staticmethod
+    async def _write(
+        tool: WriteTool[Any, Any], item: ActionItem, context: ToolContext, key: str
+    ) -> ActionItem:
+        """The write applied by its slice once per key, or its outcome unknown."""
         planned = PlannedEffect(item.targets, item.plan)
         try:
-            async with asyncio.timeout(timeout.total_seconds()):
-                result = await tool.execute(planned, context, item_key(str(record.id), index))
+            async with asyncio.timeout(tool.spec.timeout.total_seconds()):
+                result = await tool.execute(planned, context, key)
         except TimeoutError:
             return item.with_state(ItemState.OUTCOME_UNKNOWN, TIMED_OUT)
         # Неожиданная ошибка среза: эффект мог зафиксироваться — исход неизвестен, повтора нет.
         except Exception:
-            log.exception("Пункт действия Leo упал", tool=item.tool, action=record.id)
+            log.exception("Пункт действия Leo упал", tool=item.tool, key=key)
             return item.with_state(ItemState.OUTCOME_UNKNOWN, FAILED)
         if result.error is not None:
             return item.with_state(ItemState.FAILED, result.error.code.value)

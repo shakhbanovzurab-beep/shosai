@@ -522,7 +522,7 @@ If the model needs more, `load_toolset(name)` adds the schemas for the next roun
 ### 8.3 Execution
 
 - **Reads and egress** run in parallel, at most 8 calls per round; further calls of the round are refused. Each has its own timeout, and its result is capped by `result_budget`. Errors become typed error data the model can explain; a call of a tool not offered, or with arguments its schema refuses, never runs. Calls pass a per-process bulkhead sized below the database pool, so a burst waits for a connection instead of failing for one.
-- **Until the Action Gateway** (agent step 9a) only reads and cabinet actions are offered; writes and egress join with their cards.
+- **Writes and egress join with their cards**: writes with the Action Gateway (agent step 9a), egress in agent step 13b. An egress call made once the run's taint is external or worse is proposed as a card like a write (one card waits at a time), runs once on approval as the person, and its kept result becomes that call's answer when the epilogue resumes — its sources numbered among the run's, its text wrapped with the tool's label; an untainted run's egress call runs at once.
 - **Egress** additionally requires a card when taint ≥ external (§7.4), and is metered.
 - **Rounds:**
   - soft limit 4: after it, reasoning is forced on and the planner prompt asks to conclude;
@@ -831,7 +831,7 @@ This is below the transcript tables (1.9 TB/year) and needs no new store.
 | Suite | What | Where | Gate |
 |---|---|---|---|
 | Trajectories | Per skill and toolset: tool choice, arguments, order, final answer; mocked tools; rule checks + LLM judge | CI on synthetic data | no regression > 3 points on any suite; tool-choice accuracy ≥ baseline |
-| Safety | Injection corpora through each untrusted channel (mail, web, foreign files, meeting speech, memory, MCP descriptions, user skills); assert no unapproved write or untainted egress | CI | 0 violations |
+| Safety | Injection corpora through each untrusted channel (mail, web, foreign files, meeting speech, memory, MCP descriptions, user skills); assert no unapproved write, and no egress after untrusted text without its card | CI | 0 violations |
 | Confirmation invariants | Property tests (Hypothesis) over the Action Gateway: concurrent approvals, crashes at each step, expiry, replays | CI, real PostgreSQL | 0 double executions |
 | Multilingual parity | The trajectory and decision suites in all 16 languages | CI (nightly) | per-language floor |
 | Decision calibration | Per policy: accuracy per band, ECE, coverage per language | CI on threshold or question change | ECE ≤ 0.05 |

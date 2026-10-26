@@ -2,10 +2,11 @@
 
 An item keeps what its slice froze when the write was proposed — the targets and the data its
 `execute` reads back — the preview the card showed, the arguments' names with hashes of their
-values for the audit trail, and its outcome. An item is marked `executing` in its own commit
-before its slice is called (write-ahead): an executor lost after that point leaves the item
-`outcome_unknown`, never retried; one lost before it leaves the item `failed`
-(`not_started`), since nothing was attempted.
+values for the audit trail, and its outcome. An item of a call that sends data out (Leo §7.4)
+keeps the call's arguments as its plan and, once the call ran, the id of its kept result. An
+item is marked `executing` in its own commit before its slice is called (write-ahead): an
+executor lost after that point leaves the item `outcome_unknown`, never retried; one lost
+before it leaves the item `failed` (`not_started`), since nothing was attempted.
 """
 
 import hashlib
@@ -21,6 +22,7 @@ from shosai.core.agent_tools.results import PreviewParam
 from shosai.features.agent.domain.actions import ItemOutcome
 
 HASH_CHARS: Final = 16
+WRITE_EFFECT: Final = "write"
 
 
 class ItemState(StrEnum):
@@ -54,6 +56,10 @@ class ActionItem:
     reversibility: str = "reversible"
     state: ItemState = ItemState.PENDING
     code: str | None = None
+    # Эффект инструмента: запись, или вызов наружу, который ждал карточки (Leo §7.4).
+    effect: str = WRITE_EFFECT
+    # Хранимый результат вызова наружу после одобрения: его читает эпилог.
+    result: str | None = None
 
     def stored(self) -> dict[str, JsonValue]:
         """The item as the action row keeps it."""
@@ -66,11 +72,17 @@ class ActionItem:
             "reversibility": self.reversibility,
             "state": self.state.value,
             "code": self.code,
+            "effect": self.effect,
+            "result": self.result,
         }
 
     def with_state(self, state: ItemState, code: str | None = None) -> ActionItem:
         """The item in another state."""
         return replace(self, state=state, code=code)
+
+    def with_result(self, result: str) -> ActionItem:
+        """The item succeeded, its call's result kept under the id."""
+        return replace(self, state=ItemState.SUCCEEDED, code=None, result=result)
 
     @property
     def outcome(self) -> ItemOutcome:
@@ -89,7 +101,7 @@ class ActionItem:
 def item_of(raw: Mapping[str, JsonValue]) -> ActionItem:
     """An item back from the action row."""
     preview = mapping(raw.get("preview"))
-    code = raw.get("code")
+    code, result = raw.get("code"), raw.get("result")
     return ActionItem(
         tool=str(raw["tool"]),
         targets=tuple(str(target) for target in sequence(raw.get("targets"))),
@@ -103,6 +115,8 @@ def item_of(raw: Mapping[str, JsonValue]) -> ActionItem:
         reversibility=str(raw.get("reversibility") or "reversible"),
         state=ItemState(str(raw.get("state") or ItemState.PENDING.value)),
         code=None if code is None else str(code),
+        effect=str(raw.get("effect") or WRITE_EFFECT),
+        result=None if result is None else str(result),
     )
 
 
