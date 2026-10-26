@@ -3,7 +3,7 @@
 A workspace's source shows the workspace's name; one of the person's own data shows their
 Personal space, in the language of the answer — the words of the cabinet's space switcher, so
 the panel and the switcher agree. A language the platform does not have reads in English. A
-page of the web is of no space of the person's: it shows its site.
+page of the web is of no space of the person's: it shows its site, without `www.`.
 """
 
 from collections.abc import Mapping
@@ -20,6 +20,8 @@ PERSONAL_SPACE: Final[Mapping[str, str]] = {
     "zh-Hant": "個人", "ja": "個人", "id": "Pribadi",
 }  # fmt: skip
 FALLBACK_LANGUAGE: Final = "en"
+# Сайт читается без «www.»: python.org, а не www.python.org.
+WEB_PREFIX: Final = "www."
 
 
 def personal_space(language: str) -> str:
@@ -30,7 +32,8 @@ def personal_space(language: str) -> str:
 def space_of(ref: SourceRef, language: str, workspaces: Mapping[UUID, str]) -> str:
     """The space a source is listed with: its site, its workspace's name, or Personal."""
     if ref.kind is SourceKind.WEB:
-        return urlsplit(ref.id).hostname or ref.id
+        site = urlsplit(ref.id).hostname or ref.id
+        return site.removeprefix(WEB_PREFIX)
     if ref.org_id is None:
         return personal_space(language)
     return workspaces[ref.org_id]

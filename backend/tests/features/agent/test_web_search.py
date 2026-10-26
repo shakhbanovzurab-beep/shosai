@@ -149,7 +149,7 @@ async def test_without_a_standard_model_the_search_is_unavailable() -> None:
 
 def test_a_web_page_is_listed_with_its_site_not_a_space_of_the_person_s() -> None:
     org = uuid.uuid4()
-    page = SourceRef(SourceKind.WEB, "https://news.example:8443/launch?a=1", "Launch")
+    page = SourceRef(SourceKind.WEB, "https://www.news.example:8443/launch?a=1", "Launch")
     task = SourceRef(SourceKind.TASK, "t1", "Book travel", org_id=org)
     own = SourceRef(SourceKind.FILE, "f1", "Plan")
 
