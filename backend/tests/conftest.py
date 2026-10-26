@@ -49,6 +49,7 @@ pytest_plugins = (
     "tests.features.agent.feedback_bench",
     "tests.features.agent.action_bench",
     "tests.features.agent.proxy_bench",
+    "tests.features.agent.skills_bench",
 )
 
 

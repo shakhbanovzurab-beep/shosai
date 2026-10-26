@@ -15,6 +15,8 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Final
 
+import httpx
+
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.config.roles import ProcessRole
 from shosai.core.db.engines import DATABASE_PROFILES
@@ -36,6 +38,7 @@ from shosai.features.agent.application.egress_calls import EgressCalls
 from shosai.features.agent.application.feedback import Feedback
 from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.history import History
+from shosai.features.agent.application.installed_skills import InstalledSkills
 from shosai.features.agent.application.lost_runs import LostRuns
 from shosai.features.agent.application.native_proxy import NativeProxy
 from shosai.features.agent.application.paused_runs import PausedRuns
@@ -50,6 +53,7 @@ from shosai.features.agent.application.run_registry import RunRegistry
 from shosai.features.agent.application.run_sources import RunSources
 from shosai.features.agent.application.run_streams import RunStreams
 from shosai.features.agent.application.run_telemetry import RunTelemetry
+from shosai.features.agent.application.skill_store import SkillStore
 from shosai.features.agent.application.thread_care import ThreadCare
 from shosai.features.agent.application.threads import Threads
 from shosai.features.agent.application.tool_offer import TurnRouting
@@ -62,22 +66,26 @@ from shosai.features.agent.channels.http.actions import build_actions_router
 from shosai.features.agent.channels.http.feedback import build_feedback_router
 from shosai.features.agent.channels.http.native_proxy import build_native_proxy_router
 from shosai.features.agent.channels.http.settings import build_settings_router
+from shosai.features.agent.channels.http.skills import build_skills_router
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
 from shosai.features.agent.channels.subscriptions import subscriptions
 from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_handlers
 from shosai.features.agent.channels.web_tools import WEB_TOOLS, web_tools
-from shosai.features.agent.contracts import ACTION_PROPOSALS
+from shosai.features.agent.contracts import ACTION_PROPOSALS, SKILL_READER
 from shosai.features.agent.contracts.events import TurnCompleted
 from shosai.features.agent.infrastructure.action_metrics import ActionMetrics
 from shosai.features.agent.infrastructure.feedback_metrics import FeedbackMetrics
 from shosai.features.agent.infrastructure.fleet import Fleet
+from shosai.features.agent.infrastructure.github_skills import GitHubSkills, github_client
 from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.person_records import PERSON_MODELS
 from shosai.features.agent.infrastructure.proxy_metrics import ProxyMetrics
 from shosai.features.agent.infrastructure.run_log import RunLog
 from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.run_records import RUN_MODELS
+from shosai.features.agent.infrastructure.skill_metrics import SkillMetrics
+from shosai.features.agent.infrastructure.skills_directory import SkillsDirectory, directory_client
 from shosai.features.agent.infrastructure.thread_lease import ThreadLeases
 from shosai.features.agent.infrastructure.thread_records import THREAD_MODELS
 from shosai.features.agent.infrastructure.tool_metrics import ToolMetrics
@@ -129,6 +137,19 @@ def native_proxy(services: CoreServices, settings: AgentSettings) -> NativeProxy
     )
 
 
+def skill_store(
+    services: CoreServices, clients: tuple[httpx.AsyncClient, httpx.AsyncClient]
+) -> SkillStore:
+    """The skills store over the process's GitHub and skills.sh clients (step 15)."""
+    metrics = SkillMetrics(services.registry)
+    sources = (
+        GitHubSkills(clients[0], services.cache, metrics),
+        SkillsDirectory(clients[1], services.cache, metrics),
+        services.rate_limiter,
+    )
+    return SkillStore(services.transactions, sources)
+
+
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """Settings > Leo, threads and their history, turns and runs, departures, and the
@@ -140,6 +161,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     run_log, leases, fleet = RunLog(valkey), ThreadLeases(valkey), Fleet(valkey)
     tail, registry = LogTail(valkey, run_log), RunRegistry(leases, fleet)
     settings = services.settings.features.get(AgentSettings)
+    skill_clients = (github_client(settings.github_token()), directory_client())
     metrics, tracer = (
         RunMetrics(services.registry),
         services.tracer_provider.get_tracer(TRACER_NAME),
@@ -179,6 +201,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 build_actions_router((decisions, ActionInbox(transactions, cards)), ports),
                 build_feedback_router(feedback, ports),
                 build_native_proxy_router(native_proxy(services, settings), ports),
+                build_skills_router(skill_store(services, skill_clients), ports),
             ),
             task_handlers=task_handlers(
                 Handlers(departures, lost_runs, engine, care, actions, CasePurge(transactions))
@@ -193,11 +216,13 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     PortProposals(transactions, (services.agent_tools, cards, threads))
                 ),
                 ME_CONTRIBUTIONS.bind(preferences),
+                SKILL_READER.bind(InstalledSkills()),
             ),
         )
     finally:
         await tail.close()
         await registry.close()
+        await asyncio.gather(*(client.aclose() for client in skill_clients))
 
 
 AGENT = FeatureModule(

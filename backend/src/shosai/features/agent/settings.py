@@ -16,7 +16,7 @@ in any environment.
 from collections.abc import Iterator
 from typing import Self
 
-from pydantic import model_validator
+from pydantic import SecretStr, model_validator
 
 from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
 from shosai.core.config.gate import GateViolation
@@ -25,7 +25,7 @@ from shosai.core.config.sections import SettingsSection
 
 
 class AgentSettings(SettingsSection):
-    """Which models Leo answers with."""
+    """Which models Leo answers with, and how the skills store reads GitHub."""
 
     # Модель OpenRouter стандартного уровня, например google/gemini-3.8-flash.
     agent_standard_model: str | None = None
@@ -34,6 +34,8 @@ class AgentSettings(SettingsSection):
     # Служебная модель: заголовки тредов и сжатие старых ходов в сводку, вне пути ответа.
     agent_utility_model: str | None = None
     agent_utility_fallback_model: str | None = None
+    # Токен GitHub хранилища навыков: 5 000 запросов в час вместо 60; без него — анонимно.
+    agent_github_token: SecretStr | None = None
     # Трассировка LangChain в LangSmith: разговоры не уходят с платформы, поэтому всегда выключена.
     langsmith_tracing: bool = False
     langchain_tracing_v2: bool = False
@@ -49,6 +51,11 @@ class AgentSettings(SettingsSection):
     def standard_route(self) -> ModelRoute | None:
         """The standard tier's route, or None while no model is set."""
         return route_of(self.agent_standard_model, self.agent_standard_fallback_model)
+
+    def github_token(self) -> str | None:
+        """The skills store's GitHub token; None, or empty, reads anonymously."""
+        token = self.agent_github_token.get_secret_value() if self.agent_github_token else ""
+        return token or None
 
     def utility_route(self) -> ModelRoute | None:
         """The utility model's route for titles and summaries, or None while none is set."""

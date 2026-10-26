@@ -3072,6 +3072,110 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agent/skills": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Skills
+         * @description The person's installed skills, the newest first.
+         */
+        get: operations["list_skills_v1_agent_skills_get"];
+        put?: never;
+        /**
+         * Install Skill
+         * @description Install a skill, pinned to the commit its reference names now.
+         */
+        post: operations["install_skill_v1_agent_skills_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/skills/{skill_id}/update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Update Skill
+         * @description Read the skill again at its repository's default branch.
+         */
+        post: operations["update_skill_v1_agent_skills__skill_id__update_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/skills/{skill_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Uninstall Skill
+         * @description Remove the skill.
+         */
+        delete: operations["uninstall_skill_v1_agent_skills__skill_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/skills/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search Skills
+         * @description Search the skills.sh directory; fewer than two characters find nothing.
+         */
+        get: operations["search_skills_v1_agent_skills_search_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/skills/scan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Scan Repository
+         * @description List the skills of a public GitHub repository, at most 40.
+         */
+        post: operations["scan_repository_v1_agent_skills_scan_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -4770,6 +4874,14 @@ export interface components {
          */
         IndexStage: "queued" | "parsing" | "chunking" | "embedding" | "indexed" | "failed";
         /**
+         * InstallSkillIn
+         * @description What to install: a GitHub folder or link, or a skills.sh id or link.
+         */
+        InstallSkillIn: {
+            /** Reference */
+            reference: string;
+        };
+        /**
          * InvalidField
          * @description Where a request failed validation and why; the submitted value is never echoed.
          */
@@ -6384,6 +6496,14 @@ export interface components {
             message: string;
         };
         /**
+         * ScanRepositoryIn
+         * @description A public GitHub repository, as owner/repo or a link.
+         */
+        ScanRepositoryIn: {
+            /** Repository */
+            repository: string;
+        };
+        /**
          * ScopeIn
          * @description The space of a new thread: Personal, or a workspace the person belongs to.
          */
@@ -6896,6 +7016,83 @@ export interface components {
         SignedOutElsewhere: {
             /** Ended */
             ended: number;
+        };
+        /**
+         * SkillCandidateOut
+         * @description A skill found in skills.sh or in a repository, not installed yet.
+         */
+        SkillCandidateOut: {
+            /**
+             * Reference
+             * @description What `POST /v1/agent/skills` takes to install it.
+             */
+            reference: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string | null;
+            /** Installs */
+            installs: number | null;
+            /** Source Url */
+            source_url: string;
+        };
+        /**
+         * SkillOut
+         * @description A SKILL.md-based instruction installed from GitHub, pinned to a commit.
+         */
+        SkillOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string;
+            /**
+             * Reference
+             * @description owner/repo/path/to/folder — the folder of SKILL.md.
+             */
+            reference: string;
+            /**
+             * Commit
+             * @description The pinned commit, short.
+             */
+            commit: string | null;
+            /** Source Url */
+            source_url: string;
+            /**
+             * Content
+             * @description The instructions of SKILL.md, without its front matter.
+             */
+            content: string;
+            /**
+             * Has Extra Files
+             * @description The folder holds other files, which never run.
+             */
+            has_extra_files: boolean;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /**
+         * SkillSearchOut
+         * @description Skills to install.
+         */
+        SkillSearchOut: {
+            /** Results */
+            results: components["schemas"]["SkillCandidateOut"][];
+        };
+        /**
+         * SkillsOut
+         * @description The person's skills.
+         */
+        SkillsOut: {
+            /** Skills */
+            skills: components["schemas"]["SkillOut"][];
         };
         /**
          * SocialRegisterRequest
@@ -14805,6 +15002,204 @@ export interface operations {
                 };
                 content: {
                     "text/event-stream": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_skills_v1_agent_skills_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SkillsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    install_skill_v1_agent_skills_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InstallSkillIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SkillOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    update_skill_v1_agent_skills__skill_id__update_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                skill_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SkillOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    uninstall_skill_v1_agent_skills__skill_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                skill_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    search_skills_v1_agent_skills_search_get: {
+        parameters: {
+            query?: {
+                q?: string;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SkillSearchOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    scan_repository_v1_agent_skills_scan_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScanRepositoryIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SkillSearchOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };
