@@ -110,6 +110,15 @@ class ArtifactOut(Out):
     chat_id: UUID
 
 
+class QuestionAttachmentOut(Out):
+    """A file attached to a question."""
+
+    id: UUID
+    name: str
+    size: int
+    type: str
+
+
 class MessageOut(Out):
     """A row of the history: a question, an answer (with how it ended, the steps it took, its
     sources and its cards) or a server's note (with the card it tells about)."""
@@ -125,6 +134,9 @@ class MessageOut(Out):
     actions: list[ProposalOut] = Field(description="The cards the answer proposed, as they stand.")
     artifacts: list[ArtifactOut] = Field(description="What the tools handed over, by reference.")
     feedback: Rating | None = Field(description="The person's rating of the answer, if any.")
+    attachments: list[QuestionAttachmentOut] = Field(
+        description="The files attached to a question."
+    )
 
 
 def scope_of(kind: ScopeKind, workspace_id: UUID | None) -> ThreadScope:
@@ -168,6 +180,7 @@ def message_out(view: MessageView) -> MessageOut:
         actions=[ProposalOut.model_validate(card) for card in view.actions],
         artifacts=[ArtifactOut.model_validate(artifact) for artifact in view.artifacts],
         feedback=view.feedback,
+        attachments=[QuestionAttachmentOut.model_validate(item) for item in view.attachments],
     )  # fmt: skip
 
 

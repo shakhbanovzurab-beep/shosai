@@ -27,6 +27,7 @@ from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.agent_tools.spec import ToolSpec
 from shosai.core.ai.calls import ModelRoute
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.documents.extraction import DocumentReader
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.kernel.homes import Home
@@ -43,6 +44,7 @@ from shosai.features.agent.application.eval_world import world_bindings
 from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.model_stream import DEFAULT_PACE, Pace
 from shosai.features.agent.application.result_pages import ResultPages
+from shosai.features.agent.application.run_attachments import AttachmentReader
 from shosai.features.agent.application.run_context import ContextBuilder, text_of
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.run_engine_parts import EngineParts, ModelStreams
@@ -162,6 +164,8 @@ class EvalRunner:
             graph=turn_graph(frames), frames=frames, context=ContextBuilder(ports),
             routing=TurnRouting(ToolRegistry(catalog), ports), tools=tools,
             telemetry=self._telemetry, pace=services.pace,
+            # В мире оценки вложений нет: хранилище пусто.
+            attachments=AttachmentReader(transactions, ({}, DocumentReader(), pages)),
         )  # fmt: skip
         self._queue = PersonEngines()
         self._threads = Threads(transactions, (ports, services.effects))

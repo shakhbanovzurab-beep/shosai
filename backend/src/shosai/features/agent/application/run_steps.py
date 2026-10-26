@@ -1,8 +1,10 @@
 """The nodes' work for one run: the context and its tools, each model round, each tool round,
 and the conversation again after a card's decision.
 
-The context and the run's toolsets are read in one transaction as the person; wrapped text in
-the context — a page's subject someone else wrote — taints the run before the first round.
+The question's attachments are read first — each a step of the turn; images go to the model
+beside the question. The context and the run's toolsets are read in one transaction as the
+person; wrapped text in the context — a page's subject someone else wrote, an attachment's
+text — taints the run before the first round.
 The conversation lives here, never in the frame's state: a resumed run reads it back from the
 database — the context, its own rounds before the card and the server note on what became of
 the action — and goes on with its steps, sources, taint and toolsets as they were. Each round
@@ -21,7 +23,7 @@ from uuid import UUID
 
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
-from shosai.core.ai.requests import ChatMessage, ChatRequest, Role
+from shosai.core.ai.requests import ChatMessage, ChatRequest, ImagePart, Role
 from shosai.features.agent.application.model_stream import AnswerBuffer, stream_answer
 from shosai.features.agent.application.run_context import text_message
 from shosai.features.agent.application.run_earlier import earlier_work
@@ -36,6 +38,15 @@ from shosai.features.agent.domain.runs import TURN_DEADLINE
 from shosai.features.agent.domain.wrapper import Label
 from shosai.features.agent.infrastructure.prompts import CONCLUDE, LAST_ROUND
 from shosai.features.agent.infrastructure.turn_graph import ModelAnswer
+
+
+def with_images(request: ChatRequest, images: tuple[ImagePart, ...]) -> ChatRequest:
+    """The request with the question's images beside its text, in its last message."""
+    if not images:
+        return request
+    *before, question = request.messages
+    asked = replace(question, parts=(*question.parts, *images))
+    return replace(request, messages=(*before, asked))
 
 
 @dataclass(frozen=True, slots=True)
@@ -66,14 +77,16 @@ class RunSteps:
         self._request: ChatRequest | None = None
 
     async def context(self) -> None:
-        """The policy, the recent conversation and the question; the run's toolsets."""
-        payload, sizes = self._run.payload, self._run.times.sizes
+        """The question's attachments, then the policy, the recent conversation and the
+        question with its images; the run's toolsets."""
+        payload, sizes, run = self._run.payload, self._run.times.sizes, self._run
+        images = await self._parts.attachments.read(payload, run.work, run.emitter)
         labels: list[Provenance] = []
         with self._parts.telemetry.context():
             async with self._parts.transactions.begin(payload.scope(), read_only=True) as session:
                 request = await self._parts.context.request(session, payload, sizes, labels)
                 offer = await self._parts.routing.offer(session, payload)
-        self._begin(request, offer, labels)
+        self._begin(with_images(request, images), offer, labels)
 
     async def resume(self, action_id: UUID) -> None:
         """After the card's decision: the context again, the run's rounds before the card and

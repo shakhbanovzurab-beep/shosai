@@ -103,7 +103,8 @@ def read_again(row: AgentMessageRecord) -> ChatMessage | None:
         parts = (TextPart(row.text),) if row.text else ()
         return ChatMessage(Role.ASSISTANT, parts, tool_calls=calls)
     if row.role == MessageRole.SERVER.value:
-        return text_message(Role.USER, said(row.role, row.text, row.digest, row.sources))
+        # Заметка сервера — без вложений: граница обёртки ей не нужна.
+        return text_message(Role.USER, said(row.role, row.text, row.digest, row.sources, ""))
     return None
 
 

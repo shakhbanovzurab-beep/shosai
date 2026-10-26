@@ -7,7 +7,7 @@ id, and reads only the columns it shows. An answer lists the steps the person sa
 sources the tools named (step 6), the artifacts the tools handed over by reference (AG-R1),
 and the cards it proposed — a server's note the card it tells about — rendered in the person's
 language, read with the page in one query (step 9b), and the person's rating of it (step 11a);
-its attachments join it with step 12.
+a question lists its attachments by name, size and type, never their objects (step 12b).
 """
 
 from dataclasses import dataclass, replace
@@ -27,6 +27,7 @@ from shosai.core.pagination.keyset import Keyset
 from shosai.core.pagination.page import Page, PageRequest, page_of
 from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.threads import Threads
+from shosai.features.agent.domain.attachments import attached_of
 from shosai.features.agent.domain.feedback import Rating
 from shosai.features.agent.domain.threads import AnswerStatus, HistoryRole
 from shosai.features.agent.infrastructure.person_records import AgentFeedbackRecord
@@ -43,6 +44,7 @@ NEWEST: Final = Keyset((MESSAGE.created_at.expression, MESSAGE.id.expression), d
 SHOWN: Final = load_only(
     MESSAGE.id, MESSAGE.created_at, MESSAGE.role, MESSAGE.text, MESSAGE.status,
     MESSAGE.duration_ms, MESSAGE.steps, MESSAGE.sources, MESSAGE.action_ids, MESSAGE.artifacts,
+    MESSAGE.attachments,
 )  # fmt: skip
 
 
@@ -120,6 +122,7 @@ class MessageView:
     actions: tuple[dict[str, JsonValue], ...] = ()
     artifacts: tuple[dict[str, JsonValue], ...] = ()
     feedback: Rating | None = None
+    attachments: tuple[dict[str, Any], ...] = ()
 
 
 def view_of(record: AgentMessageRecord) -> MessageView:
@@ -130,6 +133,7 @@ def view_of(record: AgentMessageRecord) -> MessageView:
         created_at=record.created_at, duration_ms=record.duration_ms,
         steps=steps_of(record.steps), sources=sources_of(record.sources),
         artifacts=tuple(record.artifacts),
+        attachments=tuple(attached.listed() for attached in attached_of(record.attachments)),
     )  # fmt: skip
 
 

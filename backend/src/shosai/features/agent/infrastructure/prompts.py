@@ -114,10 +114,22 @@ CUT_RESULT: Final = (
     "This result was cut to fit. 'omitted' gives how many items each cut list held; call "
     "core__read_result with result_ref to read the whole result."
 )
+# Вложения вопроса (шаг 12b): текст документа — началом с отсылкой к остальному, картинка и
+# нечитаемый файл — словами; имя файла — в кавычках, весь блок обёрнут меткой `file:own`.
+ATTACHED_TEXT: Final = 'The person attached the file "{name}". Its text:\n{text}'
+ATTACHED_MORE: Final = (
+    'This is only the beginning of the file; call core__read_result with result_ref "{ref}" to '
+    "read the rest."
+)
+ATTACHED_IMAGE: Final = 'The person attached the image "{name}" to this message.'
+ATTACHED_UNREADABLE: Final = (
+    'The person attached the file "{name}", but it could not be read ({code}).'
+)
 PROMPT_TEXTS: Final = (
     POLICY, *LENGTHS.values(), LANGUAGE, SUMMARY, VOLATILE, QUESTION, TITLE_TASK, SUMMARY_TASK,
     FIRST_QUESTION, CONCLUDE, LAST_ROUND, LOADABLE, UNKNOWN_TOOL, EXTRA_CALL, CUT_CALL,
     CUT_RESULT, SOURCES_NOTE, PROPOSED, ONE_CHANGE, ACTION_NOTE, *ACTION_OUTCOMES.values(),
+    ATTACHED_TEXT, ATTACHED_MORE, ATTACHED_IMAGE, ATTACHED_UNREADABLE,
 )  # fmt: skip
 
 

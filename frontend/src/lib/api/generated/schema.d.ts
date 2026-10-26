@@ -5242,6 +5242,11 @@ export interface components {
             artifacts: components["schemas"]["ArtifactOut"][];
             /** @description The person's rating of the answer, if any. */
             feedback: components["schemas"]["Rating"] | null;
+            /**
+             * Attachments
+             * @description The files attached to a question.
+             */
+            attachments: components["schemas"]["QuestionAttachmentOut"][];
         };
         /**
          * Messenger
@@ -6029,6 +6034,23 @@ export interface components {
          * @enum {string}
          */
         PublicStatus: "proposed" | "executing" | "succeeded" | "partially_succeeded" | "failed" | "rejected" | "expired" | "outcome_unknown";
+        /**
+         * QuestionAttachmentOut
+         * @description A file attached to a question.
+         */
+        QuestionAttachmentOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Size */
+            size: number;
+            /** Type */
+            type: string;
+        };
         /**
          * QuotaSnapshot
          * @description Recording minutes left; billing fills it.
@@ -7766,6 +7788,11 @@ export interface components {
              * @description The thread's last question, rewritten to `text` and answered.
              */
             edit_of?: string | null;
+            /**
+             * Upload Ids
+             * @description Ready `leo_attachment` uploads attached to a new question, at most five.
+             */
+            upload_ids?: string[];
         };
         /**
          * UnsubscribeAnswer

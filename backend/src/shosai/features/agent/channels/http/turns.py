@@ -32,6 +32,7 @@ from shosai.features.agent.application.turn_start import (
     TurnStarter,
 )
 from shosai.features.agent.channels.http.shapes import Strict
+from shosai.features.agent.domain.attachments import MAX_ATTACHMENTS
 from shosai.features.agent.domain.stream import StreamEvent
 from shosai.features.agent.domain.threads import QUESTION_MAX, SURFACE_PATH_MAX, TurnKind
 from shosai.features.identity.contracts import Principal, bearer_principal
@@ -75,12 +76,24 @@ class TurnBody(Strict):
     edit_of: UUID | None = Field(
         default=None, description="The thread's last question, rewritten to `text` and answered."
     )
+    upload_ids: list[UUID] = Field(
+        default_factory=list,
+        max_length=MAX_ATTACHMENTS,
+        description="Ready `leo_attachment` uploads attached to a new question, at most five.",
+    )
 
     @model_validator(mode="after")
     def one_replacement(self) -> Self:
-        """A turn regenerates or edits, never both."""
+        """A turn regenerates or edits, never both; only a new question brings attachments."""
         if self.regenerate_of is not None and self.edit_of is not None:
             message = "regenerate_of and edit_of exclude each other"
+            raise ValueError(message)
+        again = self.regenerate_of is not None or self.edit_of is not None
+        if again and self.upload_ids:
+            message = "attachments come only with a new question"
+            raise ValueError(message)
+        if len(set(self.upload_ids)) != len(self.upload_ids):
+            message = "an upload is attached once"
             raise ValueError(message)
         return self
 
@@ -97,7 +110,9 @@ class TurnBody(Strict):
             again = Replacement(TurnKind.EDIT, self.edit_of)
         else:
             again = Replacement(TurnKind.NEW, None)
-        return TurnRequest(self.text, self.locale, self.supersede, page, again)
+        return TurnRequest(
+            self.text, self.locale, self.supersede, page, again, tuple(self.upload_ids)
+        )
 
 
 def server_event(event: StreamEvent) -> ServerSentEvent:

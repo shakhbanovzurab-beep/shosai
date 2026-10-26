@@ -27,6 +27,7 @@ from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
 from shosai.core.config.roles import ProcessRole
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.documents.extraction import DocumentReader
 from shosai.core.events.catalog import EventTypes
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.idempotency.ledger import EffectLedger
@@ -40,6 +41,7 @@ from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.model_stream import Pace
 from shosai.features.agent.application.result_pages import ResultPages
+from shosai.features.agent.application.run_attachments import AttachmentReader
 from shosai.features.agent.application.run_context import ContextBuilder
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.run_engine_parts import EngineParts
@@ -66,10 +68,13 @@ from shosai.features.agent.infrastructure.turn_graph import turn_graph
 from shosai.features.agent.infrastructure.turn_saver import TurnSaver
 from shosai.features.agent.module import AGENT
 from shosai.features.billing.contracts import TOKEN_ALLOWANCE
+from shosai.features.files.application.upload_rules import UploadRequest
+from shosai.features.files.contracts import UPLOADS, UploadPurpose
 from shosai.features.identity.contracts import (
     ACCOUNT_PROFILE_READER,
     AUTHENTICATOR,
     CONSENT_READER,
+    Principal,
 )
 from shosai.features.notes.contracts import MEETING_READER
 from shosai.features.workspaces.contracts import MEMBERSHIP_READER, WORKSPACE_READER
@@ -88,6 +93,7 @@ from tests.features.agent.turn_doubles import (
     Terms,
 )
 from tests.features.billing.people_bench import BearerOfTheTest, bearer
+from tests.features.files.upload_bench import UploadBench
 from tests.harness.connections import Connection
 from tests.harness.database_access import (
     DatabaseAccess,
@@ -124,6 +130,8 @@ class TurnBench:
     catalog: AgentToolCatalog
     # Порты стенда: карточки читают через них профиль и пространства.
     ports: PortDirectory
+    # Загрузки слота: вложения вопросов идут через них, как у files.
+    uploads: UploadBench
 
     @property
     def connection(self) -> Connection:
@@ -136,6 +144,20 @@ class TurnBench:
         shape = ProcessShape(role=ProcessRole.WORKERS)
         async with open_database_access(slot_urls(self.run_slot), shape) as workers:
             yield workers.transactions
+
+    async def attachment(self, person: uuid.UUID, name: str, body: bytes, kind: str) -> str:
+        """A ready `leo_attachment` upload of the person: its id."""
+        principal = Principal(person, HOME, 0)
+        request = UploadRequest(UploadPurpose.LEO_ATTACHMENT, name, kind, len(body))
+        view = await self.uploads.service.create(principal, request)
+        [link] = view.links
+        async with httpx.AsyncClient() as client:
+            put = await client.put(
+                link.request.url, content=body, headers=dict(link.request.headers)
+            )
+        assert put.status_code == 200, put.text
+        await self.uploads.service.complete(principal, view.id)
+        return str(view.id)
 
     async def thread(self, person: uuid.UUID, home: Home = HOME) -> str:
         """A new thread of the person: its id."""
@@ -181,7 +203,7 @@ def stream_of(answer: httpx.Response) -> list[tuple[str, int, Mapping[str, Any]]
 
 @pytest_asyncio.fixture
 async def turn_bench(
-    homes: DatabaseAccess, valkey: Redis, run_slot: RunSlot
+    homes: DatabaseAccess, valkey: Redis, run_slot: RunSlot, upload_bench: UploadBench
 ) -> AsyncIterator[TurnBench]:
     """Turns over the slot's homes and Valkey, with one agent worker alive in the fleet."""
     terms, model, queue, meetings = Terms(), ScriptedModel(), InlineQueue(), Meetings()
@@ -195,6 +217,7 @@ async def turn_bench(
             ACCOUNT_PROFILE_READER.bind(Profiles()),
             MEETING_READER.bind(meetings),
             WORKSPACE_READER.bind(WorkspaceDirectory()),
+            UPLOADS.bind(upload_bench.claims),
         ]
     )
     registry = CollectorRegistry()
@@ -220,7 +243,9 @@ async def turn_bench(
     parts = EngineParts(
         homes.transactions, model, ROUTE, run_log, leases, fleet, runs, outbox,
         turn_graph(frames), frames, ContextBuilder(ports),
-        TurnRouting(ToolRegistry(catalog), ports), tool_parts, telemetry, QUICK,
+        TurnRouting(ToolRegistry(catalog), ports), tool_parts, telemetry,
+        AttachmentReader(homes.transactions, (upload_bench.objects, DocumentReader(), pages)),
+        QUICK,
     )  # fmt: skip
     queue.engine = RunEngine(parts)
     threads = Threads(homes.transactions, (ports, effects))
@@ -243,7 +268,7 @@ async def turn_bench(
         async with client_of(build_probe_app(extra=routers).app) as http:
             yield TurnBench(
                 http, homes, valkey, model, queue, terms, parts, run_slot, meetings,
-                (registry, spans), tools, catalog, ports,
+                (registry, spans), tools, catalog, ports, upload_bench,
             )  # fmt: skip
             await queue.settle()
     finally:

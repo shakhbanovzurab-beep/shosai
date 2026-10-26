@@ -26,6 +26,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.agent.application.attachment_notes import attachments_block
 from shosai.features.agent.application.surface_digest import Subject, subject_digest
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.budgets import (
@@ -133,8 +134,14 @@ class ContextBuilder:
         # Сводка идёт после стабильной головы: кэш провайдера держит голову целиком.
         summary = SUMMARY.format(summary=clip(thread.summary, cap(5))) if thread.summary else ""
         head = "\n\n".join(part for part in (POLICY, core, summary) if part)
-        history = await self._recent(session, thread, question)
+        token = boundary(secrets.token_bytes(BOUNDARY_BYTES))
+        history = await self._recent(session, thread, question, token)
         volatile = await self._volatile(session, payload, zone, labels)
+        attached = attachments_block(question.digest, token)
+        if attached is not None and labels is not None:
+            labels.append(Provenance.FILE_OWN)
+        asked = QUESTION.format(text=question.text)
+        asked = asked if attached is None else f"{asked}\n\n{attached}"
         if sizes is not None:
             sizes |= {
                 Segment.POLICY: estimate_tokens(POLICY),
@@ -142,13 +149,13 @@ class ContextBuilder:
                 Segment.SUMMARY: estimate_tokens(summary),
                 Segment.RECENT: sum(estimate_tokens(text_of(message)) for message in history),
                 Segment.VOLATILE: estimate_tokens(volatile),
-                Segment.QUESTION: estimate_tokens(question.text),
+                Segment.QUESTION: estimate_tokens(asked),
             }
         return ChatRequest(
             messages=(
                 text_message(Role.SYSTEM, head),
                 *history,
-                text_message(Role.USER, f"{volatile}\n\n{QUESTION.format(text=question.text)}"),
+                text_message(Role.USER, f"{volatile}\n\n{asked}"),
             ),
             max_output_tokens=MAX_OUTPUT_TOKENS,
         )
@@ -164,7 +171,11 @@ class ContextBuilder:
             raise RunOverError
 
     async def _recent(
-        self, session: AsyncSession, thread: AgentThreadRecord, question: AgentMessageRecord
+        self,
+        session: AsyncSession,
+        thread: AgentThreadRecord,
+        question: AgentMessageRecord,
+        token: str,
     ) -> list[ChatMessage]:
         """Segment 6: the newest messages before the question and after the summary."""
         since = thread.created_at
@@ -202,7 +213,7 @@ class ContextBuilder:
                 .limit(HISTORY_ROWS)
             )
         ).all()
-        texts = [said(row.role, row.text, row.digest, row.sources) for row in rows]
+        texts = [said(row.role, row.text, row.digest, row.sources, token) for row in rows]
         sizes = [row.tokens + estimate_tokens(text) - estimate_tokens(row.text)
                  for row, text in zip(rows, texts, strict=True)]  # fmt: skip
         kept = recent_window(sizes, cap(6))
@@ -233,12 +244,21 @@ class ContextBuilder:
         return VOLATILE.format(context=clip("\n".join(lines), cap(7)))
 
 
-def said(role: str, text: str, digest: dict[str, Any] | None, sources: list[dict[str, Any]]) -> str:
-    """A message as the model reads it again: a server note in its registered words, an answer
-    with what its numbers stood for."""
+def said(
+    role: str,
+    text: str,
+    digest: dict[str, Any] | None,
+    sources: list[dict[str, Any]],
+    token: str,
+) -> str:
+    """A message as the model reads it again: a server note in its registered words, a question
+    with its attachments' notes, an answer with what its numbers stood for."""
     if role == MessageRole.SERVER.value:
         note = (digest or {}).get("text")
         return note if isinstance(note, str) else ""
+    if role == MessageRole.USER.value:
+        attached = attachments_block(digest, token)
+        return text if attached is None else f"{text}\n\n{attached}"
     return with_sources(text, sources)
 
 

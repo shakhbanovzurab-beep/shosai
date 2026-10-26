@@ -18,6 +18,7 @@ from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.agent_tools.results import ToolError, ToolErrorCode, ToolResult
 from shosai.features.agent.application.result_pages import ResultPages
+from shosai.features.agent.application.run_attachments import ATTACHMENT_RESULT
 from shosai.features.agent.application.run_sources import RunSources
 from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.tool_answers import digest_content, error_content
@@ -83,6 +84,9 @@ class ResultReader:
         """The result's own label, else its spec's; a kept page takes its tool's."""
         if offered.spec.name != READ_RESULT:
             return result.provenance or offered.spec.provenance
-        origin = offer.kept_from(str(getattr(result.output, "tool", "")))
+        kept = str(getattr(result.output, "tool", ""))
+        if kept == ATTACHMENT_RESULT:
+            return Provenance.FILE_OWN
+        origin = offer.kept_from(kept)
         # Инструмента хранимого результата больше нет: это прочитанное раньше, метка памяти.
         return origin.spec.provenance if origin is not None else Provenance.MEMORY

@@ -14,6 +14,7 @@ const row = (id: string, role: AgentMessage["role"], status: AgentMessage["statu
   artifacts: [],
   actions: [],
   feedback: null,
+  attachments: [],
 });
 
 describe("a thread's history", () => {

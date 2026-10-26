@@ -44,6 +44,8 @@ class TurnPayload(HomeTaskPayload):
     subject_id: UUID | None = None
     # Включённые переключатели Leo (`ToolSpec.switch`): пусто — инструменты за ними не предлагаются.
     switches_on: tuple[str, ...] = ()
+    # Загрузки нового вопроса: приём хода берёт их у files и называет на вопросе.
+    attachments: tuple[UUID, ...] = ()
 
 
 RUN_TURN: Final = TaskDeclaration(

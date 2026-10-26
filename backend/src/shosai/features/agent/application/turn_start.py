@@ -93,6 +93,8 @@ class TurnRequest:
     supersede: bool
     page: Page = field(default_factory=lambda: Page(None, None))
     again: Replacement = field(default_factory=lambda: Replacement(TurnKind.NEW, None))
+    # Готовые загрузки `leo_attachment` нового вопроса.
+    attachments: tuple[UUID, ...] = ()
 
 
 class TurnPrint(BaseModel):
@@ -102,6 +104,7 @@ class TurnPrint(BaseModel):
     question: str
     kind: TurnKind
     question_id: UUID | None
+    attachments: list[UUID] = []
 
 
 def unavailable() -> AppError:
@@ -137,6 +140,7 @@ class TurnStarter:
             question=question,
             kind=request.again.kind,
             question_id=request.again.question_id,
+            attachments=list(request.attachments),
         )
         effect = EffectKey(
             TURN_KEYS, account_key(principal.user_id, client_key), fingerprint_of(asked)
@@ -164,6 +168,7 @@ class TurnStarter:
             subject_kind=page.subject.kind if page.subject else None,
             subject_id=page.subject.subject_id if page.subject else None,
             switches_on=tuple(switch.value for switch in Switch if preferences.switched_on(switch)),
+            attachments=request.attachments,
         )  # fmt: skip
         return await self._admitted(
             principal, terms, (effect, question), supersede=request.supersede

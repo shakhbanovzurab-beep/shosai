@@ -18,6 +18,7 @@ from typing import Final
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.config.roles import ProcessRole
 from shosai.core.db.engines import DATABASE_PROFILES
+from shosai.core.documents.extraction import DocumentReader
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, QueueCompanion
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.agent.application.account_data import ACCOUNT_DATA, AgentAccountData
@@ -39,6 +40,7 @@ from shosai.features.agent.application.paused_runs import PausedRuns
 from shosai.features.agent.application.preferences import AgentPreferences
 from shosai.features.agent.application.proposal_port import PortProposals
 from shosai.features.agent.application.result_pages import ResultPages
+from shosai.features.agent.application.run_attachments import AttachmentReader
 from shosai.features.agent.application.run_context import ContextBuilder
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.run_engine_parts import EngineParts
@@ -119,6 +121,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             transactions, services.ai, settings.standard_route(), run_log, leases, fleet,
             registry, services.outbox, turn_graph(frames), frames, ContextBuilder(ports),
             routing, tools, telemetry,
+            AttachmentReader(transactions, (services.objects, DocumentReader(), pages)),
         )
     )  # fmt: skip
     starter = TurnStarter(

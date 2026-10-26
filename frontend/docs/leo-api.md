@@ -12,7 +12,7 @@ The panel talks to the API in Personal and in a workspace (agent steps 7a and 7b
 "Stop", "Regenerate" and "Edit", steps and sources. Every turn names the page and its subject: a note or a meeting,
 a task (`?task=`) or a board (`?board=`); only a UUID is ever sent as a subject's id. Nothing of a conversation is
 kept in the browser; old `leo-chat*` keys are erased. A hub and the admin panel keep the
-sample `/api/leo` (NDJSON) until agent steps 20 and 16; attachments come with step 12. Since step 10 cards and
+sample `/api/leo` (NDJSON) until agent steps 20 and 16. Since step 12b a question carries attachments. Since step 10 cards and
 "Needs you" are on the API too, and `/v1/agent/actions*` has no mocks.
 
 Since agent step 9a1 Leo proposes writes: a write call becomes a card (`action.proposed`) and the run pauses
@@ -57,7 +57,8 @@ Message = {id, role: user | assistant | server, text, status: done | stopped | f
   server note), `created_at`, `duration_ms`, `steps` (an answer's tool calls; empty otherwise, `status` `done`
   or `failed`), `sources` (an answer's, as the `sources` event left them), `artifacts` (what the tools handed over,
   by reference — a team chat's digest) and `actions` (the cards an answer proposed, or the card a server note tells
-  about, as they stand); `feedback` comes with the rating and `attachments` with uploads. The model's tool rounds
+  about, as they stand), `feedback` (the person's rating of an answer, or null) and `attachments` (a question's
+  files: `{id, name, size, type}`; empty otherwise). The model's tool rounds
   are never listed. A card a slice put into the thread (a digest's "Make a task", AG-R2) joins the answer it belongs
   to in `actions` and the inbox, with no run.
 - `POST` with a workspace the person is not in is `404 workspace_not_found`; a workspace scope without
@@ -76,9 +77,15 @@ Message = {id, role: user | assistant | server, text, status: done | stopped | f
  regenerate_of?: <the last question's id>, edit_of?: <the last question's id>, supersede?: bool}
 ```
 
-- The body grows with the steps that use it: now `text`, `locale`, `supersede`, `surface`, `regenerate_of` and
-  `edit_of`; `upload_ids` comes with attachments, until then it is `422`. A regenerate or an edit sends the question's
-  text as well (the edited text for an edit); naming both is `422`.
+- A regenerate or an edit sends the question's text as well (the edited text for an edit); naming both is `422`.
+- `upload_ids` (agent step 12b): ready uploads of purpose `leo_attachment` (files' presigned uploads, ≤ 10 MiB each),
+  at most five, each once, only with a new question (`422` with a regenerate or an edit). An upload that is not the
+  person's, not ready or of another purpose is `409 upload_not_claimable`. Each file is read as a step of the turn
+  (`activity: read_attachment`, `detail`: the file's name): an image goes to the model beside the question; a
+  document's text (PDF, DOCX, XLSX, PPTX, RTF, TXT, MD, CSV, JSON, XML, YAML — ≤ 64 K characters a file, ≤ 256 K a
+  question) is read and kept, and a file that cannot be read fails its step alone with a code (`unsupported`,
+  `malformed`, `encrypted`, `too_large`, `timeout`, `gone`, `unavailable`, `failed`). The question lists its
+  attachments in the history (`attachments: [{id, name, size, type}]`).
 - `surface.path` is the cabinet path without its query; Leo is told the page and, through the subject's owner, what
   the person may read of the meeting, task, board or file it shows — nothing about one they may not read.
 - `regenerate_of` answers the last question again; `edit_of` replaces its text and its answer. Any other id is
@@ -102,7 +109,7 @@ ignored. Exactly one of `run.completed` and `run.failed` ends a run.
 | Event | Data |
 | --- | --- |
 | `run.started` | `{run_id, thread_id, message_id, reply_id}` |
-| `step.started` / `step.completed` / `step.failed` | `{id, seq, activity, detail?, duration_ms?, code?}` — `activity` is a tool's name (`notes.search`) or `think`, `write_answer`; an unknown one reads as a generic line |
+| `step.started` / `step.completed` / `step.failed` | `{id, seq, activity, detail?, duration_ms?, code?}` — `activity` is a tool's name (`notes.search`) or `think`, `write_answer`, `read_attachment`; an unknown one reads as a generic line |
 | `text.delta` | `{text}` |
 | `sources` | `{sources: LeoSource[]}` — the whole list so far; its numbers never change within a run |
 | `artifact` | `LeoArtifact` |

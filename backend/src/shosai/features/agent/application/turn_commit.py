@@ -11,7 +11,7 @@ worker is ended `failed` at once, so nothing waits for it.
 from dataclasses import dataclass
 from datetime import datetime
 from http import HTTPStatus
-from typing import Protocol
+from typing import Any, Protocol
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -45,6 +45,7 @@ from shosai.features.agent.infrastructure.thread_records import (
     AgentThreadRecord,
 )
 from shosai.features.agent.infrastructure.turn_saver import TurnSaver
+from shosai.features.files.contracts import UPLOADS, ClaimedObject, UploadPurpose
 from shosai.features.identity.contracts import Principal
 
 
@@ -91,7 +92,15 @@ async def commit_turn(
                 session, principal.user_id, terms.thread_id, lock=True
             )
             now = terms.started_at
-            await ask(session, thread, terms, question)
+            attached = [
+                attachment_of(
+                    await parts.ports.get(UPLOADS).claim(
+                        session, upload, UploadPurpose.LEO_ATTACHMENT
+                    )
+                )
+                for upload in terms.attachments
+            ]
+            await ask(session, thread, terms, (question, attached))
             session.add(
                 AgentRunRecord(
                     id=terms.run_id, started_at=now, thread_id=thread.id,
@@ -111,11 +120,23 @@ async def commit_turn(
         return done.outcome
 
 
+def attachment_of(claimed: ClaimedObject) -> dict[str, Any]:
+    """A claimed upload as the question names it: the object's key stays on the server."""
+    return {
+        "id": str(claimed.upload_id), "name": claimed.filename, "size": claimed.size_bytes,
+        "type": claimed.content_type, "key": claimed.object_key,
+    }  # fmt: skip
+
+
 async def ask(
-    session: AsyncSession, thread: AgentThreadRecord, terms: TurnPayload, question: str
+    session: AsyncSession,
+    thread: AgentThreadRecord,
+    terms: TurnPayload,
+    asked: tuple[str, list[dict[str, Any]]],
 ) -> None:
-    """Write a new question, or answer the thread's last one again — rewritten for an edit;
-    any other question is 409 `not_last_question`."""
+    """Write a new question with its attachments, or answer the thread's last one again —
+    rewritten for an edit; any other question is 409 `not_last_question`."""
+    question, attached = asked
     last = await session.scalar(
         select(AgentMessageRecord)
         .where(
@@ -139,7 +160,7 @@ async def ask(
             AgentMessageRecord(
                 id=terms.question_id, created_at=terms.started_at, thread_id=thread.id,
                 user_id=thread.user_id, run_id=terms.run_id, role=MessageRole.USER.value,
-                text=question, tokens=estimate_tokens(question),
+                text=question, tokens=estimate_tokens(question), attachments=attached,
             )
         )  # fmt: skip
 

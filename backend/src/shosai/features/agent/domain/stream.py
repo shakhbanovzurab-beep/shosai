@@ -56,6 +56,7 @@ class Activity(StrEnum):
 
     THINK = "think"
     WRITE_ANSWER = "write_answer"
+    READ_ATTACHMENT = "read_attachment"
 
 
 class Completion(StrEnum):

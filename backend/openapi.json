@@ -17457,6 +17457,14 @@
               }
             ],
             "description": "The person's rating of the answer, if any."
+          },
+          "attachments": {
+            "items": {
+              "$ref": "#/components/schemas/QuestionAttachmentOut"
+            },
+            "type": "array",
+            "title": "Attachments",
+            "description": "The files attached to a question."
           }
         },
         "type": "object",
@@ -17471,7 +17479,8 @@
           "sources",
           "actions",
           "artifacts",
-          "feedback"
+          "feedback",
+          "attachments"
         ],
         "title": "MessageOut",
         "description": "A row of the history: a question, an answer (with how it ended, the steps it took, its\nsources and its cards) or a server's note (with the card it tells about)."
@@ -19697,6 +19706,36 @@
         ],
         "title": "PublicStatus",
         "description": "The status the cabinet's card shows (`LeoProposal.status`)."
+      },
+      "QuestionAttachmentOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "size",
+          "type"
+        ],
+        "title": "QuestionAttachmentOut",
+        "description": "A file attached to a question."
       },
       "QuotaSnapshot": {
         "properties": {
@@ -24082,6 +24121,16 @@
             ],
             "title": "Edit Of",
             "description": "The thread's last question, rewritten to `text` and answered."
+          },
+          "upload_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 5,
+            "title": "Upload Ids",
+            "description": "Ready `leo_attachment` uploads attached to a new question, at most five."
           }
         },
         "additionalProperties": false,

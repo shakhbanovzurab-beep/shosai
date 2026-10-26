@@ -15,6 +15,7 @@ from shosai.core.ai.results import ChatDelta
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.features.agent.application.model_stream import DEFAULT_PACE, Pace
+from shosai.features.agent.application.run_attachments import AttachmentReader
 from shosai.features.agent.application.run_context import ContextBuilder
 from shosai.features.agent.application.run_registry import RunRegistry
 from shosai.features.agent.application.run_telemetry import RunTelemetry
@@ -55,4 +56,5 @@ class EngineParts:
     routing: TurnRouting
     tools: ToolParts
     telemetry: RunTelemetry
+    attachments: AttachmentReader
     pace: Pace = DEFAULT_PACE
