@@ -3,7 +3,12 @@
 Facts this module relies on, from OpenRouter's documentation read on 2026-10-13:
 
 - usage, with `cost` in credits (USD), comes in every answer and in a stream's last chunk
-- web search is the server tool `openrouter:web_search`
+- web search is the server tool `openrouter:web_search`; the answer cites the pages in
+  `message.annotations` as `url_citation`s
+- checked against the live API on 2026-10-26: a model's native search (Google's) cites
+  short-lived redirect links with no passage, while the `exa` engine cites the pages' own
+  addresses, titles and passages for every model; `max_results` bounds each search and
+  `max_total_results` the call, which may search more than once
 - generated images come in `choices[0].message.images` as data URLs
 - `/embeddings` answers `data[].embedding` with its `index`
 - `/rerank` answers `results[].index` and `relevance_score`, with `usage.search_units` as
@@ -33,6 +38,7 @@ from shosai.core.ai.results import Citation, Unit, Usage
 
 DATA_URL: Final = re.compile(r"data:([\w.+-]+/[\w.+-]+);base64,(.*)", re.DOTALL)
 WEB_SEARCH_TOOL: Final = "openrouter:web_search"
+SEARCH_ENGINE: Final = "exa"
 
 
 def data_url(image: ImagePart) -> str:
@@ -71,9 +77,10 @@ def chat_body(model: str, request: ChatRequest, *, stream: bool) -> Json:
         for t in request.tools
     ]  # fmt: skip
     if request.web_search_results:
-        tools.append(
-            {"type": WEB_SEARCH_TOOL, "parameters": {"max_results": request.web_search_results}}
-        )
+        pages = request.web_search_results
+        # Движок Exa — адреса самих страниц и их отрывки при любой модели; предел — на весь вызов.
+        found = {"engine": SEARCH_ENGINE, "max_results": pages, "max_total_results": pages}
+        tools.append({"type": WEB_SEARCH_TOOL, "parameters": found})
     body: Json = {
         "model": model,
         "messages": [message_body(message) for message in request.messages],

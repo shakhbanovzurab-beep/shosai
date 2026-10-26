@@ -689,7 +689,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Realtime and integrations | Web Push (VAPID) | — | PWA notifications |
 | Realtime and integrations | SMTP (Timeweb), two mailboxes | — | Email: account mail from one mailbox, notifications and newsletters from the other; Mailpit 1.31.5 stands in locally |
 | Realtime and integrations | Cloudflare Turnstile | — | Form protection: registration, password reset, sign-in after failures ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)) |
-| AI providers | OpenRouter | — | Chat, vision, embeddings, rerank, web search, transcription of recordings ([ADR 0043](../adr/0043-speech-providers-by-task.md)) |
+| AI providers | OpenRouter | — | Chat, vision, embeddings, rerank, web search (the `exa` engine of its server tool: the pages' own addresses and passages, whatever the model), transcription of recordings ([ADR 0043](../adr/0043-speech-providers-by-task.md)) |
 | AI providers | Jev (TypeSafe AI) through OpenRouter's Decisions API | `typesafe/jev-1.13`, pinned | Leo's Decision Layer: typed, calibrated decisions behind versioned policies with deterministic fallbacks ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)) |
 | AI providers | OpenAI Realtime | — | Streaming speech recognition of live meetings (gpt-live-transcribe, gpt-realtime-whisper) |
 | AI providers | Google Gemini Live | — | Simultaneous translation (gemini-3.5-live-translate-preview, gemini-3.8-live as interpreter), voice assistant |

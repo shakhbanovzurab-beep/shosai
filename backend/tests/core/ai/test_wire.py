@@ -1,7 +1,9 @@
 """OpenRouter answers are parsed strictly: anything unexpected is a provider error."""
 
 import base64
+import json
 from decimal import Decimal
+from pathlib import Path
 
 import pytest
 
@@ -160,3 +162,17 @@ def test_a_web_answer_cites_each_web_page_once_in_the_order_cited() -> None:
         Citation("http://b.example/", "http://b.example/", ""),
     )
     assert citations_of({"content": "no search"}) == ()
+
+
+def test_a_recorded_exa_answer_cites_the_pages_own_addresses_with_their_passages() -> None:
+    recorded = json.loads(
+        (Path(__file__).parent / "recorded" / "web_search_answer.json").read_text()
+    )
+
+    pages = citations_of(recorded["choices"][0]["message"])
+
+    assert len(pages) == len({page.url for page in pages}) == 8
+    assert pages[0].url == "https://www.python.org/"
+    assert pages[0].title == "Welcome to Python.org"
+    assert "Python 3.15.2" in pages[0].snippet
+    assert all(page.url.startswith("https://") and page.snippet for page in pages)

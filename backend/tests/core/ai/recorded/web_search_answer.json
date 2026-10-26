@@ -1,0 +1,109 @@
+{
+  "_recorded": "OpenRouter /chat/completions with openrouter:web_search, engine exa, max_results 3, model google/gemini-3.8-flash, 2026-10-26; passages cut to 300 characters",
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "The latest stable Python release is **Python 3.15.2** (released October 25, 2026).",
+        "annotations": [
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://www.python.org/",
+              "title": "Welcome to Python.org",
+              "start_index": 0,
+              "end_index": 0,
+              "content": "Welcome to Python.org\n\nLatest: Python 3.15.2\n\n- Web Development: Django, Pyramid, Bottle, Tornado, Flask, Litestar, FastAPI\n- GUI ... : tkInter, PyGObject, PyQt, PySide, Kivy, wxPython, DearPyGui\n- AI ... , scikit-learn, Transformers, Anthropic, LangChain"
+            }
+          },
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://www.python.org/downloads/windows/",
+              "title": "Python Releases for Windows | Python.org",
+              "start_index": 0,
+              "end_index": 0,
+              "content": "Releases ... Windows ... Python.org\n\n...\n\n# Python Releases for Windows\n\n...\n\n- Latest Python install manager - Python install manager 26.4\n- Latest Python 3 Release - Python 3.15.2\n\n...\n\n## Stable Releases\n\n...\n\n- Python 3.14.10 - Oct. 25, 2026\n\n...\n\nDownload using the Python install manager.\n\n- Do"
+            }
+          },
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://www.python.org/doc/versions/",
+              "title": "Python documentation by version | Python.org",
+              "start_index": 0,
+              "end_index": 0,
+              "content": "### Python 3.15\n\n- Python 3.15.2, released on 25 October 2026 \n- Python 3.15.1, released on 21 October 2026 \n- Python 3.15.0, released on 9 October 2026\n...\n2026 \n- Python 3.14.5, released on\n...\n- Python 3.14.0, released on 7 October 2025"
+            }
+          },
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://www.python.org/downloads/windows/",
+              "title": "Python Releases for Windows | Python.org",
+              "start_index": 0,
+              "end_index": 0,
+              "content": "Releases ... Windows ... Python ... org\n\n...\n\n# Python Releases for Windows\n\n...\n\n- Latest Python install manager - Python install manager 26.4\n- Latest Python 3 Release - Python 3.15.2\n\n...\n\n## Stable Releases\n\n...\n\n- Python 3.14.10 - Oct. 25, 2026\n\n...\n\nDownload using the Python install manager.\n\n"
+            }
+          },
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://www.python.org/downloads/source/",
+              "title": "Python Source Releases | Python.org",
+              "start_index": 0,
+              "end_index": 0,
+              "content": "Releases\n\n...\n\n# Python Source Releases\n\n...\n\n- Latest Python 3 Release - Python 3.15.2\n\n...\n\n## Stable Releases\n\n...\n\n- Python 3.11.18 - Oct. 25, 2026\n\n...\n\n-\n\n...\n\n-\n\n...\n\n- Python 3.13.18 - Oct. 25, 2026\n\n...\n\n- Download\n\n...\n\n.1 ... . ... 6 ... . 2\n\n...\n\n- Download Gzipped source tarball\n- Downl"
+            }
+          },
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://www.python.org/downloads/android/",
+              "title": "Python Releases for Android | Python.org",
+              "start_index": 0,
+              "end_index": 0,
+              "content": "# Python Releases for\n\n...\n\n- Latest Python 3 Release - Python 3.15.2\n\n...\n\nthe\n\n...\n\n## Stable Releases\n\n...\n\n- Python 3.14.10 - Oct. 25, 2026\n\n...\n\n- Download Android embeddable package (aarch64)\n- Download Android embeddable package (x86_64)\n- Python 3.15.2 - Oct. 25, 2026"
+            }
+          },
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://time.is/",
+              "title": "Time.is - exact time, any time zone",
+              "start_index": 0,
+              "end_index": 0,
+              "content": "# Exact time now:\n\n03:30:38\n\nMonday, 26 October, 2026, week 44\n\n## Daylight Saving Time ended in Europe, Greenland and the Middle East\n\n October 24 Saturday 2026\n...\nClocks go one hour back in time when daylight saving time ends."
+            }
+          },
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://www.calendardate.com/todays.htm?mobile-app=true&theme=dark",
+              "title": "Today's Date",
+              "start_index": 0,
+              "end_index": 0,
+              "content": "Today's Date\n\n...\n\n# Today's Date\n\n...\n\nToday's Date is Monday October 26, 2026\n\n...\n\n| Day Number of Year: | 299 |\n| --- | --- |\n| Week Number of Year: | 44 |\n| Month Number of Year: | 10 |\n| Leap Year: | No - Next is 2028 |\n| Daylight Saving Time: | No |\n\n...\n\n| Today's Date in Other Date Formats "
+            }
+          },
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://today-date.com/",
+              "title": "Today’s Date in Numbers: MM/DD/YYYY, DD/MM/YYYY & ISO",
+              "start_index": 0,
+              "end_index": 0,
+              "content": "Today’s Date in Numbers: MM/DD/YYYY, DD/MM/YYYY & ISO\n\n...\n\n# Today’s date in numbers\n\n...\n\nToday’s date is shown below in numbers and written formats. You can view and copy the current date in American, British, European and international ISO formats.\n\n...\n\nThe date is generated automatically using"
+            }
+          }
+        ]
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 6287,
+    "completion_tokens": 431,
+    "cost": 0.027331499999999998
+  }
+}

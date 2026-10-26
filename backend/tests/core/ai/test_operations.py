@@ -72,7 +72,9 @@ async def test_a_request_carries_images_tools_and_web_search(homes: DatabaseAcce
     assert image["type"] == "image_url"
     assert image["image_url"]["url"].startswith("data:image/png;base64,")
     assert [tool["type"] for tool in body["tools"]] == ["function", "openrouter:web_search"]
-    assert body["tools"][1]["parameters"] == {"max_results": 3}
+    assert body["tools"][1]["parameters"] == {
+        "engine": "exa", "max_results": 3, "max_total_results": 3,
+    }  # fmt: skip
     assert (body["model"], body["max_tokens"], body["stream"]) == ("probe/chat", 50, False)
 
 

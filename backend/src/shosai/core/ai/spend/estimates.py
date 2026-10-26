@@ -2,7 +2,7 @@
 
 An estimate errs high, never low: it reserves room under the ceilings, and the recorded
 cost replaces it. Text counts four characters a token; an image 765 input tokens (a 512-px
-tile of the vision models), and a page a web search may bring 1 500 input tokens. Output is
+tile of the vision models), and a page a web search may bring 2 000 input tokens. Output is
 the request's own bound. Speech counts its seconds and, for token-billed models, 10 input
 and 3 output tokens a second; a live minute 25 audio tokens a second each way. A document
 whose pages are not named counts a page per 150 KB.
@@ -26,7 +26,7 @@ from shosai.core.ai.results import Unit, Usage
 
 CHARS_PER_TOKEN: Final = 4
 IMAGE_TOKENS: Final = 765
-WEB_PAGE_TOKENS: Final = 1_500
+WEB_PAGE_TOKENS: Final = 2_000
 SPEECH_IN_TOKENS: Final = 10
 SPEECH_OUT_TOKENS: Final = 3
 AUDIO_TOKENS: Final = 25
