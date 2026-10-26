@@ -863,21 +863,22 @@ For Russian users, add 3 transactions × 45 ms ≈ 135 ms of round trip; this is
 **Throughput:**
 
 - At 10 K DAU: ≈ 3 turns/s peak and ≈ 35 concurrent streams. At 100 K DAU: ≈ 29 turns/s and ≈ 350 concurrent streams.
-- A run is I/O-bound. Runs execute in worker processes of the dedicated `agent` queue, at most 48 concurrent runs each ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D12): 1 process at 10 K DAU and about 8 at 100 K DAU, by configuration with the N+2 rule. A count of running runs across the fleet, kept in Valkey, answers 429 `agent_busy` when the workers are full, so a turn never waits in the queue behind a full fleet. The run task has no automatic retry. Agent workers stop with a 200 s grace and are handed over without a gap; the API keeps its 30 s.
+- A run is I/O-bound. Runs execute in worker processes of the dedicated `agent` queue, at most 48 concurrent runs each ([ADR 0068](../../adr/0068-leo-agent-slice.md) AG-D12): 1 process at 10 K DAU and about 8 at 100 K DAU, by configuration with the N+2 rule. **Measured (agent step 17)** in production's shape — the API and one agent worker as their own processes on the local stack, the model a double over HTTP answering ≈ 800 tokens over 8 s after a tool round, histories of 100 messages: at 3.6 turns/s on the worker (the design point's 29 turns/s over 8 workers) the platform's time is p50 96 ms and p95 138 ms; at 8 turns/s p95 319 ms; at 12 turns/s (48 runs at once) p95 0.8–1.0 s. A worker spends ≈ 0.2 s of CPU per turn, so one worker serves about 8 turns/s within L-N1 and the 8 workers of 100 K DAU keep a twofold margin. A count of running runs across the fleet, kept in Valkey, answers 429 `agent_busy` when the workers are full, so a turn never waits in the queue behind a full fleet. The run task has no automatic retry. Agent workers stop with a 200 s grace and are handed over without a gap; the API keeps its 30 s.
 - The API serves the streams: one blocked `XREAD` per process tails all the run logs its clients follow, so an open stream costs it kilobytes and no Valkey connection of its own. The queue's pickup adds a few milliseconds before the first token; it is measured and counted in the platform overhead.
 - Model concurrency is bounded by the provider-wide semaphore (§12).
 
 **Valkey:**
 
-- leases, checkpoints and event logs of about 350 active runs ≈ 350 × (50 KB + 200 KB) ≈ 90 MB at 100 K DAU;
+- a run's event log is ≈ 12 KB for an answer of 800 tokens with a tool round (measured, agent step 17); it lives an hour after its last write while the run goes on and ten minutes after its end, when only a reconnecting stream reads it (an hour after the end kept every turn of the last hour: ≈ 104 000 logs, ≈ 1.3 GB at 100 K DAU);
+- event logs ≈ (350 running + 29 turns/s × 600 s) × 12 KB ≈ 0.2 GB at 100 K DAU and ≈ 25 MB at 10 K; leases and fleet counts are bytes; a checkpoint exists only for a run paused on a card;
 - user state ≈ 40 000 × 1 KB = 40 MB.
 
 **Database per turn:**
 
-- 2 transactions on the hot path, plus 1 per approval;
+- 4 transactions on the hot path (measured, agent step 17): the API's check before admission (an `Idempotency-Key` replay, the thread, consent, settings) and its write of the question and the run, the worker's read of the context and its write of the end; plus the provider port's cost row for each model call (F6) and 1 per approval;
 - background work: 1–3 transactions for memory, compaction and runs.
 
-At 29 turns/s (100 K DAU) that is ≈ 60 tx/s on the hot path, against the RU home's pool of 10 per process at 45 ms per round trip. This fits, and it is watched by the existing pool alerts.
+At 29 turns/s (100 K DAU) that is ≈ 120 tx/s on the hot path and ≈ 70 cost rows/s, against the RU home's pool of 10 per API process and 5 per worker at 45 ms per round trip. This fits, and it is watched by the existing pool alerts.
 
 **Proactive:**
 

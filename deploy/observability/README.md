@@ -43,7 +43,7 @@ The owner reads them, so everything a person sees is plain Russian: titles, desc
 
 | Dashboard | Uid | From |
 |---|---|---|
-| One per journey: «Вход в аккаунт», «Кабинет: скорость открытия страниц» | `journey-<name>` | each SLO a slice or core declares |
+| One per journey: «Вход в аккаунт», «Кабинет: скорость открытия страниц» | `journey-<name>` | each SLO a slice or core declares, and the latencies a slice tracks without a promise |
 | «Правила, которые не должны нарушаться» | `invariant-monitors` | each invariant monitor |
 | «Процессы сервера» | `process-roles` | `backend/src/shosai/composition/dashboards.py` |
 | «Базы данных в России и в ЕС» | `data-homes` | same |

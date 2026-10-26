@@ -5,7 +5,10 @@ the model's own unavailability is the provider's — in 99 % of turns, and the p
 time on a turn of a person in the EU home stays under half a second in 95 % of turns (step 5b).
 An approved action is carried out, or refused with a code, within 30 s in 99 % of approvals;
 an outcome nobody can tell counts against it (step 9a2). No item of an action is ever executed
-twice or without the person's approval (L-N5): the hourly check's two gauges stay at 0.
+twice or without the person's approval (L-N5): the hourly check's two gauges stay at 0. The
+turn's dashboard also tracks, with no promise or alert, the platform's time for people of both
+homes — Russian ones' are measured and reported, not paged (L-N1) — and the worker's pickup
+of a turn (step 17).
 """
 
 from shosai.core.observability.objectives import (
@@ -15,13 +18,19 @@ from shosai.core.observability.objectives import (
     LatencyRatio,
     ServiceLevelObjective,
     StaysAtMost,
+    TrackedLatency,
 )
 from shosai.features.agent.infrastructure.action_metrics import (
     APPROVED_ACTIONS,
     EXECUTED_TWICE,
     EXECUTED_UNAPPROVED,
 )
-from shosai.features.agent.infrastructure.run_metrics import OVERHEAD, PLATFORM_FAILURES, TURNS
+from shosai.features.agent.infrastructure.run_metrics import (
+    OVERHEAD,
+    PICKUP,
+    PLATFORM_FAILURES,
+    TURNS,
+)
 
 LEO_TURN = Journey("leo_turn", "Ход Leo")
 LEO_ACTION = Journey("leo_action", "Действие Leo после одобрения")
@@ -84,5 +93,27 @@ AGENT_MONITORS = (
             "действий."
         ),
         condition=StaysAtMost(EXECUTED_UNAPPROVED),
+    ),
+)
+
+AGENT_TRACKED = (
+    TrackedLatency(
+        LEO_TURN,
+        "Время платформы на ходе Leo: 95 % ходов быстрее этой линии",
+        "Сколько своего времени платформа тратит на ход — без модели и инструментов — у людей, "
+        "чьи данные хранятся в ЕС и в России. Для ЕС обещаны 0,5 секунды (график выше). База "
+        "России дальше от сервера в ЕС, каждая транзакция там дольше: это время измеряется и "
+        "показывается здесь, но срочных сообщений не шлёт.",
+        OVERHEAD,
+        (("ЕС", 'home="eu"'), ("Россия", 'home="ru"')),
+    ),
+    TrackedLatency(
+        LEO_TURN,
+        "Воркер берёт ход: 95 % ходов быстрее этой линии",
+        "Сколько проходит от приёма вопроса — с его записью в базу — до того, как воркер ходов "
+        "начал ход. Это время входит во время платформы; рост значит, что воркерам ходов не "
+        "хватает места или Valkey отвечает медленно.",
+        PICKUP,
+        (("все ходы", ""),),
     ),
 )

@@ -2,7 +2,8 @@
 
 An event's stream id is `0-<its number>`, so the log itself refuses a number that does not
 follow the last one, and a client that saw number N resumes with the entries after `0-N`.
-The log keeps the last 2 000 events and lives an hour after its last write; the database,
+The log keeps the last 2 000 events and lives an hour after its last write, or ten minutes
+after the run's terminal event, when only a reconnecting stream still reads it; the database,
 not the log, says how a run ended.
 """
 
@@ -12,11 +13,12 @@ from datetime import timedelta
 from typing import Final
 from uuid import UUID
 
+from opentelemetry.instrumentation.utils import suppress_instrumentation
 from redis.asyncio import Redis
 from redis.typing import EncodableT, FieldT
 
-from shosai.features.agent.domain.runs import EVENT_LOG_MAX, EVENT_LOG_TTL
-from shosai.features.agent.domain.stream import EventKind, StreamEvent
+from shosai.features.agent.domain.runs import ENDED_LOG, EVENT_LOG_MAX, EVENT_LOG_TTL
+from shosai.features.agent.domain.stream import TERMINAL, EventKind, StreamEvent
 from shosai.features.agent.infrastructure.run_keys import log_key
 
 KIND: Final = "kind"
@@ -76,10 +78,18 @@ class RunLog:
         self._valkey = valkey
 
     async def append(self, run_id: UUID, events: Sequence[StreamEvent]) -> None:
-        """Add events in their order, in one round trip, and keep the log alive an hour."""
+        """Add events in their order, in one round trip, and keep the log alive an hour, or ten
+        minutes once the run's terminal event is in it."""
         if not events:
             return
         key = log_key(run_id)
+        ended = any(event.kind in TERMINAL for event in events)
+        # Запись журнала идёт до десяти раз в секунду на ход: спан на каждую команду Valkey
+        # стоил воркеру процессора и коллектору потока спанов, ничего не добавляя к `agent.run`.
+        with suppress_instrumentation():
+            await self._write(key, events, ENDED_LOG if ended else EVENT_LOG_TTL)
+
+    async def _write(self, key: str, events: Sequence[StreamEvent], ttl: timedelta) -> None:
         async with self._valkey.pipeline(transaction=True) as pipeline:
             for event in events:
                 fields: dict[FieldT, EncodableT] = {
@@ -89,7 +99,7 @@ class RunLog:
                 await pipeline.xadd(
                     key, fields, id=entry_id(event.seq), maxlen=EVENT_LOG_MAX, approximate=True
                 )
-            await pipeline.expire(key, EVENT_LOG_TTL)
+            await pipeline.expire(key, ttl)
             await pipeline.execute()
 
     async def hold(self, run_id: UUID, ttl: timedelta) -> None:

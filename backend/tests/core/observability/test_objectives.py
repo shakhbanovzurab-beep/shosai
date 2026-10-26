@@ -6,6 +6,7 @@ from dataclasses import replace
 
 import pytest
 
+from shosai.core.observability.dashboards import journey_dashboards
 from shosai.core.observability.objectives import (
     AlertClass,
     EventRatio,
@@ -15,6 +16,7 @@ from shosai.core.observability.objectives import (
     NeverIncreases,
     ServiceLevelObjective,
     StaysAtMost,
+    TrackedLatency,
 )
 from shosai.core.observability.rule_files import OwnerRules, render
 
@@ -91,3 +93,31 @@ def test_each_owner_gets_its_files_and_the_burn_limits_follow_the_budget() -> No
     assert fast["annotations"]["description"].startswith(
         "Мы обещаем, что страницы открываются быстро."
     )
+
+
+def test_a_tracked_latency_joins_its_journey_s_dashboard_without_a_promise_line() -> None:
+    tracked = TrackedLatency(
+        BASE.journey, "Скорость по домам", "Без обещания.", "http_server_request_duration_seconds",
+        (("ЕС", 'home="eu"'), ("все", "")),
+    )  # fmt: skip
+    alone = TrackedLatency(
+        Journey("leo_turn", "Ход Leo"), "Подхват", "-", "pickup_seconds", (("все", ""),)
+    )
+
+    boards = journey_dashboards([BASE], [tracked, alone])
+
+    panels = boards["journey-cabinet-api"]["panels"]
+    assert isinstance(panels, list)
+    chart = panels[-1]
+    queries = [target["expr"] for target in chart["targets"]]
+    assert chart["title"] == "Скорость по домам"
+    buckets = "http_server_request_duration_seconds_bucket"
+    assert queries == [
+        f'histogram_quantile(0.95, sum by (le) (rate({buckets}{{home="eu"}}[5m])))',
+        f"histogram_quantile(0.95, sum by (le) (rate({buckets}[5m])))",
+    ]
+    assert "journey-leo-turn" in boards
+    with pytest.raises(ValueError, match="серий"):
+        TrackedLatency(BASE.journey, "x", "y", "m_seconds", ())
+    with pytest.raises(ValueError, match="гистограмма"):
+        TrackedLatency(BASE.journey, "x", "y", 'm{a="b"}', (("все", ""),))

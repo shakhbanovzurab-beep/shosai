@@ -241,8 +241,9 @@ def rendered_dashboards(features: Sequence[FeatureModule]) -> dict[str, str]:
     owners = declared_rules(features).values()
     objectives = [slo for owner in owners for slo in owner.objectives]
     monitors = [monitor for owner in owners for monitor in owner.monitors]
+    tracked = [latency for feature in features for latency in feature.tracked]
     boards = {
-        **journey_dashboards(objectives),
+        **journey_dashboards(objectives, tracked),
         "invariant-monitors": invariants_dashboard(monitors),
         "process-roles": processes(),
         "data-homes": homes(),

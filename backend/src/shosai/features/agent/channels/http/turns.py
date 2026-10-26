@@ -8,8 +8,9 @@ the stream, as the platform's envelope: `question_invalid`, `thread_not_found`,
 `entitlements_unavailable` (503), `not_last_question` (409, a regenerate or an edit of any
 question but the thread's last), `idempotency_key_reused`, `validation_error`. Each event
 has the run's next number as its id, and a comment every 15 s keeps the connection open.
-`GET /v1/agent/runs/{id}/events` resumes after `Last-Event-ID` (410 `run_events_gone` after
-the log's hour); `POST /v1/agent/runs/{id}/cancel` asks the run to stop (202).
+`GET /v1/agent/runs/{id}/events` resumes after `Last-Event-ID` (410 `run_events_gone` once the
+log is gone: an hour after its last write, ten minutes after the run's end); `POST
+/v1/agent/runs/{id}/cancel` asks the run to stop (202).
 """
 
 from collections.abc import AsyncIterable

@@ -3,6 +3,8 @@
 import asyncio
 import uuid
 
+from shosai.features.agent.domain.runs import ENDED_LOG
+from shosai.features.agent.infrastructure.run_keys import log_key
 from tests.features.agent.turn_bench import TurnBench, stream_of
 from tests.harness.connections import fetch_rows, fetch_value
 
@@ -62,6 +64,9 @@ async def test_a_turn_streams_its_answer_and_keeps_it(turn_bench: TurnBench) -> 
         (uuid.UUID(thread),),
     )
     assert title == "What is Shosai?"
+    # Законченный прогон держит журнал минуты для переподключения, а не час.
+    kept_ms = await turn_bench.valkey.pttl(log_key(uuid.UUID(started["run_id"])))
+    assert 0 < kept_ms <= ENDED_LOG.total_seconds() * 1000
 
 
 async def test_the_same_key_streams_the_same_run_once(turn_bench: TurnBench) -> None:

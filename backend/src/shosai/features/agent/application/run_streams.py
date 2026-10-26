@@ -1,7 +1,8 @@
 """A run's stream as the API serves it: open, resumed, or stopped (ADR 0032; agent plan §3.5).
 
 Only the run's person reads or stops it (404 `run_not_found` for anyone else). A stream
-follows the run's log from the number the client saw; a log gone after its hour is 410
+follows the run's log from the number the client saw; a log gone (an hour after its last
+write, ten minutes after the run's end) is 410
 `run_events_gone`, and the client reloads the thread. When a run's log stays silent for 45 s,
 its record is read: a run that ended there — its worker committed the end but could not write
 it to the log — ends the stream with the event its record holds, so no client waits for an
@@ -83,7 +84,7 @@ class RunStreams:
         return RunRecord(row[0], row[1], row[2], RunStatus(row[3]), row[4])
 
     async def resumable(self, principal: Principal, run_id: UUID) -> RunRecord:
-        """The person's run whose log is still kept; 410 `run_events_gone` after its hour."""
+        """The person's run whose log is still kept; 410 `run_events_gone` once it is gone."""
         run = await self.owned(principal, run_id)
         try:
             kept = await self._log.kept(run_id)

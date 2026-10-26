@@ -39,7 +39,7 @@ from shosai.features.agent.domain.attachments import (
 )
 from shosai.features.agent.domain.runs import TURN_DEADLINE
 from shosai.features.agent.domain.stream import Activity, EventKind
-from shosai.features.agent.domain.threads import StepStatus
+from shosai.features.agent.domain.threads import StepStatus, TurnKind
 from shosai.features.agent.infrastructure.thread_records import AgentMessageRecord
 
 MESSAGE = AgentMessageRecord
@@ -75,6 +75,10 @@ class AttachmentReader:
         self, payload: TurnPayload, work: RunWork, emitter: RunEmitter
     ) -> tuple[ImagePart, ...]:
         """The images the model sees beside the question; the documents noted on it."""
+        # Новый вопрос без файлов — частый случай: транзакция ему не нужна (agent шаг 17). Его
+        # загрузки названы в задаче; «Ещё раз» и правка берут файлы прежнего вопроса из строки.
+        if payload.kind is TurnKind.NEW and not payload.attachments:
+            return ()
         async with self._transactions.begin(payload.scope(), read_only=True) as session:
             question = await session.scalar(
                 select(MESSAGE).where(

@@ -22,6 +22,7 @@ from shosai.features.agent.domain.runs import Channel
 
 TURNS: Final = "shosai_agent_turns_total"
 OVERHEAD: Final = "shosai_agent_platform_overhead_seconds"
+PICKUP: Final = "shosai_agent_queue_pickup_seconds"
 # Границы корзин: 0.5 — цель накладных расходов платформы (§16.3), остальные — для панели.
 OVERHEAD_BUCKETS: Final = (0.05, 0.1, 0.2, 0.3, 0.5, 0.75, 1, 2, 5)
 FIRST_WORD_BUCKETS: Final = (0.25, 0.5, 1, 2, 3, 5, 8, 15, 30)
@@ -56,7 +57,7 @@ class RunMetrics:
             registry=registry,
         )
         self._pickup = Histogram(
-            "shosai_agent_queue_pickup_seconds",
+            PICKUP,
             "Время от допуска хода до того, как его взял воркер ходов",
             buckets=PICKUP_BUCKETS,
             registry=registry,

@@ -97,7 +97,7 @@ from shosai.features.agent.infrastructure.thread_records import THREAD_MODELS
 from shosai.features.agent.infrastructure.tool_metrics import ToolMetrics
 from shosai.features.agent.infrastructure.turn_graph import turn_graph
 from shosai.features.agent.infrastructure.turn_saver import TurnSaver
-from shosai.features.agent.objectives import AGENT_MONITORS, AGENT_OBJECTIVES
+from shosai.features.agent.objectives import AGENT_MONITORS, AGENT_OBJECTIVES, AGENT_TRACKED
 from shosai.features.agent.settings import AgentSettings, agent_model_set
 from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 
@@ -257,5 +257,6 @@ AGENT = FeatureModule(
     agent_tools=(*CORE_TOOLS, *WEB_TOOLS, *PLATFORM_TOOLS),
     objectives=AGENT_OBJECTIVES,
     monitors=AGENT_MONITORS,
+    tracked=AGENT_TRACKED,
     account_data=(ACCOUNT_DATA,),
 )

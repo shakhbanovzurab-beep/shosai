@@ -141,3 +141,19 @@ async def test_attachments_come_only_with_a_new_question_and_only_one_s_own(
     assert (foreign.status_code, foreign.json()["error"]["code"]) == (409, "upload_not_claimable")
     assert again.status_code == 422
     assert many.status_code == 422
+
+
+async def test_a_regenerated_answer_sees_the_question_s_image_again(turn_bench: TurnBench) -> None:
+    person = uuid.uuid4()
+    thread = await turn_bench.thread(person)
+    image = await turn_bench.attachment(person, "chart.png", PNG, "image/png")
+    turn_bench.model.scripts = [saying("A chart.")]
+    first = stream_of(await turn_bench.ask(person, thread, "What is this?", upload_ids=[image]))
+
+    again = await turn_bench.ask(
+        person, thread, "What is this?", regenerate_of=first[0][2]["message_id"]
+    )
+
+    assert again.status_code == 200
+    _, images = question_of(turn_bench.model.calls[-1])
+    assert [(part.media_type, len(part.data)) for part in images] == [("image/png", len(PNG))]

@@ -1,8 +1,9 @@
 """The doubles a turn's tests run with (agent step 5a): the model, the `agent` queue, the plan's
 terms, the person's profile and the meetings a page can show.
 
-The model is a script of pieces, holding the first calls at a gate when asked; the queue drives a
-sent turn at once in the background unless it holds it to play a lost worker.
+The model is a script of pieces, holding the first calls at a gate when asked or pausing before
+each piece; the queue drives a sent turn at once in the background unless it holds it to play a
+lost worker, or hands it to the real `agent` queue when given its sender (the load test).
 """
 
 import asyncio
@@ -19,6 +20,7 @@ from shosai.core.ai.requests import ChatRequest
 from shosai.core.ai.results import ChatDelta, ChatResult, Usage
 from shosai.core.kernel.homes import Home
 from shosai.core.tasks.declaration import TaskDeclaration
+from shosai.core.tasks.sender import TaskSender
 from shosai.features.agent.application.after_turn import ThreadTask
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.turn_task import TurnPayload
@@ -53,6 +55,8 @@ class ScriptedModel:
     # Сколько первых вызовов после первого куска ждут открытых ворот; остальные идут сразу.
     held_calls: int = 0
     failure: Exception | None = None
+    # Пауза перед каждым куском, секунды: так нагрузочный тест играет поток настоящей модели.
+    pause: float = 0.0
     calls: list[ChatRequest] = field(default_factory=list)
     # Кто платит каждый вызов: человек или платформенный счёт оператора.
     contexts: list[CallContext] = field(default_factory=list)
@@ -73,6 +77,8 @@ class ScriptedModel:
         for index, piece in enumerate(pieces):
             if held and index > 0:
                 await self.gate.wait()
+            if self.pause:
+                await asyncio.sleep(self.pause)
             yield piece
         if self.failure is not None:
             raise self.failure
@@ -86,11 +92,14 @@ class InlineQueue:
     hold: bool = False
     sent: list[TurnPayload] = field(default_factory=list)
     running: list[asyncio.Task[None]] = field(default_factory=list)
+    # Отправитель настоящей очереди `agent`: ход уходит в её поток Valkey и ждёт воркера.
+    sender: TaskSender | None = None
 
     async def send(self, task: TaskDeclaration[TurnPayload], payload: TurnPayload) -> str:
-        """Run the turn in the background."""
-        del task
+        """Run the turn in the background, or send it to the real queue."""
         self.sent.append(payload)
+        if self.sender is not None:
+            return await self.sender.send(task, payload)
         if not self.hold and self.engine is not None:
             self.running.append(asyncio.create_task(self.engine.run(payload)))
         return str(uuid.uuid4())

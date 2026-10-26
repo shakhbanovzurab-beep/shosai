@@ -27,6 +27,7 @@ dependencies = [
     "openpyxl>=3.1.5",
     "opentelemetry-api>=1.45.0",
     "opentelemetry-exporter-otlp-proto-http>=1.45.0",
+    "opentelemetry-instrumentation>=0.66b1",
     "opentelemetry-instrumentation-redis>=0.66b0",
     "opentelemetry-sdk>=1.45.0",
     # Превью картинок-вложений задач: WebP до 640 px в воркере (files шаг 8c, ADR 0064).

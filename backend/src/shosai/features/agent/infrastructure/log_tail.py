@@ -6,8 +6,11 @@ stream: a new follower writes to the wake stream, so the reader picks the new lo
 instead of after its block. The block is two seconds, under the managed Valkey's cut of a
 blocking read (draft lesson). The reader starts with the process's first follower and runs
 until the process stops. Each follower gets only events after the last one it got, so two
-tabs of one run share the reads and neither sees an event twice. A failing read is logged and
-retried after a pause; followers keep waiting and their streams keep their heartbeats.
+tabs of one run share the reads and neither sees an event twice. Followers are kept by their
+log's key, named once: a read hands its events to the followers of each log it got, never
+scanning the others (agent step 17: the scan named every followed log's key on every read). A
+failing read is logged and retried after a pause; followers keep waiting and their streams keep
+their heartbeats.
 """
 
 import asyncio
@@ -50,6 +53,10 @@ class Follower:
     run_id: UUID
     seq: int
     events: asyncio.Queue[StreamEvent] = field(default_factory=asyncio.Queue)
+    key: str = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.key = log_key(self.run_id)
 
 
 class LogTail:
@@ -60,7 +67,7 @@ class LogTail:
         self._log = run_log
         self._wake = wake_key(secrets.token_hex(8))
         self._wake_seen = "0-0"
-        self._followers: set[Follower] = set()
+        self._followers: dict[str, set[Follower]] = {}
         self._reader: asyncio.Task[None] | None = None
 
     async def follow(
@@ -76,7 +83,7 @@ class LogTail:
             yield event
             if closes_stream(event, followed=index < len(kept) - 1):
                 return
-        self._followers.add(follower)
+        self._followers.setdefault(follower.key, set()).add(follower)
         try:
             await self._wake_reader()
             while True:
@@ -87,7 +94,7 @@ class LogTail:
                 if closes_stream(came, followed=False):
                     return
         finally:
-            self._followers.discard(follower)
+            self._forget(follower)
 
     @staticmethod
     async def _next(follower: Follower, silence: Silence | None) -> StreamEvent | None:
@@ -131,13 +138,20 @@ class LogTail:
                 log.exception("Читатель журналов Leo споткнулся; продолжает после паузы")
                 await asyncio.sleep(OUTAGE_PAUSE.total_seconds())
 
+    def _forget(self, follower: Follower) -> None:
+        followers = self._followers.get(follower.key)
+        if followers is None:
+            return
+        followers.discard(follower)
+        if not followers:
+            del self._followers[follower.key]
+
     async def _read_once(self) -> None:
         positions: dict[KeyT, StreamIdT] = {self._wake: self._wake_seen}
-        seen: dict[str, int] = {}
-        for follower in self._followers:
-            key = log_key(follower.run_id)
-            seen[key] = min(seen.get(key, follower.seq), follower.seq)
-        positions |= {key: entry_id(seq) for key, seq in seen.items()}
+        positions |= {
+            key: entry_id(min(follower.seq for follower in followers))
+            for key, followers in self._followers.items()
+        }
         reply = await self._valkey.xread(positions, block=int(BLOCK.total_seconds() * 1000))
         for key, entries in streams_of(reply).items():
             if not entries:
@@ -148,9 +162,7 @@ class LogTail:
             self._dispatch(key, [event_of(entry) for entry in entries])
 
     def _dispatch(self, key: str, events: list[StreamEvent]) -> None:
-        for follower in self._followers:
-            if log_key(follower.run_id) != key:
-                continue
+        for follower in self._followers.get(key, ()):
             for event in events:
                 if event.seq > follower.seq:
                     follower.seq = event.seq

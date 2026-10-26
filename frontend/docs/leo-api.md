@@ -95,8 +95,8 @@ Message = {id, role: user | assistant | server, text, status: done | stopped | f
 - Refusals before the stream: `402 token_limit` (`params.limit`: `frontier_weekly_tokens`, `standard_daily_tokens`,
   `standard_weekly_tokens`), `403 consent_required`, `404 thread_not_found`, `409 thread_busy`, `422`,
   `429 rate_limited | too_many_runs | agent_busy` with `Retry-After`, `503 agent_unavailable | entitlements_unavailable`.
-- Resume: `GET /v1/agent/runs/{id}/events` with `Last-Event-ID`; `410 run_events_gone` after an hour — reload the
-  thread. Stop: `POST /v1/agent/runs/{id}/cancel` (202; asking again, or after the end, changes nothing). Another
+- Resume: `GET /v1/agent/runs/{id}/events` with `Last-Event-ID`; `410 run_events_gone` once the log is gone — an
+  hour after its last event, ten minutes after the run's end — reload the thread. Stop: `POST /v1/agent/runs/{id}/cancel` (202; asking again, or after the end, changes nothing). Another
   person's run is `404 run_not_found`.
 - A run whose worker was lost ends `run.failed {process_lost}` within a minute; the question stays in the thread, so
   "Retry" asks it again.

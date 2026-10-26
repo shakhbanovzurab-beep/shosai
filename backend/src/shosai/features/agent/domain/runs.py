@@ -19,6 +19,10 @@ READ_TOOL_TIMEOUT: Final = timedelta(seconds=20)
 LEASE_TTL: Final = timedelta(seconds=30)
 LEASE_RENEWAL: Final = timedelta(seconds=10)
 EVENT_LOG_TTL: Final = timedelta(hours=1)
+# Журнал законченного прогона нужен только переподключившемуся потоку: ответ уже в истории, а
+# поздний клиент получает 410 и перечитывает её. Час держал бы в Valkey журналы всех ходов
+# последнего часа — ≈ 1,3 ГБ при 100 тыс. DAU вместо ≈ 0,1 ГБ (agent шаг 17).
+ENDED_LOG: Final = timedelta(minutes=10)
 # Журнал прогона на паузе живёт дольше карточки: решение пишет в него исход и конец прогона.
 PAUSED_LOG: Final = timedelta(hours=1, minutes=15)
 EVENT_LOG_MAX: Final = 2_000

@@ -3,8 +3,9 @@
 A journey's dashboard shows each of its objectives under a heading with its promise: whether
 the promise holds over the last 3 days, the share of failures over the last hour and five
 minutes against what the promise allows, the events per minute and, for a latency promise,
-the time 95 % of events stay under, with exemplars that open a slow request's trace. The
-monitors' dashboard has one tile per monitor. A slice's declarations bring its dashboards
+the time 95 % of events stay under, with exemplars that open a slow request's trace. After
+them come the latencies the journey only tracks, with no promise line. The monitors'
+dashboard has one tile per monitor. A slice's declarations bring its dashboards
 with them; the uids are the ones the alerts link to.
 """
 
@@ -27,6 +28,7 @@ from shosai.core.observability.objectives import (
     Journey,
     NeverIncreases,
     ServiceLevelObjective,
+    TrackedLatency,
 )
 from shosai.core.observability.rule_files import INVARIANTS_DASHBOARD, journey_uid, recorded
 from shosai.core.observability.tiles import share, status
@@ -102,19 +104,51 @@ def promise_panels(slo: ServiceLevelObjective) -> list[Panel]:
     return panels
 
 
-def journey_dashboards(objectives: Sequence[ServiceLevelObjective]) -> dict[str, dict[str, object]]:
-    """Dashboard uid → dashboard, one per journey of the objectives."""
-    journeys: dict[str, tuple[Journey, list[ServiceLevelObjective]]] = {}
+def tracked_panels(latencies: Sequence[TrackedLatency]) -> list[Panel]:
+    """The latencies a journey tracks without a promise: a heading, then a chart each."""
+    if not latencies:
+        return []
+    charts = [
+        Chart(
+            latency.title,
+            latency.description,
+            SECONDS,
+            [
+                Series(label, quantile_95(latency.histogram, matchers))
+                for label, matchers in latency.series
+            ],
+        ).panel()
+        for latency in latencies
+    ]
+    return [row("Отслеживаем без обещания и срочных сообщений"), *charts]
+
+
+def quantile_95(histogram: str, matchers: str) -> str:
+    """The time 95 % of a histogram's events stay under, over the rate window."""
+    buckets = f"{histogram}_bucket{{{matchers}}}" if matchers else f"{histogram}_bucket"
+    return f"histogram_quantile(0.95, sum by (le) (rate({buckets}[{RATE_WINDOW}])))"
+
+
+def journey_dashboards(
+    objectives: Sequence[ServiceLevelObjective], tracked: Sequence[TrackedLatency] = ()
+) -> dict[str, dict[str, object]]:
+    """Dashboard uid → dashboard, one per journey of the objectives and tracked latencies."""
+    journeys: dict[str, tuple[Journey, list[ServiceLevelObjective], list[TrackedLatency]]] = {}
     for slo in objectives:
-        journeys.setdefault(slo.journey.name, (slo.journey, []))[1].append(slo)
+        journeys.setdefault(slo.journey.name, (slo.journey, [], []))[1].append(slo)
+    for latency in tracked:
+        journeys.setdefault(latency.journey.name, (latency.journey, [], []))[2].append(latency)
     return {
         journey_uid(journey): dashboard(
             journey_uid(journey),
             journey.title,
             f"Что Shosai обещает на пути «{journey.title}» и как это выполняется.",
-            [panel for slo in members for panel in promise_panels(slo)],
+            [
+                *(panel for slo in members for panel in promise_panels(slo)),
+                *tracked_panels(latencies),
+            ],
         )
-        for journey, members in journeys.values()
+        for journey, members, latencies in journeys.values()
     }
 
 

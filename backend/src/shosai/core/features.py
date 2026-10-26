@@ -50,7 +50,11 @@ from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.kernel.homes import Home
 from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.rate_limits import RateLimiter
-from shosai.core.observability.objectives import InvariantMonitor, ServiceLevelObjective
+from shosai.core.observability.objectives import (
+    InvariantMonitor,
+    ServiceLevelObjective,
+    TrackedLatency,
+)
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.ports.keys import PortBinding, PortKey
 from shosai.core.runtime.loops import ScheduledLoop
@@ -182,6 +186,8 @@ class FeatureModule:
     # Цели путей и мониторы инвариантов среза (§16.3, §16.4): из них рендерятся правила Prometheus.
     objectives: tuple[ServiceLevelObjective, ...] = ()
     monitors: tuple[InvariantMonitor, ...] = ()
+    # Задержки, которые дашборд пути показывает без обещания и оповещений (§16.3).
+    tracked: tuple[TrackedLatency, ...] = ()
     # Таблицы, строками которых делятся через политику доступа; гейт изоляции читает их (§7).
     shareable: tuple[ShareableResource, ...] = ()
 

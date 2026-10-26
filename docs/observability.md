@@ -133,6 +133,7 @@ MEETING_MONITORS = (
 ## A dashboard panel
 
 - A journey's dashboard is generated from its objectives: a slice that declares an SLO gets its panels.
+- A latency to show with no promise and no alert — measured and reported, not paged — is a `TrackedLatency(journey, title, description, histogram, series)` in the slice's `tracked`: a chart of the time 95 % of events stay under, one line per `(label, matchers)`, after the journey's promises (Leo's turn tracks the platform's time of both homes and the worker's pickup, agent step 17).
 - The other dashboards are code in `backend/src/shosai/composition/dashboards.py` and `ai_dashboard.py`, built from `core/observability/grafana.py` (charts) and `tiles.py` (single numbers). A panel is a `Chart(title, description, unit, series, limit=…)`, at most four `Series` each, or a `status`/`share`/`Tile`.
 - Everything the owner reads on a panel is plain Russian: title, description, legend, unit. `--update-rules` renders the dashboards with the rules; Grafana picks the files up within a minute.
 

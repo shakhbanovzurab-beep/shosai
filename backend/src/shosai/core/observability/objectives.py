@@ -19,6 +19,8 @@ NAME = re.compile(r"[a-z][a-z0-9_]*")
 WINDOW = re.compile(r"[1-9][0-9]*[mhd]")
 # Метрика — имя сэмпла Prometheus, без селектора: селектор пишет индикатор.
 METRIC = re.compile(r"[a-z_][a-z0-9_]*")
+# Линий на графике дашборда не больше четырёх (палитра графиков, deploy/observability/README.md).
+MAX_TRACKED_SERIES = 4
 
 
 class AlertClass(StrEnum):
@@ -166,3 +168,22 @@ class InvariantMonitor:
     def __post_init__(self) -> None:
         if not (NAME.fullmatch(self.name) is not None):
             raise ValueError(f"имя монитора {self.name!r} — snake_case")
+
+
+@dataclass(frozen=True, slots=True)
+class TrackedLatency:
+    """A latency a journey's dashboard shows beside its promises, with no promise and no alert
+    (§16.3: measured and reported, not paged): the time 95 % of events stay under, one line per
+    series — a label for the owner, in Russian, and the histogram's matchers, empty for all."""
+
+    journey: Journey
+    title: str
+    description: str
+    histogram: str
+    series: tuple[tuple[str, str], ...]
+
+    def __post_init__(self) -> None:
+        if not (METRIC.fullmatch(self.histogram) is not None):
+            raise ValueError(f"гистограмма {self.histogram!r}")
+        if not 1 <= len(self.series) <= MAX_TRACKED_SERIES:
+            raise ValueError(f"«{self.title}»: серий {len(self.series)}, допустимо от 1 до 4")
