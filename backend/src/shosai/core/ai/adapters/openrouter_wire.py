@@ -21,6 +21,7 @@ import base64
 import binascii
 import json
 import re
+from dataclasses import replace
 from decimal import Decimal, InvalidOperation
 from typing import Final
 
@@ -108,6 +109,25 @@ def usage_of(raw: object, *, unit: Unit | None = None, units_field: str = "") ->
         units=units,
         unit=unit,
         reported_cost_usd=reported_cost(usage.get("cost")),
+    )
+
+
+def image_usage(raw: object) -> Usage:
+    """Usage of an image answer: one picture, the tokens of the pictures given and made apart
+    from text tokens, as `prompt_tokens_details` and `completion_tokens_details` name them."""
+    usage = raw if isinstance(raw, dict) else {}
+    counted = usage_of(raw, unit=Unit.IMAGE)
+    given, made = (
+        details.get("image_tokens") if isinstance(details, dict) else None
+        for details in (usage.get("prompt_tokens_details"), usage.get("completion_tokens_details"))
+    )
+    given_tokens, made_tokens = int(given or 0), int(made or 0)
+    return replace(
+        counted,
+        input_tokens=max(counted.input_tokens - given_tokens, 0),
+        output_tokens=max(counted.output_tokens - made_tokens, 0),
+        input_image_tokens=given_tokens,
+        output_image_tokens=made_tokens,
     )
 
 

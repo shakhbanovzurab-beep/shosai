@@ -34,6 +34,7 @@ from shosai.core.ai.adapters.openrouter_wire import (
     data_url,
     first_choice,
     image_of,
+    image_usage,
     stream_chunk,
     tool_calls_of,
     usage_of,
@@ -179,7 +180,7 @@ class OpenRouter:
         }
         answer = await self._post("chat/completions", body)
         data, media_type = image_of(first_choice(answer).get("message") or {})
-        usage = usage_of(answer.get("usage"), unit=Unit.IMAGE, units_field="")
+        usage = image_usage(answer.get("usage"))
         return GeneratedImage(data=data, media_type=media_type, model=model, usage=usage)
 
     async def transcribe(self, model: ModelRef, request: TranscriptionRequest) -> Transcript:

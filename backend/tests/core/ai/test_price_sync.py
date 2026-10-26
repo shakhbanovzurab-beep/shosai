@@ -7,12 +7,15 @@ import httpx
 import pytest
 
 from shosai.core.ai.adapters.openrouter import OPENROUTER_API
-from shosai.core.ai.calls import ModelRef, Provider
+from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
+from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.pricing.sync import listed_prices, price_sync_handler
+from shosai.core.ai.requests import ImageRequest
 from shosai.core.ai.results import Unit
 from shosai.core.kernel.homes import Home
 from shosai.core.tasks.payloads import HomeTaskPayload
-from tests.core.ai.bench import set_prices
+from tests.core.ai.bench import ai_bench, context, set_prices
+from tests.doubles.openrouter import image_answer, usage
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
@@ -38,6 +41,9 @@ LISTING = {
         model("openrouter/auto", {"prompt": "-1", "completion": "-1"}),
         model("probe/long", {"prompt": "0.0000716666666667", "completion": "0"},
               ("transcription",)),
+        model("probe/picture", {"prompt": "0.000005", "image": "0.02",
+                                "image_token": "0.0000044", "image_output": "0.00003"},
+              ("image",)),
     ]
 }  # fmt: skip
 
@@ -57,6 +63,10 @@ def test_each_field_becomes_its_unit_and_unreadable_prices_are_skipped() -> None
         ("probe/tokens-stt", Unit.INPUT): Decimal("0.000002500000"),
         ("probe/tokens-stt", Unit.OUTPUT): Decimal("0.000010000000"),
         ("probe/long", Unit.AUDIO_SECOND): Decimal("0.000071666667"),
+        # Цена за поданную картинку (`image`) не пишется: единица `image` — за созданную.
+        ("probe/picture", Unit.INPUT): Decimal("0.000005000000"),
+        ("probe/picture", Unit.INPUT_IMAGE): Decimal("0.000004400000"),
+        ("probe/picture", Unit.OUTPUT_IMAGE): Decimal("0.000030000000"),
     }
 
 
@@ -115,3 +125,44 @@ async def test_a_failed_listing_writes_nothing(homes: DatabaseAccess, run_slot: 
     await sync.handle(HomeTaskPayload(home=Home.EU))
 
     assert await synced(run_slot) == []
+
+
+PICTURE = ModelRoute(ModelRef(Provider.OPENROUTER, "probe/picture"))
+PNG = b"\x89PNG\r\n\x1a\n"
+
+
+async def test_a_picture_priced_by_image_tokens_is_made_after_the_sync(
+    homes: DatabaseAccess, run_slot: RunSlot
+) -> None:
+    bench = ai_bench(homes.transactions)
+    refused = None
+    try:
+        await bench.providers.generate_image(context("picture:0"), PICTURE, ImageRequest("a study"))
+    except AiCallError as error:
+        refused = error.failure
+    priced = {"prompt": "0.000005", "image_token": "0.0000044", "image_output": "0.00003"}
+    listing = {"data": [model("probe/picture", priced, ("image",))]}
+    await price_sync_handler(homes.transactions, listing_client([listing])).handle(
+        HomeTaskPayload(home=Home.EU)
+    )
+    used = usage(12, 1_300) | {"completion_tokens_details": {"image_tokens": 1_290}}
+    # Новый процесс: прежний помнит «цен нет» до конца срока своего кэша цен.
+    bench = ai_bench(homes.transactions)
+    bench.openrouter.answer("chat/completions", image_answer(PNG, "image/png", used))
+
+    made = await bench.providers.generate_image(
+        context("picture:1"), PICTURE, ImageRequest("a quiet study")
+    )
+
+    [row] = await fetch_rows(
+        run_slot.claimed.connections[Home.EU],
+        "SELECT output_tokens, output_image_tokens, unit, units, cost_usd, cost_source"
+        " FROM provider_costs WHERE effect_key = 'picture:1'",
+    )
+    assert refused is AiFailure.MODEL_UNPRICED
+    assert (made.data, made.usage.output_image_tokens) == (PNG, 1_290)
+    # Без цены от провайдера: 12 входных токенов, 10 текстовых выходных по цене входных
+    # (своей нет) и 1 290 токенов картинки по 0,00003.
+    assert (row["output_tokens"], row["output_image_tokens"], row["unit"]) == (10, 1_290, "image")
+    assert row["cost_source"] == "priced"
+    assert row["cost_usd"] == Decimal("0.000060") + Decimal("0.0387")

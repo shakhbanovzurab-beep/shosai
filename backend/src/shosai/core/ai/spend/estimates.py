@@ -5,7 +5,10 @@ cost replaces it. Text counts four characters a token; an image 765 input tokens
 tile of the vision models), and a page a web search may bring 2 000 input tokens. Output is
 the request's own bound. Speech counts its seconds and, for token-billed models, 10 input
 and 3 output tokens a second; a live minute 25 audio tokens a second each way. A document
-whose pages are not named counts a page per 150 KB.
+whose pages are not named counts a page per 150 KB. A picture made counts as one picture
+for a model priced per picture and 6 250 image tokens for one priced per token — the largest
+picture of OpenRouter's token-priced image models, OpenAI's 1536x1024 at high quality
+(Gemini's 1024x1024 is 1 290).
 """
 
 import json
@@ -20,12 +23,14 @@ from shosai.core.ai.requests import (
     ChatRequest,
     EmbeddingRequest,
     ImagePart,
+    ImageRequest,
     TextPart,
 )
 from shosai.core.ai.results import Unit, Usage
 
 CHARS_PER_TOKEN: Final = 4
 IMAGE_TOKENS: Final = 765
+PICTURE_TOKENS: Final = 6_250
 WEB_PAGE_TOKENS: Final = 2_000
 SPEECH_IN_TOKENS: Final = 10
 SPEECH_OUT_TOKENS: Final = 3
@@ -60,6 +65,17 @@ def embedding_estimate(request: EmbeddingRequest) -> Usage:
 def per_item(unit: Unit) -> Usage:
     """One request or one picture."""
     return Usage(units=Decimal(1), unit=unit)
+
+
+def image_estimate(request: ImageRequest) -> Usage:
+    """The prompt and the pictures given, and the picture made: one, or its tokens."""
+    return Usage(
+        input_tokens=tokens_of(request.prompt),
+        input_image_tokens=len(request.references) * IMAGE_TOKENS,
+        output_image_tokens=PICTURE_TOKENS,
+        units=Decimal(1),
+        unit=Unit.IMAGE,
+    )
 
 
 def speech_estimate(audio: AudioFile) -> Usage:

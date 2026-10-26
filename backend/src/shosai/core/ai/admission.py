@@ -34,7 +34,8 @@ NEEDED_UNITS: Final = MappingProxyType(
         "chat": (TOKENS,),
         "embed": (frozenset({Unit.INPUT}),),
         "rerank": (frozenset({Unit.REQUEST}),),
-        "image": (frozenset({Unit.IMAGE}),),
+        # Картинка — по цене за штуку или за токены созданной картинки (прайс OpenRouter).
+        "image": (frozenset({Unit.IMAGE}), frozenset({Unit.OUTPUT_IMAGE})),
         "transcribe": (TOKENS, SECONDS),
         "diarize": (SECONDS,),
         "live_transcription": (SECONDS, TOKENS, frozenset({Unit.INPUT_AUDIO, Unit.OUTPUT})),

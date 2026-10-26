@@ -25,6 +25,13 @@ def cost_of(usage: Usage, prices: ModelPrices) -> tuple[Decimal, CostSource]:
         return usage.reported_cost_usd, CostSource.REPORTED
     # Кэшированные токены дешевле, если у модели есть их цена; иначе — по цене входных.
     cached_price = prices.get(Unit.CACHED_INPUT, prices.get(Unit.INPUT, Decimal(0)))
+    # Токены картинки без своей цены стоят как обычные; цена за картинку уже включает её токены.
+    image_in_price = prices.get(Unit.INPUT_IMAGE, prices.get(Unit.INPUT, Decimal(0)))
+    image_out_price = (
+        Decimal(0)
+        if Unit.IMAGE in prices
+        else prices.get(Unit.OUTPUT_IMAGE, prices.get(Unit.OUTPUT, Decimal(0)))
+    )
     fresh_input = max(usage.input_tokens - usage.cached_tokens, 0)
     total = (
         fresh_input * prices.get(Unit.INPUT, Decimal(0))
@@ -32,6 +39,8 @@ def cost_of(usage: Usage, prices: ModelPrices) -> tuple[Decimal, CostSource]:
         + usage.output_tokens * prices.get(Unit.OUTPUT, Decimal(0))
         + usage.input_audio_tokens * prices.get(Unit.INPUT_AUDIO, Decimal(0))
         + usage.output_audio_tokens * prices.get(Unit.OUTPUT_AUDIO, Decimal(0))
+        + usage.input_image_tokens * image_in_price
+        + usage.output_image_tokens * image_out_price
     )
     if usage.unit is not None:
         total += usage.units * prices.get(usage.unit, Decimal(0))

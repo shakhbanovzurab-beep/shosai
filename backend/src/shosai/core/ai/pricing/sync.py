@@ -8,6 +8,9 @@ price. OpenRouter's `pricing` names units by field (read on 2026-10-13):
   model without a `completion` price, whose `prompt` is per second of audio (OpenAI's own
   list confirms it: gpt-transcribe $0.0045 a minute is OpenRouter's 0.000075)
 - `input_cache_read` is per cached input token, `audio` and `audio_output` per audio token
+- `image_token` and `image_output` are per image token, of the pictures a call is given and of
+  the one it makes (read on 2026-10-26); `image`, a price per given picture, is not recorded:
+  the price list's `image` unit is per picture made
 - a negative price marks a router whose price varies: skipped; `overrides` for long prompts
   are not followed, the base price is the one recorded
 
@@ -48,6 +51,8 @@ FIELDS: Final = {
     "input_cache_read": Unit.CACHED_INPUT,
     "audio": Unit.INPUT_AUDIO,
     "audio_output": Unit.OUTPUT_AUDIO,
+    "image_token": Unit.INPUT_IMAGE,
+    "image_output": Unit.OUTPUT_IMAGE,
 }
 SYNC_PRICES: Final = TaskDeclaration(
     name="ai.sync_prices",

@@ -187,6 +187,8 @@ class CostWriter:
                 + entry.output_tokens
                 + entry.input_audio_tokens
                 + entry.output_audio_tokens
+                + entry.input_image_tokens
+                + entry.output_image_tokens
             ),
         )
         for settlement in self._settlements.all():

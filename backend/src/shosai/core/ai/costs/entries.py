@@ -30,6 +30,9 @@ class CostEntry(HomeTaskPayload):
     output_tokens: int = 0
     input_audio_tokens: int = 0
     output_audio_tokens: int = 0
+    # Новые поля необязательны: запись стоимости из очереди читает задачу и прежнего образа.
+    input_image_tokens: int = 0
+    output_image_tokens: int = 0
     units: Decimal = Decimal(0)
     unit: str | None = None
     cost_usd: Decimal

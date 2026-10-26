@@ -58,6 +58,7 @@ from shosai.core.ai.spend.estimates import (
     chat_estimate,
     decision_estimate,
     embedding_estimate,
+    image_estimate,
     ocr_estimate,
     per_item,
     speech_estimate,
@@ -137,7 +138,7 @@ class AiProviders:
         """A picture from a prompt."""
         operation = Operation(
             "image", self._openrouter("image"), lambda c, m: c.generate_image(m, request),
-            per_item(Unit.IMAGE),
+            image_estimate(request),
         )  # fmt: skip
         return await self._routed(context, route, operation)
 

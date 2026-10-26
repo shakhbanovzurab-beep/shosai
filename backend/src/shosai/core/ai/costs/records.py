@@ -73,6 +73,10 @@ class ProviderCost(ModelBase):
             name="audio_tokens_not_negative",
         ),
         CheckConstraint(
+            "input_image_tokens >= 0 AND output_image_tokens >= 0",
+            name="image_tokens_not_negative",
+        ),
+        CheckConstraint(
             "(exchange_rate_used IS NULL) = (cost_rub IS NULL)", name="rubles_with_their_rate"
         ),
         CheckConstraint("length(effect_key) BETWEEN 1 AND 200", name="effect_key_length"),
@@ -107,6 +111,8 @@ class ProviderCost(ModelBase):
     output_tokens: Mapped[int] = mapped_column(Integer, server_default="0")
     input_audio_tokens: Mapped[int] = mapped_column(Integer, server_default="0")
     output_audio_tokens: Mapped[int] = mapped_column(Integer, server_default="0")
+    input_image_tokens: Mapped[int] = mapped_column(Integer, server_default="0")
+    output_image_tokens: Mapped[int] = mapped_column(Integer, server_default="0")
     units: Mapped[Decimal] = mapped_column(Numeric(18, 3), server_default="0")
     unit: Mapped[str | None] = mapped_column(Text)
     cost_usd: Mapped[Decimal] = mapped_column(Numeric(18, 10))

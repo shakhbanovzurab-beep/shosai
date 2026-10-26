@@ -19,6 +19,9 @@ class Unit(StrEnum):
     # Аудиотокены живых моделей стоят иначе, чем текстовые.
     INPUT_AUDIO = "input_audio_token"
     OUTPUT_AUDIO = "output_audio_token"
+    # Токены картинок моделей изображений: на входе (картинки-образцы) и в созданной картинке.
+    INPUT_IMAGE = "input_image_token"
+    OUTPUT_IMAGE = "output_image_token"
     AUDIO_SECOND = "audio_second"
     PAGE = "page"
     DOCUMENT = "document"
@@ -35,6 +38,8 @@ class Usage:
     output_tokens: int = 0
     input_audio_tokens: int = 0
     output_audio_tokens: int = 0
+    input_image_tokens: int = 0
+    output_image_tokens: int = 0
     # Не токены: секунды, страницы, запросы, картинки — в своих единицах.
     units: Decimal = Decimal(0)
     unit: Unit | None = None
