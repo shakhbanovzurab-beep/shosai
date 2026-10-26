@@ -128,22 +128,24 @@ async def test_a_russian_home_call_needs_the_cross_border_consent(
     assert await cost_rows(run_slot.claimed.connections[Home.EU]) == []
 
 
+# Каждый счёт платформы — и тот, что появится, — должен записываться: его знает проверка таблицы.
+@pytest.mark.parametrize("account", list(PlatformAccount))
 async def test_a_platform_call_is_charged_to_its_account_in_the_eu_home(
-    homes: DatabaseAccess, run_slot: RunSlot
+    account: PlatformAccount, homes: DatabaseAccess, run_slot: RunSlot
 ) -> None:
     await set_prices(homes.transactions, CHAT_MODEL, **CHAT_PRICES)
     bench = ai_bench(homes.transactions)
     bench.openrouter.answer("chat/completions", chat_answer("ok", usage(10, 2, cost=0.001)))
-    demo = CallContext(
-        effect_key="demo:visitor-1:1", feature="site.demo", call_class=CallClass.STANDARD,
-        origin=CallOrigin.INTERACTIVE, platform_account=PlatformAccount.LANDING_DEMO,
+    call = CallContext(
+        effect_key=f"platform:{account}:1", feature="site.demo", call_class=CallClass.STANDARD,
+        origin=CallOrigin.INTERACTIVE, platform_account=account,
     )  # fmt: skip
 
-    await bench.providers.chat(demo, ROUTE, QUESTION)
+    await bench.providers.chat(call, ROUTE, QUESTION)
 
     [row] = await cost_rows(run_slot.claimed.connections[Home.EU])
     assert (row["payer"], row["platform_account"], row["user_id"]) == (
-        "platform", "landing_demo", None,
+        "platform", account.value, None,
     )  # fmt: skip
 
 

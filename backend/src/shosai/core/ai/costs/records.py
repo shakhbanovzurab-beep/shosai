@@ -50,8 +50,9 @@ class ProviderCost(ModelBase):
             "(payer = 'platform' AND user_id IS NULL AND platform_account IS NOT NULL)",
             name="payer_named",
         ),
+        # Счёт Leo в админке добавила ревизия admin_assistant_costs (agent шаг 16).
         CheckConstraint(
-            "platform_account IN ('landing_demo', 'help_assistant', 'system')",
+            "platform_account IN ('landing_demo', 'help_assistant', 'admin_assistant', 'system')",
             name="platform_account_known",
         ),
         CheckConstraint("call_class IN ('essential', 'standard', 'expensive')", name="class_known"),
