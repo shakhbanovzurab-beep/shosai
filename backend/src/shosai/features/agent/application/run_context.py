@@ -36,10 +36,12 @@ from shosai.features.agent.domain.budgets import (
     recent_window,
 )
 from shosai.features.agent.domain.context import clean_path, clip, now_line, page_line, profile_core
+from shosai.features.agent.domain.operator import is_operator
 from shosai.features.agent.domain.runs import RunStatus
 from shosai.features.agent.domain.threads import AnswerStatus, MessageRole
 from shosai.features.agent.domain.wrapper import BOUNDARY_BYTES, boundary
 from shosai.features.agent.infrastructure.prompts import (
+    OPERATOR_POLICY,
     POLICY,
     QUESTION,
     SOURCES_NOTE,
@@ -133,7 +135,8 @@ class ContextBuilder:
         )
         # Сводка идёт после стабильной головы: кэш провайдера держит голову целиком.
         summary = SUMMARY.format(summary=clip(thread.summary, cap(5))) if thread.summary else ""
-        head = "\n\n".join(part for part in (POLICY, core, summary) if part)
+        policy = OPERATOR_POLICY if is_operator(user_id) else POLICY
+        head = "\n\n".join(part for part in (policy, core, summary) if part)
         token = boundary(secrets.token_bytes(BOUNDARY_BYTES))
         history = await self._recent(session, thread, question, token)
         volatile = await self._volatile(session, payload, zone, labels)
@@ -144,7 +147,7 @@ class ContextBuilder:
         asked = asked if attached is None else f"{asked}\n\n{attached}"
         if sizes is not None:
             sizes |= {
-                Segment.POLICY: estimate_tokens(POLICY),
+                Segment.POLICY: estimate_tokens(policy),
                 Segment.PROFILE: estimate_tokens(core),
                 Segment.SUMMARY: estimate_tokens(summary),
                 Segment.RECENT: sum(estimate_tokens(text_of(message)) for message in history),

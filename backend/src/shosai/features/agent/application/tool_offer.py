@@ -29,6 +29,7 @@ from shosai.features.agent.application.tool_registry import (
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.context import clean_path
 from shosai.features.agent.domain.core_tools import LOAD_TOOLSET
+from shosai.features.agent.domain.operator import is_operator
 from shosai.features.agent.domain.routing import (
     Route,
     RouteFacts,
@@ -155,7 +156,9 @@ class TurnRouting:
     async def offer(self, session: AsyncSession, payload: TurnPayload) -> TurnOffer:
         """The run's offer: the page's, the sticky and then the others while they fit."""
         toolsets = self._registry.toolsets()
-        gates = Gates(frozenset(payload.switches_on), await self._capabilities(payload, toolsets))
+        operator = is_operator(payload.user_id)
+        capabilities = None if operator else await self._capabilities(payload, toolsets)
+        gates = Gates(frozenset(payload.switches_on), capabilities, operator)
         facts = []
         for name in toolsets.names:
             admitted = toolsets.admitted(name, gates)

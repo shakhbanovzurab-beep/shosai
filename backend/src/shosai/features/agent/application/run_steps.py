@@ -37,6 +37,7 @@ from shosai.features.agent.application.tool_read_back import ResultReader
 from shosai.features.agent.application.tool_round import ToolRound
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.budgets import Segment, round_policy
+from shosai.features.agent.domain.operator import payer_of
 from shosai.features.agent.domain.runs import TURN_DEADLINE
 from shosai.features.agent.domain.wrapper import Label
 from shosai.features.agent.infrastructure.prompts import CONCLUDE, LAST_ROUND
@@ -146,12 +147,14 @@ class RunSteps:
         note = LAST_ROUND if not policy.tools else CONCLUDE if policy.conclude else None
         if note is not None:
             request = replace(request, messages=(*request.messages, text_message(Role.USER, note)))
+        scope, platform = payer_of(payload.scope())
         context = CallContext(
             effect_key=f"agent.turn:{payload.run_id}:{number}",
             feature="agent.turn",
             call_class=CallClass.STANDARD,
             origin=CallOrigin.INTERACTIVE,
-            scope=payload.scope(),
+            scope=scope,
+            platform_account=platform,
             cross_border_consent=payload.cross_border_consent,
             deadline=TURN_DEADLINE,
         )

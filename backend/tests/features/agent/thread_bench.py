@@ -26,6 +26,7 @@ from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.departures import Departures
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.threads import Threads
+from shosai.features.agent.channels.http.callers import person_mount
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.infrastructure.thread_records import AgentMessageRecord
 from shosai.features.identity.contracts import AUTHENTICATOR
@@ -172,6 +173,8 @@ async def thread_bench(homes: DatabaseAccess, run_slot: RunSlot) -> AsyncIterato
     threads = Threads(homes.transactions, (ports, effects), clock)
     # Тредам без хода карточки не нужны: каталог инструментов пуст.
     cards = ActionCards(AgentToolCatalog(), ports)
-    router = build_threads_router((threads, History(homes.transactions, threads, cards)), ports)
+    router = build_threads_router(
+        (threads, History(homes.transactions, threads, cards)), person_mount(ports)
+    )
     async with client_of(build_probe_app(extra=(router,)).app) as http:
         yield ThreadBench(http, homes, run_slot, ports, clock)

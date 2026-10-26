@@ -193,6 +193,8 @@ class SpendSettings(SettingsSection):
     ai_landing_demo_daily_usd: Decimal = Field(default=Decimal(20), ge=0)
     ai_help_assistant_hourly_usd: Decimal = Field(default=Decimal(5), ge=0)
     ai_help_assistant_daily_usd: Decimal = Field(default=Decimal(20), ge=0)
+    ai_admin_assistant_hourly_usd: Decimal = Field(default=Decimal(5), ge=0)
+    ai_admin_assistant_daily_usd: Decimal = Field(default=Decimal(20), ge=0)
     ai_system_hourly_usd: Decimal = Field(default=Decimal(10), ge=0)
     ai_system_daily_usd: Decimal = Field(default=Decimal(50), ge=0)
     # Включён настройкой — дорогие вызовы стоят, что бы ни лежало в Valkey.

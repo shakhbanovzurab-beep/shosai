@@ -18,6 +18,7 @@ from typing import Final
 import httpx
 
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
+from shosai.core.agent_tools.bindings import AgentTool
 from shosai.core.config.roles import ProcessRole
 from shosai.core.db.engines import DATABASE_PROFILES
 from shosai.core.documents.extraction import DocumentReader
@@ -42,6 +43,7 @@ from shosai.features.agent.application.installed_skills import InstalledSkills
 from shosai.features.agent.application.lost_runs import LostRuns
 from shosai.features.agent.application.native_proxy import NativeProxy
 from shosai.features.agent.application.paused_runs import PausedRuns
+from shosai.features.agent.application.platform_ratings import PlatformRatings
 from shosai.features.agent.application.preferences import AgentPreferences
 from shosai.features.agent.application.proposal_port import PortProposals
 from shosai.features.agent.application.result_pages import ResultPages
@@ -63,12 +65,18 @@ from shosai.features.agent.application.turn_commit import TurnParts
 from shosai.features.agent.application.turn_start import TurnStarter
 from shosai.features.agent.channels.agent_tools import CORE_TOOLS, core_tools
 from shosai.features.agent.channels.http.actions import build_actions_router
+from shosai.features.agent.channels.http.callers import operator_mount, person_mount
 from shosai.features.agent.channels.http.feedback import build_feedback_router
 from shosai.features.agent.channels.http.native_proxy import build_native_proxy_router
 from shosai.features.agent.channels.http.settings import build_settings_router
 from shosai.features.agent.channels.http.skills import build_skills_router
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
+from shosai.features.agent.channels.platform_tools import (
+    PLATFORM_TOOLS,
+    PlatformReads,
+    platform_tools,
+)
 from shosai.features.agent.channels.subscriptions import subscriptions
 from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_handlers
 from shosai.features.agent.channels.web_tools import WEB_TOOLS, web_tools
@@ -150,6 +158,18 @@ def skill_store(
     return SkillStore(services.transactions, sources)
 
 
+def own_tools(
+    services: CoreServices, settings: AgentSettings, pages: ResultPages
+) -> tuple[AgentTool, ...]:
+    """Leo's own toolsets: core, web, and the operator's platform (AG-D5)."""
+    reads = PlatformReads(services.ai_spend, PlatformRatings(services.transactions))
+    return (
+        *core_tools(pages),
+        *web_tools(services.ai, settings.standard_route),
+        *platform_tools(reads),
+    )
+
+
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """Settings > Leo, threads and their history, turns and runs, departures, and the
@@ -192,12 +212,15 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     care = ThreadCare(transactions, (services.ai, settings.utility_route()), ports)
     decisions, actions = action_gateway(services, cards, (run_log, frames), pages)
     feedback = Feedback((transactions, ports, threads), FeedbackMetrics(services.registry))
+    person, operator = person_mount(ports), operator_mount(ports)
     try:
         yield FeatureParts(
             http_routers=(
                 build_settings_router(preferences, ports),
-                build_threads_router((threads, History(transactions, threads, cards)), ports),
-                build_turns_router((starter, streams), ports),
+                build_threads_router((threads, History(transactions, threads, cards)), person),
+                build_turns_router((starter, streams), person),
+                build_threads_router((threads, History(transactions, threads, cards)), operator),
+                build_turns_router((starter, streams), operator),
                 build_actions_router((decisions, ActionInbox(transactions, cards)), ports),
                 build_feedback_router(feedback, ports),
                 build_native_proxy_router(native_proxy(services, settings), ports),
@@ -208,7 +231,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             ),
             subscriptions=subscriptions(departures, AfterTurn(services.tasks)),
             periodic_jobs=PERIODIC_JOBS,
-            agent_tools=(*core_tools(pages), *web_tools(services.ai, settings.standard_route)),
+            agent_tools=own_tools(services, settings, pages),
             queue_companions=(QueueCompanion(TaskQueue.AGENT, lambda: present_in_fleet(fleet)),),
             provides=(
                 ACCOUNT_DATA_HANDLERS.bind(AgentAccountData(transactions, valkey)),
@@ -232,7 +255,7 @@ AGENT = FeatureModule(
     events=(TurnCompleted,),
     settings=(AgentSettings,),
     production_checks=(agent_model_set,),
-    agent_tools=(*CORE_TOOLS, *WEB_TOOLS),
+    agent_tools=(*CORE_TOOLS, *WEB_TOOLS, *PLATFORM_TOOLS),
     objectives=AGENT_OBJECTIVES,
     monitors=AGENT_MONITORS,
     account_data=(ACCOUNT_DATA,),

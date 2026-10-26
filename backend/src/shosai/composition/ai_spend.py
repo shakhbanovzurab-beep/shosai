@@ -37,6 +37,9 @@ def ceilings_of(settings: SpendSettings) -> Ceilings:
         PlatformAccount.HELP_ASSISTANT.value: (
             settings.ai_help_assistant_hourly_usd, settings.ai_help_assistant_daily_usd,
         ),
+        PlatformAccount.ADMIN_ASSISTANT.value: (
+            settings.ai_admin_assistant_hourly_usd, settings.ai_admin_assistant_daily_usd,
+        ),
         PlatformAccount.SYSTEM.value: (settings.ai_system_hourly_usd, settings.ai_system_daily_usd),
     }  # fmt: skip
     return Ceilings(

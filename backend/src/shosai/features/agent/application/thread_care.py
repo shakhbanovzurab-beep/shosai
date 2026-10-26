@@ -31,6 +31,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.after_turn import QUESTION_TITLE, ThreadTask
 from shosai.features.agent.domain.budgets import SEGMENT_CAPS, Segment, needs_compaction
 from shosai.features.agent.domain.context import clip
+from shosai.features.agent.domain.operator import payer_of
 from shosai.features.agent.domain.threads import (
     AnswerStatus,
     MessageRole,
@@ -177,12 +178,14 @@ class ThreadCare:
         if self._route is None or task.user_id is None:
             return None
         purpose = effect.split(":", 1)[0]
+        scope, platform = payer_of(task.scope())
         context = CallContext(
             effect_key=f"agent.{effect}",
             feature=f"agent.{purpose}",
             call_class=CallClass.STANDARD,
             origin=CallOrigin.BACKGROUND,
-            scope=task.scope(),
+            scope=scope,
+            platform_account=platform,
             cross_border_consent=consent or task.home is Home.EU,
         )
         request = ChatRequest(

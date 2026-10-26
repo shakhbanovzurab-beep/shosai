@@ -102,6 +102,8 @@ PROBE_WORDING: Final = PreviewWording(
     title=dict.fromkeys(LANGUAGES, "Probe write"),
     fields=(PreviewField("count", dict.fromkeys(LANGUAGES, "Tasks")),),
 )
+# Пробное чтение платформы: набор оператора (AG-D5), человеку не предлагается никогда.
+PLATFORM_PROBE: Final = read("platform.probe", Gates(step_detail=None))
 # Пробный поиск в сети: выход наружу за переключателем, со своей карточкой.
 WEB_LOOKUP: Final = ToolSpec(
     name="web.lookup", toolset="web", description="Probe egress.", input=Query, output=Found,
@@ -206,6 +208,7 @@ class ProbeTools:
             ReadTool(NOTES_WAIT, self.wait),
             ReadTool(NOTES_FAIL, self.fail),
             WriteTool(TASKS_CREATE, plan, preview, execute),
+            ReadTool(PLATFORM_PROBE, self.archive),
             *((ReadTool(WEB_LOOKUP, self.lookup),) if self.pages is not None else ()),
         )
 

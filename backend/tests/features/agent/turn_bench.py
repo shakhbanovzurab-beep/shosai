@@ -57,6 +57,7 @@ from shosai.features.agent.application.tool_round import ToolParts
 from shosai.features.agent.application.turn_commit import TurnParts
 from shosai.features.agent.application.turn_start import TurnStarter
 from shosai.features.agent.channels.agent_tools import core_tools
+from shosai.features.agent.channels.http.callers import operator_mount, person_mount
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
 from shosai.features.agent.infrastructure.fleet import Fleet
@@ -73,6 +74,7 @@ from shosai.features.files.application.upload_rules import UploadRequest
 from shosai.features.files.contracts import UPLOADS, UploadPurpose
 from shosai.features.identity.contracts import (
     ACCOUNT_PROFILE_READER,
+    ADMIN_GATE,
     AUTHENTICATOR,
     CONSENT_READER,
     Principal,
@@ -87,6 +89,7 @@ from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.agent.tool_doubles import ProbeTools
 from tests.features.agent.turn_doubles import (
     WAIT,
+    AdminSession,
     InlineQueue,
     Meetings,
     Profiles,
@@ -222,6 +225,7 @@ async def turn_bench(
     ports.install(
         [
             AUTHENTICATOR.bind(BearerOfTheTest()),
+            ADMIN_GATE.bind(AdminSession()),
             MEMBERSHIP_READER.bind(MembershipDirectory()),
             TOKEN_ALLOWANCE.bind(terms),
             CONSENT_READER.bind(terms),
@@ -267,12 +271,17 @@ async def turn_bench(
         ),
         limit=GENEROUS,
     )  # fmt: skip
-    routers = (
-        build_threads_router((threads, History(homes.transactions, threads, cards)), ports),
-        build_turns_router(
-            (starter, RunStreams(homes.transactions, (run_log, tail), leases, metrics, SILENCE)),
-            ports,
-        ),
+    history, streams = (
+        History(homes.transactions, threads, cards),
+        RunStreams(homes.transactions, (run_log, tail), leases, metrics, SILENCE),
+    )
+    routers = tuple(
+        router
+        for mount in (person_mount(ports), operator_mount(ports))
+        for router in (
+            build_threads_router((threads, history), mount),
+            build_turns_router((starter, streams), mount),
+        )
     )
     await fleet.alive("bench-worker")
     try:

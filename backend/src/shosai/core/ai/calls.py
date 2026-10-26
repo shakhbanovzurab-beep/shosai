@@ -43,6 +43,8 @@ class PlatformAccount(StrEnum):
 
     LANDING_DEMO = "landing_demo"
     HELP_ASSISTANT = "help_assistant"
+    # Leo в админ-панели (ADR 0068 AG-D5): его ходы платит платформа, не человек.
+    ADMIN_ASSISTANT = "admin_assistant"
     SYSTEM = "system"
 
 

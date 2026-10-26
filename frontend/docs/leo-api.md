@@ -122,7 +122,7 @@ ignored. Exactly one of `run.completed` and `run.failed` ends a run.
 ## Sources
 
 ```text
-LeoSource = {id, kind: meeting | file | task | note | mail | web, title, space, locator | null, quote, highlight: string[]}
+LeoSource = {id, kind: meeting | file | task | note | mail | web | report, title, space, locator | null, quote, highlight: string[]}
 ```
 
 The answer cites `[n]`, the n-th source counting from one. Sources come from the tools Leo used, never from the
@@ -202,3 +202,15 @@ history's messages carry the person's rating in `feedback` (`useful`, `not_usefu
 One press under an answer, the same press again takes it back. The rating counts only in anonymous totals.
 `shared` is true when the person's "Help improve the models" consent (Settings › Privacy) let the conversation become
 an evaluation case — never for an answer built on a workspace's data.
+
+## Leo in the admin panel
+
+The admin's panel talks to the same routes under `/v1/admin/agent/*` — threads, history, turns, run events and
+cancel, the same shapes — behind the admin's session cookie (ADR 0049), not a bearer token (agent step 16a). A
+person's token opens none of them and the admin's cookie none of `/v1/agent/*`. The operator's threads are their
+own (`scope=personal`); a turn takes no `upload_ids` (422 `attachments_not_allowed`) and is answered in Russian.
+There are no cards, no ratings and no attachments. The operator's tools read platform aggregates — AI spend, the
+OpenRouter balance, answer ratings — and cite them as `report` sources, whose `id` names the report
+(`spend.summary:month:model`, `spend.daily:30`, `spend.forecast`, `openrouter.balance`, `ratings:30`) and whose
+`space` is "Платформа".
+

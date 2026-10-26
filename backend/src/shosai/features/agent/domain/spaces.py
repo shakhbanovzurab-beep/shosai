@@ -3,7 +3,8 @@
 A workspace's source shows the workspace's name; one of the person's own data shows their
 Personal space, in the language of the answer — the words of the cabinet's space switcher, so
 the panel and the switcher agree. A language the platform does not have reads in English. A
-page of the web is of no space of the person's: it shows its site, without `www.`.
+page of the web is of no space of the person's: it shows its site, without `www.`; a report of
+the platform's, for the operator, shows the Platform.
 """
 
 from collections.abc import Mapping
@@ -19,6 +20,13 @@ PERSONAL_SPACE: Final[Mapping[str, str]] = {
     "ar": "شخصي", "tr": "Kişisel", "ko": "개인", "hi": "निजी", "vi": "Cá nhân",
     "zh-Hant": "個人", "ja": "個人", "id": "Pribadi",
 }  # fmt: skip
+# Отчёты платформы оператору (AG-D5) — ни в чьём пространстве: «Платформа».
+PLATFORM_SPACE: Final[Mapping[str, str]] = {
+    "en": "Platform", "fr": "Plateforme", "de": "Plattform", "ru": "Платформа",
+    "nl": "Platform", "it": "Piattaforma", "es": "Plataforma", "pt-BR": "Plataforma",
+    "ar": "المنصة", "tr": "Platform", "ko": "플랫폼", "hi": "प्लेटफ़ॉर्म", "vi": "Nền tảng",
+    "zh-Hant": "平台", "ja": "プラットフォーム", "id": "Platform",
+}  # fmt: skip
 FALLBACK_LANGUAGE: Final = "en"
 # Сайт читается без «www.»: python.org, а не www.python.org.
 WEB_PREFIX: Final = "www."
@@ -31,6 +39,8 @@ def personal_space(language: str) -> str:
 
 def space_of(ref: SourceRef, language: str, workspaces: Mapping[UUID, str]) -> str:
     """The space a source is listed with: its site, its workspace's name, or Personal."""
+    if ref.kind is SourceKind.REPORT:
+        return PLATFORM_SPACE.get(language, PLATFORM_SPACE[FALLBACK_LANGUAGE])
     if ref.kind is SourceKind.WEB:
         site = urlsplit(ref.id).hostname or ref.id
         return site.removeprefix(WEB_PREFIX)

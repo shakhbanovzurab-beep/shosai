@@ -9,7 +9,9 @@ runs already going (429 `too_many_runs`), or when the agent workers are full (42
 the turn supersedes the running one, which is asked to stop first — and commits its question
 and its run in one transaction. `run.started` is written to the run's log before the task is
 sent, so the stream has its first event the moment it opens. What an admission took is given
-back on every failure after it; a Valkey that does not answer is 503 `agent_unavailable`.
+back on every failure after it; a Valkey that does not answer is 503 `agent_unavailable`. The
+platform operator's turn (AG-D5) has no plan to ask and no consent to give: the platform pays
+it, it is answered in Russian and carries no attachments (422 `attachments_not_allowed`).
 """
 
 import asyncio
@@ -47,13 +49,17 @@ from shosai.features.agent.application.turn_commit import (
     commit_turn,
 )
 from shosai.features.agent.application.turn_task import RUN_TURN, TurnPayload, started_event
+from shosai.features.agent.domain.operator import OPERATOR_LANGUAGE, is_operator
 from shosai.features.agent.domain.preferences import Switch, answer_language
 from shosai.features.agent.domain.threads import ThreadRuleError, TurnKind, check_question
 from shosai.features.agent.infrastructure.fleet import Admission
 from shosai.features.agent.infrastructure.person_records import AgentSettingsRecord
+from shosai.features.billing.contracts import TokenRoute
 from shosai.features.identity.contracts import CONSENT_READER, Principal
 
 TURN_LIMIT: Final = RateLimit("agent.turn", 20, timedelta(minutes=1), 5)
+# Маршрут токенов хода оператора: в пределах — тарифа нет, расход несёт платформенный счёт.
+OPERATOR_ROUTE: Final = TokenRoute.WITHIN_ALLOWANCE.value
 TURN_KEYS: Final = EffectScope("agent.turn", timedelta(hours=24))
 SUPERSEDE_WAIT: Final = timedelta(seconds=5)
 SUPERSEDE_POLL: Final = timedelta(milliseconds=100)
@@ -150,20 +156,29 @@ class TurnStarter:
             stored = await session.get(AgentSettingsRecord, principal.user_id)
         if principal.home is Home.RU and not consent:
             raise AppError("consent_required", HTTPStatus.FORBIDDEN)
-        route = await standard_tokens(self._parts.ports, principal)
+        # Ход оператора платит платформа (AG-D5): тарифа и его токенов у него нет, вложений тоже.
+        operator = is_operator(principal.user_id)
+        if operator and request.attachments:
+            raise AppError("attachments_not_allowed", HTTPStatus.UNPROCESSABLE_ENTITY)
+        route = (
+            OPERATOR_ROUTE
+            if operator
+            else (await standard_tokens(self._parts.ports, principal)).value
+        )
         await self._within_rate(principal)
         preferences = preferences_of(stored)
         page, again = request.page, request.again
+        language = OPERATOR_LANGUAGE if operator else answer_language(preferences, request.locale)
+        switches = () if operator else tuple(s.value for s in Switch if preferences.switched_on(s))
         terms = TurnPayload(
             home=principal.home, user_id=principal.user_id, run_id=new_id(), thread_id=thread_id,
             started_at=self._clock(), question_id=again.question_id or new_id(),
-            reply_id=new_id(), language=answer_language(preferences, request.locale),
+            reply_id=new_id(), language=language,
             length=preferences.response_length, cross_border_consent=consent,
-            token_route=route.value, kind=again.kind, path=page.path,
+            token_route=route, kind=again.kind, path=page.path,
             subject_kind=page.subject.kind if page.subject else None,
             subject_id=page.subject.subject_id if page.subject else None,
-            switches_on=tuple(switch.value for switch in Switch if preferences.switched_on(switch)),
-            attachments=request.attachments,
+            switches_on=switches, attachments=request.attachments,
         )  # fmt: skip
         return await self._admitted(
             principal, terms, (effect, question), supersede=request.supersede

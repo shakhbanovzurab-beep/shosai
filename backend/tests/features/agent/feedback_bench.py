@@ -29,6 +29,7 @@ from shosai.features.agent.application.case_reads import CaseReads
 from shosai.features.agent.application.feedback import Feedback
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.threads import Threads
+from shosai.features.agent.channels.http.callers import person_mount
 from shosai.features.agent.channels.http.feedback import build_feedback_router
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.infrastructure.feedback_metrics import FeedbackMetrics
@@ -188,7 +189,7 @@ async def feedback_bench(homes: DatabaseAccess, run_slot: RunSlot) -> AsyncItera
     history = History(homes.transactions, threads, ActionCards(AgentToolCatalog(), ports))
     feedback = Feedback((homes.transactions, ports, threads), FeedbackMetrics(registry), clock)
     routers = (
-        build_threads_router((threads, history), ports),
+        build_threads_router((threads, history), person_mount(ports)),
         build_feedback_router(feedback, ports),
     )
     async with client_of(build_probe_app(extra=routers).app) as http:

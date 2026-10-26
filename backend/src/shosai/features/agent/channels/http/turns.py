@@ -22,7 +22,6 @@ from fastapi.sse import EventSourceResponse, ServerSentEvent
 from pydantic import Field, model_validator
 
 from shosai.core.idempotency.http import IdempotencyKeyHeader
-from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.run_streams import RunStreams
 from shosai.features.agent.application.surface_digest import Subject, SubjectKind
 from shosai.features.agent.application.turn_start import (
@@ -31,11 +30,12 @@ from shosai.features.agent.application.turn_start import (
     TurnRequest,
     TurnStarter,
 )
+from shosai.features.agent.channels.http.callers import Mount
 from shosai.features.agent.channels.http.shapes import Strict
 from shosai.features.agent.domain.attachments import MAX_ATTACHMENTS
 from shosai.features.agent.domain.stream import StreamEvent
 from shosai.features.agent.domain.threads import QUESTION_MAX, SURFACE_PATH_MAX, TurnKind
-from shosai.features.identity.contracts import Principal, bearer_principal
+from shosai.features.identity.contracts import Principal
 
 LOCALE_MAX = 16
 PATH_MAX = SURFACE_PATH_MAX
@@ -120,11 +120,11 @@ def server_event(event: StreamEvent) -> ServerSentEvent:
     return ServerSentEvent(data=dict(event.data), event=event.kind.value, id=str(event.seq))
 
 
-def build_turns_router(services: tuple[TurnStarter, RunStreams], ports: PortDirectory) -> APIRouter:
-    """The routes of turns and runs."""
+def build_turns_router(services: tuple[TurnStarter, RunStreams], mount: Mount) -> APIRouter:
+    """The routes of turns and runs, for the mount's caller."""
     starter, streams = services
-    router = APIRouter(prefix="/v1/agent", tags=["agent"])
-    person = Annotated[Principal, Depends(bearer_principal(ports))]
+    router = APIRouter(prefix=mount.prefix, tags=list(mount.tags))
+    person = Annotated[Principal, Depends(mount.caller)]
 
     async def admitted_run(
         principal: person, thread_id: UUID, body: TurnBody, idempotency_key: IdempotencyKeyHeader

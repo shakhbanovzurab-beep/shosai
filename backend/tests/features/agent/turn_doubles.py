@@ -54,6 +54,8 @@ class ScriptedModel:
     held_calls: int = 0
     failure: Exception | None = None
     calls: list[ChatRequest] = field(default_factory=list)
+    # Кто платит каждый вызов: человек или платформенный счёт оператора.
+    contexts: list[CallContext] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.gate.set()
@@ -62,7 +64,8 @@ class ScriptedModel:
         self, context: CallContext, route: ModelRoute, request: ChatRequest
     ) -> AsyncIterator[ChatDelta]:
         """The script, piece by piece."""
-        del context, route
+        del route
+        self.contexts.append(context)
         held = len(self.calls) < self.held_calls
         script = self.scripts[min(len(self.calls), len(self.scripts) - 1)] if self.scripts else None
         pieces = self.pieces if script is None else script(request) if callable(script) else script
@@ -196,3 +199,14 @@ class Utility:
         del context
         self.requests.append(request)
         return ChatResult(self.answers.pop(0), (), "stop", route.primary, Usage())
+
+
+ADMIN_SESSION: Final = "admin-session"
+
+
+class AdminSession:
+    """The admin's session: the cookie `admin-session` is a live one."""
+
+    async def admitted(self, cookie: str | None) -> bool:
+        """Whether the cookie is the bench's admin session."""
+        return cookie == ADMIN_SESSION

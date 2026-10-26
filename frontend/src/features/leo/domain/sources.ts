@@ -3,7 +3,8 @@
  * ADR 0068 AG-D1): событие `sources` в потоке и маркеры `[n]` в тексте ответа; номера дают инструменты.
  */
 
-export type SourceKind = "meeting" | "file" | "task" | "note" | "mail" | "web";
+/** `report` — отчёт платформы оператору в админ-панели (agent шаг 16): расходы, баланс, оценки. */
+export type SourceKind = "meeting" | "file" | "task" | "note" | "mail" | "web" | "report";
 
 export type LeoSource = {
   id: string;

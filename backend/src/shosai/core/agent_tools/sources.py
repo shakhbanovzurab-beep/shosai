@@ -33,6 +33,8 @@ class SourceKind(StrEnum):
     NOTE = "note"
     MAIL = "mail"
     WEB = "web"
+    # Отчёт платформы для оператора (AG-D5): расходы, тарифы, аккаунты, оценки — только числа.
+    REPORT = "report"
 
 
 @dataclass(frozen=True, slots=True)

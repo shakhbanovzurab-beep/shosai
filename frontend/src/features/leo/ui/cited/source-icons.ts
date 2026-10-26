@@ -1,4 +1,4 @@
-import { FileText, Globe, ListChecks, Mail, NotebookPen, Video } from "lucide-react";
+import { ChartColumn, FileText, Globe, ListChecks, Mail, NotebookPen, Video } from "lucide-react";
 
 import type { SourceKind } from "../../domain/sources";
 
@@ -10,4 +10,5 @@ export const SOURCE_ICONS: Record<SourceKind, typeof FileText> = {
   note: NotebookPen,
   mail: Mail,
   web: Globe,
+  report: ChartColumn,
 };

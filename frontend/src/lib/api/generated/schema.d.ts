@@ -2928,6 +2928,138 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/agent/threads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Threads
+         * @description A page of one space's threads, newest activity first.
+         */
+        get: operations["list_threads_v1_admin_agent_threads_get"];
+        put?: never;
+        /**
+         * Create Thread
+         * @description A new thread in a space; a retry with the same key answers the same thread.
+         */
+        post: operations["create_thread_v1_admin_agent_threads_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/agent/threads/{thread_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Thread
+         * @description One of the person's threads.
+         */
+        get: operations["get_thread_v1_admin_agent_threads__thread_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Thread
+         * @description Delete a thread with its whole conversation.
+         */
+        delete: operations["delete_thread_v1_admin_agent_threads__thread_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Rename Thread
+         * @description Rename a thread.
+         */
+        patch: operations["rename_thread_v1_admin_agent_threads__thread_id__patch"];
+        trace?: never;
+    };
+    "/v1/admin/agent/threads/{thread_id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Messages
+         * @description A page of the thread's history, newest first.
+         */
+        get: operations["list_messages_v1_admin_agent_threads__thread_id__messages_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/agent/threads/{thread_id}/turns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Take Turn
+         * @description Ask Leo; the answer streams as the run's events.
+         */
+        post: operations["take_turn_v1_admin_agent_threads__thread_id__turns_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/agent/runs/{run_id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Resume Run
+         * @description The run's events after the last one the client saw.
+         */
+        get: operations["resume_run_v1_admin_agent_runs__run_id__events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/agent/runs/{run_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel Run
+         * @description Ask the run to stop; the answer keeps its text so far.
+         */
+        post: operations["cancel_run_v1_admin_agent_runs__run_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/agent/actions": {
         parameters: {
             query?: never;
@@ -7158,7 +7290,7 @@ export interface components {
          * @description What a source is; the cabinet picks its icon by the kind.
          * @enum {string}
          */
-        SourceKind: "meeting" | "file" | "task" | "note" | "mail" | "web";
+        SourceKind: "meeting" | "file" | "task" | "note" | "mail" | "web" | "report";
         /**
          * SourceMeetingOut
          * @description The meeting a task came from.
@@ -14700,6 +14832,332 @@ export interface operations {
                 run_id: string;
             };
             cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_threads_v1_admin_agent_threads_get: {
+        parameters: {
+            query: {
+                /** @description The context's space. */
+                scope: components["schemas"]["ScopeKind"];
+                /** @description The workspace, with `scope=workspace`. */
+                workspace_id?: string | null;
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_ThreadOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_thread_v1_admin_agent_threads_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ThreadCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_thread_v1_admin_agent_threads__thread_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                thread_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_thread_v1_admin_agent_threads__thread_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                thread_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    rename_thread_v1_admin_agent_threads__thread_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                thread_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ThreadPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_messages_v1_admin_agent_threads__thread_id__messages_get: {
+        parameters: {
+            query?: {
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: never;
+            path: {
+                thread_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_MessageOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    take_turn_v1_admin_agent_threads__thread_id__turns_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                thread_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TurnBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": unknown;
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    resume_run_v1_admin_agent_runs__run_id__events_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The last event's id seen. */
+                "Last-Event-ID"?: number;
+            };
+            path: {
+                run_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": unknown;
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    cancel_run_v1_admin_agent_runs__run_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
         };
         requestBody?: never;
         responses: {

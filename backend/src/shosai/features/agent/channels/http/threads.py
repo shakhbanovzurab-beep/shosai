@@ -20,10 +20,10 @@ from shosai.core.agent_tools.sources import SourceKind
 from shosai.core.idempotency.http import IdempotencyKeyHeader
 from shosai.core.kernel.errors import AppError
 from shosai.core.pagination.page import Page, PageParameters
-from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.history import History, MessageView
 from shosai.features.agent.application.threads import Threads, ThreadView
 from shosai.features.agent.channels.http.actions import ProposalOut
+from shosai.features.agent.channels.http.callers import Mount
 from shosai.features.agent.channels.http.shapes import Out, Strict
 from shosai.features.agent.domain.feedback import Rating
 from shosai.features.agent.domain.threads import (
@@ -35,7 +35,7 @@ from shosai.features.agent.domain.threads import (
     ThreadScope,
     check_available,
 )
-from shosai.features.identity.contracts import Principal, bearer_principal
+from shosai.features.identity.contracts import Principal
 
 
 class ScopeIn(Strict):
@@ -184,11 +184,11 @@ def message_out(view: MessageView) -> MessageOut:
     )  # fmt: skip
 
 
-def build_threads_router(services: tuple[Threads, History], ports: PortDirectory) -> APIRouter:
-    """The routes of the person's threads and their history."""
+def build_threads_router(services: tuple[Threads, History], mount: Mount) -> APIRouter:
+    """The routes of the caller's threads and their history."""
     threads, history = services
-    router = APIRouter(prefix="/v1/agent/threads", tags=["agent"])
-    person = Annotated[Principal, Depends(bearer_principal(ports))]
+    router = APIRouter(prefix=f"{mount.prefix}/threads", tags=list(mount.tags))
+    person = Annotated[Principal, Depends(mount.caller)]
 
     @router.get("")
     async def list_threads(

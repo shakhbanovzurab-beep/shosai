@@ -7,7 +7,7 @@ toolset. Each name is spelled for the wire (`notes__search`: providers allow no 
 schema is measured once. Reads, egress, cabinet actions and writes are offered; a write's call
 becomes a card through the Action Gateway (step 9a), never an effect, and an egress call waits
 for its card once the run is tainted (step 13b). A tool behind a switch the person turned off,
-or an entitlement their plan lacks, is never offered.
+or an entitlement their plan lacks, is never offered; `platform` goes to the operator alone (AG-D5).
 """
 
 from collections.abc import Mapping
@@ -21,6 +21,7 @@ from shosai.core.agent_tools.spec import ToolEffect, ToolSpec
 from shosai.core.ai.requests import ToolSchema
 from shosai.features.agent.domain.budgets import estimate_tokens
 from shosai.features.agent.domain.digests import compact
+from shosai.features.agent.domain.operator import offered_to
 from shosai.features.agent.domain.routing import CORE
 from shosai.features.agent.domain.wrapper import egress_needs_card
 
@@ -45,9 +46,14 @@ class Gates:
     switches_on: frozenset[str]
     # None — тариф не читался: ни один инструмент не требует возможности тарифа.
     capabilities: frozenset[str] | None = None
+    # Ход оператора платформы: только набор `platform` (AG-D5); человеку он не предлагается.
+    operator: bool = False
 
     def admit(self, spec: ToolSpec[Any, Any]) -> bool:
-        """Whether the tool may be offered: its switch on, its entitlement in the plan."""
+        """Whether the tool may be offered: to this caller, its switch on, its entitlement in
+        the plan."""
+        if not offered_to(spec.toolset, spec.name, operator=self.operator):
+            return False
         if spec.switch is not None and spec.switch not in self.switches_on:
             return False
         if spec.entitlement is None:
