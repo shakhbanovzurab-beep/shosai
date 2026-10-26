@@ -20,6 +20,7 @@ export function MessageAction(props: React.ComponentProps<typeof Button>) {
   );
 }
 
+/** «Копировать» с отметкой «Скопировано»: копирует текст как есть — что убрать из него, решает место. */
 export function CopyAction({ text }: { readonly text: string }) {
   const t = useTranslations("leo");
   const [copied, setCopied] = React.useState(false);
@@ -32,7 +33,7 @@ export function CopyAction({ text }: { readonly text: string }) {
 
   const copy = async () => {
     try {
-      await copyText(text.replaceAll("**", ""));
+      await copyText(text);
       setCopied(true);
     } catch {
       toast.error(t("message.copyFailed"));

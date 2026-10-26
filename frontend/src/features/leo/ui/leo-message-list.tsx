@@ -167,7 +167,8 @@ function AnswerActions({ message, isLast, canRegenerate, onRegenerate }: Assista
   const t = useTranslations("leo");
   return (
     <div className="flex flex-wrap items-center gap-0.5 ps-2">
-      {message.content ? <CopyAction text={message.content} /> : null}
+      {/* Ответ копируется без звёздочек жирного: в письме или документе они — мусор. */}
+      {message.content ? <CopyAction text={message.content.replaceAll("**", "")} /> : null}
       {message.feedback !== undefined && message.status === "done" ? (
         <RatingActions messageId={message.id} saved={message.feedback} />
       ) : null}

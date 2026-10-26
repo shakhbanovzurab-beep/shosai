@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { blocksOf, decoded, lexed, safeHref } from "./markdown";
+import { blocksOf, decoded, fenceClosed, lexed, safeHref } from "./markdown";
 import { citedParts, citesIn } from "./markdown-cites";
 import { parsed } from "./markdown-stream";
 
@@ -37,9 +37,27 @@ describe("Leo's Markdown", () => {
 
   it("reads unfinished Markdown as text while it is being written", () => {
     expect(flat(blocks("Some **bold"))).toContain("**bold");
-    expect(blocks("```ts\nconst a = 1")[0]).toEqual({ key: "0", type: "code", lang: "ts", text: "const a = 1" });
+    expect(blocks("```ts\nconst a = 1")[0]).toEqual({
+      key: "0",
+      type: "code",
+      lang: "ts",
+      text: "const a = 1",
+      closed: false,
+    });
     expect(blocks("| a | b |\n|--")[0].type).toBe("paragraph");
     expect(blocks("1. one\n2.")[0].type).toBe("list");
+  });
+
+  it("knows when a code block's fence is closed, so a diagram or formula is drawn only whole", () => {
+    expect(fenceClosed("```mermaid\nflowchart LR\n```")).toBe(true);
+    expect(fenceClosed("```mermaid\nflowchart LR\n```\n\n")).toBe(true);
+    expect(fenceClosed("~~~~\nx\n~~~~~")).toBe(true);
+    expect(fenceClosed("```mermaid\nflowchart LR")).toBe(false);
+    expect(fenceClosed("````\nx\n```")).toBe(false);
+    expect(fenceClosed("```\nx\n~~~")).toBe(false);
+    expect(fenceClosed("```")).toBe(false);
+    expect(fenceClosed("    indented code")).toBe(true);
+    expect(blocks("```mermaid\nA --> B\n```\n\nafter")[0]).toMatchObject({ type: "code", closed: true });
   });
 
   it("builds lists, tables, quotes and headings", () => {

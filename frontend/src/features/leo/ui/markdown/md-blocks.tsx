@@ -5,6 +5,7 @@ import { cn } from "cn";
 import { Separator } from "@/components/ui/separator";
 
 import type { MdAlign, MdBlock } from "../../domain/markdown";
+import { MdCode } from "./md-code";
 import { MdInlines } from "./md-inline";
 
 // Заголовки ответа — внутри панели с заголовком Leo (h2): самый крупный из них — h3.
@@ -32,11 +33,7 @@ function MdBlockNode({ block }: { readonly block: MdBlock }) {
       );
     }
     case "code":
-      return (
-        <pre dir="ltr" className="overflow-x-auto rounded-lg bg-muted p-3 font-mono text-xs leading-relaxed">
-          <code data-language={block.lang || undefined}>{block.text}</code>
-        </pre>
-      );
+      return <MdCode block={block} />;
     case "quote":
       return (
         <blockquote className="flex flex-col gap-2 border-s-2 ps-3 text-muted-foreground">

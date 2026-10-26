@@ -22,7 +22,8 @@ export type MdItem = { key: string; blocks: MdBlock[] };
 export type MdBlock = { key: string } & (
   | { type: "paragraph"; children: MdInline[] }
   | { type: "heading"; depth: number; children: MdInline[] }
-  | { type: "code"; lang: string; text: string }
+  /** `closed` — забор блока закрыт: код дописан, и его можно рисовать целиком (диаграмма, формула). */
+  | { type: "code"; lang: string; text: string; closed: boolean }
   | { type: "quote"; blocks: MdBlock[] }
   | { type: "list"; ordered: boolean; start: number; items: MdItem[] }
   | { type: "table"; align: MdAlign[]; header: MdCell[]; rows: { key: string; cells: MdCell[] }[] }
@@ -97,6 +98,18 @@ function inlineNode(token: Token): Unkeyed<MdInline>[] {
   }
 }
 
+const FENCE_OPEN = /^ {0,3}(`{3,}|~{3,})/;
+
+/** Блок кода дописан: у блока с забором есть закрывающий забор не короче открывающего; блок отступом — всегда. */
+export function fenceClosed(raw: string): boolean {
+  const open = FENCE_OPEN.exec(raw)?.[1];
+  if (open === undefined) return true;
+  const lines = raw.trimEnd().split("\n");
+  if (lines.length < 2) return false;
+  const last = lines.at(-1)?.trim() ?? "";
+  return last.length >= open.length && [...last].every((char) => char === open[0]);
+}
+
 // Пункт «тесного» списка — строка текста, а не абзац: она тоже становится абзацем пункта.
 const listItemOf = (item: Tokens.ListItem): Unkeyed<MdItem> => ({ blocks: blocksOf(item.tokens) });
 const cellOf = (cell: Tokens.TableCell): Unkeyed<MdCell> => ({ nodes: inlineOf(cell.tokens) });
@@ -111,7 +124,7 @@ function blockOf(token: Token): Unkeyed<MdBlock>[] {
     case "heading":
       return [{ type: "heading", depth: t.depth, children: inlineOf(t.tokens) }];
     case "code":
-      return [{ type: "code", lang: (t.lang ?? "").split(/\s/)[0], text: t.text }];
+      return [{ type: "code", lang: (t.lang ?? "").split(/\s/)[0], text: t.text, closed: fenceClosed(t.raw) }];
     case "blockquote":
       return [{ type: "quote", blocks: blocksOf(t.tokens) }];
     case "list":
