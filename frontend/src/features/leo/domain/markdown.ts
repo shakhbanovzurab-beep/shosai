@@ -1,4 +1,6 @@
-import { type MarkedToken, marked, type Token, type Tokens } from "marked";
+import { Marked, type MarkedToken, type Token, type Tokens } from "marked";
+
+import { blockMath, inlineMath, MATH_LANGUAGES, type MathToken } from "./markdown-math";
 
 /*
  * Ответ модели в Markdown — как безопасное дерево (ADR 0068 AG-D6). Лексер — `marked`; разметку строит кабинет:
@@ -12,6 +14,7 @@ export type MdInline = { key: string } & (
   | { type: "strong" | "em" | "del"; children: MdInline[] }
   | { type: "code"; text: string }
   | { type: "link"; href: string; children: MdInline[] }
+  | { type: "math"; tex: string; display: boolean }
   | { type: "br" }
 );
 
@@ -27,6 +30,7 @@ export type MdBlock = { key: string } & (
   | { type: "quote"; blocks: MdBlock[] }
   | { type: "list"; ordered: boolean; start: number; items: MdItem[] }
   | { type: "table"; align: MdAlign[]; header: MdCell[]; rows: { key: string; cells: MdCell[] }[] }
+  | { type: "math"; tex: string }
   | { type: "rule" }
 );
 
@@ -66,6 +70,10 @@ function inlineOf(tokens: readonly Token[] | undefined): MdInline[] {
 }
 
 function inlineNode(token: Token): Unkeyed<MdInline>[] {
+  if (token.type === "inlineMath") {
+    const math = token as MathToken;
+    return [{ type: "math", tex: math.text, display: math.display }];
+  }
   {
     const t = token as MarkedToken;
     switch (t.type) {
@@ -115,6 +123,7 @@ const listItemOf = (item: Tokens.ListItem): Unkeyed<MdItem> => ({ blocks: blocks
 const cellOf = (cell: Tokens.TableCell): Unkeyed<MdCell> => ({ nodes: inlineOf(cell.tokens) });
 
 function blockOf(token: Token): Unkeyed<MdBlock>[] {
+  if (token.type === "blockMath") return [{ type: "math", tex: (token as MathToken).text }];
   const t = token as MarkedToken;
   switch (t.type) {
     case "paragraph":
@@ -123,8 +132,13 @@ function blockOf(token: Token): Unkeyed<MdBlock>[] {
       return [{ type: "paragraph", children: inlineOf(t.tokens ?? [{ type: "text", raw: t.text, text: t.text }]) }];
     case "heading":
       return [{ type: "heading", depth: t.depth, children: inlineOf(t.tokens) }];
-    case "code":
-      return [{ type: "code", lang: (t.lang ?? "").split(/\s/)[0], text: t.text, closed: fenceClosed(t.raw) }];
+    case "code": {
+      const lang = (t.lang ?? "").split(/\s/)[0];
+      const closed = fenceClosed(t.raw);
+      // Формула в заборе рисуется, когда он закрыт; до того — кодом, как пишется.
+      if (closed && MATH_LANGUAGES.has(lang.toLowerCase())) return [{ type: "math", tex: t.text.trim() }];
+      return [{ type: "code", lang, text: t.text, closed }];
+    }
     case "blockquote":
       return [{ type: "quote", blocks: blocksOf(t.tokens) }];
     case "list":
@@ -161,7 +175,10 @@ export function blocksOf(tokens: readonly Token[]): MdBlock[] {
   return keyed<MdBlock>(tokens.flatMap(blockOf));
 }
 
+// Свой экземпляр лексера: расширения формул не меняют общий `marked` других мест кабинета.
+const lexer = new Marked({ gfm: true, breaks: true, extensions: [blockMath, inlineMath] });
+
 /** Токены верхнего уровня текста: блок за блоком, с их исходным текстом. */
 export function lexed(text: string): Token[] {
-  return marked.lexer(text, { gfm: true, breaks: true });
+  return lexer.lexer(text);
 }

@@ -4,6 +4,7 @@ import { Link } from "@/lib/navigation";
 
 import type { MdInline } from "../../domain/markdown";
 import { CitedText } from "./citations";
+import { MdMath } from "./md-math";
 
 /** Строка ответа: выделения, код, ссылки и маркеры источников; путь кабинета открывается без перезагрузки. */
 export function MdInlines({ nodes }: { readonly nodes: readonly MdInline[] }) {
@@ -34,6 +35,8 @@ function MdInlineNode({ node }: { readonly node: MdInline }) {
       );
     case "code":
       return <code className="rounded-sm bg-muted px-1 py-0.5 font-mono text-[0.85em]">{node.text}</code>;
+    case "math":
+      return <MdMath tex={node.tex} display={node.display} />;
     case "br":
       return <br />;
     case "link":

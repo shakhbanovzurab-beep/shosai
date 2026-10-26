@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import type { MdAlign, MdBlock } from "../../domain/markdown";
 import { MdCode } from "./md-code";
 import { MdInlines } from "./md-inline";
+import { MdMath } from "./md-math";
 
 // Заголовки ответа — внутри панели с заголовком Leo (h2): самый крупный из них — h3.
 const HEADINGS = ["h3", "h4", "h5", "h6"] as const;
@@ -44,6 +45,8 @@ function MdBlockNode({ block }: { readonly block: MdBlock }) {
       return <MdList block={block} />;
     case "table":
       return <MdTable block={block} />;
+    case "math":
+      return <MdMath tex={block.tex} display />;
     case "rule":
       return <Separator />;
   }

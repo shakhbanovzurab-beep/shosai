@@ -2,7 +2,7 @@
 
 import type { MdBlock } from "../../domain/markdown";
 import { CopyAction } from "../leo-message-actions";
-import { useHighlighter } from "./use-highlighter";
+import { useHighlighter } from "./lazy-renderers";
 
 /** Блок кода ответа: язык и «Копировать» в шапке, код с подсветкой; пока подсветка грузится — тем же текстом. */
 export function MdCode({ block }: { readonly block: Extract<MdBlock, { type: "code" }> }) {
