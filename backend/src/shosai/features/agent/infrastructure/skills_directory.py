@@ -5,7 +5,8 @@ application outside Vercel cannot hold (checked on 2026-10-26: 401 `authenticati
 The directory's own site searches through `/api/search?q=`, public and the draft's source: it
 answers `skills[]` of `{id: owner/repo/name, source, skillId, name, installs}`. It is not a
 documented contract, so the search fails soft — an empty list, logged and counted — whenever
-the answer is late, refused or not of that shape, and a query's answer is kept a minute.
+the answer is late (20 s: the site's search took 10 to 26 s on 2026-10-26), refused or not of
+that shape, and a query's answer is kept ten minutes.
 """
 
 import hashlib
@@ -22,11 +23,12 @@ from shosai.features.agent.infrastructure.skill_metrics import SkillMetrics, Sou
 
 SEARCH: Final = "https://skills.sh/api/search"
 SITE: Final = "https://skills.sh"
-TIMEOUT: Final = httpx.Timeout(5.0)
+# Поиск сайта отвечал за 10–26 с 2026-10-26: ждём 20 с, в пределах 30 с ответа edge.
+TIMEOUT: Final = httpx.Timeout(20.0)
 RESULTS: Final = 30
 ANSWER_BYTES: Final = 1024 * 1024
 NAMESPACE: Final = "agent.skills_search.v1"
-KEPT_FOR: Final = timedelta(minutes=1)
+KEPT_FOR: Final = timedelta(minutes=10)
 log = structlog.stdlib.get_logger(__name__)
 
 

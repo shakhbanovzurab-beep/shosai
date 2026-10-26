@@ -1,5 +1,5 @@
 """Finding skills to install (agent step 15): a repository's skills by name, shallow first and
-without examples; skills.sh searched and kept a minute, an empty list when it fails; GitHub's
+without examples; skills.sh searched and kept ten minutes, an empty list when it fails; GitHub's
 rate limit, a truncated tree and a SKILL.md without front matter as the store's codes; the
 person's skills read by id for studio, and nobody else's."""
 
@@ -39,7 +39,7 @@ async def test_a_scan_lists_the_repository_s_skills_by_name(skills_bench: Skills
     assert (wrong.status_code, wrong.json()["detail"]) == (422, "repository_invalid")
 
 
-async def test_the_directory_is_searched_kept_a_minute_and_fails_softly(
+async def test_the_directory_is_searched_kept_and_fails_softly(
     skills_bench: SkillsBench,
 ) -> None:
     who = bearer((HOME, uuid.uuid4()))
