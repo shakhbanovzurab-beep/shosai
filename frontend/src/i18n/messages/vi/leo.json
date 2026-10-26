@@ -115,6 +115,13 @@
     "earlier": "Hiện tin nhắn trước đó",
     "latest": "Đến tin nhắn mới nhất"
   },
+  "rating": {
+    "useful": "Hữu ích",
+    "notUseful": "Không hữu ích",
+    "thanks": "Cảm ơn bạn đã góp ý",
+    "shared": "Cảm ơn bạn — cuộc trò chuyện này sẽ giúp cải thiện Leo",
+    "failed": "Không lưu được đánh giá của bạn"
+  },
   "steps": {
     "gettingStarted": "Đang bắt đầu",
     "doneIn": "Hoàn tất trong {duration}",

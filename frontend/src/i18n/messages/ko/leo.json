@@ -115,6 +115,13 @@
     "earlier": "이전 메시지 보기",
     "latest": "최신 메시지로 이동"
   },
+  "rating": {
+    "useful": "유용함",
+    "notUseful": "유용하지 않음",
+    "thanks": "의견을 보내 주셔서 감사해요",
+    "shared": "감사해요. 이 채팅은 Leo를 개선하는 데 도움이 돼요",
+    "failed": "평가를 저장하지 못했어요"
+  },
   "steps": {
     "gettingStarted": "시작하는 중",
     "doneIn": "{duration} 만에 완료",

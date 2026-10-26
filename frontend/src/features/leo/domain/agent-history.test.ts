@@ -82,5 +82,6 @@ describe("a thread's history", () => {
       ["m", "assistant", ["a2"]],
     ]);
     expect(conversation[1].artifacts).toEqual([artifact]);
+    expect([conversation[0].feedback, conversation[1].feedback]).toEqual([undefined, null]);
   });
 });

@@ -4,6 +4,7 @@ import { apiErrorOf } from "@/lib/api/errors";
 import type { components } from "@/lib/api/generated/schema";
 
 import type { AgentMessage, AgentPage, AgentThread } from "../domain/agent-history";
+import type { LeoRating } from "../domain/types";
 
 /* Треды, история и ходы Leo — маршруты среза agent (`/v1/agent/*`, docs/leo-api.md). */
 
@@ -78,6 +79,22 @@ export const agentApi = {
         signal,
       }),
     ),
+
+  /** Оценка ответа (AG-D13): `shared` — ход стал оценочным случаем с согласия человека. */
+  rate: (messageId: string, rating: LeoRating): Promise<{ rating: LeoRating; shared: boolean }> =>
+    dataOf(
+      apiClient.PUT("/v1/agent/messages/{message_id}/feedback", {
+        params: { path: { message_id: messageId } },
+        body: { rating },
+      }),
+    ),
+
+  /** Снять оценку; вместе с ней уходит и оценочный случай. */
+  unrate: async (messageId: string): Promise<void> => {
+    await dataOf(
+      apiClient.DELETE("/v1/agent/messages/{message_id}/feedback", { params: { path: { message_id: messageId } } }),
+    );
+  },
 
   cancel: async (runId: string): Promise<void> => {
     await dataOf(apiClient.POST("/v1/agent/runs/{run_id}/cancel", { params: { path: { run_id: runId } } }));

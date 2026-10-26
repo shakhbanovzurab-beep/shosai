@@ -115,6 +115,13 @@
     "earlier": "Önceki mesajları göster",
     "latest": "En son mesaja git"
   },
+  "rating": {
+    "useful": "Faydalı",
+    "notUseful": "Faydalı değil",
+    "thanks": "Geri bildiriminiz için teşekkürler",
+    "shared": "Teşekkürler; bu sohbet Leo’yu geliştirmeye yardımcı olacak",
+    "failed": "Değerlendirmeniz kaydedilemedi"
+  },
   "steps": {
     "gettingStarted": "Başlıyorum",
     "doneIn": "{duration} içinde tamamlandı",

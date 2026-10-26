@@ -115,6 +115,13 @@
     "earlier": "以前のメッセージを表示",
     "latest": "最新のメッセージへ移動"
   },
+  "rating": {
+    "useful": "役に立った",
+    "notUseful": "役に立たなかった",
+    "thanks": "フィードバックありがとうございます",
+    "shared": "ありがとうございます。このチャットは Leo の改善に役立てられます",
+    "failed": "評価を保存できませんでした"
+  },
   "steps": {
     "gettingStarted": "開始しています",
     "doneIn": "{duration} で完了",

@@ -115,6 +115,13 @@
     "earlier": "顯示較早的訊息",
     "latest": "前往最新訊息"
   },
+  "rating": {
+    "useful": "有幫助",
+    "notUseful": "沒有幫助",
+    "thanks": "感謝你的回饋",
+    "shared": "感謝你，這段對話將協助改善 Leo",
+    "failed": "無法儲存你的評分"
+  },
   "steps": {
     "gettingStarted": "正在準備",
     "doneIn": "已完成，耗時 {duration}",

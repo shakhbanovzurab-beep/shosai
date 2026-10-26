@@ -21,6 +21,7 @@ import type { LeoChat } from "../model/leo-chat";
 import { CitedAnswer } from "./cited/cited-answer";
 import { LeoArtifacts } from "./leo-artifacts";
 import { CopyAction, MessageAction } from "./leo-message-actions";
+import { RatingActions } from "./leo-rating";
 import { LeoReplyError } from "./leo-reply-error";
 import { LeoSteps } from "./leo-steps";
 import { LeoUserMessage } from "./leo-user-message";
@@ -163,8 +164,11 @@ function AnswerCard({ text, sources, isStreaming }: { text: string; sources?: Le
 function AnswerActions({ message, isLast, canRegenerate, onRegenerate }: AssistantMessageProps) {
   const t = useTranslations("leo");
   return (
-    <div className="flex items-center gap-0.5 ps-2">
+    <div className="flex flex-wrap items-center gap-0.5 ps-2">
       {message.content ? <CopyAction text={message.content} /> : null}
+      {message.feedback !== undefined && message.status === "done" ? (
+        <RatingActions messageId={message.id} saved={message.feedback} />
+      ) : null}
       {isLast ? (
         <MessageAction onClick={onRegenerate} disabled={!canRegenerate}>
           <RotateCcw />

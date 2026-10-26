@@ -115,6 +115,13 @@
     "earlier": "Eerdere berichten tonen",
     "latest": "Naar het nieuwste bericht"
   },
+  "rating": {
+    "useful": "Nuttig",
+    "notUseful": "Niet nuttig",
+    "thanks": "Bedankt voor je feedback",
+    "shared": "Bedankt: deze chat helpt Leo te verbeteren",
+    "failed": "Kan je beoordeling niet opslaan"
+  },
   "steps": {
     "gettingStarted": "Ik ga aan de slag",
     "doneIn": "Klaar in {duration}",

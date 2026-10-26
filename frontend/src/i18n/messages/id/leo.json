@@ -115,6 +115,13 @@
     "earlier": "Tampilkan pesan sebelumnya",
     "latest": "Ke pesan terbaru"
   },
+  "rating": {
+    "useful": "Berguna",
+    "notUseful": "Tidak berguna",
+    "thanks": "Terima kasih atas masukan Anda",
+    "shared": "Terima kasih — chat ini akan membantu meningkatkan Leo",
+    "failed": "Tidak dapat menyimpan penilaian Anda"
+  },
   "steps": {
     "gettingStarted": "Memulai",
     "doneIn": "Selesai dalam {duration}",

@@ -115,6 +115,13 @@
     "earlier": "Afficher les messages précédents",
     "latest": "Aller au dernier message"
   },
+  "rating": {
+    "useful": "Utile",
+    "notUseful": "Pas utile",
+    "thanks": "Merci pour votre retour",
+    "shared": "Merci — cette conversation aidera à améliorer Leo",
+    "failed": "Impossible d’enregistrer votre avis"
+  },
   "steps": {
     "gettingStarted": "Je commence",
     "doneIn": "Terminé en {duration}",

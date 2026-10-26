@@ -115,6 +115,13 @@
     "earlier": "Frühere Nachrichten anzeigen",
     "latest": "Zur neuesten Nachricht"
   },
+  "rating": {
+    "useful": "Hilfreich",
+    "notUseful": "Nicht hilfreich",
+    "thanks": "Danke für dein Feedback",
+    "shared": "Danke – dieser Chat hilft, Leo zu verbessern",
+    "failed": "Deine Bewertung konnte nicht gespeichert werden"
+  },
   "steps": {
     "gettingStarted": "Legt los",
     "doneIn": "Fertig nach {duration}",

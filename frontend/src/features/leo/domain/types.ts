@@ -38,7 +38,14 @@ export interface LeoMessage {
   artifacts?: LeoArtifact[];
   /** Почему ответа нет: код отказа до хода или сбоя хода (`token_limit`, `turn_deadline` …). */
   failure?: LeoFailure;
+  /**
+   * Оценка ответа человеком (AG-D13): null — не оценён. Ответ без поля не оценивается: его нет в истории сервера
+   * (примерный чат, ход ещё идёт).
+   */
+  feedback?: LeoRating | null;
 }
+
+export type LeoRating = "useful" | "not_useful";
 
 /** Код сбоя и, для лимита токенов, какой лимит кончился (`standard_daily_tokens` …). */
 export interface LeoFailure {

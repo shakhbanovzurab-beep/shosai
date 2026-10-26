@@ -52,6 +52,7 @@ export function messageOf(row: AgentMessage, shown: ReadonlySet<string> = new Se
     sources: sources.length > 0 ? sources : undefined,
     proposals: proposals.length > 0 ? proposals : undefined,
     artifacts: row.artifacts.length > 0 ? row.artifacts : undefined,
+    feedback: row.role === "assistant" ? row.feedback : undefined,
     durationMs: row.duration_ms ?? undefined,
   };
 }

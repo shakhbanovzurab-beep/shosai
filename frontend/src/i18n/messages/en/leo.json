@@ -115,6 +115,13 @@
     "earlier": "Show earlier messages",
     "latest": "Go to the latest message"
   },
+  "rating": {
+    "useful": "Useful",
+    "notUseful": "Not useful",
+    "thanks": "Thanks for the feedback",
+    "shared": "Thanks — this chat will help improve Leo",
+    "failed": "Couldn’t save your rating"
+  },
   "steps": {
     "gettingStarted": "Getting started",
     "doneIn": "Done in {duration}",
