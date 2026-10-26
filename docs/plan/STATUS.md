@@ -39,7 +39,7 @@ Statuses: `todo` · `planned` (package plan written, approved) · `in progress` 
 | proactive | Leo initiative: signals, suggestions, Today feed, `/v1/ws/user` | agent, decisions, memory | todo | — | Wave 3; owns the native `/v1/ws/user` frames |
 | errands | Delayed Leo actions and reminders | agent, proactive | todo | — | Wave 3; the two native reminder routes |
 | mail | Mail: inbox over connectors, triage, drafts | connectors, decisions, agent | todo | — | Wave 3; fetch-through, no own mailbox store (SM-14) |
-| studio | Studio: models, prompts, personal context | identity, F6 | todo | — | Wave 3; absorbs the Leo `models` slice (SM-5); the skills dialog reads agent's skills store |
+| studio | Studio: models, prompts, personal context | identity, F6 | todo | — | Wave 3; absorbs the Leo `models` slice (SM-5); the skills dialog reads agent's skills store; its plan moves Admin › AI models (with F6's spend reports, forecast and OpenRouter credits) and Admin › Platform prompts off their sample `/api/admin` paths onto `/v1/admin/*` (owner, 2026-10-26; SLICE_MAP §19) |
 | mcp | MCP: Shosai as an MCP server, external MCP servers for Leo | agent, identity | todo | — | Wave 3 |
 | support | Support: tickets and newsletters | identity, files | todo | — | Wave 4; newsletters kept with a new admin screen (SM-10); unsubscribe and suppression in F6 |
 | releases | Releases: desktop builds, rollout, downloads | identity, files | todo | — | Wave 4 |
