@@ -20,6 +20,7 @@ import type { LeoMessage } from "../domain/types";
 import type { LeoChat } from "../model/leo-chat";
 import { CitedAnswer } from "./cited/cited-answer";
 import { LeoArtifacts } from "./leo-artifacts";
+import { LeoFollowQuestion } from "./leo-follow-question";
 import { CopyAction, MessageAction } from "./leo-message-actions";
 import { RatingActions } from "./leo-rating";
 import { LeoReplyError } from "./leo-reply-error";
@@ -53,6 +54,7 @@ export function LeoMessageList({
 
   return (
     <MessageScrollerProvider autoScroll>
+      <LeoFollowQuestion lastQuestionId={lastUserId} />
       <MessageScroller className="min-h-0 flex-1">
         <MessageScrollerViewport>
           <MessageScrollerContent className="gap-6 px-4 py-5 group-data-[expanded=true]/leo:mx-auto group-data-[expanded=true]/leo:w-full group-data-[expanded=true]/leo:max-w-3xl">
@@ -69,7 +71,7 @@ export function LeoMessageList({
               </Button>
             ) : null}
             {messages.map((message) => (
-              <MessageScrollerItem key={message.id} messageId={message.id} scrollAnchor={message.role === "user"}>
+              <MessageScrollerItem key={message.id} messageId={message.id}>
                 {message.role === "user" ? (
                   <LeoUserMessage
                     message={message}
