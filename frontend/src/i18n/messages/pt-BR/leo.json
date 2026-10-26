@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "Começando",
-    "doneIn": "Concluído em {duration}",
+    "thinking": "Pensando",
+    "workedFor": "Trabalhou por {duration}",
+    "finished": "Terminou de pensar",
     "stoppedAfter": "Interrompido após {duration}",
     "somethingWrong": "Algo deu errado",
     "label": "Ações do Leo",
     "needsApproval": "Aguardando aprovação",
     "detail": "“{detail}”",
+    "moreSources": "+{count, number} mais",
     "status": "{status, select, running {Em andamento} done {Concluído} error {Falhou} stopped {Interrompido} other {}}"
   },
   "attachments": {

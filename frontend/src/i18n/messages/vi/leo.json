@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "Đang bắt đầu",
-    "doneIn": "Hoàn tất trong {duration}",
+    "thinking": "Đang suy nghĩ",
+    "workedFor": "Đã làm việc trong {duration}",
+    "finished": "Đã suy nghĩ xong",
     "stoppedAfter": "Đã dừng sau {duration}",
     "somethingWrong": "Đã xảy ra sự cố",
     "label": "Thao tác của Leo",
     "needsApproval": "Cần phê duyệt",
     "detail": "“{detail}”",
+    "moreSources": "+{count, number} nữa",
     "status": "{status, select, running {Đang thực hiện} done {Hoàn tất} error {Không thành công} stopped {Đã dừng} other {}}"
   },
   "attachments": {

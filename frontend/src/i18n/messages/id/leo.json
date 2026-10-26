@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "Memulai",
-    "doneIn": "Selesai dalam {duration}",
+    "thinking": "Berpikir",
+    "workedFor": "Bekerja selama {duration}",
+    "finished": "Selesai berpikir",
     "stoppedAfter": "Dihentikan setelah {duration}",
     "somethingWrong": "Terjadi kesalahan",
     "label": "Tindakan Leo",
     "needsApproval": "Perlu persetujuan",
     "detail": "“{detail}”",
+    "moreSources": "+{count, number} lainnya",
     "status": "{status, select, running {Dalam proses} done {Selesai} error {Tidak berhasil} stopped {Dihentikan} other {}}"
   },
   "attachments": {

@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "Getting started",
-    "doneIn": "Done in {duration}",
+    "thinking": "Thinking",
+    "workedFor": "Worked for {duration}",
+    "finished": "Finished thinking",
     "stoppedAfter": "Stopped after {duration}",
     "somethingWrong": "Something went wrong",
     "label": "Leo’s actions",
     "needsApproval": "Needs approval",
     "detail": "“{detail}”",
+    "moreSources": "+{count, number} more",
     "status": "{status, select, running {In progress} done {Done} error {Failed} stopped {Stopped} other {}}"
   },
   "attachments": {

@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "أبدأ العمل",
-    "doneIn": "تم خلال {duration}",
+    "thinking": "جارٍ التفكير",
+    "workedFor": "استغرق العمل {duration}",
+    "finished": "اكتمل التفكير",
     "stoppedAfter": "تم الإيقاف بعد {duration}",
     "somethingWrong": "حدث خطأ ما",
     "label": "إجراءات Leo",
     "needsApproval": "بانتظار الموافقة",
     "detail": "«{detail}»",
+    "moreSources": "+{count, number} أخرى",
     "status": "{status, select, running {قيد التنفيذ} done {تم} error {تعذر التنفيذ} stopped {تم الإيقاف} other {}}"
   },
   "attachments": {

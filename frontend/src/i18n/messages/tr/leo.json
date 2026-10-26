@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "Başlıyorum",
-    "doneIn": "{duration} içinde tamamlandı",
+    "thinking": "Düşünüyorum",
+    "workedFor": "{duration} çalıştı",
+    "finished": "Düşünmeyi bitirdi",
     "stoppedAfter": "{duration} sonra durduruldu",
     "somethingWrong": "Bir şeyler ters gitti",
     "label": "Leo’nun işlemleri",
     "needsApproval": "Onay gerekiyor",
     "detail": "“{detail}”",
+    "moreSources": "+{count, number} daha",
     "status": "{status, select, running {Devam ediyor} done {Tamamlandı} error {Tamamlanamadı} stopped {Durduruldu} other {}}"
   },
   "attachments": {

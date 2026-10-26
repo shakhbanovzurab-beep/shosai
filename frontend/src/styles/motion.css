@@ -1,0 +1,13 @@
+@theme {
+  /* Линия рисует себя: у пути pathLength="1" и stroke-dasharray="1" (галочка «готово» у Leo). */
+  --animate-draw: draw 400ms ease-out 150ms both;
+
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}

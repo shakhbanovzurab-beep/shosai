@@ -42,7 +42,7 @@ export function useLeoChat({ page, context }: { page: string; context: LeoContex
       const replyId = createId();
       setMessages(key, () => [
         ...history,
-        { id: replyId, role: "assistant", content: "", status: "streaming", steps: [] },
+        { id: replyId, role: "assistant", content: "", status: "streaming", steps: [], startedAt: Date.now() },
       ]);
 
       const controller = new AbortController();

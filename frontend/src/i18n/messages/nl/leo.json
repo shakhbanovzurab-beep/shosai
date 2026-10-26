@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "Ik ga aan de slag",
-    "doneIn": "Klaar in {duration}",
+    "thinking": "Ik denk na",
+    "workedFor": "{duration} gewerkt",
+    "finished": "Klaar met nadenken",
     "stoppedAfter": "Gestopt na {duration}",
     "somethingWrong": "Er ging iets mis",
     "label": "Leo’s acties",
     "needsApproval": "Goedkeuring nodig",
     "detail": "‘{detail}’",
+    "moreSources": "+{count, number} meer",
     "status": "{status, select, running {Bezig} done {Klaar} error {Mislukt} stopped {Gestopt} other {}}"
   },
   "attachments": {

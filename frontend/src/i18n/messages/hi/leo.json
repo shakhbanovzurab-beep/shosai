@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "शुरू कर रहा हूं",
-    "doneIn": "{duration} में हो गया",
+    "thinking": "सोच रहा हूं",
+    "workedFor": "{duration} तक काम किया",
+    "finished": "सोचना पूरा हुआ",
     "stoppedAfter": "{duration} के बाद रोका गया",
     "somethingWrong": "कुछ गड़बड़ हो गई",
     "label": "Leo की कार्रवाइयां",
     "needsApproval": "मंज़ूरी चाहिए",
     "detail": "“{detail}”",
+    "moreSources": "+{count, number} और",
     "status": "{status, select, running {जारी है} done {हो गया} error {नहीं हो सका} stopped {रोका गया} other {}}"
   },
   "attachments": {

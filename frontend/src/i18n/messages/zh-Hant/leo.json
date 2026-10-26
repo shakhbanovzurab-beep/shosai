@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "正在準備",
-    "doneIn": "已完成，耗時 {duration}",
+    "thinking": "思考中",
+    "workedFor": "已工作 {duration}",
+    "finished": "思考完畢",
     "stoppedAfter": "已停止，耗時 {duration}",
     "somethingWrong": "發生錯誤",
     "label": "Leo 的動作",
     "needsApproval": "待核准",
     "detail": "「{detail}」",
+    "moreSources": "還有 {count, number} 個",
     "status": "{status, select, running {進行中} done {已完成} error {失敗} stopped {已停止} other {}}"
   },
   "attachments": {

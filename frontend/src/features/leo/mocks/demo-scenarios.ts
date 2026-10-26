@@ -2,6 +2,7 @@ import type { LeoActionId } from "../domain/actions";
 import type { LeoArtifact } from "../domain/artifacts";
 import type { LeoProposal } from "../domain/proposals";
 import type { LeoSource } from "../domain/sources";
+import { SHOWCASE } from "./demo-showcase";
 import { digestScenario } from "./digest-scenario";
 
 /*
@@ -154,6 +155,7 @@ const SHORTER: Scenario = {
 
 // Демо без модели: сценарий выбирается по словам английского вопроса; на всё остальное отвечает обычная заглушка.
 const RULES: [RegExp, Scenario][] = [
+  [/\bshowcase\b/i, SHOWCASE],
   [/\b(follow[- ]?up|send)\b/i, FOLLOW_UP],
   [/\b(shorter|shorten|tighten|rewrite)\b/i, SHORTER],
   [/\b(agree|agreed|pricing)\b/i, CITED],

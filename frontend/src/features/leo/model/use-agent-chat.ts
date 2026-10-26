@@ -62,17 +62,16 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     files: readonly File[] = [],
   ): Promise<LeoMessage | undefined> => {
     const key = crypto.randomUUID();
-    const reply: LeoMessage = { id: `${key}:reply`, role: "assistant", content: "", status: "streaming", steps: [] };
-    const turn: LiveTurn = {
-      key,
-      kind,
-      threadId: thread.threadId,
-      question,
-      reply,
-      runId: null,
-      seq: 0,
-      startedAt: Date.now(),
+    const startedAt = Date.now();
+    const reply: LeoMessage = {
+      id: `${key}:reply`,
+      role: "assistant",
+      content: "",
+      status: "streaming",
+      steps: [],
+      startedAt,
     };
+    const turn: LiveTurn = { key, kind, threadId: thread.threadId, question, reply, runId: null, seq: 0, startedAt };
     addTurn(scopeKey, turn);
     let threadId = thread.threadId;
     if (threadId === null) {

@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "시작하는 중",
-    "doneIn": "{duration} 만에 완료",
+    "thinking": "생각하는 중",
+    "workedFor": "{duration} 동안 작업함",
+    "finished": "생각을 마침",
     "stoppedAfter": "{duration} 후 중지됨",
     "somethingWrong": "문제가 생겼어요",
     "label": "Leo 진행 과정",
     "needsApproval": "승인 필요",
     "detail": "“{detail}”",
+    "moreSources": "+{count, number}개 더",
     "status": "{status, select, running {진행 중} done {완료} error {실패} stopped {중지됨} other {}}"
   },
   "attachments": {

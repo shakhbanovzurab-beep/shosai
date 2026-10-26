@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "Начинаю",
-    "doneIn": "Готово за {duration}",
+    "thinking": "Думаю",
+    "workedFor": "Работал {duration}",
+    "finished": "Закончил думать",
     "stoppedAfter": "Остановлено через {duration}",
     "somethingWrong": "Что-то пошло не так",
     "label": "Действия Leo",
     "needsApproval": "Нужно подтверждение",
     "detail": "«{detail}»",
+    "moreSources": "Ещё {count, number}",
     "status": "{status, select, running {Выполняется} done {Готово} error {Ошибка} stopped {Остановлено} other {}}"
   },
   "attachments": {

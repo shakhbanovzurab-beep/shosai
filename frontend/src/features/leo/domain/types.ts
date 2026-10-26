@@ -29,6 +29,8 @@ export interface LeoMessage {
   status: LeoMessageStatus;
   attachments?: LeoAttachment[];
   steps?: LeoStep[];
+  /** Когда ответ начался, мс эпохи: по нему идёт таймер «думает» живого хода. */
+  startedAt?: number;
   durationMs?: number;
   /** Источники ответа; маркеры `[n]` в тексте ссылаются на них по порядку. */
   sources?: LeoSource[];

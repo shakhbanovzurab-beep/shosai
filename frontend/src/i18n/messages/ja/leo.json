@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "開始しています",
-    "doneIn": "{duration} で完了",
+    "thinking": "考えています",
+    "workedFor": "{duration} 作業しました",
+    "finished": "考え終わりました",
     "stoppedAfter": "{duration} で停止",
     "somethingWrong": "問題が発生しました",
     "label": "Leo の作業内容",
     "needsApproval": "承認待ち",
     "detail": "「{detail}」",
+    "moreSources": "ほか {count, number} 件",
     "status": "{status, select, running {実行中} done {完了} error {失敗} stopped {停止} other {}}"
   },
   "attachments": {

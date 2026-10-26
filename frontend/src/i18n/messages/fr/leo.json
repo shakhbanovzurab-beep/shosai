@@ -124,12 +124,15 @@
   },
   "steps": {
     "gettingStarted": "Je commence",
-    "doneIn": "Terminé en {duration}",
+    "thinking": "Je réfléchis",
+    "workedFor": "A travaillé pendant {duration}",
+    "finished": "Réflexion terminée",
     "stoppedAfter": "Arrêté après {duration}",
     "somethingWrong": "Un problème est survenu",
     "label": "Actions de Leo",
     "needsApproval": "Approbation requise",
     "detail": "« {detail} »",
+    "moreSources": "+{count, number} autres",
     "status": "{status, select, running {En cours} done {Terminé} error {Échec} stopped {Arrêté} other {}}"
   },
   "attachments": {

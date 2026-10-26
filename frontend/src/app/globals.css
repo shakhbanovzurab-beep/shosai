@@ -10,6 +10,8 @@
 @import "../styles/preferences.css";
 /* The fonts a user can pick, self-hosted from pinned packages */
 @import "../styles/fonts.css";
+/* Motion that tw-animate-css does not have */
+@import "../styles/motion.css";
 
 @custom-variant dark (&:is(.dark *));
 
