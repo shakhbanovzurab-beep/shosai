@@ -7,9 +7,6 @@ import type {
   PromptsResponse,
   RoleModelSettings,
   SetActivePromptRequest,
-  Skill,
-  SkillSearchResponse,
-  SkillsResponse,
   StudioContext,
   StudioRole,
   UpdateRoleModelRequest,
@@ -28,14 +25,6 @@ export const studioApi = {
     request<Prompt>(at("/prompts", id), jsonBody("PATCH", draft)),
   deletePrompt: (id: string) => request<void>(at("/prompts", id), { method: "DELETE" }),
   setActive: (body: SetActivePromptRequest) => request<PromptsResponse>("/prompts/active", jsonBody("PUT", body)),
-
-  listSkills: () => request<SkillsResponse>("/skills"),
-  searchSkills: (q: string) => request<SkillSearchResponse>(`/skills/search?q=${encodeURIComponent(q)}`),
-  scanRepository: (repository: string) =>
-    request<SkillSearchResponse>("/skills/scan", jsonBody("POST", { repository })),
-  installSkill: (reference: string) => request<Skill>("/skills", jsonBody("POST", { reference })),
-  updateSkill: (id: string) => request<Skill>(`${at("/skills", id)}/update`, { method: "POST" }),
-  uninstallSkill: (id: string) => request<void>(at("/skills", id), { method: "DELETE" }),
 
   listModels: () => request<ModelsResponse>("/models"),
   updateRole: (role: StudioRole, body: UpdateRoleModelRequest) =>

@@ -10,13 +10,5 @@
   "promptTooLong": "Hướng dẫn quá dài. Hãy dùng tối đa {max, plural, other {# ký tự}}.",
   "tooManySkills": "Mỗi câu lệnh chỉ dùng được tối đa {max, plural, other {# kỹ năng}}.",
   "promptNotFound": "Không tìm thấy câu lệnh.",
-  "promptForOtherRole": "Câu lệnh này được viết cho một vai trò khác.",
-  "skillNotFound": "Không tìm thấy kỹ năng.",
-  "skillReferenceInvalid": "Hãy dùng owner/repo/skill, hoặc liên kết skills.sh hay GitHub đến kỹ năng đó.",
-  "skillFileEmpty": "Tệp SKILL.md của kỹ năng này đang trống.",
-  "skillMissing": "Không tìm thấy {path} trong {repository}.",
-  "repositoryInvalid": "Hãy dùng owner/repo hoặc liên kết GitHub.",
-  "repositoryUnreadable": "Không thể đọc {repository}. Kho lưu trữ này có công khai không?",
-  "repositoryNoSkills": "Không có tệp SKILL.md nào trong {repository}.",
-  "directoryUnavailable": "Danh mục skills.sh hiện không phản hồi. Hãy thử lại sau giây lát."
+  "promptForOtherRole": "Câu lệnh này được viết cho một vai trò khác."
 }

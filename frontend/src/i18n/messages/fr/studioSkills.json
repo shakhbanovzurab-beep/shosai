@@ -21,7 +21,8 @@
     "help": "Un dépôt public contenant un fichier SKILL.md",
     "emptyTitle": "Votre propre compétence depuis GitHub",
     "emptyDescription": "Saisissez un dépôt public pour y trouver les fichiers SKILL.md.",
-    "scanFailed": "Impossible de lire le dépôt."
+    "scanFailed": "Impossible de lire le dépôt.",
+    "noSkills": "Aucune compétence trouvée dans ce dépôt."
   },
   "candidate": {
     "installs": "{count, plural, one {# installation} many {# d’installations} other {# installations}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Impossible de mettre à jour la compétence",
     "removed": "{name} retirée",
     "removeFailed": "Impossible de retirer la compétence"
+  },
+  "problems": {
+    "skill_already_installed": "Cette compétence est déjà installée.",
+    "skill_limit_reached": "Vous pouvez installer jusqu’à 20 compétences. Supprimez-en une pour en ajouter une autre.",
+    "skill_not_found": "Impossible de trouver cette compétence dans le dépôt.",
+    "repo_not_found": "Impossible de trouver ce dépôt. Est-il public ?",
+    "skill_reference_invalid": "Indiquez propriétaire/dépôt/compétence, ou un lien skills.sh ou GitHub vers la compétence.",
+    "repository_invalid": "Indiquez propriétaire/dépôt ou un lien GitHub.",
+    "repo_too_large": "Le dépôt est trop volumineux pour être lu.",
+    "skill_too_large": "Le fichier SKILL.md de cette compétence est trop volumineux.",
+    "no_frontmatter": "Ce SKILL.md ne commence pas par un nom et une description.",
+    "skill_file_empty": "Le fichier SKILL.md de cette compétence ne contient aucune instruction.",
+    "ambiguous_skill": "Plusieurs compétences du dépôt portent ce nom. Indiquez le chemin complet du dossier de la compétence.",
+    "rate_limited": "GitHub limite les requêtes en ce moment. Réessayez dans quelques minutes.",
+    "github_unavailable": "GitHub ne répond pas en ce moment. Réessayez dans un instant.",
+    "skills_unavailable": "Les compétences ne sont pas disponibles en ce moment. Réessayez dans un instant."
   }
 }

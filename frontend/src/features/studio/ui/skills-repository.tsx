@@ -53,7 +53,10 @@ export function SkillsRepository({ installed }: { installed: Skill[] }) {
           {state.error}
         </p>
       ) : null}
-      {state.results ? <SkillCandidates candidates={state.results} installed={installed} /> : null}
+      {state.results && state.results.length > 0 ? (
+        <SkillCandidates candidates={state.results} installed={installed} />
+      ) : null}
+      {state.results?.length === 0 ? <p className="text-muted-foreground text-sm">{t("repository.noSkills")}</p> : null}
       {state.results === null && !state.error ? (
         <Empty className="py-6">
           <EmptyHeader>

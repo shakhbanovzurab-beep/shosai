@@ -56,12 +56,3 @@ export function setActive(role: StudioRole, promptId: string | null): Problem | 
   state.active[role] = promptId;
   return null;
 }
-
-/** Removes an uninstalled skill from every prompt that used it. */
-export function detachSkill(skillId: string) {
-  for (const prompt of state.prompts.values()) {
-    if (prompt.skill_ids.includes(skillId)) {
-      state.prompts.set(prompt.id, { ...prompt, skill_ids: prompt.skill_ids.filter((id) => id !== skillId) });
-    }
-  }
-}

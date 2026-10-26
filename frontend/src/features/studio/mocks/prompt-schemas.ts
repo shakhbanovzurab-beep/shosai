@@ -36,8 +36,6 @@ export const promptDraftSchema = z.object({
 export const contextBodySchema = z.object({
   content: z.string().max(CONTEXT_MAX_CHARS, "contextTooLong" satisfies LimitProblem),
 });
-export const referenceSchema = z.object({ reference: z.string().trim().min(3).max(500) });
-export const repositorySchema = z.object({ repository: z.string().trim().min(3).max(500) });
 
 export const readJson = (request: Request) => request.json().catch(() => null);
 

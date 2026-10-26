@@ -21,7 +21,8 @@
     "help": "SKILL.md 파일이 있는 공개 저장소",
     "emptyTitle": "GitHub에 있는 나만의 스킬",
     "emptyDescription": "공개 저장소를 입력하면 그 안의 SKILL.md 파일을 찾아요.",
-    "scanFailed": "저장소를 읽지 못했어요."
+    "scanFailed": "저장소를 읽지 못했어요.",
+    "noSkills": "이 저장소에서 스킬을 찾지 못했어요."
   },
   "candidate": {
     "installs": "{count, plural, other {#회 설치}}",
@@ -49,5 +50,21 @@
     "updateFailed": "스킬을 업데이트하지 못했어요",
     "removed": "{name}을(를) 제거했어요",
     "removeFailed": "스킬을 제거하지 못했어요"
+  },
+  "problems": {
+    "skill_already_installed": "이미 설치된 스킬이에요.",
+    "skill_limit_reached": "스킬은 최대 20개까지 설치할 수 있어요. 새로 추가하려면 하나를 삭제하세요.",
+    "skill_not_found": "저장소에서 이 스킬을 찾지 못했어요.",
+    "repo_not_found": "저장소를 찾지 못했어요. 공개 저장소인가요?",
+    "skill_reference_invalid": "owner/repo/skill 형식이나 스킬의 skills.sh 또는 GitHub 링크를 입력하세요.",
+    "repository_invalid": "owner/repo 형식이나 GitHub 링크를 입력하세요.",
+    "repo_too_large": "저장소가 너무 커서 읽을 수 없어요.",
+    "skill_too_large": "이 스킬의 SKILL.md가 너무 커요.",
+    "no_frontmatter": "이 SKILL.md는 이름과 설명으로 시작하지 않아요.",
+    "skill_file_empty": "이 스킬의 SKILL.md에 지침이 없어요.",
+    "ambiguous_skill": "저장소에 같은 이름의 스킬이 여러 개 있어요. 스킬 폴더의 전체 경로를 입력하세요.",
+    "rate_limited": "지금 GitHub가 요청을 제한하고 있어요. 몇 분 후에 다시 시도해 주세요.",
+    "github_unavailable": "지금 GitHub가 응답하지 않아요. 잠시 후 다시 시도해 주세요.",
+    "skills_unavailable": "지금은 스킬을 사용할 수 없어요. 잠시 후 다시 시도해 주세요."
   }
 }

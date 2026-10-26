@@ -21,7 +21,8 @@
     "help": "مستودع عام يحتوي على ملف SKILL.md",
     "emptyTitle": "مهارة خاصة من GitHub",
     "emptyDescription": "يمكن إدخال مستودع عام للعثور على ملفات SKILL.md فيه.",
-    "scanFailed": "تعذرت قراءة المستودع."
+    "scanFailed": "تعذرت قراءة المستودع.",
+    "noSkills": "لم يتم العثور على مهارات في هذا المستودع."
   },
   "candidate": {
     "installs": "{count, plural, zero {# تثبيت} one {تثبيت واحد} two {تثبيتان} few {# تثبيتات} many {# تثبيتًا} other {# تثبيت}}",
@@ -49,5 +50,21 @@
     "updateFailed": "تعذر تحديث المهارة",
     "removed": "تمت إزالة {name}",
     "removeFailed": "تعذرت إزالة المهارة"
+  },
+  "problems": {
+    "skill_already_installed": "هذه المهارة مثبتة بالفعل.",
+    "skill_limit_reached": "يمكنك تثبيت ما يصل إلى 20 مهارة. أزل واحدة لإضافة أخرى.",
+    "skill_not_found": "تعذر العثور على هذه المهارة في المستودع.",
+    "repo_not_found": "تعذر العثور على هذا المستودع. هل هو عام؟",
+    "skill_reference_invalid": "استخدم owner/repo/skill، أو رابط skills.sh أو GitHub إلى المهارة.",
+    "repository_invalid": "استخدم owner/repo أو رابط GitHub.",
+    "repo_too_large": "المستودع أكبر من أن تتم قراءته.",
+    "skill_too_large": "ملف SKILL.md لهذه المهارة كبير جدًا.",
+    "no_frontmatter": "لا يبدأ ملف SKILL.md هذا باسم ووصف.",
+    "skill_file_empty": "لا يحتوي ملف SKILL.md لهذه المهارة على تعليمات.",
+    "ambiguous_skill": "توجد في المستودع عدة مهارات بهذا الاسم. استخدم المسار الكامل لمجلد المهارة.",
+    "rate_limited": "يحد GitHub من الطلبات حاليًا. يرجى إعادة المحاولة بعد بضع دقائق.",
+    "github_unavailable": "لا يستجيب GitHub حاليًا. يرجى إعادة المحاولة بعد قليل.",
+    "skills_unavailable": "المهارات غير متاحة حاليًا. يرجى إعادة المحاولة بعد قليل."
   }
 }

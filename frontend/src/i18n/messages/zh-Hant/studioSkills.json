@@ -21,7 +21,8 @@
     "help": "含有 SKILL.md 檔案的公開儲存庫",
     "emptyTitle": "從 GitHub 加入自己的技能",
     "emptyDescription": "輸入公開儲存庫，即可找出其中的 SKILL.md 檔案。",
-    "scanFailed": "無法讀取儲存庫。"
+    "scanFailed": "無法讀取儲存庫。",
+    "noSkills": "此儲存庫中找不到技能。"
   },
   "candidate": {
     "installs": "{count, plural, other {# 次安裝}}",
@@ -49,5 +50,21 @@
     "updateFailed": "無法更新技能",
     "removed": "已移除 {name}",
     "removeFailed": "無法移除技能"
+  },
+  "problems": {
+    "skill_already_installed": "此技能已安裝。",
+    "skill_limit_reached": "最多可安裝 20 個技能。請先移除一個再新增。",
+    "skill_not_found": "在儲存庫中找不到此技能。",
+    "repo_not_found": "找不到此儲存庫。它是公開的嗎？",
+    "skill_reference_invalid": "請使用 owner/repo/skill，或技能的 skills.sh 或 GitHub 連結。",
+    "repository_invalid": "請使用 owner/repo 或 GitHub 連結。",
+    "repo_too_large": "儲存庫太大，無法讀取。",
+    "skill_too_large": "此技能的 SKILL.md 太大。",
+    "no_frontmatter": "此 SKILL.md 開頭沒有名稱和說明。",
+    "skill_file_empty": "此技能的 SKILL.md 沒有任何指示。",
+    "ambiguous_skill": "儲存庫中有多個同名技能。請使用技能資料夾的完整路徑。",
+    "rate_limited": "GitHub 目前正在限制請求。請過幾分鐘再試一次。",
+    "github_unavailable": "GitHub 目前沒有回應。請稍後再試一次。",
+    "skills_unavailable": "目前無法使用技能。請稍後再試一次。"
   }
 }

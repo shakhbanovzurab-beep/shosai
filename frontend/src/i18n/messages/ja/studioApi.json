@@ -10,13 +10,5 @@
   "promptTooLong": "指示が長すぎます。{max, plural, other {# 文字}}以内にしてください。",
   "tooManySkills": "1 つのプロンプトで使用できるスキルは {max, plural, other {# 個}}までです。",
   "promptNotFound": "プロンプトが見つかりません。",
-  "promptForOtherRole": "そのプロンプトは別の役割用です。",
-  "skillNotFound": "スキルが見つかりません。",
-  "skillReferenceInvalid": "owner/repo/skill の形式か、skills.sh または GitHub のスキルへのリンクを使用してください。",
-  "skillFileEmpty": "そのスキルの SKILL.md は空です。",
-  "skillMissing": "{repository} に {path} が見つかりませんでした。",
-  "repositoryInvalid": "owner/repo の形式か、GitHub のリンクを使用してください。",
-  "repositoryUnreadable": "{repository} を読み込めませんでした。公開リポジトリかどうか確認してください。",
-  "repositoryNoSkills": "{repository} に SKILL.md ファイルはありません。",
-  "directoryUnavailable": "skills.sh のディレクトリが現在応答していません。しばらくしてからもう一度お試しください。"
+  "promptForOtherRole": "そのプロンプトは別の役割用です。"
 }

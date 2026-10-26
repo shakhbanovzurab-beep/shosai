@@ -1,15 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 
 import { useTranslations } from "use-intl";
 
-import { errorMessage } from "@/lib/errors";
-
-import { studioApi } from "../api/studio-api";
+import { skillsApi } from "../api/skills-api";
 import type { SkillCandidate } from "../domain/contract";
+import { describeSkillError } from "./skill-problem-words";
 
-type SearchState = { status: "idle" | "loading" | "done"; results: SkillCandidate[]; error: string | null };
+type SearchState = { status: "idle" | "loading" | "done"; results: SkillCandidate[]; error: ReactNode };
 
 /** Searches the skills.sh directory as you type, a short pause after the last keystroke. */
 export function useDirectorySearch() {
@@ -28,13 +27,17 @@ export function useDirectorySearch() {
     }
     setState((prev) => ({ ...prev, status: "loading" }));
     timer.current = setTimeout(() => {
-      studioApi.searchSkills(q).then(
+      skillsApi.search(q).then(
         ({ results }) => {
           if (latest.current === q) setState({ status: "done", results, error: null });
         },
         (error: unknown) => {
           if (latest.current === q) {
-            setState({ status: "done", results: [], error: errorMessage(error) ?? t("readyMade.searchFailed") });
+            setState({
+              status: "done",
+              results: [],
+              error: describeSkillError(error, t) ?? t("readyMade.searchFailed"),
+            });
           }
         },
       );

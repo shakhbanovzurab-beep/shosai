@@ -21,7 +21,8 @@
     "help": "Публичный репозиторий с файлом SKILL.md",
     "emptyTitle": "Свой навык из GitHub",
     "emptyDescription": "Укажите публичный репозиторий, чтобы найти в нём файлы SKILL.md.",
-    "scanFailed": "Не удалось прочитать репозиторий."
+    "scanFailed": "Не удалось прочитать репозиторий.",
+    "noSkills": "В этом репозитории нет навыков."
   },
   "candidate": {
     "installs": "{count, plural, one {# установка} few {# установки} many {# установок} other {# установки}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Не удалось обновить навык",
     "removed": "Навык {name} убран",
     "removeFailed": "Не удалось убрать навык"
+  },
+  "problems": {
+    "skill_already_installed": "Этот навык уже установлен.",
+    "skill_limit_reached": "Можно установить до 20 навыков. Удалите один, чтобы добавить новый.",
+    "skill_not_found": "Не удалось найти этот навык в репозитории.",
+    "repo_not_found": "Не удалось найти репозиторий. Он публичный?",
+    "skill_reference_invalid": "Укажите owner/repo/skill или ссылку на навык в skills.sh или GitHub.",
+    "repository_invalid": "Укажите owner/repo или ссылку на GitHub.",
+    "repo_too_large": "Репозиторий слишком большой, его не прочитать.",
+    "skill_too_large": "SKILL.md этого навыка слишком большой.",
+    "no_frontmatter": "В начале SKILL.md нет названия и описания.",
+    "skill_file_empty": "В SKILL.md этого навыка нет инструкций.",
+    "ambiguous_skill": "В репозитории несколько навыков с таким названием. Укажите полный путь к папке навыка.",
+    "rate_limited": "GitHub сейчас ограничивает запросы. Попробуйте через несколько минут.",
+    "github_unavailable": "GitHub сейчас не отвечает. Попробуйте чуть позже.",
+    "skills_unavailable": "Навыки сейчас недоступны. Попробуйте чуть позже."
   }
 }

@@ -10,13 +10,5 @@
   "promptTooLong": "Die Anweisungen sind zu lang. Verwende höchstens {max, plural, one {# Zeichen} other {# Zeichen}}.",
   "tooManySkills": "Ein Prompt kann höchstens {max, plural, one {# Skill} other {# Skills}} verwenden.",
   "promptNotFound": "Prompt nicht gefunden.",
-  "promptForOtherRole": "Dieser Prompt ist für eine andere Rolle geschrieben.",
-  "skillNotFound": "Skill nicht gefunden.",
-  "skillReferenceInvalid": "Verwende inhaber/repo/skill oder einen skills.sh- oder GitHub-Link zum Skill.",
-  "skillFileEmpty": "Die SKILL.md dieses Skills ist leer.",
-  "skillMissing": "{path} wurde in {repository} nicht gefunden.",
-  "repositoryInvalid": "Verwende inhaber/repo oder einen GitHub-Link.",
-  "repositoryUnreadable": "{repository} konnte nicht gelesen werden. Ist es öffentlich?",
-  "repositoryNoSkills": "Keine SKILL.md-Dateien in {repository}.",
-  "directoryUnavailable": "Das Verzeichnis von skills.sh antwortet gerade nicht. Versuche es gleich erneut."
+  "promptForOtherRole": "Dieser Prompt ist für eine andere Rolle geschrieben."
 }

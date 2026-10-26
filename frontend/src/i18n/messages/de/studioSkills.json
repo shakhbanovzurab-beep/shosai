@@ -21,7 +21,8 @@
     "help": "Ein öffentliches Repository mit einer SKILL.md-Datei",
     "emptyTitle": "Dein eigener Skill von GitHub",
     "emptyDescription": "Gib ein öffentliches Repository ein, um die SKILL.md-Dateien darin zu finden.",
-    "scanFailed": "Das Repository konnte nicht gelesen werden."
+    "scanFailed": "Das Repository konnte nicht gelesen werden.",
+    "noSkills": "In diesem Repository wurden keine Skills gefunden."
   },
   "candidate": {
     "installs": "{count, plural, one {# Installation} other {# Installationen}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Der Skill konnte nicht aktualisiert werden",
     "removed": "{name} entfernt",
     "removeFailed": "Der Skill konnte nicht entfernt werden"
+  },
+  "problems": {
+    "skill_already_installed": "Dieser Skill ist schon installiert.",
+    "skill_limit_reached": "Du kannst bis zu 20 Skills installieren. Entferne einen, um einen neuen hinzuzufügen.",
+    "skill_not_found": "Dieser Skill wurde im Repository nicht gefunden.",
+    "repo_not_found": "Das Repository wurde nicht gefunden. Ist es öffentlich?",
+    "skill_reference_invalid": "Gib inhaber/repo/skill an oder einen Link zum Skill auf skills.sh oder GitHub.",
+    "repository_invalid": "Gib inhaber/repo oder einen GitHub-Link an.",
+    "repo_too_large": "Das Repository ist zu groß zum Lesen.",
+    "skill_too_large": "Die SKILL.md dieses Skills ist zu groß.",
+    "no_frontmatter": "Am Anfang dieser SKILL.md fehlen Name und Beschreibung.",
+    "skill_file_empty": "Die SKILL.md dieses Skills enthält keine Anweisungen.",
+    "ambiguous_skill": "Im Repository gibt es mehrere Skills mit diesem Namen. Gib den vollständigen Pfad zum Ordner des Skills an.",
+    "rate_limited": "GitHub begrenzt gerade die Anfragen. Versuche es in ein paar Minuten erneut.",
+    "github_unavailable": "GitHub antwortet gerade nicht. Versuche es gleich erneut.",
+    "skills_unavailable": "Skills sind gerade nicht verfügbar. Versuche es gleich erneut."
   }
 }

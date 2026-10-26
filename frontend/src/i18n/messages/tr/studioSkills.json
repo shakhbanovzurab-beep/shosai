@@ -21,7 +21,8 @@
     "help": "SKILL.md dosyası içeren herkese açık bir depo",
     "emptyTitle": "GitHub’dan kendi beceriniz",
     "emptyDescription": "İçindeki SKILL.md dosyalarını bulmak için herkese açık bir depo girin.",
-    "scanFailed": "Depo okunamadı."
+    "scanFailed": "Depo okunamadı.",
+    "noSkills": "Bu depoda beceri bulunamadı."
   },
   "candidate": {
     "installs": "{count, plural, one {# yükleme} other {# yükleme}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Beceri güncellenemedi",
     "removed": "{name} kaldırıldı",
     "removeFailed": "Beceri kaldırılamadı"
+  },
+  "problems": {
+    "skill_already_installed": "Bu beceri zaten yüklü.",
+    "skill_limit_reached": "En fazla 20 beceri yükleyebilirsiniz. Yenisini eklemek için birini kaldırın.",
+    "skill_not_found": "Bu beceri depoda bulunamadı.",
+    "repo_not_found": "Bu depo bulunamadı. Herkese açık mı?",
+    "skill_reference_invalid": "owner/repo/skill ya da beceriye skills.sh veya GitHub bağlantısı kullanın.",
+    "repository_invalid": "owner/repo ya da bir GitHub bağlantısı kullanın.",
+    "repo_too_large": "Depo okunamayacak kadar büyük.",
+    "skill_too_large": "Bu becerinin SKILL.md dosyası çok büyük.",
+    "no_frontmatter": "Bu SKILL.md bir ad ve açıklamayla başlamıyor.",
+    "skill_file_empty": "Bu becerinin SKILL.md dosyasında talimat yok.",
+    "ambiguous_skill": "Depoda bu ada sahip birden fazla beceri var. Becerinin klasörünün tam yolunu kullanın.",
+    "rate_limited": "GitHub şu anda istekleri sınırlıyor. Birkaç dakika sonra tekrar deneyin.",
+    "github_unavailable": "GitHub şu anda yanıt vermiyor. Birazdan tekrar deneyin.",
+    "skills_unavailable": "Beceriler şu anda kullanılamıyor. Birazdan tekrar deneyin."
   }
 }

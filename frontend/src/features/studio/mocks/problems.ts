@@ -15,18 +15,11 @@ export type Problem =
         | "modelNotOnPlan"
         | "promptNameRequired"
         | "promptNotFound"
-        | "promptForOtherRole"
-        | "skillNotFound"
-        | "skillReferenceInvalid"
-        | "skillFileEmpty"
-        | "repositoryInvalid"
-        | "directoryUnavailable";
+        | "promptForOtherRole";
     }
   | { code: "contextTooLong" | "promptNameTooLong" | "promptTooLong" | "tooManySkills"; max: number }
   | { code: "maxTokensRange"; min: number; max: number }
-  | { code: "modelCantDoRole"; model: string; role: StudioRole }
-  | { code: "skillMissing"; path: string; repository: string }
-  | { code: "repositoryUnreadable" | "repositoryNoSkills"; repository: string };
+  | { code: "modelCantDoRole"; model: string; role: StudioRole };
 
 export const isProblem = (value: object): value is Problem => "code" in value;
 
@@ -45,11 +38,6 @@ async function word(problem: Problem): Promise<string> {
       const roles = await getTranslations("studio");
       return t(problem.code, { model: problem.model, role: roles(`roles.${problem.role}.name`) });
     }
-    case "skillMissing":
-      return t(problem.code, { path: problem.path, repository: problem.repository });
-    case "repositoryUnreadable":
-    case "repositoryNoSkills":
-      return t(problem.code, { repository: problem.repository });
     default:
       return t(problem.code);
   }

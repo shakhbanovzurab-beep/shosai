@@ -21,7 +21,8 @@
     "help": "Um repositório público com um arquivo SKILL.md",
     "emptyTitle": "Sua própria habilidade do GitHub",
     "emptyDescription": "Digite um repositório público para encontrar os arquivos SKILL.md nele.",
-    "scanFailed": "Não foi possível ler o repositório."
+    "scanFailed": "Não foi possível ler o repositório.",
+    "noSkills": "Nenhuma habilidade encontrada neste repositório."
   },
   "candidate": {
     "installs": "{count, plural, one {# instalação} many {# de instalações} other {# instalações}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Não foi possível atualizar a habilidade",
     "removed": "{name} removida",
     "removeFailed": "Não foi possível remover a habilidade"
+  },
+  "problems": {
+    "skill_already_installed": "Esta habilidade já está instalada.",
+    "skill_limit_reached": "Você pode instalar até 20 habilidades. Remova uma para adicionar outra.",
+    "skill_not_found": "Não foi possível encontrar essa habilidade no repositório.",
+    "repo_not_found": "Não foi possível encontrar esse repositório. Ele é público?",
+    "skill_reference_invalid": "Use proprietário/repositório/habilidade, ou um link do skills.sh ou do GitHub para a habilidade.",
+    "repository_invalid": "Use proprietário/repositório ou um link do GitHub.",
+    "repo_too_large": "O repositório é grande demais para ser lido.",
+    "skill_too_large": "O SKILL.md dessa habilidade é grande demais.",
+    "no_frontmatter": "Esse SKILL.md não começa com um nome e uma descrição.",
+    "skill_file_empty": "O SKILL.md dessa habilidade não tem instruções.",
+    "ambiguous_skill": "Várias habilidades do repositório têm esse nome. Use o caminho completo da pasta da habilidade.",
+    "rate_limited": "O GitHub está limitando as solicitações agora. Tente novamente em alguns minutos.",
+    "github_unavailable": "O GitHub não está respondendo agora. Tente novamente em instantes.",
+    "skills_unavailable": "As habilidades não estão disponíveis agora. Tente novamente em instantes."
   }
 }

@@ -21,7 +21,8 @@
     "help": "SKILL.md फ़ाइल वाली पब्लिक रिपॉज़िटरी",
     "emptyTitle": "GitHub से आपकी अपनी स्किल",
     "emptyDescription": "कोई पब्लिक रिपॉज़िटरी डालें, उसमें मौजूद SKILL.md फ़ाइलें खोजी जाएंगी।",
-    "scanFailed": "रिपॉज़िटरी पढ़ी नहीं जा सकी।"
+    "scanFailed": "रिपॉज़िटरी पढ़ी नहीं जा सकी।",
+    "noSkills": "इस रिपॉज़िटरी में कोई स्किल नहीं मिली।"
   },
   "candidate": {
     "installs": "{count, plural, one {# इंस्टॉल} other {# इंस्टॉल}}",
@@ -49,5 +50,21 @@
     "updateFailed": "स्किल अपडेट नहीं की जा सकी।",
     "removed": "{name} हटाई गई",
     "removeFailed": "स्किल हटाई नहीं जा सकी।"
+  },
+  "problems": {
+    "skill_already_installed": "यह स्किल पहले से इंस्टॉल है।",
+    "skill_limit_reached": "आप अधिकतम 20 स्किल इंस्टॉल कर सकते हैं। नई जोड़ने के लिए एक हटाएं।",
+    "skill_not_found": "रिपॉज़िटरी में यह स्किल नहीं मिली।",
+    "repo_not_found": "यह रिपॉज़िटरी नहीं मिली। क्या यह सार्वजनिक है?",
+    "skill_reference_invalid": "owner/repo/skill या स्किल का skills.sh या GitHub लिंक दें।",
+    "repository_invalid": "owner/repo या GitHub लिंक दें।",
+    "repo_too_large": "रिपॉज़िटरी पढ़ने के लिए बहुत बड़ी है।",
+    "skill_too_large": "इस स्किल की SKILL.md बहुत बड़ी है।",
+    "no_frontmatter": "इस SKILL.md की शुरुआत में नाम और विवरण नहीं है।",
+    "skill_file_empty": "इस स्किल की SKILL.md में कोई निर्देश नहीं है।",
+    "ambiguous_skill": "रिपॉज़िटरी में इस नाम की कई स्किल हैं। स्किल के फ़ोल्डर का पूरा पाथ दें।",
+    "rate_limited": "GitHub अभी अनुरोध सीमित कर रहा है। कुछ मिनट बाद फिर से कोशिश करें।",
+    "github_unavailable": "GitHub अभी जवाब नहीं दे रहा। थोड़ी देर बाद फिर से कोशिश करें।",
+    "skills_unavailable": "स्किल अभी उपलब्ध नहीं हैं। थोड़ी देर बाद फिर से कोशिश करें।"
   }
 }

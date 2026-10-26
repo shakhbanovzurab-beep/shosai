@@ -21,7 +21,8 @@
     "help": "Kho lưu trữ công khai có chứa tệp SKILL.md",
     "emptyTitle": "Kỹ năng của riêng bạn từ GitHub",
     "emptyDescription": "Nhập một kho lưu trữ công khai để tìm các tệp SKILL.md trong đó.",
-    "scanFailed": "Không thể đọc kho lưu trữ."
+    "scanFailed": "Không thể đọc kho lưu trữ.",
+    "noSkills": "Không tìm thấy kỹ năng nào trong kho lưu trữ này."
   },
   "candidate": {
     "installs": "{count, plural, other {# lượt cài đặt}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Không thể cập nhật kỹ năng",
     "removed": "Đã gỡ {name}",
     "removeFailed": "Không thể gỡ kỹ năng"
+  },
+  "problems": {
+    "skill_already_installed": "Kỹ năng này đã được cài đặt.",
+    "skill_limit_reached": "Bạn có thể cài đặt tối đa 20 kỹ năng. Hãy gỡ một kỹ năng để thêm kỹ năng khác.",
+    "skill_not_found": "Không tìm thấy kỹ năng này trong kho lưu trữ.",
+    "repo_not_found": "Không tìm thấy kho lưu trữ này. Kho có công khai không?",
+    "skill_reference_invalid": "Hãy dùng owner/repo/skill, hoặc liên kết skills.sh hay GitHub đến kỹ năng.",
+    "repository_invalid": "Hãy dùng owner/repo hoặc liên kết GitHub.",
+    "repo_too_large": "Kho lưu trữ quá lớn để đọc.",
+    "skill_too_large": "Tệp SKILL.md của kỹ năng này quá lớn.",
+    "no_frontmatter": "Tệp SKILL.md này không bắt đầu bằng tên và mô tả.",
+    "skill_file_empty": "Tệp SKILL.md của kỹ năng này không có hướng dẫn.",
+    "ambiguous_skill": "Kho lưu trữ có nhiều kỹ năng trùng tên này. Hãy dùng đường dẫn đầy đủ đến thư mục của kỹ năng.",
+    "rate_limited": "GitHub đang giới hạn yêu cầu. Hãy thử lại sau vài phút.",
+    "github_unavailable": "GitHub hiện không phản hồi. Hãy thử lại sau giây lát.",
+    "skills_unavailable": "Kỹ năng hiện không khả dụng. Hãy thử lại sau giây lát."
   }
 }

@@ -10,13 +10,5 @@
   "promptTooLong": "{max, plural, other {지침이 너무 길어요. 최대 #자까지 입력해 주세요.}}",
   "tooManySkills": "{max, plural, other {프롬프트에는 스킬을 최대 #개까지 사용할 수 있어요.}}",
   "promptNotFound": "프롬프트를 찾을 수 없어요.",
-  "promptForOtherRole": "다른 역할용으로 작성된 프롬프트예요.",
-  "skillNotFound": "스킬을 찾을 수 없어요.",
-  "skillReferenceInvalid": "owner/repo/skill 형식이나 스킬의 skills.sh 또는 GitHub 링크를 입력해 주세요.",
-  "skillFileEmpty": "이 스킬의 SKILL.md가 비어 있어요.",
-  "skillMissing": "{repository}에서 {path}을(를) 찾지 못했어요.",
-  "repositoryInvalid": "owner/repo 형식이나 GitHub 링크를 입력해 주세요.",
-  "repositoryUnreadable": "{repository}을(를) 읽지 못했어요. 공개 저장소인지 확인해 주세요.",
-  "repositoryNoSkills": "{repository}에 SKILL.md 파일이 없어요.",
-  "directoryUnavailable": "지금은 skills.sh 디렉터리가 응답하지 않아요. 잠시 후 다시 시도해 주세요."
+  "promptForOtherRole": "다른 역할용으로 작성된 프롬프트예요."
 }

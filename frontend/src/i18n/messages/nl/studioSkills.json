@@ -21,7 +21,8 @@
     "help": "Een openbare repository met een SKILL.md-bestand",
     "emptyTitle": "Je eigen vaardigheid van GitHub",
     "emptyDescription": "Vul een openbare repository in om de SKILL.md-bestanden erin te vinden.",
-    "scanFailed": "Kan de repository niet lezen."
+    "scanFailed": "Kan de repository niet lezen.",
+    "noSkills": "Geen vaardigheden gevonden in deze repository."
   },
   "candidate": {
     "installs": "{count, plural, one {# installatie} other {# installaties}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Kan de vaardigheid niet bijwerken",
     "removed": "{name} verwijderd",
     "removeFailed": "Kan de vaardigheid niet verwijderen"
+  },
+  "problems": {
+    "skill_already_installed": "Deze vaardigheid is al geïnstalleerd.",
+    "skill_limit_reached": "Je kunt maximaal 20 vaardigheden installeren. Verwijder er een om een nieuwe toe te voegen.",
+    "skill_not_found": "Kan deze vaardigheid niet vinden in de repository.",
+    "repo_not_found": "Kan deze repository niet vinden. Is hij openbaar?",
+    "skill_reference_invalid": "Gebruik owner/repo/skill, of een skills.sh- of GitHub-link naar de vaardigheid.",
+    "repository_invalid": "Gebruik owner/repo of een GitHub-link.",
+    "repo_too_large": "De repository is te groot om te lezen.",
+    "skill_too_large": "De SKILL.md van deze vaardigheid is te groot.",
+    "no_frontmatter": "Deze SKILL.md begint niet met een naam en een beschrijving.",
+    "skill_file_empty": "De SKILL.md van deze vaardigheid bevat geen instructies.",
+    "ambiguous_skill": "Meerdere vaardigheden in de repository hebben deze naam. Gebruik het volledige pad naar de map van de vaardigheid.",
+    "rate_limited": "GitHub beperkt nu het aantal verzoeken. Probeer het over een paar minuten opnieuw.",
+    "github_unavailable": "GitHub reageert nu niet. Probeer het zo opnieuw.",
+    "skills_unavailable": "Vaardigheden zijn nu niet beschikbaar. Probeer het zo opnieuw."
   }
 }

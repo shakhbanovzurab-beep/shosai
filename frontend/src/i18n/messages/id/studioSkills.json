@@ -21,7 +21,8 @@
     "help": "Repositori publik yang berisi file SKILL.md",
     "emptyTitle": "Skill Anda sendiri dari GitHub",
     "emptyDescription": "Masukkan repositori publik untuk menemukan file SKILL.md di dalamnya.",
-    "scanFailed": "Tidak dapat membaca repositori."
+    "scanFailed": "Tidak dapat membaca repositori.",
+    "noSkills": "Tidak ada skill yang ditemukan di repositori ini."
   },
   "candidate": {
     "installs": "{count, plural, other {# pemasangan}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Tidak dapat memperbarui skill",
     "removed": "{name} dihapus",
     "removeFailed": "Tidak dapat menghapus skill"
+  },
+  "problems": {
+    "skill_already_installed": "Skill ini sudah terpasang.",
+    "skill_limit_reached": "Anda dapat memasang hingga 20 skill. Hapus satu untuk menambahkan yang lain.",
+    "skill_not_found": "Tidak dapat menemukan skill itu di repositori.",
+    "repo_not_found": "Tidak dapat menemukan repositori itu. Apakah repositori itu publik?",
+    "skill_reference_invalid": "Gunakan owner/repo/skill, atau tautan skills.sh atau GitHub ke skill.",
+    "repository_invalid": "Gunakan owner/repo atau tautan GitHub.",
+    "repo_too_large": "Repositori terlalu besar untuk dibaca.",
+    "skill_too_large": "SKILL.md skill itu terlalu besar.",
+    "no_frontmatter": "SKILL.md itu tidak diawali nama dan deskripsi.",
+    "skill_file_empty": "SKILL.md skill itu tidak berisi instruksi.",
+    "ambiguous_skill": "Ada beberapa skill dengan nama itu di repositori. Gunakan jalur lengkap ke folder skill.",
+    "rate_limited": "GitHub sedang membatasi permintaan. Coba lagi dalam beberapa menit.",
+    "github_unavailable": "GitHub sedang tidak merespons. Coba lagi sebentar lagi.",
+    "skills_unavailable": "Skill sedang tidak tersedia. Coba lagi sebentar lagi."
   }
 }

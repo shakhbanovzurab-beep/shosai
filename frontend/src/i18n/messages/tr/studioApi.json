@@ -10,13 +10,5 @@
   "promptTooLong": "Talimatlar çok uzun. En fazla {max, plural, one {# karakter} other {# karakter}} kullanın.",
   "tooManySkills": "Bir istem en fazla {max, plural, one {# beceri} other {# beceri}} kullanabilir.",
   "promptNotFound": "İstem bulunamadı.",
-  "promptForOtherRole": "Bu istem başka bir rol için yazılmış.",
-  "skillNotFound": "Beceri bulunamadı.",
-  "skillReferenceInvalid": "owner/repo/skill biçimini ya da beceriye giden bir skills.sh veya GitHub bağlantısını kullanın.",
-  "skillFileEmpty": "Bu becerinin SKILL.md dosyası boş.",
-  "skillMissing": "{repository} içinde {path} bulunamadı.",
-  "repositoryInvalid": "owner/repo biçimini veya bir GitHub bağlantısını kullanın.",
-  "repositoryUnreadable": "{repository} okunamadı. Depo herkese açık mı?",
-  "repositoryNoSkills": "{repository} içinde SKILL.md dosyası yok.",
-  "directoryUnavailable": "skills.sh kataloğu şu anda yanıt vermiyor. Birazdan tekrar deneyin."
+  "promptForOtherRole": "Bu istem başka bir rol için yazılmış."
 }

@@ -10,13 +10,5 @@
   "promptTooLong": "As instruções são longas demais. Use no máximo {max, plural, one {# caractere} many {# de caracteres} other {# caracteres}}.",
   "tooManySkills": "Um prompt pode usar no máximo {max, plural, one {# habilidade} many {# de habilidades} other {# habilidades}}.",
   "promptNotFound": "Prompt não encontrado.",
-  "promptForOtherRole": "Esse prompt foi escrito para outra função.",
-  "skillNotFound": "Habilidade não encontrada.",
-  "skillReferenceInvalid": "Use proprietário/repositório/habilidade ou um link do skills.sh ou do GitHub para a habilidade.",
-  "skillFileEmpty": "O SKILL.md dessa habilidade está vazio.",
-  "skillMissing": "Não foi possível encontrar {path} em {repository}.",
-  "repositoryInvalid": "Use proprietário/repositório ou um link do GitHub.",
-  "repositoryUnreadable": "Não foi possível ler {repository}. Ele é público?",
-  "repositoryNoSkills": "Nenhum arquivo SKILL.md em {repository}.",
-  "directoryUnavailable": "O catálogo skills.sh não está respondendo agora. Tente novamente daqui a pouco."
+  "promptForOtherRole": "Esse prompt foi escrito para outra função."
 }

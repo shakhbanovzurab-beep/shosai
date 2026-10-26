@@ -10,13 +10,5 @@
   "promptTooLong": "Инструкции слишком длинные. Используйте не больше {max, plural, one {# символа} few {# символов} many {# символов} other {# символа}}.",
   "tooManySkills": "В одном промте можно использовать не больше {max, plural, one {# навыка} few {# навыков} many {# навыков} other {# навыка}}.",
   "promptNotFound": "Промт не найден.",
-  "promptForOtherRole": "Этот промт написан для другой роли.",
-  "skillNotFound": "Навык не найден.",
-  "skillReferenceInvalid": "Укажите owner/repo/skill или ссылку на навык в skills.sh или GitHub.",
-  "skillFileEmpty": "Файл SKILL.md этого навыка пуст.",
-  "skillMissing": "Не удалось найти {path} в {repository}.",
-  "repositoryInvalid": "Укажите owner/repo или ссылку на GitHub.",
-  "repositoryUnreadable": "Не удалось прочитать {repository}. Репозиторий публичный?",
-  "repositoryNoSkills": "В {repository} нет файлов SKILL.md.",
-  "directoryUnavailable": "Каталог skills.sh сейчас не отвечает. Попробуйте ещё раз чуть позже."
+  "promptForOtherRole": "Этот промт написан для другой роли."
 }

@@ -21,7 +21,8 @@
     "help": "SKILL.md ファイルを含む公開リポジトリ",
     "emptyTitle": "GitHub から自作のスキルを追加",
     "emptyDescription": "公開リポジトリを入力すると、その中の SKILL.md ファイルを検索します。",
-    "scanFailed": "リポジトリを読み込めませんでした。"
+    "scanFailed": "リポジトリを読み込めませんでした。",
+    "noSkills": "このリポジトリにスキルは見つかりませんでした。"
   },
   "candidate": {
     "installs": "{count, plural, other {# 回インストール}}",
@@ -49,5 +50,21 @@
     "updateFailed": "スキルを更新できませんでした",
     "removed": "{name} を削除しました",
     "removeFailed": "スキルを削除できませんでした"
+  },
+  "problems": {
+    "skill_already_installed": "このスキルはすでにインストールされています。",
+    "skill_limit_reached": "インストールできるスキルは 20 個までです。追加するには 1 つ削除してください。",
+    "skill_not_found": "リポジトリにこのスキルが見つかりませんでした。",
+    "repo_not_found": "リポジトリが見つかりませんでした。公開されていますか？",
+    "skill_reference_invalid": "owner/repo/skill、またはスキルの skills.sh か GitHub のリンクを入力してください。",
+    "repository_invalid": "owner/repo または GitHub のリンクを入力してください。",
+    "repo_too_large": "リポジトリが大きすぎて読み込めません。",
+    "skill_too_large": "このスキルの SKILL.md が大きすぎます。",
+    "no_frontmatter": "この SKILL.md の先頭に名前と説明がありません。",
+    "skill_file_empty": "このスキルの SKILL.md に指示がありません。",
+    "ambiguous_skill": "リポジトリに同じ名前のスキルが複数あります。スキルのフォルダのフルパスを入力してください。",
+    "rate_limited": "GitHub が現在リクエストを制限しています。数分後にもう一度お試しください。",
+    "github_unavailable": "GitHub が現在応答していません。しばらくしてからもう一度お試しください。",
+    "skills_unavailable": "スキルは現在利用できません。しばらくしてからもう一度お試しください。"
   }
 }

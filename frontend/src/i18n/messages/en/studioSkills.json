@@ -21,7 +21,8 @@
     "help": "A public repository containing a SKILL.md file",
     "emptyTitle": "Your own skill from GitHub",
     "emptyDescription": "Enter a public repository to find the SKILL.md files in it.",
-    "scanFailed": "Couldn’t read the repository."
+    "scanFailed": "Couldn’t read the repository.",
+    "noSkills": "No skills found in this repository."
   },
   "candidate": {
     "installs": "{count, plural, one {# install} other {# installs}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Couldn’t update the skill",
     "removed": "Removed {name}",
     "removeFailed": "Couldn’t remove the skill"
+  },
+  "problems": {
+    "skill_already_installed": "This skill is already installed.",
+    "skill_limit_reached": "You can install up to 20 skills. Remove one to add another.",
+    "skill_not_found": "Couldn’t find that skill in the repository.",
+    "repo_not_found": "Couldn’t find that repository. Is it public?",
+    "skill_reference_invalid": "Use owner/repo/skill, or a skills.sh or GitHub link to the skill.",
+    "repository_invalid": "Use owner/repo or a GitHub link.",
+    "repo_too_large": "The repository is too large to read.",
+    "skill_too_large": "That skill’s SKILL.md is too large.",
+    "no_frontmatter": "That SKILL.md has no name and description at the top.",
+    "skill_file_empty": "That skill’s SKILL.md has no instructions.",
+    "ambiguous_skill": "Several skills in the repository have that name. Use the full path to the skill’s folder.",
+    "rate_limited": "GitHub is limiting requests right now. Try again in a few minutes.",
+    "github_unavailable": "GitHub isn’t answering right now. Try again in a moment.",
+    "skills_unavailable": "Skills aren’t available right now. Try again in a moment."
   }
 }

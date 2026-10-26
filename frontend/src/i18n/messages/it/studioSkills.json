@@ -21,7 +21,8 @@
     "help": "Un repository pubblico che contiene un file SKILL.md",
     "emptyTitle": "La tua skill da GitHub",
     "emptyDescription": "Inserisci un repository pubblico per trovare i file SKILL.md che contiene.",
-    "scanFailed": "Impossibile leggere il repository."
+    "scanFailed": "Impossibile leggere il repository.",
+    "noSkills": "Nessuna skill trovata in questo repository."
   },
   "candidate": {
     "installs": "{count, plural, one {# installazione} many {# di installazioni} other {# installazioni}}",
@@ -49,5 +50,21 @@
     "updateFailed": "Impossibile aggiornare la skill",
     "removed": "{name} rimossa",
     "removeFailed": "Impossibile rimuovere la skill"
+  },
+  "problems": {
+    "skill_already_installed": "Questa skill è già installata.",
+    "skill_limit_reached": "Puoi installare fino a 20 skill. Rimuovine una per aggiungerne un’altra.",
+    "skill_not_found": "Impossibile trovare questa skill nel repository.",
+    "repo_not_found": "Impossibile trovare questo repository. È pubblico?",
+    "skill_reference_invalid": "Usa owner/repo/skill, oppure un link a skills.sh o GitHub verso la skill.",
+    "repository_invalid": "Usa owner/repo o un link a GitHub.",
+    "repo_too_large": "Il repository è troppo grande per essere letto.",
+    "skill_too_large": "Il file SKILL.md di questa skill è troppo grande.",
+    "no_frontmatter": "Questo SKILL.md non inizia con un nome e una descrizione.",
+    "skill_file_empty": "Il file SKILL.md di questa skill non contiene istruzioni.",
+    "ambiguous_skill": "Nel repository ci sono più skill con questo nome. Usa il percorso completo della cartella della skill.",
+    "rate_limited": "GitHub sta limitando le richieste in questo momento. Riprova tra qualche minuto.",
+    "github_unavailable": "GitHub non risponde in questo momento. Riprova tra poco.",
+    "skills_unavailable": "Le skill non sono disponibili in questo momento. Riprova tra poco."
   }
 }

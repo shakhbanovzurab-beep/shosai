@@ -5,18 +5,12 @@ import { type MockRoute, mockRoute } from "@/mocks/routing";
 import { contextRoute } from "./context-route";
 import { modelsRoute, roleModelRoute } from "./models-route";
 import { activePromptRoute, promptRoute, promptsRoute } from "./prompts-route";
-import { skillRoute, skillScanRoute, skillSearchRoute, skillsRoute, skillUpdateRoute } from "./skills-route";
 
 export const handlers: MockRoute[] = [
   mockRoute("/api/studio/context", contextRoute, ["GET", "PUT"]),
   mockRoute("/api/studio/models", modelsRoute, ["GET"]),
   mockRoute("/api/studio/prompts", promptsRoute, ["GET", "POST"]),
   mockRoute("/api/studio/prompts/active", activePromptRoute, ["PUT"]),
-  mockRoute("/api/studio/skills", skillsRoute, ["GET", "POST"]),
-  mockRoute("/api/studio/skills/scan", skillScanRoute, ["POST"]),
-  mockRoute("/api/studio/skills/search", skillSearchRoute, ["GET"]),
   mockRoute("/api/studio/models/roles/:role", roleModelRoute, ["PUT"]),
   mockRoute("/api/studio/prompts/:id", promptRoute, ["PATCH", "DELETE"]),
-  mockRoute("/api/studio/skills/:id", skillRoute, ["DELETE"]),
-  mockRoute("/api/studio/skills/:id/update", skillUpdateRoute, ["POST"]),
 ];

@@ -1,3 +1,5 @@
+import type { components } from "@/lib/api/generated/schema";
+
 /**
  * Studio API contract, shared by the UI and the route handlers in `server/` (mounted under
  * `src/app/api/studio`). The handlers proxy to the FastAPI backend at `BACKEND_API_URL` (paths
@@ -45,41 +47,15 @@ export const PROMPT_SKILLS_MAX = 20;
 
 /*
  * ---------- Skills ----------
- * GET /skills, POST /skills (install), POST /skills/{id}/update, DELETE /skills/{id},
- * GET /skills/search?q= (skills.sh directory), POST /skills/scan (SKILL.md files in a GitHub repository)
+ * Leo's skills store, on the API since agent step 15: `/v1/agent/skills*` (see `api/skills-api.ts`).
  */
 
 /** A SKILL.md-based instruction installed from GitHub, pinned to the commit it was read at. */
-export type Skill = {
-  id: string;
-  name: string;
-  description: string;
-  /** "owner/repo/path/to/skill-folder" — the folder holding SKILL.md. */
-  reference: string;
-  /** Short SHA of the last commit that touched the skill folder when it was installed or updated. */
-  commit: string | null;
-  source_url: string;
-  content: string;
-  /** The folder also holds scripts or other files, which the assistant won't run. */
-  has_extra_files: boolean;
-  updated_at: string;
-};
-
-export type SkillsResponse = { skills: Skill[] };
-
+export type Skill = components["schemas"]["SkillOut"];
+export type SkillsResponse = components["schemas"]["SkillsOut"];
 /** A skill found in the skills.sh directory or in a repository, not yet installed. */
-export type SkillCandidate = {
-  /** Pass to POST /skills to install. skills.sh results may use "owner/repo/skill-id"; the backend resolves the folder. */
-  reference: string;
-  name: string;
-  description: string | null;
-  installs: number | null;
-  source_url: string;
-};
-
-export type SkillSearchResponse = { results: SkillCandidate[] };
-export type ScanRepositoryRequest = { repository: string };
-export type InstallSkillRequest = { reference: string };
+export type SkillCandidate = components["schemas"]["SkillCandidateOut"];
+export type SkillSearchResponse = components["schemas"]["SkillSearchOut"];
 
 /* ---------- Models: GET /models, PUT /models/roles/{role} ---------- */
 

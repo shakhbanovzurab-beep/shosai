@@ -10,13 +10,5 @@
   "promptTooLong": "De instructies zijn te lang. Gebruik maximaal {max, plural, one {# teken} other {# tekens}}.",
   "tooManySkills": "Een prompt kan maximaal {max, plural, one {# vaardigheid} other {# vaardigheden}} gebruiken.",
   "promptNotFound": "Prompt niet gevonden.",
-  "promptForOtherRole": "Die prompt is voor een andere rol geschreven.",
-  "skillNotFound": "Vaardigheid niet gevonden.",
-  "skillReferenceInvalid": "Gebruik owner/repo/skill, of een skills.sh- of GitHub-link naar de vaardigheid.",
-  "skillFileEmpty": "De SKILL.md van die vaardigheid is leeg.",
-  "skillMissing": "Kan {path} niet vinden in {repository}.",
-  "repositoryInvalid": "Gebruik owner/repo of een GitHub-link.",
-  "repositoryUnreadable": "Kan {repository} niet lezen. Is de repository openbaar?",
-  "repositoryNoSkills": "Geen SKILL.md-bestanden in {repository}.",
-  "directoryUnavailable": "De skills.sh-catalogus reageert nu niet. Probeer het zo opnieuw."
+  "promptForOtherRole": "Die prompt is voor een andere rol geschreven."
 }

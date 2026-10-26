@@ -10,13 +10,5 @@
   "promptTooLong": "Instruksinya terlalu panjang. Gunakan paling banyak {max, plural, other {# karakter}}.",
   "tooManySkills": "Satu prompt dapat memakai paling banyak {max, plural, other {# skill}}.",
   "promptNotFound": "Prompt tidak ditemukan.",
-  "promptForOtherRole": "Prompt tersebut ditulis untuk peran lain.",
-  "skillNotFound": "Skill tidak ditemukan.",
-  "skillReferenceInvalid": "Gunakan owner/repo/skill, atau tautan skills.sh atau GitHub ke skill tersebut.",
-  "skillFileEmpty": "SKILL.md milik skill tersebut kosong.",
-  "skillMissing": "Tidak dapat menemukan {path} di {repository}.",
-  "repositoryInvalid": "Gunakan owner/repo atau tautan GitHub.",
-  "repositoryUnreadable": "Tidak dapat membaca {repository}. Apakah repositori ini publik?",
-  "repositoryNoSkills": "Tidak ada file SKILL.md di {repository}.",
-  "directoryUnavailable": "Katalog skills.sh sedang tidak merespons. Coba lagi sebentar lagi."
+  "promptForOtherRole": "Prompt tersebut ditulis untuk peran lain."
 }
