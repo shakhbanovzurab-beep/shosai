@@ -184,6 +184,7 @@ restore() {
 }
 
 # Оставляет образы GHCR текущей и прежней выкатки; остальные удаляет, чтобы диск не заполнялся.
+# Без --digests Docker 29 отдаёт пустое поле .Digest, и ни один образ не попадает под удаление.
 prune_images() {
   local name reference
   local keep=" ${backend#*@} ${edge#*@} ${previous_backend#*@} ${previous_edge#*@} "
@@ -192,7 +193,7 @@ prune_images() {
     while read -r reference; do
       [[ $keep == *" ${reference#*@} "* ]] && continue
       docker image rm "$reference" >/dev/null || log "не удалось удалить $reference"
-    done < <(docker image ls --no-trunc --format '{{.Repository}}@{{.Digest}}' "$REGISTRY/$name" | grep '@sha256:')
+    done < <(docker image ls --digests --no-trunc --format '{{.Repository}}@{{.Digest}}' "$REGISTRY/$name" | grep '@sha256:')
   done
 }
 
