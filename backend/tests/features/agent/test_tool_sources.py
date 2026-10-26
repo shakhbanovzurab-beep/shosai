@@ -91,7 +91,10 @@ async def test_an_answer_cites_the_sources_its_tools_named_in_their_spaces(
     assert [source["org_id"] for source in kept] == [None, str(org)]
     assert [listed(source) for source in kept] == [listed(source) for source in expected]
     assert history.json()["items"][0]["sources"] == expected
-    assert replayed.endswith("Sources of this answer, by number: [1] meeting m1; [2] task t1.")
+    assert replayed.endswith(
+        "<<Shosai's note, not part of the answer above: its numbers stood for "
+        "[1] meeting m1; [2] task t1.>>"
+    )
     assert "Someone else" not in json.dumps(read)
 
 
