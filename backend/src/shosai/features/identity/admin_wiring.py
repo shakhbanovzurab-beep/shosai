@@ -1,6 +1,7 @@
 """Building the admin panel's backend for the process: the session, the gate, the routes."""
 
 from shosai.core.features import CoreServices, FeatureParts
+from shosai.features.identity.application.account_counts import AccountCountsReader
 from shosai.features.identity.application.account_states import AccountStates
 from shosai.features.identity.application.admin_access import AdminAccess, AdminCredentials
 from shosai.features.identity.application.admin_users import AdminUsers
@@ -9,6 +10,7 @@ from shosai.features.identity.channels.http.admin_session import build_admin_ses
 from shosai.features.identity.channels.http.admin_users import build_admin_users_router
 from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.contracts import ADMIN_GATE, OPERATOR_AUDIT
+from shosai.features.identity.contracts.accounts import ACCOUNT_COUNTS
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.admin_sessions import AdminSessions
 from shosai.features.identity.infrastructure.directory import Directory
@@ -54,5 +56,6 @@ def admin_parts(
         provides=(
             ADMIN_GATE.bind(admin),
             OPERATOR_AUDIT.bind(OperatorJournal(services.outbox)),
+            ACCOUNT_COUNTS.bind(AccountCountsReader(services.transactions)),
         ),
     )

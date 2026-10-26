@@ -14,7 +14,7 @@ from typing import Annotated, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, Response
-from pydantic import Field
+from pydantic import Field, TypeAdapter
 
 from shosai.core.agent_tools.sources import SourceKind
 from shosai.core.idempotency.http import IdempotencyKeyHeader
@@ -110,6 +110,38 @@ class ArtifactOut(Out):
     chat_id: UUID
 
 
+class ChartSeriesOut(Out):
+    """One series of a chart: the rows' column it reads, and its label."""
+
+    key: str
+    label: str
+
+
+class ChartSpecOut(Out):
+    """How to draw a chart: bars or a line, the x axis's column, the series and the rows."""
+
+    shape: Literal["bar", "line"]
+    x: str
+    stacked: bool
+    series: list[ChartSeriesOut]
+    rows: list[dict[str, str | int | float | None]] = Field(
+        description="At most 100 rows of numbers, computed by the tool, never by the model."
+    )
+
+
+class ChartArtifactOut(Out):
+    """A chart of the platform's numbers for the operator (AG-D10)."""
+
+    kind: Literal["chart"]
+    ref: str = Field(description="The chart's report, as `chart:<report id>`.")
+    alt: str = Field(description="The chart's title, for those who do not see it.")
+    spec: ChartSpecOut
+
+
+type AnyArtifactOut = Annotated[ArtifactOut | ChartArtifactOut, Field(discriminator="kind")]
+ARTIFACTS: TypeAdapter[AnyArtifactOut] = TypeAdapter(AnyArtifactOut)
+
+
 class QuestionAttachmentOut(Out):
     """A file attached to a question."""
 
@@ -132,7 +164,7 @@ class MessageOut(Out):
     steps: list[StepOut]
     sources: list[AnswerSourceOut]
     actions: list[ProposalOut] = Field(description="The cards the answer proposed, as they stand.")
-    artifacts: list[ArtifactOut] = Field(description="What the tools handed over, by reference.")
+    artifacts: list[AnyArtifactOut] = Field(description="What the tools handed over, by reference.")
     feedback: Rating | None = Field(description="The person's rating of the answer, if any.")
     attachments: list[QuestionAttachmentOut] = Field(
         description="The files attached to a question."
@@ -178,7 +210,7 @@ def message_out(view: MessageView) -> MessageOut:
             for source in view.sources
         ],
         actions=[ProposalOut.model_validate(card) for card in view.actions],
-        artifacts=[ArtifactOut.model_validate(artifact) for artifact in view.artifacts],
+        artifacts=[ARTIFACTS.validate_python(artifact) for artifact in view.artifacts],
         feedback=view.feedback,
         attachments=[QuestionAttachmentOut.model_validate(item) for item in view.attachments],
     )  # fmt: skip

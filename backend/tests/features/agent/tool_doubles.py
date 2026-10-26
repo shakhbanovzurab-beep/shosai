@@ -208,7 +208,7 @@ class ProbeTools:
             ReadTool(NOTES_WAIT, self.wait),
             ReadTool(NOTES_FAIL, self.fail),
             WriteTool(TASKS_CREATE, plan, preview, execute),
-            ReadTool(PLATFORM_PROBE, self.archive),
+            ReadTool(PLATFORM_PROBE, self.search),
             *((ReadTool(WEB_LOOKUP, self.lookup),) if self.pages is not None else ()),
         )
 

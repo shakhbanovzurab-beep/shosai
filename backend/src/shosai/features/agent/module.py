@@ -72,11 +72,9 @@ from shosai.features.agent.channels.http.settings import build_settings_router
 from shosai.features.agent.channels.http.skills import build_skills_router
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
-from shosai.features.agent.channels.platform_tools import (
-    PLATFORM_TOOLS,
-    PlatformReads,
-    platform_tools,
-)
+from shosai.features.agent.channels.platform_reads import PlatformReads
+from shosai.features.agent.channels.platform_specs import PLATFORM_TOOLS
+from shosai.features.agent.channels.platform_tools import platform_tools
 from shosai.features.agent.channels.subscriptions import subscriptions
 from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_handlers
 from shosai.features.agent.channels.web_tools import WEB_TOOLS, web_tools
@@ -162,7 +160,8 @@ def own_tools(
     services: CoreServices, settings: AgentSettings, pages: ResultPages
 ) -> tuple[AgentTool, ...]:
     """Leo's own toolsets: core, web, and the operator's platform (AG-D5)."""
-    reads = PlatformReads(services.ai_spend, PlatformRatings(services.transactions))
+    ratings = PlatformRatings(services.transactions)
+    reads = PlatformReads((services.ai_spend, ratings, services.ports))
     return (
         *core_tools(pages),
         *web_tools(services.ai, settings.standard_route),

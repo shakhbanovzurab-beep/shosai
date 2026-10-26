@@ -27,5 +27,5 @@ def test_the_ports_are_named_for_the_slice() -> None:
 
     assert keys == {
         "billing.entitlements", "billing.minutes_allowance", "billing.usage_tombstones",
-        "billing.meeting_minutes", "billing.token_allowance",
+        "billing.meeting_minutes", "billing.token_allowance", "billing.commerce_facts",
     }  # fmt: skip

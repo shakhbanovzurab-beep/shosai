@@ -7,9 +7,11 @@ import uuid
 from typing import Final
 
 import httpx
+from pydantic import JsonValue
 
 from shosai.core.ai.calls import PlatformAccount
 from shosai.core.ai.requests import ChatRequest
+from shosai.features.agent.domain.charts import Series, chart
 from shosai.features.agent.domain.operator import OPERATOR_ID
 from shosai.features.agent.infrastructure.prompts import OPERATOR_POLICY
 from tests.features.agent.tool_doubles import calling, saying
@@ -84,7 +86,7 @@ async def test_the_operator_s_turn_is_the_platform_s_in_russian_with_platform_to
     assert {(c.scope, c.platform_account) for c in contexts} == {
         (None, PlatformAccount.ADMIN_ASSISTANT)
     }
-    assert turn_bench.tools.ran == ["archive"]
+    assert turn_bench.tools.ran == ["spend"]
     assert events[-1][0] == "run.completed"
     rows = await turn_bench.http.get(
         f"{ADMIN}/threads", params={"scope": "personal"}, headers=COOKIE
@@ -118,3 +120,31 @@ async def test_the_operator_s_turn_takes_no_attachments(turn_bench: TurnBench) -
 
     assert (refused.status_code, refused.json()["detail"]) == (422, "attachments_not_allowed")
     assert OPERATOR_ID not in {c.scope.user_id for c in turn_bench.model.contexts if c.scope}
+
+
+async def test_a_chart_reaches_the_stream_and_the_history_as_its_spec(
+    turn_bench: TurnBench,
+) -> None:
+    thread = await operator_thread(turn_bench.http)
+    rows: list[dict[str, JsonValue]] = [
+        {"day": "2026-10-25", "cost_usd": 0.5},
+        {"day": "2026-10-26", "cost_usd": 0.4},
+    ]
+    drawn = chart(
+        "spend.daily:2", "Расходы по дням", ("line", "day", (Series("cost_usd", "USD"),)), rows
+    )
+    turn_bench.tools.artifacts = [drawn]
+    turn_bench.model.scripts = [calling(("platform__probe", '{"query": "spend"}')), saying("Вот.")]
+
+    events = stream_of(await operator_asks(turn_bench.http, thread, "Расходы по дням?"))
+    history = await turn_bench.http.get(f"{ADMIN}/threads/{thread}/messages", headers=COOKIE)
+
+    [shown] = [data for kind, _, data in events if kind == "artifact"]
+    expected = {
+        "kind": "chart", "ref": "chart:spend.daily:2", "alt": "Расходы по дням",
+        "spec": {"shape": "line", "x": "day", "stacked": False,
+                 "series": [{"key": "cost_usd", "label": "USD"}], "rows": rows},
+    }  # fmt: skip
+    assert shown == expected
+    [answer] = [m for m in history.json()["items"] if m["role"] == "assistant"]
+    assert answer["artifacts"] == [expected]

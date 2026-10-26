@@ -15,6 +15,7 @@ from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.billing.application.account_data import ACCOUNT_DATA, BillingAccountData
 from shosai.features.billing.application.catalogue import Catalogue
+from shosai.features.billing.application.commerce_facts import CommerceFactsReader
 from shosai.features.billing.application.entitlement_snapshots import EntitlementSnapshots
 from shosai.features.billing.application.minutes import MinutesMeter
 from shosai.features.billing.application.native_me import BillingMe
@@ -30,6 +31,7 @@ from shosai.features.billing.channels.http.admin_promo_codes import (
 from shosai.features.billing.channels.http.plans import build_plans_router
 from shosai.features.billing.channels.http.usage import build_usage_router
 from shosai.features.billing.contracts import (
+    COMMERCE_FACTS,
     ENTITLEMENTS,
     MINUTES_ALLOWANCE,
     TOKEN_ALLOWANCE,
@@ -85,12 +87,11 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     catalogue = Catalogue(
         services.transactions, (SubscriptionHolders(services.transactions), cache)
     )
+    codes = PromoCodes(services.transactions, business=business)
     yield FeatureParts(
         http_routers=(
             build_admin_plans_router(catalogue, services.ports),
-            build_admin_promo_codes_router(
-                PromoCodes(services.transactions, business=business), services.ports
-            ),
+            build_admin_promo_codes_router(codes, services.ports),
             build_plans_router(views, inquiries, services.ports, services.rate_limiter),
             build_usage_router(views, services.ports),
         ),
@@ -100,6 +101,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             MINUTES_ALLOWANCE.bind(meter),
             USAGE_TOMBSTONES.bind(meter),
             TOKEN_ALLOWANCE.bind(standing),
+            COMMERCE_FACTS.bind(CommerceFactsReader(catalogue, codes)),
             ACCOUNT_DATA_HANDLERS.bind(BillingAccountData(services.transactions)),
         ),
         cost_settlements=(TokenSettlement(snapshots, business),),

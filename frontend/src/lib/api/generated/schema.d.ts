@@ -3565,14 +3565,15 @@ export interface components {
          * @enum {string}
          */
         AnswerStatus: "done" | "stopped" | "failed";
+        AnyArtifactOut: components["schemas"]["ArtifactOut"] | components["schemas"]["ChartArtifactOut"];
         /**
          * ArtifactOut
          * @description A result read apart from the answer: a team chat's digest, by its reference (AG-R1).
          */
         ArtifactOut: {
             /**
-             * Kind
-             * @constant
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
              */
             kind: "chat_digest";
             /**
@@ -3897,6 +3898,62 @@ export interface components {
             current_password?: string | null;
             /** New Password */
             new_password: string;
+        };
+        /**
+         * ChartArtifactOut
+         * @description A chart of the platform's numbers for the operator (AG-D10).
+         */
+        ChartArtifactOut: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "chart";
+            /**
+             * Ref
+             * @description The chart's report, as `chart:<report id>`.
+             */
+            ref: string;
+            /**
+             * Alt
+             * @description The chart's title, for those who do not see it.
+             */
+            alt: string;
+            spec: components["schemas"]["ChartSpecOut"];
+        };
+        /**
+         * ChartSeriesOut
+         * @description One series of a chart: the rows' column it reads, and its label.
+         */
+        ChartSeriesOut: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+        };
+        /**
+         * ChartSpecOut
+         * @description How to draw a chart: bars or a line, the x axis's column, the series and the rows.
+         */
+        ChartSpecOut: {
+            /**
+             * Shape
+             * @enum {string}
+             */
+            shape: "bar" | "line";
+            /** X */
+            x: string;
+            /** Stacked */
+            stacked: boolean;
+            /** Series */
+            series: components["schemas"]["ChartSeriesOut"][];
+            /**
+             * Rows
+             * @description At most 100 rows of numbers, computed by the tool, never by the model.
+             */
+            rows: {
+                [key: string]: string | number | null;
+            }[];
         };
         /**
          * ChatLineOut
@@ -5523,7 +5580,7 @@ export interface components {
              * Artifacts
              * @description What the tools handed over, by reference.
              */
-            artifacts: components["schemas"]["ArtifactOut"][];
+            artifacts: components["schemas"]["AnyArtifactOut"][];
             /** @description The person's rating of the answer, if any. */
             feedback: components["schemas"]["Rating"] | null;
             /**

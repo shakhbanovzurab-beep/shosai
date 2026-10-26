@@ -75,11 +75,16 @@ class ArtifactKind(StrEnum):
 
     # Дайджест командного чата: хранит срез chats 30 дней (AG-R1).
     CHAT_DIGEST = "chat_digest"
+    # График оператору (AG-D10): спецификация и строки, посчитанные в коде, — JSON в `spec`.
+    CHART = "chart"
 
 
 ARTIFACT_FIELDS: Final[Mapping[ArtifactKind, frozenset[str]]] = {
     ArtifactKind.CHAT_DIGEST: frozenset({"workspace_id", "chat_id"}),
+    ArtifactKind.CHART: frozenset({"spec"}),
 }
+# Поле артефакта — ссылка или небольшая спецификация, не содержимое: графику хватает 16 000.
+FIELD_VALUE_MAX: Final = 16_000
 
 
 @dataclass(frozen=True, slots=True)
@@ -102,5 +107,7 @@ class ArtifactRef:
             problems.append(f"артефакт {self.kind}: поля {sorted(ARTIFACT_FIELDS[self.kind])}")
         if any(not FIELD_NAME.fullmatch(name) or not value for name, value in self.fields.items()):
             problems.append("поля артефакта — имена в snake_case с непустыми значениями")
+        if any(len(value) > FIELD_VALUE_MAX for value in self.fields.values()):
+            problems.append(f"значение поля артефакта — до {FIELD_VALUE_MAX} символов")
         if problems:
             raise ValueError("; ".join(problems))

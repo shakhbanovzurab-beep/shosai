@@ -7,12 +7,14 @@ Usage is never in the snapshot: `MinutesAllowance` counts the month's minutes li
 the live meetings meetings report (`MEETING_MINUTES`, bound by notes; none until then)
 and the tombstones of deleted ones (`UsageTombstones`). `TokenAllowanceReader` tells the
 agent, before a model request, where its tokens come from: the week's allowance, packs, a
-fall back to a standard model, or a stop with the limit that stopped it (BL-D4). The events
-billing publishes are in `contracts.events`.
+fall back to a standard model, or a stop with the limit that stopped it (BL-D4). `CommerceFacts`
+gives the platform operator's Leo the catalogue's plans and promo codes (agent AG-D5). The
+events billing publishes are in `contracts.events`.
 """
 
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 from enum import StrEnum
 from http import HTTPStatus
 from typing import Final, Protocol
@@ -33,6 +35,7 @@ from shosai.features.billing.domain.money import Currency
 from shosai.features.billing.domain.plans import Audience, Capability, ModelTier, PlanLimits
 
 __all__ = [
+    "COMMERCE_FACTS",
     "ENTITLEMENTS",
     "MEETING_MINUTES",
     "MINUTES_ALLOWANCE",
@@ -40,6 +43,7 @@ __all__ = [
     "USAGE_TOMBSTONES",
     "Audience",
     "Capability",
+    "CommerceFacts",
     "Currency",
     "EntitlementSnapshot",
     "EntitlementSource",
@@ -52,6 +56,8 @@ __all__ = [
     "MinutesLeft",
     "ModelTier",
     "PlanLimits",
+    "PlanSummary",
+    "PromoSummary",
     "TokenAllowanceReader",
     "TokenDecision",
     "TokenLimit",
@@ -181,6 +187,44 @@ class MeetingMinutes(Protocol):
         ...
 
 
+@dataclass(frozen=True, slots=True)
+class PlanSummary:
+    """A plan of the catalogue as the operator's Leo reads it: its prices in minor units."""
+
+    slug: str
+    name: str
+    audience: str
+    subscribers: int
+    on_sale: bool
+    archived: bool
+    month_prices: Mapping[str, int]
+    year_prices: Mapping[str, int]
+
+
+@dataclass(frozen=True, slots=True)
+class PromoSummary:
+    """A promo code as the operator's Leo reads it, with its status today."""
+
+    code: str
+    status: str
+    percent_off: int | None
+    redemptions: int
+    max_redemptions: int | None
+    valid_until: date | None
+
+
+class CommerceFacts(Protocol):
+    """The catalogue's plans and promo codes, for the platform operator (agent AG-D5)."""
+
+    async def plans(self) -> Sequence[PlanSummary]:
+        """Every plan, archived ones included, in the pricing page's order."""
+        ...
+
+    async def promo_codes(self) -> Sequence[PromoSummary]:
+        """Every promo code with its status today."""
+        ...
+
+
 class TokenAllowanceReader(Protocol):
     """The route of a person's next model request of a tier, read live (never cached)."""
 
@@ -193,6 +237,7 @@ class TokenAllowanceReader(Protocol):
 ENTITLEMENTS: Final = PortKey[Entitlements]("billing.entitlements")
 MINUTES_ALLOWANCE: Final = PortKey[MinutesAllowance]("billing.minutes_allowance")
 TOKEN_ALLOWANCE: Final = PortKey[TokenAllowanceReader]("billing.token_allowance")
+COMMERCE_FACTS: Final = PortKey[CommerceFacts]("billing.commerce_facts")
 USAGE_TOMBSTONES: Final = PortKey[UsageTombstones]("billing.usage_tombstones")
 # Привязывает meetings; пока его нет, порт пуст и живых минут ноль.
 MEETING_MINUTES: Final = PortKey[MeetingMinutes]("billing.meeting_minutes")

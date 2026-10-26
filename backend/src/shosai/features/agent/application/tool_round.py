@@ -16,6 +16,7 @@ over by its reference (`artifact`, AG-R1), which the answer keeps.
 """
 
 import asyncio
+import json
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -30,7 +31,7 @@ from shosai.core.agent_tools.arguments import parse_arguments
 from shosai.core.agent_tools.bindings import ReadTool
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolError, ToolErrorCode, ToolResult
-from shosai.core.agent_tools.sources import ArtifactRef
+from shosai.core.agent_tools.sources import ArtifactKind, ArtifactRef
 from shosai.core.ai.requests import ChatMessage, Role, TextPart, ToolCall
 from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.card_proposals import CardProposals
@@ -48,6 +49,7 @@ from shosai.features.agent.application.tool_read_back import ResultReader
 from shosai.features.agent.application.tool_registry import OfferedTool, waits_for_card
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.budgets import CALLS_PER_ROUND, estimate_tokens
+from shosai.features.agent.domain.charts import SPEC_FIELD
 from shosai.features.agent.domain.core_tools import LOAD_TOOLSET, NAVIGATE
 from shosai.features.agent.domain.runs import TURN_DEADLINE
 from shosai.features.agent.domain.stream import EventKind
@@ -79,13 +81,12 @@ class ToolParts:
 
 
 def artifact_of(artifact: ArtifactRef) -> dict[str, JsonValue]:
-    """An artifact as the stream and the answer carry it: its reference, never its content."""
-    return {
-        "kind": artifact.kind.value,
-        "ref": artifact.ref,
-        "alt": artifact.alt,
-        **artifact.fields,
-    }
+    """An artifact as the stream and the answer carry it: its reference, never its content —
+    a chart with its spec as an object, as the cabinet draws it."""
+    fields: dict[str, JsonValue] = dict(artifact.fields)
+    if artifact.kind is ArtifactKind.CHART:
+        fields[SPEC_FIELD] = json.loads(artifact.fields[SPEC_FIELD])
+    return {"kind": artifact.kind.value, "ref": artifact.ref, "alt": artifact.alt, **fields}
 
 
 class ToolRound:

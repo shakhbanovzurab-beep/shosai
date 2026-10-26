@@ -14091,6 +14091,23 @@
         "title": "AnswerStatus",
         "description": "How an answer ended; a failure is never written into the text."
       },
+      "AnyArtifactOut": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ArtifactOut"
+          },
+          {
+            "$ref": "#/components/schemas/ChartArtifactOut"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "chart": "#/components/schemas/ChartArtifactOut",
+            "chat_digest": "#/components/schemas/ArtifactOut"
+          }
+        }
+      },
       "ArtifactOut": {
         "properties": {
           "kind": {
@@ -14921,6 +14938,117 @@
         ],
         "title": "ChangeRequest",
         "description": "The current password (none for an account without one) and the new one."
+      },
+      "ChartArtifactOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "chart",
+            "title": "Kind"
+          },
+          "ref": {
+            "type": "string",
+            "title": "Ref",
+            "description": "The chart's report, as `chart:<report id>`."
+          },
+          "alt": {
+            "type": "string",
+            "title": "Alt",
+            "description": "The chart's title, for those who do not see it."
+          },
+          "spec": {
+            "$ref": "#/components/schemas/ChartSpecOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "ref",
+          "alt",
+          "spec"
+        ],
+        "title": "ChartArtifactOut",
+        "description": "A chart of the platform's numbers for the operator (AG-D10)."
+      },
+      "ChartSeriesOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label"
+        ],
+        "title": "ChartSeriesOut",
+        "description": "One series of a chart: the rows' column it reads, and its label."
+      },
+      "ChartSpecOut": {
+        "properties": {
+          "shape": {
+            "type": "string",
+            "enum": [
+              "bar",
+              "line"
+            ],
+            "title": "Shape"
+          },
+          "x": {
+            "type": "string",
+            "title": "X"
+          },
+          "stacked": {
+            "type": "boolean",
+            "title": "Stacked"
+          },
+          "series": {
+            "items": {
+              "$ref": "#/components/schemas/ChartSeriesOut"
+            },
+            "type": "array",
+            "title": "Series"
+          },
+          "rows": {
+            "items": {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Rows",
+            "description": "At most 100 rows of numbers, computed by the tool, never by the model."
+          }
+        },
+        "type": "object",
+        "required": [
+          "shape",
+          "x",
+          "stacked",
+          "series",
+          "rows"
+        ],
+        "title": "ChartSpecOut",
+        "description": "How to draw a chart: bars or a line, the x axis's column, the series and the rows."
       },
       "ChatLineOut": {
         "properties": {
@@ -18660,7 +18788,7 @@
           },
           "artifacts": {
             "items": {
-              "$ref": "#/components/schemas/ArtifactOut"
+              "$ref": "#/components/schemas/AnyArtifactOut"
             },
             "type": "array",
             "title": "Artifacts",
