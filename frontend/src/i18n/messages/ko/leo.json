@@ -165,6 +165,8 @@
     "model_unavailable": "AI 모델이 응답하지 않았습니다. 다시 시도하세요.",
     "turn_deadline": "Leo가 너무 오래 걸렸습니다. 다시 시도하거나 더 좁은 질문을 하세요.",
     "process_lost": "Leo가 중단되었습니다. 다시 시도하세요.",
+    "upload_failed": "파일을 업로드하지 못했어요. 연결을 확인하고 다시 시도해 보세요.",
+    "upload_not_claimable": "파일 하나를 더 이상 사용할 수 없어요. 다시 첨부해 주세요.",
     "stopFailed": "Leo를 멈추지 못했습니다. 다시 시도하세요."
   },
   "recent": {

@@ -165,6 +165,8 @@
     "model_unavailable": "AI 模型沒有回應。請再試一次。",
     "turn_deadline": "Leo 花了太久時間。請再試一次，或問得更具體一些。",
     "process_lost": "Leo 被中斷了。請再試一次。",
+    "upload_failed": "無法上傳你的檔案。請檢查連線後再試一次。",
+    "upload_not_claimable": "你的其中一個檔案已無法使用。請重新附加。",
     "stopFailed": "無法停止 Leo。請再試一次。"
   },
   "recent": {

@@ -165,6 +165,8 @@
     "model_unavailable": "Mô hình AI không phản hồi. Hãy thử lại.",
     "turn_deadline": "Leo mất quá nhiều thời gian. Hãy thử lại hoặc hỏi câu cụ thể hơn.",
     "process_lost": "Leo bị gián đoạn. Hãy thử lại.",
+    "upload_failed": "Không tải lên được tệp của bạn. Hãy kiểm tra kết nối và thử lại.",
+    "upload_not_claimable": "Một trong các tệp của bạn không còn dùng được. Hãy đính kèm lại.",
     "stopFailed": "Không dừng được Leo. Hãy thử lại."
   },
   "recent": {

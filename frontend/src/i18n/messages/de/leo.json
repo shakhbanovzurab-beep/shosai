@@ -165,6 +165,8 @@
     "model_unavailable": "Das KI-Modell hat nicht geantwortet. Versuche es erneut.",
     "turn_deadline": "Leo hat zu lange gebraucht. Versuche es erneut oder stelle eine engere Frage.",
     "process_lost": "Leo wurde unterbrochen. Versuche es erneut.",
+    "upload_failed": "Deine Dateien konnten nicht hochgeladen werden. Prüfe die Verbindung und versuche es erneut.",
+    "upload_not_claimable": "Eine deiner Dateien ist nicht mehr verfügbar. Hänge sie erneut an.",
     "stopFailed": "Leo konnte nicht gestoppt werden. Versuche es erneut."
   },
   "recent": {

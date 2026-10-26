@@ -20,7 +20,7 @@ export interface LeoChat {
   readonly reset: () => void;
   /** Более ранние сообщения треда, если они есть на сервере. */
   readonly earlier?: { readonly available: boolean; readonly loading: boolean; readonly load: () => void };
-  /** Можно ли приложить файлы к вопросу: к Leo на API — с загрузками для Leo (шаг 12). */
+  /** Можно ли приложить файлы к вопросу: к Leo на API — загрузками `leo_attachment` (шаг 12 агента). */
   readonly attachments: boolean;
   /** «Недавние чаты» пространства; у примерного чата их нет. */
   readonly threads?: LeoThreads;

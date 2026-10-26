@@ -165,6 +165,8 @@
     "model_unavailable": "El modelo de IA no respondió. Inténtalo de nuevo.",
     "turn_deadline": "Leo tardó demasiado. Inténtalo de nuevo o haz una pregunta más concreta.",
     "process_lost": "Leo se interrumpió. Inténtalo de nuevo.",
+    "upload_failed": "No se pudieron subir tus archivos. Revisa la conexión e inténtalo de nuevo.",
+    "upload_not_claimable": "Uno de tus archivos ya no está disponible. Adjúntalo de nuevo.",
     "stopFailed": "No se pudo detener a Leo. Inténtalo de nuevo."
   },
   "recent": {

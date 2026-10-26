@@ -16,6 +16,8 @@ const WORDED = new Set([
   "model_unavailable",
   "turn_deadline",
   "process_lost",
+  "upload_failed",
+  "upload_not_claimable",
 ]);
 const UNAVAILABLE = new Set(["agent_unavailable", "entitlements_unavailable"]);
 

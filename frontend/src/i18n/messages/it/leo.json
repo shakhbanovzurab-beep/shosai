@@ -165,6 +165,8 @@
     "model_unavailable": "Il modello di IA non ha risposto. Riprova.",
     "turn_deadline": "Leo ci ha messo troppo. Riprova o fai una domanda più mirata.",
     "process_lost": "Leo è stato interrotto. Riprova.",
+    "upload_failed": "Impossibile caricare i file. Controlla la connessione e riprova.",
+    "upload_not_claimable": "Uno dei file non è più disponibile. Allegalo di nuovo.",
     "stopFailed": "Impossibile fermare Leo. Riprova."
   },
   "recent": {

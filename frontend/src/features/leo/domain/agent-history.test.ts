@@ -85,4 +85,13 @@ describe("a thread's history", () => {
     expect(conversation[1].artifacts).toEqual([artifact]);
     expect([conversation[0].feedback, conversation[1].feedback]).toEqual([undefined, null]);
   });
+
+  it("shows a question's files and leaves a question without them bare", () => {
+    const file = { id: "u1", name: "plan.txt", size: 62, type: "text/plain" };
+    const pages = [{ items: [row("q2", "user"), { ...row("q1", "user"), attachments: [file] }], next_cursor: null }];
+
+    const [first, second] = conversationOf(pages);
+
+    expect([first.attachments, second.attachments]).toEqual([[file], undefined]);
+  });
 });

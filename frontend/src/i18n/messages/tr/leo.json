@@ -165,6 +165,8 @@
     "model_unavailable": "Yapay zekâ modeli yanıt vermedi. Tekrar deneyin.",
     "turn_deadline": "Leo çok uzun sürdü. Tekrar deneyin ya da daha dar bir soru sorun.",
     "process_lost": "Leo kesintiye uğradı. Tekrar deneyin.",
+    "upload_failed": "Dosyalarınız yüklenemedi. Bağlantınızı kontrol edip tekrar deneyin.",
+    "upload_not_claimable": "Dosyalarınızdan biri artık kullanılamıyor. Yeniden ekleyin.",
     "stopFailed": "Leo durdurulamadı. Tekrar deneyin."
   },
   "recent": {

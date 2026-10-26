@@ -165,6 +165,8 @@
     "model_unavailable": "Model AI tidak merespons. Coba lagi.",
     "turn_deadline": "Leo terlalu lama. Coba lagi atau ajukan pertanyaan yang lebih spesifik.",
     "process_lost": "Leo terhenti. Coba lagi.",
+    "upload_failed": "Tidak dapat mengunggah file Anda. Periksa koneksi dan coba lagi.",
+    "upload_not_claimable": "Salah satu file Anda sudah tidak tersedia. Lampirkan lagi.",
     "stopFailed": "Leo tidak dapat dihentikan. Coba lagi."
   },
   "recent": {

@@ -17,6 +17,7 @@ import type { LeoMessage } from "../domain/types";
 import { chooseThread, messagesKey, scopeOf, threadsKey, useAgentThread } from "./agent-thread";
 import { refusal, runTurn, stopTurn } from "./agent-turn-runner";
 import { addTurn, dropTurns, failedReply, liveTurns, subscribeTurns, updateTurn } from "./agent-turns";
+import { uploadedAttachments } from "./agent-uploads";
 import { liveEpilogues, subscribeEpilogues } from "./epilogues";
 import type { LeoChat } from "./leo-chat";
 import { useAgentThreads } from "./use-agent-threads";
@@ -52,7 +53,12 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     dropTurns(scopeKey, (turn) => isRecorded(turn, thread.conversation));
   }, [scopeKey, thread.conversation]);
 
-  const ask = async (kind: TurnKind, question: LeoMessage, body: TurnBody): Promise<LeoMessage | undefined> => {
+  const ask = async (
+    kind: TurnKind,
+    question: LeoMessage,
+    body: TurnBody,
+    files: readonly File[] = [],
+  ): Promise<LeoMessage | undefined> => {
     const key = crypto.randomUUID();
     const reply: LeoMessage = { id: `${key}:reply`, role: "assistant", content: "", status: "streaming", steps: [] };
     const turn: LiveTurn = {
@@ -78,6 +84,15 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
       updateTurn(scopeKey, key, (live) => ({ ...live, threadId: created }));
       chooseThread(scopeKey, created);
     }
+    if (files.length > 0) {
+      try {
+        body.upload_ids = await uploadedAttachments(files);
+      } catch (error) {
+        console.warn("Leo: файлы вопроса не загрузились", error);
+        updateTurn(scopeKey, key, (live) => ({ ...live, reply: failedReply(live.reply, "upload_failed") }));
+        return turnOfKey(key)?.reply;
+      }
+    }
     const settledThread = threadId;
     return runTurn({
       scope: scopeKey,
@@ -99,10 +114,22 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     return { locale, surface, supersede: false };
   };
 
-  const send = (content: string): Promise<LeoMessage | undefined> => {
+  const send = (content: string, files: File[] = []): Promise<LeoMessage | undefined> => {
     if (isBusy) return Promise.resolve(undefined);
-    const question: LeoMessage = { id: crypto.randomUUID(), role: "user", content, status: "done" };
-    return ask("new", question, { ...base(), text: content });
+    const attachments = files.map((file) => ({
+      id: crypto.randomUUID(),
+      name: file.name,
+      size: file.size,
+      type: file.type,
+    }));
+    const question: LeoMessage = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content,
+      status: "done",
+      attachments: attachments.length > 0 ? attachments : undefined,
+    };
+    return ask("new", question, { ...base(), text: content }, files);
   };
 
   const again = (kind: Exclude<TurnKind, "new">, content?: string) => {
@@ -141,7 +168,7 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     addProposal,
     reset,
     earlier: thread.earlier,
-    attachments: false,
+    attachments: true,
     threads,
   };
 }

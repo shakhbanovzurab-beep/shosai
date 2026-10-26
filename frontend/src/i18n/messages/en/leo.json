@@ -165,6 +165,8 @@
     "model_unavailable": "The AI model didn’t respond. Try again.",
     "turn_deadline": "Leo took too long. Try again or ask something narrower.",
     "process_lost": "Leo was interrupted. Try again.",
+    "upload_failed": "Couldn’t upload your files. Check your connection and try again.",
+    "upload_not_claimable": "One of your files isn’t ready anymore. Attach it again.",
     "stopFailed": "Couldn’t stop Leo. Try again."
   },
   "recent": {
