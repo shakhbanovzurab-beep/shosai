@@ -24,6 +24,7 @@ dependencies = [
     "httpx>=0.28.1",
     "jinja2>=3.1.6",
     "langgraph==1.2.16",
+    "openpyxl>=3.1.5",
     "opentelemetry-api>=1.45.0",
     "opentelemetry-exporter-otlp-proto-http>=1.45.0",
     "opentelemetry-instrumentation-redis>=0.66b0",
@@ -37,9 +38,13 @@ dependencies = [
     # Токены доступа и обновления, совместимые с черновиком: HS256 (§18.2, ADR 0045).
     "pyjwt>=2.15.1",
     # Нативный импорт записи (notes шаг 9b): тело multipart разбирается потоком, без диска.
+    "pypdf>=6.21.1",
+    "python-docx>=1.2.0",
     "python-multipart>=0.0.32",
+    "python-pptx>=1.0.2",
     "redis>=8.1.0",
     "sqlalchemy[asyncio]>=2.1.2",
+    "striprtf>=0.0.33",
     "structlog>=26.1.0",
     "taskiq>=0.13.0",
     "uvicorn>=0.54.0",
@@ -67,6 +72,7 @@ dev = [
     "types-aiobotocore[s3]>=3.9.2",
     "shosai-contracts",
     "aiosmtpd>=1.4.6",
+    "types-openpyxl>=3.1.5.20261017",
 ]
 
 [build-system]
@@ -108,7 +114,8 @@ plugins = ["pydantic.mypy"]
 warn_unreachable = true
 # SQLAlchemy 2.1 не аннотирует конструктор DDL (строка и словарь подстановок);
 # остальные вызовы SQLAlchemy проверяются строго.
-untyped_calls_exclude = ["sqlalchemy.sql.ddl.DDL"]
+# striprtf не аннотирован: функция берёт строку RTF и возвращает текст.
+untyped_calls_exclude = ["sqlalchemy.sql.ddl.DDL", "striprtf.striprtf.rtf_to_text"]
 enable_error_code = [
     "ignore-without-code",
     "redundant-expr",
