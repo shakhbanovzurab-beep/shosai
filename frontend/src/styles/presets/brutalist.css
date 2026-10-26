@@ -22,9 +22,9 @@ value: brutalist
   --input: oklch(0 0 0);
   --ring: oklch(0.6489 0.237 26.9728);
   --chart-1: oklch(0.6489 0.237 26.9728);
-  --chart-2: oklch(0.968 0.211 109.7692);
+  --chart-2: oklch(0.44 0.095 109.7692);
   --chart-3: oklch(0.5635 0.2408 260.8178);
-  --chart-4: oklch(0.7323 0.2492 142.4953);
+  --chart-4: oklch(0.644 0.2192 142.4953);
   --chart-5: oklch(0.5931 0.2726 328.3634);
   --sidebar: oklch(0.9551 0 0);
   --sidebar-foreground: oklch(0 0 0);
@@ -69,7 +69,7 @@ value: brutalist
   --chart-2: oklch(0.9691 0.2005 109.6228);
   --chart-3: oklch(0.6755 0.1765 252.2592);
   --chart-4: oklch(0.7395 0.2268 142.8504);
-  --chart-5: oklch(0.6131 0.2458 328.0714);
+  --chart-5: oklch(0.621 0.2458 328.0714);
   --sidebar: oklch(0 0 0);
   --sidebar-foreground: oklch(1 0 0);
   --sidebar-primary: oklch(0.7044 0.1872 23.1858);

@@ -22,10 +22,10 @@ value: soft-pop
   --input: oklch(0.5555 0 0);
   --ring: oklch(0.7853 0.1041 274.7134);
   --chart-1: oklch(0.5106 0.2301 276.9656);
-  --chart-2: oklch(0.7038 0.123 182.5025);
-  --chart-3: oklch(0.7686 0.1647 70.0804);
+  --chart-2: oklch(0.635 0.113 182.5025);
+  --chart-3: oklch(0.657 0.1407 70.0804);
   --chart-4: oklch(0.6559 0.2118 354.3084);
-  --chart-5: oklch(0.7227 0.192 149.5793);
+  --chart-5: oklch(0.631 0.174 149.5793);
   --sidebar: oklch(0.9789 0.0082 121.6272);
   --sidebar-foreground: oklch(0 0 0);
   --sidebar-primary: oklch(0.5106 0.2301 276.9656);
