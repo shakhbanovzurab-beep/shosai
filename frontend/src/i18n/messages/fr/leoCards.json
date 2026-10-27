@@ -11,6 +11,7 @@
     },
     "irreversible": "Irréversible",
     "warning": "À vérifier avant d’approuver",
+    "suspicious": "Ce contenu semblait donner des instructions à Leo — vérifiez attentivement avant d’approuver",
     "failed": "Impossible d’envoyer votre réponse",
     "status": {
       "proposed": "Vous attend",

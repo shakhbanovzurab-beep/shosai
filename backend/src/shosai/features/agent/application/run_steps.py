@@ -39,7 +39,7 @@ from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.budgets import Segment, round_policy
 from shosai.features.agent.domain.operator import payer_of
 from shosai.features.agent.domain.runs import TURN_DEADLINE
-from shosai.features.agent.domain.wrapper import Label
+from shosai.features.agent.domain.wrapper import Label, unwrapped
 from shosai.features.agent.infrastructure.prompts import CONCLUDE, LAST_ROUND
 from shosai.features.agent.infrastructure.turn_graph import ModelAnswer
 
@@ -86,7 +86,7 @@ class RunSteps:
         context is read when the rule leaves one out."""
         payload, sizes, run = self._run.payload, self._run.times.sizes, self._run
         images = await self._parts.attachments.read(payload, run.work, run.emitter)
-        labels: list[Provenance] = []
+        labels: list[tuple[Provenance, str]] = []
         routing = self._parts.routing
         with self._parts.telemetry.context():
             async with self._parts.transactions.begin(payload.scope(), read_only=True) as session:
@@ -104,7 +104,7 @@ class RunSteps:
         """After the card's decision: the context again, the run's rounds before the card and
         the note on what became of the action, with the run's work as it was."""
         payload, sizes, work = self._run.payload, self._run.times.sizes, self._run.work
-        labels: list[Provenance] = []
+        labels: list[tuple[Provenance, str]] = []
         with self._parts.telemetry.context():
             async with self._parts.transactions.begin(payload.scope(), read_only=True) as session:
                 request = await self._parts.context.request(session, payload, sizes, labels)
@@ -132,13 +132,13 @@ class RunSteps:
         self,
         request: ChatRequest,
         offer: TurnOffer,
-        labels: list[Provenance],
+        labels: list[tuple[Provenance, str]],
         earlier: tuple[ChatMessage, ...] = (),
     ) -> None:
         work = self._run.work
         work.offer = offer
-        for provenance in labels:
-            work.read_wrapped(Label.of(provenance))
+        for provenance, text in labels:
+            work.read_wrapped(Label.of(provenance), unwrapped(text))
         self._run.times.sizes[Segment.TOOLS] = offer.tokens()
         self._request = replace(request, messages=(*request.messages, *earlier))
 

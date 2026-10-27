@@ -11,6 +11,7 @@
     },
     "irreversible": "되돌릴 수 없어요",
     "warning": "승인하기 전에 확인하세요",
+    "suspicious": "이 내용은 Leo에게 지시를 내리는 것처럼 보였어요. 승인하기 전에 꼼꼼히 확인하세요",
     "failed": "답변을 보내지 못했어요",
     "status": {
       "proposed": "확인 기다리는 중",

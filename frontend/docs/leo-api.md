@@ -18,7 +18,7 @@ sample `/api/leo` (NDJSON) until agent steps 20 and 16. Since step 12b a questio
 Since agent step 9a1 Leo proposes writes: a write call becomes a card (`action.proposed`) and the run pauses
 (`run.paused`); `approve` and `reject` are served, and the card's end follows as `action.updated` on the same run's
 stream. Since step 9b1 a card is the whole `LeoProposal` in the person's language (their profile's): `{id, tool,
-title, space, origin {kind, app}, reversibility, warning, taint, preview {kind: "fields", fields [{label, value}],
+title, space, origin {kind, app}, reversibility, warning, taint, suspicious, preview {kind: "fields", fields [{label, value}],
 body}, status, outcome, nonce, created_at, expires_at, resolved_at}` — the title and the fields are the slice's
 words, `space` is Personal or the workspace's name — the same in the stream, in the decision's answer (which adds
 `run_id`), in the inbox and in the history, where an answer and a server note carry their cards in `actions`.
@@ -149,7 +149,7 @@ The stream carries the reference only; the chats slice serves the digest (`GET /
 | `POST` | `/v1/agent/actions/{id}/reject` | `{nonce}` | `LeoProposal` |
 
 ```text
-LeoProposal = {id, tool, title, space, origin: {kind: thread | errand | mcp, app}, reversibility, warning, taint,
+LeoProposal = {id, tool, title, space, origin: {kind: thread | errand | mcp, app}, reversibility, warning, taint, suspicious,
                preview: {kind: "fields", fields: [{label, value}], body | null}, status, outcome, nonce,
                created_at, expires_at, resolved_at}
 status = proposed | executing | succeeded | partially_succeeded | failed | rejected | expired | outcome_unknown
@@ -159,7 +159,7 @@ status = proposed | executing | succeeded | partially_succeeded | failed | rejec
 - A decision on an action that no longer waits is `409 action_not_pending`; the card then shows its final state.
 - `approve` waits up to 20 s for the outcome; a slower one answers `executing` and `action.updated` follows on the run's
   stream. When `run_id` comes back, the cabinet follows that run's events for Leo's closing words.
-- `warning: true` asks for a careful decision on the screen; `taint` names what the action was prepared from.
+- `warning: true` asks for a careful decision on the screen; `taint` names what the action was prepared from. `suspicious: true` (additive, absent from older servers) says text the run read looked like it was giving Leo instructions (decisions' `content.injection`); the card states it in `leoCards.card.suspicious`.
 - `outcome_unknown` asks the person to check before retrying: the change may have happened.
 - Text-edit previews (`kind: "diff"` with `accepted_changes`) come with the first tool that edits text; until then
   `accepted_changes` is refused (`422`).

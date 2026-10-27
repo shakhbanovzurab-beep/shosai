@@ -62,6 +62,7 @@ describe("a thread's history", () => {
       reversibility: "reversible",
       warning: false,
       taint: null,
+      suspicious: false,
       preview: { kind: "fields", fields: [], body: null },
       status: "succeeded",
       outcome: null,

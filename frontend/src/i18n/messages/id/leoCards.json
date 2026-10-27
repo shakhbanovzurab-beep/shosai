@@ -11,6 +11,7 @@
     },
     "irreversible": "Tidak dapat diurungkan",
     "warning": "Periksa sebelum menyetujui",
+    "suspicious": "Konten ini tampak berisi instruksi untuk Leo — periksa dengan saksama sebelum menyetujui",
     "failed": "Tidak dapat mengirim jawaban Anda",
     "status": {
       "proposed": "Menunggu Anda",

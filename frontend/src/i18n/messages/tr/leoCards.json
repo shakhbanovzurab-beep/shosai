@@ -11,6 +11,7 @@
     },
     "irreversible": "Geri alınamaz",
     "warning": "Onaylamadan önce kontrol edin",
+    "suspicious": "Bu içerik Leo’ya talimat veriyor gibi görünüyordu; onaylamadan önce dikkatle kontrol edin",
     "failed": "Yanıtınız gönderilemedi",
     "status": {
       "proposed": "Sizi bekliyor",

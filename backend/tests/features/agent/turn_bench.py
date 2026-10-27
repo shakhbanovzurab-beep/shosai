@@ -60,7 +60,7 @@ from shosai.features.agent.channels.agent_tools import core_tools
 from shosai.features.agent.channels.http.callers import operator_mount, person_mount
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
-from shosai.features.agent.contracts import FRICTION_JUDGE, TURN_ROUTER
+from shosai.features.agent.contracts import FRICTION_JUDGE, INJECTION_JUDGE, TURN_ROUTER
 from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.run_log import RunLog
@@ -230,6 +230,7 @@ async def turn_bench(
             UPLOADS.bind(upload_bench.claims),
             *(FRICTION_JUDGE.bind(judge) for judge in bench_doubles.judges),
             *(TURN_ROUTER.bind(router) for router in bench_doubles.routers),
+            *(INJECTION_JUDGE.bind(judge) for judge in bench_doubles.injections),
         ]
     )
     registry = CollectorRegistry()
@@ -258,7 +259,7 @@ async def turn_bench(
         turn_graph(frames), frames, ContextBuilder(ports),
         TurnRouting(ToolRegistry(catalog), ports), tool_parts, telemetry,
         AttachmentReader(homes.transactions, (upload_bench.objects, DocumentReader(), pages)),
-        QUICK,
+        QUICK, ports,
     )  # fmt: skip
     queue.engine = RunEngine(parts)
     threads = Threads(homes.transactions, (ports, effects))

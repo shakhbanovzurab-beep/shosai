@@ -11,6 +11,7 @@
     },
     "irreversible": "Nicht rückgängig zu machen",
     "warning": "Vor dem Bestätigen prüfen",
+    "suspicious": "Dieser Inhalt wirkte wie Anweisungen an Leo – prüfe ihn sorgfältig vor dem Bestätigen",
     "failed": "Deine Antwort konnte nicht gesendet werden",
     "status": {
       "proposed": "Wartet auf dich",

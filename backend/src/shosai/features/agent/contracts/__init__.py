@@ -32,6 +32,7 @@ from shosai.features.agent.domain.friction import CardEnd, Friction
 __all__ = [
     "ACTION_PROPOSALS",
     "FRICTION_JUDGE",
+    "INJECTION_JUDGE",
     "MEMORY_RECALL",
     "PROFILE_FACTS",
     "SKILL_READER",
@@ -41,6 +42,8 @@ __all__ = [
     "Friction",
     "FrictionFacts",
     "FrictionJudge",
+    "InjectionJudge",
+    "InjectionPiece",
     "InstalledSkill",
     "MemoryRecall",
     "ProfileFacts",
@@ -104,6 +107,8 @@ class ProposalCard:
     created_at: datetime
     expires_at: datetime
     resolved_at: datetime | None = None
+    # Прочитанное прогоном было похоже на указания для Leo (decisions' `content.injection`).
+    suspicious: bool = False
 
 
 class ProposalRefusedError(AppError):
@@ -196,6 +201,32 @@ class FrictionJudge(Protocol):
 
 
 @dataclass(frozen=True, slots=True)
+class InjectionPiece:
+    """A piece of text entering a run under an untrusted label, as the model reads it, and
+    whom the judgement is for."""
+
+    label: str
+    # Инструмент, чей результат это; `context` — кусок самого контекста (вложение, страница).
+    tool: str
+    text: str
+    # Номер куска в прогоне: решение о нём — предмет (прогон, кусок).
+    part: int
+    language: str
+    scope: TenancyScope
+    cross_border_consent: bool
+    run_id: UUID
+
+
+class InjectionJudge(Protocol):
+    """Judges whether a piece of text tries to instruct the AI (decisions' `content.injection`);
+    the person's own words never come here."""
+
+    async def judge(self, piece: InjectionPiece) -> bool | None:
+        """True when the piece is addressed to an AI; None when the judge has nothing to say."""
+        ...
+
+
+@dataclass(frozen=True, slots=True)
 class RecalledFact:
     """A fact memory recalls for a turn: the person's statement and where it came from."""
 
@@ -249,6 +280,7 @@ class SkillReader(Protocol):
 ACTION_PROPOSALS: Final = PortKey[ActionProposals]("agent.action_proposals")
 TURN_ROUTER: Final = PortKey[TurnRouter]("agent.turn_router")
 FRICTION_JUDGE: Final = PortKey[FrictionJudge]("agent.friction_judge")
+INJECTION_JUDGE: Final = PortKey[InjectionJudge]("agent.injection_judge")
 MEMORY_RECALL: Final = PortKey[MemoryRecall]("agent.memory_recall")
 PROFILE_FACTS: Final = PortKey[ProfileFacts]("agent.profile_facts")
 SKILL_READER: Final = PortKey[SkillReader]("agent.skill_reader")

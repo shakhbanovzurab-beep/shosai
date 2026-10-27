@@ -224,6 +224,7 @@ def telemetry(
         "rounds": len(work.answers),
         "tool_calls": work.tool_calls,
         "routing": work.offer.routing() if work.offer is not None else {},
+        "taint": int(work.taint),
         "input_tokens": usage.input_tokens if usage is not None else 0,
         "cached_tokens": usage.cached_tokens if usage is not None else 0,
         "output_tokens": usage.output_tokens if usage is not None else 0,

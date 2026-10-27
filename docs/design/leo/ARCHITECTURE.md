@@ -738,7 +738,7 @@ If any check fails, the errand becomes a **new proposal** delivered to the user,
 | home PostgreSQL | `agent_threads`, `agent_messages` (monthly partitions, UUIDv7) | authoritative | user's / company's home | thread until deleted; a workspace's threads hidden when membership ends and erased 7 d later unless it is restored (ADR 0068 AG-D3) | backup, PITR (nfr-2) |
 | home PostgreSQL | `agent_tool_results` (monthly partitions) | authoritative | home | read for 30 d, partitions dropped after 2 months | — |
 | home PostgreSQL | `agent_feedback`, `agent_eval_cases` (ADR 0068 AG-D13) | authoritative | home | a rating with its answer; a case only with `improve_models` consent, erased with the rating, the consent, the thread or the account, and after 12 months | — |
-| home PostgreSQL | `agent_runs` (partitions) | authoritative telemetry: ids, model, tokens, cost, latencies, outcome, policy versions | home | 90 d | — |
+| home PostgreSQL | `agent_runs` (partitions) | authoritative telemetry: ids, model, tokens, cost, latencies, outcome, policy versions, the run's final taint (`content.injection`, for memory's admission) | home | 90 d | — |
 | home PostgreSQL | `agent_actions` | authoritative | home | 30 d after a terminal state; audit stays 12 months | — |
 | home PostgreSQL | `agent_audit` (partitions) | authoritative, append-only | home | 12 months | — |
 | home PostgreSQL | `memory_facts` with pgvector embeddings (ADR 0033) | authoritative | home | user controls; forgotten → purge 180 d | — |

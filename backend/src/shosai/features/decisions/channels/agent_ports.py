@@ -8,23 +8,35 @@ nothing could make it lighter.
 `TurnRouter`: the toolsets that fill a turn's room are asked as `turn.route`; the ranking of
 an active version goes back to the agent, a shadow's is only recorded. A routed run's called
 toolsets are reported as what followed.
+
+`InjectionJudge`: each piece of untrusted text entering a run is asked as `content.injection`,
+its subject the run and the piece's number; only an active version's finding reaches the run.
 """
 
 from typing import Final
 from uuid import UUID
 
 from shosai.core.kernel.homes import Home
-from shosai.features.agent.contracts import CardEnd, Friction, FrictionFacts, RouteRequest
+from shosai.features.agent.contracts import (
+    CardEnd,
+    Friction,
+    FrictionFacts,
+    InjectionPiece,
+    RouteRequest,
+)
 from shosai.features.decisions.contracts import (
     ACTION_FRICTION,
+    CONTENT_INJECTION,
     TURN_ROUTE,
     CardFacts,
     CardFriction,
     CardResolution,
     DecisionCall,
     Decisions,
+    InjectionFinding,
     Subject,
     SubjectKind,
+    TextFacts,
     ToolsetsCalled,
     TurnFacts,
 )
@@ -92,3 +104,21 @@ class AgentTurnRouter:
         """What a routed run called."""
         subject = Subject(SubjectKind.RUN, run_id)
         self._decisions.observe(TURN_ROUTE, home, subject, ToolsetsCalled(called))
+
+
+class AgentInjectionJudge:
+    """The agent's `InjectionJudge` over `content.injection`."""
+
+    def __init__(self, decisions: Decisions) -> None:
+        self._decisions = decisions
+
+    async def judge(self, piece: InjectionPiece) -> bool | None:
+        """True when an active version found instructions for an AI; None otherwise."""
+        facts = TextFacts(label=piece.label, tool=piece.tool, text=piece.text)
+        subject = Subject(SubjectKind.TEXT, piece.run_id, piece.part)
+        call = DecisionCall(
+            piece.scope, piece.cross_border_consent, subject, facts, InjectionFinding.CLEAN,
+            piece.language,
+        )  # fmt: skip
+        outcome = await self._decisions.decide(CONTENT_INJECTION, call)
+        return True if outcome.value is InjectionFinding.SUSPICIOUS else None

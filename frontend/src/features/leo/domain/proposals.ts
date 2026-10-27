@@ -41,6 +41,8 @@ export type LeoProposal = {
   warning: boolean;
   /** Метка внешнего текста, прочитанного до карточки (`mail`, `web`, `mcp:<сервер>` …): человек видит, по чему. */
   taint: string | null;
+  /** Прочитанное прогоном было похоже на указания для Leo; у карточек старого API поля нет. */
+  suspicious?: boolean;
   preview: ProposalPreview;
   status: ProposalStatus;
   /** Код неудачи пункта действия (`not_found`, `timeout` …), когда оно не удалось целиком. */

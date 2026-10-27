@@ -4297,6 +4297,12 @@ export interface components {
              * @description The label of the text the run read before it.
              */
             taint: string | null;
+            /**
+             * Suspicious
+             * @description Text the run read looked like it was giving Leo instructions.
+             * @default false
+             */
+            suspicious: boolean;
             preview: components["schemas"]["PreviewOut"];
             status: components["schemas"]["PublicStatus"];
             /**
@@ -6327,6 +6333,12 @@ export interface components {
              * @description The label of the text the run read before it.
              */
             taint: string | null;
+            /**
+             * Suspicious
+             * @description Text the run read looked like it was giving Leo instructions.
+             * @default false
+             */
+            suspicious: boolean;
             preview: components["schemas"]["PreviewOut"];
             status: components["schemas"]["PublicStatus"];
             /**

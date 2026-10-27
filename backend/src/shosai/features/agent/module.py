@@ -191,11 +191,9 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     tail, registry = LogTail(valkey, run_log), RunRegistry(leases, fleet)
     settings = services.settings.features.get(AgentSettings)
     skill_clients = (github_client(settings.github_token()), directory_client())
-    metrics, tracer = (
-        RunMetrics(services.registry),
-        services.tracer_provider.get_tracer(TRACER_NAME),
-    )
-    telemetry, pages = RunTelemetry(metrics, tracer), ResultPages(transactions, ports)
+    tracer = services.tracer_provider.get_tracer(TRACER_NAME)
+    metrics, pages = RunMetrics(services.registry), ResultPages(transactions, ports)
+    telemetry = RunTelemetry(metrics, tracer)
     cards = ActionCards(services.agent_tools, ports)
     tools = ToolParts(
         pages, RunSources(transactions, ports), tool_bulkhead(services.role),
@@ -208,6 +206,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             registry, services.outbox, turn_graph(frames), frames, ContextBuilder(ports),
             routing, tools, telemetry,
             AttachmentReader(transactions, (services.objects, DocumentReader(), pages)),
+            ports=ports,
         )
     )  # fmt: skip
     starter = TurnStarter(

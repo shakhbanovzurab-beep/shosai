@@ -62,6 +62,7 @@ class AgentRunRecord(ModelBase):
         CheckConstraint(
             "language IS NULL OR language ~ '^[a-z]{2,3}(-[A-Za-z]{2,4})?$'", name="language_form"
         ),
+        CheckConstraint("taint BETWEEN 0 AND 2", name="taint_level"),
         Index("ix_agent_runs_thread", "thread_id", sql_text("started_at DESC")),
         Index(
             "ix_agent_runs_live",
@@ -95,6 +96,8 @@ class AgentRunRecord(ModelBase):
     duration_ms: Mapped[int | None] = mapped_column(Integer)
     # Какие наборы инструментов выбраны и каким правилом (AG-D7): имена и код правила.
     routing: Mapped[dict[str, Any]] = mapped_column(JSONB, server_default=sql_text("'{}'::jsonb"))
+    # Как далеко дошёл чужой текст к концу хода: 0 — нет, 1 — внешний, 2 — подозрительный.
+    taint: Mapped[int] = mapped_column(SmallInteger, server_default="0")
     ended_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 

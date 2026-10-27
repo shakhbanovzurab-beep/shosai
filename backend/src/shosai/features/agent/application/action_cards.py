@@ -17,6 +17,7 @@ from pydantic import JsonValue
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.agent_tools.catalog import AgentToolCatalog
+from shosai.core.agent_tools.context import Taint
 from shosai.core.agent_tools.previews import (
     EMPTY,
     FALLBACK_LANGUAGE,
@@ -59,6 +60,7 @@ def card_of(
         "reversibility": first.reversibility,
         "warning": screen_only(Friction(record.friction)),
         "taint": record.taint_sources[0] if record.taint_sources else None,
+        "suspicious": record.taint >= Taint.SUSPICIOUS,
         "preview": {
             "kind": "fields",
             "fields": [{"label": label, "value": value} for label, value in rendered.fields],

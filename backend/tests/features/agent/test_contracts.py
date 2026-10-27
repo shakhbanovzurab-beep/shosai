@@ -36,6 +36,7 @@ def test_the_ports_are_named_for_the_slice() -> None:
         "agent.action_proposals",
         "agent.turn_router",
         "agent.friction_judge",
+        "agent.injection_judge",
         "agent.memory_recall",
         "agent.profile_facts",
         "agent.skill_reader",

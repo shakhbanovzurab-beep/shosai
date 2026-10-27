@@ -5,7 +5,8 @@ the tables and the declaration of what they hold of a person — nothing that ou
 partition; step 3 the engine bound to `DECISION_LAYER`: the versions in force, Jev through
 the provider port with the caller waiting only the policy's deadline, records written in
 batches off every path, and the daily check that Jev's endpoint keeps nothing; step 5 binds the
-agent's `FrictionJudge` (`action.friction`), step 6 its `TurnRouter` (`turn.route`).
+agent's `FrictionJudge` (`action.friction`), step 6 its `TurnRouter` (`turn.route`), step 7
+its `InjectionJudge` (`content.injection`).
 """
 
 from collections.abc import AsyncIterator
@@ -18,12 +19,16 @@ import httpx
 
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
-from shosai.features.agent.contracts import FRICTION_JUDGE, TURN_ROUTER
+from shosai.features.agent.contracts import FRICTION_JUDGE, INJECTION_JUDGE, TURN_ROUTER
 from shosai.features.decisions.application.asking import Asker
 from shosai.features.decisions.application.engine import DecisionEngine
 from shosai.features.decisions.application.in_force import PoliciesInForce
 from shosai.features.decisions.application.recording import Recorder
-from shosai.features.decisions.channels.agent_ports import AgentFrictionJudge, AgentTurnRouter
+from shosai.features.decisions.channels.agent_ports import (
+    AgentFrictionJudge,
+    AgentInjectionJudge,
+    AgentTurnRouter,
+)
 from shosai.features.decisions.channels.tasks import PERIODIC_JOBS, zero_retention_check
 from shosai.features.decisions.contracts import DECISION_LAYER
 from shosai.features.decisions.domain.policies import policies_by_key
@@ -81,6 +86,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     DECISION_LAYER.bind(engine),
                     FRICTION_JUDGE.bind(AgentFrictionJudge(engine)),
                     TURN_ROUTER.bind(AgentTurnRouter(engine)),
+                    INJECTION_JUDGE.bind(AgentInjectionJudge(engine)),
                 ),
             )
         finally:

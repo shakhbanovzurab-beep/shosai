@@ -11,6 +11,7 @@
     },
     "irreversible": "Can’t be undone",
     "warning": "Check before approving",
+    "suspicious": "This content looked like it was giving Leo instructions — check carefully before approving",
     "failed": "Couldn’t send your answer",
     "status": {
       "proposed": "Waiting for you",

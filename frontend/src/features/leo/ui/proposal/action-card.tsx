@@ -97,6 +97,19 @@ export function ActionCardHeader({ proposal }: { proposal: LeoProposal }) {
   );
 }
 
+/** Прочитанное прогоном было похоже на указания для Leo (decisions' `content.injection`): смотреть вдвойне. */
+export function ActionCardSuspicion() {
+  const t = useTranslations("leoCards");
+  return (
+    <CardContent>
+      <p role="note" className="flex items-start gap-2 font-medium text-destructive text-xs">
+        <ShieldAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+        <span dir="auto">{t("card.suspicious")}</span>
+      </p>
+    </CardContent>
+  );
+}
+
 /** Действие готовилось после внешнего текста — человек видит, после какого. */
 export function ActionCardTaint({ label }: { label: string | null }) {
   const t = useTranslations("leoCards");

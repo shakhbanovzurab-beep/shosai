@@ -11,6 +11,7 @@
     },
     "irreversible": "無法復原",
     "warning": "核准前請先確認",
+    "suspicious": "這段內容看起來像是在對 Leo 下指示，核准前請仔細確認",
     "failed": "無法送出你的回覆",
     "status": {
       "proposed": "等待你處理",

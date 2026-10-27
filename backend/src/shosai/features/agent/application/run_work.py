@@ -22,6 +22,7 @@ from shosai.core.agent_tools.context import Taint
 from shosai.core.agent_tools.sources import SourceRef
 from shosai.core.ai.requests import ChatMessage, ToolCall
 from shosai.core.ai.results import Usage
+from shosai.features.agent.application.injection_watch import CONTEXT_TOOL, InjectionWatch
 from shosai.features.agent.application.tool_offer import TurnOffer
 from shosai.features.agent.domain.sources import SourceLedger
 from shosai.features.agent.domain.wrapper import BOUNDARY_BYTES, Label, boundary, taint_after
@@ -132,13 +133,23 @@ class RunWork:
     # Пространства человека с именами: читаются при первом источнике, один раз за ход.
     spaces: dict[UUID, str] | None = None
     spaces_read: asyncio.Lock = field(default_factory=asyncio.Lock)
+    # Судья подсказок в тексте (decisions' `content.injection`); None — не привязан.
+    watch: InjectionWatch | None = None
     opened: int = field(default=0, init=False)
 
-    def read_wrapped(self, label: Label) -> None:
-        """Wrapped text entered the context: the run's taint rises, the label is noted."""
+    def read_wrapped(self, label: Label, text: str = "", tool: str = CONTEXT_TOOL) -> None:
+        """Wrapped text entered the context: the run's taint rises, the label is noted, and
+        the text is put to the injection judge unless the run is already suspicious."""
         self.taint = taint_after(self.taint, label)
         if label.text not in self.taint_sources:
             self.taint_sources.append(label.text)
+        if self.watch is not None and text and self.taint < Taint.SUSPICIOUS:
+            self.watch.start(label, text, tool)
+
+    async def settle_judgements(self) -> None:
+        """The pending judgements, within their wait: a positive one makes the run suspicious."""
+        if self.watch is not None and await self.watch.settle():
+            self.taint = taint_after(self.taint, None, instructions_seen=True)
 
     def resume_from(self, earlier: EarlierWork) -> None:
         """Go on from the run's work before its card."""

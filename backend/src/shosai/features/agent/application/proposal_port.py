@@ -53,7 +53,7 @@ def card_model(card: dict[str, Any], origin: ProposalOrigin) -> ProposalCard:
     return ProposalCard(
         id=card["id"], tool=card["tool"], title=card["title"], space=card["space"],
         origin=origin, reversibility=Reversibility(card["reversibility"]),
-        warning=card["warning"], taint=card["taint"],
+        warning=card["warning"], taint=card["taint"], suspicious=card["suspicious"],
         fields=tuple((row["label"], row["value"]) for row in preview["fields"]),
         body=preview["body"], status=PublicStatus(card["status"]), outcome=card["outcome"],
         nonce=card["nonce"], created_at=datetime.fromisoformat(card["created_at"]),

@@ -11,6 +11,7 @@
     },
     "irreversible": "Não dá para desfazer",
     "warning": "Confira antes de aprovar",
+    "suspicious": "Este conteúdo parecia dar instruções ao Leo: confira com atenção antes de aprovar",
     "failed": "Não foi possível enviar sua resposta",
     "status": {
       "proposed": "Aguardando você",

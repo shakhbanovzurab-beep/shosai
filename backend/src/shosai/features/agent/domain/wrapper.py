@@ -20,6 +20,8 @@ BOUNDARY_BYTES: Final = 12
 MCP_SERVER: Final = re.compile(r"[a-z0-9][a-z0-9_-]{0,39}")
 _MARKER_START: Final = re.compile(r"<(?=<)")
 _ESCAPED: Final = "< "
+# Строка-маркер обёртки целиком: текст внутри экранирован и маркером стать не может.
+_MARKER_LINE: Final = re.compile(r"^<<(?:untrusted source=[^>\n]+ |end )id=[0-9a-f]+>>\n?", re.M)
 
 
 @dataclass(frozen=True, slots=True)
@@ -68,6 +70,11 @@ def escape(text: str) -> str:
 def wrap(text: str, label: Label, token: str) -> str:
     """Untrusted text between its markers, escaped, each marker on its own line."""
     return f"{opening(label, token)}\n{escape(text)}\n{closing(token)}"
+
+
+def unwrapped(text: str) -> str:
+    """Wrapped text without its marker lines: the pieces as written, for a judge to read."""
+    return _MARKER_LINE.sub("", text).strip("\n")
 
 
 def taint_after(current: Taint, label: Label | None, *, instructions_seen: bool = False) -> Taint:

@@ -11,6 +11,7 @@
     },
     "irreversible": "No se puede deshacer",
     "warning": "Revísalo antes de aprobar",
+    "suspicious": "Este contenido parecía darle instrucciones a Leo: revísalo con atención antes de aprobar",
     "failed": "No se pudo enviar tu respuesta",
     "status": {
       "proposed": "Te espera",

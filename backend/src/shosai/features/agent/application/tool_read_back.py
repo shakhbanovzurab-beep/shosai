@@ -73,8 +73,8 @@ class ResultReader:
         provenance = self._provenance(offer, offered, result)
         if provenance is not None:
             label = Label.of(provenance)
+            self._work.read_wrapped(label, text, spec.name)
             text = wrap(text, label, self._work.token)
-            self._work.read_wrapped(label)
         return ReadBack(text, result_id, grew)
 
     @staticmethod

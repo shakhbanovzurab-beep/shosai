@@ -14,6 +14,7 @@ from shosai.core.ai.requests import ChatRequest
 from shosai.core.ai.results import ChatDelta
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
+from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.model_stream import DEFAULT_PACE, Pace
 from shosai.features.agent.application.run_attachments import AttachmentReader
 from shosai.features.agent.application.run_context import ContextBuilder
@@ -58,3 +59,5 @@ class EngineParts:
     telemetry: RunTelemetry
     attachments: AttachmentReader
     pace: Pace = DEFAULT_PACE
+    # Порты срезов: судья подсказок в тексте (decisions' `content.injection`), когда привязан.
+    ports: PortDirectory | None = None

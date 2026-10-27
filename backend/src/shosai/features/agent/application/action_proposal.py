@@ -115,6 +115,8 @@ class ActionProposer:
     ) -> Proposed:
         """The action stored as `proposed`, audited, with its card."""
         payload, work = run
+        # Карточка говорит, подозрителен ли прогон: суждения о прочитанном дожидаемся здесь.
+        await work.settle_judgements()
         action_id = new_id()
         if self._judging is None:
             friction = friction_rule(work.taint, Reversibility(item.reversibility))

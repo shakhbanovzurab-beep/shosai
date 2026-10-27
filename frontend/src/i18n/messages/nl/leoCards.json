@@ -11,6 +11,7 @@
     },
     "irreversible": "Kan niet ongedaan worden gemaakt",
     "warning": "Controleer dit voor je goedkeurt",
+    "suspicious": "Deze inhoud leek Leo instructies te geven: controleer dit goed voor je goedkeurt",
     "failed": "Kan je antwoord niet versturen",
     "status": {
       "proposed": "Wacht op jou",

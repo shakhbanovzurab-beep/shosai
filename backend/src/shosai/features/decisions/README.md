@@ -54,3 +54,8 @@ Leo's Decision Layer: the judgement calls the rest of Leo must not make by hand 
 
 - `TURN_ROUTER` is bound over the engine (`channels/agent_ports.py`). The agent asks it only when its rule cannot offer some toolset even for reading (`features/agent/application/route_ranking.py`): while every toolset's reads fit, a write is one `load_toolset` away and nothing is asked (DL-D3). Today a person's catalog is ≈ 7 300 tokens whole and ≈ 3 500 in reads against segment 2's 4 000, so no turn asks.
 - When asked, the person's question, the start of the last answer and the thread's turn count are read in one statement; Jev runs while the context is read, and the first model request waits for it at most 400 ms. An active version's ranking — the candidates surely needed, likeliest first — fills the room before the rule's order; a shadow's is only recorded. The decision's subject is the run; what the run called reaches `observe` as `ToolsetsCalled`.
+
+## `content.injection` beside the agent's wrapper (step 7a)
+
+- `INJECTION_JUDGE` is bound over the engine (`channels/agent_ports.py`). The agent puts every piece it wraps under an untrusted label to it — tool results and pages, the page's subject, the person's attachments (`file:own`, DL-D5) — the moment the piece is wrapped; the round never waits. The decision's subject is the run and the piece's number; an active version's finding makes the run suspicious, a shadow's is only recorded, an empty piece or an already suspicious run asks nothing.
+- The agent awaits the pending judgements, each at most 400 ms, before a write's card and at the run's end: the card says so (`suspicious`, worded in the cabinet's 16 languages) and `agent_runs.taint` keeps the run's final taint for memory.

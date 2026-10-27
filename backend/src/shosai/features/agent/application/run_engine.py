@@ -21,6 +21,7 @@ import structlog
 
 from shosai.core.ai.errors import AiCallError
 from shosai.core.kv.connection import REDIS_FAILURES
+from shosai.features.agent.application.injection_watch import injection_watch
 from shosai.features.agent.application.model_stream import AnswerBuffer, ModelStalledError
 from shosai.features.agent.application.run_close import RunCloser
 from shosai.features.agent.application.run_context import RunOverError, ThreadGoneError
@@ -91,7 +92,7 @@ class RunEngine:
         times = TurnTimes(began=now if resumed else payload.started_at, picked_up=now)
         state = RunState(
             payload, self._parts.route, times, AnswerBuffer(emitter.text, self._monotonic()),
-            RunWork(), emitter,
+            RunWork(watch=injection_watch(self._parts.ports, payload)), emitter,
         )  # fmt: skip
         telemetry, registry = self._parts.telemetry, self._parts.registry
         if resumed is None:
@@ -169,6 +170,7 @@ class RunEngine:
         payload, times = state.payload, state.times
         text = state.buffer.text
         answer = state.work.total(text)
+        await state.work.settle_judgements()
         now = self._clock()
         recorded: Ending | None = None
         try:

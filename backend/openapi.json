@@ -15812,6 +15812,12 @@
             "title": "Taint",
             "description": "The label of the text the run read before it."
           },
+          "suspicious": {
+            "type": "boolean",
+            "title": "Suspicious",
+            "description": "Text the run read looked like it was giving Leo instructions.",
+            "default": false
+          },
           "preview": {
             "$ref": "#/components/schemas/PreviewOut"
           },
@@ -15880,6 +15886,7 @@
           "reversibility",
           "warning",
           "taint",
+          "suspicious",
           "preview",
           "status",
           "outcome",
@@ -20910,6 +20917,12 @@
             "title": "Taint",
             "description": "The label of the text the run read before it."
           },
+          "suspicious": {
+            "type": "boolean",
+            "title": "Suspicious",
+            "description": "Text the run read looked like it was giving Leo instructions.",
+            "default": false
+          },
           "preview": {
             "$ref": "#/components/schemas/PreviewOut"
           },
@@ -20965,6 +20978,7 @@
           "reversibility",
           "warning",
           "taint",
+          "suspicious",
           "preview",
           "status",
           "outcome",

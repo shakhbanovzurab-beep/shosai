@@ -7,7 +7,13 @@ import { useTranslations } from "use-intl";
 import { changeIndexes, isPending, type LeoProposal } from "../../domain/proposals";
 import { useProposal } from "../../model/proposal-store";
 import { approveProposal, rejectProposal } from "../../model/proposals";
-import { ActionCardActions, ActionCardHeader, ActionCardRoot, ActionCardTaint } from "./action-card";
+import {
+  ActionCardActions,
+  ActionCardHeader,
+  ActionCardRoot,
+  ActionCardSuspicion,
+  ActionCardTaint,
+} from "./action-card";
 import { ActionCardResolved } from "./action-card-resolved";
 import { FieldsPreview } from "./fields-preview";
 import { InlineDiff } from "./inline-diff";
@@ -58,6 +64,7 @@ export function LeoProposalCard({ proposal: sent }: { proposal: LeoProposal }) {
       ) : (
         <FieldsPreview fields={proposal.preview.fields} body={proposal.preview.body} />
       )}
+      {proposal.suspicious ? <ActionCardSuspicion /> : null}
       <ActionCardTaint label={proposal.taint} />
       <ActionCardActions
         proposal={proposal}

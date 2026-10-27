@@ -104,10 +104,10 @@ class ContextBuilder:
         session: AsyncSession,
         payload: TurnPayload,
         sizes: dict[Segment, int] | None = None,
-        labels: list[Provenance] | None = None,
+        labels: list[tuple[Provenance, str]] | None = None,
     ) -> ChatRequest:
         """The request for the model, read in the person's transaction; `sizes` receives the
-        segments' estimated tokens, `labels` the label of each wrapped text the context holds."""
+        segments' estimated tokens, `labels` each wrapped text the context holds, labelled."""
         user_id = person_of(payload)
         await self._still_running(session, payload)
         thread = await session.scalar(
@@ -142,7 +142,7 @@ class ContextBuilder:
         volatile = await self._volatile(session, payload, zone, labels)
         attached = attachments_block(question.digest, token)
         if attached is not None and labels is not None:
-            labels.append(Provenance.FILE_OWN)
+            labels.append((Provenance.FILE_OWN, attached))
         asked = QUESTION.format(text=question.text)
         asked = asked if attached is None else f"{asked}\n\n{attached}"
         if sizes is not None:
@@ -227,7 +227,7 @@ class ContextBuilder:
         session: AsyncSession,
         payload: TurnPayload,
         zone: str,
-        labels: list[Provenance] | None,
+        labels: list[tuple[Provenance, str]] | None,
     ) -> str:
         """Segment 7: the time to the minute, the page and what it shows."""
         lines = [now_line(self._clock().astimezone(zone_info(zone)), zone)]
@@ -243,7 +243,7 @@ class ContextBuilder:
             if digest is not None:
                 lines.append(digest.text)
                 if digest.label is not None and labels is not None:
-                    labels.append(digest.label)
+                    labels.append((digest.label, digest.text))
         return VOLATILE.format(context=clip("\n".join(lines), cap(7)))
 
 

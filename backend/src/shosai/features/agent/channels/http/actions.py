@@ -69,6 +69,10 @@ class ProposalOut(Out):
     reversibility: Literal["reversible", "compensable", "irreversible"]
     warning: bool = Field(description="Approve on the screen only, after a careful look.")
     taint: str | None = Field(description="The label of the text the run read before it.")
+    suspicious: bool = Field(
+        default=False,
+        description="Text the run read looked like it was giving Leo instructions.",
+    )
     preview: PreviewOut
     status: PublicStatus
     outcome: str | None = Field(description="The code of an item that did not succeed.")

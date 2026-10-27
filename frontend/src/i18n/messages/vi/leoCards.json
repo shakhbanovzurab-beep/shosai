@@ -11,6 +11,7 @@
     },
     "irreversible": "Không thể hoàn tác",
     "warning": "Kiểm tra trước khi duyệt",
+    "suspicious": "Nội dung này có vẻ đang ra chỉ dẫn cho Leo — hãy kiểm tra kỹ trước khi duyệt",
     "failed": "Không gửi được câu trả lời của bạn",
     "status": {
       "proposed": "Đang chờ bạn",
