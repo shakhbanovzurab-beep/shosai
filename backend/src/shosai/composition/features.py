@@ -22,6 +22,7 @@ from shosai.features.capture.module import CAPTURE
 from shosai.features.decisions.module import DECISIONS
 from shosai.features.files.module import FILES
 from shosai.features.identity.module import IDENTITY
+from shosai.features.meetings.module import MEETINGS
 from shosai.features.memory.module import MEMORY
 from shosai.features.notes.module import NOTES
 from shosai.features.tasks.module import TASKS
@@ -38,6 +39,7 @@ FEATURES: tuple[FeatureModule, ...] = (
     CAPTURE,
     DECISIONS,
     MEMORY,
+    MEETINGS,
     ALERTING,
 )
 
