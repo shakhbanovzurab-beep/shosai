@@ -163,7 +163,9 @@ async def status_changed(
     session: AsyncSession, viewer: UUID, task: TaskRecord, before: TaskStatus, now: datetime
 ) -> None:
     """A status changed without a move: on the changer's board, the move its next read makes,
-    from where the card showed to the top of the first column of the new status."""
+    from where the card showed to where that read puts it — the column its row keeps when that
+    is of the new status, as after two changes with no read between, else the top of the first
+    column of the new status."""
     if not _clocked(task):
         return
     placed = await session.get(TaskPlacementRecord, (viewer, task.id))
@@ -171,7 +173,7 @@ async def status_changed(
         return
     columns = await board_columns(session, placed.board_id)
     source = spot_for(before, columns, placed.column_id).column_id
-    target = spot_for(TaskStatus(task.status), columns, source).column_id
+    target = spot_for(TaskStatus(task.status), columns, placed.column_id).column_id
     await moved(session, task, (placed.board_id, source, target), now)
 
 

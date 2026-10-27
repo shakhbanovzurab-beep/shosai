@@ -2,7 +2,9 @@
 
 One task on one board of columns of known kinds, every request realigning the card as the
 mocks' routes do, with the rule settled in plan §3.9: a status changed without a move acts
-at the change, on the changer's board.
+at the change, on the changer's board, as the move its next read makes — from the column the
+card shows in to the one the read puts it in, which is where its row sits when that column
+is of the new status.
 """
 
 import uuid
@@ -15,13 +17,18 @@ from shosai.features.tasks.domain.clocks import Span, Stopwatch, stopwatch_of
 
 @dataclass
 class ClockModel:
-    """The task's spans, its card's column and status, and the board's settings."""
+    """The task's spans, the column its card shows in and the one its row keeps, its status,
+    and the board's settings."""
 
     kinds: dict[uuid.UUID, str]
     column: uuid.UUID
     status: str
     automations: StopwatchAutomations | None
     spans: list[Span] = field(default_factory=list)
+    sitting: uuid.UUID | None = None
+
+    def __post_init__(self) -> None:
+        self.sitting = self.sitting or self.column
 
     def _open(self) -> Span | None:
         return next((span for span in self.spans if span.stopped_at is None), None)
@@ -59,18 +66,20 @@ class ClockModel:
 
     def move(self, target: uuid.UUID, now: datetime) -> None:
         """`patchCard` with a column: the column's kind is the status."""
+        self.sitting = target
         if target == self.column:
             return
         self.status = self.kinds[target]
         self._follow(target, now)
 
     def set_status(self, status: str, now: datetime) -> None:
-        """`patchTask` with a status, realigned at once on the changer's board: to the first
-        column of the status."""
+        """`patchTask` with a status, on the changer's board as its next read moves the card:
+        to the column its row keeps if that is of the status, else to the first such."""
         if status == self.status:
             return
         self.status = status
-        target = next(column for column, kind in self.kinds.items() if kind == status)
+        first = next(column for column, kind in self.kinds.items() if kind == status)
+        target = self.sitting if self.sitting and self.kinds[self.sitting] == status else first
         self._follow(target, now)
 
     def stopwatch(self) -> Stopwatch | None:
