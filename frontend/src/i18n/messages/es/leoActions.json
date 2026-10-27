@@ -73,5 +73,8 @@
   },
   "web": {
     "search": "Buscando en la web"
+  },
+  "memory": {
+    "recall": "Revisando lo que recuerdo de ti"
   }
 }

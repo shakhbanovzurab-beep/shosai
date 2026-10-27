@@ -61,5 +61,18 @@
     "save": "Não foi possível salvar a alteração",
     "forget": "Não foi possível esquecer"
   },
-  "more": "Mostrar mais"
+  "more": "Mostrar mais",
+  "line": {
+    "label": "O Leo pode lembrar:"
+  },
+  "imported": {
+    "title": "Da sua memória anterior",
+    "description": "O Leo trouxe estes fatos da sua memória anterior. Nenhum é usado até você responder.",
+    "review": "Revisar",
+    "hide": "Ocultar",
+    "turnDown": "Não lembrar destes",
+    "confirmTitle": "Não lembrar de nenhum?",
+    "confirmDescription": "O Leo não vai usar nenhum dos fatos trazidos da sua memória anterior. Não dá para desfazer.",
+    "done": "O Leo não vai lembrar deles"
+  }
 }

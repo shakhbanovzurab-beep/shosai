@@ -61,5 +61,18 @@
     "save": "Không lưu được thay đổi",
     "forget": "Không quên được"
   },
-  "more": "Hiển thị thêm"
+  "more": "Hiển thị thêm",
+  "line": {
+    "label": "Leo có thể ghi nhớ:"
+  },
+  "imported": {
+    "title": "Từ bộ nhớ trước đây của bạn",
+    "description": "Leo đã chuyển những thông tin này từ bộ nhớ trước đây của bạn. Không thông tin nào được dùng cho đến khi bạn trả lời.",
+    "review": "Xem lại",
+    "hide": "Ẩn",
+    "turnDown": "Không ghi nhớ những điều này",
+    "confirmTitle": "Không ghi nhớ điều nào?",
+    "confirmDescription": "Leo sẽ không dùng thông tin nào được chuyển từ bộ nhớ trước đây của bạn. Bạn không thể hoàn tác.",
+    "done": "Leo sẽ không ghi nhớ chúng"
+  }
 }

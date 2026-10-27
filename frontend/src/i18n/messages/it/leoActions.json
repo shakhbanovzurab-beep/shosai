@@ -73,5 +73,8 @@
   },
   "web": {
     "search": "Cerco sul web"
+  },
+  "memory": {
+    "recall": "Controllo cosa ricordo di te"
   }
 }

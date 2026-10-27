@@ -61,5 +61,18 @@
     "save": "Impossible d’enregistrer la modification",
     "forget": "Impossible d’oublier cette information"
   },
-  "more": "Afficher plus"
+  "more": "Afficher plus",
+  "line": {
+    "label": "Leo pourrait retenir :"
+  },
+  "imported": {
+    "title": "De votre mémoire précédente",
+    "description": "Leo a repris ces informations de votre mémoire précédente. Aucune n’est utilisée tant que vous n’avez pas répondu.",
+    "review": "Passer en revue",
+    "hide": "Masquer",
+    "turnDown": "Ne pas les retenir",
+    "confirmTitle": "N’en retenir aucune ?",
+    "confirmDescription": "Leo n’utilisera aucune des informations reprises de votre mémoire précédente. Vous ne pourrez pas annuler.",
+    "done": "Leo ne les retiendra pas"
+  }
 }

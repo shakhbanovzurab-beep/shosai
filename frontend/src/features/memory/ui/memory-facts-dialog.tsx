@@ -18,6 +18,7 @@ import { undoForget, usePendingForget } from "../model/pending-forget";
 import { FactCandidates } from "./fact-candidates";
 import { FactList } from "./fact-list";
 import { ForgetAll } from "./forget-all";
+import { ImportedFacts } from "./imported-facts";
 
 function EmptyMemory({ words }: { words: MemoryWords }) {
   const { t } = words;
@@ -40,7 +41,8 @@ function FactsBody({ page, words }: { page: FactsPage; words: MemoryWords }) {
   const query = useFactsQuery();
   const { candidates, active } = splitFacts(page.items);
   const filtered = query.kind !== null || query.words !== "";
-  const nothing = page.counts.active === 0 && page.counts.candidates === 0 && !filtered;
+  const { counts } = page;
+  const nothing = counts.active === 0 && counts.candidates === 0 && counts.imported === 0 && !filtered;
   return (
     <div className="flex flex-col gap-5">
       {memory.status === "ready" && !memory.data ? (
@@ -50,11 +52,12 @@ function FactsBody({ page, words }: { page: FactsPage; words: MemoryWords }) {
         </Alert>
       ) : null}
       <FactCandidates candidates={candidates} words={words} />
+      <ImportedFacts count={counts.imported} words={words} />
       {nothing ? <EmptyMemory words={words} /> : null}
       {nothing ? null : (
         <FactList
           active={active}
-          total={page.counts.active}
+          total={counts.active}
           words={words}
           onMore={page.next_cursor === null ? null : () => void loadMoreFacts()}
         />

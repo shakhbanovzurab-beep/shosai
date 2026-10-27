@@ -61,5 +61,18 @@
     "save": "No se pudo guardar el cambio",
     "forget": "No se pudo olvidar"
   },
-  "more": "Mostrar más"
+  "more": "Mostrar más",
+  "line": {
+    "label": "Leo podría recordar:"
+  },
+  "imported": {
+    "title": "De tu memoria anterior",
+    "description": "Leo trajo estos datos de tu memoria anterior. No se usa ninguno hasta que respondas.",
+    "review": "Revisar",
+    "hide": "Ocultar",
+    "turnDown": "No recordarlos",
+    "confirmTitle": "¿No recordar ninguno?",
+    "confirmDescription": "Leo no usará ninguno de los datos traídos de tu memoria anterior. No se puede deshacer.",
+    "done": "Leo no los recordará"
+  }
 }

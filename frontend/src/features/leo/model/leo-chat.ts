@@ -25,6 +25,11 @@ export interface LeoChat {
   readonly attachments: boolean;
   /** Чей разговор: настройки Leo (Settings › Leo — голос, язык ответа) есть только у человека. */
   readonly owner: "person" | "operator";
+  /**
+   * Тред человека, у которого память может предложить кандидата: строка под ответом читает их по нему (MM-D1).
+   * Нет у оператора и у примерного чата.
+   */
+  readonly memoryThreadId?: string | null;
   /** «Недавние чаты» пространства; у примерного чата их нет. */
   readonly threads?: LeoThreads;
   /**

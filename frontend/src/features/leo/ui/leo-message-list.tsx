@@ -13,6 +13,7 @@ import {
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
 import { Spinner } from "@/components/ui/spinner";
+import { MemoryCandidateLine } from "@/features/memory/ui/memory-candidate-line";
 
 import type { LeoProposal } from "../domain/proposals";
 import type { LeoSource } from "../domain/sources";
@@ -34,6 +35,8 @@ interface LeoMessageListProps {
   readonly isBusy: boolean;
   /** Более ранние сообщения треда на сервере: кнопка над разговором их подгружает. */
   readonly earlier?: LeoChat["earlier"];
+  /** Тред, кандидатов памяти которого строка показывает под последним ответом; null — строки нет. */
+  readonly memoryThreadId: string | null;
   readonly onRegenerate: () => void;
   readonly onEditLast: (content: string) => void;
   /** Карточка одобрения, сделанная из артефакта ответа (дайджест чата), — в этот же ответ. */
@@ -44,6 +47,7 @@ export function LeoMessageList({
   messages,
   isBusy,
   earlier,
+  memoryThreadId,
   onRegenerate,
   onEditLast,
   onProposal,
@@ -79,13 +83,18 @@ export function LeoMessageList({
                     onEdit={onEditLast}
                   />
                 ) : (
-                  <AssistantMessage
-                    message={message}
-                    isLast={message.id === lastAssistantId}
-                    canRegenerate={!isBusy}
-                    onRegenerate={onRegenerate}
-                    onProposal={(proposal) => onProposal(message.id, proposal)}
-                  />
+                  <>
+                    <AssistantMessage
+                      message={message}
+                      isLast={message.id === lastAssistantId}
+                      canRegenerate={!isBusy}
+                      onRegenerate={onRegenerate}
+                      onProposal={(proposal) => onProposal(message.id, proposal)}
+                    />
+                    {memoryThreadId && message.id === lastAssistantId && message.status === "done" ? (
+                      <MemoryCandidateLine threadId={memoryThreadId} answerId={message.id} />
+                    ) : null}
+                  </>
                 )}
               </MessageScrollerItem>
             ))}

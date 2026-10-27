@@ -61,5 +61,18 @@
     "save": "Değişiklik kaydedilemedi",
     "forget": "Unutulamadı"
   },
-  "more": "Daha fazla göster"
+  "more": "Daha fazla göster",
+  "line": {
+    "label": "Leo şunu hatırlayabilir:"
+  },
+  "imported": {
+    "title": "Önceki belleğinizden",
+    "description": "Leo bu bilgileri önceki belleğinizden aktardı. Siz yanıtlayana kadar hiçbiri kullanılmaz.",
+    "review": "Gözden geçir",
+    "hide": "Gizle",
+    "turnDown": "Bunları hatırlama",
+    "confirmTitle": "Hiçbirini hatırlamasın mı?",
+    "confirmDescription": "Leo önceki belleğinizden aktarılan bilgilerin hiçbirini kullanmaz. Bu işlem geri alınamaz.",
+    "done": "Leo bunları hatırlamayacak"
+  }
 }

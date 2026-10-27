@@ -73,5 +73,8 @@
   },
   "web": {
     "search": "İnternette arıyorum"
+  },
+  "memory": {
+    "recall": "Hakkınızda hatırladıklarımı kontrol ediyorum"
   }
 }

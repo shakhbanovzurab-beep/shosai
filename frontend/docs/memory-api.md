@@ -16,6 +16,7 @@ What Leo remembers about the person, fact by fact ([ADR 0071](../../docs/adr/007
 | `DELETE` | `/v1/agent/memory`                       | —                                        | `204`            |
 | `GET`    | `/v1/agent/memory/settings`              | —                                        | `{enabled}`      |
 | `PATCH`  | `/v1/agent/memory/settings`              | `{"enabled": bool}`                      | `{enabled}`      |
+| `POST`   | `/v1/agent/memory/imported/turn-down`    | —                                        | `204`            |
 | `GET`    | `/v1/agent/memory/summary`               | —                                        | `MemorySummaryOut` |
 | `POST`   | `/v1/agent/memory/summary/refresh`       | —                                        | `MemorySummaryOut` |
 | `POST`   | `/v1/agent/memory/summary/messages` + `Idempotency-Key` | `{"message": str}`        | `MemoryMessageOut` |
@@ -46,6 +47,14 @@ and `thread_id` (a conversation's waiting candidates).
   says so.
 - **Leo's changes.** When Leo forgets a fact the person approved on a card, the card names the `memory`
   domain and a shown list reads again.
+- **The line under Leo's answer** (MM-D1). Under the last finished answer of a person's conversation the panel
+  reads `GET /v1/agent/memory?thread_id={thread}&status=candidate` — at once and once more eight seconds later,
+  while memory admits the turn in the background — and shows each waiting candidate quietly as "Leo may
+  remember: … · Remember · Don't remember". No notification; the operator's conversations have no line.
+- **Carried over from the earlier memory** (MM-D8). When `counts.imported` is above zero the dialog shows the
+  count; "Review" lists them (`source=imported`, by pages) to answer one by one, and "Don't remember these" turns
+  every one down at once after a confirmation (`POST /v1/agent/memory/imported/turn-down`). They never join the
+  daily "Should Leo remember this?".
 
 ## The summary and its box (MM-D3)
 

@@ -61,5 +61,18 @@
     "save": "Tidak dapat menyimpan perubahan",
     "forget": "Tidak dapat melupakannya"
   },
-  "more": "Tampilkan lebih banyak"
+  "more": "Tampilkan lebih banyak",
+  "line": {
+    "label": "Leo mungkin mengingat:"
+  },
+  "imported": {
+    "title": "Dari memori Anda sebelumnya",
+    "description": "Leo membawa fakta ini dari memori Anda sebelumnya. Tidak ada yang dipakai sampai Anda menjawab.",
+    "review": "Tinjau",
+    "hide": "Sembunyikan",
+    "turnDown": "Jangan ingat ini",
+    "confirmTitle": "Jangan ingat satu pun?",
+    "confirmDescription": "Leo tidak akan memakai fakta apa pun yang dibawa dari memori Anda sebelumnya. Tindakan ini tidak dapat diurungkan.",
+    "done": "Leo tidak akan mengingatnya"
+  }
 }

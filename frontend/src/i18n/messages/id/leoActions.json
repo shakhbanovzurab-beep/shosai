@@ -73,5 +73,8 @@
   },
   "web": {
     "search": "Mencari di web"
+  },
+  "memory": {
+    "recall": "Memeriksa yang saya ingat tentang Anda"
   }
 }

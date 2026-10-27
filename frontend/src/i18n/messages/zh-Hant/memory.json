@@ -61,5 +61,18 @@
     "save": "無法儲存變更",
     "forget": "無法忘記"
   },
-  "more": "顯示更多"
+  "more": "顯示更多",
+  "line": {
+    "label": "Leo 可能會記住："
+  },
+  "imported": {
+    "title": "來自你先前的記憶",
+    "description": "這些是 Leo 從你先前的記憶帶過來的資訊。在你回覆前都不會使用。",
+    "review": "檢閱",
+    "hide": "隱藏",
+    "turnDown": "不要記住這些",
+    "confirmTitle": "一則都不記住嗎？",
+    "confirmDescription": "Leo 不會使用任何從你先前記憶帶過來的資訊。此操作無法復原。",
+    "done": "Leo 不會記住它們"
+  }
 }

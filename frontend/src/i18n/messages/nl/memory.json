@@ -61,5 +61,18 @@
     "save": "Kan de wijziging niet opslaan",
     "forget": "Kan het niet vergeten"
   },
-  "more": "Meer tonen"
+  "more": "Meer tonen",
+  "line": {
+    "label": "Leo kan onthouden:"
+  },
+  "imported": {
+    "title": "Uit je eerdere geheugen",
+    "description": "Leo heeft deze feiten uit je eerdere geheugen overgenomen. Geen ervan wordt gebruikt tot je antwoordt.",
+    "review": "Bekijken",
+    "hide": "Verbergen",
+    "turnDown": "Deze niet onthouden",
+    "confirmTitle": "Geen van deze onthouden?",
+    "confirmDescription": "Leo gebruikt geen van de feiten uit je eerdere geheugen. Dit kun je niet ongedaan maken.",
+    "done": "Leo onthoudt ze niet"
+  }
 }

@@ -25,6 +25,7 @@ export function LeoConversation({
       messages={chat.messages}
       isBusy={chat.isBusy}
       earlier={chat.earlier}
+      memoryThreadId={chat.memoryThreadId ?? null}
       onRegenerate={chat.regenerate}
       onEditLast={chat.editLast}
       onProposal={chat.addProposal}

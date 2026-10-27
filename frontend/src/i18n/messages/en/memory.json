@@ -61,5 +61,18 @@
     "save": "Couldn’t save the change",
     "forget": "Couldn’t forget it"
   },
-  "more": "Show more"
+  "more": "Show more",
+  "line": {
+    "label": "Leo may remember:"
+  },
+  "imported": {
+    "title": "From your earlier memory",
+    "description": "Leo carried these over from your earlier memory. None is used until you answer.",
+    "review": "Review",
+    "hide": "Hide",
+    "turnDown": "Don’t remember these",
+    "confirmTitle": "Don’t remember any of these?",
+    "confirmDescription": "Leo won’t use any of the facts carried over from your earlier memory. You can’t undo this.",
+    "done": "Leo won’t remember them"
+  }
 }

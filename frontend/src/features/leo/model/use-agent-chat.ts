@@ -186,6 +186,7 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     earlier: thread.earlier,
     attachments: channel.attachments,
     owner: channel.owner,
+    memoryThreadId: channel.owner === "person" ? thread.threadId : null,
     threads,
     voice,
   };

@@ -61,5 +61,18 @@
     "save": "Impossibile salvare la modifica",
     "forget": "Impossibile dimenticarla"
   },
-  "more": "Mostra altro"
+  "more": "Mostra altro",
+  "line": {
+    "label": "Leo potrebbe ricordare:"
+  },
+  "imported": {
+    "title": "Dalla tua memoria precedente",
+    "description": "Leo ha ripreso queste informazioni dalla tua memoria precedente. Nessuna viene usata finché non rispondi.",
+    "review": "Rivedi",
+    "hide": "Nascondi",
+    "turnDown": "Non ricordarle",
+    "confirmTitle": "Non ricordarne nessuna?",
+    "confirmDescription": "Leo non userà nessuna delle informazioni riprese dalla tua memoria precedente. Non si può annullare.",
+    "done": "Leo non le ricorderà"
+  }
 }

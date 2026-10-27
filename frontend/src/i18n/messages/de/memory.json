@@ -61,5 +61,18 @@
     "save": "Änderung konnte nicht gespeichert werden",
     "forget": "Konnte nicht vergessen werden"
   },
-  "more": "Mehr anzeigen"
+  "more": "Mehr anzeigen",
+  "line": {
+    "label": "Leo könnte sich merken:"
+  },
+  "imported": {
+    "title": "Aus deinem früheren Gedächtnis",
+    "description": "Leo hat diese Fakten aus deinem früheren Gedächtnis übernommen. Keiner wird genutzt, bevor du antwortest.",
+    "review": "Durchsehen",
+    "hide": "Ausblenden",
+    "turnDown": "Diese nicht merken",
+    "confirmTitle": "Keinen davon merken?",
+    "confirmDescription": "Leo nutzt keinen der aus deinem früheren Gedächtnis übernommenen Fakten. Das lässt sich nicht rückgängig machen.",
+    "done": "Leo merkt sie sich nicht"
+  }
 }

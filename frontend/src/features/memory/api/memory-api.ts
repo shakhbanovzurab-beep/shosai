@@ -27,6 +27,13 @@ export const memoryApi = {
   /** Вернуть забытый или заменённый в последние сутки факт. */
   restore: (id: string): Promise<MemoryFact> => dataOf(apiClient.POST("/v1/agent/memory/{fact_id}/restore", fact(id))),
   forgetAll: (): Promise<void> => dataOf(apiClient.DELETE("/v1/agent/memory")),
+  /** Кандидаты беседы — для строки под ответом Leo. */
+  threadCandidates: (threadId: string): Promise<FactsPage> =>
+    dataOf(apiClient.GET("/v1/agent/memory", { params: { query: { thread_id: threadId, status: "candidate" } } })),
+  /** Кандидаты, перенесённые из прежней памяти (MM-D8): только в своём списке. */
+  imported: (cursor: string | null): Promise<FactsPage> =>
+    dataOf(apiClient.GET("/v1/agent/memory", { params: { query: { source: "imported", cursor } } })),
+  turnDownImported: (): Promise<void> => dataOf(apiClient.POST("/v1/agent/memory/imported/turn-down")),
   enabled: async (): Promise<boolean> => (await dataOf(apiClient.GET("/v1/agent/memory/settings"))).enabled,
   setEnabled: async (enabled: boolean): Promise<boolean> =>
     (await dataOf(apiClient.PATCH("/v1/agent/memory/settings", { body: { enabled } }))).enabled,
