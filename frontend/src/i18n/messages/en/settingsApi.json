@@ -18,8 +18,7 @@
     "mcpNameRequired": "Give the server a name.",
     "mcpNameTooLong": "That name is too long. Use a shorter one.",
     "mcpUrlInvalid": "Enter the server’s http(s) URL.",
-    "mcpServerNotFound": "Server not found.",
-    "summaryMessageRequired": "Write a question or an update."
+    "mcpServerNotFound": "Server not found."
   },
   "avatarTooLarge": "The image is larger than {size}.",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "Amount: {amount}",
     "status": "Status: {status}",
     "demoNote": "Demo invoice. The real one is a PDF from the billing backend."
-  },
-  "notesFromYou": "Notes from you"
+  }
 }

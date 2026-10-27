@@ -12,12 +12,23 @@
     "copy": "複製文字",
     "copied": "已複製摘要",
     "copyFailed": "無法複製",
-    "learnMore": "瞭解詳情"
+    "learnMore": "瞭解詳情",
+    "empty": "Leo 尚未撰寫摘要。Leo 記住關於你的事之後，摘要就會出現。",
+    "stale": "你最近的變更很快就會反映在摘要中。"
   },
   "composer": {
     "placeholder": "提問或更新",
     "label": "詢問記憶摘要的相關問題，或告訴 Leo 要變更什麼",
     "send": "傳送",
     "sendFailed": "無法傳送"
+  },
+  "reply": {
+    "label": "Leo 的回答",
+    "remembered": "已記住",
+    "updated": "已更新",
+    "forgotten": "已忘記",
+    "undone": "已復原",
+    "undoFailed": "無法復原變更",
+    "nothing": "沒有任何變更。"
   }
 }

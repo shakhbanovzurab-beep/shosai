@@ -12,12 +12,23 @@
     "copy": "텍스트 복사",
     "copied": "요약을 복사했어요",
     "copyFailed": "복사하지 못했어요",
-    "learnMore": "자세히 알아보기"
+    "learnMore": "자세히 알아보기",
+    "empty": "Leo가 아직 요약을 작성하지 않았어요. Leo가 나에 대해 무언가를 기억하면 나타나요.",
+    "stale": "최근 변경 사항이 곧 요약에 반영돼요."
   },
   "composer": {
     "placeholder": "질문하거나 수정할 내용 입력",
     "label": "메모리 요약에 대해 질문하거나 Leo에게 바꿀 내용을 알려 주세요",
     "send": "보내기",
     "sendFailed": "보내지 못했어요"
+  },
+  "reply": {
+    "label": "Leo의 답변",
+    "remembered": "기억함",
+    "updated": "수정함",
+    "forgotten": "잊음",
+    "undone": "실행 취소됨",
+    "undoFailed": "변경을 실행 취소하지 못했어요",
+    "nothing": "변경된 내용이 없어요."
   }
 }

@@ -28,9 +28,6 @@ artifacts, uploaded files, feedback) return when their owners serve them.
 | `POST`   | `/mcp`            | `McpServerDraft`                            | `201 McpServer`        |
 | `PATCH`  | `/mcp/{id}`       | `{"enabled": bool}`                         | `McpServer`            |
 | `DELETE` | `/mcp/{id}`       | —                                           | `204`                  |
-| `GET`    | `/memories/summary` | —                                         | `MemorySummary`        |
-| `POST`   | `/memories/summary` | `{"message": str}` (ask or update)        | `MemorySummary`        |
-| `POST`   | `/memories/summary/refresh` | —                                 | `MemorySummary`        |
 
 ## Behaviour the UI relies on
 
@@ -63,7 +60,7 @@ artifacts, uploaded files, feedback) return when their owners serve them.
 - **Memory** is the `memory` slice's and runs on the real API (see `memory-api.md`): the switch is `GET` and
   `PATCH /v1/agent/memory/settings` — off stops Leo using and saving memories and deletes nothing — and the
   facts one by one, with their sources, are `/v1/agent/memory`; Settings › Memory opens them from its "What
-  Leo remembers" row under the summary.
+  Leo remembers" row under the summary, which is memory's as well.
 - **Hotkeys.** `hotkeys` holds only the desktop app's global shortcuts the user changed, e.g.
   `{"prompter": "Mod+Alt+Y", "close_app": null}`; `null` turns a shortcut off and a missing id uses
   its default. Ids and defaults are in `src/features/settings/domain/hotkeys.ts` (`open_app` ⌥⌘Z,
@@ -74,7 +71,4 @@ artifacts, uploaded files, feedback) return when their owners serve them.
   replaces the whole map. Reject with `422`: a combo without `Mod` or `Alt`, a system shortcut
   (`Mod+Space`, `Mod+Tab`, `Mod+Q`, `Mod+W`, `Mod+Alt+Escape`), or one already used by another
   command. The desktop app reads the effective shortcuts from `GET /settings`.
-- **Memory summary** (like ChatGPT's): a model-written overview of what Leo has learned, as titled
-  `sections`, plus `suggestions` for "Learn more". `POST /memories/summary` takes a question about it
-  or a correction ("Forget that I…") and returns the updated summary; `refresh` rewrites it from the
-  latest memories. The demo can't run a model, so it files messages under a "Notes from you" section.
+- **Memory summary** is the `memory` slice's too (`/v1/agent/memory/summary*`, see `memory-api.md`).

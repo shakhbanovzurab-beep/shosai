@@ -8,5 +8,4 @@ export const settingsResource = createPollingResource(settingsApi.get);
 export const billingResource = createPollingResource(settingsApi.billing);
 export const usageResource = createPollingResource(settingsApi.usage);
 export const mcpResource = createPollingResource(settingsApi.listMcp);
-export const memorySummaryResource = createPollingResource(settingsApi.memorySummary);
 export const connectorsResource = createPollingResource(settingsApi.listConnectors);

@@ -18,8 +18,7 @@
     "mcpNameRequired": "Beri nama server.",
     "mcpNameTooLong": "Nama tersebut terlalu panjang. Gunakan nama yang lebih pendek.",
     "mcpUrlInvalid": "Masukkan URL http(s) server.",
-    "mcpServerNotFound": "Server tidak ditemukan.",
-    "summaryMessageRequired": "Tulis pertanyaan atau pembaruan."
+    "mcpServerNotFound": "Server tidak ditemukan."
   },
   "avatarTooLarge": "Gambar lebih besar dari {size}.",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "Jumlah: {amount}",
     "status": "Status faktur: {status}",
     "demoNote": "Faktur demo. Faktur asli berupa PDF dari sistem tagihan."
-  },
-  "notesFromYou": "Catatan dari Anda"
+  }
 }

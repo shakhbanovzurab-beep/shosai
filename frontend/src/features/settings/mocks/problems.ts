@@ -28,8 +28,7 @@ export type Problem =
   | "mcpNameRequired"
   | "mcpNameTooLong"
   | "mcpUrlInvalid"
-  | "mcpServerNotFound"
-  | "summaryMessageRequired";
+  | "mcpServerNotFound";
 
 /** The words for a problem in the request's interface language. */
 export async function problemText(problem: Problem) {

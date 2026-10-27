@@ -12,12 +12,23 @@
     "copy": "Text kopieren",
     "copied": "Zusammenfassung kopiert",
     "copyFailed": "Text konnte nicht kopiert werden",
-    "learnMore": "Mehr erfahren"
+    "learnMore": "Mehr erfahren",
+    "empty": "Leo hat noch keine Zusammenfassung geschrieben. Sie erscheint, sobald Leo sich etwas über dich merkt.",
+    "stale": "Deine letzten Änderungen erscheinen bald in der Zusammenfassung."
   },
   "composer": {
     "placeholder": "Fragen oder ändern",
     "label": "Stelle eine Frage zu deiner Gedächtnis-Zusammenfassung oder sag Leo, was geändert werden soll",
     "send": "Senden",
     "sendFailed": "Nachricht konnte nicht gesendet werden"
+  },
+  "reply": {
+    "label": "Antwort von Leo",
+    "remembered": "Gemerkt",
+    "updated": "Geändert",
+    "forgotten": "Vergessen",
+    "undone": "Rückgängig gemacht",
+    "undoFailed": "Die Änderung konnte nicht rückgängig gemacht werden",
+    "nothing": "Nichts geändert."
   }
 }

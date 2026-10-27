@@ -12,12 +12,23 @@
     "copy": "Copia testo",
     "copied": "Riepilogo copiato",
     "copyFailed": "Impossibile copiare",
-    "learnMore": "Scopri di più"
+    "learnMore": "Scopri di più",
+    "empty": "Leo non ha ancora scritto un riepilogo. Apparirà quando Leo ricorderà qualcosa su di te.",
+    "stale": "Le tue ultime modifiche compariranno a breve nel riepilogo."
   },
   "composer": {
     "placeholder": "Chiedi o aggiorna",
     "label": "Fai una domanda sul riepilogo della memoria o di’ a Leo cosa cambiare",
     "send": "Invia",
     "sendFailed": "Impossibile inviare"
+  },
+  "reply": {
+    "label": "Risposta di Leo",
+    "remembered": "Ricordato",
+    "updated": "Aggiornato",
+    "forgotten": "Dimenticato",
+    "undone": "Annullato",
+    "undoFailed": "Impossibile annullare la modifica",
+    "nothing": "Non è cambiato nulla."
   }
 }

@@ -12,7 +12,6 @@ import type {
 } from "../domain/billing-contract";
 import type { ConnectorsResponse, ConnectorUpdateResponse } from "../domain/connectors-contract";
 import type { McpServer, McpServerDraft, McpServersResponse } from "../domain/mcp-contract";
-import type { MemorySummary } from "../domain/memory-contract";
 import type { SettingsPatch, UserSettings } from "../domain/settings-contract";
 
 const request = <T>(path: string, init?: RequestInit) => apiRequest<T>(`/api/settings${path}`, init);
@@ -34,7 +33,4 @@ export const settingsApi = {
   listConnectors: () => request<ConnectorsResponse>("/connectors"),
   setConnected: (id: string, connected: boolean) =>
     request<ConnectorUpdateResponse>(at("/connectors", id), jsonBody("PATCH", { connected })),
-  memorySummary: () => request<MemorySummary>("/memories/summary"),
-  sendSummaryMessage: (message: string) => request<MemorySummary>("/memories/summary", jsonBody("POST", { message })),
-  refreshSummary: () => request<MemorySummary>("/memories/summary/refresh", { method: "POST" }),
 };

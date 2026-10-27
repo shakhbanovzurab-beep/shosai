@@ -12,12 +12,23 @@
     "copy": "Copier le texte",
     "copied": "Résumé copié",
     "copyFailed": "Impossible de copier",
-    "learnMore": "En savoir plus"
+    "learnMore": "En savoir plus",
+    "empty": "Leo n’a pas encore rédigé de résumé. Il apparaîtra dès que Leo retiendra quelque chose à votre sujet.",
+    "stale": "Vos dernières modifications apparaîtront bientôt dans le résumé."
   },
   "composer": {
     "placeholder": "Question ou modification",
     "label": "Posez une question sur le résumé de votre mémoire ou dites à Leo quoi modifier",
     "send": "Envoyer",
     "sendFailed": "Impossible d’envoyer"
+  },
+  "reply": {
+    "label": "Réponse de Leo",
+    "remembered": "Retenu",
+    "updated": "Modifié",
+    "forgotten": "Oublié",
+    "undone": "Annulé",
+    "undoFailed": "Impossible d’annuler la modification",
+    "nothing": "Rien n’a changé."
   }
 }

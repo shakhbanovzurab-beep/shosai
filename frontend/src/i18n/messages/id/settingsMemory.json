@@ -12,12 +12,23 @@
     "copy": "Salin teks",
     "copied": "Ringkasan disalin",
     "copyFailed": "Tidak dapat menyalin",
-    "learnMore": "Pelajari lebih lanjut"
+    "learnMore": "Pelajari lebih lanjut",
+    "empty": "Leo belum menulis ringkasan. Ringkasan akan muncul setelah Leo mengingat sesuatu tentang Anda.",
+    "stale": "Perubahan terbaru Anda akan segera muncul di ringkasan."
   },
   "composer": {
     "placeholder": "Tanyakan atau perbarui",
     "label": "Tanyakan tentang ringkasan memori Anda atau beri tahu Leo apa yang perlu diubah",
     "send": "Kirim",
     "sendFailed": "Tidak dapat mengirim"
+  },
+  "reply": {
+    "label": "Jawaban Leo",
+    "remembered": "Diingat",
+    "updated": "Diperbarui",
+    "forgotten": "Dilupakan",
+    "undone": "Dibatalkan",
+    "undoFailed": "Tidak dapat membatalkan perubahan",
+    "nothing": "Tidak ada yang berubah."
   }
 }

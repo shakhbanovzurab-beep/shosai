@@ -18,8 +18,7 @@
     "mcpNameRequired": "Дайте серверу название.",
     "mcpNameTooLong": "Название слишком длинное. Сократите его.",
     "mcpUrlInvalid": "Введите адрес сервера, начинающийся с http(s).",
-    "mcpServerNotFound": "Сервер не найден.",
-    "summaryMessageRequired": "Напишите вопрос или что изменить."
+    "mcpServerNotFound": "Сервер не найден."
   },
   "avatarTooLarge": "Изображение больше {size}.",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "Сумма: {amount}",
     "status": "Статус: {status}",
     "demoNote": "Демо-счёт. Настоящий счёт — это PDF из платёжной системы."
-  },
-  "notesFromYou": "Ваши уточнения"
+  }
 }

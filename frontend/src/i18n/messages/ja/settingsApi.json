@@ -18,8 +18,7 @@
     "mcpNameRequired": "サーバーの名前を入力してください。",
     "mcpNameTooLong": "名前が長すぎます。短くしてください。",
     "mcpUrlInvalid": "サーバーの http(s) URL を入力してください。",
-    "mcpServerNotFound": "サーバーが見つかりません。",
-    "summaryMessageRequired": "質問か、更新する内容を入力してください。"
+    "mcpServerNotFound": "サーバーが見つかりません。"
   },
   "avatarTooLarge": "画像が {size} を超えています。",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "金額：{amount}",
     "status": "ステータス：{status}",
     "demoNote": "デモ用の請求書です。実際の請求書は請求システムから PDF で発行されます。"
-  },
-  "notesFromYou": "自分から伝えたこと"
+  }
 }

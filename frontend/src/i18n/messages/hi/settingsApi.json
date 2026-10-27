@@ -18,8 +18,7 @@
     "mcpNameRequired": "सर्वर को कोई नाम दें।",
     "mcpNameTooLong": "यह नाम बहुत लंबा है। छोटा नाम रखें।",
     "mcpUrlInvalid": "सर्वर का http(s) URL डालें।",
-    "mcpServerNotFound": "सर्वर नहीं मिला।",
-    "summaryMessageRequired": "कोई सवाल या अपडेट लिखें।"
+    "mcpServerNotFound": "सर्वर नहीं मिला।"
   },
   "avatarTooLarge": "इमेज {size} से बड़ी है।",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "रकम: {amount}",
     "status": "स्थिति: {status}",
     "demoNote": "यह डेमो इनवॉइस है। असली इनवॉइस बिलिंग बैकएंड से PDF के रूप में आता है।"
-  },
-  "notesFromYou": "आपकी ओर से नोट"
+  }
 }

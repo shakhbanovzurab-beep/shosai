@@ -18,8 +18,7 @@
     "mcpNameRequired": "서버 이름을 입력해 주세요.",
     "mcpNameTooLong": "이름이 너무 길어요. 더 짧게 입력해 주세요.",
     "mcpUrlInvalid": "서버의 http(s) URL을 입력해 주세요.",
-    "mcpServerNotFound": "서버를 찾을 수 없어요.",
-    "summaryMessageRequired": "질문이나 업데이트할 내용을 입력해 주세요."
+    "mcpServerNotFound": "서버를 찾을 수 없어요."
   },
   "avatarTooLarge": "이미지가 {size}보다 커요.",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "금액: {amount}",
     "status": "상태: {status}",
     "demoNote": "데모 청구서예요. 실제 청구서는 결제 시스템에서 PDF로 발급돼요."
-  },
-  "notesFromYou": "직접 남긴 메모"
+  }
 }

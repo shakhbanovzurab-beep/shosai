@@ -18,8 +18,7 @@
     "mcpNameRequired": "يرجى إدخال اسم للخادم.",
     "mcpNameTooLong": "الاسم طويل جدًا. يرجى اختيار اسم أقصر.",
     "mcpUrlInvalid": "يرجى إدخال عنوان URL للخادم يبدأ بـ http(s).",
-    "mcpServerNotFound": "لم يتم العثور على الخادم.",
-    "summaryMessageRequired": "يرجى كتابة سؤال أو تحديث."
+    "mcpServerNotFound": "لم يتم العثور على الخادم."
   },
   "avatarTooLarge": "حجم الصورة أكبر من {size}.",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "المبلغ: {amount}",
     "status": "الحالة: {status}",
     "demoNote": "فاتورة تجريبية. الفاتورة الفعلية ملف PDF يصدر من نظام الفوترة."
-  },
-  "notesFromYou": "ملاحظات منك"
+  }
 }

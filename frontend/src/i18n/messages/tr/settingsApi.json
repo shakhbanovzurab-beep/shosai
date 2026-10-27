@@ -18,8 +18,7 @@
     "mcpNameRequired": "Sunucuya bir ad verin.",
     "mcpNameTooLong": "Bu ad çok uzun. Daha kısa bir ad kullanın.",
     "mcpUrlInvalid": "Sunucunun http(s) URL’sini girin.",
-    "mcpServerNotFound": "Sunucu bulunamadı.",
-    "summaryMessageRequired": "Bir soru veya güncelleme yazın."
+    "mcpServerNotFound": "Sunucu bulunamadı."
   },
   "avatarTooLarge": "Görsel {size} boyutundan büyük.",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "Tutar: {amount}",
     "status": "Durum: {status}",
     "demoNote": "Demo fatura. Gerçek fatura, faturalandırma sisteminden gelen bir PDF dosyasıdır."
-  },
-  "notesFromYou": "Sizden gelen notlar"
+  }
 }

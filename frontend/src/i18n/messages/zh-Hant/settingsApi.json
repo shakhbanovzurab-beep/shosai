@@ -18,8 +18,7 @@
     "mcpNameRequired": "請為伺服器命名。",
     "mcpNameTooLong": "名稱太長，請改用較短的名稱。",
     "mcpUrlInvalid": "請輸入伺服器的 http(s) 網址。",
-    "mcpServerNotFound": "找不到伺服器。",
-    "summaryMessageRequired": "請輸入問題或要更新的內容。"
+    "mcpServerNotFound": "找不到伺服器。"
   },
   "avatarTooLarge": "圖片大於 {size}。",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "金額：{amount}",
     "status": "狀態：{status}",
     "demoNote": "示範發票。實際發票會是由帳單後端產生的 PDF。"
-  },
-  "notesFromYou": "你的備註"
+  }
 }

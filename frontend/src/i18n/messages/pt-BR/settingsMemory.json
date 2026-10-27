@@ -12,12 +12,23 @@
     "copy": "Copiar texto",
     "copied": "Resumo copiado",
     "copyFailed": "Não foi possível copiar",
-    "learnMore": "Saiba mais"
+    "learnMore": "Saiba mais",
+    "empty": "O Leo ainda não escreveu um resumo. Ele aparece quando o Leo lembrar de algo sobre você.",
+    "stale": "Suas últimas alterações aparecerão no resumo em breve."
   },
   "composer": {
     "placeholder": "Pergunte ou atualize",
     "label": "Pergunte sobre o resumo da memória ou diga ao Leo o que mudar",
     "send": "Enviar",
     "sendFailed": "Não foi possível enviar"
+  },
+  "reply": {
+    "label": "Resposta do Leo",
+    "remembered": "Lembrado",
+    "updated": "Atualizado",
+    "forgotten": "Esquecido",
+    "undone": "Desfeito",
+    "undoFailed": "Não foi possível desfazer a alteração",
+    "nothing": "Nada mudou."
   }
 }

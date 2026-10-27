@@ -12,12 +12,23 @@
     "copy": "Copy text",
     "copied": "Summary copied",
     "copyFailed": "Couldn’t copy",
-    "learnMore": "Learn more"
+    "learnMore": "Learn more",
+    "empty": "Leo hasn’t written a summary yet. It appears once Leo remembers something about you.",
+    "stale": "Your latest changes will appear in the summary shortly."
   },
   "composer": {
     "placeholder": "Ask or update",
     "label": "Ask about your memory summary or tell Leo what to change",
     "send": "Send",
     "sendFailed": "Couldn’t send"
+  },
+  "reply": {
+    "label": "Leo’s answer",
+    "remembered": "Remembered",
+    "updated": "Updated",
+    "forgotten": "Forgotten",
+    "undone": "Undone",
+    "undoFailed": "Couldn’t undo the change",
+    "nothing": "Nothing changed."
   }
 }

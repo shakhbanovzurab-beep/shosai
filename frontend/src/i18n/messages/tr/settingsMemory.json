@@ -12,12 +12,23 @@
     "copy": "Metni kopyala",
     "copied": "Özet kopyalandı",
     "copyFailed": "Kopyalanamadı",
-    "learnMore": "Daha fazla bilgi"
+    "learnMore": "Daha fazla bilgi",
+    "empty": "Leo henüz bir özet yazmadı. Leo sizinle ilgili bir şey hatırladığında görünür.",
+    "stale": "Son değişiklikleriniz kısa süre içinde özete eklenecek."
   },
   "composer": {
     "placeholder": "Soru sorun veya değişiklik isteyin",
     "label": "Bellek özetiniz hakkında soru sorun veya Leo’ya neyi değiştirmesi gerektiğini söyleyin",
     "send": "Gönder",
     "sendFailed": "Gönderilemedi"
+  },
+  "reply": {
+    "label": "Leo’nun yanıtı",
+    "remembered": "Hatırlandı",
+    "updated": "Güncellendi",
+    "forgotten": "Unutuldu",
+    "undone": "Geri alındı",
+    "undoFailed": "Değişiklik geri alınamadı",
+    "nothing": "Hiçbir şey değişmedi."
   }
 }

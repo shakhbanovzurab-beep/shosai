@@ -16,10 +16,12 @@ What Leo remembers about the person, fact by fact ([ADR 0071](../../docs/adr/007
 | `DELETE` | `/v1/agent/memory`                       | —                                        | `204`            |
 | `GET`    | `/v1/agent/memory/settings`              | —                                        | `{enabled}`      |
 | `PATCH`  | `/v1/agent/memory/settings`              | `{"enabled": bool}`                      | `{enabled}`      |
+| `GET`    | `/v1/agent/memory/summary`               | —                                        | `MemorySummaryOut` |
+| `POST`   | `/v1/agent/memory/summary/refresh`       | —                                        | `MemorySummaryOut` |
+| `POST`   | `/v1/agent/memory/summary/messages` + `Idempotency-Key` | `{"message": str}`        | `MemoryMessageOut` |
 
 The list also filters by `status`, `source=imported` (the draft's carried-over candidates, listed only there)
-and `thread_id` (a conversation's waiting candidates); the summary's routes (`/v1/agent/memory/summary*`) are
-in the same slice.
+and `thread_id` (a conversation's waiting candidates).
 
 ## Behaviour the UI relies on
 
@@ -44,3 +46,18 @@ in the same slice.
   says so.
 - **Leo's changes.** When Leo forgets a fact the person approved on a card, the card names the `memory`
   domain and a shown list reads again.
+
+## The summary and its box (MM-D3)
+
+- **The summary** is `{sections [{title, body}], suggestions [≤ 3], updated_at, stale}`, written by a model from
+  the current facts in the interface language. Reading it never calls a model; `sections` is empty when Leo
+  remembers nothing, and the dialog says so. `stale` means the facts changed since it was written and a rewrite
+  is on its way; the dialog says the latest changes will appear shortly. `refresh` rewrites it now (ten times an
+  hour; `409 memory_off`, `403 consent_required`, `503 memory_unavailable`).
+- **"Ask or update"** posts `{message}` with a fresh `Idempotency-Key` per message. The answer is
+  `{answer, changes, summary}`: `answer` is the answer to a question or null; each change is
+  `{change: remembered | updated | forgotten, fact, replaced_id}`. The dialog shows the answer and the changes
+  above the box, each with Undo: a remembered fact is forgotten (`DELETE /{id}`), a corrected one is undone by
+  restoring `replaced_id`, a forgotten one by restoring it — for a day. After a message the dialog reads the
+  summary again while it is stale, for two minutes at most. `409 memory_off`, `403 consent_required`, `429`,
+  `503 memory_unavailable` come back as a toast.

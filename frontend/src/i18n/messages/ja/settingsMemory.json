@@ -12,12 +12,23 @@
     "copy": "テキストをコピー",
     "copied": "要約をコピーしました",
     "copyFailed": "コピーできませんでした",
-    "learnMore": "詳細"
+    "learnMore": "詳細",
+    "empty": "Leo はまだ要約を書いていません。Leo があなたについて何か覚えると表示されます。",
+    "stale": "最近の変更はまもなく要約に反映されます。"
   },
   "composer": {
     "placeholder": "質問または更新",
     "label": "メモリの要約について質問するか、Leo に変更内容を伝える",
     "send": "送信",
     "sendFailed": "送信できませんでした"
+  },
+  "reply": {
+    "label": "Leo の回答",
+    "remembered": "覚えました",
+    "updated": "更新しました",
+    "forgotten": "忘れました",
+    "undone": "元に戻しました",
+    "undoFailed": "変更を元に戻せませんでした",
+    "nothing": "変更はありません。"
   }
 }

@@ -18,8 +18,7 @@
     "mcpNameRequired": "Geef de server een naam.",
     "mcpNameTooLong": "Die naam is te lang. Kies een kortere.",
     "mcpUrlInvalid": "Vul de http(s)-URL van de server in.",
-    "mcpServerNotFound": "Server niet gevonden.",
-    "summaryMessageRequired": "Schrijf een vraag of een wijziging."
+    "mcpServerNotFound": "Server niet gevonden."
   },
   "avatarTooLarge": "De afbeelding is groter dan {size}.",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "Bedrag: {amount}",
     "status": "Betaalstatus: {status}",
     "demoNote": "Demofactuur. De echte factuur is een pdf uit het factureringssysteem."
-  },
-  "notesFromYou": "Notities van jou"
+  }
 }

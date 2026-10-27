@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 
-import { Copy, CornerDownRight, Ellipsis, RefreshCw } from "lucide-react";
+import { Copy, Ellipsis, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { useFormatter, useNow, useTranslations } from "use-intl";
 
@@ -10,13 +10,14 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
+import type { MemoryMessageReply, MemorySummary } from "@/features/memory/domain/summary-contract";
+import { refreshSummary, summaryResource } from "@/features/memory/model/summary";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 
-import type { MemorySummary } from "../../domain/memory-contract";
-import { refreshMemorySummary } from "../../model/memory-actions";
-import { memorySummaryResource } from "../../model/settings-resources";
 import { SectionState } from "../section-state";
+import { MemorySummaryBody } from "./memory-summary-body";
 import { MemorySummaryComposer } from "./memory-summary-composer";
+import { MemorySummaryReply } from "./memory-summary-reply";
 
 const asText = (summary: MemorySummary) => summary.sections.map((s) => `${s.title}\n${s.body}`).join("\n\n");
 
@@ -45,11 +46,12 @@ function SummaryMenu({ summary }: { summary: MemorySummary }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <DropdownMenuItem onSelect={() => startRefresh(() => refreshMemorySummary(t))}>
+        <DropdownMenuItem onSelect={() => startRefresh(() => refreshSummary(t("summary.refreshFailed")))}>
           <RefreshCw />
           {t("summary.refresh")}
         </DropdownMenuItem>
         <DropdownMenuItem
+          disabled={summary.sections.length === 0}
           onSelect={() =>
             navigator.clipboard.writeText(asText(summary)).then(
               () => toast.success(t("summary.copied")),
@@ -65,53 +67,15 @@ function SummaryMenu({ summary }: { summary: MemorySummary }) {
   );
 }
 
-/** What Leo wrote: its sections and suggested questions, each in the direction of its own text. */
-function SummaryBody({ summary, onSuggest }: { summary: MemorySummary; onSuggest: (text: string) => void }) {
-  const t = useTranslations("settingsMemory");
-  return (
-    <div className="flex flex-col gap-6">
-      {summary.sections.map((section) => (
-        <section key={section.title} className="flex flex-col gap-2">
-          <h3 dir="auto" className="font-semibold text-lg">
-            {section.title}
-          </h3>
-          <p dir="auto" className="whitespace-pre-line text-[15px] leading-7">
-            {section.body}
-          </p>
-        </section>
-      ))}
-      {summary.suggestions.length > 0 ? (
-        <section className="flex flex-col gap-2">
-          <h3 className="font-semibold text-lg">{t("summary.learnMore")}</h3>
-          <ul className="flex flex-col gap-2">
-            {summary.suggestions.map((suggestion) => (
-              <li key={suggestion} className="flex gap-2">
-                <CornerDownRight
-                  className="mt-1 size-4 shrink-0 text-muted-foreground rtl:-scale-x-100"
-                  aria-hidden="true"
-                />
-                <button
-                  type="button"
-                  dir="auto"
-                  onClick={() => onSuggest(suggestion)}
-                  className="cursor-pointer text-start underline decoration-dotted underline-offset-4 hover:decoration-solid focus-visible:outline-2 focus-visible:outline-ring"
-                >
-                  {suggestion}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-    </div>
-  );
-}
-
-/** ChatGPT-style memory summary: what Leo has learned, with a box to ask about it or correct it. */
+/**
+ * The memory summary: what Leo has learned, written by the model from the facts, with a box to ask about it or
+ * correct it; the box's answer and its changes, each undone in place, sit above the box (MM-D3).
+ */
 export function MemorySummaryDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const t = useTranslations("settingsMemory");
-  const state = usePollingResource(memorySummaryResource);
+  const state = usePollingResource(summaryResource);
   const [draft, setDraft] = useState("");
+  const [reply, setReply] = useState<MemoryMessageReply | null>(null);
   const summary = state.status === "ready" ? state.data : null;
 
   return (
@@ -124,11 +88,12 @@ export function MemorySummaryDialog({ open, onClose }: { open: boolean; onClose:
           <DialogDescription className="sr-only">{t("summary.dialogDescription")}</DialogDescription>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
-          <SectionState state={state} onRetry={() => void memorySummaryResource.refresh()}>
-            {(data) => <SummaryBody summary={data} onSuggest={setDraft} />}
+          <SectionState state={state} onRetry={() => void summaryResource.refresh()}>
+            {(data) => <MemorySummaryBody summary={data} onSuggest={setDraft} />}
           </SectionState>
         </div>
-        <MemorySummaryComposer value={draft} onChange={setDraft} />
+        {reply ? <MemorySummaryReply key={reply.changes.map((c) => c.fact.id).join()} reply={reply} /> : null}
+        <MemorySummaryComposer value={draft} onChange={setDraft} onReply={setReply} />
       </DialogContent>
     </Dialog>
   );

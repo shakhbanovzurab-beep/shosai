@@ -18,8 +18,7 @@
     "mcpNameRequired": "Ponle un nombre al servidor.",
     "mcpNameTooLong": "Ese nombre es demasiado largo. Usa uno más corto.",
     "mcpUrlInvalid": "Escribe la URL http(s) del servidor.",
-    "mcpServerNotFound": "No se encontró el servidor.",
-    "summaryMessageRequired": "Escribe una pregunta o un cambio."
+    "mcpServerNotFound": "No se encontró el servidor."
   },
   "avatarTooLarge": "La imagen pesa más de {size}.",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "Importe: {amount}",
     "status": "Estado: {status}",
     "demoNote": "Factura de demostración. La real es un PDF generado por el sistema de facturación."
-  },
-  "notesFromYou": "Tus notas"
+  }
 }

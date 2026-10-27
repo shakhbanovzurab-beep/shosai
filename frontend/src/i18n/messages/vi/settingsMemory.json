@@ -12,12 +12,23 @@
     "copy": "Sao chép văn bản",
     "copied": "Đã sao chép tóm tắt",
     "copyFailed": "Không thể sao chép",
-    "learnMore": "Tìm hiểu thêm"
+    "learnMore": "Tìm hiểu thêm",
+    "empty": "Leo chưa viết bản tóm tắt nào. Bản tóm tắt sẽ xuất hiện khi Leo ghi nhớ điều gì đó về bạn.",
+    "stale": "Những thay đổi mới nhất của bạn sẽ sớm có trong bản tóm tắt."
   },
   "composer": {
     "placeholder": "Hỏi hoặc cập nhật",
     "label": "Hỏi về tóm tắt bộ nhớ hoặc cho Leo biết cần thay đổi gì",
     "send": "Gửi",
     "sendFailed": "Không thể gửi"
+  },
+  "reply": {
+    "label": "Câu trả lời của Leo",
+    "remembered": "Đã ghi nhớ",
+    "updated": "Đã cập nhật",
+    "forgotten": "Đã quên",
+    "undone": "Đã hoàn tác",
+    "undoFailed": "Không thể hoàn tác thay đổi",
+    "nothing": "Không có gì thay đổi."
   }
 }

@@ -18,8 +18,7 @@
     "mcpNameRequired": "Hãy đặt tên cho máy chủ.",
     "mcpNameTooLong": "Tên này quá dài. Hãy dùng tên ngắn hơn.",
     "mcpUrlInvalid": "Hãy nhập URL http(s) của máy chủ.",
-    "mcpServerNotFound": "Không tìm thấy máy chủ.",
-    "summaryMessageRequired": "Hãy viết một câu hỏi hoặc một cập nhật."
+    "mcpServerNotFound": "Không tìm thấy máy chủ."
   },
   "avatarTooLarge": "Ảnh lớn hơn {size}.",
   "invoice": {
@@ -29,6 +28,5 @@
     "amount": "Số tiền: {amount}",
     "status": "Trạng thái: {status}",
     "demoNote": "Hóa đơn demo. Hóa đơn thật là tệp PDF từ hệ thống thanh toán."
-  },
-  "notesFromYou": "Ghi chú từ bạn"
+  }
 }
