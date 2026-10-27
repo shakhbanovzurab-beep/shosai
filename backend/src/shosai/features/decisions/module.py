@@ -24,12 +24,17 @@ from shosai.features.decisions.application.asking import Asker
 from shosai.features.decisions.application.engine import DecisionEngine
 from shosai.features.decisions.application.in_force import PoliciesInForce
 from shosai.features.decisions.application.recording import Recorder
+from shosai.features.decisions.application.reliability import ReliabilityPass
 from shosai.features.decisions.channels.agent_ports import (
     AgentFrictionJudge,
     AgentInjectionJudge,
     AgentTurnRouter,
 )
-from shosai.features.decisions.channels.tasks import PERIODIC_JOBS, zero_retention_check
+from shosai.features.decisions.channels.tasks import (
+    PERIODIC_JOBS,
+    reliability_count,
+    zero_retention_check,
+)
 from shosai.features.decisions.contracts import DECISION_LAYER
 from shosai.features.decisions.domain.policies import policies_by_key
 from shosai.features.decisions.infrastructure.metrics import DecisionMetrics
@@ -82,10 +87,11 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         max_in_flight=settings.decisions_max_in_flight,
     )
     check = partial(zero_retention_check, terms=terms, model=settings.decisions_jev_model)
+    counting = ReliabilityPass(services.transactions, policies_by_key(), partial(datetime.now, UTC))
     async with httpx.AsyncClient(timeout=PUBLIC_API_TIMEOUT) as client, writer.running():
         try:
             yield FeatureParts(
-                task_handlers=(check(client),),
+                task_handlers=(check(client), reliability_count(counting)),
                 periodic_jobs=PERIODIC_JOBS,
                 provides=(
                     DECISION_LAYER.bind(engine),

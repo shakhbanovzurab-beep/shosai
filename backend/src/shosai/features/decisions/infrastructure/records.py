@@ -6,13 +6,14 @@ only insert (the daily reliability pass reads them as the sweep role). In the EU
 platform's policies in force and their fitted thresholds: data without an owner (§6).
 """
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, Final
 from uuid import UUID
 
 from sqlalchemy import (
     Boolean,
     CheckConstraint,
+    Date,
     DateTime,
     ForeignKeyConstraint,
     Index,
@@ -187,4 +188,42 @@ class ThresholdRevisionRow(ModelBase):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
-DECISION_MODELS: Final = (DecisionRow, DecisionOutcomeRow, PolicyStateRow, ThresholdRevisionRow)
+# Ключ счёта надёжности: день и дом, версия политики, полоса, язык и источник.
+RELIABILITY_KEY: Final = (
+    "day", "home", "point", "version", "revision", "shadow", "band", "language", "source",
+)  # fmt: skip
+
+
+class ReliabilityRow(ModelBase):
+    """A day's decisions of a home in one band, and how many the careful case followed (EU
+    home): numbers and codes only; a revision of 0 means the decision had none."""
+
+    __tablename__ = "decision_reliability"
+    __table_args__ = (
+        PrimaryKeyConstraint(*RELIABILITY_KEY, name="pk_decision_reliability"),
+        CheckConstraint(f"home IN ({', '.join(repr(h.value) for h in Home)})", name="home_known"),
+        CheckConstraint(f"point {POINT_FORM}", name="point_form"),
+        CheckConstraint("version >= 1 AND revision >= 0", name="versions"),
+        CheckConstraint(f"band {CODE_FORM} AND length(band) <= 64", name="band_form"),
+        CheckConstraint(f"language {LANGUAGE_FORM}", name="language_form"),
+        CheckConstraint(f"source IN ({known(DecisionSource)})", name="source_known"),
+        CheckConstraint("decisions >= 1 AND positives BETWEEN 0 AND decisions", name="counts"),
+        {"info": table_info(homes=(Home.EU,))},
+    )
+
+    day: Mapped[date] = mapped_column(Date)
+    home: Mapped[str] = mapped_column(Text)
+    point: Mapped[str] = mapped_column(Text)
+    version: Mapped[int] = mapped_column(SmallInteger)
+    revision: Mapped[int] = mapped_column(Integer)
+    shadow: Mapped[bool] = mapped_column(Boolean)
+    band: Mapped[str] = mapped_column(Text)
+    language: Mapped[str] = mapped_column(Text)
+    source: Mapped[str] = mapped_column(Text)
+    decisions: Mapped[int] = mapped_column(Integer)
+    positives: Mapped[int] = mapped_column(Integer)
+
+
+DECISION_MODELS: Final = (
+    DecisionRow, DecisionOutcomeRow, PolicyStateRow, ThresholdRevisionRow, ReliabilityRow,
+)  # fmt: skip

@@ -9,7 +9,7 @@ person's id, and the window before activation is counted in them.
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 
 from sqlalchemy import func, select, update
@@ -21,12 +21,26 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.decisions.infrastructure.records import (
     DecisionRow,
     PolicyStateRow,
+    ReliabilityRow,
     ThresholdRevisionRow,
 )
 
 EU = TenancyScope(Home.EU)
 POLICY = PolicyStateRow
 REVISION = ThresholdRevisionRow
+
+
+@dataclass(frozen=True, slots=True)
+class BandCount:
+    """A band's decisions over some days and those the careful case followed."""
+
+    version: int
+    revision: int
+    shadow: bool
+    band: str
+    source: str
+    decisions: int
+    positives: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,6 +121,20 @@ class PolicyAdmin:
                 )
                 for r in rows
             ]  # fmt: skip
+
+    async def reliability(self, point: str, since: date) -> Sequence[BandCount]:
+        """A point's reliability counts since a day, summed over homes and languages."""
+        rel = ReliabilityRow
+        keys = (rel.version, rel.revision, rel.shadow, rel.band, rel.source)
+        statement = (
+            select(*keys, func.sum(rel.decisions), func.sum(rel.positives))
+            .where(rel.point == point, rel.day >= since)
+            .group_by(*keys)
+            .order_by(*keys)
+        )
+        async with self._transactions.begin(EU, read_only=True) as session:
+            rows = (await session.execute(statement)).all()
+        return [BandCount(*row[:5], decisions=int(row[5]), positives=int(row[6])) for row in rows]
 
     async def states(self, point: str) -> Sequence[VersionState]:
         """Every version of a point that was ever in force."""

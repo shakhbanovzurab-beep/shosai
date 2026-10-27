@@ -92,6 +92,16 @@ class Policy[F, V](ABC):
         """Whether a judged outcome is the expected one."""
         return judged == expected
 
+    def band(self, outcome: str) -> str:
+        """The band a recorded outcome's code falls in, for the daily reliability counts."""
+        return outcome
+
+    def confirms(self, outcome: str, observation: Mapping[str, object] | None) -> bool:
+        """Whether what followed a recorded decision is the careful outcome's case; False when
+        nothing followed or the point observes nothing."""
+        del outcome, observation
+        return False
+
     @abstractmethod
     def wording(self) -> Mapping[str, object]:
         """Every fixed text of the questions, as the model-facing test and the digest read it."""

@@ -157,6 +157,16 @@ class TurnRoute(Policy[TurnFacts, tuple[str, ...]]):
             room=whole(raw, "room"), turn=whole(raw, "turn"),
         )  # fmt: skip
 
+    def band(self, outcome: str) -> str:
+        """Ranked or not: the names themselves are not a band."""
+        return "none" if outcome == "-" else "ranked"
+
+    def confirms(self, outcome: str, observation: Mapping[str, object] | None) -> bool:
+        """The run called a toolset the ranking brought in."""
+        called = observation.get("called") if observation is not None else None
+        ranked = set() if outcome == "-" else set(outcome.split(","))
+        return isinstance(called, list) and bool(ranked.intersection(map(str, called)))
+
     def careful_case(self, expected: tuple[str, ...]) -> bool:
         """A turn that needs at least one candidate."""
         return bool(expected)

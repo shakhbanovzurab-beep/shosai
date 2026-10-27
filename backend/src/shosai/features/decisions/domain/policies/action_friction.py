@@ -160,6 +160,12 @@ class ActionFriction(Policy[CardFacts, CardFriction]):
             request=text(raw, "request"), card=text(raw, "card"),
         )  # fmt: skip
 
+    def confirms(self, outcome: str, observation: Mapping[str, object] | None) -> bool:
+        """The person declined the card: in the warning band it was warranted, in the
+        standard band a warning was missed."""
+        del outcome
+        return observation is not None and observation.get("resolution") == "rejected"
+
     def careful_case(self, expected: CardFriction) -> bool:
         """A card that should warn."""
         return expected is CardFriction.WARNING

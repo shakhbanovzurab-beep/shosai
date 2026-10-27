@@ -2,7 +2,8 @@
 
     shosai decisions dataset check|generate|draft-reference|label-reference …   the sets
     shosai decisions calibrate POINT@VERSION [--recorded] [--concurrency N]
-    shosai decisions report POINT                     versions in force and revisions
+    shosai decisions report POINT                     versions in force, revisions and
+                                                      reliability per band over a week
     shosai decisions promote POINT@VERSION --revision N --to shadow|active [--note TEXT]
     shosai decisions retire POINT@VERSION [--note TEXT]
 
@@ -18,6 +19,7 @@ import json
 import sys
 from collections.abc import Coroutine, Mapping
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 from typing import Any, Final, Literal, TextIO
 
 from shosai.composition.decisions_dataset_command import add_dataset, checked, made
@@ -33,6 +35,8 @@ from shosai.features.decisions.infrastructure.policy_admin import PolicyAdmin
 from shosai.features.decisions.settings import DecisionsSettings
 
 EXIT_OK: Final = 0
+# Надёжность в отчёте — за последнюю неделю: дневных счётов хватает и на одну полосу.
+RELIABILITY_DAYS: Final = timedelta(days=7)
 EXIT_FAILED: Final = 1
 
 type Action = Literal[
@@ -161,6 +165,15 @@ async def reported(admin: PolicyAdmin, point: str, out: TextIO) -> int:
         verdict = "passed" if revision.passed else "failed"
         made = f"{revision.created_at:%Y-%m-%d}"
         out.write(f"{point}@{revision.version} revision {revision.revision}: {verdict}, {made}\n")
+    week_ago = datetime.now(UTC).date() - RELIABILITY_DAYS
+    for count in await admin.reliability(point, week_ago):
+        mode = "shadow" if count.shadow else "in force"
+        share = count.positives / count.decisions
+        out.write(
+            f"{point}@{count.version} revision {count.revision} ({mode}) band {count.band}, "
+            f"{count.source}: {count.decisions} decisions, {share:.1%} careful case, "
+            f"last {RELIABILITY_DAYS.days} days\n"
+        )
     return EXIT_OK
 
 
