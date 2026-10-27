@@ -1,20 +1,17 @@
 """Walking model-facing text and checking that instructions are written in Latin script.
 
-A letter outside the Latin script (Cyrillic, Greek, CJK) marks a non-English instruction:
-a model takes the language of an instruction as a cue for the language of its answer.
-Digits, punctuation and Latin letters with diacritics pass.
+The rule is core's `non_latin_letters`, the one studio applies to the operator's platform text.
 """
 
-import unicodedata
 from collections.abc import Iterable, Iterator, Mapping, Set
 from dataclasses import dataclass
 from enum import Enum
 
 from pydantic import BaseModel
 
+from shosai.core.kernel.latin_script import non_latin_letters
 from tests.model_facing.registry import ModelFacingSource
 
-LATIN_LETTER_PREFIX = "LATIN "
 EXCERPT_LENGTH = 80
 
 
@@ -29,17 +26,6 @@ class ModelText:
 def iter_texts(value: object, path: str = "$") -> Iterator[ModelText]:
     """Every string of an object, including mapping keys and enum values."""
     yield from _walk(value, path, frozenset())
-
-
-def non_latin_letters(text: str) -> list[str]:
-    """Letters outside the Latin script, without repeats, in code point order."""
-    return sorted(
-        {
-            char
-            for char in text
-            if char.isalpha() and not unicodedata.name(char, "").startswith(LATIN_LETTER_PREFIX)
-        }
-    )
 
 
 def find_violations(sources: Iterable[ModelFacingSource]) -> list[str]:

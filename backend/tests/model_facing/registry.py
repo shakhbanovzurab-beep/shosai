@@ -32,6 +32,7 @@ from shosai.features.memory.infrastructure.embeddings import EMBEDDING_TEXTS
 from shosai.features.memory.infrastructure.extraction_prompts import EXTRACTION_TEXTS
 from shosai.features.memory.infrastructure.summary_prompts import SUMMARY_TEXTS
 from shosai.features.notes.infrastructure.prompts import PROMPT_TEXTS as NOTES_PROMPTS
+from shosai.features.studio.domain.platform_layer import PLATFORM_TEXTS
 
 
 @dataclass(frozen=True, slots=True)
@@ -90,6 +91,9 @@ MODEL_FACING_SOURCES: tuple[ModelFacingSource, ...] = (
     ModelFacingSource(owner="memory", name="embedding prefixes", collect=lambda: EMBEDDING_TEXTS),
     ModelFacingSource(
         owner="memory", name="summary and box prompts", collect=lambda: SUMMARY_TEXTS
+    ),
+    ModelFacingSource(
+        owner="studio", name="the platform layer's frame", collect=lambda: PLATFORM_TEXTS
     ),
     *slice_tool_sources(),
 )

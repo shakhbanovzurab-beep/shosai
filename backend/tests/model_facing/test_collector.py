@@ -6,7 +6,8 @@ from enum import StrEnum
 import pytest
 from pydantic import BaseModel, Field, create_model
 
-from tests.model_facing.collector import find_violations, iter_texts, non_latin_letters
+from shosai.core.kernel.latin_script import non_latin_letters
+from tests.model_facing.collector import find_violations, iter_texts
 from tests.model_facing.registry import ModelFacingSource
 
 

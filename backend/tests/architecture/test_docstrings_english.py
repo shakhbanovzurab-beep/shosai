@@ -8,7 +8,7 @@ import ast
 from collections.abc import Iterator
 from pathlib import Path
 
-from tests.model_facing.collector import non_latin_letters
+from shosai.core.kernel.latin_script import non_latin_letters
 
 BACKEND = Path(__file__).resolve().parents[2]
 DOCUMENTED_NODES = (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)
