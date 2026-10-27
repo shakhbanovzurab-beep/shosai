@@ -7,7 +7,8 @@ home, the `vector` extension and the handler of what memory holds of a person. S
 routes of Settings > Memory's facts and switch, and the switch's mirror in the native
 `/v1/auth/me`. Step 4 the vectors — the embedding pass once a minute per home on the owner's
 `google/gemini-embedding-2` — and the agent's `MEMORY_RECALL` and `PROFILE_FACTS` bound.
-Step 5 a turn's admission after `agent.turn.completed`. The toolset comes with the next step.
+Step 5 a turn's admission after `agent.turn.completed`. Step 6 Leo's `memory` toolset —
+`memory.recall` and `memory.forget` — offered while the person's memory is on.
 """
 
 from collections.abc import AsyncIterator
@@ -15,15 +16,20 @@ from contextlib import asynccontextmanager
 
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.core.idempotency.action_items import ActionItems
 from shosai.features.agent.contracts.memory import MEMORY_RECALL, PROFILE_FACTS
 from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 from shosai.features.memory.application.account_data import ACCOUNT_DATA, MemoryAccountData
 from shosai.features.memory.application.embedding_pass import EmbeddingPass
 from shosai.features.memory.application.fact_changes import FactChanges
+from shosai.features.memory.application.fact_forgets import FactForgets
 from shosai.features.memory.application.fact_list import FactLists
+from shosai.features.memory.application.fact_search import FactSearch
 from shosai.features.memory.application.recall import Recall
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.application.turn_admission import TurnAdmission
+from shosai.features.memory.channels.agent_tool_handlers import MemoryTools
+from shosai.features.memory.channels.agent_tools import MEMORY_TOOLS
 from shosai.features.memory.channels.http.facts import build_memory_router
 from shosai.features.memory.channels.subscriptions import subscriptions
 from shosai.features.memory.channels.tasks import PERIODIC_JOBS, embedding_tick, turn_admission
@@ -51,8 +57,12 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         (Extractor(services.ai, settings.model_route()), embedder),
         (ports, services.effects, services.valkey, metrics),
     )
+    search = FactSearch(transactions, (lists, embedder, services.valkey, ports))
+    items = ActionItems(services.effects, services.outbox)
+    tools = MemoryTools(transactions, (search, FactForgets(lists), items))
     yield FeatureParts(
         http_routers=(build_memory_router((lists, changes, switch), ports),),
+        agent_tools=tools.bound(),
         task_handlers=(embedding_tick(embedding), turn_admission(admission)),
         subscriptions=subscriptions(services.tasks),
         periodic_jobs=PERIODIC_JOBS,
@@ -71,4 +81,5 @@ MEMORY = FeatureModule(
     models=MEMORY_MODELS,
     settings=(MemorySettings,),
     account_data=(ACCOUNT_DATA,),
+    agent_tools=MEMORY_TOOLS,
 )

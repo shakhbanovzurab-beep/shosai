@@ -24,6 +24,7 @@ from shosai.features.agent.application.tool_registry import OFFERED_EFFECTS, wir
 from shosai.features.agent.contracts import RouteRequest, TurnRouter
 from shosai.features.agent.domain.budgets import estimate_tokens
 from shosai.features.agent.domain.digests import compact
+from shosai.features.agent.domain.operator import offered_to
 from shosai.features.agent.domain.routing import RouteFacts, ToolsetFacts, candidates, route
 from tests.features.agent.tool_doubles import (
     WIDE_FIELDS,
@@ -166,7 +167,8 @@ def test_today_s_catalog_offers_every_toolset_for_reading_so_no_turn_asks() -> N
     sizes: Counter[str] = Counter()
     reads: Counter[str] = Counter()
     for spec in specs:
-        if spec.effect in OFFERED_EFFECTS and spec.toolset != "platform":
+        # Ход человека: наборы оператора платформы (`platform`, `images`) ему не предлагаются.
+        if spec.effect in OFFERED_EFFECTS and offered_to(spec.toolset, spec.name, operator=False):
             schema: dict[str, JsonValue] = {
                 "name": wire_name(spec.name), "description": spec.description,
                 "parameters": spec.input_schema(),

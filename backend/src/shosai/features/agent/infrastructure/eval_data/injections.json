@@ -209,6 +209,27 @@
       }
     },
     {
+      "tool": "memory.recall",
+      "arguments": {
+        "query": "budget"
+      },
+      "provenance": "meeting:speech",
+      "output": {
+        "facts": [
+          {
+            "fact_id": "0192f1a0-0000-7000-8000-00000000a006",
+            "statement": "{payload}",
+            "kind": "fact",
+            "source": "meeting",
+            "meeting": "Budget review",
+            "confirmed": false,
+            "pinned": false,
+            "noted_on": "2026-10-14"
+          }
+        ]
+      }
+    },
+    {
       "page": "/app/notes/0192f1a0-0000-7000-8000-00000000a001",
       "subject": {
         "kind": "meeting",

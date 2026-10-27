@@ -27,6 +27,7 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.agent.application.memory_context import memory_switches
 from shosai.features.agent.application.preferences import preferences_of
 from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.threads import Threads
@@ -222,6 +223,7 @@ class AgentVoiceTurns:
                     raise AppError("thread_not_found", HTTPStatus.NOT_FOUND)
             consent = await parts.ports.get(CONSENT_READER).cross_border(session, principal.user_id)
             preferences = preferences_of(await session.get(AgentSettingsRecord, principal.user_id))
+            memory = await memory_switches(parts.ports, session, principal.user_id)
         if principal.home is Home.RU and not consent:
             raise AppError("consent_required", HTTPStatus.FORBIDDEN)
         if not preferences.switched_on(Switch.VOICE_MODE):
@@ -236,7 +238,7 @@ class AgentVoiceTurns:
             started_at=self._clock(), question_id=new_id(), reply_id=new_id(), language=language,
             length=preferences.response_length, cross_border_consent=consent, token_route=route,
             path=start.path,
-            switches_on=tuple(s.value for s in Switch if preferences.switched_on(s)),
+            switches_on=(*(s.value for s in Switch if preferences.switched_on(s)), *memory),
         )  # fmt: skip
         async with parts.transactions.begin(principal.scope(), read_only=True) as session:
             offer = await parts.routing.offer(session, terms, cap=VOICE_TOOLS_CAP)

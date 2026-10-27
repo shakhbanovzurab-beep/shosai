@@ -4,8 +4,10 @@
 read in the context's own transaction, and the facts recalled for the question of segment 7
 (`MemoryRecall`), started beside it with a deadline. Each fact says what it raises the run's
 taint to: a fact the person confirmed is their own data and raises nothing; any other keeps
-its source's taint, at least external (MM-D7). Agent binds `PersonWords`: the person's own
-words of a finished turn, which memory admits facts from, never tool rounds or attachments.
+its source's taint, at least external (MM-D7). Whether memory is on is read when a turn starts:
+a turn carries `MEMORY_SWITCH` among its switches while it is, which offers memory's toolset.
+Agent binds `PersonWords`: the person's own words of a finished turn, which memory admits facts
+from, never tool rounds or attachments.
 """
 
 from dataclasses import dataclass
@@ -20,8 +22,12 @@ from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.keys import PortKey
 
+# `ToolSpec.switch` набора памяти: ход несёт его, пока память человека включена.
+MEMORY_SWITCH: Final = "memory.enabled"
+
 __all__ = [
     "MEMORY_RECALL",
+    "MEMORY_SWITCH",
     "PERSON_WORDS",
     "PROFILE_FACTS",
     "MemoryRecall",
@@ -84,6 +90,10 @@ class ProfileFacts(Protocol):
 
     async def profile(self, session: AsyncSession, user_id: UUID, max_tokens: int) -> ProfileCore:
         """Read in the caller's transaction, as the person; within the budget."""
+        ...
+
+    async def enabled(self, session: AsyncSession, user_id: UUID) -> bool:
+        """Whether the person's memory is on, read in the caller's transaction."""
         ...
 
 

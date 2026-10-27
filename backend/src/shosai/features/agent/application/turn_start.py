@@ -11,7 +11,8 @@ and its run in one transaction. `run.started` is written to the run's log before
 sent, so the stream has its first event the moment it opens. What an admission took is given
 back on every failure after it; a Valkey that does not answer is 503 `agent_unavailable`. The
 platform operator's turn (AG-D5) has no plan to ask and no consent to give: the platform pays
-it, it is answered in Russian and carries no attachments (422 `attachments_not_allowed`).
+it, it is answered in Russian and carries no attachments (422 `attachments_not_allowed`). The
+switches the person left on travel with the turn, memory's among them while it is on.
 """
 
 import asyncio
@@ -39,6 +40,7 @@ from shosai.core.kv.connection import REDIS_FAILURES
 from shosai.core.kv.rate_limits import RateLimit
 from shosai.core.tasks.errors import TaskQueueUnavailableError
 from shosai.core.web.rate_limit import RateLimitedError
+from shosai.features.agent.application.memory_context import memory_switches
 from shosai.features.agent.application.preferences import preferences_of
 from shosai.features.agent.application.surface_digest import Subject
 from shosai.features.agent.application.token_admission import standard_tokens
@@ -154,6 +156,7 @@ class TurnStarter:
             await parts.threads.visible_thread(session, principal.user_id, thread_id)
             consent = await parts.ports.get(CONSENT_READER).cross_border(session, principal.user_id)
             stored = await session.get(AgentSettingsRecord, principal.user_id)
+            memory = await memory_switches(parts.ports, session, principal.user_id)
         if principal.home is Home.RU and not consent:
             raise AppError("consent_required", HTTPStatus.FORBIDDEN)
         # Ход оператора платит платформа (AG-D5): тарифа и его токенов у него нет, вложений тоже.
@@ -169,7 +172,8 @@ class TurnStarter:
         preferences = preferences_of(stored)
         page, again = request.page, request.again
         language = OPERATOR_LANGUAGE if operator else answer_language(preferences, request.locale)
-        switches = () if operator else tuple(s.value for s in Switch if preferences.switched_on(s))
+        leo = tuple(s.value for s in Switch if preferences.switched_on(s))
+        switches = () if operator else (*leo, *memory)
         terms = TurnPayload(
             home=principal.home, user_id=principal.user_id, run_id=new_id(), thread_id=thread_id,
             started_at=self._clock(), question_id=again.question_id or new_id(),

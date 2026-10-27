@@ -2,9 +2,9 @@
 
 Every scenario runs for a new person who exists only for that run: the other slices' ports the
 turn reads are answered here, by the scenario — a plan with every capability and tokens to
-spare, a profile in the run's language, no workspaces, and the page's meeting, task, board or
-file as the scenario describes it. The person's rows are erased after the run through the
-slices' own erasure handlers, so the eval leaves nothing behind.
+spare, a profile in the run's language, no workspaces, memory on with nothing pinned, and the
+page's meeting, task, board or file as the scenario describes it. The person's rows are erased
+after the run through the slices' own erasure handlers, so the eval leaves nothing behind.
 """
 
 from collections.abc import Collection, Mapping, Sequence
@@ -19,7 +19,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.keys import PortBinding
 from shosai.core.storage.port import ObjectStream
+from shosai.features.agent.application.eval_memory import EvalMemory
 from shosai.features.agent.application.eval_stage import EvalStage
+from shosai.features.agent.contracts.memory import PROFILE_FACTS
 from shosai.features.agent.domain.eval_cases import EvalSubject
 from shosai.features.billing.contracts import (
     ENTITLEMENTS,
@@ -281,4 +283,5 @@ def world_bindings(stage: EvalStage) -> tuple[PortBinding[Any], ...]:
         FILE_READER.bind(EvalFiles(stage)),
         MEMBERSHIP_READER.bind(spaces),
         WORKSPACE_READER.bind(spaces),
+        PROFILE_FACTS.bind(EvalMemory()),
     )

@@ -1,56 +1,66 @@
 {
-  "reason": "Agent step 9a1: write tools offered and routed reads-first (rules_v2); a write becomes a card that pauses the run.",
-  "recorded_on": "2026-10-24",
+  "reason": "Memory step 6: the memory toolset offered while the person's memory is on; memory_recall and memory_forget added.",
+  "recorded_on": "2026-10-27",
   "scenarios": {
     "greeting": {
       "model_calls": 1,
-      "input_tokens": 4883,
+      "input_tokens": 4864,
       "output_tokens": 19
     },
     "meeting_decision": {
       "model_calls": 2,
-      "input_tokens": 9953,
+      "input_tokens": 9915,
       "output_tokens": 36
     },
     "overdue_tasks": {
       "model_calls": 2,
-      "input_tokens": 10165,
+      "input_tokens": 10127,
       "output_tokens": 43
     },
     "board_page": {
       "model_calls": 2,
-      "input_tokens": 9961,
+      "input_tokens": 10295,
       "output_tokens": 54
     },
     "meeting_page": {
       "model_calls": 2,
-      "input_tokens": 9811,
+      "input_tokens": 10145,
       "output_tokens": 74
     },
     "file_lookup": {
       "model_calls": 3,
-      "input_tokens": 15269,
+      "input_tokens": 15212,
       "output_tokens": 61
     },
     "plan_minutes": {
       "model_calls": 2,
-      "input_tokens": 9875,
+      "input_tokens": 9837,
       "output_tokens": 27
     },
     "nothing_found": {
       "model_calls": 2,
-      "input_tokens": 9849,
+      "input_tokens": 9811,
       "output_tokens": 44
     },
     "task_proposal": {
       "model_calls": 2,
-      "input_tokens": 11878,
+      "input_tokens": 11839,
       "output_tokens": 36
     },
     "multi_source": {
       "model_calls": 2,
-      "input_tokens": 10350,
+      "input_tokens": 10312,
       "output_tokens": 79
+    },
+    "memory_recall": {
+      "model_calls": 2,
+      "input_tokens": 9908,
+      "output_tokens": 29
+    },
+    "memory_forget": {
+      "model_calls": 3,
+      "input_tokens": 15065,
+      "output_tokens": 48
     }
   }
 }

@@ -129,6 +129,10 @@ class Recall:
         )
         return found is not None
 
+    async def enabled(self, session: AsyncSession, user_id: UUID) -> bool:
+        """Whether the person's memory is on, in the agent's transaction."""
+        return await memory_on(session, user_id)
+
     async def profile(self, session: AsyncSession, user_id: UUID, max_tokens: int) -> ProfileCore:
         """Pinned facts, then preferences, within the budget, in the agent's transaction."""
         if not await memory_on(session, user_id):

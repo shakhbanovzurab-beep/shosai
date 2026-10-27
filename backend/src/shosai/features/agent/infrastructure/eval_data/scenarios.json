@@ -880,6 +880,171 @@
         ],
         "cites": true
       }
+    },
+    {
+      "id": "memory_recall",
+      "summary": "What Leo knows about the person: it reads its memory and says what it holds.",
+      "questions": {
+        "en": "What do you know about me?",
+        "fr": "Que sais-tu de moi ?",
+        "de": "Was weißt du über mich?",
+        "ru": "Что ты обо мне знаешь?",
+        "nl": "Wat weet je over mij?",
+        "it": "Cosa sai di me?",
+        "es": "¿Qué sabes de mí?",
+        "pt-BR": "O que você sabe sobre mim?",
+        "ar": "ماذا تعرف عني؟",
+        "tr": "Hakkımda ne biliyorsun?",
+        "ko": "나에 대해 뭘 알고 있어?",
+        "hi": "आप मेरे बारे में क्या जानते हैं?",
+        "vi": "Bạn biết gì về tôi?",
+        "zh-Hant": "你知道我哪些事？",
+        "ja": "私について何を知っていますか？",
+        "id": "Apa yang kamu ketahui tentang saya?"
+      },
+      "fixtures": {
+        "memory.recall": {
+          "output": {
+            "facts": [
+              {
+                "fact_id": "0192f1a0-0000-7000-8000-00000000d002",
+                "statement": "Prefers short answers",
+                "kind": "preference",
+                "source": "user_statement",
+                "meeting": null,
+                "confirmed": true,
+                "pinned": true,
+                "noted_on": "2026-10-05"
+              },
+              {
+                "fact_id": "0192f1a0-0000-7000-8000-00000000d001",
+                "statement": "Is vegetarian",
+                "kind": "preference",
+                "source": "user_statement",
+                "meeting": null,
+                "confirmed": true,
+                "pinned": false,
+                "noted_on": "2026-10-12"
+              }
+            ]
+          },
+          "provenance": "memory"
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "memory.recall",
+              "arguments": {}
+            }
+          ]
+        },
+        {
+          "say": "I remember that you prefer short answers and that you are vegetarian."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "memory.recall"
+        ]
+      }
+    },
+    {
+      "id": "memory_forget",
+      "summary": "Forgetting: Leo finds the fact and proposes to forget it on a card; nothing is forgotten before the person approves.",
+      "questions": {
+        "en": "Forget that I'm vegetarian.",
+        "fr": "Oublie que je suis végétarien.",
+        "de": "Vergiss, dass ich Vegetarier bin.",
+        "ru": "Забудь, что я вегетарианец.",
+        "nl": "Vergeet dat ik vegetariër ben.",
+        "it": "Dimentica che sono vegetariano.",
+        "es": "Olvida que soy vegetariano.",
+        "pt-BR": "Esqueça que eu sou vegetariano.",
+        "ar": "انسَ أنني نباتي.",
+        "tr": "Vejetaryen olduğumu unut.",
+        "ko": "내가 채식주의자라는 건 잊어 줘.",
+        "hi": "भूल जाइए कि मैं शाकाहारी हूँ।",
+        "vi": "Hãy quên rằng tôi ăn chay.",
+        "zh-Hant": "忘記我吃素這件事。",
+        "ja": "私がベジタリアンだということは忘れて。",
+        "id": "Lupakan bahwa saya vegetarian."
+      },
+      "fixtures": {
+        "memory.recall": {
+          "output": {
+            "facts": [
+              {
+                "fact_id": "0192f1a0-0000-7000-8000-00000000d001",
+                "statement": "Is vegetarian",
+                "kind": "preference",
+                "source": "user_statement",
+                "meeting": null,
+                "confirmed": true,
+                "pinned": false,
+                "noted_on": "2026-10-12"
+              }
+            ]
+          },
+          "provenance": "memory"
+        }
+      },
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "memory.recall",
+              "arguments": {
+                "query": "vegetarian"
+              }
+            }
+          ]
+        },
+        {
+          "calls": [
+            {
+              "tool": "core.load_toolset",
+              "arguments": {
+                "name": "memory"
+              }
+            }
+          ]
+        },
+        {
+          "calls": [
+            {
+              "tool": "memory.forget",
+              "arguments": {
+                "fact_ids": [
+                  "0192f1a0-0000-7000-8000-00000000d001"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "say": "I prepared the card; approve it and I will forget that you are vegetarian."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "memory.recall",
+          "core.load_toolset",
+          "memory.forget"
+        ],
+        "arguments": {
+          "memory.recall": {
+            "query": "vegetarian"
+          },
+          "memory.forget": {
+            "fact_ids": [
+              "0192f1a0-0000-7000-8000-00000000d001"
+            ]
+          }
+        },
+        "pauses": true
+      }
     }
   ]
 }

@@ -1,6 +1,6 @@
 """Memory in a turn's context: the profile core keeps segment 4 byte-identical, recalled facts
-come before the question, and only facts the person confirmed leave the run untainted
-(memory step 4, ADR 0071 MM-D7)."""
+come before the question, only facts the person confirmed leave the run untainted, and a turn
+carries memory's switch only while memory is on (memory steps 4 and 6, ADR 0071 MM-D7)."""
 
 import uuid
 from dataclasses import dataclass, field
@@ -12,7 +12,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.agent_tools.context import Taint
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.requests import ChatRequest, TextPart
-from shosai.features.agent.contracts.memory import ProfileCore, RecalledFact, RecallRequest
+from shosai.features.agent.contracts.memory import (
+    MEMORY_SWITCH,
+    ProfileCore,
+    RecalledFact,
+    RecallRequest,
+)
 from shosai.features.agent.infrastructure.prompts import MEMORY_OFF, MEMORY_ON, RECALLED
 from tests.features.agent.bench_doubles import MemoryPorts
 from tests.features.agent.turn_bench import TurnBench, stream_of
@@ -32,7 +37,7 @@ class Memory:
 
     recalled: tuple[RecalledFact, ...] = ()
     pinned: tuple[RecalledFact, ...] = (OWN,)
-    enabled: bool = True
+    on: bool = True
     asked: list[RecallRequest] = field(default_factory=list)
 
     async def recall(self, request: RecallRequest) -> tuple[RecalledFact, ...]:
@@ -45,7 +50,12 @@ class Memory:
     ) -> ProfileCore:
         """The profile core."""
         del session, user_id, max_tokens
-        return ProfileCore(enabled=self.enabled, facts=self.pinned if self.enabled else ())
+        return ProfileCore(enabled=self.on, facts=self.pinned if self.on else ())
+
+    async def enabled(self, session: AsyncSession, user_id: uuid.UUID) -> bool:
+        """Whether memory is on."""
+        del session, user_id
+        return self.on
 
 
 @pytest.fixture
@@ -87,6 +97,7 @@ async def test_the_profile_core_keeps_the_head_byte_identical_and_trusts_the_per
 
     head = text_at(first, 0)
     assert MEMORY_ON in head
+    assert MEMORY_SWITCH in turn_bench.queue.sent[-1].switches_on
     assert "- [preference] Prefers short answers" in head
     assert first.messages[0] == second.messages[0]
     assert third.messages[0] != first.messages[0]
@@ -118,7 +129,7 @@ async def test_memory_off_says_so_and_recalls_nothing(
 ) -> None:
     person = uuid.uuid4()
     thread = await turn_bench.thread(person)
-    memory.enabled, memory.recalled = False, (OWN,)
+    memory.on, memory.recalled = False, (OWN,)
 
     await turn_bench.ask(person, thread, "Remember that I like tea")
     request = turn_bench.model.calls[-1]
@@ -126,3 +137,4 @@ async def test_memory_off_says_so_and_recalls_nothing(
     assert MEMORY_OFF in text_at(request, 0)
     assert RECALLED not in text_at(request, -1)
     assert memory.asked == []
+    assert MEMORY_SWITCH not in turn_bench.queue.sent[-1].switches_on

@@ -39,6 +39,12 @@ What Leo knows about the person: their preferences, facts about them and their w
 
 - `channels/subscriptions.py` sends `memory.admit_turn` for each `agent.turn.completed`; `application/turn_admission.py` reads the agent's `PERSON_WORDS` with the switch and the consent, asks `infrastructure/extractor.py` (`MEMORY_MODEL`, one more ask on an unreadable answer) for at most three statements, embeds them in one call, and `application/admission_writer.py` decides and writes under the person's admission lock, reading the switch again inside it. The write is keyed by the run; a suspicious run, memory off, the operator or a missing consent take nothing.
 
+## Leo's `memory` toolset (step 6)
+
+- `channels/agent_tools.py` declares `memory.recall` (read) and `memory.forget` (write, compensable), both behind the agent's `MEMORY_SWITCH`: a turn carries it only while the person's memory is on (read at the turn's start through `PROFILE_FACTS.enabled`). Never offered over MCP.
+- `application/fact_search.py`: with a query, one embedding under the person's consent and the exact nearest 20 above the recall floor; without one, the pinned and then the most recently confirmed. Current facts in Personal and the workspaces the person is in now only. A result with a meeting's fact is labelled `meeting:speech` and cites the meeting the person can still read; any other `memory`. The result is wrapped whole, so it marks the run external even when every fact was confirmed.
+- `application/fact_forgets.py` and `channels/agent_tool_handlers.py`: the plan freezes up to ten facts, every one current and the person's or the call is refused; the card (`channels/agent_previews.py`, 16 languages) shows how many and each statement as stored; the approved write ends those still current under row locks with the item's key and audit event (`ActionItems`), restorable for 24 hours, even if memory was switched off after the approval.
+
 ## What the models read (step 1)
 
 `infrastructure/extraction_prompts.py` (a turn's and a meeting's extraction) and `infrastructure/summary_prompts.py` (the summary and the box): English instructions with the output language stated in each, and their answer schemas — registered in the model-facing English test.

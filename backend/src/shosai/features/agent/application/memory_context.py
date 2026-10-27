@@ -4,7 +4,9 @@ The profile core is read in the context's own transaction and closes segment 4 w
 memory is on and the pinned facts and preferences, under a boundary keyed to their text.
 Recall starts as soon as the question and the previous answer are read, beside the rest of
 the context, and is awaited after the transaction: the embedding call never holds a database
-connection. A recall that is late, failed or absent gives nothing; the turn goes on.
+connection. A recall that is late, failed or absent gives nothing; the turn goes on. Whether
+memory is on is also read when a turn starts, so the turn carries memory's switch and offers its
+toolset only then.
 """
 
 import asyncio
@@ -13,6 +15,7 @@ from collections.abc import Sequence
 from datetime import timedelta
 from functools import partial
 from typing import Final
+from uuid import UUID
 
 import structlog
 from redis.exceptions import RedisError
@@ -23,6 +26,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.contracts.memory import (
     MEMORY_RECALL,
+    MEMORY_SWITCH,
     PROFILE_FACTS,
     RecalledFact,
     RecallRequest,
@@ -47,6 +51,16 @@ GRACE: Final = timedelta(milliseconds=100)
 ANSWER_HEAD: Final = 300
 type Recalling = asyncio.Task[tuple[RecalledFact, ...]]
 log = structlog.stdlib.get_logger(__name__)
+
+
+async def memory_switches(
+    ports: PortDirectory, session: AsyncSession, user_id: UUID
+) -> tuple[str, ...]:
+    """The memory switch while the person's memory is on: it offers memory's toolset."""
+    bound = ports.all(PROFILE_FACTS)
+    if not bound or is_operator(user_id):
+        return ()
+    return (MEMORY_SWITCH,) if await bound[0].enabled(session, user_id) else ()
 
 
 class MemoryContext:
