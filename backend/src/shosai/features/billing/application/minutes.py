@@ -1,10 +1,10 @@
 """The month's meeting minutes: the live count, the allowance and the tombstones (BL-D3).
 
-The month is the business calendar's month of the meeting's start (ADR 0058). Used seconds are the
-meetings that still exist (meetings' port; none bound yet, so none) plus the tombstones
-of deleted ones; the count is never cached. A Free account claims its desktop device on
-its first check there; a device another Free account claimed refuses it. Paid accounts
-neither claim nor are refused.
+The month is the business calendar's month of the session's start (ADR 0058). Used seconds
+are what every `MEETING_MINUTES` binding reports — the meetings that still exist, Leo's voice
+conversations — plus the tombstones of deleted meetings; the count is never cached. A Free
+account claims its desktop device on its first check there; a device another Free account
+claimed refuses it. Paid accounts neither claim nor are refused.
 """
 
 import hashlib
@@ -109,7 +109,7 @@ class MinutesMeter:
     async def used_in(
         self, session: AsyncSession, user_id: UUID, window: tuple[datetime, datetime]
     ) -> int:
-        """Seconds of meetings started in the window: live ones and tombstones."""
+        """Seconds of sessions started in the window: every binding's and the tombstones."""
         start, end = window
         tombstones = await session.scalar(
             select(func.coalesce(func.sum(UsageEventRecord.seconds), 0)).where(

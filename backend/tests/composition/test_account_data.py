@@ -131,6 +131,7 @@ def test_core_and_every_slice_of_the_platform_need_exactly_their_handlers() -> N
                 "notes",
                 "tasks",
                 "agent",
+                "capture",
             )
         ]
     )

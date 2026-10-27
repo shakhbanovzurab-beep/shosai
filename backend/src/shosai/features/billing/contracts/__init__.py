@@ -4,10 +4,11 @@ Every slice reads what a person or a workspace may use through `Entitlements`: a
 of the plan in force, its limits and capabilities, cached and versioned, never guessed —
 when it cannot be read the answer is `EntitlementsUnavailableError` (503, inv-3).
 Usage is never in the snapshot: `MinutesAllowance` counts the month's minutes live, from
-the live meetings meetings report (`MEETING_MINUTES`, bound by notes; none until then)
-and the tombstones of deleted ones (`UsageTombstones`). `TokenAllowanceReader` tells the
-agent, before a model request, where its tokens come from: the week's allowance, packs, a
-fall back to a standard model, or a stop with the limit that stopped it (BL-D4). `CommerceFacts`
+what the slices with metered sessions report (`MEETING_MINUTES`: notes' meetings, capture's
+voice conversations) and the tombstones of deleted meetings (`UsageTombstones`).
+`TokenAllowanceReader` tells the agent, before a model request, where its tokens come from:
+the week's allowance, packs, a fall back to a standard model, or a stop with the limit that
+stopped it (BL-D4). `CommerceFacts`
 gives the platform operator's Leo the catalogue's plans and promo codes (agent AG-D5). The
 events billing publishes are in `contracts.events`.
 """
@@ -24,7 +25,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
-from shosai.core.ports.keys import PortKey
+from shosai.core.ports.keys import Cardinality, PortKey
 from shosai.features.billing.domain.meters import (
     MinutesLeft,
     TokenDecision,
@@ -178,12 +179,13 @@ class UsageTombstones(Protocol):
 
 
 class MeetingMinutes(Protocol):
-    """Seconds of the person's meetings that still exist, by their start (bound by notes)."""
+    """Seconds a slice counts against the plan's minutes, by their start: notes' meetings that
+    still exist, capture's voice conversations (ADR 0070 LV-D7)."""
 
     async def recorded_seconds(
         self, session: AsyncSession, user_id: UUID, window: tuple[datetime, datetime]
     ) -> int:
-        """Seconds of meetings started in `[start, end)`, read in the caller's transaction."""
+        """Seconds of sessions started in `[start, end)`, read in the caller's transaction."""
         ...
 
 
@@ -239,5 +241,5 @@ MINUTES_ALLOWANCE: Final = PortKey[MinutesAllowance]("billing.minutes_allowance"
 TOKEN_ALLOWANCE: Final = PortKey[TokenAllowanceReader]("billing.token_allowance")
 COMMERCE_FACTS: Final = PortKey[CommerceFacts]("billing.commerce_facts")
 USAGE_TOMBSTONES: Final = PortKey[UsageTombstones]("billing.usage_tombstones")
-# Привязывает meetings; пока его нет, порт пуст и живых минут ноль.
-MEETING_MINUTES: Final = PortKey[MeetingMinutes]("billing.meeting_minutes")
+# Привязывают срезы с минутами тарифа: встречи notes и голосовые разговоры capture.
+MEETING_MINUTES: Final = PortKey[MeetingMinutes]("billing.meeting_minutes", Cardinality.MANY)

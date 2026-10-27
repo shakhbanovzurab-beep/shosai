@@ -149,7 +149,7 @@
   - `billing` — plans, entitlements, usage meters, subscriptions, acquirers, seats, company invoices;
   - `files` — files and folders, uploads, storage quota: the one path for bytes;
   - `notes` — recorded meetings: sessions, transcript storage, post-meeting pipeline, notes, share links (named `meetings` until ADR 0057);
-  - `capture` — live capture, in-meeting answers, voice translation (the WS gateway role);
+  - `capture` — live capture, in-meeting answers, voice translation, Leo's voice mode (the WS gateway role, [ADR 0070](../adr/0070-leo-voice-on-gemini-live.md));
   - `meetings` — Shosai video meetings: LiveKit rooms, recording, track ingest, broadcasts, room whiteboard; the cabinet's Meetings section (named `rooms` until ADR 0057);
   - `knowledge` — sources, indexing, search;
   - `commitments` — people, decisions, promises and open topics across meetings;
@@ -253,6 +253,7 @@
 | Leo suggestion | `agent_suggestions`, `suggestion_deliveries`, `suggestion_feedback`; `proactive_triggers` | UUIDv7; dedup key per subject | home DB; triggers taken with `FOR UPDATE SKIP LOCKED` | one delivery per (suggestion, channel) | commit | suggestions 90 days; feedback 12 months |
 | Leo records | `agent_runs`, `agent_decisions`, `agent_decision_outcomes` (monthly partitions; decisions carry no person id, [ADR 0069](../adr/0069-decision-layer-slice.md)) | UUIDv7 | home DB | append-only; ids, numbers and codes, no text | commit, off the hot path; decision rows in batches per process and home | 90 days |
 | Leo feedback | `agent_feedback`, `agent_eval_cases` in the home DB ([ADR 0068](../adr/0068-leo-agent-slice.md)) | the answer's id | home DB | the last rating wins; a case only with the person's `improve_models` consent and no workspace source | commit with the rating | a rating with its answer; a case erased with its rating, the consent, the thread or the account, and after 12 months |
+| Voice conversation | `capture_voice_sessions` (monthly partitions) in the home DB; Gemini Live session on the WS process; exchanges in `agent_messages` with an `agent_runs` row of channel `voice` | UUIDv7 | one conversation per person (Valkey lock, extended every minute) | a second one is refused with 4409 | seconds written every minute and at the end; a crashed process loses at most a minute; counted against the plan's monthly minutes ([ADR 0070](../adr/0070-leo-voice-on-gemini-live.md)) | current and previous month |
 | Errand and schedule | `errands`, `schedule_runs` in the home DB | UUID; job name | `FOR UPDATE SKIP LOCKED`; the scheduler walks both homes | errand runs only from `scheduled`; a job runs only if `last_run_at` is older than its interval | commit | finished errands after 24 h; failed errands kept 30 days, visible to the user |
 | Event | `outbox_messages`, `processed_events` | event UUID = dedup key; (consumer, event_id) unique | home DB | per-subscriber task; mark in the subscriber's transaction | commit with the effect | published rows after 7 days |
 | Audit event | `org_audit_events`, monthly partitions | UUIDv7 | commit order | append-only | same transaction as the action | 12 months, longer by contract |
@@ -265,7 +266,7 @@
   - search and analytics — derived, may lag.
 - No cross-home write conflicts by construction.
 - High-volume tables:
-  - UUIDv7 keys and monthly partitions: `transcript_segments`, `provider_costs`, `prompt_executions`, `usage_events`, `login_events`, `client_errors`, `agent_audit`, `agent_messages`, `agent_tool_results`, `agent_runs`, `agent_decisions`, `agent_decision_outcomes`, `org_audit_events`;
+  - UUIDv7 keys and monthly partitions: `transcript_segments`, `provider_costs`, `prompt_executions`, `usage_events`, `login_events`, `client_errors`, `agent_audit`, `agent_messages`, `agent_tool_results`, `agent_runs`, `agent_decisions`, `agent_decision_outcomes`, `org_audit_events`, `capture_voice_sessions`;
   - partitions are kept by core (`core/db/partitions`): each parent's migration registers its policy (months ahead, months kept) in `partition_policies`, and a daily tick per home creates partitions two months ahead and drops expired ones through a function owned by the migration role;
   - retention by dropping partitions, except `usage_events`: its tombstones count toward the lifetime Free quota and live as long as the account ([ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md)).
 - Time ([ADR 0058](../adr/0058-time-zones-the-persons-and-the-business-zone.md)):

@@ -18,6 +18,7 @@ from shosai.core.features import FeatureModule
 from shosai.features.agent.module import AGENT
 from shosai.features.alerting.module import ALERTING
 from shosai.features.billing.module import BILLING
+from shosai.features.capture.module import CAPTURE
 from shosai.features.decisions.module import DECISIONS
 from shosai.features.files.module import FILES
 from shosai.features.identity.module import IDENTITY
@@ -33,6 +34,7 @@ FEATURES: tuple[FeatureModule, ...] = (
     NOTES,
     TASKS,
     AGENT,
+    CAPTURE,
     DECISIONS,
     ALERTING,
 )

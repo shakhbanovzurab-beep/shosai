@@ -51,6 +51,7 @@ pytest_plugins = (
     "tests.features.agent.action_bench",
     "tests.features.agent.proxy_bench",
     "tests.features.agent.skills_bench",
+    "tests.features.capture.voice_bench",
 )
 
 

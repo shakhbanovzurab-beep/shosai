@@ -25,6 +25,7 @@ from shosai.features.agent.domain.context import CONTEXT_TEXTS
 from shosai.features.agent.infrastructure.eval_prompts import JUDGE_TEXTS
 from shosai.features.agent.infrastructure.prompts import PROMPT_TEXTS as AGENT_PROMPTS
 from shosai.features.agent.infrastructure.voice_prompts import VOICE_PROMPT_TEXTS
+from shosai.features.capture.infrastructure.voice_texts import VOICE_TEXTS
 from shosai.features.decisions.domain.policies import policy_wording
 from shosai.features.decisions.infrastructure.generation_texts import generation_texts
 from shosai.features.notes.infrastructure.prompts import PROMPT_TEXTS as NOTES_PROMPTS
@@ -76,6 +77,7 @@ MODEL_FACING_SOURCES: tuple[ModelFacingSource, ...] = (
     ModelFacingSource(owner="notes", name="notes prompts", collect=lambda: NOTES_PROMPTS),
     ModelFacingSource(owner="agent", name="Leo's policy", collect=lambda: AGENT_PROMPTS),
     ModelFacingSource(owner="agent", name="Leo's voice", collect=lambda: VOICE_PROMPT_TEXTS),
+    ModelFacingSource(owner="capture", name="voice tool failure", collect=lambda: VOICE_TEXTS),
     ModelFacingSource(owner="agent", name="Leo's context", collect=lambda: CONTEXT_TEXTS),
     ModelFacingSource(owner="agent", name="Leo's page subjects", collect=lambda: SUBJECT_TEXTS),
     ModelFacingSource(owner="agent", name="the evaluation's judge", collect=lambda: JUDGE_TEXTS),

@@ -13,8 +13,8 @@ A slice's WebSocket route hands its socket to `SocketGateway.serve` with its ses
 - open sockets, their ends by close code and their lifetimes are metrics by route.
 
 Close codes 4000 to 4999 mirror HTTP: `4000 + status` (4401 for a bad token, 4403 forbidden,
-4409 a second session, 4429 a limit). The token is checked by the slice through identity's
-`Authenticator`: core knows no identity.
+4409 a second session, 4429 a limit); the close reason is the refusal's error code. The token
+is checked by the slice through identity's `Authenticator`: core knows no identity.
 """
 
 import asyncio
@@ -105,6 +105,10 @@ class GatewaySocket:
     async def send_json(self, frame: Mapping[str, Any]) -> None:
         """A control frame."""
         await self.websocket.send_text(json.dumps(frame, separators=(",", ":")))
+
+    async def send_bytes(self, data: bytes) -> None:
+        """A binary frame: audio or another payload of the route."""
+        await self.websocket.send_bytes(data)
 
     async def frames(self) -> AsyncIterator[str | bytes]:
         """The client's frames, text or binary, until it disconnects."""
@@ -225,24 +229,24 @@ class SocketGateway:
         self._empty.clear()
         self._metrics.opened(route)
         started = time.monotonic()
-        code = await self._run(socket, session)
+        code, reason = await self._run(socket, session)
         self._open.discard(socket)
         if not self._open:
             self._empty.set()
-        await socket.close(code)
+        await socket.close(code, reason)
         self._metrics.ended(route, code, time.monotonic() - started)
 
-    async def _run(self, socket: GatewaySocket, session: Session) -> int:
+    async def _run(self, socket: GatewaySocket, session: Session) -> tuple[int, str]:
         try:
             await session(socket)
         except SocketRefusedError as refusal:
-            return refusal.code
+            return refusal.code, refusal.reason
         except WebSocketDisconnect as gone:
-            return gone.code
+            return gone.code, ""
         except Exception:
             log.exception("Сессия сокета упала", route=socket.route)
-            return SocketClose.INTERNAL
-        return SocketClose.RESTART if socket.stopping.is_set() else SocketClose.NORMAL
+            return SocketClose.INTERNAL, ""
+        return (SocketClose.RESTART if socket.stopping.is_set() else SocketClose.NORMAL), ""
 
     async def drain(self, grace: timedelta) -> None:
         """Tell every socket the process stops, wait for the sessions, close the rest."""

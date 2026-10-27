@@ -211,6 +211,7 @@
     "PUT /v1/tasks/{task_id}/values/{sticker_id}"
   ],
   "ws": [
-    "GET /v1/health"
+    "GET /v1/health",
+    "WS /v1/ws/voice"
   ]
 }

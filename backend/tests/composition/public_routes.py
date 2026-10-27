@@ -14,7 +14,9 @@ def route_snapshot(app: FastAPI) -> list[str]:
     for context in iter_route_contexts(app.routes):
         route = context.original_route
         if isinstance(route, APIWebSocketRoute):
-            keys.add(f"WS {context.path}")
+            # FastAPI 0.142 не даёт контексту WebSocket-маршрута из подключённого роутера путь:
+            # тогда путь — маршрута; роутеры WS подключаются без префикса.
+            keys.add(f"WS {context.path or route.path}")
         elif isinstance(route, APIRoute):
             keys.update(f"{method} {context.path}" for method in context.methods or ())
     return sorted(keys)

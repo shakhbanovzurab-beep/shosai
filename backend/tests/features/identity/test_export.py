@@ -18,6 +18,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.account_data import AgentAccountData
 from shosai.features.billing.application.account_data import BillingAccountData
+from shosai.features.capture.application.account_data import CaptureAccountData
 from shosai.features.files.application.account_data import FilesAccountData
 from shosai.features.identity.application.account_data import IdentityAccountData
 from shosai.features.identity.application.export_runner import ExportRunner
@@ -66,6 +67,7 @@ def runner_of(
             ACCOUNT_DATA_HANDLERS.bind(NotesAccountData(homes.transactions, (objects, uploads))),
             ACCOUNT_DATA_HANDLERS.bind(TasksAccountData(homes.transactions, ports)),
             ACCOUNT_DATA_HANDLERS.bind(AgentAccountData(homes.transactions, valkey)),
+            ACCOUNT_DATA_HANDLERS.bind(CaptureAccountData(homes.transactions)),
         ]
     )
     return ExportRunner(homes.transactions, ports, (objects, uploads), bench.services.email)

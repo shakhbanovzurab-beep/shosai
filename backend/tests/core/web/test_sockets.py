@@ -32,6 +32,7 @@ CABINET: Final = Origin("https://shosai.example")
 STRANGER: Final = Origin("https://evil.example")
 GOOD_TOKEN: Final = "good-token"
 DRAIN: Final = timedelta(seconds=5)
+BAD: Final = SocketClose.BAD_HELLO
 
 
 async def session(socket: GatewaySocket) -> None:
@@ -126,24 +127,24 @@ async def test_another_origin_is_refused_before_the_handshake_ends() -> None:
 
 
 @pytest.mark.parametrize(
-    ("first", "code"),
+    ("first", "code", "reason"),
     [
-        ("not json", SocketClose.BAD_HELLO),
-        (json.dumps({"type": "hello", "v": "1", "token": GOOD_TOKEN}), SocketClose.BAD_HELLO),
-        (json.dumps({"type": "hi", "v": 1, "token": GOOD_TOKEN}), SocketClose.BAD_HELLO),
-        (b"\x00\x00", SocketClose.BAD_HELLO),
-        (json.dumps({"type": "hello", "v": 1, "token": "stolen"}), 4401),
+        ("not json", SocketClose.BAD_HELLO, "bad_hello"),
+        (json.dumps({"type": "hello", "v": "1", "token": GOOD_TOKEN}), BAD, "bad_hello"),
+        (json.dumps({"type": "hi", "v": 1, "token": GOOD_TOKEN}), BAD, "bad_hello"),
+        (b"\x00\x00", SocketClose.BAD_HELLO, "bad_hello"),
+        (json.dumps({"type": "hello", "v": 1, "token": "stolen"}), 4401, "token_invalid"),
     ],
-)
-async def test_a_wrong_hello_or_token_ends_the_socket_with_its_code(
-    first: str | bytes, code: int
+)  # fmt: skip
+async def test_a_wrong_hello_or_token_ends_the_socket_with_its_code_and_reason(
+    first: str | bytes, code: int, reason: str
 ) -> None:
     gateway, registry = gateway_of()
     async with gateway_server(gateway) as url, connect(url, origin=CABINET) as client:
         await client.send(first)
         received = await close_code(client)
 
-    assert received == code
+    assert (received, client.close_reason) == (code, reason)
     assert closed(registry, code) == 1
 
 
