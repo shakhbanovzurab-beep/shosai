@@ -9,7 +9,8 @@ routes of Settings > Memory's facts and switch, and the switch's mirror in the n
 `google/gemini-embedding-2` — and the agent's `MEMORY_RECALL` and `PROFILE_FACTS` bound.
 Step 5 a turn's admission after `agent.turn.completed`. Step 6 Leo's `memory` toolset —
 `memory.recall` and `memory.forget` — offered while the person's memory is on. Step 7 the
-summary, its "Ask or update" box and restore.
+summary, its "Ask or update" box and restore. Step 9 a meeting's recollection after its first
+notes.
 """
 
 from collections.abc import AsyncIterator
@@ -28,6 +29,7 @@ from shosai.features.memory.application.fact_forgets import FactForgets
 from shosai.features.memory.application.fact_list import FactLists
 from shosai.features.memory.application.fact_restore import FactRestore
 from shosai.features.memory.application.fact_search import FactSearch
+from shosai.features.memory.application.meeting_recollection import MeetingRecollection
 from shosai.features.memory.application.recall import Recall
 from shosai.features.memory.application.summaries import Summaries
 from shosai.features.memory.application.summary_facts import SummaryFacts
@@ -41,6 +43,7 @@ from shosai.features.memory.channels.subscriptions import subscriptions
 from shosai.features.memory.channels.tasks import (
     PERIODIC_JOBS,
     embedding_tick,
+    meeting_recollection,
     summary_queue,
     summary_writes,
     turn_admission,
@@ -49,6 +52,7 @@ from shosai.features.memory.infrastructure.embeddings import Embedder
 from shosai.features.memory.infrastructure.extractor import Extractor
 from shosai.features.memory.infrastructure.memory_model import MemoryModel
 from shosai.features.memory.infrastructure.metrics import MemoryMetrics
+from shosai.features.memory.infrastructure.recollector import Recollector
 from shosai.features.memory.infrastructure.records import MEMORY_MODELS
 from shosai.features.memory.infrastructure.summary_model import SummaryModel
 from shosai.features.memory.settings import MemorySettings
@@ -90,6 +94,11 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         (Extractor(services.ai, settings.model_route()), embedder),
         (ports, services.effects, services.valkey, metrics),
     )
+    recollection = MeetingRecollection(
+        transactions,
+        (Recollector(services.ai, settings.model_route()), embedder),
+        (ports, services.effects, metrics),
+    )
     search = FactSearch(transactions, (lists, embedder, services.valkey, ports))
     items = ActionItems(services.effects, services.outbox)
     tools = MemoryTools(transactions, (search, FactForgets(lists), items))
@@ -105,6 +114,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             embedding_tick(embedding),
             turn_admission(admission),
             summary_writes(summaries),
+            meeting_recollection(recollection),
         ),
         subscriptions=subscriptions(services.tasks),
         periodic_jobs=PERIODIC_JOBS,

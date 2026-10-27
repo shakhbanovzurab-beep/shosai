@@ -1,4 +1,4 @@
-"""Writing what a turn's statements became, under the person's lock (memory step 5).
+"""Writing what a turn's or a meeting's statements became, under the person's lock (steps 5, 9).
 
 Each statement's nearest facts — current, waiting, and those the person forgot or turned down
 in the last 180 days — are read with the statement's vector, the rules decide, and the result
@@ -7,7 +7,8 @@ count the same day's candidates twice. The switch is read again inside it: a fac
 written after the person turned memory off (§16.4).
 """
 
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from typing import Final
 from uuid import UUID
@@ -56,6 +57,40 @@ def person_key(user_id: UUID) -> int:
     return folded - WORD if folded >= WORD // 2 else folded
 
 
+@dataclass(frozen=True, slots=True)
+class Origin:
+    """Where statements were said: the source, its space, its references, the conversation
+    a turn's came from, the taint of what was read and when it was said."""
+
+    source: MemorySource
+    org_id: UUID | None
+    refs: Mapping[str, str]
+    taint: Taint
+    said_at: datetime
+    thread_id: UUID | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Found:
+    """A statement, its vector, and the references of its own evidence."""
+
+    statement: Statement
+    vector: Sequence[float]
+    refs: Mapping[str, str] = field(default_factory=dict)
+
+
+def turn_origin(words: TurnWords) -> Origin:
+    """A turn's statements: the person's own words in their conversation."""
+    return Origin(
+        source=MemorySource.USER_STATEMENT,
+        org_id=words.org_id,
+        refs={"thread_id": str(words.thread_id), "message_id": str(words.message_id)},
+        taint=words.taint,
+        said_at=words.said_at,
+        thread_id=words.thread_id,
+    )
+
+
 def sensitivity_of(statement: Statement) -> Sensitivity:
     """How personal the statement is."""
     return Sensitivity.SENSITIVE if statement.sensitive else Sensitivity.NORMAL
@@ -74,8 +109,8 @@ class AdmissionWriter:
         self,
         session: AsyncSession,
         user_id: UUID,
-        words: TurnWords,
-        found: Sequence[tuple[Statement, Sequence[float]]],
+        origin: Origin,
+        found: Sequence[Found],
     ) -> list[Admission]:
         """What each statement became; nothing at all when memory is off by now."""
         await session.execute(
@@ -85,13 +120,13 @@ class AdmissionWriter:
             return []
         now = self._clock()
         outcomes: list[Admission] = []
-        for statement, vector in found:
-            near = await self._neighbours(session, user_id, vector, now)
+        for item in found:
+            near = await self._neighbours(session, user_id, item.vector, now)
             today = await self._candidates_today(session, user_id, now)
-            admit = before_judge(statement, MemorySource.USER_STATEMENT, near, now) or by_rule(
-                statement, MemorySource.USER_STATEMENT, today, subject_fact(near)
+            admit = before_judge(item.statement, origin.source, near, now) or by_rule(
+                item.statement, origin.source, today, subject_fact(near)
             )
-            await self._apply(session, (user_id, words, now), (statement, vector), admit)
+            await self._apply(session, (user_id, origin, now), item, admit)
             outcomes.append(admit.admission)
         if any(outcome in {Admission.ACTIVE, Admission.CANDIDATE} for outcome in outcomes):
             await session.execute(
@@ -150,12 +185,12 @@ class AdmissionWriter:
     async def _apply(
         self,
         session: AsyncSession,
-        where: tuple[UUID, TurnWords, datetime],
-        what: tuple[Statement, Sequence[float]],
+        where: tuple[UUID, Origin, datetime],
+        item: Found,
         admit: Admit,
     ) -> None:
-        user_id, words, now = where
-        statement, vector = what
+        user_id, origin, now = where
+        statement = item.statement
         if admit.admission is Admission.CONFIRMED and admit.neighbour is not None:
             held = await session.get(MemoryFactRecord, admit.neighbour, with_for_update=True)
             if held is not None and fact_of(held).current:
@@ -165,16 +200,16 @@ class AdmissionWriter:
             return
         session.add(
             MemoryFactRecord(
-                id=new_id(), user_id=user_id, org_id=words.org_id, kind=statement.kind.value,
-                statement=statement.text, source_kind=MemorySource.USER_STATEMENT.value,
-                source_ref={"thread_id": str(words.thread_id), "message_id": str(words.message_id)},
-                thread_id=words.thread_id, confidence=1.0 if admit.confirmed else 0.5,
+                id=new_id(), user_id=user_id, org_id=origin.org_id, kind=statement.kind.value,
+                statement=statement.text, source_kind=origin.source.value,
+                source_ref={**origin.refs, **item.refs}, thread_id=origin.thread_id,
+                confidence=1.0 if admit.confirmed else 0.5,
                 sensitivity=sensitivity_of(statement).value,
                 explicit=statement.explicit, confirmed=admit.confirmed,
-                source_taint=TAINTS[min(words.taint, Taint.EXTERNAL)],
+                source_taint=TAINTS[min(origin.taint, Taint.EXTERNAL)],
                 status=(FactStatus.ACTIVE if admit.confirmed else FactStatus.CANDIDATE).value,
                 replaces=admit.neighbour, confirmations=1 if admit.confirmed else 0,
-                last_confirmed_at=now, embedding=list(vector), embedding_model=self._model,
-                valid_from=words.said_at, created_at=now, updated_at=now,
+                last_confirmed_at=now, embedding=list(item.vector), embedding_model=self._model,
+                valid_from=origin.said_at, created_at=now, updated_at=now,
             )
         )  # fmt: skip

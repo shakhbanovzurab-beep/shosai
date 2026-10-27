@@ -58,6 +58,9 @@ TURN_INSTRUCTIONS: Final = "\n\n".join(
     )
 )
 
+MEETING_SUMMARY: Final = "Summary:"
+MEETING_KEY_POINTS: Final = "Key points:"
+MEETING_PARTICIPANTS: Final = "Participants:"
 MEETING_INSTRUCTIONS: Final = "\n\n".join(
     (
         "You keep the long-term memory of Leo, an AI assistant, about one person, <owner>, "
@@ -140,6 +143,9 @@ EXTRACTION_TEXTS: Final[tuple[object, ...]] = (
     LATEST,
     ASK_AGAIN,
     TURN_INSTRUCTIONS,
+    MEETING_SUMMARY,
+    MEETING_KEY_POINTS,
+    MEETING_PARTICIPANTS,
     MEETING_INSTRUCTIONS,
     TurnAnswer,
     MeetingAnswer,

@@ -23,7 +23,11 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.contracts.memory import PERSON_WORDS, TurnWords
 from shosai.features.identity.contracts import CONSENT_READER
-from shosai.features.memory.application.admission_writer import AdmissionWriter
+from shosai.features.memory.application.admission_writer import (
+    AdmissionWriter,
+    Found,
+    turn_origin,
+)
 from shosai.features.memory.application.switch import memory_on
 from shosai.features.memory.domain.admission import Admission
 from shosai.features.memory.infrastructure.embeddings import Embedder, Payer
@@ -73,8 +77,12 @@ class TurnAdmission:
         async with self._transactions.begin(scope) as session:
 
             async def write() -> Admitted:
-                found = list(zip(statements, vectors, strict=True))
-                return Admitted(outcomes=await self._writer.write(session, user_id, words, found))
+                found = [
+                    Found(statement, vector)
+                    for statement, vector in zip(statements, vectors, strict=True)
+                ]
+                outcomes = await self._writer.write(session, user_id, turn_origin(words), found)
+                return Admitted(outcomes=outcomes)
 
             done = await self._effects.once(session, effect, Admitted, write)
         outcomes = done.outcome.outcomes

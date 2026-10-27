@@ -52,6 +52,10 @@ What Leo knows about the person: their preferences, facts about them and their w
 - `application/fact_restore.py`: `POST /v1/agent/memory/{id}/restore` — within a day of a forget or a replacement; a turned-down candidate comes back waiting; an expiry, forgetting everything or a replacement replaced again are final.
 - `infrastructure/memory_model.py`: the extraction, the summary and the box share one call — a JSON object asked once more when unreadable.
 
+## Meeting recollections (step 9)
+
+- `channels/subscriptions.py` sends `memory.recollect_meeting` for revision 1 of `notes.meeting.notes_ready`; `application/meeting_recollection.py` reads the owner's switch and consent and the meeting through `MEETING_READER` and `MEETING_FINDINGS` as the owner, asks `infrastructure/recollector.py` for at most five statements, embeds them in one call and writes them through `application/admission_writer.py` as candidates in the meeting's space, labelled as its speech, each citing its finding or the summary. A statement about the owner needs evidence that names them (`domain/recollections.py`). The write is keyed by the meeting; a key already written answers before the model is asked.
+
 ## What the models read (step 1)
 
 `infrastructure/extraction_prompts.py` (a turn's and a meeting's extraction) and `infrastructure/summary_prompts.py` (the summary and the box): English instructions with the output language stated in each, and their answer schemas — registered in the model-facing English test.

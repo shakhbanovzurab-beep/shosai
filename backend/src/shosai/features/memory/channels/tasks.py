@@ -1,6 +1,6 @@
 """Memory's tasks: a turn's admission after `agent.turn.completed` (step 5), the embedding pass
-of each home, once a minute (step 4), and a person's summary rewritten in the background (step
-7).
+of each home, once a minute (step 4), a person's summary rewritten in the background (step 7),
+and a meeting's recollection after its first notes (step 9).
 
 A fact written without a vector is recalled from the next minute on; a pass lost or repeated
 changes nothing the next one would not, since a vector lands only on a fact still waiting for
@@ -26,6 +26,7 @@ from shosai.core.tasks.declaration import (
 from shosai.core.tasks.payloads import HomeTaskPayload
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.memory.application.embedding_pass import EmbeddingPass
+from shosai.features.memory.application.meeting_recollection import MeetingRecollection
 from shosai.features.memory.application.summaries import Summaries, SummaryQueue
 from shosai.features.memory.application.turn_admission import TurnAdmission
 from shosai.features.memory.infrastructure.metrics import SummaryTrigger
@@ -53,6 +54,20 @@ class SummaryTask(HomeTaskPayload):
     trigger: SummaryTrigger
 
 
+class MeetingTask(HomeTaskPayload):
+    """One meeting of its owner, with its first notes."""
+
+    meeting_id: UUID
+
+
+# Сбой поставщика модели — повод повторить: запись воспоминаний идемпотентна по встрече.
+RECOLLECT: Final = TaskDeclaration(
+    name="memory.recollect_meeting",
+    queue=TaskQueue.DEFAULT,
+    payload=MeetingTask,
+    deadline=timedelta(minutes=3),
+    retry=RetryPolicy(MAX_DELIVERIES, (*TRANSIENT_FAILURES, AiCallError)),
+)
 # Сводка, не написанная из-за модели, ждёт следующего открытия: повторяется только сбой связи.
 WRITE_SUMMARY: Final = TaskDeclaration(
     name="memory.write_summary",
@@ -117,3 +132,13 @@ def summary_writes(summaries: Summaries) -> TaskHandler[SummaryTask]:
             await summaries.write(payload.scope(), payload.trigger)
 
     return TaskHandler(WRITE_SUMMARY, write)
+
+
+def meeting_recollection(recollection: MeetingRecollection) -> TaskHandler[MeetingTask]:
+    """The recollection of the payload's meeting."""
+
+    async def recollect(payload: MeetingTask) -> None:
+        if payload.user_id is not None:
+            await recollection.recollect(payload.home, payload.user_id, payload.meeting_id)
+
+    return TaskHandler(RECOLLECT, recollect)
