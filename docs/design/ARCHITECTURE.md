@@ -92,7 +92,7 @@
 | Component | Where | Responsibility | Scaling |
 |---|---|---|---|
 | Clients | user devices | Web cabinet (Vite SPA, PWA); public site in the browser; macOS, iOS, Linux, Windows apps; external MCP clients. One base URL `shosai.tech` ([ADR 0040](../adr/0040-shosai-tech-is-the-domain.md)); the shipped native clients call `whisperer.one`, pointed at v2 at cutover Desktop clients buffer up to 30 s of unsent audio | — |
-| Edge | plane | NGINX ×2: TLS, static assets, rate limits; `/v1/ws/*` → WS gateway (least_conn), `/v1/*` and `/email/*` (images that mail points at) → API; cabinet paths (`/app/*`, `/admin/*`, OAuth callback, `/unauthorized`) → the cabinet's static files; every other path → public site; handshake closed with 1013 when the plane is full | 2 nodes |
+| Edge | plane | NGINX ×2: TLS, static assets, rate limits; `/v1/ws/*` → WS gateway (least_conn), `/v1/*` and `/email/*` (images that mail points at) → API; cabinet paths (`/app/*`, `/admin/*`, OAuth callback, `/unauthorized`) → the cabinet's static files; every other path → public site; handshake closed with 1013 when the plane is full. A stream layer in front of HTTPS on 443 routes by SNI (`ssl_preread`): `turn.shosai.tech` to LiveKit's TURN/TLS, every other name to the HTTP edge with the proxy protocol, so client addresses survive ([ADR 0072](../adr/0072-meetings-slice.md)) | 2 nodes |
 | Public site | plane | Next.js: server-rendered and statically generated public pages — landing, pricing, documentation, blog, legal, help centre, shared-link pages with previews; real `404`; `sitemap.xml`, `robots.txt`. Reads data only from the API; holds no business logic, database connection or queue ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | N stateless processes |
 | API | plane | FastAPI: cabinet, Leo (turns admitted, committed and streamed from their event logs; run by the agent workers), billing, companies and access policy, administration, presigned uploads, acquirer webhooks | N processes; one pool per database |
 | WS gateway | plane | Live capture, voice, translation, ingest of room participant tracks from LiveKit egress. Meeting resume state lives in Redis; any process can resume any meeting | 250 meetings per process; 11–13 processes |
@@ -101,7 +101,7 @@
 | Valkey (managed) | EU | Task streams, transcript queue, locks, WS slots, meeting resume state, Leo run state (active and paused runs, run event logs, thread leases), circuit-breaker state. AOF every second, replica, `noeviction` | managed |
 | Redis cache | plane | LRU cache only; losing it is harmless | container |
 | Qdrant | plane | Vector index: knowledge chunks and per-minute meeting windows. Payload: tenant, owner, access level, grantees. Derived; rebuilt from sources | 1 node |
-| LiveKit | plane | SFU, egress (room recording, per-participant audio tracks to the WS gateway), coturn | pinned versions |
+| LiveKit | plane | SFU, egress (video recording; each participant's audio track to a file for the notes and live to the WS gateway), embedded TURN; its own ephemeral Redis. Today on the one host with hard memory and CPU limits; the production machine is decided before launch ([ADR 0072](../adr/0072-meetings-slice.md)) | pinned versions |
 | Nango | plane | OAuth proxy for connectors; one instance per home, state in its home database | pinned versions |
 | PostgreSQL RU | Russia | Source of truth of the Russian home | managed, PgBouncer |
 | PostgreSQL EU | EU | Source of truth of the EU home; directory tables; platform tables and telemetry without an account (§6) | managed, PgBouncer |
@@ -118,8 +118,9 @@
 | Clients → Edge | HTTPS, WSS | handshake 5 s | client, reconnect with jitter | 50 req/s and 1 000 connections per IP |
 | Edge → API | HTTP | connect 2 s; response 30 s | edge, one retry for idempotent methods | 64 requests in flight per process |
 | Edge → WS gateway | WSS, least_conn | handshake 5 s | client | 250 meetings per process; full → 1013 |
-| Clients → LiveKit | WebRTC | connect 10 s | LiveKit client | 16 participants per room |
-| LiveKit egress → WS gateway | participant audio track (PCM over WSS) | connect 5 s; lives while the participant is in the room | egress reconnects; on failure the room is recorded whole and analysed after the meeting | one track per speaker, 16 per room |
+| Clients → LiveKit | WebRTC | connect 10 s | LiveKit client | participants per room: the owner's plan entitlement, at most 50 (4 on staging); video only for the speakers and the pinned, at most 6 tiles ([ADR 0072](../adr/0072-meetings-slice.md)) |
+| LiveKit egress → bucket | each participant's audio track as a file in the owner's home bucket | from the participant's first unmute to their leaving | the sweep reconciles egress; a lost track marks the run partial | one job per speaking participant |
+| LiveKit egress → WS gateway | participant audio track (PCM over WSS) | connect 5 s; lives while the participant is in the room | egress reconnects; on failure the notes come from the track files after the meeting | one track per speaker |
 | WS gateway → AI | audio stream | connect 3 s; phrase max(15 s, 2 × duration) | WS gateway, one reconnect | provider session pool below the provider quota; over → `retry_later` |
 | WS gateway → Valkey | transcript queue, resume state | 20 ms | none; without Redis the line is shown marked "not saved" and written to the DB directly | queue bounded by meeting length |
 | WS gateway → PostgreSQL (home) | transcript batch | 500 ms per batch | queue drain worker, keyed by (session_id, seq) | one batch in flight per process |
@@ -316,7 +317,7 @@
 | Invite and join | `POST /v1/workspaces/{id}/invitations` (email links); `POST /v1/workspaces/join {token}` or `{workspace_id}` for a verified domain | one-time token bound to the invited address; repeat returns the same membership | 300 ms | membership; 402 no seats; 409 the person's home differs from the workspace's (until §22) |
 | Share inside a company | each share record's own route (`PATCH /v1/workspaces/{id}/meetings/{meeting}`, `PATCH …/knowledge/{item}`), all through the one access policy | set-state | 300 ms | new access + audit event; 403 without right; revocation immediate |
 | Company invoice | `POST /v1/billing/workspaces/{id}/invoices {seats, period, payer}` → number + PDF | invoice number; statement payment matched once | 2 s; seats active by the next business day | `paid`, `issued` or unmatched payment → operator alert after 24 h |
-| Room transcription | LiveKit track egress → WSS to the WS gateway, one participant per stream | (session_id, seq) | line on screen ≤ 2 s | transcript per participant in the room owner's meeting with company access; egress failure → whole-room recording analysed after the meeting |
+| Room transcription | LiveKit track egress → WSS to the WS gateway, one participant per stream | (session_id, seq) | line on screen ≤ 2 s | transcript per participant in the room owner's meeting with company access; live egress failure → the participants' track files analysed after the meeting |
 | Leo turn and approval | `POST /v1/agent/threads/{id}/turns` → SSE with event ids; resume `GET /v1/agent/runs/{id}/events`; `POST /v1/agent/actions/{id}/approve` | `Idempotency-Key` per user message; approval by one conditional status update; item key `action_id:index` | platform overhead ≤ 500 ms (EU) | exactly one terminal event per run; 409 `thread_busy`; a write executes once or ends `outcome_unknown` ([ADR 0025](../adr/0025-leo-action-gateway.md), [ADR 0032](../adr/0032-leo-stream-protocol-v2.md)) |
 | Account transfer | internal `POST /internal/transfers {user_id, to_home}`; saga steps as tasks | transfer id; each step checks journal and manifest | minutes per user | SUCCEEDED after manifest check and source purge; CANCELLED before the directory switch; RECONCILING if the target did not confirm |
 
@@ -338,9 +339,9 @@
    5. The line is drained to the user's or company's home DB in a batch within 500 ms.
 2. **Room transcription.**
    1. Participants → LiveKit (WebRTC).
-   2. Egress streams each participant's audio track to the WS gateway.
-   3. The rest is the same as the live meeting; the speaker is the track's participant.
-   4. The transcript is saved in the room owner's meeting with company access.
+   2. Egress writes each participant's audio track to a file in the owner's home bucket and streams it to the WS gateway.
+   3. The live path is the same as the live meeting; the speaker is the track's participant.
+   4. The transcript, the call's chat and the board's picture are saved in the room owner's meeting with company access; the track files give the meeting's transcript after the call, speaker by speaker, without diarization.
 3. **Post-meeting analysis.**
    1. End command, the silence sweep 5 min after the last audio, or the 6-hour ceiling.
    2. Run row committed; stage task enqueued.
@@ -409,7 +410,7 @@
 | Plane full | Handshake 1013; clients retry with jitter |
 | Directory unavailable | Sign-in by cache, running sessions by token, registration and transfer 503 |
 | Redis unavailable | Capture continues; lines are shown marked "not saved" and written to the DB directly; expensive AI operations fail closed (kill switch treated as engaged); unlimited meetings unaffected |
-| LiveKit egress down | Room recorded whole and analysed after the meeting |
+| LiveKit egress down | The call goes on; live notes stop; the track files written so far are analysed after the meeting, and a participant without a file is missing from the notes, which say so |
 | Bank API down | Invoices issued; crediting waits for the next pass; seats stay active until the end of the paid period + 7 days |
 | Index lags an access change | Hits re-checked against the DB; revoked content is not returned |
 
@@ -713,6 +714,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Frontend | TypeScript (cabinet) | 5.9.3 | Type checking; 7.x waits for the tools that use the compiler's JavaScript API ([F2 plan](../plan/packages/F2-frontend-foundation.md) §5) |
 | Frontend | openapi-typescript, openapi-fetch | 7.13.0, 0.17.0 | Client types and calls generated from the backend's OpenAPI document |
 | Frontend | MSW | 3.0.1 | Mocks of the API in development and tests only |
+| Frontend | livekit-client, Excalidraw | current stable when added (meetings A10, A11b) | Video calls, the room's whiteboard; each loaded only on its route or when the board opens ([ADR 0072](../adr/0072-meetings-slice.md)) |
 | Frontend | Tailwind CSS, Mermaid | 4.3.3, 12.0.0 | Styles; diagrams in answers |
 | Frontend | Vitest, react-doctor | 5.0.3, 0.9.17 | Tests; React code-health gate |
 | Clients | macOS, iOS: Swift, SwiftUI, WhispererKit | Swift 6 | Apple desktop and mobile clients |

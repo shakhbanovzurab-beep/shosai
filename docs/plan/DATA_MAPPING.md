@@ -1155,6 +1155,7 @@ Amended on 2026-10-27 by the [memory plan](slices/memory.md) ([ADR 0071](../adr/
 - **Columns:** 12 of 14 move unchanged; exceptions:
   - `invite_token` — *moved*. Verbatim: plaintext secret in invitation links.
   - `lk_room_name` — *moved*. Verbatim: LiveKit room name `r-<hex>`.
+- Rooms with `e2ee = true` are moved closed: v2 has no end-to-end encryption, and their links answer "This meeting has ended" (ADR 0072, MR-D5).
 
 #### `room_recordings` → `room_recordings` · **moved**
 
@@ -1163,10 +1164,10 @@ Amended on 2026-10-27 by the [memory plan](slices/memory.md) ([ADR 0071](../adr/
   - `s3_key` — *moved*. Verbatim; the same object is also pointed to by `storage_files.s3_key` (section 6, prefix O2).
   - `egress_id` — *moved*. Verbatim: dedup key of the LiveKit egress.
 
-#### `video_admin_actions` → `video_admin_actions` · **moved**
+#### `video_admin_actions` → identity's operator audit log · **moved**
 
 - **Owner → home:** own `owner_id`.
-- **Columns:** 10 of 12 move unchanged; exceptions:
+- **Columns:** each row becomes one entry of the admin's EU audit log (`OperatorAudit`), with the action, the room's LiveKit name as its subject and the result; there is no `video_admin_actions` table in v2 ([ADR 0072](../../adr/0072-meetings-slice.md)); exceptions:
   - `admin_email` — *moved*. Denormalised admin address, personal data.
   - `target_identity` — *moved*. LiveKit identity = a user id as text, no FK.
 - Append-only audit of platform admins acting on rooms.

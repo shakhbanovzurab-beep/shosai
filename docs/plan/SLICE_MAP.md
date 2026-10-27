@@ -408,10 +408,11 @@ Scope, data and routes as the [Leo architecture](../design/leo/ARCHITECTURE.md) 
 - **Depends on:** identity, support (link to a ticket).
 
 #### 24. meetings
-- **Scope:** the cabinet's Meetings section (`/app/meetings`: "New meeting" starts a video call, "Schedule in calendar" hands over to calendar, live meetings and joining, recent recordings from notes; "Upload a recording" stays in Notes, ADR 0057); Shosai video rooms on LiveKit, recording, per-participant track egress to capture (fr-16), the room owner's meeting with company access, the join links already sent, the admin LiveKit screen; broadcasts and the room whiteboard (kept, §8.1 SM-8; their screens are designed in the new visual language before their steps). Subtitles and the room AI panel are dropped.
-- **Owns:** `rooms`, `room_recordings` (O2, dual pointer with `storage_files`), `video_admin_actions`, `streams*`, `room_whiteboards`.
+- **Scope:** the cabinet's Meetings section (`/app/meetings`: "New meeting" starts a video call, "Schedule in calendar" hands over to calendar, live meetings and joining, recent recordings from notes; "Upload a recording" stays in Notes, ADR 0057); Shosai video rooms on LiveKit, recording, per-participant track egress to capture (fr-16), the room owner's meeting with company access, the join links already sent, the admin LiveKit screen; broadcasts and the room whiteboard (kept, §8.1 SM-8; their screens are designed in the new visual language before their steps). Subtitles and the room AI panel are dropped. Since [ADR 0072](../adr/0072-meetings-slice.md): up to 50 participants by the owner's plan entitlement, video for the speakers and the pinned; notes from each participant's track file; chat kept with the meeting; ephemeral reactions and raised hands; the board's picture in the notes; no E2EE ([plan](slices/meetings.md)).
+- **Owns:** `rooms`, `room_calls`, `room_bans`, `room_chat_messages` (until the call's end), `room_tracks`, `room_recordings` (O2, dual pointer with `storage_files`), `streams*`, `room_whiteboards`. The admin's actions go to identity's audit log; `video_admin_actions` is not kept (ADR 0072).
 - **Routes:** E per §3; `/v1/meetings/*`, `/v1/admin/livekit/*`.
-- **Depends on:** capture (track ingest), notes (owner's meeting), files, workspaces, calendar (rooms of calendar events).
+- **Depends on:** notes (the room's meeting, its chat and board), files, billing (the participant ceiling, recording), workspaces, capture (live track ingest), calendar (rooms of calendar events), knowledge (the board picture indexed).
+- **Leo tools:** `meetings` toolset: list live calls (read); start and end a call (W).
 
 #### 25. site
 Scope as S17 today ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md), FM-1a, FM-1b), plus the public pages of shared links: the shared note `/s/{token}` with comments and the meeting result `/r/{token}`, served by the meetings API.
