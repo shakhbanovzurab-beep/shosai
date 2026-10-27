@@ -18,7 +18,7 @@ import { voiceScopeOf } from "../domain/voice-wire";
 import { channelOf, shownIn } from "./agent-channel";
 import { chooseThread, messagesKey, scopeOf, threadsKey, useAgentThread } from "./agent-thread";
 import { refusal, runTurn, stopTurn } from "./agent-turn-runner";
-import { addTurn, dropTurns, failedReply, liveTurns, subscribeTurns, updateTurn } from "./agent-turns";
+import { addTurn, dropTurns, failedReply, liveTurns, subscribeTurns, updateTurn, withMeasured } from "./agent-turns";
 import { uploadedAttachments } from "./agent-uploads";
 import { liveEpilogues, subscribeEpilogues } from "./epilogues";
 import type { LeoChat } from "./leo-chat";
@@ -48,7 +48,8 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
   const shown = epilogues.filter((epilogue) => epilogue.threadId !== null && epilogue.threadId === thread.threadId);
   const writing = shown.find((epilogue) => epilogue.reply?.status === "streaming");
   const isBusy = asking || writing !== undefined;
-  const messages = shownIn(channel, withEpilogues(mergedConversation(thread.conversation, visible), shown));
+  const merged = withMeasured(mergedConversation(thread.conversation, visible), visible);
+  const messages = shownIn(channel, withEpilogues(merged, shown));
   useSettledEpilogues(epilogues);
 
   // Записанный историей ход больше не нужен: его ответ уже в ней.

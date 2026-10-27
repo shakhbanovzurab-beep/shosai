@@ -133,7 +133,9 @@ class TurnStarter:
     async def start(
         self, principal: Principal, thread_id: UUID, request: TurnRequest, client_key: str
     ) -> UUID:
-        """The run that answers the turn: new, or the one the key made before."""
+        """The run that answers the turn: new, or the one the key made before. The run starts
+        when the request arrives, so its duration covers the checks the person waits for too."""
+        received = self._clock()
         try:
             question = check_question(request.text, 0)
         except ThreadRuleError as error:
@@ -176,7 +178,7 @@ class TurnStarter:
         switches = () if operator else (*leo, *memory)
         terms = TurnPayload(
             home=principal.home, user_id=principal.user_id, run_id=new_id(), thread_id=thread_id,
-            started_at=self._clock(), question_id=again.question_id or new_id(),
+            started_at=received, question_id=again.question_id or new_id(),
             reply_id=new_id(), language=language,
             length=preferences.response_length, cross_border_consent=consent,
             token_route=route, kind=again.kind, path=page.path,

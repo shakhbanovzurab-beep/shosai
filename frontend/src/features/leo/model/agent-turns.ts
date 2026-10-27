@@ -11,6 +11,8 @@ import { flushFrame, onNextFrame } from "./frame-queue";
 const EMPTY: readonly LiveTurn[] = [];
 const turns = new Map<string, readonly LiveTurn[]>();
 const listeners = new Set<() => void>();
+// Сколько человек ждал ответов, увиденных вживую в этой вкладке: история перечитывает их со временем сервера.
+const measured = new Map<string, number>();
 
 export const liveTurns = (scope: string): readonly LiveTurn[] => turns.get(scope) ?? EMPTY;
 
@@ -79,6 +81,7 @@ export function dropTurns(scope: string, recorded: (turn: LiveTurn) => boolean) 
   const list = liveTurns(scope);
   const kept = list.filter((turn) => !recorded(turn));
   if (kept.length === list.length) return;
+  for (const turn of list) if (turn.reply.durationMs !== undefined) measured.set(turn.reply.id, turn.reply.durationMs);
   turns.set(scope, kept);
   notify();
 }
@@ -90,3 +93,15 @@ export const failedReply = (reply: LeoMessage, code: string, limit?: string): Le
   steps: reply.steps?.map((step) => (step.status === "running" ? { ...step, status: "stopped" } : step)),
   failure: limit === undefined ? { code } : { code, limit },
 });
+
+/**
+ * Ответы со временем, которое человек видел, пока ход шёл: сервер считает ход без сети, поэтому его время короче,
+ * и перечитанная история не должна менять уже показанное число.
+ */
+export function withMeasured(messages: LeoMessage[], live: readonly LiveTurn[]): LeoMessage[] {
+  const waited = new Map(measured);
+  for (const turn of live) if (turn.reply.durationMs !== undefined) waited.set(turn.reply.id, turn.reply.durationMs);
+  const seen = (message: LeoMessage) => waited.get(message.id) ?? message.durationMs;
+  if (messages.every((message) => seen(message) === message.durationMs)) return messages;
+  return messages.map((message) => ({ ...message, durationMs: seen(message) }));
+}
