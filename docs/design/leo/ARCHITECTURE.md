@@ -933,7 +933,7 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 | uses | search; people and commitments | `knowledge`; `commitments` | `workspace.search`, knowledge, people and commitments |
 | provides | memory port: `record_recollections(meeting)` | memory → `notes` | meeting facts with provenance |
 | provides | agent port: `run_voice_turn`, `confirm_by_voice` | agent → `capture` | one thread for text and voice |
-| provides | decision port: `decide(point, …)`, `observe(decision_id, …)` (ADR 0069) | decisions → any slice | routing, friction and injection (`agent`, through its ports), memory admission (`memory`), initiative (`proactive`), mail triage (`mail`), hub signal (`hubs`) |
+| provides | decision port: `decide(point, …)`, `observe(point, home, subject, …)` (ADR 0069) | decisions → any slice | routing, friction and injection (`agent`, through its ports), memory admission (`memory`), initiative (`proactive`), mail triage (`mail`), hub signal (`hubs`) |
 | provides | registry projection for MCP | agent → `mcp` | external MCP tools under the same gateway |
 | provides | user-context port for live answers | memory → `capture` | profile core for `/v1/ws/realtime` `ask` |
 
