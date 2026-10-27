@@ -3648,6 +3648,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/rooms/{room_id}/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Meeting Chat Messages
+         * @description The call's messages after a sequence, oldest first.
+         */
+        get: operations["list_meeting_chat_messages_v1_meetings_rooms__room_id__chat_get"];
+        put?: never;
+        /**
+         * Send Meeting Chat Message
+         * @description Send a message to everyone in the call.
+         */
+        post: operations["send_meeting_chat_message_v1_meetings_rooms__room_id__chat_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/meetings/join/{token}": {
         parameters: {
             query?: never;
@@ -5982,6 +6006,51 @@ export interface components {
              * @description A shipped template's code or your own template's id; null for Leo's.
              */
             template_id?: string | null;
+        };
+        /**
+         * MeetingChatMessageIn
+         * @description A message's text, 1 to 2 000 characters once trimmed.
+         */
+        MeetingChatMessageIn: {
+            /** Text */
+            text: string;
+        };
+        /**
+         * MeetingChatMessageOut
+         * @description A message of the call.
+         */
+        MeetingChatMessageOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Seq */
+            seq: number;
+            /**
+             * Identity
+             * @description The sender's session.
+             */
+            identity: string;
+            /** Author */
+            author: string;
+            /** Text */
+            text: string;
+            /**
+             * Sent At
+             * Format: date-time
+             */
+            sent_at: string;
+        };
+        /**
+         * MeetingChatPageOut
+         * @description Messages after a sequence; a non-null `next_cursor` is the `after` of the next page.
+         */
+        MeetingChatPageOut: {
+            /** Items */
+            items: components["schemas"]["MeetingChatMessageOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
         };
         /**
          * MeetingOut
@@ -17251,6 +17320,84 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_meeting_chat_messages_v1_meetings_rooms__room_id__chat_get: {
+        parameters: {
+            query?: {
+                /** @description The last `seq` you hold; 0 for all. */
+                after?: number;
+                limit?: number;
+            };
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingChatPageOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    send_meeting_chat_message_v1_meetings_rooms__room_id__chat_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MeetingChatMessageIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingChatMessageOut"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

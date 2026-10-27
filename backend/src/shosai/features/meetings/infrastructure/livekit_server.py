@@ -25,12 +25,14 @@ import structlog
 from livekit.api.access_token import AccessToken, TokenVerifier, VideoGrants
 from livekit.api.livekit_api import LiveKitAPI
 from livekit.api.twirp_client import ServerError
+from livekit.protocol.models import DataPacket
 from livekit.protocol.room import (
     CreateRoomRequest,
     DeleteRoomRequest,
     ListParticipantsRequest,
     ListRoomsRequest,
     RoomParticipantIdentity,
+    SendDataRequest,
     UpdateParticipantRequest,
     UpdateRoomMetadataRequest,
 )
@@ -143,6 +145,19 @@ class LiveKitServer:
         request = RoomParticipantIdentity(room=room_name, identity=identity)
         try:
             await self._call("remove_participant", self._client.room.remove_participant(request))
+        except ServerError as error:
+            if error.code == NOT_FOUND:
+                return False
+            raise
+        return True
+
+    async def publish(self, room_name: str, topic: str, payload: bytes) -> bool:
+        """Send a reliable data packet to everyone in the room; False when the SFU lacks it."""
+        request = SendDataRequest(
+            room=room_name, data=payload, kind=DataPacket.Kind.RELIABLE, topic=topic
+        )
+        try:
+            await self._call("publish", self._client.room.send_data(request))
         except ServerError as error:
             if error.code == NOT_FOUND:
                 return False

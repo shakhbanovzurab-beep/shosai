@@ -45,6 +45,10 @@ class UnconfiguredVideoServer:
         """Calls are unavailable."""
         raise VideoUnavailableError
 
+    async def publish(self, room_name: str, topic: str, payload: bytes) -> bool:
+        """Calls are unavailable."""
+        raise VideoUnavailableError
+
     async def set_attributes(
         self, room_name: str, identity: str, attributes: Mapping[str, str]
     ) -> bool:

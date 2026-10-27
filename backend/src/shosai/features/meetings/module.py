@@ -6,7 +6,8 @@ the SFU behind the `VideoServer` port, opened with the process and closed with i
 readiness probe when it is configured. Step A3 added the tables of each home and their
 account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`, the public
 join with its room passes in Valkey and their renewal, removal with bans, hands and the
-account's rooms. Step A5 added LiveKit's webhook, calls and the sweep of each home.
+account's rooms. Step A5 added LiveKit's webhook, calls and the sweep of each home; A6 the
+call's chat.
 """
 
 from collections.abc import AsyncIterator
@@ -22,12 +23,14 @@ from shosai.features.meetings.application.account_data import (
 )
 from shosai.features.meetings.application.account_rooms import AccountRooms
 from shosai.features.meetings.application.calls import Calls
+from shosai.features.meetings.application.chat import Chat
 from shosai.features.meetings.application.joining import JoinDesk
 from shosai.features.meetings.application.passes import PassCheck
 from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.sweep import Sweep
 from shosai.features.meetings.application.video_server import VideoUnavailableError
+from shosai.features.meetings.channels.http.chat import build_chat_router
 from shosai.features.meetings.channels.http.joining import build_joining_router
 from shosai.features.meetings.channels.http.rooms import build_rooms_router
 from shosai.features.meetings.channels.http.webhook import build_webhook_router
@@ -72,6 +75,10 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
             http_routers=(
                 build_rooms_router((book, removals), ports, origin),
                 build_webhook_router(server, calls, metrics),
+                build_chat_router(
+                    Chat(transactions, (services.effects, services.rate_limiter, server)),
+                    PassCheck(transactions, passes),
+                ),
                 build_joining_router(
                     desk, PassCheck(transactions, passes), ports, services.rate_limiter
                 ),

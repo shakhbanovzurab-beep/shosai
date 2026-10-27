@@ -152,3 +152,14 @@ async def test_metadata_attributes_and_removal_reach_a_joined_session(
         assert not await sfu.remove_participant(room_name, identity)
     assert [room.metadata for room in await sfu.rooms([room_name])] == ['{"v":1}']
     assert not await sfu.set_metadata("r-00000000deadbeef", "{}")
+
+
+async def test_a_reliable_packet_reaches_the_room_and_a_missing_room_is_unavailable(
+    sfu: VideoServer, room_name: str
+) -> None:
+    await sfu.create_room(RoomSpec(name=room_name, max_participants=4, metadata="{}"))
+
+    assert await sfu.publish(room_name, "chat", b'{"v":1}')
+    # LiveKit отвечает 503 «no response from servers» на комнату, которой нет ни на одном узле.
+    with pytest.raises(VideoUnavailableError):
+        await sfu.publish("r-00000000deadbeef", "chat", b'{"v":1}')

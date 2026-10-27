@@ -15,7 +15,7 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 import structlog
-from sqlalchemy import func, select, text, update
+from sqlalchemy import delete, func, select, text, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -32,6 +32,7 @@ from shosai.features.meetings.application.video_server import SfuWebhook, Webhoo
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted
 from shosai.features.meetings.domain.calls import CallState
 from shosai.features.meetings.domain.rooms import CEILING_MIN
+from shosai.features.meetings.infrastructure.call_records import RoomChatMessageRecord
 from shosai.features.meetings.infrastructure.room_records import CEILING_MAX, RoomCallRecord
 
 LOOKUP = text("SELECT room_id, owner_id, org_id FROM meetings_room_by_livekit_name(:name)")
@@ -112,8 +113,12 @@ class Calls:
         await self._tasks.send(HAND_OVER_CALL, task)
 
     async def ended(self, task: CallTask) -> None:
-        """End a finished call once its handover is done."""
+        """End a finished call once its handover is done; its chat goes with it."""
         async with self._transactions.begin(task.scope()) as session:
+            # Чат живёт только звонок: пока заметки его не принимают (B3), он удаляется.
+            await session.execute(
+                delete(RoomChatMessageRecord).where(RoomChatMessageRecord.call_id == task.call_id)
+            )
             await session.execute(
                 update(RoomCallRecord)
                 .where(

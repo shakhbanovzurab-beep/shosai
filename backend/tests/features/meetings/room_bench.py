@@ -28,6 +28,7 @@ from shosai.features.identity.contracts import (
     AUTHENTICATOR,
     AccountProfile,
 )
+from shosai.features.meetings.application.chat import Chat
 from shosai.features.meetings.application.joining import JoinDesk
 from shosai.features.meetings.application.passes import PassCheck
 from shosai.features.meetings.application.removals import Removals
@@ -42,6 +43,7 @@ from shosai.features.meetings.application.video_server import (
     VideoUnavailableError,
     WebhookRejectedError,
 )
+from shosai.features.meetings.channels.http.chat import build_chat_router
 from shosai.features.meetings.channels.http.joining import build_joining_router
 from shosai.features.meetings.channels.http.rooms import build_rooms_router
 from shosai.features.meetings.infrastructure.room_passes import RoomPasses
@@ -64,6 +66,7 @@ class SfuDouble:
     sessions: dict[str, list[SfuParticipant]] = field(default_factory=dict)
     deleted: list[str] = field(default_factory=list)
     metadata: dict[str, str] = field(default_factory=dict)
+    published: list[tuple[str, str, bytes]] = field(default_factory=list)
     up: bool = True
 
     def _answering(self) -> None:
@@ -114,6 +117,14 @@ class SfuDouble:
         before = self.sessions.get(room_name, [])
         self.sessions[room_name] = [item for item in before if item.identity != identity]
         return len(before) != len(self.sessions[room_name])
+
+    async def publish(self, room_name: str, topic: str, payload: bytes) -> bool:
+        """Keep what was published to a held room."""
+        self._answering()
+        if room_name not in self.rooms_held:
+            return False
+        self.published.append((room_name, topic, payload))
+        return True
 
     async def set_attributes(
         self, room_name: str, identity: str, attributes: Mapping[str, str]
@@ -225,6 +236,10 @@ async def rooms_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[Roo
     routers = (
         build_rooms_router((book, Removals(homes.transactions, sfu, passes)), ports, ORIGIN),
         build_joining_router(desk, PassCheck(homes.transactions, passes), ports, limiter),
+        build_chat_router(
+            Chat(homes.transactions, (effects, limiter, sfu), lambda: NOW),
+            PassCheck(homes.transactions, passes),
+        ),
     )
     async with client_of(build_probe_app(extra=routers).app) as http:
         yield RoomsBench(http, homes, sfu, spaces, people)

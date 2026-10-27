@@ -27,6 +27,7 @@ from shosai.features.meetings.application.video_server import RoomSpec, SfuWebho
 from shosai.features.meetings.channels.http.webhook import build_webhook_router
 from shosai.features.meetings.contracts import PENDING_EVENTS
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
+from shosai.features.meetings.infrastructure.call_records import RoomChatMessageRecord
 from shosai.features.meetings.infrastructure.meetings_metrics import MeetingsMetrics
 from shosai.features.meetings.infrastructure.room_records import RoomCallRecord, RoomRecord
 from tests.core.web.probe_app import build_probe_app, client_of
@@ -237,3 +238,18 @@ async def test_the_webhook_route_folds_a_signed_body_and_refuses_a_forged_one(
     assert (forged.status_code, forged.json()["error"]["code"]) == (401, "webhook_rejected")
     assert accepted.status_code == 204
     assert (await the_call(homes, owner)).lk_room_sid == SID
+
+
+async def test_a_calls_chat_goes_with_its_handover(homes: DatabaseAccess) -> None:
+    owner = uuid.uuid4()
+    room = await add_room(homes, room_row(owner))
+    call = await the_call(homes, owner)
+    async with homes.transactions.begin(TenancyScope(Home.RU, owner)) as session:
+        await session.execute(update(RoomCallRecord).values(state="ending", emptied_at=NOW))
+
+    await calls_of(homes, SentTasks()).ended(CallTask(home=Home.RU, user_id=owner, call_id=call.id))
+
+    async with homes.transactions.begin(TenancyScope(Home.RU, owner), read_only=True) as session:
+        kept = await session.scalar(select(func.count()).select_from(RoomChatMessageRecord))
+    assert kept == 0
+    assert room.id == call.room_id

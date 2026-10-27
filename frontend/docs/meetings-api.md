@@ -69,7 +69,7 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
 | `PUT`  | `/v1/meetings/rooms/{id}/board`              | `{elements, files, version}` | `{version}` |
 | `POST` | `/v1/meetings/rooms/{id}/board/picture`      | `{size_bytes}`               | a presigned upload |
 
-- **Chat** (MR-D11): `ChatMessageOut` is `{id, seq, identity, author, text, sent_at}`. The text is 1–2 000
+- **Chat** (MR-D11): `MeetingChatMessageOut` is `{id, seq, identity, author, text, sent_at}`. The text is 1–2 000
   characters (`422 text_required`, `422 text_too_long`); 20 messages per 10 seconds per person (`429` with
   `Retry-After`); a call must be going on (`409 no_live_call`); a removed person is `403 removed`. The server
   publishes every accepted message to the room on topic `chat` (below), the sender's own included, so the sender

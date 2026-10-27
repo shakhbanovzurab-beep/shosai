@@ -149,6 +149,14 @@ class VideoServer(Protocol):
         """Disconnect a session; False when it is no longer in the room."""
         ...
 
+    async def publish(self, room_name: str, topic: str, payload: bytes) -> bool:
+        """Send a reliable data packet to everyone in the room.
+
+        LiveKit answers a room no node holds as unavailable, so a finished room raises
+        `VideoUnavailableError` like an unreachable SFU; the caller treats both the same.
+        """
+        ...
+
     async def set_attributes(
         self, room_name: str, identity: str, attributes: Mapping[str, str]
     ) -> bool:
