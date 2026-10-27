@@ -4,7 +4,9 @@ A card carries its slice's words for the planned write, the space it goes to in 
 language, where it came from and its nonce, the same in the stream and over HTTP. The inbox
 lists only the person's own cards newest first by cursor; "Needs you" offers only cards still
 waiting within their hour; a stranger's card is not found. The history's answer carries the
-card it proposed, as it stands now.
+card it proposed, as it stands now. A card that has run names the cabinet's data it changed,
+so a decision outside a run's stream — a voice card's, one whose log is gone — still refreshes
+the screens.
 """
 
 import uuid
@@ -105,3 +107,21 @@ async def test_the_history_s_answer_carries_its_card_as_it_stands(
     ]
 
     assert with_cards == [("server", ["rejected"]), ("assistant", ["rejected"])]
+
+
+async def test_a_card_names_the_data_it_changed_once_it_has_run(action_bench: ActionBench) -> None:
+    person = uuid.uuid4()
+    waiting = (await action_bench.paused_turn(person))["card"]
+    rejected = (await action_bench.paused_turn(person))["card"]
+
+    approved = await action_bench.decide(person, waiting, "approve")
+    await action_bench.queue.settle()
+    refused = await action_bench.decide(person, rejected, "reject")
+    read = await action_bench.http.get(
+        f"/v1/agent/actions/{waiting['id']}", headers=bearer((HOME, person))
+    )
+
+    assert (waiting["status"], waiting["invalidates"]) == ("proposed", [])
+    assert (approved.json()["status"], approved.json()["invalidates"]) == ("succeeded", ["tasks"])
+    assert read.json()["invalidates"] == ["tasks"]
+    assert (refused.json()["status"], refused.json()["invalidates"]) == ("rejected", [])

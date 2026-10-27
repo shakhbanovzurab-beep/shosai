@@ -57,6 +57,10 @@ class VoiceEvents(Protocol):
         """A write became a card the person decides on the screen."""
         ...
 
+    async def decided(self, action_id: UUID) -> None:
+        """A card was approved by voice: the screen re-reads it and what it changed."""
+        ...
+
 
 class VoiceConversation(Protocol):
     """An open conversation: its thread, what the voice model is told, and its exchanges."""

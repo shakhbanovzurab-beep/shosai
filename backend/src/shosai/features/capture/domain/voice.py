@@ -3,9 +3,9 @@
 The cabinet's `hello` names the space — Personal or a workspace — the thread to go on with,
 the page and the interface's language. The server's control frames tell the conversation's
 state, both sides' words as they are heard so far, the steps of Leo's tools, the cards they
-prepared and why the conversation ended; speech goes both ways in binary frames, PCM16 mono
-at the rates `ready` names. A conversation lasts at most 30 minutes and ends after two in
-which nobody spoke; a person has one at a time.
+prepared, the cards approved by voice and why the conversation ended; speech goes both ways
+in binary frames, PCM16 mono at the rates `ready` names. A conversation lasts at most 30
+minutes and ends after two in which nobody spoke; a person has one at a time.
 """
 
 from collections.abc import Mapping
@@ -130,6 +130,11 @@ def step(activity: str, status: str) -> Frame:
 def proposed(action_id: UUID) -> Frame:
     """A write became a card for the person to decide on the screen."""
     return {"type": "action.proposed", "action_id": str(action_id)}
+
+
+def decided(action_id: UUID) -> Frame:
+    """A card was approved by voice; the cabinet re-reads it and the data it changed."""
+    return {"type": "action.decided", "action_id": str(action_id)}
 
 
 def ended(end: VoiceEnd) -> Frame:

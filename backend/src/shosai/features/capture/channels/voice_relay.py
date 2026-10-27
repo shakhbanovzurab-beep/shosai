@@ -62,6 +62,10 @@ class SocketEvents:
         """A write became a card."""
         await self._relay.send(wire.proposed(action_id))
 
+    async def decided(self, action_id: UUID) -> None:
+        """A card was approved by voice."""
+        await self._relay.send(wire.decided(action_id))
+
 
 class VoiceRelay:
     """Relays one conversation until it ends; returns why it ended."""

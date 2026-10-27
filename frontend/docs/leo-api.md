@@ -114,7 +114,7 @@ ignored. Exactly one of `run.completed` and `run.failed` ends a run.
 | `sources` | `{sources: LeoSource[]}` — the whole list so far; its numbers never change within a run |
 | `artifact` | `LeoArtifact` |
 | `client.action` | `{navigate: {to}}` — a cabinet path, followed only if the cabinet knows the route |
-| `action.proposed` / `action.updated` | `{action: LeoProposal}`; `updated` also `{invalidates: string[]}` (query domains to refetch) |
+| `action.proposed` / `action.updated` | `{action: LeoProposal}`; `updated` also `{invalidates: string[]}` (query domains to refetch; the card carries the same since 2026-10-27) |
 | `run.paused` | `{action_id}` |
 | `run.completed` | `{message_id, outcome: answered \| stopped, truncated}` |
 | `run.failed` | `{code: model_unavailable \| token_limit \| turn_deadline \| process_lost \| failed}` |
@@ -172,10 +172,13 @@ How the cabinet shows them (step 10):
   before the card, the card's end, Leo's epilogue — and the history is re-read when the run ends. While the outcome
   is still on its way the server closes the stream at the card's pause; the cabinet reads it again with a growing
   pause for about three minutes. A pause on a new card of the epilogue ends the follow: that card is decided later.
-- `action.updated` updates the card wherever it is shown (the panel, "Needs you"), and its `invalidates` re-read the
-  shown screens of those domains — resources tagged with `inDomain` (`src/lib/resource-domains.ts`): `tasks` (boards,
+- `action.updated` updates the card wherever it is shown (the panel, "Needs you"). A card that has run carries
+  `invalidates`, the domains its succeeded items changed; the first time the store sees a card's outcome — the answer
+  to a decision, `action.updated`, or a card re-read after voice mode's `action.decided` — it re-reads the shown
+  screens of those domains, once: resources tagged with `inDomain` (`src/lib/resource-domains.ts`): `tasks` (boards,
   a task, Today), `notes` (the library, counts, a meeting, its notes, its share link, recent meetings), `files`
-  (files, storage).
+  (files, storage). So a voice card, or one decided after its run's log is gone, refreshes the screens too. A tab
+  that becomes visible again re-reads every shown resource (`refreshOnReturn` in the signed-in layout).
 - `taint` and `outcome` are codes the cabinet words (`leoCards.card.taint`, `leoCards.card.outcome`); an unknown label
   reads as outside text, an unknown outcome adds nothing to the status.
 - `409 action_not_pending` re-reads the card, which then shows how it ended.

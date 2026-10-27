@@ -8,7 +8,8 @@ hold: the voice model calls `core.confirm` for that card, and every bound judge 
 what was read back. No judge, a judge in doubt, a card with a warning, one not read back in
 this conversation, one no longer waiting — the card stays on the screen. An approval by voice
 goes the screen's way: one conditional update, the audit, the worker, with `approved_via =
-voice`.
+voice`; the conversation's socket is then told, so the screen re-reads the card and the data
+it changed.
 """
 
 import json
@@ -60,6 +61,14 @@ class ReadBack:
         return {"action_id": str(self.action_id), "read_back": self.words, "next": note}
 
 
+@dataclass(frozen=True, slots=True)
+class Confirmation:
+    """The answer `core.confirm` gives the voice model, and the card it approved, if any."""
+
+    answer: str
+    approved: UUID | None = None
+
+
 class VoiceApproval:
     """Reads cards back and approves them by voice."""
 
@@ -93,10 +102,10 @@ class VoiceApproval:
 
     async def confirm(
         self, person: Principal, terms: TurnPayload, read: ReadBack | None, heard: str
-    ) -> str:
+    ) -> Confirmation:
         """The answer to `core.confirm`: approved and carried out, or why nothing was done."""
         if read is None or not read.by_voice:
-            return told(SCREEN_ONLY)
+            return Confirmation(told(SCREEN_ONLY))
         facts = VoiceApprovalFacts(
             read_back=read.words, utterance=heard.strip(), language=terms.language,
             scope=terms.scope(), cross_border_consent=terms.cross_border_consent,
@@ -106,13 +115,13 @@ class VoiceApproval:
         verdicts = [await judge.approved(facts) for judge in judges]
         if not facts.utterance or not judges or not all(v is True for v in verdicts):
             log.info("Голосовое одобрение не принято", action_id=str(read.action_id))
-            return told(NOT_APPROVED)
+            return Confirmation(told(NOT_APPROVED))
         async with self._transactions.begin(person.scope(), read_only=True) as session:
             nonce = await session.scalar(
                 select(AgentActionRecord.nonce).where(AgentActionRecord.id == read.action_id)
             )
         if nonce is None:
-            return told(NOT_WAITING)
+            return Confirmation(told(NOT_WAITING))
         try:
             decided = await self._decisions.approve(
                 person, read.action_id, nonce, ApprovedVia.VOICE
@@ -121,8 +130,9 @@ class VoiceApproval:
             log.info(
                 "Голосовое одобрение опоздало", action_id=str(read.action_id), code=refused.code
             )
-            return told(NOT_WAITING)
-        return json.dumps({"status": decided.record.status, "next": CONFIRMED})
+            return Confirmation(told(NOT_WAITING))
+        answer = json.dumps({"status": decided.record.status, "next": CONFIRMED})
+        return Confirmation(answer, read.action_id)
 
     def _judges(self) -> tuple[VoiceApprovalJudge, ...]:
         return self._ports.all(VOICE_APPROVAL_JUDGE)

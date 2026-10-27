@@ -19,9 +19,10 @@ import { followRun } from "./run-follower";
 
 type Words = { failed: string };
 
-async function refreshed(proposal: LeoProposal) {
+/** Карточку решили в другом месте — на другом экране или голосом: её итог виден здесь, а «Нужны вы» перечитывается. */
+export async function rereadCard(id: string) {
   try {
-    receiveCard(await proposalsApi.card(proposal.id));
+    receiveCard(await proposalsApi.card(id));
   } catch (error) {
     // «Нужны вы» всё равно перечитается и уберёт карточку, если она уже не ждёт.
     console.warn("Leo: решённую карточку не удалось перечитать", error);
@@ -39,7 +40,7 @@ async function decide(proposal: LeoProposal, request: () => Promise<DecidedPropo
     return runId;
   } catch (error) {
     toast.error(words.failed, { description: apiErrorDescription(error) });
-    if (error instanceof ApiError && error.code === "action_not_pending") await refreshed(proposal);
+    if (error instanceof ApiError && error.code === "action_not_pending") await rereadCard(proposal.id);
     return null;
   } finally {
     markBusy(proposal.id, false);

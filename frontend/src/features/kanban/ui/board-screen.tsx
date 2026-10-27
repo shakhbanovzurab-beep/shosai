@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useTranslations } from "use-intl";
 
@@ -82,21 +82,12 @@ function BoardSkeleton() {
   );
 }
 
-/** One board: loads its columns and tasks, and re-reads a Jira board when you come back to the tab. */
+/** One board: loads its columns and tasks; the signed-in layout re-reads it when you come back to the tab. */
 export function BoardScreen({ boards, current, incoming }: Omit<ViewProps, "view" | "onViewChange">) {
   const t = useTranslations("kanban");
   const tc = useTranslations("common");
   const [view, setView] = useState<BoardView>("board");
   const detail = useBoardDetail(current.id);
-  const isJira = current.jira !== null;
-
-  useEffect(() => {
-    if (!isJira) return;
-    const resource = boardResource(current.id);
-    const onVisible = () => (document.visibilityState === "visible" ? void resource.refresh() : undefined);
-    document.addEventListener("visibilitychange", onVisible);
-    return () => document.removeEventListener("visibilitychange", onVisible);
-  }, [current.id, isJira]);
 
   if (detail.status !== "ready")
     return (

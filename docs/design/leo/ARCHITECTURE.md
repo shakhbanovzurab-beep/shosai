@@ -1016,7 +1016,7 @@ This design turns that into a real client and adds what is missing. The frontend
 **Engineering rules:**
 
 - **Render cost.** A token re-renders only the live message. The run store (Zustand) is keyed by run, with selector subscriptions, and deltas are batched per animation frame. Markdown is incremental: finished blocks are memoised and only the tail block re-parses. That fixes W1. The renderer is the cabinet's own, on `marked`'s lexer; it never renders raw HTML, renders links only with `https`, `http`, `mailto` or a cabinet path, loads no remote resource, and is tested on unfinished Markdown and XSS (§17 Q-2, ADR 0068 AG-D6).
-- **No hand-mirrored registries.** Types come from OpenAPI, and activity labels come from server activity codes plus i18n with a generic fallback. Cache invalidation follows `invalidates` from `action.updated` (fixes W2).
+- **No hand-mirrored registries.** Types come from OpenAPI, and activity labels come from server activity codes plus i18n with a generic fallback. Cache invalidation follows `invalidates`, which every card carries once it has run — from `action.updated`, a decision's answer or a card re-read after a voice approval — once per card, so a decision outside a run's stream refreshes the screens too (fixes W2).
 - **Lazy loading.** The panel, voice and Markdown extras load on first open, prefetched on hover or ⌘I (fixes W4).
 - **Accessibility.** The panel is a dialog: focus moves in and out, Escape closes. The feed is `role="log"` and announces completed messages, not tokens. Mentions use combobox semantics (fixes W3).
 - **Errors.** Errors are never written into the conversation (fixes W5). On logout, nothing of the thread stays in the browser beyond the HTTP cache.

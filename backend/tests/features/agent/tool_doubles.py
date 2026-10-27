@@ -120,6 +120,7 @@ WEB_LOOKUP: Final = ToolSpec(
 TASKS_CREATE: Final = ToolSpec(
     name="tasks.create", toolset="tasks", description="Probe write.", input=Query, output=Found,
     effect=ToolEffect.WRITE, reversibility=Reversibility.REVERSIBLE, previews=(PROBE_WORDING,),
+    invalidates=("tasks",),
 )  # fmt: skip
 
 

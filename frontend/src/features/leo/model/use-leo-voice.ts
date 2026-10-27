@@ -5,13 +5,15 @@ import * as React from "react";
 import { useTranslations } from "use-intl";
 
 import type { VoiceEnd, VoiceServerFrame } from "../domain/voice-wire";
+import { rereadCard } from "./proposals";
 import { openVoiceAudio, type VoiceAudio } from "./voice/voice-audio";
 import { VoiceSocket, type VoiceTarget } from "./voice/voice-socket";
 
 /*
  * Голосовой режим Leo — разговор с Gemini Live голосом Charon через сервер (ADR 0070). Хук держит микрофон,
  * динамик и сокет; фазу ведут кадры сервера и сам звук: «говорит» — пока играет голос Leo. Перебил человек —
- * голос Leo замолкает сразу. Закончился разговор — тред перечитывается: в нём уже записаны реплики.
+ * голос Leo замолкает сразу. Карточку одобрили голосом — она перечитывается, и экраны показывают, что она изменила.
+ * Закончился разговор — тред перечитывается: в нём уже записаны реплики.
  */
 
 export type LeoVoicePhase = "off" | "connecting" | "unavailable" | "listening" | "thinking" | "speaking";
@@ -77,6 +79,9 @@ export function useLeoVoice({ target, onEnded }: UseLeoVoiceOptions) {
         break;
       case "action.proposed":
         setProposed(true);
+        break;
+      case "action.decided":
+        void rereadCard(frame.action_id);
         break;
       default:
         break;

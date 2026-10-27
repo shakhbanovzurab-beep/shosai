@@ -23,10 +23,11 @@ WAIT: Final = timedelta(seconds=3)
 
 @dataclass
 class Heard:
-    """What a call told the conversation's socket: its steps and cards."""
+    """What a call told the conversation's socket: its steps, cards and voice approvals."""
 
     steps: list[tuple[str, str]] = field(default_factory=list)
     cards: list[UUID] = field(default_factory=list)
+    approvals: list[UUID] = field(default_factory=list)
 
     async def step(self, activity: str, status: str) -> None:
         """A step and its status."""
@@ -35,6 +36,10 @@ class Heard:
     async def proposed(self, action_id: UUID) -> None:
         """A card."""
         self.cards.append(action_id)
+
+    async def decided(self, action_id: UUID) -> None:
+        """A card approved by voice."""
+        self.approvals.append(action_id)
 
 
 @dataclass

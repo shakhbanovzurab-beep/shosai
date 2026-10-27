@@ -95,20 +95,26 @@ async def test_an_interruption_stops_the_answer_cancels_the_call_and_opens_the_n
     ]  # fmt: skip
 
 
-async def test_a_card_reaches_the_cabinet_and_a_failed_call_still_answers_the_model() -> None:
+async def test_a_card_and_its_voice_approval_reach_the_cabinet_and_a_failed_call_answers() -> None:
     talk = Talk()
     relay, cabinet, gemini, _ = relay_of(talk)
     running = asyncio.create_task(relay.run())
     await gemini.put(LiveToolCall("c-1", "tasks__create", "{}"))
     await until(lambda: gemini.results)
-    talk.fail = True
-    await gemini.put(LiveToolCall("c-2", "notes__search", "{}"))
+    await gemini.put(LiveToolCall("c-2", "core__confirm", "{}"))
     await until(lambda: len(gemini.results) == 2)
+    talk.fail = True
+    await gemini.put(LiveToolCall("c-3", "notes__search", "{}"))
+    await until(lambda: len(gemini.results) == 3)
     await cabinet.inbox.put(None)
 
     assert await running is VoiceEnd.ENDED
-    assert {"type": "action.proposed", "action_id": str(CARD)} in cabinet.sent
-    assert gemini.results == [("c-1", FOUND), ("c-2", TOOL_FAILED)]
+    cards = [frame for frame in cabinet.sent if str(frame.get("type")).startswith("action.")]
+    assert cards == [
+        {"type": "action.proposed", "action_id": str(CARD)},
+        {"type": "action.decided", "action_id": str(CARD)},
+    ]
+    assert gemini.results == [("c-1", FOUND), ("c-2", FOUND), ("c-3", TOOL_FAILED)]
 
 
 @pytest.mark.parametrize(

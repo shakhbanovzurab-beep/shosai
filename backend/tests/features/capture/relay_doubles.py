@@ -95,7 +95,7 @@ class Talk:
         self.gate.set()
 
     async def call(self, call: tuple[str, str, str], events: VoiceEvents, *, heard: str) -> str:
-        """A step, the gate, then the result or a card."""
+        """A step, the gate, then the result, a card or a card approved by voice."""
         _, name, _ = call
         self.calls.append(name)
         self.heard.append(heard)
@@ -107,6 +107,8 @@ class Talk:
         await events.step(name, "done")
         if name == "tasks__create":
             await events.proposed(CARD)
+        if name == "core__confirm":
+            await events.decided(CARD)
         return FOUND
 
     async def record(self, exchange: VoiceExchange) -> None:

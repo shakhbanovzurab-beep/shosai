@@ -4,7 +4,9 @@ The card carries what the person decides with, in their language (their profile'
 and the labelled fields its slice words for the preview it planned (`ToolSpec.previews`), the
 space the change goes to — Personal, or the workspace by name — where the proposal came from,
 how it can be undone, whether it asks for a careful decision on the screen, what the run read
-before it (a label), its state and its times, and the nonce a decision carries. Every channel
+before it (a label), its state and its times, the nonce a decision carries, and, once it has
+run, the cabinet's data its succeeded items changed (`invalidates`) — so a screen re-reads
+them wherever the card's outcome reaches it, in a run's stream or outside one. Every channel
 renders the same words from the same wording, so no client keeps a slice's vocabulary.
 """
 
@@ -44,10 +46,21 @@ ORIGIN_KINDS: Final[Mapping[ProposalOrigin, str]] = {
 log = structlog.stdlib.get_logger(__name__)
 
 
+def invalidated(catalog: AgentToolCatalog, items: Sequence[ActionItem]) -> tuple[str, ...]:
+    """The cabinet's data domains the succeeded items changed, in their order."""
+    domains: dict[str, None] = {}
+    for item in items:
+        tool = catalog.tool(item.tool)
+        if item.state is ItemState.SUCCEEDED and tool is not None:
+            domains |= dict.fromkeys(tool.spec.invalidates)
+    return tuple(domains)
+
+
 def card_of(
-    record: AgentActionRecord, rendered: RenderedPreview, space: str
+    record: AgentActionRecord, rendered: RenderedPreview, facts: tuple[str, tuple[str, ...]]
 ) -> dict[str, JsonValue]:
-    """The card of an action, with its words rendered."""
+    """The card of an action, with its words rendered, in its space, with what it changed."""
+    space, changed = facts
     items = items_of(record)
     first = items[0]
     codes = [item.code for item in items if item.state is not ItemState.SUCCEEDED and item.code]
@@ -72,6 +85,7 @@ def card_of(
         "created_at": record.created_at.isoformat(),
         "expires_at": record.expires_at.isoformat(),
         "resolved_at": None if record.resolved_at is None else record.resolved_at.isoformat(),
+        "invalidates": list(changed),
     }
 
 
@@ -98,9 +112,12 @@ class ActionCards:
             card_of(
                 record,
                 self.rendered(items_of(record)[0], language),
-                personal_space(language)
-                if record.org_id is None
-                else spaces.get(record.org_id, EMPTY),
+                (
+                    personal_space(language)
+                    if record.org_id is None
+                    else spaces.get(record.org_id, EMPTY),
+                    invalidated(self._catalog, items_of(record)),
+                ),
             )
             for record in records
         ]

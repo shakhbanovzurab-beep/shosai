@@ -1,7 +1,7 @@
 /*
  * Провод голосового режима Leo (ADR 0070, LV-D2): управление — JSON-кадрами, звук — двоичными.
  * Клиент первым кадром шлёт `hello` с версией, токеном и пространством; сервер отвечает `ready` и дальше
- * сообщает состояние разговора, расшифровки обеих сторон, шаги и карточки. Кадр, которого кабинет не знает,
+ * сообщает состояние разговора, расшифровки обеих сторон, шаги, карточки и одобренные голосом карточки. Кадр, которого кабинет не знает,
  * пропускается: сервер может прислать новый раньше кабинета.
  */
 
@@ -37,6 +37,7 @@ export type VoiceServerFrame =
   | { type: "interrupted" }
   | { type: "step"; activity: string; status: "running" | "done" | "failed" }
   | { type: "action.proposed"; action_id: string }
+  | { type: "action.decided"; action_id: string }
   | { type: "ended"; code: string }
   | { type: "server.shutdown" };
 
@@ -47,6 +48,7 @@ const KINDS = new Set<VoiceServerFrame["type"]>([
   "interrupted",
   "step",
   "action.proposed",
+  "action.decided",
   "ended",
   "server.shutdown",
 ]);

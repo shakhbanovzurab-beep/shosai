@@ -4543,6 +4543,11 @@ export interface components {
             /** Resolved At */
             resolved_at: string | null;
             /**
+             * Invalidates
+             * @description The cabinet's data its succeeded items changed, by domain (`tasks`, `notes`, `files`); empty until it has run.
+             */
+            invalidates: string[];
+            /**
              * Run Id
              * @description The run whose stream carries the outcome.
              */
@@ -6795,6 +6800,11 @@ export interface components {
             expires_at: string;
             /** Resolved At */
             resolved_at: string | null;
+            /**
+             * Invalidates
+             * @description The cabinet's data its succeeded items changed, by domain (`tasks`, `notes`, `files`); empty until it has run.
+             */
+            invalidates: string[];
         };
         /**
          * Provider

@@ -4,13 +4,16 @@ import { useSyncExternalStore } from "react";
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource } from "@/lib/polling-resource";
+import { refreshDomains } from "@/lib/resource-domains";
 
 import { proposalsApi } from "../api/proposals-api";
-import { isPending, type LeoProposal, laterOf } from "../domain/proposals";
+import { isPending, isSettled, type LeoProposal, laterOf } from "../domain/proposals";
 
 /*
  * Карточки Leo в двух местах — в разговоре и в «Нужны вы» на главной. Решение или итог в одном месте сразу видны
- * в другом: здесь последнее известное состояние каждой карточки и то, что сейчас в работе.
+ * в другом: здесь последнее известное состояние каждой карточки и то, что сейчас в работе. Откуда бы ни пришёл итог
+ * карточки — ответ на решение, поток прогона или голосовой разговор, — показанные экраны один раз перечитывают
+ * данные, которые она изменила.
  */
 
 /** Ожидающие решения из чатов, поручений и MCP — список «Нужны вы». */
@@ -49,12 +52,12 @@ export const proposalArrived = () => void pendingResource.refresh();
 
 /** Новое состояние карточки от сервера: ответ на решение, `action.updated` или перечитанная карточка. */
 export function receiveCard(card: LeoProposal) {
-  set((s) => {
-    const known = s.latest.get(card.id);
-    return { ...s, latest: new Map([...s.latest, [card.id, known ? laterOf(known, card) : card]]) };
-  });
+  const known = snapshot.latest.get(card.id);
+  set((s) => ({ ...s, latest: new Map([...s.latest, [card.id, known ? laterOf(known, card) : card]]) }));
   if (!isPending(card))
     pendingResource.update((page) => ({ ...page, items: page.items.filter((item) => item.id !== card.id) }));
+  const firstOutcome = isSettled(card) && (known === undefined || !isSettled(known));
+  if (firstOutcome && card.invalidates?.length) refreshDomains(card.invalidates);
 }
 
 /** Карточка ждёт ответа на решение: кнопки заняты. */

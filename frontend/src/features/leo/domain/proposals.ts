@@ -52,6 +52,8 @@ export type LeoProposal = {
   created_at: string;
   expires_at: string;
   resolved_at: string | null;
+  /** Данные кабинета, которые изменили удавшиеся пункты (`tasks`, `notes`, `files`); пусто, пока она не выполнена. */
+  invalidates?: string[];
 };
 
 /** Карточка после решения и прогон, чей поток несёт итог и эпилог Leo. */
@@ -69,6 +71,9 @@ const RANK: Record<ProposalStatus, number> = {
   expired: 2,
   outcome_unknown: 2,
 };
+
+/** Карточка решена и, если её одобрили, выполнена: её состояние больше не изменится. */
+export const isSettled = (proposal: Pick<LeoProposal, "status">) => RANK[proposal.status] === RANK.succeeded;
 
 /** Более позднее из двух известных состояний карточки: статус только идёт вперёд, при равных — свежее прочтённое. */
 export const laterOf = (known: LeoProposal, fresh: LeoProposal) =>

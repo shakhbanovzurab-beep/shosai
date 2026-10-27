@@ -27,6 +27,7 @@ from shosai.core.agent_tools.results import PlannedEffect
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.agent.application.action_cards import invalidated
 from shosai.features.agent.application.action_rows import (
     AuditEntry,
     audit,
@@ -162,13 +163,5 @@ class ActionExecution:
         if record.approved_at is not None:
             waited = (now - record.approved_at).total_seconds()
             self._metrics.ended_after_approval(record.status, waited)
-        await self._paused.tell(claimed.scope.home, record, settled, self._invalidates(items))
-
-    def _invalidates(self, items: list[ActionItem]) -> tuple[str, ...]:
-        """The cabinet's query domains the succeeded items changed."""
-        domains: dict[str, None] = {}
-        for item in items:
-            tool = self._catalog.tool(item.tool)
-            if item.state is ItemState.SUCCEEDED and tool is not None:
-                domains |= dict.fromkeys(tool.spec.invalidates)
-        return tuple(domains)
+        changed = invalidated(self._catalog, items)
+        await self._paused.tell(claimed.scope.home, record, settled, changed)

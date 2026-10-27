@@ -13,7 +13,7 @@
 ## Decision
 
 1. **Voice mode is a Gemini Live session the server holds** (LV-D1): `WS /v1/ws/voice` on the `ws` role, a `capture` route; the browser streams microphone audio (PCM16 16 kHz) and plays Leo's (PCM16 24 kHz). Model `gemini-3.8-live`, voice **Charon**, end of a phrase after 500 ms of silence (LV-D4).
-2. **The wire** (LV-D2): JSON text frames for control, binary frames for audio; `hello` first with the protocol version, the access token and the scope; `ready`, `state`, `transcript`, `interrupted`, `step`, `action.proposed`, `ended`, `server.shutdown` from the server.
+2. **The wire** (LV-D2): JSON text frames for control, binary frames for audio; `hello` first with the protocol version, the access token and the scope; `ready`, `state`, `transcript`, `interrupted`, `step`, `action.proposed`, `action.decided` (added 2026-10-27: a card approved by voice, which the cabinet re-reads), `ended`, `server.shutdown` from the server.
 3. **Authentication in `hello`** (LV-D3): the access token within 5 s of the upgrade, checked by identity's `Authenticator`; the cabinet's `Origin` only; never a token in the URL.
 4. **One thread for text and voice** (LV-D5): each exchange is written at its turn's end — the person's phrase and Leo's answer from Gemini's transcripts — with an `agent_runs` row of channel `voice` and the sources of its reads.
 5. **Reads like a text turn, writes as cards** (LV-D6): the same tools, switches and access policy; a write is proposed through the Action Gateway and shown on the screen.

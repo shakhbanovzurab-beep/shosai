@@ -16730,6 +16730,14 @@
             ],
             "title": "Resolved At"
           },
+          "invalidates": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Invalidates",
+            "description": "The cabinet's data its succeeded items changed, by domain (`tasks`, `notes`, `files`); empty until it has run."
+          },
           "run_id": {
             "anyOf": [
               {
@@ -16762,6 +16770,7 @@
           "created_at",
           "expires_at",
           "resolved_at",
+          "invalidates",
           "run_id"
         ],
         "title": "DecidedOut",
@@ -22272,6 +22281,14 @@
               }
             ],
             "title": "Resolved At"
+          },
+          "invalidates": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Invalidates",
+            "description": "The cabinet's data its succeeded items changed, by domain (`tasks`, `notes`, `files`); empty until it has run."
           }
         },
         "type": "object",
@@ -22291,7 +22308,8 @@
           "nonce",
           "created_at",
           "expires_at",
-          "resolved_at"
+          "resolved_at",
+          "invalidates"
         ],
         "title": "ProposalOut",
         "description": "A card, in the person's language (`LeoProposal`)."

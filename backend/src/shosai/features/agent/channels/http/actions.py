@@ -80,6 +80,10 @@ class ProposalOut(Out):
     created_at: datetime
     expires_at: datetime
     resolved_at: datetime | None
+    invalidates: list[str] = Field(
+        description="The cabinet's data its succeeded items changed, by domain (`tasks`, "
+        "`notes`, `files`); empty until it has run."
+    )
 
 
 class DecidedOut(ProposalOut):

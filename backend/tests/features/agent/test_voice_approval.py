@@ -65,6 +65,7 @@ async def test_a_card_read_back_is_approved_by_voice_and_carried_out(
     row = await card_row(action_bench, card["action_id"])
     assert (row["status"], row["approved_via"]) == ("succeeded", "voice")
     assert ("approved", "voice") in row["audit"]
+    assert heard.approvals == [uuid.UUID(card["action_id"])]
 
 
 async def test_no_clear_yes_no_judge_a_warning_or_an_unread_card_leaves_it_on_the_screen(
@@ -95,6 +96,7 @@ async def test_no_clear_yes_no_judge_a_warning_or_an_unread_card_leaves_it_on_th
         CARD_ON_SCREEN, SCREEN_ONLY, SCREEN_ONLY,
     )  # fmt: skip
     assert action_bench.turns.tools.executed == []
+    assert heard.approvals == []
     for card in (first, second, third):
         row = await card_row(action_bench, card["action_id"])
         assert (row["status"], row["approved_via"]) == ("proposed", None)

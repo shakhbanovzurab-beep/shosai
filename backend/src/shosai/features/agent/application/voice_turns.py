@@ -152,7 +152,10 @@ class VoiceTalk:
         call_id, name, arguments = call
         if name == CONFIRM_TOOL:
             read = self.read.get(action_of(arguments) or new_id())
-            return await self.parts.approval.confirm(self.person, self.terms, read, heard)
+            confirmed = await self.parts.approval.confirm(self.person, self.terms, read, heard)
+            if confirmed.approved is not None:
+                await events.decided(confirmed.approved)
+            return confirmed.answer
         async with self.turn:
             exchange = self.current()
             if not exchange.run_open:
