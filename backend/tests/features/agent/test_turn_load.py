@@ -32,6 +32,7 @@ from decimal import Decimal
 from typing import Final
 
 import httpx
+import pytest
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from psycopg.rows import DictRow
@@ -45,6 +46,7 @@ from shosai.core.tasks.system import StreamOptions, TaskSystem, build_task_syste
 from shosai.features.agent.application.model_stream import DEFAULT_PACE
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.turn_task import RUN_TURN
+from shosai.features.agent.domain.runs import STREAM_STALL
 from shosai.features.agent.infrastructure.run_keys import FLEET_RUNS, log_key
 from tests.core.tasks.workbench import eventually, running
 from tests.features.agent.tool_doubles import MODEL, calling
@@ -83,6 +85,12 @@ SELECT gen_random_uuid(), now() - m * interval '1 second', t.id, t.user_id,
 FROM agent_threads AS t CROSS JOIN generate_series(1, %(per_thread)s) AS m
 WHERE t.id IN (SELECT md5('load-thread' || g)::uuid FROM generate_series(1, %(threads)s) AS g)
 """
+
+
+@pytest.fixture
+def stream_silence() -> timedelta:
+    """Production's silence: under load a stream waits on its log, not on the database."""
+    return STREAM_STALL
 
 
 def answering(request: ChatRequest) -> list[ChatDelta]:
@@ -229,7 +237,8 @@ async def test_one_agent_worker_answers_48_turns_at_once_within_the_budgets(
     assert p95 <= OVERHEAD_P95_MS
     assert pickup >= 0.95
     assert max(logs) <= LOG_BYTES
-    # Сверх ходов: проверка отказанного 49-го до допуска и редкие чтения потоков API, которые в
-    # стенде идут в базу после секунды тишины (в production — после 45 с). Лишняя транзакция
-    # на ход дала бы 48 сверху.
+    # Сверх ходов: проверка отказанного 49-го до допуска. Поток читает базу только после 45 с
+    # тишины журнала, как в production: на медленной машине CI паузы в секунду бывают у многих
+    # потоков сразу, и прежняя секундная тишина стенда добавляла десятки чтений. Лишняя
+    # транзакция на ход дала бы 48 сверху.
     assert done.transactions <= TRANSACTIONS_PER_TURN * CAPACITY + CAPACITY // 4

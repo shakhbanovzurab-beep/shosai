@@ -16,7 +16,6 @@ from datetime import timedelta
 from typing import Any, Final
 
 import httpx
-import pytest
 import pytest_asyncio
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
@@ -86,6 +85,7 @@ from shosai.features.workspaces.infrastructure.membership_reader import (
     WorkspaceDirectory,
 )
 from tests.core.web.probe_app import build_probe_app, client_of
+from tests.features.agent.bench_doubles import BenchDoubles
 from tests.features.agent.tool_doubles import ProbeTools
 from tests.features.agent.turn_doubles import (
     WAIT,
@@ -110,7 +110,6 @@ from tests.harness.run_slot import RunSlot
 HOME: Final = Home.EU
 ROUTE: Final = ModelRoute(ModelRef(Provider.OPENROUTER, "probe/leo"))
 QUICK: Final = Pace(flush=timedelta(milliseconds=20), stall=timedelta(seconds=2))
-SILENCE: Final = timedelta(seconds=1)
 # Тесты задают много ходов подряд; предел частоты проверяет свой тест.
 GENEROUS: Final = RateLimit("agent.turn_bench", 1_000, timedelta(minutes=1), 1_000)
 
@@ -205,19 +204,13 @@ def stream_of(answer: httpx.Response) -> list[tuple[str, int, Mapping[str, Any]]
     return events
 
 
-@pytest.fixture
-def probe_tools() -> ProbeTools:
-    """The probe's tools; a module that needs others overrides this fixture."""
-    return ProbeTools()
-
-
 @pytest_asyncio.fixture
 async def turn_bench(
     homes: DatabaseAccess,
     valkey: Redis,
     run_slot: RunSlot,
     upload_bench: UploadBench,
-    probe_tools: ProbeTools,
+    bench_doubles: BenchDoubles,
 ) -> AsyncIterator[TurnBench]:
     """Turns over the slot's homes and Valkey, with one agent worker alive in the fleet."""
     terms, model, queue, meetings = Terms(), ScriptedModel(), InlineQueue(), Meetings()
@@ -245,7 +238,7 @@ async def turn_bench(
     tracing.add_span_processor(SimpleSpanProcessor(spans))
     tracer = tracing.get_tracer("shosai.agent")
     telemetry = RunTelemetry(metrics, tracer)
-    pages, tools = ResultPages(homes.transactions, ports), probe_tools
+    pages, tools = ResultPages(homes.transactions, ports), bench_doubles.tools
     catalog = AgentToolCatalog()
     catalog.install([*core_tools(pages), *tools.bound()])
     sources = RunSources(homes.transactions, ports)
@@ -273,7 +266,7 @@ async def turn_bench(
     )  # fmt: skip
     history, streams = (
         History(homes.transactions, threads, cards),
-        RunStreams(homes.transactions, (run_log, tail), leases, metrics, SILENCE),
+        RunStreams(homes.transactions, (run_log, tail), leases, metrics, bench_doubles.silence),
     )
     routers = tuple(
         router
