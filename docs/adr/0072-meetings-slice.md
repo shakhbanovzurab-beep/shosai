@@ -4,7 +4,7 @@
   - MR-D1, MR-D8 and MR-D10's data source: as proposed.
   - MR-D2, MR-D3, MR-D4, MR-D5, MR-D6, MR-D7, MR-D9 and MR-D10's audit: with the owner's amendments.
   - MR-D11…MR-D14: added by the owner.
-  - The points marked *agent-derived* are the plan's own detailing, stated so the owner can correct them.
+  - The points marked *agent-derived* are the plan's own detailing, stated so the owner can correct them. On 2026-10-27 the owner confirmed four of them: notes by participant track (point 13), chat through the server (point 7), one recording meaning one video recording (point 14), and the 6 and 2 tiles (point 3). The owner also added the exposure rule and the memory note of point 14.
 - **Packages:**
   - `meetings` (owner);
   - notes (the room's meeting, notes from participant tracks, the call's chat and board picture);
@@ -107,9 +107,11 @@ Two facts of today's host shape the rest:
     - **Staging limits:**
       - at most 4 participants per room;
       - one video recording at a time, with a length limit (*agent-derived:* 30 minutes, and a 540p 15 fps preset);
-      - hard `mem_limit` (equal to the swap limit) and `cpus` for LiveKit, its Redis and egress.
-      - *Agent-derived:* participant track egress for notes is bounded by the 4 participants and egress's container limits rather than by the one-recording rule.
-    - **Local development:** LiveKit and its Redis run under a Compose profile only in meetings sessions, and egress under its own profile only in the sessions that check recording or track egress. Both are stopped at the session's end.
+      - hard `mem_limit` (equal to the swap limit) and `cpus` for LiveKit, its Redis and egress;
+      - participant track egress for notes is bounded by the 4 participants and egress's container limits, not by the one-recording rule (confirmed by the owner);
+      - 16 GB of memory later; when they arrive, the staging limits are revisited. Until then every start of egress checks the available memory first.
+    - **Exposure.** The host has no firewall, neither its own nor in the provider's panel. Only LiveKit's media ports (UDP 7882, UDP 3478, UDP 30000–30099, TCP 7881) and 443 through NGINX listen outside. LiveKit's API, egress, its Redis and everything else are bound to loopback or the Compose network. The staging check verifies it and the staging runbook records it. SSH, port 80 (the redirect and certbot's webroot) and the provider's agent on 10050, which listen today, are left to the owner.
+    - **Local development:** LiveKit and its Redis run under a Compose profile only in meetings sessions, and egress under its own profile only in the sessions that check recording or track egress. Both are stopped at the session's end. Their ports are bound to 127.0.0.1 and differ from staging's.
     - **50 participants** are checked by calculation, not on staging.
     - **The production LiveKit machine** is a separate decision before launch.
     - **The share of calls:** 5 % of meetings is the starting design point.
