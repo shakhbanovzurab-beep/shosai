@@ -1,4 +1,5 @@
-"""`platform.draw_image` as the model sees it (AG-D10; agent step 16b2).
+"""`images.draw` as the model sees it (AG-D10; agent step 16b2): the operator's own toolset,
+since `platform` holds its eight tools (Leo §8.1).
 
 A picture for the operator: an illustration of a report or an idea, never a person's content.
 The answer shows it by reference under the text.
@@ -9,10 +10,10 @@ from typing import Final
 
 from shosai.core.agent_tools.spec import CostClass, ToolEffect, ToolSpec
 from shosai.features.agent.application.platform_images import DrawImageIn, DrawImageOut
-from shosai.features.agent.domain.operator import PLATFORM_TOOLSET
+from shosai.features.agent.domain.operator import IMAGES_TOOLSET
 
 DRAW_IMAGE: Final = ToolSpec(
-    name=f"{PLATFORM_TOOLSET}.draw_image", toolset=PLATFORM_TOOLSET,
+    name=f"{IMAGES_TOOLSET}.draw", toolset=IMAGES_TOOLSET,
     description=(
         "Draw a picture for the operator: an illustration of a report, an idea or a layout. "
         "It appears under your answer; describe it in words only briefly. Never draw a chart "

@@ -1,6 +1,6 @@
 """Pictures Leo draws for the platform operator (AG-D5, AG-D10; agent step 16b2).
 
-`platform.draw_image` asks the image model (`AGENT_IMAGE_MODEL`, paid by the platform's
+`images.draw` asks the image model (`AGENT_IMAGE_MODEL`, paid by the platform's
 `admin_assistant` account) for a picture, checks its type, weight and size, stores the object
 under `platform/agent/images/` in the EU home's bucket and its pointer row by the run, and
 hands the answer an `image` artifact by reference — never the bytes. The admin panel reads it

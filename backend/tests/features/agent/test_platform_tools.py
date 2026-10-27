@@ -183,9 +183,7 @@ async def test_no_balance_without_the_key_and_no_caller_but_the_operator(
     drawn = {"prompt": "A study.", "caption": "Кабинет"}
     refused = [
         await tool.run(
-            tool.spec.input.model_validate(
-                drawn if tool.spec.name == "platform.draw_image" else {}
-            ),
+            tool.spec.input.model_validate(drawn if tool.spec.name == "images.draw" else {}),
             person,
         )
         for tool in others

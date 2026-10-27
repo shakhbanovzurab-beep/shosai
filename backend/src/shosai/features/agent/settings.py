@@ -34,7 +34,7 @@ class AgentSettings(SettingsSection):
     # Служебная модель: заголовки тредов и сжатие старых ходов в сводку, вне пути ответа.
     agent_utility_model: str | None = None
     agent_utility_fallback_model: str | None = None
-    # Модель OpenRouter, что рисует картинки Leo администратора (`platform.draw_image`); без неё
+    # Модель OpenRouter, что рисует картинки Leo администратора (`images.draw`); без неё
     # инструмент отвечает `unavailable`. Цена — за токены картинки, из ежедневной синхронизации.
     agent_image_model: str | None = None
     # Токен GitHub хранилища навыков: 5 000 запросов в час вместо 60; без него — анонимно.

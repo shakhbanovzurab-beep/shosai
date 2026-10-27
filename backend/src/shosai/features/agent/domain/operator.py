@@ -20,6 +20,9 @@ OPERATOR_ID: Final = UUID("01a10000-0000-7000-8000-00000000ad31")
 OPERATOR_HOME: Final = Home.EU
 OPERATOR_LANGUAGE: Final = "ru"
 PLATFORM_TOOLSET: Final = "platform"
+# Картинки оператора — свой набор: в наборе не больше восьми инструментов (Leo §8.1).
+IMAGES_TOOLSET: Final = "images"
+OPERATOR_TOOLSETS: Final = frozenset({PLATFORM_TOOLSET, IMAGES_TOOLSET})
 # Из ядра оператору нужно только дочитать хранимый результат и подгрузить набор.
 OPERATOR_CORE_TOOLS: Final = frozenset({"core.read_result", "core.load_toolset"})
 
@@ -42,8 +45,8 @@ def payer_of(scope: TenancyScope) -> tuple[TenancyScope | None, PlatformAccount 
 
 
 def offered_to(toolset: str, tool: str, *, operator: bool) -> bool:
-    """Whether a tool may be offered: `platform` to the operator only, and to the operator
-    nothing else but what pages a result."""
+    """Whether a tool may be offered: `platform` and `images` to the operator only, and to the
+    operator nothing else but what pages a result."""
     if operator:
-        return toolset == PLATFORM_TOOLSET or tool in OPERATOR_CORE_TOOLS
-    return toolset != PLATFORM_TOOLSET
+        return toolset in OPERATOR_TOOLSETS or tool in OPERATOR_CORE_TOOLS
+    return toolset not in OPERATOR_TOOLSETS
