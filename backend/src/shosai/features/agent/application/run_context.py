@@ -15,10 +15,10 @@ waited for a worker.
 
 import secrets
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import UTC, datetime
-from typing import Any, Final
+from typing import Final
 from uuid import UUID
-from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from sqlalchemy import or_, select, tuple_
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,24 +27,27 @@ from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.attachment_notes import attachments_block
+from shosai.features.agent.application.context_parts import UTC_ZONE, cap, person_of, zone_info
+from shosai.features.agent.application.history_text import said
+from shosai.features.agent.application.memory_context import MemoryContext, Recalling
 from shosai.features.agent.application.surface_digest import Subject, subject_digest
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.budgets import (
-    SEGMENT_CAPS,
     Segment,
     estimate_tokens,
     recent_window,
 )
 from shosai.features.agent.domain.context import clean_path, clip, now_line, page_line, profile_core
+from shosai.features.agent.domain.memory_text import MemoryBlock
 from shosai.features.agent.domain.operator import is_operator
 from shosai.features.agent.domain.runs import RunStatus
 from shosai.features.agent.domain.threads import AnswerStatus, MessageRole
 from shosai.features.agent.domain.wrapper import BOUNDARY_BYTES, boundary
+from shosai.features.agent.infrastructure.profile_key import KEY_BYTES
 from shosai.features.agent.infrastructure.prompts import (
     OPERATOR_POLICY,
     POLICY,
     QUESTION,
-    SOURCES_NOTE,
     SUMMARY,
     VOLATILE,
     turn_instructions,
@@ -61,15 +64,12 @@ MESSAGE = AgentMessageRecord
 MAX_OUTPUT_TOKENS: Final = 4_096
 # Строк читается с запасом: окно режет их по токенам, редкий тред упрётся в это число раньше.
 HISTORY_ROWS: Final = 60
-# Сколько источников прошлого ответа называется в контексте: остальные — за пределами окна.
-NOTED_SOURCES: Final = 10
 # Заметка сервера о решении по карточке читается моделью как сообщение-примечание Shosai.
 ROLES: Final = {
     MessageRole.USER.value: Role.USER,
     MessageRole.ASSISTANT.value: Role.ASSISTANT,
     MessageRole.SERVER.value: Role.USER,
 }
-UTC_ZONE: Final = "UTC"
 
 
 class ThreadGoneError(Exception):
@@ -90,14 +90,29 @@ def text_of(message: ChatMessage) -> str:
     return "".join(part.text for part in message.parts if isinstance(part, TextPart))
 
 
+@dataclass(frozen=True, slots=True)
+class PreparedContext:
+    """A context read in its transaction, and the recall still on its way."""
+
+    head: str
+    history: list[ChatMessage]
+    volatile: str
+    asked: str
+    recalling: Recalling | None
+
+
 class ContextBuilder:
     """Builds the model's input of a run, as the person."""
 
     def __init__(
-        self, ports: PortDirectory, clock: Callable[[], datetime] = lambda: datetime.now(UTC)
+        self,
+        ports: PortDirectory,
+        clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        memory: MemoryContext | None = None,
     ) -> None:
         self._ports = ports
         self._clock = clock
+        self.memory = memory or MemoryContext(ports, secrets.token_bytes(KEY_BYTES))
 
     async def request(
         self,
@@ -108,8 +123,77 @@ class ContextBuilder:
     ) -> ChatRequest:
         """The request for the model, read in the person's transaction; `sizes` receives the
         segments' estimated tokens, `labels` each wrapped text the context holds, labelled."""
+        return self.build(await self.prepare(session, payload, sizes, labels))
+
+    async def prepare(
+        self,
+        session: AsyncSession,
+        payload: TurnPayload,
+        sizes: dict[Segment, int] | None = None,
+        labels: list[tuple[Provenance, str]] | None = None,
+        *,
+        recall: bool = False,
+    ) -> PreparedContext:
+        """The context's parts, read in the person's transaction; with `recall`, memory starts
+        recalling for the question beside the rest, to be awaited after the transaction."""
         user_id = person_of(payload)
-        await self._still_running(session, payload)
+        thread, question = await self._turn(session, payload, user_id)
+        core, zone, remembered = await self._core(session, payload, user_id)
+        if labels is not None:
+            labels.extend(remembered.tainting)
+        # Сводка идёт после стабильной головы: кэш провайдера держит голову целиком.
+        summary = SUMMARY.format(summary=clip(thread.summary, cap(5))) if thread.summary else ""
+        policy = OPERATOR_POLICY if is_operator(user_id) else POLICY
+        head = "\n\n".join(part for part in (policy, core, summary) if part)
+        token = boundary(secrets.token_bytes(BOUNDARY_BYTES))
+        history = await self._recent(session, thread, question, token)
+        earlier = next((text_of(m) for m in reversed(history) if m.role is Role.ASSISTANT), "")
+        recall = recall and remembered.on
+        recalling = self.memory.recall(payload, question.text, earlier) if recall else None
+        volatile = await self._volatile(session, payload, zone, labels)
+        attached = attachments_block(question.digest, token)
+        if attached is not None and labels is not None:
+            labels.append((Provenance.FILE_OWN, attached))
+        asked = QUESTION.format(text=question.text)
+        asked = asked if attached is None else f"{asked}\n\n{attached}"
+        if sizes is not None:
+            sizes |= {
+                Segment.POLICY: estimate_tokens(policy),
+                Segment.PROFILE: estimate_tokens(core),
+                Segment.SUMMARY: estimate_tokens(summary),
+                Segment.RECENT: sum(estimate_tokens(text_of(message)) for message in history),
+                Segment.VOLATILE: estimate_tokens(volatile),
+                Segment.QUESTION: estimate_tokens(asked),
+            }
+        return PreparedContext(head, history, volatile, asked, recalling)
+
+    @staticmethod
+    def build(prepared: PreparedContext, recalled: MemoryBlock | None = None) -> ChatRequest:
+        """The request from its parts, the recalled facts before the question."""
+        middle = recalled.text if recalled is not None else ""
+        last = "\n\n".join(part for part in (prepared.volatile, middle, prepared.asked) if part)
+        return ChatRequest(
+            messages=(
+                text_message(Role.SYSTEM, prepared.head),
+                *prepared.history,
+                text_message(Role.USER, last),
+            ),
+            max_output_tokens=MAX_OUTPUT_TOKENS,
+        )
+
+    async def _turn(
+        self, session: AsyncSession, payload: TurnPayload, user_id: UUID
+    ) -> tuple[AgentThreadRecord, AgentMessageRecord]:
+        """The run's thread and question, read as the person; an ended run or a deleted thread
+        ends the turn before the model is asked."""
+        status = await session.scalar(
+            select(AgentRunRecord.status).where(
+                AgentRunRecord.id == payload.run_id,
+                AgentRunRecord.started_at == payload.started_at,
+            )
+        )
+        if status != RunStatus.RUNNING.value:
+            raise RunOverError
         thread = await session.scalar(
             select(AgentThreadRecord).where(
                 AgentThreadRecord.id == payload.thread_id, AgentThreadRecord.user_id == user_id
@@ -126,6 +210,12 @@ class ContextBuilder:
         )
         if question is None:
             raise ThreadGoneError
+        return thread, question
+
+    async def _core(
+        self, session: AsyncSession, payload: TurnPayload, user_id: UUID
+    ) -> tuple[str, str, MemoryBlock]:
+        """Segment 4 — the person, their zone, the answer's terms and memory — and the zone."""
         profile = await self._ports.get(ACCOUNT_PROFILE_READER).profile(session, user_id)
         zone = profile.timezone if profile is not None and profile.timezone else UTC_ZONE
         core = profile_core(
@@ -133,45 +223,8 @@ class ContextBuilder:
             zone,
             turn_instructions(payload.language, payload.length),
         )
-        # Сводка идёт после стабильной головы: кэш провайдера держит голову целиком.
-        summary = SUMMARY.format(summary=clip(thread.summary, cap(5))) if thread.summary else ""
-        policy = OPERATOR_POLICY if is_operator(user_id) else POLICY
-        head = "\n\n".join(part for part in (policy, core, summary) if part)
-        token = boundary(secrets.token_bytes(BOUNDARY_BYTES))
-        history = await self._recent(session, thread, question, token)
-        volatile = await self._volatile(session, payload, zone, labels)
-        attached = attachments_block(question.digest, token)
-        if attached is not None and labels is not None:
-            labels.append((Provenance.FILE_OWN, attached))
-        asked = QUESTION.format(text=question.text)
-        asked = asked if attached is None else f"{asked}\n\n{attached}"
-        if sizes is not None:
-            sizes |= {
-                Segment.POLICY: estimate_tokens(policy),
-                Segment.PROFILE: estimate_tokens(core),
-                Segment.SUMMARY: estimate_tokens(summary),
-                Segment.RECENT: sum(estimate_tokens(text_of(message)) for message in history),
-                Segment.VOLATILE: estimate_tokens(volatile),
-                Segment.QUESTION: estimate_tokens(asked),
-            }
-        return ChatRequest(
-            messages=(
-                text_message(Role.SYSTEM, head),
-                *history,
-                text_message(Role.USER, f"{volatile}\n\n{asked}"),
-            ),
-            max_output_tokens=MAX_OUTPUT_TOKENS,
-        )
-
-    async def _still_running(self, session: AsyncSession, payload: TurnPayload) -> None:
-        status = await session.scalar(
-            select(AgentRunRecord.status).where(
-                AgentRunRecord.id == payload.run_id,
-                AgentRunRecord.started_at == payload.started_at,
-            )
-        )
-        if status != RunStatus.RUNNING.value:
-            raise RunOverError
+        remembered = await self.memory.profile(session, payload)
+        return "\n".join(part for part in (core, remembered.text) if part), zone, remembered
 
     async def _recent(
         self,
@@ -245,54 +298,3 @@ class ContextBuilder:
                 if digest.label is not None and labels is not None:
                     labels.append((digest.label, digest.text))
         return VOLATILE.format(context=clip("\n".join(lines), cap(7)))
-
-
-def said(
-    role: str,
-    text: str,
-    digest: dict[str, Any] | None,
-    sources: list[dict[str, Any]],
-    token: str,
-) -> str:
-    """A message as the model reads it again: a server note in its registered words, a question
-    with its attachments' notes, an answer with what its numbers stood for."""
-    if role == MessageRole.SERVER.value:
-        note = (digest or {}).get("text")
-        return note if isinstance(note, str) else ""
-    if role == MessageRole.USER.value:
-        attached = attachments_block(digest, token)
-        return text if attached is None else f"{text}\n\n{attached}"
-    return with_sources(text, sources)
-
-
-def with_sources(text: str, sources: list[dict[str, Any]]) -> str:
-    """An earlier answer with what its numbers stood for: kinds and ids, so a follow-up can
-    name the same things, never their titles' foreign text."""
-    if not sources:
-        return text
-    listed = "; ".join(
-        f"[{n}] {source.get('kind')} {source.get('id')}"
-        for n, source in enumerate(sources[:NOTED_SOURCES], start=1)
-    )
-    return f"{text}\n\n{SOURCES_NOTE.format(sources=listed)}"
-
-
-def cap(segment: int) -> int:
-    """A segment's cap in tokens, by its number in Leo §7.3."""
-    return SEGMENT_CAPS[list(Segment)[segment - 1]]
-
-
-def zone_info(zone: str) -> ZoneInfo:
-    """The zone the person's profile names, UTC for one the system does not know."""
-    try:
-        return ZoneInfo(zone)
-    except ZoneInfoNotFoundError, ValueError:
-        return ZoneInfo(UTC_ZONE)
-
-
-def person_of(payload: TurnPayload) -> UUID:
-    """The person a run acts for."""
-    if payload.user_id is None:
-        message = "ход Leo идёт от имени человека"
-        raise ValueError(message)
-    return payload.user_id

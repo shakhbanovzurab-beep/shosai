@@ -18,7 +18,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.agent_tools.context import Taint
 from shosai.core.agent_tools.sources import SourceKind, SourceRef
 from shosai.core.ai.requests import ChatMessage, Role, TextPart, ToolCall
-from shosai.features.agent.application.run_context import said, text_message
+from shosai.features.agent.application.history_text import said
+from shosai.features.agent.application.run_context import text_message
 from shosai.features.agent.application.run_work import EarlierWork, Step
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.threads import MessageRole

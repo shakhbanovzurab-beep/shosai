@@ -112,13 +112,19 @@ class AiProviders:
                 yield delta
 
     async def embed(
-        self, context: CallContext, route: ModelRoute, request: EmbeddingRequest
+        self,
+        context: CallContext,
+        route: ModelRoute,
+        request: EmbeddingRequest,
+        *,
+        cost_later: bool = False,
     ) -> Embeddings:
-        """Vectors of texts."""
+        """Vectors of texts; with `cost_later` the cost row is written off the caller's path,
+        as a decision's (a turn's question for memory's recall)."""
         self._guards.caps.check_embedding(request)
         operation = Operation(
             "embed", self._openrouter("embed"), lambda c, m: c.embed(m, request),
-            embedding_estimate(request),
+            embedding_estimate(request), cost_later=cost_later,
         )  # fmt: skip
         return await self._routed(context, route, operation)
 

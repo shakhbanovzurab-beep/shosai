@@ -52,6 +52,9 @@ SENSITIVITIES: Final = ", ".join(f"'{level}'" for level in Sensitivity)
 SOURCE_TAINTS: Final = ", ".join(f"'{taint}'" for taint in TAINTS)
 CURRENT: Final = text("status = 'active' AND valid_to IS NULL")
 PENDING: Final = text("status = 'candidate' AND valid_to IS NULL")
+UNEMBEDDED: Final = text(
+    "embedding IS NULL AND valid_to IS NULL AND status IN ('active', 'candidate')"
+)
 
 
 class MemoryFactRecord(ModelBase):
@@ -95,6 +98,7 @@ class MemoryFactRecord(ModelBase):
         Index(
             "ix_memory_facts_superseded", "valid_to", postgresql_where=text("valid_to IS NOT NULL")
         ),
+        Index("ix_memory_facts_unembedded", "user_id", "id", postgresql_where=UNEMBEDDED),
     )
 
     id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)

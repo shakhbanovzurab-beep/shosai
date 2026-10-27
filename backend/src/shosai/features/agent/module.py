@@ -17,6 +17,7 @@ from contextlib import asynccontextmanager
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.documents.extraction import DocumentReader
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, QueueCompanion
+from shosai.core.ports.directory import PortDirectory
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.agent.application.account_data import ACCOUNT_DATA, AgentAccountData
 from shosai.features.agent.application.action_cards import ActionCards
@@ -29,6 +30,7 @@ from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.installed_skills import InstalledSkills
 from shosai.features.agent.application.lost_runs import LostRuns
+from shosai.features.agent.application.memory_context import MemoryContext
 from shosai.features.agent.application.preferences import AgentPreferences
 from shosai.features.agent.application.proposal_port import PortProposals
 from shosai.features.agent.application.result_pages import ResultPages
@@ -81,6 +83,7 @@ from shosai.features.agent.infrastructure.github_skills import github_client
 from shosai.features.agent.infrastructure.image_records import IMAGE_MODELS
 from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.person_records import PERSON_MODELS
+from shosai.features.agent.infrastructure.profile_key import profile_boundary_key
 from shosai.features.agent.infrastructure.run_log import RunLog
 from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.run_records import RUN_MODELS
@@ -96,6 +99,12 @@ from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 
 # Трассировщик среза: спаны хода Leo (agent.run, agent.context) без единого слова разговора.
 TRACER_NAME = "shosai.agent"
+
+
+def context_builder(services: CoreServices, ports: PortDirectory) -> ContextBuilder:
+    """The turn's context, its profile core's boundary keyed to the platform's key."""
+    memory = MemoryContext(ports, profile_boundary_key(services.settings.crypto))
+    return ContextBuilder(ports, memory=memory)
 
 
 @asynccontextmanager
@@ -120,7 +129,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     engine = RunEngine(
         EngineParts(
             transactions, services.ai, settings.standard_route(), run_log, leases, fleet,
-            registry, services.outbox, turn_graph(frames), frames, ContextBuilder(ports),
+            registry, services.outbox, turn_graph(frames), frames, context_builder(services, ports),
             routing, tools, RunTelemetry(metrics, tracer),
             AttachmentReader(transactions, (services.objects, DocumentReader(), pages)),
             ports=ports,

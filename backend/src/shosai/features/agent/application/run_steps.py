@@ -27,7 +27,7 @@ from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
 from shosai.core.ai.requests import ChatMessage, ChatRequest, ImagePart, Role
 from shosai.features.agent.application.egress_answers import EgressAnswers, kept_call
 from shosai.features.agent.application.model_stream import AnswerBuffer, stream_answer
-from shosai.features.agent.application.run_context import text_message
+from shosai.features.agent.application.run_context import PreparedContext, text_message
 from shosai.features.agent.application.run_earlier import earlier_work
 from shosai.features.agent.application.run_engine_parts import EngineParts
 from shosai.features.agent.application.run_telemetry import TurnTimes
@@ -36,7 +36,7 @@ from shosai.features.agent.application.tool_offer import TurnOffer
 from shosai.features.agent.application.tool_read_back import ResultReader
 from shosai.features.agent.application.tool_round import ToolRound
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
-from shosai.features.agent.domain.budgets import Segment, round_policy
+from shosai.features.agent.domain.budgets import Segment, estimate_tokens, round_policy
 from shosai.features.agent.domain.operator import payer_of
 from shosai.features.agent.domain.runs import TURN_DEADLINE
 from shosai.features.agent.domain.wrapper import Label, unwrapped
@@ -93,12 +93,29 @@ class RunSteps:
                 offer = await routing.offer(session, payload)
                 asked = await routing.ask(session, payload, offer)
                 try:
-                    request = await self._parts.context.request(session, payload, sizes, labels)
+                    prepared = await self._parts.context.prepare(
+                        session, payload, sizes, labels, recall=True
+                    )
                 except BaseException:
                     routing.drop(asked)
                     raise
             await routing.settle(offer, asked)
+            request = await self._recalled(prepared, sizes, labels)
         self._begin(with_images(request, images), offer, labels)
+
+    async def _recalled(
+        self,
+        prepared: PreparedContext,
+        sizes: dict[Segment, int],
+        labels: list[tuple[Provenance, str]],
+    ) -> ChatRequest:
+        """The request with what memory recalled for the question, awaited after the
+        transaction; nothing in time is nothing."""
+        pending = () if prepared.recalling is None else (prepared.recalling,)
+        recalled = await self._parts.context.memory.recalled(pending)
+        labels.extend(recalled.tainting)
+        sizes[Segment.VOLATILE] = sizes.get(Segment.VOLATILE, 0) + estimate_tokens(recalled.text)
+        return self._parts.context.build(prepared, recalled)
 
     async def resume(self, action_id: UUID) -> None:
         """After the card's decision: the context again, the run's rounds before the card and

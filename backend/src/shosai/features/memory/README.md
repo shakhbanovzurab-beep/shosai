@@ -29,6 +29,12 @@ What Leo knows about the person: their preferences, facts about them and their w
 - What the person may see (`application/fact_rows.py`): current or waiting, not on its way to erasure, in Personal or a workspace they are in now (MM-D4). Anything else — another person's, a superseded, a left workspace's fact — is `memory_fact_not_found`.
 - `MemorySwitch` contributes the draft's `memory_enabled` to the native `/v1/auth/me`.
 
+## Vectors and recall (step 4a)
+
+- `infrastructure/embeddings.py`: `google/gemini-embedding-2` through the provider port, 1 024 dimensions, a question as `task: search result | query: …`, a statement as `title: none | text: …`; every call the person's, under their consent, outside their Leo tokens; a question's cost row written off the turn's path.
+- `application/embedding_pass.py` and `channels/tasks.py`: once a minute per home, facts waiting for the current model's vector — through the partial index `ix_memory_facts_unembedded` — person by person after the last one served, as the person; the vector lands only on the same statement, still waiting.
+- `application/recall.py` binds the agent's `MEMORY_RECALL` and `PROFILE_FACTS`: no consent, a clear "has memories" bit, memory off, nothing held, late or failed all give nothing, counted in `shosai_memory_recall_total{outcome}`; otherwise the exact nearest 40, the floor, 12 facts and 600 tokens. The profile core is read in the agent's transaction: memory on or off, pinned facts and preferences.
+
 ## What the models read (step 1)
 
 `infrastructure/extraction_prompts.py` (a turn's and a meeting's extraction) and `infrastructure/summary_prompts.py` (the summary and the box): English instructions with the output language stated in each, and their answer schemas — registered in the model-facing English test.

@@ -9,6 +9,8 @@ grows: egress then needs a card, a write's card shows what it was prepared from,
 ignores a run whose text looked like an instruction to Leo.
 """
 
+import hashlib
+import hmac
 import re
 from dataclasses import dataclass
 from typing import Final
@@ -50,6 +52,13 @@ def boundary(entropy: bytes) -> str:
         message = f"граница обёртки — не меньше {BOUNDARY_BYTES} случайных байт"
         raise ValueError(message)
     return entropy.hex()
+
+
+def keyed_boundary(key: bytes, text: str) -> str:
+    """A boundary for the stable head (segment 4): the same while the wrapped text is, so the
+    provider's prefix cache holds, and unknowable without the server's key to whoever wrote the
+    text — an HMAC of it (ADR 0071 MM-D7)."""
+    return hmac.new(key, text.encode(), hashlib.sha256).hexdigest()[: BOUNDARY_BYTES * 2]
 
 
 def opening(label: Label, token: str) -> str:

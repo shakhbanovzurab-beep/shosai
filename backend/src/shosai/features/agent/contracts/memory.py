@@ -48,13 +48,13 @@ class RecalledFact:
 
 @dataclass(frozen=True, slots=True)
 class RecallRequest:
-    """What a turn asks memory to recall: the person, their question and its context, the
-    workspaces they are a member of now, their consent and the budget."""
+    """What a turn asks memory to recall: the person, their question with the start of the
+    previous answer, their consent, the budget and the deadline. Memory reads the workspaces
+    the person is in itself."""
 
     home: Home
     user_id: UUID
     query: str
-    spaces: frozenset[UUID]
     # Без согласия на трансграничную передачу вопрос не уходит в модель эмбеддингов (nfr-14).
     cross_border_consent: bool
     max_tokens: int
@@ -82,9 +82,7 @@ class ProfileCore:
 class ProfileFacts(Protocol):
     """The person's profile core for the context (memory)."""
 
-    async def profile(
-        self, session: AsyncSession, user_id: UUID, spaces: frozenset[UUID], max_tokens: int
-    ) -> ProfileCore:
+    async def profile(self, session: AsyncSession, user_id: UUID, max_tokens: int) -> ProfileCore:
         """Read in the caller's transaction, as the person; within the budget."""
         ...
 

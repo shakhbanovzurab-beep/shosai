@@ -87,7 +87,7 @@ from shosai.features.workspaces.infrastructure.membership_reader import (
     WorkspaceDirectory,
 )
 from tests.core.web.probe_app import build_probe_app, client_of
-from tests.features.agent.bench_doubles import BenchDoubles
+from tests.features.agent.bench_doubles import BenchDoubles, memory_bindings
 from tests.features.agent.tool_doubles import ProbeTools
 from tests.features.agent.turn_doubles import (
     WAIT,
@@ -231,6 +231,7 @@ async def turn_bench(
             *(FRICTION_JUDGE.bind(judge) for judge in bench_doubles.judges),
             *(TURN_ROUTER.bind(router) for router in bench_doubles.routers),
             *(INJECTION_JUDGE.bind(judge) for judge in bench_doubles.injections),
+            *memory_bindings(bench_doubles.memories),
         ]
     )
     registry = CollectorRegistry()
