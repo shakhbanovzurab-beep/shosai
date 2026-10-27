@@ -121,6 +121,16 @@ GRANT shosai_sweeper TO <application role> WITH INHERIT FALSE, SET TRUE;
 
 Check: `SELECT r.rolname, m.inherit_option, m.set_option FROM pg_auth_members m JOIN pg_roles r ON r.oid = m.roleid JOIN pg_roles u ON u.oid = m.member WHERE u.rolname = '<application role>';` returns `shosai_sweeper | f | t`.
 
+## The `vector` extension
+
+Memory's tables (revision `e8bc01bd5bb4`, ADR 0071 MM-D6) need pgvector 0.5 or later in the database `shosai` of each home. The extension is not trusted, so the migrator cannot create it: `CREATE EXTENSION IF NOT EXISTS vector` in the migration fails with `permission denied to create extension "vector"`, and the release rolls back to the previous images. Enable it once per home before releasing such a commit — in Timeweb's panel (the database's extensions), through Timeweb's support, or as the cluster's administrator:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+```
+
+Check, as the migrator: `SELECT extversion FROM pg_extension WHERE extname = 'vector';` returns a version, and `SELECT '[1,2]'::halfvec(2);` succeeds. Then release the commit again ([Release a commit again](#release-a-commit-again)). Not yet done on the staging homes: releases from `f25187da` (2026-10-27 14:40 UTC) on rolled back on this error.
+
 ## TLS certificate
 
 `shosai-certificate.timer` renews it twice a day. Check: `systemctl list-timers shosai-certificate.timer` and `journalctl -u shosai-certificate.service`. Renew by hand: `sh /srv/shosai/deploy/certificate.sh renew /srv/shosai`.
