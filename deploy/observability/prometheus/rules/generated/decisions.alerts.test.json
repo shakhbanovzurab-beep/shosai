@@ -286,6 +286,40 @@
           "exp_alerts": []
         }
       ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_decision_outcomes_outside_bounds_total",
+          "values": "0x10 1x50"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "DecisionOutcomeOutsideBounds",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "ADR 0069"
+              },
+              "exp_annotations": {
+                "summary": "Решение Leo вышло не из ответа Jev в срок",
+                "description": "Слой решений поймал изменённый исход, который пришёл не как ответ Jev в срок от действующей версии — например, голосовое «да» из тени или запасного правила. Он оставил исход правила: без согласия на экране действие не выполнено. Это граница исключения для голосового подтверждения; найдите путь, который её обошёл.",
+                "runbook": "docs/runbooks/alerts.md#decision-outcome-outside-bounds",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "DecisionOutcomeOutsideBounds",
+          "exp_alerts": []
+        }
+      ]
     }
   ]
 }

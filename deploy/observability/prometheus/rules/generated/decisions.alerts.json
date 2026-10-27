@@ -133,6 +133,20 @@
             "runbook": "docs/runbooks/alerts.md#decision-unsafe-outcome",
             "dashboard": "/d/invariant-monitors"
           }
+        },
+        {
+          "alert": "DecisionOutcomeOutsideBounds",
+          "expr": "sum(increase(shosai_decision_outcomes_outside_bounds_total[15m])) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "ADR 0069"
+          },
+          "annotations": {
+            "summary": "Решение Leo вышло не из ответа Jev в срок",
+            "description": "Слой решений поймал изменённый исход, который пришёл не как ответ Jev в срок от действующей версии — например, голосовое «да» из тени или запасного правила. Он оставил исход правила: без согласия на экране действие не выполнено. Это граница исключения для голосового подтверждения; найдите путь, который её обошёл.",
+            "runbook": "docs/runbooks/alerts.md#decision-outcome-outside-bounds",
+            "dashboard": "/d/invariant-monitors"
+          }
         }
       ]
     }

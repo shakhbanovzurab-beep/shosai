@@ -43,6 +43,7 @@ WRITTEN = {
     "action.friction": {"request": "Создай задачу «Отчёт»", "card": "Создать задачу: Отчёт"},
     "turn.route": {"question": "Что решили на встрече вчера?", "previous": ""},
     "content.injection": {"text": "Квартальный отчёт готов к пятнице."},
+    "voice.approval": {"read_back": "Создать задачу\nНазвание: Отчёт", "utterance": "да давай"},
 }
 
 

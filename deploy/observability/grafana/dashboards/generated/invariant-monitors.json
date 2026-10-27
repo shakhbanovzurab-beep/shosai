@@ -1522,6 +1522,94 @@
         }
       },
       "id": 17
+    },
+    {
+      "type": "stat",
+      "gridPos": {
+        "x": 12,
+        "y": 40,
+        "w": 12,
+        "h": 5
+      },
+      "title": "Решение Leo вышло не из ответа Jev в срок",
+      "description": "Слой решений поймал изменённый исход, который пришёл не как ответ Jev в срок от действующей версии — например, голосовое «да» из тени или запасного правила. Он оставил исход правила: без согласия на экране действие не выполнено. Это граница исключения для голосового подтверждения; найдите путь, который её обошёл.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(increase(shosai_decision_outcomes_outside_bounds_total[15m])) or vector(0)",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "нет данных",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#0ca30c",
+                "value": -1000000000000000.0
+              },
+              {
+                "color": "#d03b3b",
+                "value": 1e-09
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": -1000000000000000.0,
+                "to": 0,
+                "result": {
+                  "text": "нет ✓"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1e-09,
+                "to": 1000000000000000.0,
+                "result": {
+                  "text": "да ✗"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 18
     }
   ]
 }

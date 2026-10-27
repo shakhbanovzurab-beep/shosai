@@ -3,7 +3,9 @@
 The answer is read through the version's cuts into verdicts, the policy turns them into its
 outcome, and the final outcome is the more careful of the policy's and the rule's. Should a
 policy ever return one less careful than the rule, the rule's stands and the breach is
-reported: monotonic safety is checked, not assumed.
+reported: monotonic safety is checked, not assumed. The one bounded exception is a policy
+that reads a person's consent (`reads_consent`, voice.approval): its consent is the outcome,
+and the engine returns it only from an active version's answer in time.
 """
 
 from collections.abc import Mapping
@@ -35,7 +37,7 @@ def judge(in_force: InForce, facts: object, rule: object, decision: Decision) ->
     verdicts, chances = read(decision.answers, policy.signals(facts), in_force.cuts)
     judged = policy.outcome(facts, verdicts, chances)
     final = policy.careful(rule, judged)
-    if policy.less_careful(final, rule):
+    if policy.less_careful(final, rule) and not policy.reads_consent:
         return Judgement(rule, chances, unsafe=True)
     return Judgement(final, chances, unsafe=False)
 

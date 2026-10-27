@@ -73,3 +73,13 @@ Refinements the implementation needed, decided by the agent within this decision
 - **Reference drafts are never filtered by the labeller,** whose agreement with the person is what the reference measures.
 - **Reliability counts keep the shadow flag** beside the planned key, so a shadow revision's counts never mix with the active one's.
 - **The tickets are objectives over `shosai_decision_requests_total`**; the rule generator renders only the burns an objective's share can reach.
+
+## Amendment: voice approval (the owner's, 2026-10-27)
+
+Leo §8.4 and the voice plan's Q-6 let a reversible or compensable card read back in a voice conversation be approved by voice. The owner decided on 2026-10-27 that the spoken reply is judged by Jev as a **bounded exception** to this layer's two invariants — "never less careful than the rule" and "never grants a permission":
+
+- one point, `voice.approval`, reads the person's consent (`Policy.reads_consent`); its outcome may be "given" where the rule's is "not given";
+- consent leaves the engine only as an active version's answer from Jev in time — never from a shadow, a late answer or a fallback; any changed outcome that leaves another way is the rule's and pages (`decision_outcome_outside_bounds`, `within_bounds`);
+- the yes side is fitted for 99 % precision, an unsure answer is no, and at least 99 % of the cases that must not approve are found;
+- reversible and compensable actions only, never tainted or screen-only cards — the agent offers voice approval only for those;
+- synthetic sets in the 16 languages and the owner's reference labels, as for every point.

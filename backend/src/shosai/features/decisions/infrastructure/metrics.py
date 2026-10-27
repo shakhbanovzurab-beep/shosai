@@ -6,7 +6,10 @@ differs from the rule's; `shosai_decision_seconds{point, source}` is the time th
 waited. `shosai_decision_late_total{point}` counts answers that came after their deadline,
 `shosai_decision_records_lost_total` the records a write could not keep. The invariant
 `shosai_decision_unsafe_outcomes_total{point}` — an outcome less careful than its rule —
-must stay at zero; a policy that breaks it is answered with the rule's outcome and pages.
+must stay at zero; a policy that breaks it is answered with the rule's outcome and pages. So
+must `shosai_decision_outcomes_outside_bounds_total{point}`: a changed outcome leaves only as
+Jev's answer in time. `shosai_decision_consents_total{point}` counts the consents a policy
+that reads one (voice.approval) found given.
 """
 
 from typing import Final
@@ -14,6 +17,8 @@ from typing import Final
 from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
 
 UNSAFE_OUTCOMES: Final = "shosai_decision_unsafe_outcomes_total"
+OUTSIDE_BOUNDS: Final = "shosai_decision_outcomes_outside_bounds_total"
+CONSENTS: Final = "shosai_decision_consents_total"
 REQUESTS: Final = "shosai_decision_requests_total"
 DECISION_SECONDS: Final = "shosai_decision_seconds"
 DECISION_BUCKETS: Final = (0.001, 0.005, 0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 1, 2)
@@ -54,6 +59,18 @@ class DecisionMetrics:
             ("point",),
             registry=registry,
         )
+        self._outside = Counter(
+            OUTSIDE_BOUNDS.removesuffix("_total"),
+            "Изменённые исходы не из ответа Jev в срок: инвариант, должен быть нулём",
+            ("point",),
+            registry=registry,
+        )
+        self._consents = Counter(
+            CONSENTS.removesuffix("_total"),
+            "Согласия человека, прочитанные политикой (voice.approval)",
+            ("point",),
+            registry=registry,
+        )
         self._in_flight = Gauge(
             "shosai_decision_in_flight",
             "Вызовы Jev этого процесса в полёте, опоздавшие тоже",
@@ -79,6 +96,14 @@ class DecisionMetrics:
     def unsafe(self, point: str) -> None:
         """A policy's outcome was less careful than its rule's."""
         self._unsafe.labels(point=point).inc()
+
+    def outside_bounds(self, point: str) -> None:
+        """A changed outcome reached the caller other than as Jev's answer in time."""
+        self._outside.labels(point=point).inc()
+
+    def consented(self, point: str) -> None:
+        """A policy read a person's consent as given."""
+        self._consents.labels(point=point).inc()
 
     def in_flight(self, calls: int) -> None:
         """Jev calls of the process now in flight."""

@@ -19,6 +19,8 @@ from shosai.features.decisions.infrastructure.generation_texts import (
     INJECTION_SEEN,
     ROUTE_TOOLSETS,
     TEXT_LENGTHS,
+    VOICE_NO,
+    VOICE_YES,
 )
 
 FRICTION_TOOLS: Final = (
@@ -159,8 +161,32 @@ class InjectionBrief:
         return {**target.fixed, "text": written.get("text")}
 
 
+class VoiceBrief:
+    """Cards read aloud with the person's replies: half clear approvals, half every way a
+    reply falls short of one."""
+
+    batch = 8
+
+    def targets(self, count: int, offset: int) -> list[Target]:
+        """Approvals every other case, the kinds of each side in turn."""
+        found = []
+        for index in range(offset, offset + count):
+            approves = index % 2 == 0
+            kinds = VOICE_YES if approves else VOICE_NO
+            kind = kinds[(index // 2) % len(kinds)]
+            tool, _ = FRICTION_TOOLS[index % len(FRICTION_TOOLS)]
+            requirement = f"a card for tool {tool}; the reply is {kind}"
+            found.append(Target({}, {"approves": approves}, requirement))
+        return found
+
+    def facts(self, target: Target, written: Mapping[str, object]) -> dict[str, object]:
+        """The read-back and the reply as written."""
+        return {"read_back": written.get("read_back"), "utterance": written.get("utterance")}
+
+
 BRIEFS: Final[Mapping[str, Brief]] = {
     "action.friction": FrictionBrief(),
     "turn.route": RouteBrief(),
     "content.injection": InjectionBrief(),
+    "voice.approval": VoiceBrief(),
 }

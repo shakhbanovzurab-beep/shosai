@@ -11,6 +11,10 @@ toolsets are reported as what followed.
 
 `InjectionJudge`: each piece of untrusted text entering a run is asked as `content.injection`,
 its subject the run and the piece's number; only an active version's finding reaches the run.
+
+`VoiceApprovalJudge`: the person's reply to a card read back is asked as `voice.approval`,
+its subject the action; the owner's bounded exception — approved only when an active
+version's answer in time found a clear yes, never from a shadow, a late answer or a fallback.
 """
 
 from typing import Final
@@ -24,21 +28,26 @@ from shosai.features.agent.contracts import (
     InjectionPiece,
     RouteRequest,
 )
+from shosai.features.agent.contracts.voice import VoiceApprovalFacts
 from shosai.features.decisions.contracts import (
     ACTION_FRICTION,
     CONTENT_INJECTION,
     TURN_ROUTE,
+    VOICE_APPROVAL,
     CardFacts,
     CardFriction,
     CardResolution,
     DecisionCall,
     Decisions,
+    DecisionSource,
     InjectionFinding,
     Subject,
     SubjectKind,
     TextFacts,
     ToolsetsCalled,
     TurnFacts,
+    VoiceConsent,
+    VoiceFacts,
 )
 from shosai.features.decisions.domain.policies.turn_route import TOOLSET_NAME, ToolsetCandidate
 
@@ -122,3 +131,21 @@ class AgentInjectionJudge:
         )  # fmt: skip
         outcome = await self._decisions.decide(CONTENT_INJECTION, call)
         return True if outcome.value is InjectionFinding.SUSPICIOUS else None
+
+
+class AgentVoiceApprovalJudge:
+    """The agent's `VoiceApprovalJudge` over `voice.approval`."""
+
+    def __init__(self, decisions: Decisions) -> None:
+        self._decisions = decisions
+
+    async def approved(self, facts: VoiceApprovalFacts) -> bool | None:
+        """True only when an active version's answer in time found a clear yes."""
+        call = DecisionCall(
+            facts.scope, facts.cross_border_consent, Subject(SubjectKind.ACTION, facts.action_id),
+            VoiceFacts(read_back=facts.read_back, utterance=facts.utterance),
+            VoiceConsent.NOT_GIVEN, facts.language,
+        )  # fmt: skip
+        outcome = await self._decisions.decide(VOICE_APPROVAL, call)
+        given = outcome.value is VoiceConsent.GIVEN and outcome.source is DecisionSource.JEV
+        return True if given else None

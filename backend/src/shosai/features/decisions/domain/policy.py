@@ -38,6 +38,9 @@ class Policy[F, V](ABC):
     cuts: tuple[str, ...]
     aims: Aims
     budget: int = DEFAULT_BUDGET
+    # Читает согласие человека (voice.approval, ограниченное исключение владельца от
+    # 2026-10-27): исход может быть мягче правила — только из ответа активной версии в срок.
+    reads_consent: bool = False
 
     @property
     def key(self) -> str:

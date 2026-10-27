@@ -122,6 +122,8 @@ class Recorder:
         if judgement.unsafe:
             self._metrics.unsafe(active.policy.point)
             log.error("Политика смягчила исход правила", point=active.policy.point)
+        elif active.policy.reads_consent and judgement.value != asked.rule:
+            self._metrics.consented(active.policy.point)
         settled = Settled(
             judgement.value, DecisionReason.JUDGED, DecisionSource.JEV, answered.latency_ms,
             judgement.probabilities, answered.decision,

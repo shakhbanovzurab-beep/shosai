@@ -87,6 +87,17 @@
           "legendFormat": "проверка текста",
           "range": true,
           "exemplar": false
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(shosai_decision_requests_total{point=\"voice.approval\",source=\"jev\"}[1h])) / sum(rate(shosai_decision_requests_total{point=\"voice.approval\",reason!~\"nothing_to_decide|policy_off\"}[1h]))",
+          "legendFormat": "голосовое «да»",
+          "range": true,
+          "exemplar": false
         }
       ],
       "fieldConfig": {
@@ -165,6 +176,21 @@
                 "value": {
                   "mode": "fixed",
                   "fixedColor": "#199e70"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "D"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#c98500"
                 }
               }
             ]
@@ -414,6 +440,17 @@
           "legendFormat": "проверка текста",
           "range": true,
           "exemplar": false
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(shosai_decision_late_total{point=\"voice.approval\"}[5m])) * 60",
+          "legendFormat": "голосовое «да»",
+          "range": true,
+          "exemplar": false
         }
       ],
       "fieldConfig": {
@@ -495,6 +532,21 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "D"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#c98500"
+                }
+              }
+            ]
           }
         ]
       },
@@ -516,6 +568,98 @@
       "gridPos": {
         "x": 12,
         "y": 11,
+        "w": 12,
+        "h": 9
+      },
+      "title": "Голосовые подтверждения",
+      "description": "Сколько раз в минуту Jev прочитал ответ человека как ясное «да» зачитанной карточке — и действие выполнено без экрана.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(shosai_decision_consents_total{point=\"voice.approval\"}[5m])) * 60",
+          "legendFormat": "согласия",
+          "range": true,
+          "exemplar": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix: в мин",
+          "decimals": null,
+          "min": 0,
+          "noValue": "нет данных",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#3987e5"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "axisLabel": "в минуту",
+            "axisSoftMax": null,
+            "axisBorderShow": false,
+            "lineWidth": 2,
+            "lineInterpolation": "linear",
+            "fillOpacity": 18,
+            "gradientMode": "opacity",
+            "showPoints": "never",
+            "spanNulls": true,
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#3987e5"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "showLegend": false,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "id": 6
+    },
+    {
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 20,
         "w": 12,
         "h": 9
       },
@@ -601,7 +745,7 @@
           "sort": "desc"
         }
       },
-      "id": 6
+      "id": 7
     }
   ]
 }

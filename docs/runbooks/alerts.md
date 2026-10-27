@@ -29,6 +29,15 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 ## Pages: invariant monitors (§16.4)
 
+<a id="decision-outcome-outside-bounds"></a>
+### DecisionOutcomeOutsideBounds — ADR 0069
+
+**Means.** A decision's changed outcome reached its caller other than as an active version's answer from Jev in time (`shosai_decision_outcomes_outside_bounds_total` by `point`) — for `voice.approval`, a spoken yes that would have carried out an action without the screen. This is the boundary of the owner's exception for voice approval (2026-10-27). The engine returned the rule's outcome instead, so nothing was approved; but some path produced a consent it must not.
+
+**Look.** The counter's `point`; the log line «Исход решения вне границ: оставлено правило» in the asking process (`workers-agent` or the voice gateway) names the point; `shosai decisions report <point>` shows the versions in force.
+
+**Fix.** Until the path is found, `shosai decisions retire voice.approval@<version>` turns voice approval off — every card is decided on the screen again. Then find where the engine returned a changed outcome without Jev's judged answer, with a test through `within_bounds`.
+
 <a id="decision-unsafe-outcome"></a>
 ### DecisionUnsafeOutcome — ADR 0069
 

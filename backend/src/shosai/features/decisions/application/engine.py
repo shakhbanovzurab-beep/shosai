@@ -6,7 +6,9 @@
    cap, or Jev's endpoint not confirmed zero-retention → the rule's outcome, recorded.
 3. Jev through the port, the caller waiting only the policy's deadline; a later answer is
    recorded when it lands.
-4. Verdicts, the policy's outcome, the more careful of it and the rule's.
+4. Verdicts, the policy's outcome, the more careful of it and the rule's — but for a policy
+   that reads a person's consent (voice.approval), whose consent is the outcome; a changed
+   outcome leaves only as Jev's answer in time, any other is the rule's and pages.
 5. A shadow version is answered beside the active one and acts on nothing.
 6. A record per consulted decision, metrics and the span `decision.<point>`.
 
@@ -58,7 +60,7 @@ class DecisionEngine:
         """The outcome, never less careful than `call.rule`."""
         started = time.monotonic()
         with self._tracer.start_as_current_span(f"decision.{point.name}") as span:
-            outcome = await self._decide(point, call)
+            outcome = self._bounded(point.name, call.rule, await self._decide(point, call))
             span.set_attributes(
                 {"decision.source": outcome.source.value, "decision.reason": outcome.reason.value,
                  "decision.policy": outcome.policy or ""}
@@ -68,6 +70,14 @@ class DecisionEngine:
             changed=outcome.value != call.rule, seconds=time.monotonic() - started,
         )  # fmt: skip
         return outcome
+
+    def _bounded[V](self, point: str, rule: V, outcome: Outcome[V]) -> Outcome[V]:
+        """The outcome within its bounds, else the rule's — counted, logged, paged."""
+        if within_bounds(rule, outcome):
+            return outcome
+        self._metrics.outside_bounds(point)
+        log.error("Исход решения вне границ: оставлено правило", point=point)
+        return Outcome(rule, outcome.reason, outcome.source, outcome.policy, outcome.decision_id)
 
     def observe[F, V, O](
         self, point: DecisionPoint[F, V, O], home: Home, subject: Subject, seen: O
@@ -181,3 +191,11 @@ def report_failure(task: asyncio.Task[Any]) -> None:
     """Log a background task that ended with an error nobody awaited."""
     if not task.cancelled() and task.exception() is not None:
         log.error("Теневое решение не завершилось", error=type(task.exception()).__name__)
+
+
+def within_bounds[V](rule: V, outcome: Outcome[V]) -> bool:
+    """Whether an outcome may reach its caller: the rule's own, or a changed one only as Jev's
+    answer in time — the guard that keeps a consent (voice.approval) within its bounds."""
+    return outcome.value == rule or (
+        outcome.source is DecisionSource.JEV and outcome.reason is DecisionReason.JUDGED
+    )

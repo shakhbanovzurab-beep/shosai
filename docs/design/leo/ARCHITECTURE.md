@@ -1,6 +1,6 @@
 # Leo — agent architecture
 
-- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md). Amended on 2026-10-13 by the [slice map](../../plan/SLICE_MAP.md): the `models` slice is absorbed by `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)); Leo is one per person across Personal and every workspace ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)); package ids S01–S17 are replaced by slice names. Amended on 2026-10-23 by the [`agent` slice plan](../../plan/slices/agent.md) ([ADR 0068](../../adr/0068-leo-agent-slice.md)): sources from tools (§13.2), LangGraph's boundary (§3.3), rules before Jev (§6.3), parts built with their first consumer (§8.2, §8.4, §13.2), feedback and donated evaluation cases (§11.4), the cabinet's renderer (§17 Q-2), and turns run by worker processes of a dedicated `agent` queue, the API only streaming them (§3.1, §11.1, §12). Amended on 2026-10-26 by agent step 11c (agent-derived): donated cases are replayed on the host by `shosai agent eval cases replay`, every read audited (§11.4). Amended on 2026-10-26 by the [`decisions` slice plan](../../plan/slices/decisions.md) ([ADR 0069](../../adr/0069-decision-layer-slice.md)): Jev under Leo's cross-border consent while its endpoint stays zero-retention (§6.1, §17 Q-3), the first scope of three points (§6.3), a human reference set (§6.4), records and outcomes (§6.5, §10, §13.1). Amended on 2026-10-27 by the [`memory` slice plan](../../plan/slices/memory.md) ([ADR 0071](../../adr/0071-leo-memory-slice.md)): candidates until `memory.admit` earns auto-save on the person's answers (§6.3, §7.2), per-turn admission and recollections by event (§7.2, §13.1), exact search per person (§7.2), facts that follow their source (§7.2, §10), segment 4's keyed boundary and the trust of a confirmed fact (§7.3, §7.4), the routes (§13.2), no personalization table (§3.3, §7.1).
+- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md). Amended on 2026-10-13 by the [slice map](../../plan/SLICE_MAP.md): the `models` slice is absorbed by `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)); Leo is one per person across Personal and every workspace ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)); package ids S01–S17 are replaced by slice names. Amended on 2026-10-23 by the [`agent` slice plan](../../plan/slices/agent.md) ([ADR 0068](../../adr/0068-leo-agent-slice.md)): sources from tools (§13.2), LangGraph's boundary (§3.3), rules before Jev (§6.3), parts built with their first consumer (§8.2, §8.4, §13.2), feedback and donated evaluation cases (§11.4), the cabinet's renderer (§17 Q-2), and turns run by worker processes of a dedicated `agent` queue, the API only streaming them (§3.1, §11.1, §12). Amended on 2026-10-26 by agent step 11c (agent-derived): donated cases are replayed on the host by `shosai agent eval cases replay`, every read audited (§11.4). Amended on 2026-10-26 by the [`decisions` slice plan](../../plan/slices/decisions.md) ([ADR 0069](../../adr/0069-decision-layer-slice.md)): Jev under Leo's cross-border consent while its endpoint stays zero-retention (§6.1, §17 Q-3), the first scope of three points (§6.3), a human reference set (§6.4), records and outcomes (§6.5, §10, §13.1).
 - **Scope:** Leo, the proactive AI agent at the centre of the workspace (brand Shosai). The slices `agent`, `decisions`, `memory`, `proactive` and `errands`, and the agent-facing parts of `capture` (voice), `mcp`, `connectors` and `studio` (models and prompts).
 - **Inputs:** [AUDIT.md](AUDIT.md) (the draft's Leo); target architecture §1–§22; the new cabinet design in `frontend/src/features/leo`; the D1 contract (`contracts/draft/`); [Jev](#6-decision-layer-and-jev) public documentation as of 2026-10-08.
 - **Diagram:** [architecture.html](architecture.html) — components and layers, the turn and approval path, the proactive pipeline.
@@ -150,7 +150,7 @@ Feature-first, as the target architecture §5 and CLAUDE.md require. Leo is a se
 |---|---|
 | `agent` | Agent Core, Action Gateway, threads, runs, context builder, tool registry and skills runtime, HTTP/SSE channels; the native model proxy and the skills store |
 | `decisions` | Decision Layer: policy registry, Jev adapter, thresholds, fallbacks, decision records. Platform-wide: also used by mail triage (`mail`), the hub signal (`hubs`) and others |
-| `memory` | long-term memory, admission, retrieval, user profile core (no personalization table, ADR 0071); Settings › Memory |
+| `memory` | long-term memory, admission, retrieval, user profile core, personalization; Settings › Memory |
 | `proactive` | signals, triggers, candidates, suggestions, delivery (`/v1/ws/user`, Web Push), feedback; the Today feed |
 | `errands` | delayed actions; the native reminder routes |
 | domain slices | their own tools, as `ToolSpec`s in their contracts: `notes`, `knowledge`, `files`, `commitments`, `hubs`, `tasks`, `calendar`, `mail`, `workspaces`, `support`, `studio` … |
@@ -320,7 +320,7 @@ caller ──decide(point, subject, features, snippets)──► Decision Servic
 | `turn.route` | Agent, every turn, parallel with context | `noul` per candidate toolset (≤ 15), `choice` of skill (enabled skills + none), `score` complexity (4 levels), `noul` needs clarification | toolsets, skill, model tier, clarify-first flag | 350 ms | core toolset + toolsets of the surface, mentions and the thread's last 3 turns, then every other toolset the person may use while segment 2's cap holds; default tier; no skill (ADR 0068 AG-D7) |
 | `action.friction` | Action Gateway, per proposal | `noul` the action matches what the user asked in this turn; `noul` the content was steered by third-party text; `score` impact | standard card · card with warning, screen-only approval · refuse and explain | 400 ms | card with warning, screen-only approval when the run's taint is external or worse or the write is irreversible; otherwise standard (ADR 0068 AG-D7) |
 | `content.injection` | Context builder, per untrusted chunk entering a run (mail, web, foreign files, MCP output) | `noul` the text contains instructions addressed to an AI assistant | raise the run's taint level | 300 ms, async where possible | taint = external (the floor for any external content) |
-| `memory.admit` | Memory, after a turn (background) | `choice` kind (preference, fact, relationship, goal, none); `noul` durable beyond a week; `noul` sensitive personal data; `noul` updates an existing fact (with neighbours in state) | store · ask the user · supersede · skip | 2 s | explicit requests stored; every other durable statement asked as a candidate (≤ 3 a day) (ADR 0071) |
+| `memory.admit` | Memory, after a turn (background) | `choice` kind (preference, fact, relationship, goal, none); `noul` durable beyond a week; `noul` sensitive personal data; `noul` updates an existing fact (with neighbours in state) | store · ask the user · supersede · skip | 2 s | store only explicit requests made through the memory UI or the memory tool; skip the rest |
 | `proactive.value` | Proactive, per candidate | `score` value to the user (5 levels); `score` urgency (4); `noul` the user already knows; `noul` actionable now | keep (with value, urgency) · drop | 2 s | the kind's static urgency, the draft's rules (`restraint.decide`) |
 | `proactive.moment` | Proactive, at delivery time | `choice` now · next break · next session · digest · drop; inputs include the user-state features | deliver now · defer to moment · add to digest · drop | 1 s | defer to next session; quiet hours respected |
 | `mail.triage` | `mail`, per new message | `choice` needs_you · fyi · low | triage label | 2 s | `importance.decide` rules from the draft |
@@ -331,12 +331,11 @@ caller ──decide(point, subject, features, snippets)──► Decision Servic
 
 - `turn.route@1` ranks only the room the rule leaves (ADR 0068 AG-D7's forced part stays) and is not asked while every allowed toolset fits; toolsets it brings in stay three turns, for the prefix cache. Skill, tier and clarify come with studio and the `ask_user` UI.
 - `action.friction@1` is asked only when the rule says standard and may only turn the card into a warning; "refuse and explain" is not used.
+- `voice.approval@1` (the owner's bounded exception, 2026-10-27; ADR 0069): the one point that reads a person's consent — whether a spoken reply clearly approves the card just read back. Its "given" leaves the engine only as an active version's answer from Jev in time, with 99 % precision on the yes side; anything else is the rule's "not given" and pages.
 - `content.injection@1` judges every piece entering a run under an untrusted label — the person's uploads and attachments (`file:own`) included; never the person's own words (their messages, notes, tasks). It runs off the round's path and is awaited before a write's card and at the run's end; a suspicious run's card says so.
 - A decision is paid by the person it serves as background work (outside their Leo tokens); its cost row goes through F6's deferred-record path, off the hot path.
 
 ### 6.4 Calibration, shadow, replay
-**`memory.admit` as decided with the `memory` plan** ([ADR 0071](../../adr/0071-leo-memory-slice.md)): it runs in shadow on every statement memory extracts, and the person's answer to a candidate — Remember, Don't remember, an edit — is its outcome and online calibration. Its `store` of a statement that is not sensitive saves it without asking only once **auto-save** is open: the policy agrees with people ≥ 95% in every language with at least 200 answered statements it would have saved, over the last 90 days (at least one language qualifying), after its synthetic and reference gates and its shadow. A daily check closes auto-save when a qualifying language falls below 95% over 28 days, and 1 in 20 statements it would save is still asked. Until then, and for sensitive or doubtful statements always, the outcome is a candidate.
-
 
 - **Offline calibration.** Each policy ships labelled synthetic datasets in all 16 languages. Its thresholds are fitted for a target precision per band. Release gates: per-language accuracy floor, expected calibration error ≤ 0.05, and no band with fewer than 50 examples.
 - **Human reference** ([ADR 0069](../../adr/0069-decision-layer-slice.md)). Each point also has a reference set labelled blind by a person — at least 50 cases in Russian and 50 in English, never a person's data. The generator's labels must agree with the human ones on ≥ 90% of it, and a policy is released (shadow or active) only when its outcomes agree with the reference at its accuracy floor, within 10 points of its synthetic accuracy.
@@ -381,7 +380,7 @@ The cost row is written by the provider port (inv-9), like any model call.
 | Working | Run state: pending tool calls, rounds, references to context segments by hash | Valkey checkpoint | derived | while the run is active or paused (≤ action expiry, ≤ 24 h) |
 | Conversation | Threads, messages, tool digests, rolling summary | home DB `agent_threads`, `agent_messages` | **yes** | until the user deletes the thread; tool payloads 30 days |
 | Long-term memory | Facts, preferences, relationships, goals, procedures about the user | home DB `memory_facts` | yes | decay plus supersession; user controls |
-| Profile core | Pinned facts and preferences (memory), Studio's personal context, Settings › Leo, locale, timezone, answer language; no personalization table (ADR 0071) | derived from the above | derived | read with the turn's context, one statement; not cached, so no person's fact is copied to Valkey (ADR 0071) |
+| Profile core | Pinned facts, preferences, personalization, locale, timezone, answer language | derived from the above | derived | cached 10 min, invalidated on change |
 | User state | Presence, surface, in-meeting, focus, local time, budgets | Valkey | derived | minutes |
 | Knowledge | Meetings, notes, files, knowledge collections, context graph | owner slices (`notes`, `knowledge`, `files`, `commitments`) | not Leo's | owner's rules |
 
@@ -393,42 +392,38 @@ The cost row is written by the provider port (inv-9), like any model call.
 
 | Group | Columns |
 |---|---|
-| Identity and content | `id` UUIDv7, `user_id`, `org_id` (the source's space), `kind` (preference · fact · relationship · goal · procedure), `statement` (the user's language; it is user data, never an instruction), `subject_refs` (context-graph entity ids) |
-| Provenance | `source_kind` (user_statement · meeting · team_chat · settings · user_edit · imported), `source_ref` (thread/message, meeting/finding or chat/message ids), `source_taint` |
-| Assessment | `confidence`, `sensitivity` (normal · sensitive), `explicit`, `confirmed` (by the person, ADR 0071) |
-| Validity | `valid_from`, `valid_to`, `superseded_by`, `replaces` (a candidate's proposed predecessor) |
-| Retrieval | `embedding` (`halfvec(1024)`), `embedding_model` (fixes M4) |
-| Lifecycle | `status` (candidate · active · forgotten), `pinned`, `confirmations`, `last_confirmed_at`, `erase_after`, `created_at` |
-
-The full table, its indexes and checks are in the [memory plan](../../plan/slices/memory.md) §3.6.
+| Identity and content | `id` UUIDv7, `user_id`, `kind` (preference · fact · relationship · goal · procedure), `statement` (the user's language; it is user data, never an instruction), `subject_refs` (context-graph entity ids) |
+| Provenance | `source_kind` (user_statement · meeting · settings · user_edit), `source_ref` (thread/message or meeting/segment ids) |
+| Assessment | `confidence`, `sensitivity` (normal · sensitive) |
+| Validity | `valid_from`, `valid_to`, `superseded_by` |
+| Retrieval | `embedding`, `embedding_model` (fixes M4) |
+| Lifecycle | `status` (candidate · active · forgotten), `pinned`, `last_confirmed_at`, `created_at` |
 
 **Admission** (background, after a turn, [ADR 0030](../../adr/0030-leo-memory-v2.md)):
 
 1. *Extract.* A cheap model reads the finished turn and proposes at most 3 candidate statements in a structured output. It reads only the **user's own messages**; tool results and external content are excluded. This replaces the draft's 16-language regex (M5).
 2. *Judge.* `decide(memory.admit)` with the candidate and its 5 nearest neighbours: kind, durability, sensitivity, and whether it updates a neighbour.
 3. *Supersede, don't merge.* An update closes the old fact (`valid_to`, `superseded_by`) and opens the new one. The newer fact wins, not the longer one, which fixes M3. History stays for "what did you know then".
-4. *Ask when unsure.* Sensitive facts, and facts in the middle band, become `candidate`: shown quietly as one line under the Leo answer they came from and in the list in Settings › Memory, never as a notification. Candidates are not used for answers. **Until `memory.admit` earns auto-save on the person's answers (§6.3), every statement that is not an explicit request is a candidate**, at most 3 a day per person, gone after 30 days unanswered, never asked again near something the person forgot or turned down ([ADR 0071](../../adr/0071-leo-memory-slice.md)).
-5. *Respect the switches.* With `memory_enabled=false`, without cross-border consent, or for a meeting not kept (`no_logs`, "Don't keep my meetings"), nothing is extracted or stored, **on every path**: meeting recollections, upkeep, extraction. This fixes M1, and an isolation test covers each writer.
+4. *Ask when unsure.* Sensitive facts, and facts in the middle band, become `candidate`: shown as "Should I remember…?" in the panel or the memory page. Candidates are not used for answers.
+5. *Respect the switches.* With `memory_enabled=false` or `no_logs`, nothing is extracted or stored, **on every path**: the meeting memory port, consolidation, extraction. This fixes M1, and an isolation test covers each writer.
 
-**As built by the `memory` plan** ([ADR 0071](../../adr/0071-leo-memory-slice.md)): extraction runs per turn, right after it, so a candidate can stand under its answer; the extractor sees the two exchanges before the turn for references and extracts only from the turn's own message. Meeting recollections arrive by `notes.meeting.notes_ready` (first revision), from Leo's summary, the key points and the participants, at most 5 per meeting, every one a candidate. A fact keeps its source's space and follows it: hidden when the person leaves the workspace and erased after 7 days unless restored, erased with a deleted workspace or meeting, and — from a team chat — erased at the chat's disconnection or by its message retention (ADR 0062); a fact from a conversation with Leo outlives that conversation.
-
-Meeting recollections enter with `source_kind=meeting`. They are third-party speech, so they are always rendered as untrusted, with their source.
+Meeting recollections (the memory port called by `notes`) enter with `source_kind=meeting`. They are third-party speech, so they are always rendered as untrusted, with their source.
 
 **Retrieval:**
 
 - query embedding = last user message plus the previous assistant message's first 300 characters (one embedding, reused by knowledge search; fixes the "follow-up recalls noise" part of M4);
-- the exact nearest 40 among the person's own current facts of the current embedding model (no HNSW: a global graph filtered to one person loses results; ADR 0071), above a similarity floor, then rank = similarity × recency weight × confidence;
+- top-40 by vector, then rank = similarity × recency weight × confidence;
 - ≤ 12 facts and ≤ 600 tokens.
 
-Recall does **not** refresh decay. The person's confirmation — accepting, editing, pinning, saying it again — refreshes it (ADR 0071: recalled facts are context, not cited sources, so "use the model cites" has no signal).
+Recall does **not** refresh decay. Only use the model cites, or the user's confirmation, refreshes it.
 
 **Forgetting:**
 
 - decay by kind, as in the draft (fact 180 d, episode-like goals 30 d, procedure 365 d);
 - soft forget, then purge after 180 d;
-- consolidation runs per user on a cursor over all users (fixes M2), only for users with memory on, only when facts changed since the last pass. **As built:** it is the daily upkeep per home — decay, expiry of candidates, purges, departures and the rewrite of changed summaries; no model rewrites stored facts in the background (ADR 0071).
+- consolidation runs per user on a cursor over all users (fixes M2), only for users with memory on, only when facts changed since the last pass.
 
-**User controls:** list (cursor-paginated, filtered on the server), edit, pin, forget one, forget all, accept or reject candidates, restore within 24 hours, an off switch that keeps the data, export through account export (fr-8). Every fact shows its source.
+**User controls:** list (cursor-paginated), edit, pin, forget one, forget all, accept or reject candidates, an off switch that keeps the data, export through account export (fr-8). Every fact shows its source.
 
 ### 7.3 Context Builder
 
@@ -439,7 +434,7 @@ Recall does **not** refresh decay. The person's confirmation — accepting, edit
 | 1 | Platform system policy (versioned, English) | per release | 1 500 | role, rules, confirmation protocol, language directive |
 | 2 | Tool schemas of the selected toolsets, canonical order | per thread, rarely | 4 000 | core toolset ≈ 600; draft: 20–25 K |
 | 3 | Active skill playbook | per skill | 1 500 | |
-| 4 | Profile core | per user, rarely | 600 | pinned memory and preferences (≤ 400), Studio's personal context, timezone, answer language; memory's facts wrapped with a boundary keyed by a server secret, stable while they are (§7.4) |
+| 4 | Profile core | per user, rarely | 600 | pinned memory, personalization, timezone, answer language |
 | ↑ | **cache breakpoint** | | | explicit where the provider supports it |
 | 5 | Thread summary | every few turns | 1 000 | rolling, written in the background |
 | 6 | Recent messages, verbatim | per turn | 5 000 | questions and answers; earlier turns' tool rounds left out (agent step 6) |
@@ -458,9 +453,9 @@ Recall does **not** refresh decay. The person's confirmation — accepting, edit
 
 ### 7.4 Untrusted content and taint
 
-- **One wrapper, v2.** A per-run random boundary token, escaping of any boundary-like sequence inside the data, and a provenance label from a closed set (`mail`, `web`, `file:foreign`, `file:own`, `meeting:speech`, `task:foreign`, `memory`, `mcp:<server>`, `skill:user`; `task:foreign` is text in tasks the person did not write — a colleague's, a meeting's through extraction, a Jira user's, [ADR 0059](../../adr/0059-tasks-one-store-boards-action-items-and-jira.md)). Labels are never attacker text. This fixes A4. **Segment 4's exception** ([ADR 0071](../../adr/0071-leo-memory-slice.md)): the profile core's facts are wrapped with a boundary computed as an HMAC with a server secret over the block — impossible to guess for whoever wrote a fact, and stable while the facts are unchanged, so a per-run token does not defeat the prefix cache of everything after it.
+- **One wrapper, v2.** A per-run random boundary token, escaping of any boundary-like sequence inside the data, and a provenance label from a closed set (`mail`, `web`, `file:foreign`, `file:own`, `meeting:speech`, `task:foreign`, `memory`, `mcp:<server>`, `skill:user`; `task:foreign` is text in tasks the person did not write — a colleague's, a meeting's through extraction, a Jira user's, [ADR 0059](../../adr/0059-tasks-one-store-boards-action-items-and-jira.md)). Labels are never attacker text. This fixes A4.
 - **Taint level of a run:**
-  - `none`: only the user's own words and own structured data — a memory fact the person confirmed (an explicit request, "Remember", their edit, a fact they added) is such data and raises nothing; a fact saved automatically keeps its source's provenance and taint and raises the run to at least `external` (ADR 0071);
+  - `none`: only the user's own words and own structured data;
   - `external`: any external text entered the context;
   - `suspicious`: `content.injection` fired.
 
@@ -747,7 +742,7 @@ If any check fails, the errand becomes a **new proposal** delivered to the user,
 | home PostgreSQL | `agent_runs` (partitions) | authoritative telemetry: ids, model, tokens, cost, latencies, outcome, policy versions, the run's final taint (`content.injection`, for memory's admission) | home | 90 d | — |
 | home PostgreSQL | `agent_actions` | authoritative | home | 30 d after a terminal state; audit stays 12 months | — |
 | home PostgreSQL | `agent_audit` (partitions) | authoritative, append-only | home | 12 months | — |
-| home PostgreSQL | `memory_facts` with pgvector embeddings (ADR 0033), `memory_settings`, `memory_summaries` (ADR 0071) | authoritative | home | user controls; forgotten or superseded → purge 180 d; a fact follows its source's space, meeting or team chat (ADR 0071) | — |
+| home PostgreSQL | `memory_facts` with pgvector embeddings (ADR 0033) | authoritative | home | user controls; forgotten → purge 180 d | — |
 | home PostgreSQL | `agent_suggestions`, `suggestion_deliveries`, `suggestion_feedback`, `proactive_triggers`, `proactive_settings`, `push_subscriptions` | authoritative | home | suggestions 90 d; feedback 12 months | — |
 | home PostgreSQL | `errands` | authoritative | home | finished 24 h, failed 30 d | — |
 | home PostgreSQL | `agent_decisions`, `agent_decision_outcomes` (partitions; no person id, ADR 0069) | telemetry | home | 90 d | — |
@@ -937,8 +932,7 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 | uses | access policy, inside each slice's `execute` and read services | `workspaces` | inv-14 |
 | uses | `ToolSpec`s and event types | the domain slices of §3.3, `errands` | tools, signals |
 | uses | search; people and commitments | `knowledge`; `commitments` | `workspace.search`, knowledge, people and commitments |
-| uses | `notes.meeting.notes_ready`, `MeetingReader`, `MeetingFindings` (replaces the `record_recollections` port, ADR 0071) | notes → memory | meeting recollections with provenance |
-| uses | `PersonWords.of_turn` (ADR 0071) | agent → memory | the person's own words of a turn, for admission |
+| provides | memory port: `record_recollections(meeting)` | memory → `notes` | meeting facts with provenance |
 | provides | agent port: `run_voice_turn`, `confirm_by_voice` | agent → `capture` | one thread for text and voice |
 | provides | decision port: `decide(point, …)`, `observe(point, home, subject, …)` (ADR 0069) | decisions → any slice | routing, friction and injection (`agent`, through its ports), memory admission (`memory`), initiative (`proactive`), mail triage (`mail`), hub signal (`hubs`) |
 | provides | registry projection for MCP | agent → `mcp` | external MCP tools under the same gateway |
@@ -958,7 +952,7 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 | `GET /v1/agent/actions?status=proposed&cursor=` · `POST /v1/agent/actions/{id}/approve` · `POST /v1/agent/actions/{id}/reject` | approvals inbox and cards |
 | `GET /v1/agent/suggestions?surface=&subject=` · `POST /v1/agent/suggestions/{id}/feedback` | feed, in-context chips, feedback |
 | `GET/PUT /v1/agent/settings` | initiative level, quiet hours, channels, model, answer language, style, switches |
-| `GET /v1/agent/memory` · `PATCH/DELETE /v1/agent/memory/{id}` · `DELETE /v1/agent/memory` · `POST /v1/agent/memory/{id}/accept` · `POST /v1/agent/memory/{id}/restore` · `POST /v1/agent/memory/imported/turn-down` · `GET/PATCH /v1/agent/memory/settings` · `GET /v1/agent/memory/summary` · `POST /v1/agent/memory/summary/refresh` · `POST /v1/agent/memory/summary/messages` | memory controls, the switch and the summary; the full contract is in the [memory plan](../../plan/slices/memory.md) §3.3 (ADR 0071; `POST /v1/agent/memory` is not built) |
+| `GET/POST /v1/agent/memory` · `PATCH/DELETE /v1/agent/memory/{id}` · `DELETE /v1/agent/memory` · `POST /v1/agent/memory/{id}/accept` | memory controls |
 | `GET/POST/DELETE /v1/agent/skills…` | skills |
 | `PUT/DELETE /v1/agent/messages/{id}/feedback` | "Useful / Not useful" under an answer (ADR 0068 AG-D13) |
 | `/v1/admin/agent/*` | Leo in the admin panel: the operator's threads and turns, read-only toolsets over platform aggregates (ADR 0068 AG-D5) |

@@ -30,12 +30,14 @@ from shosai.features.decisions.domain.policies.content_injection import (
     TextFacts,
 )
 from shosai.features.decisions.domain.policies.turn_route import ToolsetCandidate, TurnFacts
+from shosai.features.decisions.domain.policies.voice_approval import VoiceConsent, VoiceFacts
 
 __all__ = [
     "ACTION_FRICTION",
     "CONTENT_INJECTION",
     "DECISION_LAYER",
     "TURN_ROUTE",
+    "VOICE_APPROVAL",
     "CardFacts",
     "CardFriction",
     "CardResolution",
@@ -52,6 +54,8 @@ __all__ = [
     "ToolsetCandidate",
     "ToolsetsCalled",
     "TurnFacts",
+    "VoiceConsent",
+    "VoiceFacts",
 ]
 
 
@@ -130,4 +134,6 @@ TURN_ROUTE: Final = DecisionPoint[TurnFacts, tuple[str, ...], ToolsetsCalled]("t
 ACTION_FRICTION: Final = DecisionPoint[CardFacts, CardFriction, CardResolution]("action.friction")
 # Наблюдать нечего: у человека нет действия, которое подтвердило бы или опровергло ответ.
 CONTENT_INJECTION: Final = DecisionPoint[TextFacts, InjectionFinding, None]("content.injection")
+# Согласие человека голосом (ограниченное исключение владельца): наблюдать нечего.
+VOICE_APPROVAL: Final = DecisionPoint[VoiceFacts, VoiceConsent, None]("voice.approval")
 DECISION_LAYER: Final = PortKey[Decisions]("decisions.layer")

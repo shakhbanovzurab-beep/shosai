@@ -12,6 +12,7 @@ POINTS: Final = {
     "turn.route": "набор инструментов",
     "action.friction": "карточка",
     "content.injection": "проверка текста",
+    "voice.approval": "голосовое «да»",
 }
 # Почему решило правило: чаще всего срок, сбой провайдера, нулевое хранение и занятость.
 FALLBACK_REASONS: Final = {
@@ -63,6 +64,17 @@ def decisions() -> dict[str, Any]:
             [
                 Series(name, per_minute(f'shosai_decision_late_total{{point="{point}"}}'))
                 for point, name in POINTS.items()
+            ],
+        ).panel(),
+        Chart(
+            "Голосовые подтверждения",
+            "Сколько раз в минуту Jev прочитал ответ человека как ясное «да» зачитанной "
+            "карточке — и действие выполнено без экрана.",
+            PER_MINUTE,
+            [
+                Series(
+                    "согласия", per_minute('shosai_decision_consents_total{point="voice.approval"}')
+                )
             ],
         ).panel(),
         Chart(

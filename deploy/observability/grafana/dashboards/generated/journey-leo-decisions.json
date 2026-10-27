@@ -1012,7 +1012,7 @@
         "h": 9
       },
       "title": "Ожидание решения: 95 % решений быстрее этой линии",
-      "description": "Сколько Leo ждёт решение — от правила до ответа Jev или запасного правила по сроку. Срок задаёт политика: 350 мс для набора инструментов, 400 мс для карточки, 300 мс для проверки текста.",
+      "description": "Сколько Leo ждёт решение — от правила до ответа Jev или запасного правила по сроку. Срок задаёт политика: 350 мс для набора инструментов, 400 мс для карточки, 300 мс для проверки текста, 800 мс для голосового «да».",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -1048,6 +1048,17 @@
           },
           "expr": "histogram_quantile(0.95, sum by (le) (rate(shosai_decision_seconds_bucket{point=\"content.injection\"}[5m])))",
           "legendFormat": "проверка текста",
+          "range": true,
+          "exemplar": false
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(shosai_decision_seconds_bucket{point=\"voice.approval\"}[5m])))",
+          "legendFormat": "голосовое «да»",
           "range": true,
           "exemplar": false
         }
@@ -1128,6 +1139,21 @@
                 "value": {
                   "mode": "fixed",
                   "fixedColor": "#199e70"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "D"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#c98500"
                 }
               }
             ]

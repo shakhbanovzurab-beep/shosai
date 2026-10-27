@@ -1,5 +1,6 @@
-"""The three policies: never less careful than the rule, unsure on the careful side, valid
-questions, bounded states, records without text (ADR 0026 point 3, ADR 0069)."""
+"""The policies: never less careful than the rule — voice.approval, which reads consent, aside —
+unsure on the careful side, valid questions, bounded states, records without text (ADR 0026
+point 3, ADR 0069)."""
 
 from collections.abc import Mapping
 from typing import Any
@@ -27,6 +28,11 @@ from shosai.features.decisions.domain.policies.turn_route import (
     ToolsetCandidate,
     TurnFacts,
 )
+from shosai.features.decisions.domain.policies.voice_approval import (
+    VOICE_APPROVAL,
+    VoiceConsent,
+    VoiceFacts,
+)
 from shosai.features.decisions.domain.policy import Policy, check_point
 from shosai.features.decisions.domain.state import state_tokens
 from shosai.features.decisions.domain.verdicts import Verdict
@@ -51,6 +57,7 @@ pieces = st.builds(
     tool=st.just("web.search"),
     text=words,
 )
+voices = st.builds(VoiceFacts, read_back=words, utterance=st.text(max_size=600))
 turns = st.builds(
     TurnFacts,
     question=words,
@@ -80,6 +87,7 @@ def policy_of(facts: object) -> Policy[Any, Any]:
         TurnFacts: TURN_ROUTE,
         CardFacts: ACTION_FRICTION,
         TextFacts: CONTENT_INJECTION,
+        VoiceFacts: VOICE_APPROVAL,
     }
     return by_type[type(facts)]
 
@@ -109,12 +117,25 @@ def test_a_suspicious_run_stays_suspicious(
     assert not CONTENT_INJECTION.less_careful(final, rule)
 
 
+@given(voices, st.data())
+def test_only_a_sure_yes_gives_consent_and_only_this_policy_reads_one(
+    facts: VoiceFacts, data: st.DataObject
+) -> None:
+    given_verdicts = judged(VOICE_APPROVAL, facts, data)
+    outcome = VOICE_APPROVAL.outcome(facts, given_verdicts, {})
+    assert (outcome is VoiceConsent.GIVEN) == (given_verdicts["approves"] is Verdict.YES)
+    assert VOICE_APPROVAL.careful(VoiceConsent.NOT_GIVEN, outcome) is outcome
+    assert [policy.key for policy in POLICIES if policy.reads_consent] == ["voice.approval@1"]
+    assert VOICE_APPROVAL.settled(facts, VoiceConsent.NOT_GIVEN) is (not facts.utterance.strip())
+
+
 @pytest.mark.parametrize("policy", POLICIES, ids=lambda policy: policy.key)
 def test_an_unsure_verdict_is_read_as_its_aims_say(policy: Policy[Any, Any]) -> None:
     facts = {
         "turn.route": TurnFacts("q", "", "", (ToolsetCandidate("notes", "Notes."),), 1, 900, 1),
         "action.friction": card("tasks.create", Reversibility.REVERSIBLE),
         "content.injection": TextFacts("web", "web.search", "text"),
+        "voice.approval": VoiceFacts("Create a task\nTitle: Call Anna", "yes, go ahead"),
     }[policy.point]
     signals = policy.signals(facts)
     assert {signal.cut for signal in signals.values()} == set(policy.cuts) == set(policy.aims.cuts)
@@ -159,7 +180,7 @@ def test_a_ranking_holds_only_surely_needed_candidates(
     assert TURN_ROUTE.settled(facts, ()) is (not facts.candidates)
 
 
-@given(st.one_of(turns, cards, pieces))
+@given(st.one_of(turns, cards, pieces, voices))
 def test_every_policy_asks_a_valid_request_within_its_budget(facts: object) -> None:
     policy = policy_of(facts)
     questions = policy.questions(facts)
@@ -171,7 +192,7 @@ def test_every_policy_asks_a_valid_request_within_its_budget(facts: object) -> N
     assert set(policy.signals(facts)) == set(questions)
 
 
-@given(st.one_of(turns, cards, pieces))
+@given(st.one_of(turns, cards, pieces, voices))
 def test_a_record_keeps_no_text(facts: object) -> None:
     policy = policy_of(facts)
     for name, value in policy.facts(facts).items():
@@ -188,7 +209,9 @@ def test_an_mcp_servers_name_never_reaches_a_record() -> None:
 
 def test_policies_are_named_once_and_their_wording_hashes_apart() -> None:
     found = policies_by_key()
-    assert set(found) == {"turn.route@1", "action.friction@1", "content.injection@1"}
+    assert set(found) == {
+        "turn.route@1", "action.friction@1", "content.injection@1", "voice.approval@1",
+    }  # fmt: skip
     assert len({policy.digest() for policy in POLICIES}) == len(POLICIES)
     assert set(policy_wording()) == set(found)
     assert TURN_ROUTE.digest() == TURN_ROUTE.digest()

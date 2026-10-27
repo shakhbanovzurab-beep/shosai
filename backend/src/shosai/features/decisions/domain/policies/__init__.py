@@ -11,9 +11,12 @@ from typing import Any, Final
 from shosai.features.decisions.domain.policies.action_friction import ACTION_FRICTION
 from shosai.features.decisions.domain.policies.content_injection import CONTENT_INJECTION
 from shosai.features.decisions.domain.policies.turn_route import TURN_ROUTE
+from shosai.features.decisions.domain.policies.voice_approval import VOICE_APPROVAL
 from shosai.features.decisions.domain.policy import Policy, check_point
 
-POLICIES: Final[tuple[Policy[Any, Any], ...]] = (TURN_ROUTE, ACTION_FRICTION, CONTENT_INJECTION)
+POLICIES: Final[tuple[Policy[Any, Any], ...]] = (
+    TURN_ROUTE, ACTION_FRICTION, CONTENT_INJECTION, VOICE_APPROVAL,
+)  # fmt: skip
 
 
 def policies_by_key() -> dict[str, Policy[Any, Any]]:

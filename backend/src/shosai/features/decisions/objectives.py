@@ -1,7 +1,9 @@
 """The Decision Layer's invariant monitor and tickets (§16.3, §16.4; decisions plan §3.8).
 
 No outcome is ever less careful than its consumer's rule (ADR 0069): an answer that would be
-is overruled and counted, and the count pages. Three tickets watch Jev without waking anyone:
+is overruled and counted, and the count pages; the one exception, a person's consent read by
+voice.approval, leaves only as an active version's answer in time — any changed outcome that
+leaves another way is the rule's, and pages too. Three tickets watch Jev without waking anyone:
 decisions refused because Jev's endpoint is off OpenRouter's zero-retention list or its status
 went three days unread (DL-D1); Jev answering within the policy's deadline for 95 % of the
 decisions asked of it; and the rule's fallback at most one decision in five of those a policy
@@ -22,6 +24,7 @@ from shosai.core.observability.objectives import (
 )
 from shosai.features.decisions.infrastructure.metrics import (
     DECISION_SECONDS,
+    OUTSIDE_BOUNDS,
     REQUESTS,
     UNSAFE_OUTCOMES,
 )
@@ -77,6 +80,18 @@ DECISIONS_MONITORS = (
         ),
         condition=NeverIncreases(UNSAFE_OUTCOMES),
     ),
+    InvariantMonitor(
+        name="decision_outcome_outside_bounds",
+        invariant="ADR 0069",
+        summary="Решение Leo вышло не из ответа Jev в срок",
+        explanation=(
+            "Слой решений поймал изменённый исход, который пришёл не как ответ Jev в срок от "
+            "действующей версии — например, голосовое «да» из тени или запасного правила. Он "
+            "оставил исход правила: без согласия на экране действие не выполнено. Это граница "
+            "исключения для голосового подтверждения; найдите путь, который её обошёл."
+        ),
+        condition=NeverIncreases(OUTSIDE_BOUNDS),
+    ),
 )
 
 DECISIONS_TRACKED = (
@@ -85,12 +100,13 @@ DECISIONS_TRACKED = (
         "Ожидание решения: 95 % решений быстрее этой линии",
         "Сколько Leo ждёт решение — от правила до ответа Jev или запасного правила по сроку. "
         "Срок задаёт политика: 350 мс для набора инструментов, 400 мс для карточки, 300 мс "
-        "для проверки текста.",
+        "для проверки текста, 800 мс для голосового «да».",
         DECISION_SECONDS,
         (
             ("набор инструментов", 'point="turn.route"'),
             ("карточка", 'point="action.friction"'),
             ("проверка текста", 'point="content.injection"'),
+            ("голосовое «да»", 'point="voice.approval"'),
         ),
     ),
 )
