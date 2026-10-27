@@ -75,14 +75,23 @@ class CallRecorder:
         self._marks = marks
 
     async def record(
-        self, call: MeteredCall, usage: Usage, outcome: CallOutcome = CallOutcome.OK
+        self,
+        call: MeteredCall,
+        usage: Usage,
+        outcome: CallOutcome = CallOutcome.OK,
+        *,
+        later: bool = False,
     ) -> None:
-        """Record what the call cost, once per the context's effect key."""
+        """Record what the call cost, once per the context's effect key; `later` hands the
+        row to the record task instead of writing it on the caller's path."""
         rate = await self._rate()
         usage_record = UsageRecord(call, call.context.effect_key, datetime.now(UTC), usage)
         entry = self._entry(usage_record, outcome, rate)
         await self._billed([entry])
-        await self._writer.record(entry)
+        if later:
+            await self._writer.later(entry)
+        else:
+            await self._writer.record(entry)
 
     async def record_failed(self, call: MeteredCall, usage: Usage, attempt: int) -> None:
         """Record a paid failure under a key of its own, so the answer that follows on the

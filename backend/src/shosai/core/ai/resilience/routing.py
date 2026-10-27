@@ -104,7 +104,7 @@ class RouteRunner:
             else:
                 watch.end(OK)
                 await self._answered(attempt, operation.kind)
-                await self._recorder.record(attempt.call, result.usage)
+                await self._recorder.record(attempt.call, result.usage, later=operation.cost_later)
                 await self._spend.consume(context, result.usage, attempt.call)
                 return result
             finally:

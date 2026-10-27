@@ -14,6 +14,8 @@ import pytest
 
 from shosai.core.ai.adapters.openrouter_decisions import decision_of
 from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
+from shosai.core.ai.costs.entries import CostEntry
+from shosai.core.ai.costs.writer import RECORD_COST, record_cost_handler
 from shosai.core.ai.decisions import (
     ChoiceAnswer,
     ChoiceQuestion,
@@ -65,6 +67,19 @@ async def rows(run_slot: RunSlot) -> list[dict[str, object]]:
         "FROM provider_costs",
     )
     return [dict(row) for row in found]
+
+
+async def delivered(bench: AiBench) -> int:
+    """Run the record tasks the bench sent, as the queue would; how many there were."""
+    sent = [
+        payload
+        for name, payload in bench.sender.sent
+        if name == RECORD_COST.name and isinstance(payload, CostEntry)
+    ]
+    handler = record_cost_handler(bench.writer)
+    for payload in sent:
+        await handler.handle(payload)
+    return len(sent)
 
 
 async def deciding(homes: DatabaseAccess) -> AiBench:
@@ -154,6 +169,10 @@ async def test_a_decision_writes_one_row_at_the_reported_cost(
         context("turn:7:route", deadline=SOON), ModelRoute(JEV), TICKET
     )
 
+    # Строка — задачей записи, не на пути решения (ADR 0069 DL-D2); повтор доставки — та же.
+    assert await rows(run_slot) == []
+    assert await delivered(bench) == 1
+    await delivered(bench)
     [body] = bench.openrouter.bodies("alpha/decisions")
     [row] = await rows(run_slot)
     assert body["model"] == "typesafe/jev-1.13"
@@ -176,9 +195,24 @@ async def test_without_a_reported_cost_a_decision_is_priced_by_its_input_tokens(
     bench.openrouter.answer("alpha/decisions", httpx.Response(200, json=answer))
 
     await bench.providers.decide(context(deadline=SOON), ModelRoute(JEV), TICKET)
+    await delivered(bench)
 
     [row] = await rows(run_slot)
     assert (row["cost_usd"], row["cost_source"]) == (Decimal("0.0000199920"), "priced")
+
+
+async def test_without_the_queue_a_decisions_row_is_written_at_once(
+    homes: DatabaseAccess, run_slot: RunSlot
+) -> None:
+    bench = await deciding(homes)
+    bench.sender.failing = True
+    bench.openrouter.answer("alpha/decisions", httpx.Response(200, json=recorded()))
+
+    await bench.providers.decide(context(deadline=SOON), ModelRoute(JEV), TICKET)
+
+    [row] = await rows(run_slot)
+    assert (row["kind"], row["outcome"]) == ("decide", "ok")
+    assert bench.sample("shosai_ai_calls_without_cost_row_total") == 0
 
 
 async def test_a_paid_answer_out_of_contract_is_recorded_as_failed(

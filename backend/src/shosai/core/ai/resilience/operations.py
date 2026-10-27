@@ -33,6 +33,8 @@ class Operation[C, R]:
     client_of: Callable[[ModelRef], C]
     send: Callable[[C, ModelRef], Awaitable[R]]
     estimate: Usage
+    # Строка стоимости — задачей записи, не транзакцией на пути вызова (решения Jev).
+    cost_later: bool = False
 
 
 @dataclass(frozen=True, slots=True)

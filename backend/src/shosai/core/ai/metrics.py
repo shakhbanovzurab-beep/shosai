@@ -36,6 +36,11 @@ class AiMetrics:
             "Строки стоимости, отложенные в задачу: дом не принял запись",
             registry=registry,
         )
+        self._later = Counter(
+            "shosai_ai_cost_rows_sent_later",
+            "Строки стоимости, сразу отданные задаче записи: вызов со сроком, решения Jev",
+            registry=registry,
+        )
         self._lost = Counter(
             "shosai_ai_calls_without_cost_row",
             "Оплаченные вызовы, стоимость которых не записана и не отложена",
@@ -83,6 +88,10 @@ class AiMetrics:
     def deferred(self) -> None:
         """A cost row handed to the deferred-record task."""
         self._deferred.inc()
+
+    def sent_later(self) -> None:
+        """A cost row handed to the record task at once, off its caller's path."""
+        self._later.inc()
 
     def lost(self) -> None:
         """A paid call whose cost could be neither written nor deferred."""

@@ -155,14 +155,16 @@ class AiProviders:
     async def decide(
         self, context: CallContext, route: ModelRoute, request: DecisionRequest
     ) -> Decision:
-        """Typed answers of a decision model; the caller always sets the deadline."""
+        """Typed answers of a decision model; the caller always sets the deadline. The cost row
+        goes to the record task, so a decision's latency never includes the payer's home
+        (ADR 0069 DL-D2)."""
         if context.deadline is None:
             message = "решение всегда со своим сроком (Leo §6.3)"
             raise ValueError(message)
         self._guards.caps.check_decision(request)
         operation = Operation(
             "decide", self._openrouter("decide"), lambda c, m: c.decide(m, request),
-            decision_estimate(request),
+            decision_estimate(request), cost_later=True,
         )  # fmt: skip
         return await self._routed(context, route, operation)
 

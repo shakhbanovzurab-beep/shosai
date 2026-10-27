@@ -5,7 +5,9 @@ the payer's home records the effect key in core's ledger; the effect inserts the
 runs the settlements. A replayed key returns the stored row id and changes nothing. When
 the home does not take the write, the row goes to the deferred-record task, which writes it
 later with the same key; when the task cannot be queued either, the row is lost, logged and
-counted, and the monitor of §16.4 shows it.
+counted, and the monitor of §16.4 shows it. A call on a latency budget — a Jev decision
+(ADR 0069 DL-D2) — hands its row to the same task at once (`later`), so the home's
+transaction never sits on its caller's path.
 
 Minute rows of live sessions (F6-C5) are written in batches: one transaction per home and
 company claims every key of the batch at once, inserts the new rows with one statement and
@@ -104,6 +106,16 @@ class CostWriter:
             await self.write(entry)
         except HomeUnavailableError:
             await self._defer(entry)
+
+    async def later(self, entry: CostEntry) -> None:
+        """Hand the row to the deferred-record task at once, off the caller's path (ADR 0069
+        DL-D2); without the queue, write it now — a row is never dropped for speed."""
+        try:
+            await self._sender.send(RECORD_COST, entry)
+        except TaskQueueUnavailableError:
+            await self.record(entry)
+            return
+        self._metrics.sent_later()
 
     async def write(self, entry: CostEntry) -> UUID:
         """Write the row and run the settlements once; return the row id of the effect key."""
