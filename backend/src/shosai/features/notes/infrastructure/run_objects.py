@@ -22,7 +22,7 @@ from shosai.features.notes.infrastructure.run_records import ObjectDeletionRecor
 
 async def run_keys(session: AsyncSession, where: ColumnElement[bool]) -> list[str]:
     """The transient keys named by the runs the predicate picks, each once, in order."""
-    columns = (RunRecord.audio_key, RunRecord.raw_transcript_key, RunRecord.turns_key)
+    columns = (RunRecord.audio_key, RunRecord.raw_transcript_key)
     rows = (await session.execute(select(*columns).where(where))).all()
     return sorted({key for row in rows for key in row if key})
 

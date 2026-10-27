@@ -106,7 +106,7 @@
 | PostgreSQL RU | Russia | Source of truth of the Russian home | managed, PgBouncer |
 | PostgreSQL EU | EU | Source of truth of the EU home; directory tables; platform tables and telemetry without an account (§6) | managed, PgBouncer |
 | S3 | per home | A bucket per home: files, recordings, exports, knowledge sources of that home; the platform's in the EU home's; lifecycle rules ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)). The EU home's bucket is in Russia (Timeweb `ru-1`) until the owner moves it to the EU before launch | — |
-| AI providers | external | OpenRouter (including Jev decisions by TypeSafe AI and transcription of recordings), OpenAI Realtime, Google Gemini Live, pyannote, Mistral OCR — reached directly from the plane ([ADR 0043](../adr/0043-speech-providers-by-task.md)) | quotas per contract |
+| AI providers | external | OpenRouter (including Jev decisions by TypeSafe AI and transcription of recordings with their speakers), OpenAI Realtime, Google Gemini Live, Mistral OCR — reached directly from the plane ([ADR 0043](../adr/0043-speech-providers-by-task.md), [ADR 0073](../adr/0073-recordings-transcribed-with-speakers-by-scribe.md)) | quotas per contract |
 | Payments | external | TBank, CloudPayments, lava.top (cards); bank statement API (invoices) | — |
 | Observability | plane + outside | Grafana stack: Prometheus (metrics), Loki (logs), Tempo (traces), Grafana (one pane); OpenTelemetry Collector; Alertmanager (Telegram); node exporter; uptime probes run outside the plane | single nodes, local disks with size caps |
 | Delivery | GitHub | GitHub Actions builds the image from a green commit into a registry; `scripts/release.sh` deploys to staging, then to the plane | — |
@@ -691,11 +691,11 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Realtime and integrations | Web Push (VAPID) | — | PWA notifications |
 | Realtime and integrations | SMTP (Timeweb), two mailboxes | — | Email: account mail from one mailbox, notifications and newsletters from the other; Mailpit 1.31.5 stands in locally |
 | Realtime and integrations | Cloudflare Turnstile | — | Form protection: registration, password reset, sign-in after failures ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)) |
-| AI providers | OpenRouter | — | Chat, vision, embeddings (`google/gemini-embedding-2` for memory and, by default, knowledge — [ADR 0071](../adr/0071-leo-memory-slice.md)), rerank, web search (the `exa` engine of its server tool: the pages' own addresses and passages, whatever the model), transcription of recordings ([ADR 0043](../adr/0043-speech-providers-by-task.md)) |
+| AI providers | OpenRouter | — | Chat, vision, embeddings (`google/gemini-embedding-2` for memory and, by default, knowledge — [ADR 0071](../adr/0071-leo-memory-slice.md)), rerank, web search (the `exa` engine of its server tool: the pages' own addresses and passages, whatever the model), transcription of recordings with their speakers by `elevenlabs/scribe-v2` ([ADR 0043](../adr/0043-speech-providers-by-task.md), [ADR 0073](../adr/0073-recordings-transcribed-with-speakers-by-scribe.md)) |
 | AI providers | Jev (TypeSafe AI) through OpenRouter's Decisions API | `typesafe/jev-1.13`, pinned | Leo's Decision Layer: typed, calibrated decisions behind versioned policies with deterministic fallbacks ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)) |
 | AI providers | OpenAI Realtime | — | Streaming speech recognition of live meetings (gpt-live-transcribe, gpt-realtime-whisper) |
 | AI providers | Google Gemini Live | — | Simultaneous translation (gemini-3.5-live-translate-preview, gemini-3.8-live as interpreter), voice assistant |
-| AI providers | pyannote, Mistral OCR | — | Speaker diarization of recordings, document OCR |
+| AI providers | Mistral OCR | — | Document OCR |
 | Payments | TBank, CloudPayments, lava.top | — | Card acquiring in RUB and foreign currency, incl. PayPal |
 | Payments | Bank statement API | — | Reconciliation of company invoices; bank not chosen |
 | Payments | Invoices, acts, UPD | — | Closing documents for Russian legal entities |

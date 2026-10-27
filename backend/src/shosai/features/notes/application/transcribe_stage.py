@@ -1,13 +1,16 @@
-"""The transcribe stage of a recording's run (§3.4 flow 5, MT-D10, ADR 0043).
+"""The transcribe stage of a recording's run (§3.4 flow 5, MT-D10, ADR 0073).
 
 The recording is fetched to a scratch directory, its pauses found and its audio cut into
-parts of at most 5 minutes, ending in a pause where there is one. The parts go to the
+parts of at most 90 minutes, ending in a pause where there is one; a shorter recording is
+one part. Each part is heard a minute past its cuts on either side. The parts go to the
 transcription model through the AI port at once — at most four at a time, each under its
-own effect key, `ESSENTIAL` — asking for timed segments; a part answered without them is
-one segment. The segments, moved by their part's start, are kept as the raw transcript
-(O4, at most 72 hours) and named on the run; the align stage lays the speakers over them
-and writes the meeting's lines. A redelivered stage that finds the raw transcript named
-asks nothing again.
+own effect key, `ESSENTIAL` — asking for timed segments with their speakers; a part
+answered without segments is one. The segments, moved by where their part was heard from,
+are kept with each part's voices as the raw transcript (O4, at most 72 hours) and named on
+the run; the align stage joins the voices across the cuts and writes the meeting's lines.
+A model that marks no speakers (a fallback) leaves the segments without voices, and the
+stage says so in its log. A redelivered stage that finds the raw transcript named asks
+nothing again.
 """
 
 import asyncio
@@ -41,7 +44,8 @@ from shosai.features.notes.infrastructure.media_tools import (
 from shosai.features.notes.infrastructure.run_records import RunRecord
 
 PARTS_AT_ONCE: Final = 4
-CALL_DEADLINE: Final = timedelta(minutes=2)
+# 90 минут записи Scribe отвечает примерно за 75 с; запас — на отправку и очередь провайдера.
+CALL_DEADLINE: Final = timedelta(minutes=5)
 log = structlog.stdlib.get_logger(__name__)
 
 
@@ -84,8 +88,14 @@ class TranscribeStage:
             if locked is None:
                 raise StageFailedError(UNREADABLE)
             locked.raw_transcript_key = key
-        segments = sum(len(part["segments"]) for part in parts)
-        log.info("Запись расшифрована", run_id=str(work.run_id), segments=segments)
+        segments = [s for part in parts for s in part["segments"]]
+        voiced = any(s["speaker"] is not None for s in segments)
+        log.info(
+            "Запись расшифрована", run_id=str(work.run_id), segments=len(segments),
+            parts=len(parts), speakers_marked=voiced,
+        )  # fmt: skip
+        if segments and not voiced:
+            log.warning("Запись расшифрована без говорящих", run_id=str(work.run_id))
 
     async def _transcribed(
         self, work: StageWork, recording: tuple[str, int], *, consent: bool
@@ -96,15 +106,16 @@ class TranscribeStage:
             async with scratch() as directory:
                 path = await fetched(self._storage, work.scope.home, key, directory)
                 cuts = parts_of(duration_ms, await self._tools.silences(path))
+                heard = [part.heard(duration_ms) for part in cuts]
                 files = [
-                    await self._tools.cut(path, part, directory / f"part-{n}.ogg")
-                    for n, part in enumerate(cuts)
+                    await self._tools.cut(path, span, directory / f"part-{n}.ogg")
+                    for n, span in enumerate(heard)
                 ]
                 gate = asyncio.Semaphore(PARTS_AT_ONCE)
                 asked = await asyncio.gather(
                     *(
-                        self._part(work, (n, part, file), gate, consent=consent)
-                        for n, (part, file) in enumerate(zip(cuts, files, strict=True))
+                        self._part(work, (n, part, span, file), gate, consent=consent)
+                        for n, (part, span, file) in enumerate(zip(cuts, heard, files, strict=True))
                     ),
                     return_exceptions=True,
                 )
@@ -120,32 +131,35 @@ class TranscribeStage:
     async def _part(
         self,
         work: StageWork,
-        cut: tuple[int, Part, Path],
+        cut: tuple[int, Part, Part, Path],
         gate: asyncio.Semaphore,
         *,
         consent: bool,
     ) -> dict[str, Any]:
-        number, part, file = cut
+        number, part, heard, file = cut
         context = CallContext(
             effect_key=effect_key(work.run_id, work.stage, number), feature="notes.transcribe",
             call_class=CallClass.ESSENTIAL, origin=CallOrigin.BACKGROUND, scope=work.scope,
             cross_border_consent=consent, deadline=CALL_DEADLINE,
         )  # fmt: skip
         data = await asyncio.to_thread(file.read_bytes)
-        audio = AudioFile(data, PART_MEDIA_TYPE, part.duration_ms / 1000)
+        audio = AudioFile(data, PART_MEDIA_TYPE, heard.duration_ms / 1000)
+        request = TranscriptionRequest(audio, timestamps=True, speakers=True)
         async with gate:
-            heard = await self._ai.transcribe(
-                context, self._route, TranscriptionRequest(audio, timestamps=True)
-            )
+            answer = await self._ai.transcribe(context, self._route, request)
         segments = [
             {
-                "start_ms": part.start_ms + s.start_ms,
-                "end_ms": part.start_ms + s.end_ms,
+                "start_ms": heard.start_ms + s.start_ms,
+                "end_ms": heard.start_ms + s.end_ms,
                 "text": s.text,
+                "speaker": s.speaker,
             }
-            for s in heard.segments
+            for s in answer.segments
             if s.text.strip()
         ]
-        if not segments and heard.text.strip():
-            segments = [{"start_ms": part.start_ms, "end_ms": part.end_ms, "text": heard.text}]
+        if not segments and answer.text.strip():
+            segments = [
+                {"start_ms": heard.start_ms, "end_ms": heard.end_ms, "text": answer.text,
+                 "speaker": None}
+            ]  # fmt: skip
         return {"start_ms": part.start_ms, "end_ms": part.end_ms, "segments": segments}

@@ -35,8 +35,8 @@ STORAGE_ORIGIN_SCHEME = "https://"
 SERVER_NAME = "shosai.tech"
 # Модель OpenRouter по умолчанию для заметок встреч, та же, что в .env.example.
 NOTES_MODEL = "google/gemini-3.8-flash"
-TRANSCRIBE_MODEL = "openai/whisper-large-v3"
-DIARIZE_MODEL = "precision-3"
+# Расшифровка записей сразу с говорящими (ADR 0073).
+TRANSCRIBE_MODEL = "elevenlabs/scribe-v2"
 # Модели Leo до studio (ADR 0068 AG-D4), те же, что в .env.example; владелец может задать свои в .env.
 AGENT_STANDARD_MODEL = "google/gemini-3.8-flash"
 AGENT_STANDARD_FALLBACK_MODEL = "anthropic/claude-haiku-5.5"
@@ -58,7 +58,6 @@ COPIED = (
     "FERNET_KEY",
     "OPENROUTER_API_KEY",
     "OPENROUTER_MANAGEMENT_KEY",
-    "PYANNOTE_API_KEY",
     "OPENAI_API_KEY",
     "GOOGLE_LIVE_API_KEY",
     "MISTRAL_API_KEY",
@@ -84,7 +83,6 @@ COPIED = (
     "NOTES_FALLBACK_MODEL",
     "NOTES_TRANSCRIBE_MODEL",
     "NOTES_TRANSCRIBE_FALLBACK_MODEL",
-    "NOTES_DIARIZE_MODEL",
     "AGENT_STANDARD_MODEL",
     "AGENT_STANDARD_FALLBACK_MODEL",
     "AGENT_UTILITY_MODEL",
@@ -195,7 +193,6 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
         # Модель заметок встреч до studio (notes шаг 6); владелец может задать свою в .env.
         "NOTES_MODEL": NOTES_MODEL,
         "NOTES_TRANSCRIBE_MODEL": TRANSCRIBE_MODEL,
-        "NOTES_DIARIZE_MODEL": DIARIZE_MODEL,
         "AGENT_STANDARD_MODEL": AGENT_STANDARD_MODEL,
         "AGENT_STANDARD_FALLBACK_MODEL": AGENT_STANDARD_FALLBACK_MODEL,
         "AGENT_UTILITY_MODEL": AGENT_UTILITY_MODEL,

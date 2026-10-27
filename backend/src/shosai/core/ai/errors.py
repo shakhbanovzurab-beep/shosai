@@ -95,8 +95,8 @@ class AiCallError(AppError):
 class PaidCallError(Exception):
     """A call that failed after the provider began to charge for it: its usage is recorded.
 
-    pyannote bills a job once it starts, whatever its end; the port writes the row with the
-    outcome `failed`, then raises `AiCallError` with the failure.
+    An answer outside the contract of an alpha API is billed all the same; the port writes
+    the row with the outcome `failed`, then raises `AiCallError` with the failure.
     """
 
     def __init__(self, failure: AiFailure, usage: Usage) -> None:

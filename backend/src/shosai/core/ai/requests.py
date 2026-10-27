@@ -151,25 +151,15 @@ class TranscriptionRequest:
     """A recording to turn into text.
 
     `language` None lets the model detect it. `timestamps` asks for timed segments, which
-    only some models give (whisper-1 does, gpt-4o-transcribe answers 400).
+    only some models give (whisper-1 does, gpt-4o-transcribe answers 400). `speakers` asks
+    the model to mark who speaks, with timed segments; a model that does not diarize
+    answers without speakers (ADR 0073).
     """
 
     audio: AudioFile
     language: str | None = None
     timestamps: bool = False
-
-
-@dataclass(frozen=True, slots=True)
-class DiarizationRequest:
-    """A recording to split into speaker turns; `speakers` None lets the model count them."""
-
-    audio: AudioFile
-    speakers: int | None = None
-
-    def __post_init__(self) -> None:
-        if self.speakers is not None and self.speakers < 1:
-            message = "говорящих — хотя бы один"
-            raise ValueError(message)
+    speakers: bool = False
 
 
 @dataclass(frozen=True, slots=True)

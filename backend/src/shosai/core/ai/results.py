@@ -138,24 +138,6 @@ class Transcript:
     usage: Usage
 
 
-@dataclass(frozen=True, slots=True)
-class SpeakerTurn:
-    """When one speaker spoke; speakers are numbered 0..N-1 in order of first appearance."""
-
-    start_ms: int
-    end_ms: int
-    speaker: int
-
-
-@dataclass(frozen=True, slots=True)
-class Diarization:
-    """Who spoke when."""
-
-    turns: tuple[SpeakerTurn, ...]
-    model: ModelRef
-    usage: Usage
-
-
 class LiveChannel(StrEnum):
     """Whose speech a live text is: the person's input or the model's spoken output."""
 

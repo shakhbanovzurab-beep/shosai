@@ -101,8 +101,7 @@ async def test_a_streamed_recording_becomes_a_job_the_clients_poll_to_its_transc
     recording_bench: RecordingBench, video: Path
 ) -> None:
     owner, stranger = uuid.uuid4(), uuid.uuid4()
-    for _ in range(2):
-        recording_bench.ai.openrouter.answer(TRANSCRIPTIONS, heard())
+    recording_bench.ai.openrouter.answer(TRANSCRIPTIONS, heard())
 
     accepted = await import_file(recording_bench, owner, ("meeting.mp4", video, "audio/mp4"))
     job_id = accepted.json()["jobId"]
@@ -127,7 +126,7 @@ async def test_a_streamed_recording_becomes_a_job_the_clients_poll_to_its_transc
     }  # fmt: skip
     assert ran == list(STAGES[RunSource.IMPORT])
     assert (transcribed.json()["stage"], transcribed.json()["progress"]) == ("ready", 1.0)
-    assert (meeting.title, meeting.source, meeting.line_count) == ("meeting", "import", 4)
+    assert (meeting.title, meeting.source, meeting.line_count) == ("meeting", "import", 2)
     assert run.audio_key.startswith("transient/import/")
     assert stored is not None
     assert stored.size == (await asyncio.to_thread(video.stat)).st_size

@@ -1,20 +1,21 @@
-"""An uploaded recording becomes a meeting with its transcript (step 9a, §3.4 flow 5)."""
+"""An uploaded recording becomes a meeting with its transcript and speakers (steps 9a, 29)."""
 
 import json
 import uuid
 from datetime import timedelta
 from pathlib import Path
-from typing import Any, Final
+from typing import Any
 
 import httpx
+import pytest
 from sqlalchemy import select
 
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.files.infrastructure.upload_records import UploadRecord
-from shosai.features.notes.application.diarize_stage import turns_key
 from shosai.features.notes.application.run_rows import progress_of
 from shosai.features.notes.application.transcribe_stage import raw_key
+from shosai.features.notes.domain import recordings
 from shosai.features.notes.domain.runs import STAGES, RunSource, RunState, Stage, StageStatus
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
@@ -25,33 +26,17 @@ from shosai.features.notes.infrastructure.notes_records import SettingsRecord
 from shosai.features.notes.infrastructure.run_records import RunRecord
 from tests.features.billing.people_bench import bearer
 from tests.features.notes.recording_bench import VIDEO_SECONDS, RecordingBench, ffmpeg
+from tests.features.notes.scribe_answers import by_length, scribe
 from tests.harness.connections import fetch_rows
 from tests.harness.run_slot import RunSlot
 
 TRANSCRIPTIONS = "audio/transcriptions"
-# Голоса записи: первый говорит в начале каждой части, второй — с её двадцатой секунды.
-TWO_VOICES: Final = [
-    {"speaker": "SPEAKER_03", "start": 0.0, "end": 12.0},
-    {"speaker": "SPEAKER_01", "start": 15.0, "end": 30.0},
-    {"speaker": "SPEAKER_03", "start": 290.0, "end": 312.0},
-    {"speaker": "SPEAKER_01", "start": 314.0, "end": 330.0},
-]
 type Json = dict[str, Any]
 
 
 def heard() -> httpx.Response:
-    """A part's answer: two timed sentences, the second after a long pause."""
-    segments = [
-        {"start": 0.0, "end": 4.0, "text": " Hello, team."},
-        {"start": 20.0, "end": 26.0, "text": "Let us start."},
-    ]
-    return httpx.Response(
-        200,
-        json={
-            "text": "Hello, team. Let us start.", "language": "english", "segments": segments,
-            "usage": {"seconds": 150.0, "cost": 0.0011},
-        },
-    )  # fmt: skip
+    """A part's answer: two voices, the second after a long pause."""
+    return scribe((0.0, 4.0, 0, "Hello, team."), (20.0, 26.0, 1, "Let us start."))
 
 
 async def imported(bench: RecordingBench, owner: uuid.UUID, upload_id: uuid.UUID) -> Json:
@@ -90,23 +75,11 @@ async def failed_with(bench: RecordingBench, owner: uuid.UUID, path: Path, kind:
     return str(intake.error_code)
 
 
-async def test_a_video_becomes_a_meeting_with_its_transcript_and_a_repeat_answers_the_same(
-    recording_bench: RecordingBench, video: Path, run_slot: RunSlot
-) -> None:
-    owner = uuid.uuid4()
-    upload_id = await recording_bench.upload(owner, video, "video/mp4")
-    for _ in range(2):
-        recording_bench.ai.openrouter.answer(TRANSCRIPTIONS, heard())
-    recording_bench.ai.pyannote.turns = TWO_VOICES
-
-    started = await imported(recording_bench, owner, upload_id)
-    again = await imported(recording_bench, owner, upload_id)
-    ran = await recording_bench.drive()
-
-    run, meeting = await run_and_meeting(recording_bench, owner, started)
-    async with recording_bench.storage[Home.EU].open(raw_key(run.id)) as stream:
-        raw = json.loads(b"".join([chunk async for chunk in stream.chunks(1 << 20)]))
-    async with recording_bench.homes.transactions.begin(TenancyScope(Home.EU, owner)) as session:
+async def lines_and_speakers(
+    bench: RecordingBench, owner: uuid.UUID, meeting: MeetingRecord
+) -> tuple[list[tuple[int, str, int | None]], list[tuple[int, str, int]]]:
+    """The meeting's lines `(start, text, speaker)` and its speakers `(idx, role, talk)`."""
+    async with bench.homes.transactions.begin(TenancyScope(Home.EU, owner)) as session:
         lines = (
             await session.scalars(
                 select(TranscriptLineRecord)
@@ -114,44 +87,95 @@ async def test_a_video_becomes_a_meeting_with_its_transcript_and_a_repeat_answer
                 .order_by(TranscriptLineRecord.seq)
             )
         ).all()
-    async with recording_bench.homes.transactions.begin(TenancyScope(Home.EU, owner)) as session:
         found = await session.execute(
             select(SpeakerRecord.idx, SpeakerRecord.role, SpeakerRecord.talk_ms)
             .where(SpeakerRecord.session_id == meeting.id)
             .order_by(SpeakerRecord.idx)
         )
         speakers = [(idx, role, talk) for idx, role, talk in found]
+    assert {(line.run_id, line.origin) for line in lines} <= {(meeting.latest_run_id, "recording")}
+    return [(line.start_ms, line.text, line.speaker_idx) for line in lines], speakers
+
+
+async def raw_of(bench: RecordingBench, run: RunRecord) -> Json:
+    """The run's raw transcript (O4)."""
+    async with bench.storage[Home.EU].open(raw_key(run.id)) as stream:
+        raw: Json = json.loads(b"".join([chunk async for chunk in stream.chunks(1 << 20)]))
+    return raw
+
+
+async def test_a_video_becomes_a_meeting_with_its_speakers_and_a_repeat_answers_the_same(
+    recording_bench: RecordingBench, video: Path, run_slot: RunSlot
+) -> None:
+    owner = uuid.uuid4()
+    upload_id = await recording_bench.upload(owner, video, "video/mp4")
+    recording_bench.ai.openrouter.answer(TRANSCRIPTIONS, heard())
+
+    started = await imported(recording_bench, owner, upload_id)
+    again = await imported(recording_bench, owner, upload_id)
+    ran = await recording_bench.drive()
+
+    run, meeting = await run_and_meeting(recording_bench, owner, started)
+    raw = await raw_of(recording_bench, run)
+    lines, speakers = await lines_and_speakers(recording_bench, owner, meeting)
     costs = await fetch_rows(
         run_slot.claimed.connections[Home.EU],
         "SELECT feature, kind, outcome, unit FROM provider_costs ORDER BY feature, created_at",
     )
-    bodies = recording_bench.ai.openrouter.bodies(TRANSCRIPTIONS)
-    second = raw["parts"][1]["start_ms"]
+    [body] = recording_bench.ai.openrouter.bodies(TRANSCRIPTIONS)
     assert again == started
     assert ran == list(STAGES[RunSource.IMPORT])
     assert RunState(run.state) is RunState.SUCCEEDED
     assert (meeting.title, meeting.source, meeting.seconds) == ("meeting", "import", VIDEO_SECONDS)
     assert meeting.ended_at is not None
     assert meeting.ended_at - meeting.started_at == timedelta(seconds=VIDEO_SECONDS)
-    assert abs(second - 297_000) < 1_500
-    assert [(p["start_ms"], p["end_ms"]) for p in raw["parts"]] == [
-        (0, second), (second, run.audio_duration_ms),
-    ]  # fmt: skip
-    assert [(line.start_ms, line.text, line.speaker_idx) for line in lines] == [
-        (0, "Hello, team.", 0), (20_000, "Let us start.", 1),
-        (second, "Hello, team.", 0), (second + 20_000, "Let us start.", 1),
-    ]  # fmt: skip
-    assert {(line.run_id, line.origin) for line in lines} == {(run.id, "recording")}
-    assert (meeting.line_count, run.raw_transcript_key) == (4, raw_key(run.id))
-    assert run.turns_key == turns_key(run.id)
-    assert speakers == [(0, "numbered", 8_000), (1, "numbered", 12_000)]
-    assert [(b["input_audio"]["format"], b["response_format"]) for b in bodies] == [
-        ("ogg", "verbose_json"), ("ogg", "verbose_json"),
-    ]  # fmt: skip
+    assert [(p["start_ms"], p["end_ms"]) for p in raw["parts"]] == [(0, run.audio_duration_ms)]
+    assert lines == [(0, "Hello, team.", 0), (20_000, "Let us start.", 1)]
+    assert (meeting.line_count, run.raw_transcript_key) == (2, raw_key(run.id))
+    assert speakers == [(0, "numbered", 4_000), (1, "numbered", 6_000)]
+    assert (body["input_audio"]["format"], body["response_format"]) == ("ogg", "verbose_json")
+    assert body["provider"]["options"]["elevenlabs"]["diarize"] is True
     assert [tuple(row.values()) for row in costs] == [
-        ("notes.diarize", "diarize", "ok", "audio_second"),
-        *[("notes.transcribe", "transcribe", "ok", "audio_second")] * 2,
+        ("notes.transcribe", "transcribe", "ok", "audio_second")
     ]
+
+
+async def test_voices_are_carried_across_a_cut_and_its_minutes_are_written_once(
+    recording_bench: RecordingBench, video: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    owner = uuid.uuid4()
+    monkeypatch.setattr(recordings, "PART_MAX_MS", 5 * 60 * 1000)
+    # Обе части слышат минуту за разрезом у 297 с: голоса узнаются по ней.
+    # Части уходят разом: первая слышит 0–357 с, вторая 237–380 с — ответ по длине звука.
+    first = scribe(
+        (0.0, 4.0, 0, "Hello, team."), (20.0, 26.0, 1, "Let us start."),
+        (240.0, 250.0, 0, "Next point."), (300.0, 310.0, 1, "Agreed."),
+    )  # fmt: skip
+    second = scribe(
+        (3.0, 13.0, 5, "Next point."), (63.0, 73.0, 2, "Agreed."), (100.0, 105.0, 2, "Thanks."),
+    )  # fmt: skip
+    recording_bench.ai.openrouter.respond(TRANSCRIPTIONS, by_length(250.0, second, first))
+
+    started = await imported(
+        recording_bench, owner, await recording_bench.upload(owner, video, "video/mp4")
+    )
+    await recording_bench.drive()
+
+    run, meeting = await run_and_meeting(recording_bench, owner, started)
+    raw = await raw_of(recording_bench, run)
+    lines, speakers = await lines_and_speakers(recording_bench, owner, meeting)
+    cut = raw["parts"][1]["start_ms"]
+    assert RunState(run.state) is RunState.SUCCEEDED
+    assert abs(cut - 297_000) < 1_500
+    assert [(p["start_ms"], p["end_ms"]) for p in raw["parts"]] == [
+        (0, cut), (cut, run.audio_duration_ms),
+    ]  # fmt: skip
+    assert raw["parts"][1]["segments"][0]["start_ms"] == cut - 60_000 + 3_000
+    assert [(text, speaker) for _, text, speaker in lines] == [
+        ("Hello, team.", 0), ("Let us start.", 1), ("Next point.", 0), ("Agreed.", 1),
+        ("Thanks.", 1),
+    ]  # fmt: skip
+    assert [(idx, role) for idx, role, _ in speakers] == [(0, "numbered"), (1, "numbered")]
 
 
 async def test_a_recording_longer_than_the_minutes_left_fails_before_any_paid_call(

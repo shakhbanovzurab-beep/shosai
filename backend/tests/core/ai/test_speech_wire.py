@@ -1,12 +1,15 @@
-"""The speech answers parsed without a network: usage, segments and speaker turns."""
+"""The speech answers parsed without a network: usage, segments and speakers from words."""
 
 from decimal import Decimal
 
 import pytest
 
 from shosai.core.ai.adapters.audio_formats import audio_format
-from shosai.core.ai.adapters.openrouter_audio import segments_of, transcription_usage
-from shosai.core.ai.adapters.pyannote import turns_of
+from shosai.core.ai.adapters.openrouter_audio import (
+    segments_of,
+    speaker_segments,
+    transcription_usage,
+)
 from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.results import Unit, Usage
 
@@ -36,29 +39,53 @@ def test_a_malformed_segment_is_a_provider_error(segments: object) -> None:
     assert failed.value.failure is AiFailure.PROVIDER_ERROR
 
 
+def word(text: str, start: float, end: float, speaker: int | None) -> dict[str, object]:
+    """A word as Scribe answers it through OpenRouter."""
+    return {"word": text, "start": start, "end": end, "speaker": speaker}
+
+
+def test_a_voice_s_words_are_one_segment_until_another_voice_or_a_pause() -> None:
+    words = [
+        word("Да,", 0.0, 0.3, 0), word("согласен.", 0.35, 0.9, 0), word("Хорошо.", 1.0, 1.4, 1),
+        word("Тогда", 1.5, 1.8, 1), word("завтра.", 3.0, 3.5, 1), word(" ", 3.5, 3.6, None),
+    ]  # fmt: skip
+
+    segments = speaker_segments("Да, согласен. Хорошо. Тогда завтра.", words)
+
+    assert [(s.start_ms, s.end_ms, s.text, s.speaker) for s in segments] == [
+        (0, 900, "Да, согласен.", 0), (1000, 1800, "Хорошо. Тогда", 1), (3000, 3500, "завтра.", 1),
+    ]  # fmt: skip
+
+
+def test_a_script_without_spaces_keeps_the_answer_s_own_spacing() -> None:
+    words = [word("你", 0.0, 0.1, 0), word("好", 0.1, 0.2, 0), word("。", 0.2, 0.2, 0),
+             word("再", 0.3, 0.4, 0), word("见", 0.4, 0.5, 0)]  # fmt: skip
+
+    [segment] = speaker_segments("你好。 再见", words)
+
+    assert segment.text == "你好。 再见"
+
+
+def test_a_word_missing_from_the_text_is_joined_by_spaces() -> None:
+    segments = speaker_segments("Hello", [word("Hello", 0, 0.5, 0), word("there", 0.6, 1, 1)])
+
+    assert [s.text for s in segments] == ["Hello", "there"]
+
+
+@pytest.mark.parametrize("words", [None, [], [word("Hi", 0, 1, None)]])
+def test_words_without_speakers_give_no_speaker_segments(words: object) -> None:
+    assert speaker_segments("Hi", words) == ()
+
+
 @pytest.mark.parametrize(
-    "job",
-    [
-        {},
-        {"output": {"diarization": "none"}},
-        {"output": {"diarization": [{"speaker": "", "start": 0, "end": 1}]}},
-        {"output": {"diarization": [{"speaker": "A", "start": 2, "end": 1}]}},
-    ],
+    "words",
+    [[{"word": "Hi", "start": 2, "end": 1, "speaker": 0}], [{"start": 0, "end": 1}], [None]],
 )
-def test_a_malformed_job_output_is_a_provider_error(job: dict[str, object]) -> None:
+def test_a_malformed_word_is_a_provider_error(words: list[object]) -> None:
     with pytest.raises(AiCallError) as failed:
-        turns_of(job)
+        speaker_segments("Hi", words)
 
     assert failed.value.failure is AiFailure.PROVIDER_ERROR
-
-
-def test_turns_are_ordered_by_time_before_speakers_are_numbered() -> None:
-    job = {"output": {"diarization": [
-        {"speaker": "B", "start": 5.0, "end": 6.0},
-        {"speaker": "A", "start": 1.0, "end": 2.0},
-    ]}}  # fmt: skip
-
-    assert [(t.start_ms, t.speaker) for t in turns_of(job)] == [(1000, 0), (5000, 1)]
 
 
 @pytest.mark.parametrize(

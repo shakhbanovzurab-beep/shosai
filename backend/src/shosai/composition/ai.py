@@ -24,13 +24,6 @@ from shosai.core.ai.adapters.gemini_live import GEMINI_API, GeminiLive, gemini_c
 from shosai.core.ai.adapters.mistral_ocr import MISTRAL_API, MistralOcr, mistral_client
 from shosai.core.ai.adapters.openai_realtime import OPENAI_REALTIME, OpenAiRealtime
 from shosai.core.ai.adapters.openrouter import OPENROUTER_API, OpenRouter, openrouter_client
-from shosai.core.ai.adapters.pyannote import (
-    PYANNOTE_API,
-    JobPolling,
-    Pyannote,
-    pyannote_client,
-    upload_client,
-)
 from shosai.core.ai.admission import Admission, AiClients
 from shosai.core.ai.calls import Provider
 from shosai.core.ai.costs.billing import BillingMarks
@@ -112,7 +105,6 @@ def resilience(ai: AiSettings, dependencies: AiDependencies) -> Resilience:
     metrics = ResilienceMetrics(dependencies.registry)
     limits = {
         Provider.OPENROUTER: ai.openrouter_slots,
-        Provider.PYANNOTE: ai.pyannote_slots,
         Provider.MISTRAL: ai.mistral_slots,
         Provider.OPENAI: ai.openai_realtime_slots,
         Provider.GOOGLE: ai.google_live_slots,
@@ -162,24 +154,11 @@ def open_clients(settings: Settings, stack: AsyncExitStack) -> AiClients:
         (OPENROUTER_API, openrouter_client),
         stack,
     )
-    pyannote = provider_client(
-        "pyannote",
-        ai.pyannote_api_key,
-        ai.pyannote_base_url,
-        (PYANNOTE_API, pyannote_client),
-        stack,
-    )
     mistral = provider_client(
         "mistral", ai.mistral_api_key, ai.mistral_base_url, (MISTRAL_API, mistral_client), stack
     )
-    diarizer = None
-    if pyannote is not None:
-        uploads = upload_client()
-        stack.push_async_callback(uploads.aclose)
-        diarizer = Pyannote(pyannote, uploads, JobPolling())
     return AiClients(
         openrouter=OpenRouter(openrouter) if openrouter is not None else None,
-        pyannote=diarizer,
         openai_realtime=realtime_client(ai),
         gemini_live=gemini_live(ai, stack),
         mistral=MistralOcr(mistral) if mistral is not None else None,

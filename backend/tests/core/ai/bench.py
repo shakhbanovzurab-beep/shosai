@@ -18,7 +18,6 @@ from shosai.core.ai.adapters.gemini_live import GeminiLive
 from shosai.core.ai.adapters.mistral_ocr import MistralOcr
 from shosai.core.ai.adapters.openai_realtime import OpenAiRealtime
 from shosai.core.ai.adapters.openrouter import OpenRouter
-from shosai.core.ai.adapters.pyannote import JobPolling, Pyannote
 from shosai.core.ai.admission import Admission, AiClients
 from shosai.core.ai.calls import (
     CallClass,
@@ -65,7 +64,6 @@ from shosai.core.tasks.payloads import TaskPayload
 from tests.core.kv.outages import closed_port, redis_url
 from tests.doubles.business_calendar import MOSCOW
 from tests.doubles.openrouter import ScriptedOpenRouter
-from tests.doubles.pyannote import ScriptedPyannote
 
 USER_ID = uuid.UUID("0190f0f0-0000-7000-8000-0000000000a1")
 ORG_ID = uuid.UUID("0190f0f0-0000-7000-8000-0000000000b1")
@@ -144,7 +142,6 @@ class AiBench:
 
     providers: AiProviders
     openrouter: ScriptedOpenRouter
-    pyannote: ScriptedPyannote
     minutes: MinuteRows
     clock: ManualClock
     settlement: RecordingSettlement
@@ -220,13 +217,9 @@ def ai_bench(
     recorder = CallRecorder(writer, ExchangeRates(transactions, registry), metrics, marks)
     clock = ManualClock()
     minutes = MinuteRows(recorder, clock=clock)
-    scripted, diarizer = ScriptedOpenRouter(), ScriptedPyannote()
-    polling = JobPolling(patience=120.0, clock=clock, sleep=clock.sleep)
+    scripted = ScriptedOpenRouter()
     clients = AiClients(
         openrouter=OpenRouter(doubles.openrouter or scripted.client()) if enabled else None,
-        pyannote=(
-            Pyannote(diarizer.api_client(), diarizer.upload_client(), polling) if enabled else None
-        ),
         openai_realtime=doubles.realtime,
         gemini_live=doubles.gemini,
         mistral=MistralOcr(doubles.mistral) if enabled and doubles.mistral else None,
@@ -249,9 +242,7 @@ def ai_bench(
         StreamCap(valkey, cap=2, deadline=COUNTING_DEADLINE),
     )
     providers = AiProviders(clients, runner, sessions, limits)
-    return AiBench(
-        providers, scripted, diarizer, minutes, clock, settlement, sender, writer, registry, spans
-    )
+    return AiBench(providers, scripted, minutes, clock, settlement, sender, writer, registry, spans)
 
 
 async def set_prices(transactions: HomeTransactions, model: ModelRef, **prices: str) -> None:

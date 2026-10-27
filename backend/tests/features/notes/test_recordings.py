@@ -32,7 +32,7 @@ from tests.features.notes.recording_bench import LIMITS, VIDEO_SECONDS
     st.integers(min_value=1, max_value=RECORDING_MAX_MS),
     st.lists(st.integers(min_value=0, max_value=RECORDING_MAX_MS), max_size=200),
 )
-def test_parts_cover_the_recording_in_order_none_over_five_minutes(
+def test_parts_cover_the_recording_in_order_none_over_ninety_minutes(
     duration_ms: int, silences: list[int]
 ) -> None:
     parts = parts_of(duration_ms, silences)
@@ -45,16 +45,23 @@ def test_parts_cover_the_recording_in_order_none_over_five_minutes(
     assert parts[-1].duration_ms <= PART_MAX_MS
 
 
-def test_a_part_ends_in_the_latest_pause_of_its_five_minutes() -> None:
-    assert parts_of(420_000, [30_000, 200_000, 290_000, 310_000]) == [
-        Part(0, 290_000), Part(290_000, 420_000),
+def test_a_part_ends_in_the_latest_pause_of_its_ninety_minutes() -> None:
+    minute = 60_000
+    assert parts_of(100 * minute, [30 * minute, 85 * minute, 91 * minute]) == [
+        Part(0, 85 * minute), Part(85 * minute, 100 * minute),
     ]  # fmt: skip
-    assert parts_of(700_000, []) == [
-        Part(0, 300_000),
-        Part(300_000, 600_000),
-        Part(600_000, 700_000),
-    ]
+    assert parts_of(200 * minute, []) == [
+        Part(0, 90 * minute), Part(90 * minute, 180 * minute), Part(180 * minute, 200 * minute),
+    ]  # fmt: skip
+    assert parts_of(90 * minute, []) == [Part(0, 90 * minute)]
     assert parts_of(0, [5]) == []
+
+
+def test_a_part_is_heard_a_minute_past_each_cut_within_the_recording() -> None:
+    minute = 60_000
+    assert Part(0, 90 * minute).heard(200 * minute) == Part(0, 91 * minute)
+    assert Part(90 * minute, 180 * minute).heard(200 * minute) == Part(89 * minute, 181 * minute)
+    assert Part(180 * minute, 200 * minute).heard(200 * minute) == Part(179 * minute, 200 * minute)
 
 
 def test_only_allowed_containers_and_codecs_are_read_and_six_hours_is_the_most() -> None:

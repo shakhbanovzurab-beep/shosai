@@ -1,4 +1,4 @@
-"""Diarization and alignment of a recording's run (step 10, §3.4 flow 5, MT-D3)."""
+"""Alignment of a recording's run: the voices the transcription marked (steps 10, 29, MT-D3)."""
 
 import json
 import uuid
@@ -12,17 +12,10 @@ from sqlalchemy import select, update
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.notes.application.align_stage import AlignStage
-from shosai.features.notes.application.diarize_stage import turns_key
 from shosai.features.notes.application.pipeline import StageFailedError, StageWork
-from shosai.features.notes.application.run_rows import ensure_run, progress_of
+from shosai.features.notes.application.run_rows import ensure_run
 from shosai.features.notes.application.transcribe_stage import raw_key
-from shosai.features.notes.domain.runs import (
-    RunSource,
-    RunState,
-    Stage,
-    StageStatus,
-    idempotency_key,
-)
+from shosai.features.notes.domain.runs import RunSource, RunState, Stage, idempotency_key
 from shosai.features.notes.domain.transcript_archive import archive_key
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
@@ -31,7 +24,8 @@ from shosai.features.notes.infrastructure.meeting_records import (
 )
 from shosai.features.notes.infrastructure.run_records import RunRecord
 from tests.features.notes.recording_bench import RecordingBench
-from tests.features.notes.test_imports import TRANSCRIPTIONS, heard, imported, run_and_meeting
+from tests.features.notes.scribe_answers import unmarked
+from tests.features.notes.test_imports import TRANSCRIPTIONS, imported, run_and_meeting
 
 type Json = dict[str, Any]
 ME, THEM = 0, 1
@@ -41,10 +35,10 @@ async def recorded(
     bench: RecordingBench,
     owner: uuid.UUID,
     live: list[tuple[int, int, int, str]],
-    recording: tuple[int, int, Json, list[Json]],
+    recording: tuple[int, int, list[Json]],
 ) -> StageWork:
-    """A live meeting with its lines and a desktop recording's run, transcribed and diarized."""
-    lead_ms, duration_ms, raw, turns = recording
+    """A live meeting with its lines and a desktop recording's run, transcribed in one part."""
+    lead_ms, duration_ms, segments = recording
     started = bench.clock.now - timedelta(hours=2)
     async with bench.homes.transactions.begin(TenancyScope(Home.EU, owner)) as session:
         meeting = MeetingRecord(
@@ -68,11 +62,11 @@ async def recorded(
         run = await session.get(RunRecord, run_id)
         assert run is not None
         run.audio_lead_ms, run.audio_duration_ms = lead_ms, duration_ms
-        run.raw_transcript_key, run.turns_key = raw_key(run_id), turns_key(run_id)
-    objects = bench.storage[Home.EU]
-    kind = "application/json"
-    await objects.put(raw_key(run_id), json.dumps(raw).encode(), content_type=kind)
-    await objects.put(turns_key(run_id), json.dumps({"turns": turns}).encode(), content_type=kind)
+        run.raw_transcript_key = raw_key(run_id)
+    raw = {"parts": [{"start_ms": 0, "end_ms": duration_ms, "segments": segments}]}
+    await bench.storage[Home.EU].put(
+        raw_key(run_id), json.dumps(raw).encode(), content_type="application/json"
+    )
     scope = TenancyScope(Home.EU, owner)
     return StageWork(scope, run_id, meeting.id, RunSource.RECORDING, Stage.ALIGN, 1)
 
@@ -103,38 +97,33 @@ async def transcript(
     return found, voices, meeting.line_count
 
 
-def segment(start: float, end: float, text: str) -> Json:
-    return {"start_ms": int(start * 1000), "end_ms": int(end * 1000), "text": text}
+def segment(start: float, end: float, text: str, speaker: int | None = None) -> Json:
+    return {
+        "start_ms": int(start * 1000), "end_ms": int(end * 1000), "text": text,
+        "speaker": speaker,
+    }  # fmt: skip
 
 
-def turn(start: float, end: float, speaker: int) -> Json:
-    return {"start_ms": int(start * 1000), "end_ms": int(end * 1000), "speaker": speaker}
-
-
-async def test_a_failed_diarization_leaves_a_transcript_without_speakers_and_a_partial_run(
+async def test_a_model_that_marks_no_speakers_leaves_lines_without_them_and_the_run_succeeds(
     recording_bench: RecordingBench, video: Path
 ) -> None:
     owner = uuid.uuid4()
-    for _ in range(2):
-        recording_bench.ai.openrouter.answer(TRANSCRIPTIONS, heard())
-    recording_bench.ai.pyannote.failing["diarize"] = 500
+    recording_bench.ai.openrouter.answer(
+        TRANSCRIPTIONS, unmarked((0.0, 4.0, "Hello, team."), (20.0, 26.0, "Let us start."))
+    )
 
     started = await imported(
         recording_bench, owner, await recording_bench.upload(owner, video, "video/mp4")
     )
-    ran = await recording_bench.drive()
+    await recording_bench.drive()
 
     run, meeting = await run_and_meeting(recording_bench, owner, started)
     scope = TenancyScope(Home.EU, owner)
     work = StageWork(scope, run.id, meeting.id, RunSource.IMPORT, Stage.ALIGN, 1)
     lines, speakers, count = await transcript(recording_bench, work)
-    diarize = progress_of(run.stage_state)[Stage.DIARIZE]
-    assert ran.count(Stage.DIARIZE) == 3
-    assert (diarize.status, diarize.error_code) == (StageStatus.FAILED, "provider_error")
-    assert RunState(run.state) is RunState.PARTIALLY_COMPLETED
-    assert (len(lines), count, speakers) == (4, 4, [])
+    assert RunState(run.state) is RunState.SUCCEEDED
+    assert (len(lines), count, speakers) == (2, 2, [])
     assert {speaker for _, _, speaker, _, _ in lines} == {None}
-    assert run.turns_key is None
 
 
 async def test_four_voices_give_four_numbered_speakers_and_lines_of_about_ten_seconds(
@@ -143,14 +132,11 @@ async def test_four_voices_give_four_numbered_speakers_and_lines_of_about_ten_se
     owner = uuid.uuid4()
     voices = [(0, 2), (30, 0), (60, 3), (90, 1)]
     segments = [
-        segment(begin + 5 * n, begin + 5 * n + 5, f"Voice {voice}, sentence {n}.")
+        segment(begin + 5 * n, begin + 5 * n + 5, f"Voice {voice}, sentence {n}.", voice)
         for begin, voice in voices
         for n in range(5)
     ]
-    turns = [turn(begin, begin + 25, voice) for begin, voice in voices]
-    work = await recorded(
-        recording_bench, owner, [], (0, 120_000, {"parts": [{"segments": segments}]}, turns)
-    )
+    work = await recorded(recording_bench, owner, [], (0, 120_000, segments))
 
     await AlignStage(recording_bench.homes.transactions, recording_bench.storage).run(work)
 
@@ -176,12 +162,9 @@ async def test_a_desktop_recording_replaces_the_live_lines_it_covers_and_finds_t
         (25_000, 8_000, THEM, "Live them."),
         (400_000, 5_000, THEM, "After the recording."),
     ]
-    segments = [segment(5, 13, "Recorded me."), segment(20, 28, "Recorded them.")]
-    turns = [turn(4, 14, 1), turn(19, 29, 0)]
+    segments = [segment(5, 13, "Recorded me.", 1), segment(20, 28, "Recorded them.", 0)]
     # Запись началась через 5 секунд после встречи: её время плюс 5 секунд — время встречи.
-    work = await recorded(
-        recording_bench, owner, live, (-5_000, 60_000, {"parts": [{"segments": segments}]}, turns)
-    )
+    work = await recorded(recording_bench, owner, live, (-5_000, 60_000, segments))
     stage = AlignStage(recording_bench.homes.transactions, recording_bench.storage)
 
     await stage.run(work)
@@ -207,9 +190,7 @@ async def test_a_recording_without_speech_keeps_the_live_lines_and_fails(
 ) -> None:
     owner = uuid.uuid4()
     live = [(10_000, 8_000, ME, "Live me.")]
-    work = await recorded(
-        recording_bench, owner, live, (0, 60_000, {"parts": [{"segments": []}]}, [])
-    )
+    work = await recorded(recording_bench, owner, live, (0, 60_000, []))
 
     with pytest.raises(StageFailedError) as failed:
         await AlignStage(recording_bench.homes.transactions, recording_bench.storage).run(work)
@@ -225,9 +206,7 @@ async def test_a_meeting_with_an_archived_transcript_takes_no_recording_lines(
     owner = uuid.uuid4()
     live = [(10_000, 8_000, ME, "Live me.")]
     segments = [segment(5, 13, "Recorded me.")]
-    work = await recorded(
-        recording_bench, owner, live, (0, 60_000, {"parts": [{"segments": segments}]}, [])
-    )
+    work = await recorded(recording_bench, owner, live, (0, 60_000, segments))
     async with recording_bench.homes.transactions.begin(work.scope) as session:
         await session.execute(
             update(MeetingRecord)

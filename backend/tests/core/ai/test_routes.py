@@ -10,10 +10,8 @@ from redis.asyncio import Redis
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRef, ModelRoute, Provider
 from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.requests import (
-    AudioFile,
     ChatMessage,
     ChatRequest,
-    DiarizationRequest,
     Role,
     TextPart,
 )
@@ -21,6 +19,7 @@ from shosai.core.ai.resilience.breakers import FAILURES_TO_OPEN
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from tests.core.ai.bench import ORG_ID, USER_ID, AiBench, Doubles, ai_bench, context, set_prices
+from tests.core.ai.test_decisions import SOON, TICKET, delivered, recorded
 from tests.doubles.openrouter import chat_answer, stream_answer, usage
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
@@ -166,24 +165,26 @@ async def test_a_paid_failure_is_recorded_apart_and_the_next_model_answers(
     homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis
 ) -> None:
     first, second = (
-        ModelRef(Provider.PYANNOTE, "precision-3"),
-        ModelRef(Provider.PYANNOTE, "precision-2"),
+        ModelRef(Provider.OPENROUTER, "typesafe/jev-1.13"),
+        ModelRef(Provider.OPENROUTER, "typesafe/jev-1.12"),
     )
     for model in (first, second):
-        await set_prices(homes.transactions, model, audio_second="0.00003")
+        await set_prices(homes.transactions, model, input_token="0.000000042", output_token="0")
     bench = ai_bench(homes.transactions, doubles=Doubles(valkey=valkey))
-    bench.pyannote.statuses = ["failed", "succeeded"]
-    bench.pyannote.turns = [{"speaker": "A", "start": 0.0, "end": 1.0}]
-    audio = AudioFile(b"probe", "audio/wav", duration_seconds=10)
+    broken = recorded()
+    broken["answers"]["team"]["choice"] = "legal"
+    for answer in (broken, recorded()):
+        bench.openrouter.answer("alpha/decisions", httpx.Response(200, json=answer))
 
-    result = await bench.providers.diarize(
-        context("meeting:3:diarize"), ModelRoute(first, (second,)), DiarizationRequest(audio)
+    decision = await bench.providers.decide(
+        context("ticket:3:decide", deadline=SOON), ModelRoute(first, (second,)), TICKET
     )
+    await delivered(bench)
 
-    assert [turn.speaker for turn in result.turns] == [0]
+    assert decision.model == second
     assert [(row["effect_key"], row["model"], row["outcome"]) for row in await rows(run_slot)] == [
-        ("meeting:3:diarize:failed:0", "precision-3", "failed"),
-        ("meeting:3:diarize", "precision-2", "ok"),
+        ("ticket:3:decide:failed:0", "typesafe/jev-1.13", "failed"),
+        ("ticket:3:decide", "typesafe/jev-1.12", "ok"),
     ]
 
 

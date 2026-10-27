@@ -22,7 +22,6 @@ from shosai.core.observability.tiles import Tile
 OTHER_PROVIDERS = {
     "openai": "OpenAI",
     "google": "Google",
-    "pyannote": "pyannote",
     "mistral": "Mistral",
 }
 

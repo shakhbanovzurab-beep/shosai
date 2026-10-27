@@ -163,7 +163,7 @@ async def test_the_semaphore_holds_its_limit_across_two_processes(valkey: Redis)
             with pytest.raises(AiCallError) as call:
                 async with second.held(Provider.OPENROUTER, CallClass.ESSENTIAL, session=False):
                     pytest.fail("сверх предела")
-            async with second.held(Provider.PYANNOTE, CallClass.STANDARD, session=True):
+            async with second.held(Provider.MISTRAL, CallClass.STANDARD, session=True):
                 other_provider = True
         async with second.held(Provider.OPENROUTER, CallClass.STANDARD, session=True):
             freed = True

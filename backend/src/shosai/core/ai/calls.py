@@ -51,9 +51,8 @@ class PlatformAccount(StrEnum):
 class Provider(StrEnum):
     """The AI providers the port reaches (§18.2)."""
 
-    # Чат, картинки, эмбеддинги и расшифровка записей; разметку говорящих делает pyannote.
+    # Чат, картинки, эмбеддинги и расшифровка записей с говорящими (ADR 0073).
     OPENROUTER = "openrouter"
-    PYANNOTE = "pyannote"
     # Потоковая расшифровка живой встречи моделями Realtime (ADR 0043).
     OPENAI = "openai"
     # Gemini Live: синхронный перевод и голосовой ассистент.

@@ -14,7 +14,6 @@ from shosai.core.ai.adapters.gemini_live import GeminiLive
 from shosai.core.ai.adapters.mistral_ocr import MistralOcr
 from shosai.core.ai.adapters.openai_realtime import OpenAiRealtime
 from shosai.core.ai.adapters.openrouter import OpenRouter
-from shosai.core.ai.adapters.pyannote import Pyannote
 from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute, Provider
 from shosai.core.ai.costs.amounts import is_priced
 from shosai.core.ai.errors import AiCallError, AiFailure
@@ -37,7 +36,6 @@ NEEDED_UNITS: Final = MappingProxyType(
         # Картинка — по цене за штуку или за токены созданной картинки (прайс OpenRouter).
         "image": (frozenset({Unit.IMAGE}), frozenset({Unit.OUTPUT_IMAGE})),
         "transcribe": (TOKENS, SECONDS),
-        "diarize": (SECONDS,),
         "live_transcription": (SECONDS, TOKENS, frozenset({Unit.INPUT_AUDIO, Unit.OUTPUT})),
         "live_translation": (SECONDS, SPOKEN),
         "voice": (SPOKEN | TOKENS,),
@@ -53,7 +51,6 @@ class AiClients:
     """The provider clients of the process; None when the provider has no key."""
 
     openrouter: OpenRouter | None
-    pyannote: Pyannote | None
     openai_realtime: OpenAiRealtime | None
     gemini_live: GeminiLive | None
     mistral: MistralOcr | None

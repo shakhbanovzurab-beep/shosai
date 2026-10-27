@@ -20,7 +20,6 @@ from shosai.features.notes.domain.native_import import (
     stored_name,
 )
 from shosai.features.notes.domain.runs import (
-    NON_CRITICAL,
     STAGES,
     RunSource,
     RunState,
@@ -53,7 +52,7 @@ def test_the_draft_s_names_are_taken_and_kept_by_their_last_segment() -> None:
     assert len(stored_name("a" * 600 + ".mp3")) == FILENAME_MAX
 
 
-def test_a_job_reads_its_run_through_the_five_stages() -> None:
+def test_a_job_reads_its_run_through_its_stages() -> None:
     def at(**states: StageStatus) -> dict[Stage, StageRecord]:
         return {Stage(name): StageRecord(status, 1) for name, status in states.items()}
 
@@ -61,16 +60,17 @@ def test_a_job_reads_its_run_through_the_five_stages() -> None:
     assert job_progress(RunState.PENDING, {}) == (JobStage.UPLOADING, 0.0)
     assert job_progress(RunState.RUNNING, at(intake=running)) == (JobStage.TRANSCRIBING, 0.0)
     assert job_progress(RunState.RUNNING, at(intake=done, transcribe=done)) == (
-        JobStage.TRANSCRIBING, 0.33,
+        JobStage.TRANSCRIBING, 0.4,
     )  # fmt: skip
-    four = at(intake=done, transcribe=done, diarize=StageStatus.FAILED, align=done)
-    assert job_progress(RunState.RUNNING, four) == (JobStage.ENHANCING, 0.67)
-    assert job_progress(RunState.PARTIALLY_COMPLETED, four) == (JobStage.READY, 1.0)
+    three = at(intake=done, transcribe=done, align=done)
+    assert job_progress(RunState.RUNNING, three) == (JobStage.ENHANCING, 0.6)
+    # Прогоны до ADR 0073, оставшиеся без говорящих, клиенту — готовы.
+    assert job_progress(RunState.PARTIALLY_COMPLETED, three) == (JobStage.READY, 1.0)
     failed = at(intake=StageStatus.FAILED)
-    assert job_progress(RunState.FAILED, failed) == (JobStage.FAILED, 0.17)
+    assert job_progress(RunState.FAILED, failed) == (JobStage.FAILED, 0.2)
 
 
-@given(st.lists(st.tuples(st.integers(0, 2), st.booleans()), min_size=6, max_size=6))
+@given(st.lists(st.tuples(st.integers(0, 2), st.booleans()), min_size=5, max_size=5))
 def test_a_job_s_stage_and_progress_never_go_back(attempts: list[tuple[int, bool]]) -> None:
     progress: dict[Stage, StageRecord] = {}
     seen = [job_progress(RunState.PENDING, progress)]
@@ -87,7 +87,7 @@ def test_a_job_s_stage_and_progress_never_go_back(attempts: list[tuple[int, bool
         ended = outcome(RunSource.IMPORT, progress)
         state = ended or RunState.RUNNING
         seen.append(job_progress(state, progress))
-        if fails and stage not in NON_CRITICAL:
+        if fails:
             break
 
     for before, after in pairwise(seen):

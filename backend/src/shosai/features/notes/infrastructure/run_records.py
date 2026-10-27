@@ -84,7 +84,6 @@ class RunRecord(ModelBase):
     audio_lead_ms: Mapped[int | None] = mapped_column(Integer)
     audio_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     raw_transcript_key: Mapped[str | None] = mapped_column(Text)
-    turns_key: Mapped[str | None] = mapped_column(Text)
     # Имя файла импорта, как его прислали: его показывает задача импорта нативных клиентов.
     source_filename: Mapped[str | None] = mapped_column(Text)
     error_code: Mapped[str | None] = mapped_column(Text)

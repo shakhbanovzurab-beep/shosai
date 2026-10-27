@@ -11,7 +11,6 @@ from shosai.features.notes.domain.runs import (
     BACKOFF,
     MAX_ATTEMPTS,
     NEVER_RETRIED,
-    NON_CRITICAL,
     RUN_MOVES,
     STAGE_MOVES,
     STAGES,
@@ -78,14 +77,14 @@ def test_a_failure_comes_after_an_attempt() -> None:
 
 
 @given(state=progresses())
-def test_the_outcome_follows_the_critical_stages(
+def test_the_outcome_follows_the_stages(
     state: tuple[RunSource, dict[Stage, StageRecord]],
 ) -> None:
     source, progress = state
     failed = {s for s, r in progress.items() if r.status is StageStatus.FAILED}
     result = outcome(source, progress)
 
-    if failed - NON_CRITICAL:
+    if failed:
         assert result is RunState.FAILED
     elif any(r.status is StageStatus.PENDING for r in progress.values()):
         stage = next_stage(source, progress)
@@ -93,7 +92,7 @@ def test_the_outcome_follows_the_critical_stages(
         assert stage is not None
         assert progress[stage].status is StageStatus.PENDING
     else:
-        assert result is (RunState.PARTIALLY_COMPLETED if failed else RunState.SUCCEEDED)
+        assert result is RunState.SUCCEEDED
 
 
 @given(source=sources)
@@ -108,14 +107,17 @@ def test_a_new_run_starts_at_its_first_stage_and_skips_finished_ones(source: Run
     assert outcome(source, progress) is RunState.SUCCEEDED
 
 
-def test_a_failed_diarization_leaves_a_partial_run() -> None:
+def test_a_recording_s_speakers_come_with_its_text_and_any_failure_fails_the_run() -> None:
     progress = initial_progress(RunSource.IMPORT)
     for stage in STAGES[RunSource.IMPORT]:
         progress[stage] = StageRecord(
-            StageStatus.FAILED if stage is Stage.DIARIZE else StageStatus.DONE, attempts=1
+            StageStatus.FAILED if stage is Stage.ALIGN else StageStatus.DONE, attempts=1
         )
 
-    assert outcome(RunSource.IMPORT, progress) is RunState.PARTIALLY_COMPLETED
+    assert STAGES[RunSource.IMPORT] == STAGES[RunSource.RECORDING] == (
+        Stage.INTAKE, Stage.TRANSCRIBE, Stage.ALIGN, Stage.FINDINGS, Stage.WRITE_UP,
+    )  # fmt: skip
+    assert outcome(RunSource.IMPORT, progress) is RunState.FAILED
 
 
 def test_one_live_run_per_meeting_and_keys_for_the_rest() -> None:

@@ -205,14 +205,14 @@ async def test_a_killed_worker_s_stage_is_taken_over_from_the_database(
     assert (await pipeline.state(payload))[1][Stage.FINDINGS] is StageStatus.DONE
 
 
-async def test_a_code_retrying_cannot_cure_fails_at_once_and_a_non_critical_one_lets_the_run_go_on(
+async def test_a_code_retrying_cannot_cure_fails_at_once_and_three_failures_fail_the_run(
     pipeline: Pipeline,
 ) -> None:
     refused = await pipeline.run(RunSource.LIVE)
     pipeline.handlers[Stage.FINDINGS].failures = ["consent_required"]
     await pipeline.engine.run_stage(refused)
     imported = await pipeline.run(RunSource.IMPORT)
-    pipeline.handlers[Stage.DIARIZE].failures = ["provider_error"] * 3
+    pipeline.handlers[Stage.TRANSCRIBE].failures = ["provider_error"] * 3
 
     payload = imported
     for _ in range(12):
@@ -225,9 +225,10 @@ async def test_a_code_retrying_cannot_cure_fails_at_once_and_a_non_critical_one_
 
     assert (await pipeline.state(refused))[0] is RunState.FAILED
     state, stages = await pipeline.state(imported)
-    assert state is RunState.PARTIALLY_COMPLETED
-    assert stages[Stage.DIARIZE] is StageStatus.FAILED
-    assert stages[Stage.WRITE_UP] is StageStatus.DONE
+    assert state is RunState.FAILED
+    assert stages[Stage.TRANSCRIBE] is StageStatus.FAILED
+    assert stages[Stage.WRITE_UP] is StageStatus.PENDING
+    assert pipeline.handlers[Stage.ALIGN].calls == []
 
 
 async def test_a_stage_without_a_handler_waits_and_nothing_is_sent(

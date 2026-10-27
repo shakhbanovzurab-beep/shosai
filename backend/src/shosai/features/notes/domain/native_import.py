@@ -31,7 +31,7 @@ MEDIA_TYPES: Final[Mapping[str, str]] = {
     ".m4a": "audio/mp4", ".mp4": "audio/mp4", ".aac": "audio/aac", ".wav": "audio/wav",
     ".ogg": "audio/ogg", ".oga": "audio/ogg", ".webm": "audio/webm", ".flac": "audio/flac",
 }  # fmt: skip
-TRANSCRIBING_STAGES: Final = frozenset({Stage.INTAKE, Stage.TRANSCRIBE, Stage.DIARIZE, Stage.ALIGN})
+TRANSCRIBING_STAGES: Final = frozenset({Stage.INTAKE, Stage.TRANSCRIBE, Stage.ALIGN})
 FINISHED: Final = frozenset({StageStatus.DONE, StageStatus.FAILED})
 
 

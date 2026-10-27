@@ -1,10 +1,10 @@
-"""The pipeline's stage handlers this process runs, from its settings (plan steps 6, 9a, 10).
+"""The pipeline's stage handlers this process runs, from its settings (plan steps 6, 9a, 10, 29).
 
 The findings and write-up stages need the notes' model; the recording's stages — intake,
-transcribe, diarize and align — need the transcription and diarization models and the
-tools — `ffprobe`, `ffmpeg` and `prlimit` — on the path (the runtime image has them). A
-stage without its handler waits for a process that has it, so a development machine
-without a model or the tools leaves runs pending.
+transcribe and align — need the transcription model, which marks the speakers too
+(ADR 0073), and the tools — `ffprobe`, `ffmpeg` and `prlimit` — on the path (the runtime
+image has them). A stage without its handler waits for a process that has it, so a
+development machine without a model or the tools leaves runs pending.
 """
 
 import shutil
@@ -15,7 +15,6 @@ import structlog
 from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
 from shosai.core.features import CoreServices
 from shosai.features.notes.application.align_stage import AlignStage
-from shosai.features.notes.application.diarize_stage import DiarizeStage
 from shosai.features.notes.application.findings_stage import FindingsStage
 from shosai.features.notes.application.intake_stage import IntakeStage
 from shosai.features.notes.application.notes_model import NotesModel
@@ -61,9 +60,9 @@ def notes_stages(services: CoreServices) -> dict[Stage, StageHandler]:
 
 
 def recording_stages(services: CoreServices) -> dict[Stage, StageHandler]:
-    """The recording's stages over the transcription and diarization models and the tools."""
+    """The recording's stages over the transcription model and the tools."""
     settings = services.settings.features.get(NotesSettings)
-    if not settings.notes_transcribe_model or not settings.notes_diarize_model:
+    if not settings.notes_transcribe_model:
         return {}
     missing = [tool for tool in TOOLS if shutil.which(tool) is None]
     if missing:
@@ -71,14 +70,12 @@ def recording_stages(services: CoreServices) -> dict[Stage, StageHandler]:
         return {}
     tools = MediaTools(MediaLimits(settings.notes_media_seconds, settings.notes_media_memory_mb))
     route = route_of(settings.notes_transcribe_model, settings.notes_transcribe_fallback_model)
-    diarizer = ModelRoute(ModelRef(Provider.PYANNOTE, settings.notes_diarize_model))
     transactions, ports, objects = services.transactions, services.ports, services.objects
     return {
         Stage.INTAKE: IntakeStage(transactions, (ports, objects, tools)),
         Stage.TRANSCRIBE: TranscribeStage(
             transactions, (ports, objects, tools), (services.ai, route)
         ),
-        Stage.DIARIZE: DiarizeStage(transactions, (ports, objects, tools), (services.ai, diarizer)),
         Stage.ALIGN: AlignStage(transactions, objects),
     }
 

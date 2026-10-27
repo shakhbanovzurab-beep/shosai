@@ -1,15 +1,15 @@
-"""The align stage of a recording's run (§3.4 flow 5, MT-D3): the transcript with speakers.
+"""The align stage of a recording's run (§3.4 flow 5, MT-D3, ADR 0073): lines with speakers.
 
-The raw transcript (O4) and, when diarization succeeded, the turns (O5) are read from the
-home's bucket; the speakers are laid over the segments and numbered by first appearance
-(`domain/alignment.py`), and the pieces shaped into lines of about 10 seconds. In one
-transaction under the meeting's lock the lines replace those the recording covers — live
-lines and an earlier recording's, over its span (`audio_lead_ms` early, its length) — with
-fresh `seq`s above the meeting's highest (inv-8); the meeting's speakers are written anew,
-the owner of a desktop recording found by overlap with the live "me" lines; the line count
-follows. Lines of the run already written mean the stage ran: nothing is written twice. A
-recording without speech replaces nothing and ends the run (`transcript_empty`); a meeting
-whose transcript is archived takes no lines (`transcript_archived`, step 20).
+The raw transcript (O4) is read from the home's bucket; the voices its parts marked are
+joined across the cuts and numbered by first appearance (`domain/alignment.py`), and the
+pieces shaped into lines of about 10 seconds. In one transaction under the meeting's lock
+the lines replace those the recording covers — live lines and an earlier recording's, over
+its span (`audio_lead_ms` early, its length) — with fresh `seq`s above the meeting's highest
+(inv-8); the meeting's speakers are written anew, the owner of a desktop recording found by
+overlap with the live "me" lines; the line count follows. Lines of the run already written
+mean the stage ran: nothing is written twice. A recording without speech replaces nothing
+and ends the run (`transcript_empty`); a meeting whose transcript is archived takes no
+lines (`transcript_archived`, step 20).
 """
 
 import json
@@ -28,7 +28,7 @@ from shosai.core.kernel.ids import new_id
 from shosai.core.storage.port import ObjectStorage
 from shosai.features.notes.application.pipeline import StageFailedError, StageWork
 from shosai.features.notes.application.stage_reads import present_meeting
-from shosai.features.notes.domain.alignment import Segment, Turn, aligned, covered, talk_times
+from shosai.features.notes.domain.alignment import aligned, covered, talk_times
 from shosai.features.notes.domain.lines import Line, shape_lines
 from shosai.features.notes.domain.transcript import (
     SIDE_SPEAKER,
@@ -37,6 +37,7 @@ from shosai.features.notes.domain.transcript import (
     fitted_text,
     fresh_seqs,
 )
+from shosai.features.notes.domain.voices import HeardPart, Segment
 from shosai.features.notes.infrastructure.media_tools import UNREADABLE
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
@@ -52,25 +53,36 @@ type Json = dict[str, Any]
 log = structlog.stdlib.get_logger(__name__)
 
 
-def segments_of(raw: Json) -> list[Segment]:
-    """The raw transcript's segments in time order; `media_unreadable` when it is malformed."""
+def parts_of(raw: Json) -> list[HeardPart]:
+    """The raw transcript's parts in order, each segment with its part's voice if marked.
+
+    A raw transcript kept before ADR 0073 has no voices; `media_unreadable` when it is
+    malformed.
+    """
     try:
-        found = [
-            Segment(int(s["start_ms"]), int(s["end_ms"]), str(s["text"]))
+        parts = [
+            HeardPart(
+                int(part["start_ms"]),
+                int(part["end_ms"]),
+                tuple(
+                    sorted(
+                        (_segment(s) for s in part["segments"]),
+                        key=lambda s: (s.start_ms, s.end_ms),
+                    )
+                ),
+            )
             for part in raw["parts"]
-            for s in part["segments"]
         ]
     except (KeyError, TypeError, ValueError) as error:
         raise StageFailedError(UNREADABLE) from error
-    return sorted(found, key=lambda s: (s.start_ms, s.end_ms))
+    return sorted(parts, key=lambda part: part.start_ms)
 
 
-def turns_of(raw: Json) -> list[Turn]:
-    """The kept speaker turns; `media_unreadable` when they are malformed."""
-    try:
-        return [Turn(int(t["start_ms"]), int(t["end_ms"]), int(t["speaker"])) for t in raw["turns"]]
-    except (KeyError, TypeError, ValueError) as error:
-        raise StageFailedError(UNREADABLE) from error
+def _segment(raw: Json) -> Segment:
+    speaker = raw.get("speaker")
+    if speaker is not None and (not isinstance(speaker, int) or speaker < 0):
+        raise ValueError(speaker)
+    return Segment(int(raw["start_ms"]), int(raw["end_ms"]), str(raw["text"]), speaker)
 
 
 class AlignStage:
@@ -94,8 +106,7 @@ class AlignStage:
         if run is None or run.raw_transcript_key is None or not run.audio_duration_ms:
             raise StageFailedError(UNREADABLE)
         home = work.scope.home
-        segments = segments_of(await self._read(home, run.raw_transcript_key))
-        turns = turns_of(await self._read(home, run.turns_key)) if run.turns_key else []
+        parts = parts_of(await self._read(home, run.raw_transcript_key))
         lead = run.audio_lead_ms or 0
         span = covered(lead, run.audio_duration_ms)
         async with self._transactions.begin(work.scope) as session:
@@ -110,7 +121,7 @@ class AlignStage:
             if await self._written(session, meeting, run.id):
                 return
             me = await self._me(session, meeting, span)
-            result = aligned(segments, turns, lead_ms=lead, me=me)
+            result = aligned(parts, lead_ms=lead, me=me)
             lines = shape_lines(result.pieces)
             if not lines:
                 # Запись без речи не стирает живых строк своего отрезка (MT-D3).

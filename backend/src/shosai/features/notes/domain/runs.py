@@ -5,8 +5,10 @@ recording, a rewrite of the notes — as a sequence of stages. A stage runs, the
 given back for another attempt after a pause, or fails for good: after three attempts on
 any path, or at once for a failure retrying cannot help (the draft retried empty
 recognition three times and paid each time, 30a31cc12). A finished stage is never run
-again. A run fails when a critical stage fails, is partially completed when only a
-non-critical one did, and never leaves a terminal state.
+again. A run fails when a stage fails for good, succeeds when every stage is done, and
+never leaves a terminal state. Every stage is critical since speakers come with the
+transcription (ADR 0073); runs that lost only their diarization before keep their
+`partially_completed`.
 """
 
 from collections.abc import Mapping
@@ -38,6 +40,7 @@ class RunState(StrEnum):
     PENDING = "pending"
     RUNNING = "running"
     SUCCEEDED = "succeeded"
+    # Только у прогонов до ADR 0073, оставшихся без разметки говорящих.
     PARTIALLY_COMPLETED = "partially_completed"
     FAILED = "failed"
 
@@ -47,7 +50,6 @@ class Stage(StrEnum):
 
     INTAKE = "intake"
     TRANSCRIBE = "transcribe"
-    DIARIZE = "diarize"
     ALIGN = "align"
     FINDINGS = "findings"
     WRITE_UP = "write_up"
@@ -65,15 +67,13 @@ class StageStatus(StrEnum):
 STAGES: Final[Mapping[RunSource, tuple[Stage, ...]]] = {
     RunSource.LIVE: (Stage.FINDINGS, Stage.WRITE_UP),
     RunSource.IMPORT: (
-        Stage.INTAKE, Stage.TRANSCRIBE, Stage.DIARIZE, Stage.ALIGN, Stage.FINDINGS, Stage.WRITE_UP,
+        Stage.INTAKE, Stage.TRANSCRIBE, Stage.ALIGN, Stage.FINDINGS, Stage.WRITE_UP,
     ),
     RunSource.RECORDING: (
-        Stage.INTAKE, Stage.TRANSCRIBE, Stage.DIARIZE, Stage.ALIGN, Stage.FINDINGS, Stage.WRITE_UP,
+        Stage.INTAKE, Stage.TRANSCRIBE, Stage.ALIGN, Stage.FINDINGS, Stage.WRITE_UP,
     ),
     RunSource.REGENERATE: (Stage.WRITE_UP,),
 }  # fmt: skip
-# Без разметки говорящих расшифровка остаётся; без остального заметок нет.
-NON_CRITICAL: Final = frozenset({Stage.DIARIZE})
 # Отказы, которые повтор не исправит.
 NEVER_RETRIED: Final = frozenset(
     {
@@ -137,8 +137,6 @@ def next_stage(source: RunSource, progress: Progress) -> Stage | None:
         if record.status is StageStatus.DONE:
             continue
         if record.status is StageStatus.FAILED:
-            if stage in NON_CRITICAL:
-                continue
             return None
         return stage
     return None
@@ -197,14 +195,12 @@ def after_failure(attempts: int, code: str) -> Retry | GiveUp:
 
 def outcome(source: RunSource, progress: Progress) -> RunState | None:
     """The run's terminal state once every stage has finished, else None."""
-    failed = [
-        s for s in STAGES[source] if progress.get(s, StageRecord()).status is StageStatus.FAILED
-    ]
-    if any(stage not in NON_CRITICAL for stage in failed):
+    statuses = [progress.get(s, StageRecord()).status for s in STAGES[source]]
+    if StageStatus.FAILED in statuses:
         return RunState.FAILED
     if next_stage(source, progress) is not None:
         return None
-    return RunState.PARTIALLY_COMPLETED if failed else RunState.SUCCEEDED
+    return RunState.SUCCEEDED
 
 
 def idempotency_key(

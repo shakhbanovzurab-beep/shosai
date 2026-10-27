@@ -1,6 +1,6 @@
 # ADR 0043 — Speech providers by task: OpenRouter transcribes, pyannote diarizes, no Deepgram
 
-- **Status:** accepted by the owner on 2026-10-13; amended the same day for live sessions (F6 step 3b).
+- **Status:** accepted by the owner on 2026-10-13; amended the same day for live sessions (F6 step 3b). Point 2 and the consequences about pyannote are superseded by [ADR 0073](0073-recordings-transcribed-with-speakers-by-scribe.md) (2026-10-27): recordings are transcribed with their speakers by `elevenlabs/scribe-v2` through OpenRouter, and pyannote is removed.
 - **Packages:** F6 (steps 3a and 3b), meetings.
 - **Context documents:** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §4.3, §18.2; [F6 plan](../plan/packages/F6-platform-services.md) §3.3 and step 3; [ADR 0034](0034-platform-services-in-core.md), [ADR 0035](0035-provider-cost-from-reported-usage-and-price-table.md).
 

@@ -37,6 +37,7 @@ from shosai.features.notes.module import NOTES
 from tests.features.notes.desktop_upload import audio, call, init, live_meeting, put_part
 from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.features.notes.recording_bench import RecordingBench, ffmpeg
+from tests.features.notes.scribe_answers import scribe
 from tests.features.notes.test_imports import TRANSCRIPTIONS
 from tests.harness.database_access import ProcessShape, open_database_access, slot_urls
 from tests.harness.run_slot import RunSlot
@@ -69,13 +70,8 @@ async def uploaded(
 
 
 def recognised() -> httpx.Response:
-    segments = [
-        {"start": 4.0, "end": 9.0, "text": "Recorded me."},
-        {"start": 21.0, "end": 29.0, "text": "Recorded them."},
-    ]
-    return httpx.Response(
-        200, json={"text": "", "segments": segments, "usage": {"seconds": 150.0, "cost": 0.001}}
-    )
+    """The recording heard by Scribe: the owner's voice, then another's."""
+    return scribe((4.0, 9.0, 5, "Recorded me."), (21.0, 29.0, 2, "Recorded them."))
 
 
 async def state_of(
@@ -114,10 +110,6 @@ async def test_a_longer_recording_counts_once_replaces_the_live_lines_and_finds_
                                    markdown="My own words.", version=3, client="macos",
                                    updated_at=recording_bench.clock.now))  # fmt: skip
     recording_bench.ai.openrouter.answer(TRANSCRIPTIONS, recognised())
-    recording_bench.ai.pyannote.turns = [
-        {"speaker": "SPEAKER_05", "start": 3.5, "end": 10.0},
-        {"speaker": "SPEAKER_02", "start": 20.0, "end": 30.0},
-    ]
 
     run_id = await uploaded(recording_bench, owner, meeting_id, call_recording)
     ran = await recording_bench.drive()
@@ -126,8 +118,7 @@ async def test_a_longer_recording_counts_once_replaces_the_live_lines_and_finds_
     async with recording_bench.homes.transactions.begin(TenancyScope(Home.EU, owner)) as session:
         own = await session.scalar(select(OwnNotesRecord.markdown).where(
             OwnNotesRecord.session_id == meeting_id))  # fmt: skip
-    assert ran == [Stage.INTAKE, Stage.TRANSCRIBE, Stage.DIARIZE, Stage.ALIGN,
-                   Stage.FINDINGS, Stage.WRITE_UP]  # fmt: skip
+    assert ran == [Stage.INTAKE, Stage.TRANSCRIBE, Stage.ALIGN, Stage.FINDINGS, Stage.WRITE_UP]
     assert RunState(run.state) is RunState.SUCCEEDED
     assert meeting.seconds == 150
     assert lines == [

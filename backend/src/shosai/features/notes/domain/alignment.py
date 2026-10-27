@@ -1,13 +1,12 @@
-"""Speakers laid over a recording's transcript (plan §3.4 flow 5, MT-D3, ADR 0043).
+"""Speakers laid over a recording's transcript (plan §3.4 flow 5, MT-D3, ADR 0073).
 
-The transcription's timed segments and pyannote's speaker turns are two answers about the
-same audio. A segment takes the speaker whose turns cover most of it, or none when no turn
-touches it; the speakers are then numbered again by their first appearance in the text, so
-a voice that carries no segment gets no number. A desktop recording starts `lead_ms` before
-the meeting did (the clients measure it): its time minus the lead is the meeting's, and
-speech recorded before the meeting's start is held at its start. Its owner is the speaker
-whose turns overlap most with the live "me" lines of the span it covers. Turns are looked
-up by 10-second buckets, so a six-hour recording aligns in linear time.
+The transcription marks a voice on each segment, part by part; the parts' voices are joined
+across their cuts (`domain/voices.py`) and numbered again by their first appearance in the
+text, so a voice that carries no segment gets no number. A desktop recording starts
+`lead_ms` before the meeting did (the clients measure it): its time minus the lead is the
+meeting's, and speech recorded before the meeting's start is held at its start. Its owner
+is the voice whose segments overlap most with the live "me" lines of the span it covers.
+Segments are looked up by 10-second buckets, so a six-hour recording aligns in linear time.
 """
 
 from collections import defaultdict
@@ -16,26 +15,9 @@ from dataclasses import dataclass
 from typing import Final
 
 from shosai.features.notes.domain.lines import Line, Piece
+from shosai.features.notes.domain.voices import HeardPart, Segment, joined, shared_ms
 
 BUCKET_MS: Final = 10_000
-
-
-@dataclass(frozen=True, slots=True)
-class Segment:
-    """A timed piece of the transcription, from the recording's start."""
-
-    start_ms: int
-    end_ms: int
-    text: str
-
-
-@dataclass(frozen=True, slots=True)
-class Turn:
-    """When one of pyannote's speakers spoke, from the recording's start."""
-
-    start_ms: int
-    end_ms: int
-    speaker: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -52,19 +34,14 @@ def covered(lead_ms: int, duration_ms: int) -> tuple[int, int]:
     return max(0, -lead_ms), max(0, duration_ms - lead_ms)
 
 
-def overlap(a: tuple[int, int], b: tuple[int, int]) -> int:
-    """How many milliseconds two spans share."""
-    return max(0, min(a[1], b[1]) - max(a[0], b[0]))
+class VoiceIndex:
+    """Segments with a voice by the 10-second buckets they touch."""
 
-
-class TurnIndex:
-    """Turns by the 10-second buckets they touch."""
-
-    def __init__(self, turns: Iterable[Turn]) -> None:
-        self._turns = tuple(turns)
+    def __init__(self, segments: Iterable[Segment]) -> None:
+        self._voiced = tuple(s for s in segments if s.speaker is not None)
         self._buckets: dict[int, list[int]] = defaultdict(list)
-        for number, turn in enumerate(self._turns):
-            for bucket in range(turn.start_ms // BUCKET_MS, turn.end_ms // BUCKET_MS + 1):
+        for number, segment in enumerate(self._voiced):
+            for bucket in range(segment.start_ms // BUCKET_MS, segment.end_ms // BUCKET_MS + 1):
                 self._buckets[bucket].append(number)
 
     def shares(self, span: tuple[int, int]) -> dict[int, int]:
@@ -75,52 +52,46 @@ class TurnIndex:
             for number in self._buckets.get(bucket, ()):
                 if number not in seen:
                     seen.add(number)
-                    turn = self._turns[number]
-                    shared[turn.speaker] += overlap(span, (turn.start_ms, turn.end_ms))
+                    segment = self._voiced[number]
+                    if segment.speaker is not None:
+                        shared[segment.speaker] += shared_ms(
+                            span, (segment.start_ms, segment.end_ms)
+                        )
         return {speaker: ms for speaker, ms in shared.items() if ms > 0}
 
 
-def speaker_of(index: TurnIndex, segment: Segment) -> int | None:
-    """The speaker covering most of the segment; the lowest number on a tie."""
-    shares = index.shares((segment.start_ms, segment.end_ms))
-    if not shares:
-        return None
-    return min(shares, key=lambda speaker: (-shares[speaker], speaker))
-
-
 def aligned(
-    segments: Sequence[Segment],
-    turns: Sequence[Turn],
+    parts: Sequence[HeardPart],
     *,
     lead_ms: int = 0,
     me: Sequence[tuple[int, int]] = (),
 ) -> Aligned:
-    """The segments as pieces of the meeting, the recording `lead_ms` early, with speakers.
+    """The parts' segments as pieces of the meeting, the recording `lead_ms` early, with speakers.
 
     `me` are the spans of the live "me" lines the recording covers, in the meeting's time.
     """
-    index = TurnIndex(turns)
-    heard = [speaker_of(index, segment) for segment in segments]
+    heard = [(start + lead_ms, end + lead_ms) for start, end in me]
+    segments = joined(parts, heard)
     numbers: dict[int, int] = {}
-    for speaker in heard:
-        if speaker is not None and speaker not in numbers:
-            numbers[speaker] = len(numbers)
+    for segment in segments:
+        if segment.speaker is not None and segment.speaker not in numbers:
+            numbers[segment.speaker] = len(numbers)
     pieces = tuple(
         Piece(
             max(0, segment.start_ms - lead_ms), max(0, segment.end_ms - lead_ms), segment.text,
-            None if speaker is None else numbers[speaker],
+            None if segment.speaker is None else numbers[segment.speaker],
         )
-        for segment, speaker in zip(segments, heard, strict=True)
+        for segment in segments
     )  # fmt: skip
-    return Aligned(pieces, len(numbers), _owner(index, me, lead_ms, numbers))
+    return Aligned(pieces, len(numbers), _owner(VoiceIndex(segments), heard, numbers))
 
 
 def _owner(
-    index: TurnIndex, me: Sequence[tuple[int, int]], lead_ms: int, numbers: Mapping[int, int]
+    index: VoiceIndex, heard: Sequence[tuple[int, int]], numbers: Mapping[int, int]
 ) -> int | None:
     totals: dict[int, int] = defaultdict(int)
-    for start, end in me:
-        for speaker, ms in index.shares((start + lead_ms, end + lead_ms)).items():
+    for span in heard:
+        for speaker, ms in index.shares(span).items():
             totals[speaker] += ms
     carried = {speaker: ms for speaker, ms in totals.items() if speaker in numbers}
     if not carried:

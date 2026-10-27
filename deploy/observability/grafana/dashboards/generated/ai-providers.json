@@ -450,17 +450,6 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(shosai_ai_calls_total{provider=\"pyannote\"}[5m])) * 60",
-          "legendFormat": "pyannote",
-          "range": true,
-          "exemplar": false
-        },
-        {
-          "refId": "D",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
           "expr": "sum(rate(shosai_ai_calls_total{provider=\"mistral\"}[5m])) * 60",
           "legendFormat": "Mistral",
           "range": true,
@@ -546,21 +535,6 @@
                 }
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byFrameRefID",
-              "options": "D"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "#c98500"
-                }
-              }
-            ]
           }
         ]
       },
@@ -616,17 +590,6 @@
         },
         {
           "refId": "C",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "sum(rate(shosai_ai_calls_total{provider=\"pyannote\",outcome!=\"ok\"}[5m])) * 60",
-          "legendFormat": "pyannote",
-          "range": true,
-          "exemplar": false
-        },
-        {
-          "refId": "D",
           "datasource": {
             "type": "prometheus",
             "uid": "prometheus"
@@ -716,21 +679,6 @@
                 }
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byFrameRefID",
-              "options": "D"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "#c98500"
-                }
-              }
-            ]
           }
         ]
       },
@@ -786,17 +734,6 @@
         },
         {
           "refId": "C",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(shosai_ai_call_duration_seconds_bucket{provider=\"pyannote\"}[5m])))",
-          "legendFormat": "pyannote",
-          "range": true,
-          "exemplar": false
-        },
-        {
-          "refId": "D",
           "datasource": {
             "type": "prometheus",
             "uid": "prometheus"
@@ -886,21 +823,6 @@
                 }
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byFrameRefID",
-              "options": "D"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "#c98500"
-                }
-              }
-            ]
           }
         ]
       },
@@ -956,17 +878,6 @@
         },
         {
           "refId": "C",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "sum(rate(shosai_ai_cost_microusd_total{provider=\"pyannote\"}[1h])) * 3600 / 1e6",
-          "legendFormat": "pyannote",
-          "range": true,
-          "exemplar": false
-        },
-        {
-          "refId": "D",
           "datasource": {
             "type": "prometheus",
             "uid": "prometheus"
@@ -1053,21 +964,6 @@
                 "value": {
                   "mode": "fixed",
                   "fixedColor": "#199e70"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byFrameRefID",
-              "options": "D"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "#c98500"
                 }
               }
             ]

@@ -138,8 +138,6 @@ def ai_provider_keys_present(settings: Settings) -> Iterator[GateViolation]:
     """Every AI provider the product needs has its key; presence of a key is not a decision."""
     if settings.ai.openrouter_api_key is None:
         yield GateViolation("OPENROUTER_API_KEY", "без ключа OpenRouter модели недоступны")
-    if settings.ai.pyannote_api_key is None:
-        yield GateViolation("PYANNOTE_API_KEY", "без ключа pyannote записи встреч без говорящих")
     if settings.ai.openai_api_key is None:
         yield GateViolation("OPENAI_API_KEY", "без ключа OpenAI нет потоковой расшифровки")
     if settings.ai.google_live_api_key is None:

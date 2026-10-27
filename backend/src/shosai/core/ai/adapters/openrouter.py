@@ -17,6 +17,7 @@ import structlog
 from shosai.core.ai.adapters.http_calls import Json, call_json, failed
 from shosai.core.ai.adapters.openrouter_audio import (
     segments_of,
+    speaker_segments,
     transcript_text,
     transcription_body,
     transcription_usage,
@@ -64,6 +65,8 @@ OPENROUTER_API: Final = "https://openrouter.ai/api/v1"
 CALL_TIMEOUT: Final = httpx.Timeout(connect=10.0, read=120.0, write=30.0, pool=5.0)
 # В потоке ждём не ответа целиком, а следующего куска: 45 с тишины — обрыв (§4.3).
 STREAM_TIMEOUT: Final = httpx.Timeout(connect=10.0, read=45.0, write=30.0, pool=5.0)
+# Часть записи до 90 минут: тело ~19 МБ в base64, ответ Scribe — около 80 с (ADR 0073).
+AUDIO_TIMEOUT: Final = httpx.Timeout(connect=10.0, read=300.0, write=120.0, pool=5.0)
 log = structlog.stdlib.get_logger(__name__)
 
 
@@ -184,12 +187,23 @@ class OpenRouter:
         return GeneratedImage(data=data, media_type=media_type, model=model, usage=usage)
 
     async def transcribe(self, model: ModelRef, request: TranscriptionRequest) -> Transcript:
-        """The text of a recording, with timed segments when the request asks for them."""
-        answer = await self._post("audio/transcriptions", transcription_body(model.model, request))
+        """The text of a recording, with timed segments and speakers when the request asks."""
+        built = self._client.build_request(
+            "POST", "audio/transcriptions", json=transcription_body(model.model, request),
+            timeout=AUDIO_TIMEOUT,
+        )  # fmt: skip
+        answer = await call_json(self._client, Provider.OPENROUTER, built)
         language = answer.get("language")
+        text = transcript_text(answer)
+        segments = segments_of(answer.get("segments")) if request.timestamps else ()
+        if request.speakers:
+            # Scribe отдаёт один сегмент на весь файл: говорящие — в словах.
+            segments = speaker_segments(text, answer.get("words")) or segments_of(
+                answer.get("segments")
+            )
         return Transcript(
-            text=transcript_text(answer),
-            segments=segments_of(answer.get("segments")) if request.timestamps else (),
+            text=text,
+            segments=segments,
             language=language if isinstance(language, str) else request.language,
             model=model,
             usage=transcription_usage(answer.get("usage")),

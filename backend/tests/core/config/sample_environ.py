@@ -80,7 +80,6 @@ def production_environ(**overrides: str) -> dict[str, str]:
         TRUSTED_PROXY_ADDRESSES="10.0.0.0/24",
         FERNET_KEY=SAMPLE_FERNET_KEY,
         OPENROUTER_API_KEY=SAMPLE_SECRET,
-        PYANNOTE_API_KEY=SAMPLE_SECRET,
         OPENAI_API_KEY=SAMPLE_SECRET,
         GOOGLE_LIVE_API_KEY=SAMPLE_SECRET,
         MISTRAL_API_KEY=SAMPLE_SECRET,
@@ -95,7 +94,6 @@ def production_environ(**overrides: str) -> dict[str, str]:
         AGENT_STANDARD_MODEL="probe/leo",
         AGENT_UTILITY_MODEL="probe/leo-utility",
         NOTES_TRANSCRIBE_MODEL="probe/transcribe",
-        NOTES_DIARIZE_MODEL="probe-diarize",
         **PRODUCTION_IDENTITY,
     )
     for home in Home:

@@ -2,12 +2,14 @@
 
 Slices and core test the real adapter against it, with no network: `ScriptedOpenRouter`
 plays OpenRouter's side of HTTP, so the request bodies and the answer parsing are both
-exercised. Answers are queued per path and served in order.
+exercised. Answers are queued per path and served in order, or given by a responder that
+reads the request's body when the order of requests is not fixed.
 """
 
 import base64
 import json
 from collections import defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -24,10 +26,15 @@ class ScriptedOpenRouter:
 
     answers: dict[str, list[httpx.Response]] = field(default_factory=lambda: defaultdict(list))
     requests: list[tuple[str, Json]] = field(default_factory=list)
+    responders: dict[str, Callable[[Json], httpx.Response]] = field(default_factory=dict)
 
     def answer(self, path: str, response: httpx.Response) -> None:
         """Queue the next answer for a path such as `chat/completions`."""
         self.answers[path].append(response)
+
+    def respond(self, path: str, responder: Callable[[Json], httpx.Response]) -> None:
+        """Answer every request to a path by its body, such as parts sent at once."""
+        self.responders[path] = responder
 
     def client(self) -> httpx.AsyncClient:
         """An HTTPX client whose transport is this double."""
@@ -42,7 +49,10 @@ class ScriptedOpenRouter:
     def _handle(self, request: httpx.Request) -> httpx.Response:
         # Пути от /api/v1/ и от /api/: chat/completions, alpha/decisions.
         path = request.url.path.removeprefix("/api/").removeprefix("v1/")
-        self.requests.append((path, json.loads(request.content or b"{}")))
+        body = json.loads(request.content or b"{}")
+        self.requests.append((path, body))
+        if path in self.responders:
+            return self.responders[path](body)
         queued = self.answers.get(path)
         if not queued:
             return httpx.Response(500, json={"error": {"message": f"no scripted answer: {path}"}})

@@ -161,9 +161,6 @@ class AiSettings(SettingsSection):
     openrouter_base_url: HttpUrl | None = None
     # Ключ управления OpenRouter: только для отчёта о балансе; без него баланс неизвестен.
     openrouter_management_key: SecretStr | None = None
-    # Разметка говорящих в записях встреч; без ключа вызовы diarize отклоняются.
-    pyannote_api_key: SecretStr | None = None
-    pyannote_base_url: HttpUrl | None = None
     # Потоковая расшифровка живой встречи моделями OpenAI Realtime.
     openai_api_key: SecretStr | None = None
     openai_realtime_url: WebsocketUrl | None = None
@@ -175,7 +172,6 @@ class AiSettings(SettingsSection):
     mistral_base_url: HttpUrl | None = None
     # Вызовы и сессии в полёте на провайдера по всему плану (§3.5): ниже его квоты.
     openrouter_slots: PositiveInt = 292
-    pyannote_slots: PositiveInt = 16
     mistral_slots: PositiveInt = 16
     openai_realtime_slots: PositiveInt = 1000
     google_live_slots: PositiveInt = 1000

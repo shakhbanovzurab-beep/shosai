@@ -17,7 +17,6 @@ from decimal import Decimal
 
 from shosai.core.ai.adapters.mistral_ocr import MistralOcr
 from shosai.core.ai.adapters.openrouter import OpenRouter
-from shosai.core.ai.adapters.pyannote import Pyannote
 from shosai.core.ai.admission import AiClients
 from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute, Provider
 from shosai.core.ai.decisions import Decision, DecisionRequest
@@ -26,7 +25,6 @@ from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.limits import InputCaps
 from shosai.core.ai.requests import (
     ChatRequest,
-    DiarizationRequest,
     EmbeddingRequest,
     ImageRequest,
     LiveTranscriptionSetup,
@@ -46,7 +44,6 @@ from shosai.core.ai.resilience.streams import StreamCap
 from shosai.core.ai.results import (
     ChatDelta,
     ChatResult,
-    Diarization,
     Embeddings,
     GeneratedImage,
     Ranking,
@@ -151,7 +148,7 @@ class AiProviders:
     async def transcribe(
         self, context: CallContext, route: ModelRoute, request: TranscriptionRequest
     ) -> Transcript:
-        """The text of a recording."""
+        """The text of a recording, with its speakers when the request asks for them."""
         operation = Operation(
             "transcribe", self._openrouter("transcribe"), lambda c, m: c.transcribe(m, request),
             speech_estimate(request.audio),
@@ -180,18 +177,6 @@ class AiProviders:
             "ocr", self._mistral("ocr"), lambda c, m: c.ocr(m, request), ocr_estimate(request)
         )
         return await self._routed(context, route, operation)
-
-    async def diarize(
-        self, context: CallContext, route: ModelRoute, request: DiarizationRequest
-    ) -> Diarization:
-        """Who spoke when; a job that failed after it was charged is recorded, then refused."""
-        # Срок вызова соблюдает сам адаптер: оборвать его ожидание значило бы потерять
-        # строку уже оплаченного задания.
-        operation = Operation(
-            "diarize", self._pyannote("diarize"),
-            lambda c, m: c.diarize(m, request, context.deadline), speech_estimate(request.audio),
-        )  # fmt: skip
-        return await self._runner.call(context, route, operation)
 
     def open_transcription_stream(
         self, context: CallContext, model: ModelRef, setup: LiveTranscriptionSetup
@@ -271,11 +256,6 @@ class AiProviders:
     def _openrouter(self, kind: str) -> Callable[[ModelRef], OpenRouter]:
         return lambda model: self._runner.admission.client(
             self._clients.openrouter, Provider.OPENROUTER, model, kind
-        )
-
-    def _pyannote(self, kind: str) -> Callable[[ModelRef], Pyannote]:
-        return lambda model: self._runner.admission.client(
-            self._clients.pyannote, Provider.PYANNOTE, model, kind
         )
 
     def _mistral(self, kind: str) -> Callable[[ModelRef], MistralOcr]:

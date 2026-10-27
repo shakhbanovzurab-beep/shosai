@@ -1,7 +1,6 @@
-"""Recordings to text through OpenRouter and to speaker turns through pyannote."""
+"""Recordings to text through OpenRouter, with their speakers when asked (ADR 0073)."""
 
 import base64
-from datetime import timedelta
 from decimal import Decimal
 
 import httpx
@@ -9,10 +8,9 @@ import pytest
 
 from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
 from shosai.core.ai.errors import AiCallError, AiFailure
-from shosai.core.ai.requests import AudioFile, DiarizationRequest, TranscriptionRequest
+from shosai.core.ai.requests import AudioFile, TranscriptionRequest
 from shosai.core.kernel.homes import Home
-from tests.core.ai.bench import AiBench, ai_bench, context, set_prices
-from tests.doubles.pyannote import UPLOAD_LINK
+from tests.core.ai.bench import ai_bench, context, set_prices
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
@@ -20,8 +18,7 @@ from tests.harness.run_slot import RunSlot
 AUDIO = AudioFile(b"OggS-probe-audio", "audio/webm;codecs=opus", duration_seconds=90.5)
 TOKEN_MODEL = ModelRef(Provider.OPENROUTER, "probe/transcribe")
 SECONDS_MODEL = ModelRef(Provider.OPENROUTER, "probe/whisper")
-DIARIZER = ModelRef(Provider.PYANNOTE, "precision-2")
-PER_SECOND = "0.00003"
+SCRIBE = ModelRef(Provider.OPENROUTER, "elevenlabs/scribe-v2")
 
 
 async def rows(run_slot: RunSlot) -> list[dict[str, object]]:
@@ -32,12 +29,6 @@ async def rows(run_slot: RunSlot) -> list[dict[str, object]]:
         "input_tokens, output_tokens FROM provider_costs ORDER BY created_at",
     )
     return [dict(row) for row in found]
-
-
-async def diarizing_bench(homes: DatabaseAccess) -> AiBench:
-    """A bench whose diarization model has its price per second."""
-    await set_prices(homes.transactions, DIARIZER, audio_second=PER_SECOND)
-    return ai_bench(homes.transactions)
 
 
 async def test_a_recording_goes_as_base64_and_its_reported_cost_is_recorded(
@@ -145,92 +136,55 @@ async def test_an_unknown_recording_format_is_refused_before_it_is_sent(
     assert bench.openrouter.requests == []
 
 
-async def test_speakers_are_numbered_by_first_appearance_and_the_seconds_are_priced(
+async def test_speakers_are_asked_of_the_provider_and_read_from_the_words(
     homes: DatabaseAccess, run_slot: RunSlot
 ) -> None:
-    bench = await diarizing_bench(homes)
-    bench.pyannote.turns = [
-        {"speaker": "SPEAKER_07", "start": 0.5, "end": 2.0},
-        {"speaker": "SPEAKER_02", "start": 2.0, "end": 3.5},
-        {"speaker": "SPEAKER_07", "start": 3.5, "end": 4.0},
+    await set_prices(homes.transactions, SCRIBE, audio_second="0.0000611111")
+    bench = ai_bench(homes.transactions)
+    words = [
+        {"word": "Привет,", "start": 0.1, "end": 0.5, "speaker": 0},
+        {"word": "коллеги.", "start": 0.55, "end": 1.0, "speaker": 0},
+        {"word": "Здравствуйте.", "start": 1.2, "end": 1.9, "speaker": 1},
     ]
+    answer = {"text": "Привет, коллеги. Здравствуйте.", "language": "rus", "words": words,
+              "segments": [{"start": 0.0, "end": 1.9, "text": "Привет, коллеги. Здравствуйте."}],
+              "usage": {"seconds": 1.9, "cost": 0.000116}}  # fmt: skip
+    bench.openrouter.answer("audio/transcriptions", httpx.Response(200, json=answer))
 
-    result = await bench.providers.diarize(
-        context("meeting:9:diarize"), ModelRoute(DIARIZER), DiarizationRequest(AUDIO, speakers=2)
-    )
-
-    [upload] = bench.pyannote.sent("PUT", "/upload/probe")
-    media = bench.pyannote.body("POST", "media/input")["url"]
-    [row] = await rows(run_slot)
-    assert [(t.start_ms, t.end_ms, t.speaker) for t in result.turns] == [
-        (500, 2000, 0), (2000, 3500, 1), (3500, 4000, 0),
-    ]  # fmt: skip
-    assert str(upload.url) == UPLOAD_LINK
-    assert "authorization" not in upload.headers
-    assert upload.content == AUDIO.data
-    assert media.startswith("media://shosai/")
-    assert media.endswith(".webm")
-    assert bench.pyannote.body("POST", "diarize") == {
-        "url": media, "model": "precision-2", "numSpeakers": 2,
-    }  # fmt: skip
-    assert (row["kind"], row["outcome"], row["units"], row["unit"]) == (
-        "diarize", "ok", Decimal("90.500"), "audio_second",
+    transcript = await bench.providers.transcribe(
+        context("notes:7:transcribe:0"), ModelRoute(SCRIBE),
+        TranscriptionRequest(AUDIO, timestamps=True, speakers=True),
     )  # fmt: skip
-    assert (row["cost_usd"], row["cost_source"]) == (Decimal("0.0027150000"), "priced")
 
-
-@pytest.mark.parametrize(
-    ("statuses", "failure"),
-    [
-        (["running", "failed"], AiFailure.PROVIDER_ERROR),
-        (["running"], AiFailure.DEADLINE_EXCEEDED),
-    ],
-)
-async def test_a_job_that_fails_after_the_upload_is_still_recorded(
-    homes: DatabaseAccess, run_slot: RunSlot, statuses: list[str], failure: AiFailure
-) -> None:
-    bench = await diarizing_bench(homes)
-    bench.pyannote.statuses = statuses
-
-    with pytest.raises(AiCallError) as failed:
-        await bench.providers.diarize(
-            context(deadline=timedelta(minutes=5)), ModelRoute(DIARIZER), DiarizationRequest(AUDIO)
-        )
-
+    [body] = bench.openrouter.bodies("audio/transcriptions")
     [row] = await rows(run_slot)
-    assert failed.value.failure is failure
-    assert (row["kind"], row["outcome"], row["units"]) == ("diarize", "failed", Decimal("90.500"))
+    assert (body["response_format"], body["timestamp_granularities"]) == (
+        "verbose_json", ["segment", "word"],
+    )  # fmt: skip
+    assert body["provider"] == {
+        "options": {"elevenlabs": {"diarize": True, "tag_audio_events": False}}
+    }
+    assert [(s.start_ms, s.end_ms, s.text, s.speaker) for s in transcript.segments] == [
+        (100, 1000, "Привет, коллеги.", 0), (1200, 1900, "Здравствуйте.", 1),
+    ]  # fmt: skip
+    assert (row["kind"], row["cost_usd"], row["cost_source"]) == (
+        "transcribe", Decimal("0.000116"), "reported",
+    )  # fmt: skip
 
 
-async def test_a_job_never_started_writes_no_row(homes: DatabaseAccess, run_slot: RunSlot) -> None:
-    bench = await diarizing_bench(homes)
-    bench.pyannote.failing["diarize"] = 402
-
-    with pytest.raises(AiCallError) as failed:
-        await bench.providers.diarize(context(), ModelRoute(DIARIZER), DiarizationRequest(AUDIO))
-
-    assert failed.value.failure is AiFailure.PROVIDER_ERROR
-    assert await rows(run_slot) == []
-
-
-async def test_without_its_key_diarization_is_refused(homes: DatabaseAccess) -> None:
-    await set_prices(homes.transactions, DIARIZER, audio_second=PER_SECOND)
-    bench = ai_bench(homes.transactions, enabled=False)
-
-    with pytest.raises(AiCallError) as refused:
-        await bench.providers.diarize(context(), ModelRoute(DIARIZER), DiarizationRequest(AUDIO))
-
-    assert refused.value.failure is AiFailure.MODEL_UNAVAILABLE
-    assert bench.sample("shosai_ai_calls_refused_total", kind="diarize", code="model_unavailable")
-
-
-async def test_a_model_of_another_provider_is_not_sent_to_the_diarizer(
+async def test_a_model_without_speakers_answers_its_segments_unmarked(
     homes: DatabaseAccess,
 ) -> None:
-    bench = await diarizing_bench(homes)
+    await set_prices(homes.transactions, SECONDS_MODEL, audio_second="0.0001")
+    bench = ai_bench(homes.transactions)
+    answer = {"text": "Hello.", "segments": [{"start": 0.0, "end": 1.0, "text": "Hello."}],
+              "usage": {"seconds": 1.0, "cost": 0.0001}}  # fmt: skip
+    bench.openrouter.answer("audio/transcriptions", httpx.Response(200, json=answer))
 
-    with pytest.raises(AiCallError) as refused:
-        await bench.providers.diarize(context(), ModelRoute(TOKEN_MODEL), DiarizationRequest(AUDIO))
+    transcript = await bench.providers.transcribe(
+        context(), ModelRoute(SECONDS_MODEL), TranscriptionRequest(AUDIO, speakers=True)
+    )
 
-    assert refused.value.failure is AiFailure.MODEL_UNAVAILABLE
-    assert bench.pyannote.requests == []
+    assert [(s.start_ms, s.end_ms, s.text, s.speaker) for s in transcript.segments] == [
+        (0, 1000, "Hello.", None)
+    ]

@@ -2,7 +2,7 @@
 
 Every recorded meeting becomes something the person never has to hold in their head: the transcript with speakers, Leo's write-up by a template, the findings with their evidence, the mind map, the person's own notes synced with the desktop, folders and one share link. The slice owns the meeting's life from start to processing — also when the client never says it ended — and the transcript store the live capture writes through.
 
-- Plan: [docs/plan/slices/notes.md](../../../../../docs/plan/slices/notes.md). Decisions: MT-D1…MT-D12 in the plan, [ADR 0056](../../../../../docs/adr/0056-meetings-lifecycle-notes-and-share-links.md) and, for the slice's name (`meetings` until 2026-10-20), [ADR 0057](../../../../../docs/adr/0057-notes-and-meetings-slice-names.md).
+- Plan: [docs/plan/slices/notes.md](../../../../../docs/plan/slices/notes.md). Decisions: MT-D1…MT-D14 in the plan, [ADR 0056](../../../../../docs/adr/0056-meetings-lifecycle-notes-and-share-links.md), [ADR 0073](../../../../../docs/adr/0073-recordings-transcribed-with-speakers-by-scribe.md) for speakers and, for the slice's name (`meetings` until 2026-10-20), [ADR 0057](../../../../../docs/adr/0057-notes-and-meetings-slice-names.md).
 - Public surface: `contracts` (`LiveMeetings`, `TranscriptStore`, the `LiveSignal` port capture binds, `MeetingReader`, `MeetingFindings`, their types and errors) and `contracts.events` (`notes.meeting.ended`, `notes.meeting.notes_ready`, `notes.meeting.deleted`, `notes.meeting.restored`).
 
 ## Rules the domain holds
@@ -11,7 +11,7 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `domain/minutes.py` — a meeting counts once: the larger of its live and its recorded length, at most 6 hours; what a recording adds is checked before it is processed.
 - `domain/transcript.py` — a line is `(meeting, seq)` with the server's `seq`; equal texts are two lines; a rebuilt transcript takes fresh `seq`s; at most 2 000 characters a line.
 - `domain/lines.py` — recognised pieces become lines of about 10 seconds, split at a sentence end or a pause, never over 60 seconds, 2 000 characters, another speaker or a gap over 800 ms; no text is dropped.
-- `domain/runs.py` — a run's stages per source; three attempts per stage with pauses of 5, 30 and 120 seconds; failures retrying cannot help are not retried; critical and non-critical outcomes; terminal states are final.
+- `domain/runs.py` — a run's stages per source; three attempts per stage with pauses of 5, 30 and 120 seconds; failures retrying cannot help are not retried; a stage failed for good fails the run (every stage is critical since ADR 0073); terminal states are final.
 - `domain/templates.py` — Leo's layout and the eight shipped templates by the cabinet's codes; a person's templates: name, description, icon, one to four sections of distinct kinds, at most 50.
 - `domain/findings.py` — key points, decisions, action items, promises, risks and questions, each with evidence inside the meeting; due dates within a year of the meeting.
 - `domain/mind_map.py` — the map projected from the findings: the title, up to six topics of two to five findings.
@@ -90,12 +90,12 @@ Every recorded meeting becomes something the person never has to hold in their h
 ## Imports and transcription (step 9a, MT-D10)
 
 - `application/imports.py`, `channels/http/imports.py` — `POST /v1/notes/imports {upload_id}` (202): files' claim and the meeting (source `import`) with its run in one transaction; a repeat with the same upload answers the same meeting and run; 409 `upload_not_claimable`, 409 `meetings_not_kept`.
-- `domain/recordings.py` — the allowed containers and audio codecs, the 6 hours, parts of at most 5 minutes ending in the latest pause after their first minute.
+- `domain/recordings.py` — the allowed containers and audio codecs, the 6 hours, parts of at most 90 minutes ending in the latest pause after their first minute, each heard a minute past its cuts (ADR 0073).
 - `infrastructure/media_tools.py` — `ffprobe` and `ffmpeg` as subprocesses under `prlimit` (address space, CPU, open files), a wall-clock limit that kills the process group, `PATH` only, the `file` protocol only; a hostile file fails its call, never the worker.
 - `application/intake_stage.py` — the header read before any decoder: `unsupported_audio_format`, `recording_too_long`, billing's `covers` (`upload_exceeds_minutes`); the meeting takes the recording's length.
-- `application/transcribe_stage.py` — pauses found, parts cut to Opus, at most four asked at once under `meetings:{run}:transcribe:{n}`, segments moved by their part's start, the raw transcript kept for 72 hours (O4, `transient/transcript/{run}.json`); since step 10 the align stage writes the lines.
+- `application/transcribe_stage.py` — pauses found, parts cut to Opus, at most four asked at once under `notes:{run}:transcribe:{n}` with their speakers, segments moved by where their part was heard from, each with its part's voice, the raw transcript kept for 72 hours (O4, `transient/transcript/{run}.json`); since step 10 the align stage writes the lines.
 - `application/scratch.py` — the stage's scratch directory, the object streamed into it, removed whatever the end.
-- `stage_wiring.py` — a process runs the recording's stages only with `NOTES_TRANSCRIBE_MODEL`, `NOTES_DIARIZE_MODEL` and the tools on its path.
+- `stage_wiring.py` — a process runs the recording's stages only with `NOTES_TRANSCRIBE_MODEL` and the tools on its path.
 
 ## The native import (step 9b)
 
@@ -105,12 +105,14 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/import_jobs.py`, `domain/native_import.py` — the job is the person's own import run: `uploading`, `transcribing`, `enhancing`, `ready`, `failed`, with the share of its stages finished, both only growing; `channels/http/native_import_texts.py` words a failure in the person's language.
 - Revision `a8f5b3482221` adds `meeting_processing_runs.source_filename`, the name the file came with.
 
-## Diarization and alignment (step 10, MT-D3)
+## Speakers and alignment (steps 10 and 29, MT-D3, ADR 0073)
 
-- `application/diarize_stage.py` — the whole recording as mono Opus at 16 kHz, sent once to pyannote through the AI port (`meetings:{run}:diarize:0`, `ESSENTIAL`); the turns kept for 72 hours (O5, `transient/turns/{run}.json`). Not critical: a failed diarization leaves the transcript without speakers and the run partially completed.
-- `domain/alignment.py` — each segment takes the voice whose turns cover most of it (turns looked up by 10-second buckets), voices numbered by first appearance in the text, the owner of a desktop recording the voice most over the live "me" lines.
+- `application/transcribe_stage.py` — the transcription model marks the speakers itself: `elevenlabs/scribe-v2` through OpenRouter with ElevenLabs' `diarize`, core's adapter building one segment per run of a voice from the words. A fallback that marks none leaves the segments without voices, logged. pyannote and the diarize stage are gone (step 29).
+- `domain/voices.py` — the parts' voices joined across the cuts: over the two minutes both parts hear, a later voice takes the earlier number it speaks with when two thirds of its shared speech and 3 seconds agree, pairs from the largest agreement down, one to one; the owner of a desktop recording keeps one number by the live "me" lines; any other voice gets a new number; each part keeps the segments whose middle lies in its own span.
+- `domain/alignment.py` — voices numbered by first appearance in the text, the owner of a desktop recording the voice most over the live "me" lines, segments looked up by 10-second buckets.
 - `application/align_stage.py` — the lines of about 10 seconds replace, under the meeting's lock and with fresh `seq`s, the lines the recording covers (live ones and an earlier recording's, over its span: it began `audio_lead_ms` before the meeting, speech before the meeting's start held at it); the meeting's speakers are written anew with their talk time; the line count follows. Lines of the run found written mean the stage ran; a recording without speech replaces nothing (`transcript_empty`).
-- `settings.py` — `NOTES_DIARIZE_MODEL` (pyannote's `precision-3` by default in `.env.example`), required outside development.
+- `settings.py` — `NOTES_TRANSCRIBE_MODEL` (`elevenlabs/scribe-v2`), required outside development; `NOTES_TRANSCRIBE_FALLBACK_MODEL` optional.
+- Revision `c4d1f7a9e2b6` drops `meeting_processing_runs.turns_key` and the `diarize` records of every run's stage state; runs that ended `partially_completed` without speakers keep that state.
 
 ## The desktop recording (step 11, MT-D3)
 

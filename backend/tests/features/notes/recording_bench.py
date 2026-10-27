@@ -1,15 +1,16 @@
 """Recordings over the slot's homes and buckets: a real ffmpeg, files' claim, recorded answers.
 
 `video` makes, once per run, a 24 MiB video of 6 min 20 s whose sound pauses 4 seconds in
-every 30, so its cut has two parts ending in a pause; `seven_hours` is 2 seconds of sound
+every 30: one part, or two ending in a pause when a test shortens the parts to 5 minutes;
+`seven_hours` is 2 seconds of sound
 whose header claims 7 hours, as a hostile or broken file may. `upload` writes a person's ready
 recording upload the way files leaves one — its row and its object under `transient/` —
 so the import claims it through files' own claim. The native import (step 9b) streams to
 the same buckets, rate-limited over the slot's Valkey, and the desktop's parts (step 11)
 go to the bucket's part links; `languages` is each person's language as identity's
-profile gives it. Diarization runs on the scripted pyannote, the notes' stages finish at
-once, so a run reaches its end. The AI port is the real one over the scripted OpenRouter
-and pyannote; the pipeline's engine runs every stage it sent.
+profile gives it. The notes' stages finish at once, so a run reaches its end. The AI port
+is the real one over the scripted OpenRouter, answering as `scribe_answers.py` scripts it;
+the pipeline's engine runs every stage it sent.
 """
 
 import asyncio
@@ -50,7 +51,6 @@ from shosai.features.identity.contracts import (
     AccountProfile,
 )
 from shosai.features.notes.application.align_stage import AlignStage
-from shosai.features.notes.application.diarize_stage import DiarizeStage
 from shosai.features.notes.application.import_jobs import ImportJobs
 from shosai.features.notes.application.imports import RecordingImports
 from shosai.features.notes.application.intake_stage import IntakeStage
@@ -82,7 +82,6 @@ from tests.harness.shared_services import SlotBucket
 from tests.support.profiles import names_by_profile
 
 TRANSCRIBE_MODEL: Final = ModelRef(Provider.OPENROUTER, "probe/transcribe")
-DIARIZE_MODEL: Final = ModelRef(Provider.PYANNOTE, "precision-3")
 VIDEO_SECONDS: Final = 380
 CLAIMED_SECONDS: Final = 7 * 3600
 LIMITS: Final = MediaLimits(seconds=120, memory_mb=1024)
@@ -237,9 +236,6 @@ def stages(
         Stage.TRANSCRIBE: TranscribeStage(
             homes.transactions, (ports, storage, tools), (ai, ModelRoute(TRANSCRIBE_MODEL))
         ),
-        Stage.DIARIZE: DiarizeStage(
-            homes.transactions, (ports, storage, tools), (ai, ModelRoute(DIARIZE_MODEL))
-        ),
         Stage.ALIGN: AlignStage(homes.transactions, storage),
         Stage.FINDINGS: NotesSkipped(),
         Stage.WRITE_UP: NotesSkipped(),
@@ -253,7 +249,6 @@ async def recording_bench(
     """Imports of recordings over the slot's homes and buckets."""
     homes, clock = entitlements.homes, entitlements.clock
     await set_prices(homes.transactions, TRANSCRIBE_MODEL, audio_second="0.0000075")
-    await set_prices(homes.transactions, DIARIZE_MODEL, audio_second="0.00003")
     await set_rate(homes.transactions, "92.5000")
     providers = ai_bench(homes.transactions, doubles=Doubles())
     ports, sent, languages = PortDirectory(), Sent(), Languages()
