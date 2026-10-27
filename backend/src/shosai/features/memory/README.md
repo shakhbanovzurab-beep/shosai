@@ -16,6 +16,13 @@ What Leo knows about the person: their preferences, facts about them and their w
 - **Summary** (`domain/summary.py`): one to five titled sections of plain prose and at most three suggested questions; markup, lists or repeats refuse a written summary.
 - **The box** (`domain/box.py`, MM-D3): the model's reply resolved against the references it was given; forgetting wins over a correction of the same fact; limits on each kind of change.
 
+## Tables (step 2)
+
+- In each home (`infrastructure/records.py`, revision `e8bc01bd5bb4`): `memory_facts` — facts, candidates and ended facts with their `halfvec(1024)` stored `PLAIN` (no TOAST), the source's space, the source's taint and the person's confirmation; `memory_settings` — the switch, absent while on; `memory_summaries` — the overview as last checked. Row-level security admits the person's own rows; the sweep role reads facts and summaries for the daily upkeep. PostgreSQL keeps every closed set and the rules that tie a fact's columns together (a pinned candidate, a forgotten fact without its reason, a vector without its model are refused).
+- Paths: the person's current facts through a partial b-tree (recall and the profile core read them exactly — at the 5 000-fact limit the database spends ≈ 14 ms, so no HNSW), lists by status and date, a thread's waiting candidates, `erase_after`, and the ended facts for the purge.
+- The migration creates the `vector` extension when it is missing and drops it on the way down only if this role created it: a server whose owner installed it keeps it.
+- Account data (`application/account_data.py`): every table is erased with the person; the export lists facts without their vectors; a transfer copies them with their vectors; the "has memories" bit in Valkey (`infrastructure/presence.py`) goes with the erasure.
+
 ## What the models read (step 1)
 
 `infrastructure/extraction_prompts.py` (a turn's and a meeting's extraction) and `infrastructure/summary_prompts.py` (the summary and the box): English instructions with the output language stated in each, and their answer schemas — registered in the model-facing English test.
