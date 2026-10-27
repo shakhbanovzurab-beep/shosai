@@ -41,6 +41,7 @@ from shosai.features.agent.domain.threads import (
     check_available,
     clean_title,
 )
+from shosai.features.agent.infrastructure.image_records import AgentImageRecord
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.thread_records import (
     AgentThreadRecord,
@@ -205,7 +206,8 @@ class Threads:
             return view_of(record)
 
     async def delete(self, principal: Principal, thread_id: UUID) -> None:
-        """The thread with its messages, ratings, cases and its runs' stored results."""
+        """The thread with its messages, ratings, cases, its runs' stored results and
+        pictures."""
         async with self._transactions.begin(principal.scope()) as session:
             record = await self.visible_thread(session, principal.user_id, thread_id, lock=True)
             await erase_threads(session, principal.user_id, (record.id,))
@@ -248,6 +250,9 @@ async def erase_threads(session: AsyncSession, user_id: UUID, thread_ids: Collec
     await session.execute(
         delete(results).where(results.user_id == user_id, results.run_id.in_(runs))
     )
+    # Картинки оператора уходят с тредом: триггер ставит их объекты в очередь удаления.
+    images = AgentImageRecord
+    await session.execute(delete(images).where(images.user_id == user_id, images.run_id.in_(runs)))
     erased = list(
         await session.scalars(
             delete(THREAD)

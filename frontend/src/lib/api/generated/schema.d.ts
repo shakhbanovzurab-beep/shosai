@@ -3308,6 +3308,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/agent/images/{image_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Image
+         * @description A redirect to a 15-minute link of the picture.
+         */
+        get: operations["image_v1_admin_agent_images__image_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -3565,7 +3585,7 @@ export interface components {
          * @enum {string}
          */
         AnswerStatus: "done" | "stopped" | "failed";
-        AnyArtifactOut: components["schemas"]["ArtifactOut"] | components["schemas"]["ChartArtifactOut"];
+        AnyArtifactOut: components["schemas"]["ArtifactOut"] | components["schemas"]["ChartArtifactOut"] | components["schemas"]["ImageArtifactOut"];
         /**
          * ArtifactOut
          * @description A result read apart from the answer: a team chat's digest, by its reference (AG-R1).
@@ -4992,6 +5012,37 @@ export interface components {
          * @enum {string}
          */
         Home: "ru" | "eu";
+        /**
+         * ImageArtifactOut
+         * @description A picture Leo drew for the operator (AG-D10), read from `/v1/admin/agent/images/{ref}`.
+         */
+        ImageArtifactOut: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "image";
+            /**
+             * Ref
+             * @description The picture's id.
+             */
+            ref: string;
+            /**
+             * Alt
+             * @description The picture's caption, for those who do not see it.
+             */
+            alt: string;
+            /**
+             * Width
+             * @description Its width in pixels, to hold its place.
+             */
+            width: number;
+            /**
+             * Height
+             * @description Its height in pixels.
+             */
+            height: number;
+        };
         /**
          * ImportAccepted
          * @description The import's job, to poll.
@@ -15719,6 +15770,44 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SkillSearchOut"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    image_v1_admin_agent_images__image_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                image_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            302: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No such picture of the operator. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

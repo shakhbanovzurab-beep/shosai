@@ -34,6 +34,9 @@ class AgentSettings(SettingsSection):
     # Служебная модель: заголовки тредов и сжатие старых ходов в сводку, вне пути ответа.
     agent_utility_model: str | None = None
     agent_utility_fallback_model: str | None = None
+    # Модель OpenRouter, что рисует картинки Leo администратора (`platform.draw_image`); без неё
+    # инструмент отвечает `unavailable`. Цена — за токены картинки, из ежедневной синхронизации.
+    agent_image_model: str | None = None
     # Токен GitHub хранилища навыков: 5 000 запросов в час вместо 60; без него — анонимно.
     agent_github_token: SecretStr | None = None
     # Трассировка LangChain в LangSmith: разговоры не уходят с платформы, поэтому всегда выключена.
@@ -56,6 +59,10 @@ class AgentSettings(SettingsSection):
         """The skills store's GitHub token; None, or empty, reads anonymously."""
         token = self.agent_github_token.get_secret_value() if self.agent_github_token else ""
         return token or None
+
+    def image_route(self) -> ModelRoute | None:
+        """The route of the operator's pictures, or None while no model is set."""
+        return route_of(self.agent_image_model, None)
 
     def utility_route(self) -> ModelRoute | None:
         """The utility model's route for titles and summaries, or None while none is set."""

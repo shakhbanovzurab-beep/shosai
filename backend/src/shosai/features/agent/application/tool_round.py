@@ -82,10 +82,12 @@ class ToolParts:
 
 def artifact_of(artifact: ArtifactRef) -> dict[str, JsonValue]:
     """An artifact as the stream and the answer carry it: its reference, never its content —
-    a chart with its spec as an object, as the cabinet draws it."""
+    a chart with its spec as an object, as the cabinet draws it, a picture with its size."""
     fields: dict[str, JsonValue] = dict(artifact.fields)
     if artifact.kind is ArtifactKind.CHART:
         fields[SPEC_FIELD] = json.loads(artifact.fields[SPEC_FIELD])
+    elif artifact.kind is ArtifactKind.IMAGE:
+        fields = {name: int(value) for name, value in artifact.fields.items()}
     return {"kind": artifact.kind.value, "ref": artifact.ref, "alt": artifact.alt, **fields}
 
 

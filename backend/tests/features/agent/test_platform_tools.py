@@ -23,6 +23,7 @@ from shosai.core.config.roles import ProcessRole
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.agent.application.platform_images import PlatformImages
 from shosai.features.agent.application.platform_ratings import PlatformRatings
 from shosai.features.agent.channels.platform_reads import PlatformReads
 from shosai.features.agent.channels.platform_specs import DaysIn, NothingIn, SpendSummaryIn
@@ -124,7 +125,9 @@ def tools(
     )
     ports = PortDirectory()
     ports.install([COMMERCE_FACTS.bind(Commerce()), ACCOUNT_COUNTS.bind(Accounts())])
-    bound = platform_tools(PlatformReads((spend, ratings, ports), clock=lambda: NOW))
+    # Картинкам здесь не нужны ни модель, ни бакет: их проверяет test_platform_images.
+    images = PlatformImages(cast("Any", None), {}, (cast("Any", None), lambda: None))
+    bound = platform_tools(PlatformReads((spend, ratings, ports), clock=lambda: NOW), images)
     return {tool.spec.name: cast("ReadTool[Any, Any]", tool) for tool in bound}
 
 
@@ -176,12 +179,22 @@ async def test_no_balance_without_the_key_and_no_caller_but_the_operator(
     balance = found["platform.openrouter_balance"]
     missing = await balance.run(NothingIn(), context(operator_scope()))
     others = [tool for tool in found.values() if tool.spec.name != "platform.spend_summary"]
-    refused = [await tool.run(tool.spec.input.model_validate({}), person) for tool in others]
+    # Картинке нужны слова; остальным инструментам аргументы не нужны.
+    drawn = {"prompt": "A study.", "caption": "Кабинет"}
+    refused = [
+        await tool.run(
+            tool.spec.input.model_validate(
+                drawn if tool.spec.name == "platform.draw_image" else {}
+            ),
+            person,
+        )
+        for tool in others
+    ]
 
     assert missing.error is not None
     assert missing.error.code is ToolErrorCode.UNAVAILABLE
     assert {r.error.code for r in refused if r.error is not None} == {ToolErrorCode.FORBIDDEN}
-    assert len(refused) == 7
+    assert len(refused) == 8
 
 
 @pytest.mark.parametrize("home", [Home.RU, Home.EU])

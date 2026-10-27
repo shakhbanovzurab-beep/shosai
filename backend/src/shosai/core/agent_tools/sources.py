@@ -77,11 +77,14 @@ class ArtifactKind(StrEnum):
     CHAT_DIGEST = "chat_digest"
     # График оператору (AG-D10): спецификация и строки, посчитанные в коде, — JSON в `spec`.
     CHART = "chart"
+    # Картинка оператору (AG-D10): объект платформы по ссылке, размеры — чтобы место было до неё.
+    IMAGE = "image"
 
 
 ARTIFACT_FIELDS: Final[Mapping[ArtifactKind, frozenset[str]]] = {
     ArtifactKind.CHAT_DIGEST: frozenset({"workspace_id", "chat_id"}),
     ArtifactKind.CHART: frozenset({"spec"}),
+    ArtifactKind.IMAGE: frozenset({"width", "height"}),
 }
 # Поле артефакта — ссылка или небольшая спецификация, не содержимое: графику хватает 16 000.
 FIELD_VALUE_MAX: Final = 16_000

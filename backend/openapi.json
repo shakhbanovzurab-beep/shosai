@@ -13478,6 +13478,63 @@
           }
         }
       }
+    },
+    "/v1/admin/agent/images/{image_id}": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Image",
+        "description": "A redirect to a 15-minute link of the picture.",
+        "operationId": "image_v1_admin_agent_images__image_id__get",
+        "parameters": [
+          {
+            "name": "image_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Image Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such picture of the operator."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -14098,13 +14155,17 @@
           },
           {
             "$ref": "#/components/schemas/ChartArtifactOut"
+          },
+          {
+            "$ref": "#/components/schemas/ImageArtifactOut"
           }
         ],
         "discriminator": {
           "propertyName": "kind",
           "mapping": {
             "chart": "#/components/schemas/ChartArtifactOut",
-            "chat_digest": "#/components/schemas/ArtifactOut"
+            "chat_digest": "#/components/schemas/ArtifactOut",
+            "image": "#/components/schemas/ImageArtifactOut"
           }
         }
       },
@@ -17336,6 +17397,47 @@
         ],
         "title": "Home",
         "description": "A data home: a separate PostgreSQL cluster in its own jurisdiction.\n\nThe value is the short code carried by the access token and by task payloads.\nThe directory and data without an owner live in the EU home (ADR 0005, ADR 0010).\nEach home has its own bucket; the home is not part of an object key: an object lives\nin the bucket of its pointer's home (ADR 0044)."
+      },
+      "ImageArtifactOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "image",
+            "title": "Kind"
+          },
+          "ref": {
+            "type": "string",
+            "title": "Ref",
+            "description": "The picture's id."
+          },
+          "alt": {
+            "type": "string",
+            "title": "Alt",
+            "description": "The picture's caption, for those who do not see it."
+          },
+          "width": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Width",
+            "description": "Its width in pixels, to hold its place."
+          },
+          "height": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Height",
+            "description": "Its height in pixels."
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "ref",
+          "alt",
+          "width",
+          "height"
+        ],
+        "title": "ImageArtifactOut",
+        "description": "A picture Leo drew for the operator (AG-D10), read from `/v1/admin/agent/images/{ref}`."
       },
       "ImportAccepted": {
         "properties": {

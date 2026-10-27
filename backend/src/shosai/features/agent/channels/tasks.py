@@ -25,6 +25,7 @@ from shosai.features.agent.application.after_turn import COMPACT_THREAD, TITLE_T
 from shosai.features.agent.application.case_care import CasePurge
 from shosai.features.agent.application.departures import Departures
 from shosai.features.agent.application.lost_runs import LostRuns
+from shosai.features.agent.application.platform_images import PlatformImages
 from shosai.features.agent.application.run_engine import RunEngine
 from shosai.features.agent.application.run_resumption import RESUME_RUN, ResumePayload
 from shosai.features.agent.application.thread_care import ThreadCare
@@ -48,12 +49,15 @@ SWEEP_LOST_RUNS: Final = tick("agent.sweep_lost_runs", timedelta(seconds=50))
 SWEEP_ACTIONS: Final = tick("agent.sweep_actions", timedelta(seconds=50))
 CHECK_ACTIONS: Final = tick("agent.check_actions", timedelta(minutes=5))
 PURGE_CASES: Final = tick("agent.purge_cases", timedelta(minutes=5))
+# Объекты картинок удалённых тредов оператора уходят из бакета (step 16b2).
+RELEASE_IMAGES: Final = tick("agent.release_images", timedelta(minutes=5))
 PERIODIC_JOBS: Final = (
     PeriodicJob(PURGE_DEPARTED, every=timedelta(hours=1)),
     PeriodicJob(SWEEP_LOST_RUNS, every=timedelta(minutes=1)),
     PeriodicJob(SWEEP_ACTIONS, every=timedelta(minutes=1)),
     PeriodicJob(CHECK_ACTIONS, every=timedelta(hours=1)),
     PeriodicJob(PURGE_CASES, every=timedelta(days=1)),
+    PeriodicJob(RELEASE_IMAGES, every=timedelta(minutes=15)),
 )
 
 
@@ -66,7 +70,8 @@ class Handlers:
     engine: RunEngine
     care: ThreadCare
     actions: tuple[ActionExecution, ActionSweeps, ActionInvariants]
-    cases: CasePurge
+    # Чистки: случаи оценки и объекты картинок оператора.
+    purges: tuple[CasePurge, PlatformImages]
 
 
 def task_handlers(handlers: Handlers) -> tuple[TaskHandler[Any], ...]:
@@ -121,7 +126,10 @@ def upkeep_handlers(handlers: Handlers) -> tuple[TaskHandler[Any], ...]:
         await invariants.check(payload.home)
 
     async def purge_cases(payload: HomeTaskPayload) -> None:
-        await handlers.cases.purge(payload.home)
+        await handlers.purges[0].purge(payload.home)
+
+    async def release_images(payload: HomeTaskPayload) -> None:
+        await handlers.purges[1].release(payload.home)
 
     return (
         TaskHandler(PURGE_DEPARTED, purge_departed),
@@ -129,6 +137,7 @@ def upkeep_handlers(handlers: Handlers) -> tuple[TaskHandler[Any], ...]:
         TaskHandler(SWEEP_ACTIONS, sweep_actions),
         TaskHandler(CHECK_ACTIONS, check_actions),
         TaskHandler(PURGE_CASES, purge_cases),
+        TaskHandler(RELEASE_IMAGES, release_images),
         TaskHandler(TITLE_THREAD, title_thread),
         TaskHandler(COMPACT_THREAD, compact_thread),
     )

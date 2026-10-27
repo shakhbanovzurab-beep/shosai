@@ -3,6 +3,7 @@
  * `chat_digest` — дайджест командного чата (CF-D11, требование AG-R1 плана agent): поток несёт только ссылку,
  * сам дайджест хранит слайс chats 30 дней и стирает вместе с чатом.
  * `chart` — график оператору в админ-панели (agent шаг 16): строки посчитаны инструментом, кабинет только рисует.
+ * `image` — картинка, нарисованная оператору (agent шаг 16b2): объект платформы по ссылке, с размерами в пикселях.
  */
 
 export type ChatDigestArtifact = {
@@ -35,4 +36,19 @@ export type ChartArtifact = {
   spec: ChartSpec;
 };
 
-export type LeoArtifact = ChatDigestArtifact | ChartArtifact;
+export type ImageArtifact = {
+  kind: "image";
+  /** Ид картинки. */
+  ref: string;
+  /** Подпись картинки. */
+  alt: string;
+  width: number;
+  height: number;
+};
+
+export type LeoArtifact = ChatDigestArtifact | ChartArtifact | ImageArtifact;
+
+/** Картинку оператора отдаёт API по cookie админа: переадресацией на короткую ссылку бакета. */
+export function operatorImageUrl(ref: string): string {
+  return `/v1/admin/agent/images/${encodeURIComponent(ref)}`;
+}

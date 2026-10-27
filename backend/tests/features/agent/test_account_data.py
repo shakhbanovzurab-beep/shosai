@@ -124,7 +124,7 @@ async def test_export_transfer_and_erasure_cover_every_row_and_live_key(
     assert set(exported) == {
         "agent_threads.jsonl", "agent_messages.jsonl", "agent_tool_results.jsonl",
         "agent_actions.jsonl", "agent_settings.jsonl", "agent_skills.jsonl",
-        "agent_feedback.jsonl", "agent_eval_cases.jsonl",
+        "agent_feedback.jsonl", "agent_eval_cases.jsonl", "agent_images.jsonl",
     }  # fmt: skip
     assert b"assistant words" in exported["agent_messages.jsonl"]
     assert same

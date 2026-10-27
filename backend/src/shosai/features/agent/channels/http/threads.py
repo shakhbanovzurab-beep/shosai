@@ -138,7 +138,19 @@ class ChartArtifactOut(Out):
     spec: ChartSpecOut
 
 
-type AnyArtifactOut = Annotated[ArtifactOut | ChartArtifactOut, Field(discriminator="kind")]
+class ImageArtifactOut(Out):
+    """A picture Leo drew for the operator (AG-D10), read from `/v1/admin/agent/images/{ref}`."""
+
+    kind: Literal["image"]
+    ref: str = Field(description="The picture's id.")
+    alt: str = Field(description="The picture's caption, for those who do not see it.")
+    width: int = Field(gt=0, description="Its width in pixels, to hold its place.")
+    height: int = Field(gt=0, description="Its height in pixels.")
+
+
+type AnyArtifactOut = Annotated[
+    ArtifactOut | ChartArtifactOut | ImageArtifactOut, Field(discriminator="kind")
+]
 ARTIFACTS: TypeAdapter[AnyArtifactOut] = TypeAdapter(AnyArtifactOut)
 
 

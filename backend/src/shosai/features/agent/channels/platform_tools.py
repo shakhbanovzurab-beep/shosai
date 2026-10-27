@@ -14,6 +14,8 @@ from shosai.core.agent_tools.bindings import AgentTool, ReadTool, RunHandler
 from shosai.core.agent_tools.context import ToolContext
 from shosai.core.agent_tools.results import ToolErrorCode, ToolResult
 from shosai.core.agent_tools.spec import ToolSpec
+from shosai.features.agent.application.platform_images import PlatformImages
+from shosai.features.agent.channels.image_specs import DRAW_IMAGE
 from shosai.features.agent.channels.platform_reads import PlatformReads
 from shosai.features.agent.channels.platform_specs import (
     ACCOUNTS,
@@ -39,12 +41,13 @@ def operator_only[I: BaseModel, O: BaseModel](run: RunHandler[I, O]) -> RunHandl
     return guarded
 
 
-def platform_tools(reads: PlatformReads) -> tuple[AgentTool, ...]:
-    """The toolset bound to the operator's reads, each for the operator alone."""
+def platform_tools(reads: PlatformReads, images: PlatformImages) -> tuple[AgentTool, ...]:
+    """The toolset bound to the operator's reads and pictures, each for the operator alone."""
     handlers: tuple[tuple[ToolSpec[Any, Any], RunHandler[Any, Any]], ...] = (
         (SPEND_SUMMARY, reads.spend_summary), (SPEND_DAILY, reads.spend_daily),
         (SPEND_FORECAST, reads.spend_forecast), (OPENROUTER_BALANCE, reads.openrouter_balance),
         (ANSWER_RATINGS, reads.answer_ratings), (PLANS, reads.plans),
         (PROMO_CODES, reads.promo_codes), (ACCOUNTS, reads.accounts),
+        (DRAW_IMAGE, images.draw),
     )  # fmt: skip
     return tuple(ReadTool(spec, operator_only(run)) for spec, run in handlers)

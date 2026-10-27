@@ -2,10 +2,11 @@
 
 The person's rows are their threads with every message, the stored results of tools, the
 actions Leo proposed, Settings > Leo, installed skills, ratings and the evaluation cases
-they allowed. Runs and the action audit hold ids, numbers and codes only and expire by
-their partitions. Erasing deletes the threads — messages, ratings and cases go with them by
-the database's cascades — and the rest by the person's id, then the in-flight keys of their
-recent runs and threads in Valkey; a repeat deletes nothing more. A transfer copies the
+they allowed. Runs, the action audit and released pictures' keys hold ids, numbers and
+codes only and expire by their partitions or the release tick; pictures are the operator's.
+Erasing deletes the threads — messages, ratings and cases go with them by the database's
+cascades — and the rest by the person's id, then the in-flight keys of their recent runs and
+threads in Valkey; a repeat deletes nothing more. A transfer copies the
 conversations, the settings, the skills, the ratings and the cases; tool results and actions
 are short-lived and stay behind.
 """
@@ -31,6 +32,10 @@ from shosai.core.db.person_rows import (
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.agent.infrastructure.image_records import (
+    AgentImageRecord,
+    AgentImageReleaseRecord,
+)
 from shosai.features.agent.infrastructure.person_records import (
     AgentEvalCaseRecord,
     AgentFeedbackRecord,
@@ -65,8 +70,14 @@ ERASED: Final[tuple[type[ModelBase], ...]] = (
     AgentSkillRecord,
     AgentFeedbackRecord,
     AgentEvalCaseRecord,
+    # Картинки рисует только оператор: строк человека в них нет, стираются по его id.
+    AgentImageRecord,
 )
-EXPIRING: Final[tuple[type[ModelBase], ...]] = (AgentRunRecord, AgentAuditRecord)
+EXPIRING: Final[tuple[type[ModelBase], ...]] = (
+    AgentRunRecord,
+    AgentAuditRecord,
+    AgentImageReleaseRecord,
+)
 ACCOUNT_DATA: Final = AccountDataSpec(
     OWNER,
     tuple(TableCoverage(model.__tablename__, Treatment.ERASE) for model in ERASED)
@@ -156,6 +167,9 @@ class AgentAccountData:
             )
             await session.execute(
                 delete(AgentToolResultRecord).where(AgentToolResultRecord.user_id == user_id)
+            )
+            await session.execute(
+                delete(AgentImageRecord).where(AgentImageRecord.user_id == user_id)
             )
             await session.execute(
                 delete(AgentThreadRecord).where(AgentThreadRecord.user_id == user_id)
