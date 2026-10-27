@@ -3328,6 +3328,118 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agent/memory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Memory Facts
+         * @description Your facts and candidates, candidates first, newest first.
+         */
+        get: operations["list_memory_facts_v1_agent_memory_get"];
+        put?: never;
+        post?: never;
+        /**
+         * Forget All Memory Facts
+         * @description Forget everything Leo remembers about you.
+         */
+        delete: operations["forget_all_memory_facts_v1_agent_memory_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/memory/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Memory Settings
+         * @description Whether your memory is on.
+         */
+        get: operations["get_memory_settings_v1_agent_memory_settings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Patch Memory Settings
+         * @description Turn your memory on or off; off keeps every fact.
+         */
+        patch: operations["patch_memory_settings_v1_agent_memory_settings_patch"];
+        trace?: never;
+    };
+    "/v1/agent/memory/imported/turn-down": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Turn Down Imported Facts
+         * @description Turn down every candidate carried over from your earlier memory.
+         */
+        post: operations["turn_down_imported_facts_v1_agent_memory_imported_turn_down_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/memory/{fact_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Forget Memory Fact
+         * @description Forget a fact, or turn a candidate down.
+         */
+        delete: operations["forget_memory_fact_v1_agent_memory__fact_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Patch Memory Fact
+         * @description Correct a fact — a new one takes its place — or pin it.
+         */
+        patch: operations["patch_memory_fact_v1_agent_memory__fact_id__patch"];
+        trace?: never;
+    };
+    "/v1/agent/memory/{fact_id}/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Accept Memory Fact
+         * @description Remember a candidate.
+         */
+        post: operations["accept_memory_fact_v1_agent_memory__fact_id__accept_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -4628,6 +4740,33 @@ export interface components {
          */
         ExportState: "queued" | "running" | "ready" | "failed";
         /**
+         * FactKind
+         * @description What a fact is about.
+         * @enum {string}
+         */
+        FactKind: "preference" | "fact" | "relationship" | "goal" | "procedure";
+        /**
+         * FactPatch
+         * @description A new statement, a pin, or both.
+         */
+        FactPatch: {
+            /** Statement */
+            statement?: string | null;
+            /** Pinned */
+            pinned?: boolean | null;
+        };
+        /**
+         * FactsPageOut
+         * @description A page of facts, the next page's cursor and the person's counts.
+         */
+        FactsPageOut: {
+            /** Items */
+            items: components["schemas"]["MemoryFactOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+            counts: components["schemas"]["MemoryCountsOut"];
+        };
+        /**
          * FeaturesOut
          * @description Capabilities of the plan; the draft's defaults until billing contributes.
          */
@@ -5601,6 +5740,92 @@ export interface components {
              * Format: date-time
              */
             resets_at: string;
+        };
+        /**
+         * MemoryCountsOut
+         * @description How many facts, waiting candidates and carried-over candidates the person has.
+         */
+        MemoryCountsOut: {
+            /** Active */
+            active: number;
+            /** Candidates */
+            candidates: number;
+            /** Imported */
+            imported: number;
+        };
+        /**
+         * MemoryFactOut
+         * @description A fact, or a candidate waiting for the person.
+         */
+        MemoryFactOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            kind: components["schemas"]["FactKind"];
+            /** Statement */
+            statement: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "candidate" | "active";
+            /** Pinned */
+            pinned: boolean;
+            source: components["schemas"]["MemorySourceOut"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * MemorySettingsOut
+         * @description The memory switch.
+         */
+        MemorySettingsOut: {
+            /**
+             * Enabled
+             * @description Off: Leo neither uses nor saves memories; none is deleted.
+             */
+            enabled: boolean;
+        };
+        /**
+         * MemorySettingsPatch
+         * @description Turn memory on or off.
+         */
+        MemorySettingsPatch: {
+            /** Enabled */
+            enabled: boolean;
+        };
+        /**
+         * MemorySource
+         * @description Where a fact came from.
+         * @enum {string}
+         */
+        MemorySource: "user_statement" | "meeting" | "team_chat" | "settings" | "user_edit" | "imported";
+        /**
+         * MemorySourceOut
+         * @description Where a fact came from.
+         */
+        MemorySourceOut: {
+            kind: components["schemas"]["MemorySource"];
+            /**
+             * Title
+             * @description The meeting's title for a meeting's fact, else null.
+             */
+            title: string | null;
+            /**
+             * Thread Id
+             * @description The conversation a fact came from, if any.
+             */
+            thread_id: string | null;
+            /**
+             * Message Id
+             * @description The message a fact came from, if any.
+             */
+            message_id: string | null;
         };
         /**
          * MessageOut
@@ -15808,6 +16033,277 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_memory_facts_v1_agent_memory_get: {
+        parameters: {
+            query?: {
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+                status?: ("candidate" | "active") | null;
+                kind?: components["schemas"]["FactKind"] | null;
+                /** @description `imported`: the carried-over candidates. */
+                source?: "imported" | null;
+                /** @description A conversation's waiting candidates. */
+                thread_id?: string | null;
+                /** @description Words in the fact. */
+                q?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FactsPageOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    forget_all_memory_facts_v1_agent_memory_delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_memory_settings_v1_agent_memory_settings_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemorySettingsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    patch_memory_settings_v1_agent_memory_settings_patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MemorySettingsPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemorySettingsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    turn_down_imported_facts_v1_agent_memory_imported_turn_down_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    forget_memory_fact_v1_agent_memory__fact_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                fact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    patch_memory_fact_v1_agent_memory__fact_id__patch: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+                authorization?: string | null;
+            };
+            path: {
+                fact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FactPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemoryFactOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    accept_memory_fact_v1_agent_memory__fact_id__accept_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                fact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemoryFactOut"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

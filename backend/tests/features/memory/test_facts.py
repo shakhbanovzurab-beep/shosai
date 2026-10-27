@@ -13,7 +13,7 @@ from shosai.features.memory.domain.facts import (
     FactStatus,
     MemoryRule,
     MemoryRuleError,
-    SourceKind,
+    MemorySource,
     accept,
     clean_statement,
     confirmed_on_write,
@@ -75,7 +75,7 @@ def test_forgetting_a_candidate_is_turning_it_down() -> None:
 def test_a_chain_of_edits_leaves_one_current_fact(edits: list[str]) -> None:
     facts = [fact(pinned=True)]
     for text in edits:
-        successor = fact(statement=text, source=SourceKind.USER_EDIT)
+        successor = fact(statement=text, source=MemorySource.USER_EDIT)
         closed, opened = supersede(facts[-1], successor, LATER)
         facts[-1] = closed
         facts.append(opened)
@@ -122,16 +122,16 @@ def test_a_supersession_needs_a_new_active_fact() -> None:
 @pytest.mark.parametrize(
     ("source", "explicit", "confirmed"),
     [
-        (SourceKind.USER_EDIT, False, True),
-        (SourceKind.SETTINGS, False, True),
-        (SourceKind.USER_STATEMENT, True, True),
-        (SourceKind.TEAM_CHAT, True, True),
-        (SourceKind.USER_STATEMENT, False, False),
-        (SourceKind.MEETING, True, False),
-        (SourceKind.IMPORTED, True, False),
+        (MemorySource.USER_EDIT, False, True),
+        (MemorySource.SETTINGS, False, True),
+        (MemorySource.USER_STATEMENT, True, True),
+        (MemorySource.TEAM_CHAT, True, True),
+        (MemorySource.USER_STATEMENT, False, False),
+        (MemorySource.MEETING, True, False),
+        (MemorySource.IMPORTED, True, False),
     ],
 )
 def test_only_the_persons_own_act_confirms_a_new_fact(
-    source: SourceKind, *, explicit: bool, confirmed: bool
+    source: MemorySource, *, explicit: bool, confirmed: bool
 ) -> None:
     assert confirmed_on_write(source, explicit=explicit) is confirmed

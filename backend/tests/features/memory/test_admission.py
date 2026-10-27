@@ -29,11 +29,11 @@ from shosai.features.memory.domain.facts import (
     EndReason,
     FactKind,
     FactStatus,
-    SourceKind,
+    MemorySource,
 )
 from tests.features.memory.facts_kit import NOW, fact, kinds, sources
 
-ADMITTING = [source for source in SourceKind if source is not SourceKind.IMPORTED]
+ADMITTING = [source for source in MemorySource if source is not MemorySource.IMPORTED]
 statements = st.builds(
     Statement,
     text=st.just("Prefers short answers"),
@@ -53,7 +53,9 @@ counts = st.integers(0, 10)
 
 
 @given(statements, admitting, counts)
-def test_the_rule_never_saves_a_guess(statement: Statement, source: SourceKind, today: int) -> None:
+def test_the_rule_never_saves_a_guess(
+    statement: Statement, source: MemorySource, today: int
+) -> None:
     admit = by_rule(statement, source, today)
     if admit.admission is Admission.ACTIVE:
         assert statement.explicit
@@ -65,7 +67,7 @@ def test_the_rule_never_saves_a_guess(statement: Statement, source: SourceKind, 
 
 @given(statements, admitting, answers, counts)
 def test_the_policy_is_never_less_careful_than_the_rule(
-    statement: Statement, source: SourceKind, answer: PolicyAnswer, today: int
+    statement: Statement, source: MemorySource, answer: PolicyAnswer, today: int
 ) -> None:
     admit = by_policy(statement, source, answer, today)
     if admit.admission is Admission.AUTO_SAVED:
@@ -76,7 +78,7 @@ def test_the_policy_is_never_less_careful_than_the_rule(
         assert not admit.confirmed
     if admit.admission is Admission.ACTIVE:
         assert by_rule(statement, source, today).admission is Admission.ACTIVE
-    if source is SourceKind.MEETING:
+    if source is MemorySource.MEETING:
         assert admit.admission in {
             Admission.CANDIDATE,
             Admission.SKIPPED_CAP,
@@ -88,7 +90,7 @@ def test_the_policy_is_never_less_careful_than_the_rule(
 
 @given(statements, admitting, st.one_of(answers.map(lambda a: (a,)), st.just(())))
 def test_no_more_than_three_new_candidates_a_day(
-    statement: Statement, source: SourceKind, answer: tuple[PolicyAnswer, ...]
+    statement: Statement, source: MemorySource, answer: tuple[PolicyAnswer, ...]
 ) -> None:
     for today in range(CANDIDATES_PER_DAY, CANDIDATES_PER_DAY + 3):
         admit = (
@@ -105,14 +107,14 @@ def test_only_the_same_words_confirm_a_held_fact() -> None:
     same = Statement(
         "is  vegetarian.", FactKind.FACT, explicit=False, sensitive=False, about_person=True
     )
-    admit = before_judge(same, SourceKind.USER_STATEMENT, near, NOW)
+    admit = before_judge(same, MemorySource.USER_STATEMENT, near, NOW)
     assert admit is not None
     assert (admit.admission, admit.neighbour) == (Admission.CONFIRMED, held.id)
     # Противоречие той же темы похоже не меньше перефразировки: подтверждением оно не считается.
     moved = Statement("Is vegan", FactKind.FACT, explicit=False, sensitive=False, about_person=True)
-    assert before_judge(moved, SourceKind.USER_STATEMENT, near, NOW) is None
+    assert before_judge(moved, MemorySource.USER_STATEMENT, near, NOW) is None
     assert subject_fact(near) == held.id
-    assert by_rule(moved, SourceKind.USER_STATEMENT, 0, subject_fact(near)).neighbour == held.id
+    assert by_rule(moved, MemorySource.USER_STATEMENT, 0, subject_fact(near)).neighbour == held.id
 
 
 @pytest.mark.parametrize(
@@ -132,7 +134,7 @@ def test_the_same_words_hold_in_any_script(first: str, second: str, *, same: boo
 def test_a_waiting_statement_is_not_asked_twice() -> None:
     waiting = fact(status=FactStatus.CANDIDATE)
     statement = Statement("x", FactKind.FACT, explicit=True, sensitive=False, about_person=True)
-    admit = before_judge(statement, SourceKind.USER_STATEMENT, [Neighbour(waiting, 0.95)], NOW)
+    admit = before_judge(statement, MemorySource.USER_STATEMENT, [Neighbour(waiting, 0.95)], NOW)
     assert admit is not None
     assert admit.admission is Admission.SKIPPED_PENDING
 
@@ -141,26 +143,26 @@ def test_what_the_person_refused_is_never_asked_again_unless_asked_for() -> None
     refused = fact(status=FactStatus.FORGOTTEN, ended_reason=EndReason.TURNED_DOWN, ended_at=NOW)
     near = [Neighbour(refused, 0.97)]
     plain = Statement("x", FactKind.FACT, explicit=False, sensitive=False, about_person=True)
-    admit = before_judge(plain, SourceKind.USER_STATEMENT, near, NOW + timedelta(days=30))
+    admit = before_judge(plain, MemorySource.USER_STATEMENT, near, NOW + timedelta(days=30))
     assert admit is not None
     assert admit.admission is Admission.SKIPPED_FORGOTTEN
     asked = Statement("x", FactKind.FACT, explicit=True, sensitive=False, about_person=True)
-    assert before_judge(asked, SourceKind.USER_STATEMENT, near, NOW) is None
-    assert before_judge(plain, SourceKind.USER_STATEMENT, near, NOW + timedelta(days=181)) is None
+    assert before_judge(asked, MemorySource.USER_STATEMENT, near, NOW) is None
+    assert before_judge(plain, MemorySource.USER_STATEMENT, near, NOW + timedelta(days=181)) is None
     faded = fact(status=FactStatus.FORGOTTEN, ended_reason=EndReason.EXPIRED, ended_at=NOW)
-    assert before_judge(plain, SourceKind.USER_STATEMENT, [Neighbour(faded, 0.99)], NOW) is None
+    assert before_judge(plain, MemorySource.USER_STATEMENT, [Neighbour(faded, 0.99)], NOW) is None
 
 
 def test_a_neighbour_on_another_subject_decides_nothing() -> None:
     statement = Statement("x", FactKind.FACT, explicit=False, sensitive=False, about_person=True)
     near = [Neighbour(fact(statement="x"), SAME_SUBJECT - 0.01)]
-    assert before_judge(statement, SourceKind.USER_STATEMENT, near, NOW) is None
+    assert before_judge(statement, MemorySource.USER_STATEMENT, near, NOW) is None
     assert subject_fact(near) is None
 
 
 @given(sources)
 def test_an_explicit_request_supersedes_only_when_the_policy_names_a_fact(
-    source: SourceKind,
+    source: MemorySource,
 ) -> None:
     statement = Statement("x", FactKind.FACT, explicit=True, sensitive=True, about_person=True)
     old = uuid4()

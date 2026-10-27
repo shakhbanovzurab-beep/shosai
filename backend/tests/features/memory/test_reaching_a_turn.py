@@ -9,7 +9,7 @@ from hypothesis import strategies as st
 from shosai.core.agent_tools.context import Taint
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.features.memory.domain.decay import EXPIRY_RETENTION, faded, half_life, retention
-from shosai.features.memory.domain.facts import Fact, FactKind, FactStatus, SourceKind
+from shosai.features.memory.domain.facts import Fact, FactKind, FactStatus, MemorySource
 from shosai.features.memory.domain.packing import (
     PROFILE_TOKENS,
     RECALL_FACTS,
@@ -28,7 +28,7 @@ statements = st.text(min_size=1, max_size=200)
 
 @given(source=sources, confirmed=st.booleans(), source_taint=st.sampled_from(Taint))
 def test_an_unconfirmed_fact_always_raises_taint_and_a_confirmed_one_never(
-    *, source: SourceKind, confirmed: bool, source_taint: Taint
+    *, source: MemorySource, confirmed: bool, source_taint: Taint
 ) -> None:
     item = fact(source=source, confirmed=confirmed, source_taint=source_taint)
     if confirmed:
@@ -38,8 +38,8 @@ def test_an_unconfirmed_fact_always_raises_taint_and_a_confirmed_one_never(
 
 
 def test_a_meetings_fact_is_someone_elses_speech() -> None:
-    assert label_of(SourceKind.MEETING) is Provenance.MEETING_SPEECH
-    assert {label_of(source) for source in SourceKind if source is not SourceKind.MEETING} == {
+    assert label_of(MemorySource.MEETING) is Provenance.MEETING_SPEECH
+    assert {label_of(source) for source in MemorySource if source is not MemorySource.MEETING} == {
         Provenance.MEMORY
     }
 

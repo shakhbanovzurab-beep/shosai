@@ -10,13 +10,13 @@ from typing import Final
 
 from shosai.core.agent_tools.context import Taint
 from shosai.core.agent_tools.provenance import Provenance
-from shosai.features.memory.domain.facts import Fact, SourceKind
+from shosai.features.memory.domain.facts import Fact, MemorySource
 
 # Чужая речь встречи остаётся чужой и в памяти; остальное — данные самого человека.
-LABELS: Final = {SourceKind.MEETING: Provenance.MEETING_SPEECH}
+LABELS: Final = {MemorySource.MEETING: Provenance.MEETING_SPEECH}
 
 
-def label_of(source: SourceKind) -> Provenance:
+def label_of(source: MemorySource) -> Provenance:
     """The label a fact from this source is wrapped with."""
     return LABELS.get(source, Provenance.MEMORY)
 

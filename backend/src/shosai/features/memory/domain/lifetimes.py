@@ -12,7 +12,7 @@ purged.
 from datetime import datetime, timedelta
 from typing import Final
 
-from shosai.features.memory.domain.facts import Fact, FactStatus, SourceKind
+from shosai.features.memory.domain.facts import Fact, FactStatus, MemorySource
 
 DEPARTURE_GRACE: Final = timedelta(days=7)
 # Удалённая встреча скрыта семь дней, потом notes её стирает; факты — вместе с ней.
@@ -44,7 +44,7 @@ def candidate_expired(fact: Fact, now: datetime) -> bool:
     """A candidate unanswered for 30 days; the draft's carried-over ones never expire."""
     return (
         fact.pending
-        and fact.source is not SourceKind.IMPORTED
+        and fact.source is not MemorySource.IMPORTED
         and now - fact.created_at > CANDIDATE_LIFETIME
     )
 

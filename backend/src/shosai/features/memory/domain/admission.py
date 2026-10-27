@@ -28,7 +28,7 @@ from shosai.features.memory.domain.facts import (
     Fact,
     FactKind,
     FactStatus,
-    SourceKind,
+    MemorySource,
 )
 
 # Ближе этого два разных факта не подходят ни на одном из 16 языков (замер, план §1.4).
@@ -110,7 +110,7 @@ def is_probe(statement_id: UUID) -> bool:
     return statement_id.int % PROBE_EVERY == 0
 
 
-def explicit_request(statement: Statement, source: SourceKind) -> bool:
+def explicit_request(statement: Statement, source: MemorySource) -> bool:
     """The person asked Leo to remember it, in their own words."""
     return statement.explicit and source in SPOKEN_SOURCES
 
@@ -133,7 +133,7 @@ def on_subject(neighbours: Sequence[Neighbour]) -> list[Neighbour]:
 
 
 def before_judge(
-    statement: Statement, source: SourceKind, neighbours: Sequence[Neighbour], now: datetime
+    statement: Statement, source: MemorySource, neighbours: Sequence[Neighbour], now: datetime
 ) -> Admit | None:
     """A confirmation or a skip decided by the nearest facts alone, or None to go on."""
     for item in on_subject(neighbours):
@@ -170,7 +170,7 @@ def ask(candidates_today: int, replaces: UUID | None = None) -> Admit:
 
 
 def by_rule(
-    statement: Statement, source: SourceKind, candidates_today: int, subject: UUID | None = None
+    statement: Statement, source: MemorySource, candidates_today: int, subject: UUID | None = None
 ) -> Admit:
     """Before the policy acts: an explicit request is saved beside what it may change; anything
     else is asked, proposing to replace the current fact on its subject."""
@@ -190,7 +190,7 @@ class PolicyAnswer:
 
 
 def by_policy(
-    statement: Statement, source: SourceKind, answer: PolicyAnswer, candidates_today: int
+    statement: Statement, source: MemorySource, answer: PolicyAnswer, candidates_today: int
 ) -> Admit:
     """Once the policy acts: never less careful than the rule (Leo §6.2's monotonic safety)
     for anything the person did not ask for."""

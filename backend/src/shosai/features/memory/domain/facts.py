@@ -35,7 +35,7 @@ class FactKind(StrEnum):
     PROCEDURE = "procedure"
 
 
-class SourceKind(StrEnum):
+class MemorySource(StrEnum):
     """Where a fact came from."""
 
     USER_STATEMENT = "user_statement"
@@ -47,9 +47,9 @@ class SourceKind(StrEnum):
 
 
 # Источники, где человек говорит сам: только там бывает явная просьба запомнить.
-SPOKEN_SOURCES: Final = frozenset({SourceKind.USER_STATEMENT, SourceKind.TEAM_CHAT})
+SPOKEN_SOURCES: Final = frozenset({MemorySource.USER_STATEMENT, MemorySource.TEAM_CHAT})
 # Источники, которые и есть действие человека: факт из них подтверждён с записи.
-OWN_SOURCES: Final = frozenset({SourceKind.SETTINGS, SourceKind.USER_EDIT})
+OWN_SOURCES: Final = frozenset({MemorySource.SETTINGS, MemorySource.USER_EDIT})
 
 
 class FactStatus(StrEnum):
@@ -109,7 +109,7 @@ class Fact:
     kind: FactKind
     statement: str
     status: FactStatus
-    source: SourceKind
+    source: MemorySource
     created_at: datetime
     last_confirmed_at: datetime
     explicit: bool = False
@@ -136,7 +136,7 @@ class Fact:
         return self.status is FactStatus.CANDIDATE and self.valid_to is None
 
 
-def confirmed_on_write(source: SourceKind, *, explicit: bool) -> bool:
+def confirmed_on_write(source: MemorySource, *, explicit: bool) -> bool:
     """Whether a new fact is the person's own data from the start: their edit, their own
     setting, or a statement they asked Leo to remember."""
     return source in OWN_SOURCES or (explicit and source in SPOKEN_SOURCES)

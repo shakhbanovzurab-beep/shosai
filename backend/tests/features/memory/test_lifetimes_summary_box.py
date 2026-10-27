@@ -6,7 +6,7 @@ from uuid import uuid4
 import pytest
 
 from shosai.features.memory.domain.box import BoxReply, NewStatement, plan
-from shosai.features.memory.domain.facts import EndReason, FactKind, FactStatus, SourceKind
+from shosai.features.memory.domain.facts import EndReason, FactKind, FactStatus, MemorySource
 from shosai.features.memory.domain.lifetimes import (
     candidate_expired,
     erase_after_departure,
@@ -40,7 +40,7 @@ def test_a_candidate_leaves_after_thirty_days_unless_carried_over() -> None:
     assert candidate_expired(fact(status=FactStatus.CANDIDATE), later)
     assert not candidate_expired(fact(status=FactStatus.CANDIDATE), NOW + timedelta(days=29))
     assert not candidate_expired(
-        fact(status=FactStatus.CANDIDATE, source=SourceKind.IMPORTED), NOW + timedelta(days=900)
+        fact(status=FactStatus.CANDIDATE, source=MemorySource.IMPORTED), NOW + timedelta(days=900)
     )
     assert not candidate_expired(fact(), later)
 

@@ -13,8 +13,8 @@ from shosai.features.memory.domain.facts import (
     Fact,
     FactKind,
     FactStatus,
+    MemorySource,
     Sensitivity,
-    SourceKind,
 )
 
 NOW = datetime(2026, 10, 27, 12, tzinfo=UTC)
@@ -27,7 +27,7 @@ class FactChanges(TypedDict, total=False):
     kind: FactKind
     statement: str
     status: FactStatus
-    source: SourceKind
+    source: MemorySource
     created_at: datetime
     last_confirmed_at: datetime
     explicit: bool
@@ -50,7 +50,7 @@ def fact(fact_id: UUID | None = None, **changes: Unpack[FactChanges]) -> Fact:
         kind=FactKind.FACT,
         statement="Leads product at Lumen",
         status=FactStatus.ACTIVE,
-        source=SourceKind.USER_STATEMENT,
+        source=MemorySource.USER_STATEMENT,
         created_at=NOW,
         last_confirmed_at=NOW,
     )
@@ -58,5 +58,5 @@ def fact(fact_id: UUID | None = None, **changes: Unpack[FactChanges]) -> Fact:
 
 
 kinds = st.sampled_from(FactKind)
-sources = st.sampled_from(SourceKind)
+sources = st.sampled_from(MemorySource)
 statuses = st.sampled_from(FactStatus)

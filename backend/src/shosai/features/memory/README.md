@@ -3,7 +3,7 @@
 What Leo knows about the person: their preferences, facts about them and their work, the people they deal with, their goals and how they work — each with its source, each visible, correctable and forgettable. Memory learns in the background from what the person says to Leo and from their meetings, puts the few facts that matter into a turn within a budget, and writes the overview the person reads in Settings › Memory.
 
 - Plan: [docs/plan/slices/memory.md](../../../../../docs/plan/slices/memory.md). Decisions: MM-D1…MM-D8 in the plan and [ADR 0071](../../../../../docs/adr/0071-leo-memory-slice.md); the design is the [Leo architecture](../../../../../docs/design/leo/ARCHITECTURE.md) §7 with [ADR 0030](../../../../../docs/adr/0030-leo-memory-v2.md) and [ADR 0033](../../../../../docs/adr/0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md).
-- Public surface: none of its own. Memory binds the agent's `MEMORY_RECALL` and `PROFILE_FACTS` and reads the agent's `PERSON_WORDS` (`features/agent/contracts/memory.py`); it emits no event.
+- Public surface: the routes of §3.3 under `/v1/agent/memory` and the native `memory_enabled` of `/v1/auth/me`; memory binds the agent's `MEMORY_RECALL` and `PROFILE_FACTS` and reads the agent's `PERSON_WORDS` (`features/agent/contracts/memory.py`); it emits no event.
 
 ## Domain (step 1)
 
@@ -22,6 +22,12 @@ What Leo knows about the person: their preferences, facts about them and their w
 - Paths: the person's current facts through a partial b-tree (recall and the profile core read them exactly — at the 5 000-fact limit the database spends ≈ 14 ms, so no HNSW), lists by status and date, a thread's waiting candidates, `erase_after`, and the ended facts for the purge.
 - The migration creates the `vector` extension when it is missing and drops it on the way down only if this role created it: a server whose owner installed it keeps it.
 - Account data (`application/account_data.py`): every table is erased with the person; the export lists facts without their vectors; a transfer copies them with their vectors; the "has memories" bit in Valkey (`infrastructure/presence.py`) goes with the erasure.
+
+## Settings > Memory's routes (step 3)
+
+- `channels/http/facts.py`: `GET /v1/agent/memory` — candidates first, then current facts, newest first, by cursor, with the counts the settings row shows (`active`, `candidates`, `imported`) and filters on the server (`status`, `kind`, `source=imported`, `thread_id`, `q`); a meeting's fact names the meeting as notes titles it now for the person. `PATCH /{id}` — a new statement supersedes once per `Idempotency-Key` (the person's own words, confirmed, the pin kept), editing a candidate accepts it, a pin alone changes only the pin; `POST /{id}/accept` — accepting a candidate closes the current fact it proposed to replace; `DELETE /{id}` and `DELETE` (everything, the summary emptied, the bit cleared) are idempotent; `POST /imported/turn-down` (MM-D8); `GET`/`PATCH /settings` — the switch, whose moment is kept for the invariant monitor.
+- What the person may see (`application/fact_rows.py`): current or waiting, not on its way to erasure, in Personal or a workspace they are in now (MM-D4). Anything else — another person's, a superseded, a left workspace's fact — is `memory_fact_not_found`.
+- `MemorySwitch` contributes the draft's `memory_enabled` to the native `/v1/auth/me`.
 
 ## What the models read (step 1)
 

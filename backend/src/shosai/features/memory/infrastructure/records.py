@@ -36,8 +36,8 @@ from shosai.features.memory.domain.facts import (
     EndReason,
     FactKind,
     FactStatus,
+    MemorySource,
     Sensitivity,
-    SourceKind,
 )
 
 EMBEDDING_DIMENSIONS: Final = 1_024
@@ -45,7 +45,7 @@ TAINTS: Final = ("none", "external")
 
 
 KINDS: Final = ", ".join(f"'{kind}'" for kind in FactKind)
-SOURCES: Final = ", ".join(f"'{source}'" for source in SourceKind)
+SOURCES: Final = ", ".join(f"'{source}'" for source in MemorySource)
 STATUSES: Final = ", ".join(f"'{status}'" for status in FactStatus)
 REASONS: Final = ", ".join(f"'{reason}'" for reason in EndReason)
 SENSITIVITIES: Final = ", ".join(f"'{level}'" for level in Sensitivity)
