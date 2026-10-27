@@ -22,6 +22,7 @@ from shosai.core.tasks.declaration import TaskDeclaration
 from shosai.core.tasks.sender import TaskSender
 from shosai.features.meetings.application.calls import Calls
 from shosai.features.meetings.application.handover import CallTask
+from shosai.features.meetings.application.recording import RecordingLimits, Recordings
 from shosai.features.meetings.application.sweep import Sweep
 from shosai.features.meetings.application.video_server import RoomSpec, SfuWebhook, WebhookKind
 from shosai.features.meetings.channels.http.webhook import build_webhook_router
@@ -93,10 +94,17 @@ async def workers(run_slot: RunSlot) -> AsyncIterator[DatabaseAccess]:
         yield access
 
 
+LIMITS = RecordingLimits(concurrent=1, length=timedelta(minutes=30), buckets={}, endpoints={})
+
+
+def outbox_of() -> EventOutbox:
+    """An outbox that knows meetings' events."""
+    return EventOutbox(EventTypes([CallStarted, CallEnded, RecordingReady]))
+
+
 def calls_of(access: DatabaseAccess, sent: SentTasks) -> Calls:
     """The calls service writing its events and handovers."""
-    outbox = EventOutbox(EventTypes([CallStarted, CallEnded, RecordingReady]))
-    return Calls(access.transactions, (outbox, cast("TaskSender", sent)), lambda: NOW)
+    return Calls(access.transactions, (outbox_of(), cast("TaskSender", sent)), lambda: NOW)
 
 
 async def events(run_slot: RunSlot, room: RoomRecord) -> list[str]:
@@ -155,9 +163,9 @@ async def sweep_of(workers: DatabaseAccess, sfu: SfuDouble, calendar: Calendar) 
     ports = PortDirectory()
     ports.install([PENDING_EVENTS.bind(calendar)])
     calls = calls_of(workers, SentTasks())
-    return Sweep(
-        workers.transactions, (sfu, calls, ports, MeetingsMetrics(CollectorRegistry())), lambda: NOW
-    )
+    recordings = Recordings(workers.transactions, (sfu, ports, outbox_of()), LIMITS, lambda: NOW)
+    metrics = MeetingsMetrics(CollectorRegistry())
+    return Sweep(workers.transactions, (sfu, calls, ports, metrics, recordings), lambda: NOW)
 
 
 async def test_the_sweep_closes_idle_rooms_finishes_lost_calls_and_ends_closed_rooms_in_the_sfu(
@@ -218,7 +226,8 @@ async def test_the_webhook_route_folds_a_signed_body_and_refuses_a_forged_one(
     room = await add_room(homes, room_row(owner), with_kept=False)
     server = adapter_server()
     metrics = MeetingsMetrics(CollectorRegistry())
-    router = build_webhook_router(server, calls_of(homes, SentTasks()), metrics)
+    recordings = Recordings(homes.transactions, (server, PortDirectory(), outbox_of()), LIMITS)
+    router = build_webhook_router(server, (calls_of(homes, SentTasks()), recordings), metrics)
     body = json.dumps(
         {
             "event": "room_started",

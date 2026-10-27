@@ -10,21 +10,17 @@ body's SHA-256 is compared with the token's claim in constant time.
 """
 
 import asyncio
-import base64
-import binascii
-import hashlib
-import hmac
 from collections.abc import AsyncIterator, Awaitable, Collection, Mapping, Sequence
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import Final
 
 import aiohttp
-import jwt
 import structlog
 from livekit.api.access_token import AccessToken, TokenVerifier, VideoGrants
 from livekit.api.livekit_api import LiveKitAPI
 from livekit.api.twirp_client import ServerError
+from livekit.protocol.egress import ListEgressRequest, StopEgressRequest
 from livekit.protocol.models import DataPacket
 from livekit.protocol.room import (
     CreateRoomRequest,
@@ -36,9 +32,10 @@ from livekit.protocol.room import (
     UpdateParticipantRequest,
     UpdateRoomMetadataRequest,
 )
-from pydantic import ValidationError
 
 from shosai.features.meetings.application.video_server import (
+    BucketTarget,
+    EgressReport,
     PassRequest,
     RoomSpec,
     SessionPass,
@@ -47,15 +44,15 @@ from shosai.features.meetings.application.video_server import (
     SfuWebhook,
     VideoServer,
     VideoUnavailableError,
-    WebhookRejectedError,
 )
 from shosai.features.meetings.domain.calls import DEPARTURE_TIMEOUT, EMPTY_TIMEOUT
 from shosai.features.meetings.domain.joining import LIVEKIT_TOKEN_TTL
+from shosai.features.meetings.infrastructure.livekit_egress import composite, report_of
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
+from shosai.features.meetings.infrastructure.livekit_signatures import verified_webhook
 from shosai.features.meetings.infrastructure.livekit_wire import (
     participant_of,
     room_of,
-    webhook_of,
 )
 from shosai.features.meetings.infrastructure.unconfigured_server import (
     UnconfiguredVideoServer,
@@ -64,6 +61,8 @@ from shosai.features.meetings.settings import LiveKitSettings
 
 CALL_TIMEOUT: Final = aiohttp.ClientTimeout(total=5)
 NOT_FOUND: Final = "not_found"
+# Остановка уже законченного egress: LiveKit отвечает этими кодами, это не сбой.
+OVER: Final = frozenset({NOT_FOUND, "failed_precondition"})
 FIRST_SERVER_ERROR: Final = 500
 BEARER: Final = "Bearer "
 PROBE_ROOM: Final = "shosai-probe"
@@ -132,37 +131,21 @@ class LiveKitServer:
     async def set_metadata(self, room_name: str, metadata: str) -> bool:
         """Replace a room's metadata; False when the SFU no longer holds the room."""
         request = UpdateRoomMetadataRequest(room=room_name, metadata=metadata)
-        try:
-            await self._call("set_metadata", self._client.room.update_room_metadata(request))
-        except ServerError as error:
-            if error.code == NOT_FOUND:
-                return False
-            raise
-        return True
+        return await self._found("set_metadata", self._client.room.update_room_metadata(request))
 
     async def remove_participant(self, room_name: str, identity: str) -> bool:
         """Disconnect a session; False when it is no longer in the room."""
         request = RoomParticipantIdentity(room=room_name, identity=identity)
-        try:
-            await self._call("remove_participant", self._client.room.remove_participant(request))
-        except ServerError as error:
-            if error.code == NOT_FOUND:
-                return False
-            raise
-        return True
+        return await self._found(
+            "remove_participant", self._client.room.remove_participant(request)
+        )
 
     async def publish(self, room_name: str, topic: str, payload: bytes) -> bool:
         """Send a reliable data packet to everyone in the room; False when the SFU lacks it."""
         request = SendDataRequest(
             room=room_name, data=payload, kind=DataPacket.Kind.RELIABLE, topic=topic
         )
-        try:
-            await self._call("publish", self._client.room.send_data(request))
-        except ServerError as error:
-            if error.code == NOT_FOUND:
-                return False
-            raise
-        return True
+        return await self._found("publish", self._client.room.send_data(request))
 
     async def set_attributes(
         self, room_name: str, identity: str, attributes: Mapping[str, str]
@@ -171,13 +154,7 @@ class LiveKitServer:
         request = UpdateParticipantRequest(
             room=room_name, identity=identity, attributes=dict(attributes)
         )
-        try:
-            await self._call("set_attributes", self._client.room.update_participant(request))
-        except ServerError as error:
-            if error.code == NOT_FOUND:
-                return False
-            raise
-        return True
+        return await self._found("set_attributes", self._client.room.update_participant(request))
 
     def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
         """A pass for one session, valid for the join's 10 minutes."""
@@ -203,20 +180,37 @@ class LiveKitServer:
 
     def verify_webhook(self, body: bytes, authorization: str | None) -> SfuWebhook:
         """The webhook if it is signed over this body; `WebhookRejectedError` otherwise."""
-        token = (authorization or "").removeprefix(BEARER).strip()
+        return verified_webhook(self._verifier, self._metrics, body, authorization)
+
+    async def record(self, room_name: str, target: BucketTarget) -> str:
+        """Start the room's video recording into the bucket; its egress id."""
+        started = await self._call(
+            "record", self._client.egress.start_room_composite_egress(composite(room_name, target))
+        )
+        return started.egress_id
+
+    async def stop_egress(self, egress_id: str) -> None:
+        """Stop an egress; one already over is left as it is."""
         try:
-            claims = self._verifier.verify(token)
-            claimed = base64.b64decode(claims.sha256 or "", validate=True)
-        except (jwt.PyJWTError, binascii.Error) as error:
-            raise self._rejected(type(error).__qualname__) from error
-        if not claimed or not hmac.compare_digest(hashlib.sha256(body).digest(), claimed):
-            raise self._rejected("body_hash_mismatch")
-        try:
-            webhook = webhook_of(body)
-        except ValidationError as error:
-            raise self._rejected(type(error).__qualname__) from error
-        self._metrics.webhook_verified(accepted=True)
-        return webhook
+            await self._call(
+                "stop_egress",
+                self._client.egress.stop_egress(StopEgressRequest(egress_id=egress_id)),
+            )
+        except ServerError as error:
+            if error.code not in OVER:
+                raise
+
+    async def egresses(self, room_name: str | None = None) -> Sequence[EgressReport]:
+        """The egresses the SFU runs, a room's only when named."""
+        request = ListEgressRequest(room_name=room_name or "", active=True)
+        answer = await self._call("list_egress", self._client.egress.list_egress(request))
+        return [report_of(item) for item in answer.items]
+
+    async def egress(self, egress_id: str) -> EgressReport | None:
+        """One egress as the SFU last saw it, running or over; None when it does not know it."""
+        request = ListEgressRequest(egress_id=egress_id)
+        answer = await self._call("get_egress", self._client.egress.list_egress(request))
+        return next((report_of(item) for item in answer.items), None)
 
     async def ping(self) -> None:
         """Answer when the SFU's API answers; for the readiness probe."""
@@ -243,6 +237,15 @@ class LiveKitServer:
         self._metrics.called(operation, "ok", self._since(started))
         return answer
 
+    async def _found(self, operation: str, call: Awaitable[object]) -> bool:
+        try:
+            await self._call(operation, call)
+        except ServerError as error:
+            if error.code == NOT_FOUND:
+                return False
+            raise
+        return True
+
     @staticmethod
     def _since(started: float) -> float:
         return asyncio.get_running_loop().time() - started
@@ -252,11 +255,6 @@ class LiveKitServer:
         log.warning(
             "LiveKit не выполнил вызов", operation=operation, outcome=outcome, reason=reason
         )
-
-    def _rejected(self, reason: str) -> WebhookRejectedError:
-        self._metrics.webhook_verified(accepted=False)
-        log.warning("Вебхук LiveKit отклонён", reason=reason)
-        return WebhookRejectedError()
 
 
 @asynccontextmanager

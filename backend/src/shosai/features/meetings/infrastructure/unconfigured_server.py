@@ -7,6 +7,8 @@ from collections.abc import Collection, Mapping, Sequence
 from datetime import datetime
 
 from shosai.features.meetings.application.video_server import (
+    BucketTarget,
+    EgressReport,
     PassRequest,
     RoomSpec,
     SessionPass,
@@ -62,6 +64,22 @@ class UnconfiguredVideoServer:
     def verify_webhook(self, body: bytes, authorization: str | None) -> SfuWebhook:
         """Nothing can be verified without the secret."""
         raise WebhookRejectedError
+
+    async def record(self, room_name: str, target: BucketTarget) -> str:
+        """Calls are unavailable."""
+        raise VideoUnavailableError
+
+    async def stop_egress(self, egress_id: str) -> None:
+        """Calls are unavailable."""
+        raise VideoUnavailableError
+
+    async def egresses(self, room_name: str | None = None) -> Sequence[EgressReport]:
+        """Calls are unavailable."""
+        raise VideoUnavailableError
+
+    async def egress(self, egress_id: str) -> EgressReport | None:
+        """Calls are unavailable."""
+        raise VideoUnavailableError
 
     async def ping(self) -> None:
         """Calls are unavailable."""

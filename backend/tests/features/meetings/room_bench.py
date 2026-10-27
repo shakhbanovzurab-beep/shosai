@@ -34,6 +34,8 @@ from shosai.features.meetings.application.passes import PassCheck
 from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.video_server import (
+    BucketTarget,
+    EgressReport,
     PassRequest,
     RoomSpec,
     SessionPass,
@@ -67,6 +69,8 @@ class SfuDouble:
     deleted: list[str] = field(default_factory=list)
     metadata: dict[str, str] = field(default_factory=dict)
     published: list[tuple[str, str, bytes]] = field(default_factory=list)
+    egress_reports: dict[str, EgressReport] = field(default_factory=dict)
+    targets: dict[str, BucketTarget] = field(default_factory=dict)
     up: bool = True
 
     def _answering(self) -> None:
@@ -152,6 +156,35 @@ class SfuDouble:
         del body, authorization
         raise WebhookRejectedError
 
+    async def record(self, room_name: str, target: BucketTarget) -> str:
+        """A started recording's egress."""
+        self._answering()
+        egress_id = f"EG_{uuid.uuid4().hex[:12]}"
+        self.egress_reports[egress_id] = EgressReport(egress_id, room_name, "EGRESS_STARTING")
+        self.targets[egress_id] = target
+        return egress_id
+
+    async def stop_egress(self, egress_id: str) -> None:
+        """Mark the egress ending."""
+        self._answering()
+        report = self.egress_reports[egress_id]
+        self.egress_reports[egress_id] = replace(report, status="EGRESS_ENDING")
+
+    async def egresses(self, room_name: str | None = None) -> Sequence[EgressReport]:
+        """The egresses not over."""
+        self._answering()
+        running = {"EGRESS_STARTING", "EGRESS_ACTIVE", "EGRESS_ENDING"}
+        return [
+            report
+            for report in self.egress_reports.values()
+            if report.status in running and room_name in {None, report.room_name}
+        ]
+
+    async def egress(self, egress_id: str) -> EgressReport | None:
+        """One egress as last set."""
+        self._answering()
+        return self.egress_reports.get(egress_id)
+
     async def ping(self) -> None:
         """Answer when up."""
         self._answering()
@@ -174,14 +207,18 @@ class People:
 
     room_participants: int | None = None
     named: dict[uuid.UUID, str] = field(default_factory=dict)
+    paid: bool = True
+    file_manager_gb: int | None = None
 
     async def snapshot(self, home: Home, user_id: uuid.UUID) -> EntitlementSnapshot:
         """A plan with the test's ceiling."""
         del home
         return EntitlementSnapshot(
             user_id=user_id, plan_slug="pro", plan_name="Pro", audience=Audience.INDIVIDUAL,
-            paid=True, in_grace=False, paid_until=None,
-            limits=PlanLimits(None, None, None, room_participants=self.room_participants),
+            paid=self.paid, in_grace=False, paid_until=None,
+            limits=PlanLimits(
+                None, self.file_manager_gb, None, room_participants=self.room_participants
+            ),
             capabilities=frozenset(), source=EntitlementSource.PERSONAL, workspace_id=None,
             version=1,
         )  # fmt: skip

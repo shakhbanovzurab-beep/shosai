@@ -3648,6 +3648,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/rooms/{room_id}/recording": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start Meeting Recording
+         * @description Start recording the call; everyone in it sees the mark.
+         */
+        post: operations["start_meeting_recording_v1_meetings_rooms__room_id__recording_post"];
+        /**
+         * Stop Meeting Recording
+         * @description Stop recording the call; the file lands in File Manager.
+         */
+        delete: operations["stop_meeting_recording_v1_meetings_rooms__room_id__recording_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/meetings/rooms/{room_id}/chat": {
         parameters: {
             query?: never;
@@ -7323,6 +7347,34 @@ export interface components {
          * @enum {string}
          */
         Rating: "useful" | "not_useful";
+        /**
+         * RecordingOut
+         * @description A call's video recording.
+         */
+        RecordingOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            state: components["schemas"]["RecordingState"];
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /**
+             * File Id
+             * @description The File Manager file, once written.
+             */
+            file_id: string | null;
+        };
+        /**
+         * RecordingState
+         * @description Where a recording stands, in the order it moves.
+         * @enum {string}
+         */
+        RecordingState: "starting" | "active" | "ending" | "complete" | "failed";
         Recurrence: components["schemas"]["DayRule"] | components["schemas"]["WeekRule"] | components["schemas"]["MonthRule"];
         /**
          * RegisterBody
@@ -17320,6 +17372,72 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    start_meeting_recording_v1_meetings_rooms__room_id__recording_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    stop_meeting_recording_v1_meetings_rooms__room_id__recording_delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingOut"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

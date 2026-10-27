@@ -53,6 +53,13 @@ class MeetingsSettings(SettingsSection):
 
     # Потолок участников звонка над значением тарифа (MR-D2): 50, на стейджинге 4.
     meetings_room_participants_ceiling: int = Field(default=50, ge=2, le=1_000)
+    # Видеозаписей одновременно на всю платформу и длина одной (MR-D14: на стейджинге 1 и 30 мин).
+    meetings_recordings_concurrent: int = Field(default=1, ge=1, le=100)
+    meetings_recording_max_minutes: int = Field(default=30, ge=1, le=600)
+    # Адрес бакета дома, каким его видит egress, если он не тот, что у API (в разработке —
+    # имя сервиса в сети Compose); пусто — адрес дома.
+    meetings_egress_s3_endpoint_ru: str | None = None
+    meetings_egress_s3_endpoint_eu: str | None = None
 
 
 def livekit_settings_safe(settings: Settings) -> Iterator[GateViolation]:

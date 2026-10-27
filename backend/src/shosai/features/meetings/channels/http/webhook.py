@@ -2,9 +2,9 @@
 
 LiveKit posts every room, participant, track and egress event here from the plane's network.
 A webhook is accepted only when its JWT is signed with the API's secret over the body's
-SHA-256 (401 `webhook_rejected` otherwise); a room's events fold into its call at once, and
-the call's handover runs as a task. A webhook of another kind, or of a room Shosai does not
-know, is accepted and ignored. A repeat changes nothing.
+SHA-256 (401 `webhook_rejected` otherwise). A room's events fold into its call at once, and the
+call's handover runs as a task; an egress's report moves its recording. A webhook of another
+kind, or of a room Shosai does not know, is accepted and ignored. A repeat changes nothing.
 """
 
 from http import HTTPStatus
@@ -13,12 +13,16 @@ from typing import Annotated
 from fastapi import APIRouter, Header, Request, Response
 
 from shosai.features.meetings.application.calls import Calls
+from shosai.features.meetings.application.recording import Recordings
 from shosai.features.meetings.application.video_server import VideoServer
 from shosai.features.meetings.infrastructure.meetings_metrics import MeetingsMetrics
 
 
-def build_webhook_router(server: VideoServer, calls: Calls, metrics: MeetingsMetrics) -> APIRouter:
+def build_webhook_router(
+    server: VideoServer, handlers: tuple[Calls, Recordings], metrics: MeetingsMetrics
+) -> APIRouter:
     """The SFU's webhook."""
+    calls, recordings = handlers
     router = APIRouter(prefix="/v1/livekit", tags=["meetings"])
 
     @router.post("/webhook", status_code=HTTPStatus.NO_CONTENT, response_class=Response)
@@ -29,5 +33,9 @@ def build_webhook_router(server: VideoServer, calls: Calls, metrics: MeetingsMet
         webhook = server.verify_webhook(await request.body(), authorization)
         metrics.received(webhook.kind)
         await calls.on_webhook(webhook)
+        if webhook.egress is not None:
+            found = await calls.find(webhook.egress.room_name or webhook.room_name)
+            if found is not None:
+                await recordings.on_report(found, webhook.egress)
 
     return router

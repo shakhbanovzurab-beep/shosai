@@ -7,15 +7,17 @@ readiness probe when it is configured. Step A3 added the tables of each home and
 account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`, the public
 join with its room passes in Valkey and their renewal, removal with bans, hands and the
 account's rooms. Step A5 added LiveKit's webhook, calls and the sweep of each home; A6 the
-call's chat.
+call's chat; A7 its video recording.
 """
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from datetime import timedelta
 
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.core.health.probes import DependencyProbe
+from shosai.core.kernel.homes import Home
 from shosai.features.meetings.application.account_data import (
     ACCOUNT_DATA,
     MODELS,
@@ -26,12 +28,14 @@ from shosai.features.meetings.application.calls import Calls
 from shosai.features.meetings.application.chat import Chat
 from shosai.features.meetings.application.joining import JoinDesk
 from shosai.features.meetings.application.passes import PassCheck
+from shosai.features.meetings.application.recording import RecordingLimits, Recordings
 from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.sweep import Sweep
 from shosai.features.meetings.application.video_server import VideoUnavailableError
 from shosai.features.meetings.channels.http.chat import build_chat_router
 from shosai.features.meetings.channels.http.joining import build_joining_router
+from shosai.features.meetings.channels.http.recording import build_recording_router
 from shosai.features.meetings.channels.http.rooms import build_rooms_router
 from shosai.features.meetings.channels.http.webhook import build_webhook_router
 from shosai.features.meetings.channels.subscriptions import subscriptions
@@ -65,7 +69,10 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
         removals = Removals(transactions, server, passes)
         metrics = MeetingsMetrics(services.registry)
         calls = Calls(transactions, (services.outbox, services.tasks))
-        sweep = Sweep(transactions, (server, calls, ports, metrics))
+        recordings = Recordings(
+            transactions, (server, ports, services.outbox), recording_limits(services)
+        )
+        sweep = Sweep(transactions, (server, calls, ports, metrics, recordings))
         ceiling = services.settings.features.get(
             MeetingsSettings
         ).meetings_room_participants_ceiling
@@ -74,7 +81,8 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
         yield FeatureParts(
             http_routers=(
                 build_rooms_router((book, removals), ports, origin),
-                build_webhook_router(server, calls, metrics),
+                build_webhook_router(server, (calls, recordings), metrics),
+                build_recording_router(recordings, ports),
                 build_chat_router(
                     Chat(transactions, (services.effects, services.rate_limiter, server)),
                     PassCheck(transactions, passes),
@@ -89,6 +97,21 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
             probes=probes,
             provides=(ACCOUNT_DATA_HANDLERS.bind(MeetingsAccountData(services.transactions)),),
         )
+
+
+def recording_limits(services: CoreServices) -> RecordingLimits:
+    """The platform's recording bounds and the buckets as egress reaches them."""
+    meetings = services.settings.features.get(MeetingsSettings)
+    endpoints = {
+        Home.RU: meetings.meetings_egress_s3_endpoint_ru,
+        Home.EU: meetings.meetings_egress_s3_endpoint_eu,
+    }
+    return RecordingLimits(
+        concurrent=meetings.meetings_recordings_concurrent,
+        length=timedelta(minutes=meetings.meetings_recording_max_minutes),
+        buckets=services.settings.storage,
+        endpoints=endpoints,
+    )
 
 
 MEETINGS = FeatureModule(

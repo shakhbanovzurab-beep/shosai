@@ -14885,6 +14885,124 @@
         }
       }
     },
+    "/v1/meetings/rooms/{room_id}/recording": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Start Meeting Recording",
+        "description": "Start recording the call; everyone in it sees the mark.",
+        "operationId": "start_meeting_recording_v1_meetings_rooms__room_id__recording_post",
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Room Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordingOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Stop Meeting Recording",
+        "description": "Stop recording the call; the file lands in File Manager.",
+        "operationId": "stop_meeting_recording_v1_meetings_rooms__room_id__recording_delete",
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Room Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordingOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/meetings/rooms/{room_id}/chat": {
       "post": {
         "tags": [
@@ -23857,6 +23975,57 @@
         ],
         "title": "Rating",
         "description": "What the person said about an answer."
+      },
+      "RecordingOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "state": {
+            "$ref": "#/components/schemas/RecordingState"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "file_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Id",
+            "description": "The File Manager file, once written."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "state",
+          "started_at",
+          "file_id"
+        ],
+        "title": "RecordingOut",
+        "description": "A call's video recording."
+      },
+      "RecordingState": {
+        "type": "string",
+        "enum": [
+          "starting",
+          "active",
+          "ending",
+          "complete",
+          "failed"
+        ],
+        "title": "RecordingState",
+        "description": "Where a recording stands, in the order it moves."
       },
       "Recurrence": {
         "oneOf": [

@@ -102,7 +102,8 @@ class RoomRecordingRecord(ModelBase):
     s3_key: Mapped[str | None] = mapped_column(Text, nullable=True)
     size_bytes: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
     duration_seconds: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    held_object_id: Mapped[UUID | None] = mapped_column(Uuid, nullable=True)
+    # Файл File Manager, которым стала запись: его id — id записи (A7).
+    file_id: Mapped[UUID | None] = mapped_column(Uuid, nullable=True)
     error_code: Mapped[str | None] = mapped_column(Text, nullable=True)
     started_at: Mapped[datetime] = moment(default_now=True)
     ended_at: Mapped[datetime | None] = moment(nullable=True)

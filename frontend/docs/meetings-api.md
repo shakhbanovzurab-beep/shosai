@@ -21,7 +21,7 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
 | `DELETE` | `/v1/meetings/rooms/{id}/recording`                    | —                                      | `202 RecordingOut` |
 
 - **`RoomOut`** is `{id, title, state: open | closed, notes_on, workspace_id, link, created_at, closed_at,
-  call: {started_at, participants} | null}`, and `recording: RecordingOut | null` once recording ships (A7).
+  call: {started_at, participants} | null}`; whether a call records is in the room's marks.
   `title` is null for an untitled room (the cabinet names it); `link` is the full invitation,
   `https://shosai.tech/meet/{token}`; `call.participants` is null when the call server does not answer.
 - **New meeting** creates the room and opens its `link` path in the cabinet (`/app/meet/{token}`), which joins like
@@ -34,7 +34,9 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
   room (`403 removed`); the owner cannot remove themselves (`409 cannot_remove_owner`); an identity that is not a
   session of the room is `404 participant_not_found`. **Lowering a hand** is the owner's; the participant lowers their
   own through their attributes.
-- **`RecordingOut`** is `{id, state: starting | active | ending | complete | failed, started_at, file_id | null}`.
+- **`RecordingOut`** is `{id, state: starting | active | ending | complete | failed, started_at, file_id | null}`;
+  stopping without a running one is `409 recording_not_active`. The finished MP4 is the owner's File Manager file
+  `"{title or Meeting} YYYY-MM-DD HH-MM.mp4"` whose id is `file_id`.
   Starting is refused in this order: `404 room_not_found`, `409 room_closed`, `409 no_live_call`,
   `403 recording_not_in_plan`, `413 storage_limit`, `409 recording_active`, `503 recordings_busy` (with
   `Retry-After`). A recording stops at the platform's length limit (30 minutes on staging); the finished file lands

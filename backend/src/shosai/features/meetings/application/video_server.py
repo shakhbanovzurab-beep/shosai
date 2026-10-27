@@ -108,6 +108,30 @@ class SessionPass:
 
 
 @dataclass(frozen=True, slots=True)
+class BucketTarget:
+    """Where an egress writes: the home's bucket as the egress reaches it, and the key."""
+
+    endpoint: str
+    region: str
+    bucket: str
+    access_key: str = field(repr=False)
+    secret: str = field(repr=False)
+    key: str
+
+
+@dataclass(frozen=True, slots=True)
+class EgressReport:
+    """An egress as the SFU reports it: its state, and the file once written."""
+
+    egress_id: str
+    room_name: str
+    status: str
+    size_bytes: int = 0
+    duration_seconds: int = 0
+    error: str = ""
+
+
+@dataclass(frozen=True, slots=True)
 class SfuWebhook:
     """A verified webhook: its id for deduplication, its kind, time and subject."""
 
@@ -120,6 +144,7 @@ class SfuWebhook:
     identity: str | None = None
     # Потолок экземпляра комнаты в SFU, с которым его создали.
     ceiling: int | None = None
+    egress: EgressReport | None = None
 
 
 class VideoServer(Protocol):
@@ -169,6 +194,22 @@ class VideoServer(Protocol):
 
     def verify_webhook(self, body: bytes, authorization: str | None) -> SfuWebhook:
         """The webhook if it is signed over this body; `WebhookRejectedError` otherwise."""
+        ...
+
+    async def record(self, room_name: str, target: BucketTarget) -> str:
+        """Start the room's video recording into the bucket; its egress id."""
+        ...
+
+    async def stop_egress(self, egress_id: str) -> None:
+        """Stop an egress; one already over is left as it is."""
+        ...
+
+    async def egresses(self, room_name: str | None = None) -> Sequence[EgressReport]:
+        """The egresses the SFU runs, a room's only when named."""
+        ...
+
+    async def egress(self, egress_id: str) -> EgressReport | None:
+        """One egress as the SFU last saw it, running or over; None when it does not know it."""
         ...
 
     async def ping(self) -> None:

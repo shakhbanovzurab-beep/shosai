@@ -14,6 +14,7 @@ from livekit.protocol.models import ParticipantInfo, Room
 from pydantic import BaseModel, ConfigDict, Field
 
 from shosai.features.meetings.application.video_server import (
+    EgressReport,
     SfuParticipant,
     SfuRoom,
     SfuWebhook,
@@ -21,6 +22,7 @@ from shosai.features.meetings.application.video_server import (
 )
 
 MILLISECONDS: Final = 1_000
+NANOSECONDS: Final = 1_000_000_000
 KNOWN_KINDS: Final = frozenset(kind.value for kind in WebhookKind)
 
 
@@ -72,6 +74,39 @@ class WireParticipant(BaseModel):
     identity: str = ""
 
 
+class WireFile(BaseModel):
+    """A file an egress wrote."""
+
+    model_config = ConfigDict(extra="ignore", frozen=True)
+
+    size: int = 0
+    duration: int = 0
+
+
+class WireEgress(BaseModel):
+    """The egress of a webhook."""
+
+    model_config = ConfigDict(extra="ignore", frozen=True)
+
+    egress_id: str = Field(default="", alias="egressId")
+    room_name: str = Field(default="", alias="roomName")
+    status: str = "EGRESS_STARTING"
+    file_results: list[WireFile] = Field(default_factory=list, alias="fileResults")
+    error: str = ""
+
+    def report(self) -> EgressReport:
+        """The egress as meetings reads it."""
+        return EgressReport(
+            egress_id=self.egress_id,
+            room_name=self.room_name,
+            status=self.status,
+            size_bytes=max((item.size for item in self.file_results), default=0),
+            duration_seconds=max((item.duration for item in self.file_results), default=0)
+            // NANOSECONDS,
+            error=self.error,
+        )
+
+
 class WireWebhook(BaseModel):
     """A webhook's body as LiveKit sends it."""
 
@@ -82,6 +117,7 @@ class WireWebhook(BaseModel):
     created_at: int = Field(default=0, alias="createdAt")
     room: WireRoom | None = None
     participant: WireParticipant | None = None
+    egress: WireEgress | None = Field(default=None, alias="egressInfo")
 
 
 def webhook_of(body: bytes) -> SfuWebhook:
@@ -97,4 +133,5 @@ def webhook_of(body: bytes) -> SfuWebhook:
         participants=None if wire.room is None else room.participants,
         identity=None if wire.participant is None else wire.participant.identity,
         ceiling=None if wire.room is None or not room.ceiling else room.ceiling,
+        egress=None if wire.egress is None else wire.egress.report(),
     )

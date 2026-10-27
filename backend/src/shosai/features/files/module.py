@@ -39,6 +39,7 @@ from shosai.features.files.application.upload_claims import UploadClaims
 from shosai.features.files.application.upload_links import StorageOfHomes
 from shosai.features.files.application.upload_sweep import UploadSweep
 from shosai.features.files.application.uploads import UploadService
+from shosai.features.files.application.written_files import WrittenFilesService
 from shosai.features.files.channels.agent_tool_reads import FileReads
 from shosai.features.files.channels.agent_tool_writes import FileWrites
 from shosai.features.files.channels.agent_tools import FILES_TOOLS
@@ -57,6 +58,7 @@ from shosai.features.files.contracts.events import (
     LeoUseChanged,
 )
 from shosai.features.files.contracts.held_objects import HELD_OBJECTS
+from shosai.features.files.contracts.written_files import WRITTEN_FILES
 from shosai.features.files.emails.leo_over_limit import LEO_OVER_LIMIT
 from shosai.features.files.emails.storage_over_limit import STORAGE_OVER_LIMIT
 from shosai.features.files.infrastructure.file_records import (
@@ -93,6 +95,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     support = SupportFiles(transactions, (ports, services.outbox, watch, leo, leo_watch))
     edge = None if base is None else str(base)
     previews = Previews(transactions, (services.objects, deleter), services.tasks)
+    written = WrittenFilesService(transactions, ports, services.outbox)
     held = HeldObjectsService(
         transactions, ports, (services.objects, deleter, edge), (services.tasks, claims)
     )
@@ -131,6 +134,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         email_templates=(STORAGE_OVER_LIMIT, LEO_OVER_LIMIT),
         agent_tools=tools,
         provides=(
+            WRITTEN_FILES.bind(written),
             ACCOUNT_DATA_HANDLERS.bind(handler),
             UPLOADS.bind(claims),
             FILE_READER.bind(reader),

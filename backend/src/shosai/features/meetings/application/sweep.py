@@ -24,6 +24,7 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.meetings.application.calls import Calls
 from shosai.features.meetings.application.joining import FoundRoom
+from shosai.features.meetings.application.recording import Recordings
 from shosai.features.meetings.application.video_server import VideoServer, VideoUnavailableError
 from shosai.features.meetings.contracts import PENDING_EVENTS
 from shosai.features.meetings.domain.calls import CallState
@@ -41,11 +42,11 @@ class Sweep:
     def __init__(
         self,
         transactions: HomeTransactions,
-        services: tuple[VideoServer, Calls, PortDirectory, MeetingsMetrics],
+        services: tuple[VideoServer, Calls, PortDirectory, MeetingsMetrics, Recordings],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._server, self._calls, self._ports, self._metrics = services
+        self._server, self._calls, self._ports, self._metrics, self._recordings = services
         self._clock = clock
 
     async def run(self, home: Home) -> None:
@@ -89,6 +90,7 @@ class Sweep:
             await self._act(home, room, (verdict, call), now)
         for lk_room_name in stale:
             await self._end_in_sfu(lk_room_name)
+        await self._recordings.reconcile(home, now)
 
     async def _act(
         self,
