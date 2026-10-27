@@ -150,7 +150,7 @@ One console command, `shosai`, runs one role per process on one uvloop event loo
 | Command | Serves | Runs |
 |---|---|---|
 | `shosai api` | the public app on `HTTP_PORT`: every slice's HTTP routes and `GET /v1/health` | — |
-| `shosai ws` | the public app of the WS gateway on `HTTP_PORT`: every slice's WebSocket routes and `GET /v1/health` | — |
+| `shosai ws` | the public app of the WS gateway on `HTTP_PORT`: every slice's WebSocket routes and `GET /v1/health`. Only this role takes WebSocket upgrades (`websockets`, no compression, frames ≤ 64 KiB, ping every 20 s); a route hands its socket to `CoreServices.sockets` (`core/web/sockets.py`): the cabinet's origin only, at most `WS_SOCKETS_PER_PROCESS` sockets (one more closes with 1013), `hello` with the access token within 5 s (`identity.contracts.sockets.socket_principal`), close codes `4000 + HTTP status`, and `{"type": "server.shutdown"}` before the drain, then 1012 (ADR 0070) | — |
 | `shosai workers --queue Q` | — | TaskIQ's receiver of queue `Q` (`critical`, `default`, `bulk`, `meeting`) |
 | `shosai scheduler` | — | the loops: the outbox relay of each home every 5 s, the walk of periodic jobs of each home every 5 s, every slice's due-row sources, the queue and outbox gauges every 15 s, every slice's loops |
 | `shosai migrate upgrade` / `current` | — | Alembic for both homes, RU first; logs each home's revision |

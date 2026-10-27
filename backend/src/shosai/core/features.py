@@ -63,6 +63,7 @@ from shosai.core.storage.port import MultipartUploads, ObjectStorage
 from shosai.core.tasks.declaration import TaskHandler
 from shosai.core.tasks.queues import TaskQueue
 from shosai.core.tasks.sender import TaskSender
+from shosai.core.web.sockets import SocketGateway
 
 FEATURE_NAME: Final = re.compile(r"[a-z][a-z0-9_]*")
 
@@ -91,6 +92,8 @@ class CoreServices:
     uploads: Mapping[Home, MultipartUploads]
     locks: DistributedLocks
     rate_limiter: RateLimiter
+    # Сокеты шлюза ws: origin кабинета, ёмкость процесса, остановка с server.shutdown (ADR 0070).
+    sockets: SocketGateway
     # Порты срезов: заполняются, когда собраны все срезы; читаются при запросе или задаче.
     ports: PortDirectory
     # Сам клиент Valkey — для собственных структур среза: очереди транскрипта, состояния встреч.

@@ -81,6 +81,7 @@ from shosai.core.storage.s3_client import S3Calls, open_s3_client
 from shosai.core.storage.s3_multipart import S3MultipartUploads
 from shosai.core.storage.s3_objects import S3ObjectStorage
 from shosai.core.tasks.system import TaskSystem, build_task_system
+from shosai.core.web.sockets import socket_gateway
 
 log = structlog.stdlib.get_logger(__name__)
 
@@ -282,6 +283,7 @@ def _core_services(
         uploads=clients.uploads,
         locks=DistributedLocks(clients.valkey, kv_metrics),
         rate_limiter=RateLimiter(clients.valkey, kv_metrics),
+        sockets=socket_gateway(process.settings, telemetry.registry),
         ports=PortDirectory(),
         valkey=clients.valkey,
         registry=telemetry.registry,

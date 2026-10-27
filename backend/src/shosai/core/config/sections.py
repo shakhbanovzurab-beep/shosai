@@ -123,6 +123,8 @@ class ServerSettings(SettingsSection):
     bind_host: IPvAnyAddress = IPv4Address("127.0.0.1")
     http_port: Port = 8000
     ops_port: Port = 9100
+    # Сокетов у одного процесса шлюза ws: сверх них — закрытие с 1013 (§4.2–§4.3).
+    ws_sockets_per_process: PositiveInt = 250
 
     @model_validator(mode="after")
     def ports_differ(self) -> Self:

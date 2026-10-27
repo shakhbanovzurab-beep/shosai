@@ -69,7 +69,8 @@ class RequestBoundary:
                     # Как у инструментатора: запись и при отмене задачи посреди запроса.
                     self._metrics.observe(exchange.completed())
             else:
-                # Кадры и коды закрытия WebSocket — забота S05; здесь только контекст логов.
+                # Сокетам — контекст логов; их коды закрытия и время жизни считает шлюз
+                # (core/web/sockets.py).
                 await self.app(scope, receive, send)
 
 

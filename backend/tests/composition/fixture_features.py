@@ -15,7 +15,7 @@ from datetime import timedelta
 from typing import ClassVar
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, WebSocket
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.access.shareable import ShareableResource
@@ -28,11 +28,13 @@ from shosai.core.runtime.loops import ScheduledLoop
 from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration, TaskHandler
 from shosai.core.tasks.payloads import TaskPayload
 from shosai.core.tasks.queues import TaskQueue
+from shosai.core.web.sockets import GatewaySocket
 
 NOTES_ROUTE = "/v1/fixture-notes"
 # Нативный маршрут macOS и Windows 1.4.5 (contracts/draft/consumers.json).
 NATIVE_ROUTE = "/v1/auth/me"
 DIGEST_ROUTE = "/v1/ws/fixture-digest/status"
+DIGEST_SOCKET = "/v1/ws/fixture-digest"
 
 
 class NoteWritten(DomainEvent):
@@ -106,14 +108,19 @@ def digest_feature(lifecycle: Lifecycle) -> FeatureModule:
         lifecycle.events.append(f"digest:collect:{received.event.note_id}")
 
     @asynccontextmanager
-    async def build(_services: CoreServices) -> AsyncIterator[FeatureParts]:
+    async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         lifecycle.events.append("digest:open")
-        router = APIRouter(prefix=DIGEST_ROUTE)
+        router = APIRouter()
 
-        @router.get("")
+        @router.get(DIGEST_ROUTE)
         async def digest_status() -> dict[str, str]:
             """The fixture gateway route."""
             return {"status": "ok"}
+
+        @router.websocket(DIGEST_SOCKET)
+        async def digest_socket(websocket: WebSocket) -> None:
+            """The fixture gateway socket: hello, then ready until either side goes."""
+            await services.sockets.serve(websocket, DIGEST_SOCKET, greet)
 
         subscription = EventSubscription(
             consumer="digest.collect",
@@ -128,6 +135,14 @@ def digest_feature(lifecycle: Lifecycle) -> FeatureModule:
             lifecycle.events.append("digest:close")
 
     return FeatureModule(name="digest", build=build)
+
+
+async def greet(socket: GatewaySocket) -> None:
+    """The fixture socket's session."""
+    await socket.hello()
+    await socket.send_json({"type": "ready"})
+    async for _ in socket.frames():
+        pass
 
 
 def broken_feature(lifecycle: Lifecycle) -> FeatureModule:

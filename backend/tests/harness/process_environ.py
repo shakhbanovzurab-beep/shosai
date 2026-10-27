@@ -53,3 +53,9 @@ def slot_environ(run_slot: RunSlot, settings: HarnessSettings, **overrides: str)
         }
     environ.update(overrides)
     return environ
+
+
+def loopback_socket(port: int, path: str) -> str:
+    """The address of a WebSocket route of a test server on the loopback."""
+    # Semgrep требует wss: тестовый сервер на loopback без TLS, адрес не покидает машину.
+    return f"ws://{LOOPBACK}:{port}{path}"  # nosemgrep

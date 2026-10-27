@@ -50,21 +50,30 @@ def public_app(
 
 @asynccontextmanager
 async def serve_public_app(
-    platform: Platform, telemetry: ProcessTelemetry, name: str, routers: Sequence[APIRouter]
+    platform: Platform,
+    telemetry: ProcessTelemetry,
+    name: str,
+    routers: Sequence[APIRouter],
+    *,
+    websockets: bool = False,
 ) -> AsyncIterator[RoleTasks]:
-    """The public app on `HTTP_PORT`, trusting `X-Forwarded-*` from the edge only."""
+    """The public app on `HTTP_PORT`, trusting `X-Forwarded-*` from the edge only. With
+    `websockets`, the sockets hear `server.shutdown` and get the drain time before the stop."""
     settings = platform.services.settings
     config = server_config(
         public_app(platform, telemetry, routers),
         trusted_proxies=forwarded_allow_ips(settings.web),
         drain=PUBLIC_DRAIN,
         keep_alive=EDGE_KEEP_ALIVE,
+        websockets=websockets,
     )
     server = HttpServer(name, config, str(settings.server.bind_host), settings.server.http_port)
     await server.start()
     try:
         yield (server.task,)
     finally:
+        if websockets:
+            await platform.services.sockets.drain(PUBLIC_DRAIN)
         await server.stop()
 
 
@@ -79,7 +88,7 @@ def ws_role(
     platform: Platform, telemetry: ProcessTelemetry
 ) -> AbstractAsyncContextManager[RoleTasks]:
     """The WS gateway: every slice's WebSocket routes."""
-    return serve_public_app(platform, telemetry, "ws", platform.parts.ws_routers)
+    return serve_public_app(platform, telemetry, "ws", platform.parts.ws_routers, websockets=True)
 
 
 def workers_role(queue: TaskQueue) -> Role:

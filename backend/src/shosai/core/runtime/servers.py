@@ -31,6 +31,10 @@ DEFAULT_KEEP_ALIVE: Final = timedelta(seconds=5)
 # Дольше, чем edge держит простаивающее соединение к процессу (у NGINX по умолчанию 60 с):
 # иначе сервер закрывает соединение, которое edge в тот же миг берёт для запроса, — 502.
 EDGE_KEEP_ALIVE: Final = timedelta(seconds=75)
+# Кадр WebSocket: 40 мс звука — 1–2 КБ, управляющий JSON меньше; больше 64 КБ — ошибка клиента.
+WS_MAX_FRAME: Final = 64 * 1024
+# Пинг держит соединение через edge и находит пропавших клиентов за 20 + 20 с.
+WS_PING: Final = timedelta(seconds=20)
 log = structlog.stdlib.get_logger(__name__)
 
 
@@ -53,12 +57,14 @@ def server_config(
     trusted_proxies: Sequence[str] | None,
     drain: timedelta,
     keep_alive: timedelta = DEFAULT_KEEP_ALIVE,
+    websockets: bool = False,
 ) -> uvicorn.Config:
     """uvicorn's settings for one server of the process.
 
     `trusted_proxies` is None for a server behind no proxy (the ops app); a list, even an
     empty one, turns on `X-Forwarded-*` for exactly those peers and nobody else.
-    `keep_alive` is how long an idle connection stays open.
+    `keep_alive` is how long an idle connection stays open. `websockets` turns WebSocket
+    upgrades on — only the WS gateway takes them (ADR 0070).
     """
     return uvicorn.Config(
         app,
@@ -67,8 +73,13 @@ def server_config(
         access_log=False,
         server_header=False,
         http="h11",
-        # WebSocket-библиотеку выбирает S05 вместе с протоколом кадров; до него — без WS.
-        ws="none",
+        # WebSocket — библиотека websockets без своего I/O; кадры без сжатия: звук не сжимается,
+        # а сжатие стоило бы процессора на каждом кадре.
+        ws="websockets-sansio" if websockets else "none",
+        ws_max_size=WS_MAX_FRAME,
+        ws_per_message_deflate=False,
+        ws_ping_interval=WS_PING.total_seconds(),
+        ws_ping_timeout=WS_PING.total_seconds(),
         proxy_headers=trusted_proxies is not None,
         forwarded_allow_ips=list(trusted_proxies or ()),
         backlog=BACKLOG,
