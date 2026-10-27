@@ -17,7 +17,7 @@ from typing import Any, Final, Protocol
 import structlog
 
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute, PlatformAccount
-from shosai.core.ai.errors import AiCallError
+from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart
 from shosai.core.ai.results import ChatResult
 from shosai.features.decisions.application.briefs import BRIEFS, Target
@@ -34,6 +34,8 @@ from shosai.features.decisions.infrastructure.generation_texts import (
 )
 
 BATCH: Final = 8
+# Отказы, после которых звать модели бессмысленно до сброса потолка или выключателя.
+STOPPING: Final = frozenset({AiFailure.SPEND_LIMIT, AiFailure.EXPENSIVE_PAUSED})
 # Пакетов в работе разом: до 32 вызовов разметчика, а не три часа подряд на 2 400 случаев.
 BATCHES_AT_ONCE: Final = 4
 GENERATION_TOKENS: Final = 8_000
@@ -78,6 +80,8 @@ class DatasetMaker:
     def __init__(self, tooling: Tooling) -> None:
         self._tooling = tooling
         self._run = uuid.uuid4().hex[:12]
+        # Почему работа остановилась: потолок расходов платформы или выключатель.
+        self.stopped: AiFailure | None = None
 
     async def label(self, policy: Policy[Any, Any], case: Case) -> Mapping[str, Label] | None:
         """The labeller's labels of a case, or None when it gave none of the right kinds."""
@@ -176,7 +180,10 @@ class DatasetMaker:
     async def _ask(
         self, route: ModelRoute, prompt: tuple[str, str], key: str, tokens: int
     ) -> dict[str, Any] | None:
-        """A model's JSON answer as the platform's own call; None when there is none."""
+        """A model's JSON answer as the platform's own call; None when there is none, and no
+        call at all once the platform's spend ceiling or kill switch has stopped the work."""
+        if self.stopped is not None:
+            return None
         system, user = prompt
         request = ChatRequest(
             messages=(
@@ -194,5 +201,7 @@ class DatasetMaker:
             result = await self._tooling.chat.chat(context, route, request)
         except AiCallError as error:
             log.warning("Модель набора не ответила", key=key, failure=error.failure.value)
+            if error.failure in STOPPING:
+                self.stopped = error.failure
             return None
         return json_object(result.text)

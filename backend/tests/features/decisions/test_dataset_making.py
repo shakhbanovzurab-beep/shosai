@@ -2,6 +2,7 @@
 person (ADR 0069 DL-D8)."""
 
 import asyncio
+import io
 import json
 from collections import Counter
 from dataclasses import dataclass, field
@@ -10,7 +11,9 @@ from typing import Any
 
 import pytest
 
+from shosai.composition.decisions_dataset_command import stopped
 from shosai.core.ai.calls import CallContext, CallOrigin, ModelRef, ModelRoute, Provider
+from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.requests import ChatRequest, TextPart
 from shosai.core.ai.results import ChatResult, Usage
 from shosai.features.decisions.application.briefs import BRIEFS
@@ -53,6 +56,8 @@ class Models:
     # Сколько секунд пишет генератор и сколько его вызовов шло разом.
     writing: float = 0.0
     at_once: list[int] = field(default_factory=lambda: [0, 0])
+    # Отказ платформы на вызовы разметчика: потолок расходов, выключатель.
+    refusing: AiFailure | None = None
 
     async def chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
@@ -68,6 +73,8 @@ class Models:
             self.at_once[1] = max(self.at_once)
             await asyncio.sleep(self.writing)
             self.at_once[0] -= 1
+        elif self.refusing is not None:
+            raise AiCallError(self.refusing)
         else:
             answer = self.labels.pop(0) if self.labels else None
             text = json.dumps(answer) if answer is not None else "no idea"
@@ -177,3 +184,17 @@ async def test_drafts_are_never_filtered_by_the_labeller() -> None:
     assert [case.id for case in drafts] == [f"en-{DRAFT_OFFSET + n:05d}" for n in range(4)]
     assert len(models.calls) == 1
     assert len(models.labels) == 4
+
+
+async def test_the_spend_ceiling_stops_the_work_without_another_call() -> None:
+    models = Models("action.friction", refusing=AiFailure.SPEND_LIMIT)
+    made = maker(models)
+    out = io.StringIO()
+
+    kept = await made.generate(ACTION_FRICTION, "en", 16, 0)
+    code = stopped(made, out)
+
+    labelling = [call for call in models.calls if call.effect_key.split(":")[2] == "label"]
+    assert (kept, made.stopped, len(labelling)) == ([], AiFailure.SPEND_LIMIT, 1)
+    assert code == 1
+    assert "spend_limit" in out.getvalue()

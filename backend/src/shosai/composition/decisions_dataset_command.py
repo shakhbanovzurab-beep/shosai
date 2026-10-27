@@ -86,7 +86,19 @@ async def made(
     languages = SUPPORTED_LANGUAGES if language == "all" else (language or "",)
     for each in languages:
         await made_in(maker, policy, (each, count, action), out)
+        if maker.stopped is not None:
+            return stopped(maker, out)
     return EXIT_OK
+
+
+def stopped(maker: DatasetMaker, out: TextIO) -> int:
+    """Say why the work stopped and how to go on."""
+    reason = maker.stopped.value if maker.stopped is not None else "unknown"
+    out.write(
+        f"stopped: the platform's AI refused further calls ({reason}); what was kept is "
+        "written — run the same command again once the ceiling resets to continue\n"
+    )
+    return EXIT_FAILED
 
 
 async def made_in(
@@ -116,4 +128,6 @@ async def labelled(maker: DatasetMaker, policy: Policy[Any, Any], out: TextIO) -
                 labels[case.id] = machine
         written = with_machine_labels(path, labels)
         out.write(f"{policy.key} {path.stem}: {written} of {len(cases)} labelled\n")
+        if maker.stopped is not None:
+            return stopped(maker, out)
     return EXIT_OK
