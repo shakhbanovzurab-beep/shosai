@@ -12,7 +12,7 @@ worker reads only the conversation.
 
 import asyncio
 from datetime import datetime, timedelta
-from typing import Final
+from typing import Final, Protocol
 from uuid import UUID
 
 from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration
@@ -69,6 +69,14 @@ def started_event(payload: TurnPayload) -> StreamEvent:
         },
     )
     return event
+
+
+class Emitter(Protocol):
+    """Where a run's events go: its log for a text turn, the socket for a voice exchange."""
+
+    async def emit(self, kind: EventKind, data: EventData) -> StreamEvent:
+        """Send one event and return it with its number."""
+        ...
 
 
 class RunEmitter:

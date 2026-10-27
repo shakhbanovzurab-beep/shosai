@@ -47,7 +47,7 @@ from shosai.features.agent.application.tool_answers import (
 from shosai.features.agent.application.tool_offer import TurnOffer
 from shosai.features.agent.application.tool_read_back import ResultReader
 from shosai.features.agent.application.tool_registry import OfferedTool, waits_for_card
-from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
+from shosai.features.agent.application.turn_task import Emitter, TurnPayload
 from shosai.features.agent.domain.budgets import CALLS_PER_ROUND, estimate_tokens
 from shosai.features.agent.domain.charts import SPEC_FIELD
 from shosai.features.agent.domain.core_tools import LOAD_TOOLSET, NAVIGATE
@@ -95,7 +95,7 @@ class ToolRound:
     def __init__(
         self,
         parts: ToolParts,
-        run: tuple[TurnPayload, RunWork, RunEmitter],
+        run: tuple[TurnPayload, RunWork, Emitter],
         clock: Callable[[], float] = time.monotonic,
     ) -> None:
         self._parts = parts

@@ -108,3 +108,5 @@ class Channel(StrEnum):
 
     WEB = "web"
     ADMIN = "admin"
+    # Реплики голосового режима (ADR 0070): каждый обмен — свой прогон.
+    VOICE = "voice"

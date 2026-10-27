@@ -23,7 +23,7 @@ from shosai.core.ai.requests import ToolCall
 from shosai.features.agent.application.action_proposal import ActionProposer, Proposed
 from shosai.features.agent.application.run_work import CallAnswer, RunWork, Step
 from shosai.features.agent.application.tool_answers import error_content, step_detail
-from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
+from shosai.features.agent.application.turn_task import Emitter, TurnPayload
 from shosai.features.agent.domain.stream import EventKind
 from shosai.features.agent.domain.threads import StepStatus
 from shosai.features.agent.infrastructure.prompts import CALL_PROPOSED, PROPOSED
@@ -39,7 +39,7 @@ class CardProposals:
     def __init__(
         self,
         parts: tuple[ActionProposer, ToolMetrics],
-        run: tuple[TurnPayload, RunWork, RunEmitter],
+        run: tuple[TurnPayload, RunWork, Emitter],
         clock: Callable[[], float] = time.monotonic,
     ) -> None:
         self._proposer, self._metrics = parts

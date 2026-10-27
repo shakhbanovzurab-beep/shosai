@@ -64,6 +64,7 @@ from shosai.features.agent.application.tool_registry import ToolRegistry
 from shosai.features.agent.application.tool_round import ToolParts
 from shosai.features.agent.application.turn_commit import TurnParts
 from shosai.features.agent.application.turn_start import TurnStarter
+from shosai.features.agent.application.voice_turns import AgentVoiceTurns, VoiceParts
 from shosai.features.agent.channels.agent_tools import CORE_TOOLS, core_tools
 from shosai.features.agent.channels.http.actions import build_actions_router
 from shosai.features.agent.channels.http.callers import operator_mount, person_mount
@@ -81,6 +82,7 @@ from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_h
 from shosai.features.agent.channels.web_tools import WEB_TOOLS, web_tools
 from shosai.features.agent.contracts import ACTION_PROPOSALS, SKILL_READER
 from shosai.features.agent.contracts.events import TurnCompleted
+from shosai.features.agent.contracts.voice import VOICE_TURNS
 from shosai.features.agent.infrastructure.action_metrics import ActionMetrics
 from shosai.features.agent.infrastructure.feedback_metrics import FeedbackMetrics
 from shosai.features.agent.infrastructure.fleet import Fleet
@@ -141,6 +143,16 @@ def action_gateway(
         executor,
         ActionSweeps(transactions, parts, judging=judging),
         ActionInvariants(transactions, metrics),
+    )
+
+
+def voice_turns(
+    services: CoreServices, threads: Threads, routing: TurnRouting, tools: ToolParts
+) -> AgentVoiceTurns:
+    """Leo's voice conversations on the threads, the routing and the tools of text turns."""
+    transactions, ports = services.transactions, services.ports
+    return AgentVoiceTurns(
+        VoiceParts(transactions, ports, threads, routing, tools, services.outbox)
     )
 
 
@@ -248,6 +260,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 ),
                 ME_CONTRIBUTIONS.bind(preferences),
                 SKILL_READER.bind(InstalledSkills()),
+                VOICE_TURNS.bind(voice_turns(services, threads, routing, tools)),
             ),
         )
     finally:

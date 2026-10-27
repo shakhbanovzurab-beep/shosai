@@ -34,7 +34,7 @@ from shosai.core.db.partitions.policy import monthly_partition_range
 from shosai.features.agent.domain.actions import AuditEvent
 
 RUN_STATUSES: Final = "'running', 'paused', 'completed', 'failed', 'cancelled'"
-CHANNELS: Final = "'web', 'admin'"
+CHANNELS: Final = "'web', 'admin', 'voice'"
 ACTION_STATUSES: Final = (
     "'proposed', 'approved', 'executing', 'succeeded', 'partially_succeeded', 'failed', "
     "'outcome_unknown', 'rejected', 'expired', 'superseded'"

@@ -31,7 +31,7 @@ from shosai.features.agent.application.run_sources import listed
 from shosai.features.agent.application.run_work import EarlierWork, RunWork
 from shosai.features.agent.application.tool_offer import TurnOffer
 from shosai.features.agent.application.tool_read_back import ResultReader
-from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
+from shosai.features.agent.application.turn_task import Emitter, TurnPayload
 from shosai.features.agent.domain.action_items import ItemState
 from shosai.features.agent.domain.budgets import estimate_tokens
 from shosai.features.agent.domain.runs import TURN_DEADLINE
@@ -106,7 +106,7 @@ class EgressAnswers:
     def __init__(
         self,
         parts: tuple[HomeTransactions, ResultReader],
-        run: tuple[TurnPayload, RunWork, RunEmitter],
+        run: tuple[TurnPayload, RunWork, Emitter],
     ) -> None:
         self._transactions, self._reader = parts
         self._payload, self._work, self._emitter = run
