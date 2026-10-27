@@ -55,22 +55,24 @@ CREATE_OWNER_POLICY: Final = (
 DROP_POLICY: Final = "DROP POLICY %(policy)s ON %(table)s"
 LOOKUP_ARGUMENTS: Final[tuple[FunctionArgument, ...]] = ("text",)
 # Владелец таблиц отвечает по токену или имени LiveKit комнатой, её владельцем и пространством.
-LOOKUPS: Final = {
-    "meetings_room_by_token": """
+BY_INVITE: Final = """
 CREATE FUNCTION meetings_room_by_token(text)
 RETURNS TABLE (room_id uuid, owner_id uuid, org_id uuid)
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog, public AS $$
     SELECT room.id, room.owner_id, room.org_id FROM rooms AS room WHERE room.invite_token = $1
 $$
-""",
-    "meetings_room_by_livekit_name": """
+"""
+BY_LIVEKIT_NAME: Final = """
 CREATE FUNCTION meetings_room_by_livekit_name(text)
 RETURNS TABLE (room_id uuid, owner_id uuid, org_id uuid)
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog, public AS $$
     SELECT room.id, room.owner_id, room.org_id FROM rooms AS room WHERE room.lk_room_name = $1
 $$
-""",
-}
+"""
+LOOKUPS: Final = (
+    ("meetings_room_by_token", BY_INVITE),
+    ("meetings_room_by_livekit_name", BY_LIVEKIT_NAME),
+)
 PRINCIPAL: Final = (
     "~ '^(guest-[0-9a-f]{12}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$'"
 )
@@ -115,7 +117,7 @@ def upgrade(scope: MigrationScope) -> None:
         grant_to_application(scope, table)
     for table in SWEPT:
         grant_to_sweeper(table, ("SELECT",))
-    for name, function in LOOKUPS.items():
+    for name, function in LOOKUPS:
         op.execute(function)
         open_function(name, LOOKUP_ARGUMENTS, (scope.application_role,))
 
@@ -311,7 +313,7 @@ def create_board() -> None:
 @runs_in(applies_to)
 def downgrade(scope: MigrationScope) -> None:
     """Drop the lookups and the tables with their rules."""
-    for name in LOOKUPS:
+    for name, _function in LOOKUPS:
         drop_function(name, LOOKUP_ARGUMENTS)
     for table in SWEPT:
         revoke_from_sweeper(table)
