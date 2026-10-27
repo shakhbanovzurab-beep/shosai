@@ -1,7 +1,10 @@
 """The memory slice's settings (`MEMORY_*`, memory plan §3.2).
 
 `MEMORY_MODEL` (with `MEMORY_FALLBACK_MODEL`) finds statements in a turn and a meeting, writes
-the summary and reads the summary's box, until studio's model routes. `MEMORY_EMBEDDING_MODEL`
+the summary and reads the summary's box, until studio's model routes; `MEMORY_REASONING` says how
+hard its primary model reasons, `minimal` unless set: each call is a short structured answer,
+and gemini-3.8-flash's default reasoning spent 573 of an extraction's 600 output tokens on a
+long message and cut the answer off (measured 2026-10-27). `MEMORY_EMBEDDING_MODEL`
 turns statements and questions into vectors: the owner's
 `google/gemini-embedding-2` (MM-D6), asked for 1 024 of its Matryoshka dimensions. A change of
 model re-embeds every fact on a cursor; recall never compares vectors of two models.
@@ -13,6 +16,7 @@ from typing import Final, Self
 from pydantic import model_validator
 
 from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
+from shosai.core.ai.requests import ReasoningEffort
 from shosai.core.config.sections import SettingsSection
 
 PINNED_MODEL: Final = re.compile(r"[a-z0-9_.-]+/[a-z0-9_.-]+")
@@ -23,6 +27,9 @@ class MemorySettings(SettingsSection):
 
     memory_model: str = "google/gemini-3.8-flash"
     memory_fallback_model: str | None = None
+    # Рассуждение основной модели памяти: ответ — короткий JSON, а рассуждение по умолчанию
+    # съедало предел ответа; запасная модель отвечает как решит её провайдер.
+    memory_reasoning: ReasoningEffort | None = ReasoningEffort.MINIMAL
     memory_embedding_model: str = "google/gemini-embedding-2"
 
     @model_validator(mode="after")
@@ -45,4 +52,8 @@ class MemorySettings(SettingsSection):
             if self.memory_fallback_model
             else ()
         )
-        return ModelRoute(ModelRef(Provider.OPENROUTER, self.memory_model), fallbacks)
+        return ModelRoute(
+            ModelRef(Provider.OPENROUTER, self.memory_model),
+            fallbacks,
+            reasoning=self.memory_reasoning,
+        )

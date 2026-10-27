@@ -66,6 +66,7 @@ What Leo knows about the person: their preferences, facts about them and their w
 
 - `objectives.py`: the invariant monitor `memory_written_while_off` pages on the hourly check's gauge; the journey `leo_memory` shows recall's time and the admission's lag on memory's dashboard, with no promise. The rules and dashboards are generated from it (`pytest --update-rules`).
 - `infrastructure/metrics.py`: `shosai_memory_extractions_total{source, outcome}` (a turn's or a meeting's model call), `shosai_memory_admission_lag_seconds` (from the turn's end, carried by `memory.admit_turn`, to its admission), `shosai_memory_candidates_total{source, answer}` (Remember, Don't remember, expired). The tickets on them are hand-written in `deploy/observability/prometheus/rules/tickets.yml`; each alert has its section in `docs/runbooks/alerts.md`.
+- Memory's model reasons `minimal` (`MEMORY_REASONING`, `settings.py`): with the provider's default, gemini-3.8-flash spent an extraction's whole answer on reasoning for a long message and nothing was admitted. An answer with more statements than the rule keeps is read for its first three (a meeting's, five), never refused whole.
 - Load (`tests/features/memory/test_recall_load.py`, `test_admission_load.py`): recall at the platform's peak is never late, and one `default` worker admits about 2.6 turns a second at 1.8 s of model time — the number the `default` workers are sized by. A fact's vector never loads with its row (`deferred`, raising on a stray read): only distances in SQL read it.
 
 ## What the models read (step 1)

@@ -109,11 +109,12 @@ class TurnStatement(BaseModel):
 
 
 class TurnAnswer(BaseModel):
-    """The statements of a turn."""
+    """The statements of a turn; past the third they are not read."""
 
     model_config = ConfigDict(extra="ignore")
 
-    statements: list[TurnStatement] = Field(max_length=3)
+    # Лишние утверждения не портят ответ: правило «не больше трёх» держит извлечение.
+    statements: list[TurnStatement]
 
 
 class MeetingStatement(BaseModel):
@@ -129,11 +130,11 @@ class MeetingStatement(BaseModel):
 
 
 class MeetingAnswer(BaseModel):
-    """The statements of a meeting."""
+    """The statements of a meeting; past the fifth they are not read."""
 
     model_config = ConfigDict(extra="ignore")
 
-    statements: list[MeetingStatement] = Field(max_length=5)
+    statements: list[MeetingStatement]
 
 
 EXTRACTION_TEXTS: Final[tuple[object, ...]] = (

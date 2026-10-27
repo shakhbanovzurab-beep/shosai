@@ -1,7 +1,8 @@
 """A turn's admission: explicit requests saved, guesses asked within the day's three, the same
 words confirming, the same subject proposing a replacement, the switches on this writer, a
 redelivery writing nothing twice (memory step 5, MM-D1), and the extraction's end and the lag
-after the turn counted (memory step 11)."""
+after the turn counted, and an answer with more statements than the rule keeps read for its
+first three (memory step 11)."""
 
 import uuid
 from datetime import UTC, datetime, timedelta
@@ -121,3 +122,21 @@ async def test_the_extraction_s_end_and_the_lag_after_the_turn_are_counted(
     assert sample(EXTRACTIONS, {"source": "turn", "outcome": "failed"}) == 1
     assert sample(f"{ADMISSION_LAG}_count") == 1
     assert 7 <= (sample(f"{ADMISSION_LAG}_sum") or 0) < 60
+
+
+async def test_an_answer_with_more_than_three_statements_keeps_the_first_three(
+    admission_bench: AdmissionBench,
+) -> None:
+    person = uuid.uuid4()
+    admission_bench.consents.given.add(person)
+    told = [f"Fact {number}" for number in range(5)]
+    for number, statement in enumerate(told):
+        admission_bench.vectors.known[statement] = axis(*([0.0] * number), 1)
+    admission_bench.statements.found = [said(statement, explicit=True) for statement in told]
+
+    outcomes = await admission_bench.admission.admit(
+        Home.RU, person, admission_bench.turns.said("Remember these five things about me.")
+    )
+
+    assert outcomes == [Admission.ACTIVE] * 3
+    assert sorted(fact.statement for fact in await admission_bench.facts(person)) == told[:3]
