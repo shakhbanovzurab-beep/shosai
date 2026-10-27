@@ -84,6 +84,27 @@ def fits(question: Question, label: object) -> bool:
     return isinstance(label, bool)
 
 
+def answered_labels(
+    case_id: str, questions: Mapping[str, Question], answer: Mapping[str, object]
+) -> dict[str, Label]:
+    """A labeller's answer as labels: a JSON literal it wrote as a string is read as that
+    literal — `"true"` for a `noul`, `"2"` for a `score`; `ValueError` when a label is still
+    missing or of the wrong kind."""
+    read = dict(answer)
+    for name, question in questions.items():
+        value = read.get(name)
+        if not isinstance(value, str) or isinstance(question, ChoiceQuestion):
+            continue
+        # Дешёвые разметчики пишут JSON-литерал строкой: это разбор формата, а не догадка.
+        literal = value.strip().lower()
+        if isinstance(question, ScoreQuestion) and literal.isdecimal():
+            read[name] = int(literal)
+        elif not isinstance(question, ScoreQuestion) and literal in {"true", "false"}:
+            read[name] = literal == "true"
+    check_labels(case_id, questions, read, partial=False)
+    return {name: label for name, label in read.items() if isinstance(label, bool | int | str)}
+
+
 def truth(signal: Signal, label: Label) -> bool:
     """Whether a signal's proposition holds for a label."""
     if signal.at_least is not None:

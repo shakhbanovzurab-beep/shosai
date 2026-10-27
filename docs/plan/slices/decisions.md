@@ -229,7 +229,7 @@ Amended on 2026-10-26 with the approval:
 - **Jev's terms change.** Its endpoint leaving OpenRouter's ZDR list sends every point back to its rule within a day (`not_zdr`) and opens a ticket; enabling it again needs §1.4's comparison repeated. If TypeSafe's terms turn out worse than the published ones, ADR 0026's exit path (an open-weight model with the same request shape behind the provider port) becomes the next decision.
 - **A newer Jev.** `typesafe/jev-1.14` (snapshot of 2026-10-14) is on OpenRouter already; the pin stays at 1.13 until a policy version is calibrated on the newer one through every gate — never a silent switch.
 - **Jev's alpha endpoint changes.** The contract test fails the release (F6); the points fall back meanwhile.
-- **The reference sets wait for a person.** Each point's release needs its reference labelled (steps 5–7); without it the point stays on its rule.
+- **The reference sets wait for the owner's audit.** Since the owner's decision of 2026-10-27 (ADR 0069 amendment), two model annotators label each reference, Claude adjudicates, and the owner confirms the settled rules and a sample (`datasets/REFERENCE_LABELLING.md`); a point's release needs that audit, and without it the point stays on its rule.
 - **A language fails its gate.** The point stays on its rule for everyone until it passes; never per language.
 - **Synthetic sets flatter the policy.** Shadow on live traffic before active, and ADR 0026's 4-week revisit against the fallback.
 - **Routing churns the prefix cache.** Stickiness for three turns and the canonical order; measured in step 6.

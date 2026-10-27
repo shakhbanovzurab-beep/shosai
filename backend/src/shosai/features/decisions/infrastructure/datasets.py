@@ -3,8 +3,8 @@
 Each point has a folder named after it (`action_friction/`):
 
 - `synthetic/<language>.jsonl` — generated cases, one language per file;
-- `reference/ru.jsonl`, `reference/en.jsonl` — cases a person labelled, with the machine's
-  labels beside the person's;
+- `reference/ru.jsonl`, `reference/en.jsonl` — cases labelled blind as
+  `REFERENCE_LABELLING.md` records, with the machine's labels beside the reference's;
 - `recorded.jsonl` — Jev's answers to every case, keyed by the case and the policy's wording,
   so CI re-reads them exactly without a call and a reworded policy never reuses them;
 - `report.json` — the gates on that run as `calibrate` found them, passing or not: CI checks

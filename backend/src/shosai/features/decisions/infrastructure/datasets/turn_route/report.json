@@ -1,8 +1,8 @@
 {
   "cuts": {
     "needs": {
-      "lower": 0.6,
-      "upper": 0.7
+      "lower": 0.61,
+      "upper": 0.71
     }
   },
   "digest": "ab140eb12dc748ce",
@@ -10,156 +10,152 @@
     "ece:needs",
     "accuracy:en",
     "accuracy:fr",
+    "accuracy:de",
+    "accuracy:nl",
     "accuracy:it",
     "accuracy:es",
     "accuracy:pt-BR",
     "accuracy:ar",
     "accuracy:tr",
-    "accuracy:ko",
     "accuracy:vi",
     "accuracy:ja",
     "accuracy:id",
-    "reference_count:ru",
-    "reference_count:en",
-    "agreement",
     "reference_accuracy:ru",
-    "reference_gap:ru",
     "careful:ru",
     "reference_accuracy:en",
-    "reference_gap:en",
     "careful:en"
   ],
   "numbers": {
     "accuracy": {
-      "ar": 0.7476,
-      "de": 0.8019,
-      "en": 0.7748,
-      "es": 0.7885,
-      "fr": 0.7387,
-      "hi": 0.8462,
-      "id": 0.7818,
-      "it": 0.7264,
-      "ja": 0.7885,
-      "ko": 0.7864,
-      "nl": 0.8131,
-      "pt-BR": 0.7615,
-      "ru": 0.8384,
-      "tr": 0.766,
-      "vi": 0.7431,
-      "zh-Hant": 0.8113
+      "ar": 0.7323,
+      "de": 0.7874,
+      "en": 0.7444,
+      "es": 0.7692,
+      "fr": 0.7132,
+      "hi": 0.811,
+      "id": 0.771,
+      "it": 0.7087,
+      "ja": 0.7823,
+      "ko": 0.8099,
+      "nl": 0.748,
+      "pt-BR": 0.7231,
+      "ru": 0.8136,
+      "tr": 0.7522,
+      "vi": 0.7344,
+      "zh-Hant": 0.8095
     },
-    "agreement": 0.0,
+    "agreement": 0.9375,
     "careful": {
-      "en": 0.0,
-      "ru": 0.0
+      "en": 0.6393,
+      "ru": 0.7167
     },
-    "cases": 1686,
+    "cases": 2005,
     "counts": {
       "ar": {
         "needs": {
-          "no": 356,
-          "yes": 97
+          "no": 440,
+          "yes": 121
         }
       },
       "de": {
         "needs": {
-          "no": 368,
-          "yes": 104
+          "no": 441,
+          "yes": 124
         }
       },
       "en": {
         "needs": {
-          "no": 388,
-          "yes": 110
+          "no": 465,
+          "yes": 132
         }
       },
       "es": {
         "needs": {
-          "no": 362,
-          "yes": 101
+          "no": 407,
+          "yes": 112
         }
       },
       "fr": {
         "needs": {
-          "no": 388,
-          "yes": 110
+          "no": 450,
+          "yes": 127
         }
       },
       "hi": {
         "needs": {
-          "no": 364,
-          "yes": 104
+          "no": 444,
+          "yes": 126
         }
       },
       "id": {
         "needs": {
-          "no": 384,
-          "yes": 110
+          "no": 457,
+          "yes": 131
         }
       },
       "it": {
         "needs": {
-          "no": 370,
-          "yes": 105
+          "no": 443,
+          "yes": 126
         }
       },
       "ja": {
         "needs": {
-          "no": 361,
-          "yes": 99
+          "no": 430,
+          "yes": 118
         }
       },
       "ko": {
         "needs": {
-          "no": 356,
-          "yes": 98
+          "no": 417,
+          "yes": 114
         }
       },
       "nl": {
         "needs": {
-          "no": 372,
-          "yes": 102
+          "no": 442,
+          "yes": 122
         }
       },
       "pt-BR": {
         "needs": {
-          "no": 380,
-          "yes": 106
+          "no": 452,
+          "yes": 125
         }
       },
       "ru": {
         "needs": {
-          "no": 346,
-          "yes": 97
+          "no": 412,
+          "yes": 114
         }
       },
       "tr": {
         "needs": {
-          "no": 323,
-          "yes": 85
+          "no": 387,
+          "yes": 101
         }
       },
       "vi": {
         "needs": {
-          "no": 381,
-          "yes": 107
+          "no": 448,
+          "yes": 128
         }
       },
       "zh-Hant": {
         "needs": {
-          "no": 370,
-          "yes": 105
+          "no": 438,
+          "yes": 122
         }
       }
     },
     "ece": {
-      "needs": 0.1615
+      "needs": 0.1576
     },
     "reference_accuracy": {
-      "en": 0.0,
-      "ru": 0.0
+      "en": 0.725,
+      "ru": 0.7875
     },
-    "reference_cases": 0
+    "reference_cases": 160
   },
   "passed": false,
   "policy": "turn.route@1"

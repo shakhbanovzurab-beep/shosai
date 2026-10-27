@@ -3,7 +3,7 @@
 The generator writes, in one call per batch, the text of cases whose labels the code chose;
 each written case is then labelled blind by a model of another provider through the policy's
 own questions, and kept only when the two agree. The same labeller fills the machine's labels
-of a person's reference cases. Every call is the platform's own, keyed by the run and the
+of the reference cases. Every call is the platform's own, keyed by the run and the
 case, and answers JSON; an answer that is not is a case lost, logged, never a guess.
 """
 
@@ -21,7 +21,7 @@ from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart
 from shosai.core.ai.results import ChatResult
 from shosai.features.decisions.application.briefs import BRIEFS, Target
-from shosai.features.decisions.domain.examples import Case, Label, check_labels
+from shosai.features.decisions.domain.examples import Case, Label, answered_labels
 from shosai.features.decisions.domain.policy import Policy, question_text
 from shosai.features.decisions.infrastructure.generation_texts import (
     BRIEF_TEXTS,
@@ -95,10 +95,10 @@ class DatasetMaker:
         if answer is None:
             return None
         try:
-            check_labels(case.id, questions, answer, partial=False)
+            return answered_labels(case.id, questions, answer)
         except ValueError:
+            log.info("Разметчик ответил не теми метками", point=policy.point, case=case.id)
             return None
-        return answer
 
     async def generate(
         self, policy: Policy[Any, Any], language: str, count: int, offset: int
@@ -110,8 +110,8 @@ class DatasetMaker:
     async def draft(
         self, policy: Policy[Any, Any], language: str, count: int, offset: int
     ) -> list[Case]:
-        """Cases for a person to label blind: never filtered by the labeller, since its
-        agreement with the person is what the reference measures."""
+        """Cases to label blind for the reference: never filtered by the labeller, since its
+        agreement with the reference is what the reference measures."""
         return await self._made(policy, language, (count, offset), confirm=False)
 
     async def _made(

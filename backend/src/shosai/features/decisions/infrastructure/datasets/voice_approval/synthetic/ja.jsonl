@@ -1,0 +1,115 @@
+{"facts": {"read_back": "新しいタスク「四半期報告書の作成」を明日の午前9時に作成します。よろしいですか？", "utterance": "はい、それでお願いします。"}, "id": "ja-00000", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク「クライアントへのメール送信」の期限を今日の午後5時に更新します。よろしいですか？", "utterance": "いいえ、それはやめてください。"}, "id": "ja-00001", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク「プレゼン資料の仕上げ」を完了にします。よろしいですか？", "utterance": "あ、はい、完了でいいです。ありがとう。"}, "id": "ja-00002", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク「会議室の予約」を明日の午前10時に移動します。よろしいですか？", "utterance": "ちょっと待って、考えさせて。"}, "id": "ja-00003", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ノート「プロジェクトメモ」を「進行中」フォルダに移動します。よろしいですか？", "utterance": "はい、その「プロジェクトメモ」を「進行中」に移動してください。"}, "id": "ja-00004", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ノート「経費精算の手順」を同僚の田中さんと共有します。よろしいですか？", "utterance": "え、誰と共有するの？田中さんで合ってる？"}, "id": "ja-00005", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ファイル「売上データ.xlsx」を「共有ドライブ」に移動します。よろしいですか？", "utterance": "どうぞ、実行して。"}, "id": "ja-00006", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "新しいタスク「採用面接の準備」を明日の午後2時に作成します。よろしいですか？", "utterance": "はい、でも日付は明後日に変更して、午前中にして。"}, "id": "ja-00007", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクの更新\nタスク名：企画書の提出\n変更内容：期限を来週の月曜日に変更\nよろしいですか？", "utterance": "はい。"}, "id": "ja-00008", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスクの完了\nタスク名：請求書の送付\n完了にしますか？", "utterance": "はい、でもまだ送付していないので、完了にしないでください。"}, "id": "ja-00009", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクの移動\nタスク名：デスクの整理\n移動先：明日\nよろしいですか？", "utterance": "はい、ありがとうございます。"}, "id": "ja-00010", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ノートの移動\nノート名：打ち合わせメモ\n移動先：プロジェクトAフォルダ\nよろしいですか？", "utterance": "それより、今週の売上はどうだった？"}, "id": "ja-00011", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ノートの共有\nノート名：買い物リスト\n共有相手：田中さん\nよろしいですか？", "utterance": "はい、田中さんと共有してください。"}, "id": "ja-00012", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ファイルの移動\nファイル名：見積書.xlsx\n移動先：経費フォルダ\nよろしいですか？", "utterance": "うーん、あの、ちょっと、えっと..."}, "id": "ja-00013", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクの作成\nタスク名：クライアントへの連絡\n作成しますか？", "utterance": "進めてください。"}, "id": "ja-00014", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク完了\nタスク: 経費精算書の提出\n期限: 本日", "utterance": "はい、完了で"}, "id": "ja-00016", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク移動\nタスク: 資料作成\n移動先: 明日", "utterance": "いいえ、移動しないでください"}, "id": "ja-00017", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "メモ移動\nメモ: 打ち合わせメモ\n移動先: 会議ノート", "utterance": "ああ、はい、それでお願いします"}, "id": "ja-00018", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "メモ共有\nメモ: 企画アイデア\n共有先: 田中さん", "utterance": "ちょっと待って、まだ決めていない"}, "id": "ja-00019", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ファイル移動\nファイル: 売上データ.xlsx\n移動先: 報告書フォルダ", "utterance": "はい、売上データ.xlsxを報告書フォルダに移動してください"}, "id": "ja-00020", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク作成\nタスク: 新規クライアントへの連絡\n期限: 明日", "utterance": "誰に連絡するんですか？"}, "id": "ja-00021", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク更新\nタスク: プレゼン準備\n変更内容: 期限を金曜日に更新", "utterance": "それで進めてください"}, "id": "ja-00022", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク完了\nタスク: 請求書の発行\n担当: 佐藤さん", "utterance": "はい、完了でいいけど、担当は鈴木さんに変更して"}, "id": "ja-00023", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクの移動\nタイトル: 企画書作成\n移動先: 今日のリスト", "utterance": "はい、移動してください。"}, "id": "ja-00024", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ノートの移動\nタイトル: 会議メモ\n移動先: プロジェクトX", "utterance": "うん、でもまだプロジェクトXのフォルダができてないから、それからで。"}, "id": "ja-00025", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ノートの共有\nタイトル: 打ち合わせメモ\n共有先: 田中さん", "utterance": "あ、はい、共有してください。ありがとう。"}, "id": "ja-00026", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ファイルの移動\nファイル名: 請求書.pdf\n移動先: 経費フォルダ", "utterance": "それ、あとで確認するね。"}, "id": "ja-00027", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクの作成\nタイトル: 月次レポート提出\n期日: 金曜日", "utterance": "はい、金曜日までのタスクを作成してください。"}, "id": "ja-00028", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスクの更新\nタイトル: 資料作成\n新しい期日: 明日", "utterance": "えっと、それは...あ、いや、別に..."}, "id": "ja-00029", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクの完了\nタイトル: 資料の校正", "utterance": "どうぞ、完了して。"}, "id": "ja-00030", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスクの移動\nタイトル: 電話対応\n移動先: 明日のリスト", "utterance": "うん、それについてはOK。でも、このタスクは移動しないで。"}, "id": "ja-00031", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "メモ移動です。\n対象メモ: 会議の議事録。\n移動先: 仕事フォルダ。\nよろしいですか？", "utterance": "はい。"}, "id": "ja-00032", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "メモ共有です。\n対象メモ: 旅行のチェックリスト。\n共有先: 田中さん。\n共有権限: 閲覧のみ。\n実行しますか？", "utterance": "いいえ、やめてください。"}, "id": "ja-00033", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ファイル移動です。\n対象ファイル: 提案書_最終版.pdf。\n移動先: 顧客フォルダ。\n実行しますか？", "utterance": "あ、はい、ありがとうございます。"}, "id": "ja-00034", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク作成です。\nタスク名: 月次レポート作成。\n期限: 金曜日。\n担当者: 自分。\n作成しますか？", "utterance": "えっと、ちょっと待ってください。"}, "id": "ja-00035", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク更新です。\n対象タスク: 企画書の提出。\n変更内容: 期限を来週の水曜日に変更。\n更新しますか？", "utterance": "はい、期限を来週の水曜日に変更してください。"}, "id": "ja-00036", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク完了です。\n対象タスク: サーバー再起動。\n完了にしますか？", "utterance": "これって本当に完了してもいいんですか？"}, "id": "ja-00037", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク移動です。\n対象タスク: デザイン修正。\n移動先: 進行中リスト。\n移動しますか？", "utterance": "うん、やっちゃってください。"}, "id": "ja-00038", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "メモ移動です。\n対象メモ: 引っ越しメモ。\n移動先: アーカイブ。\n移動日: 今日。\n実行しますか？", "utterance": "はい、でも移動日は明日にしてください。"}, "id": "ja-00039", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: notes.share\nノート: 設計メモ\n共有先: 鈴木さん", "utterance": "はい、共有してください。"}, "id": "ja-00040", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: files.move\nファイル: 提案書.docx\n移動先: アーカイブ/2025", "utterance": "はい、ただしそのファイルが閉じている場合だけです。"}, "id": "ja-00041", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: tasks.update\nタスク: 見積書作成\n変更内容: 期限を来週に変更", "utterance": "あ、今日の打ち合わせは何時でしたっけ？"}, "id": "ja-00043", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: tasks.complete\nタスク: 報告書提出", "utterance": "はい、報告書提出を完了してください。"}, "id": "ja-00044", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: tasks.move\nタスク: 会議設定\n移動先: 完了済み", "utterance": "うーん、それは…あ、ちょっと待って。"}, "id": "ja-00045", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: notes.move\nノート: アイデアメモ\n移動先: プロジェクトX", "utterance": "やってください。"}, "id": "ja-00046", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: notes.share\nノート: 打ち合わせメモ\n共有先: 佐藤さん", "utterance": "はい、そのファイルを削除してください。"}, "id": "ja-00047", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ファイルを移動します。\n対象: 提案書.docx\n移動先: 営業資料フォルダ\nよろしいですか？", "utterance": "はい。"}, "id": "ja-00048", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスクを追加します。\nタイトル: 月次報告書の作成\n期限: 来週金曜日\n担当: 自分\nよろしいですか？", "utterance": "いいえ、やめてください。"}, "id": "ja-00049", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクを更新します。\nタスク: 顧客への電話\n開始日を明日に変更\nよろしいですか？", "utterance": "はい、ありがとう。"}, "id": "ja-00050", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスクを完了にします。\nタスク: 資料の校正\n完了日: 今日\nよろしいですか？", "utterance": "ちょっと待ってください。"}, "id": "ja-00051", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクを移動します。\nタスク: デザイン案の提出\n移動先: 進行中リスト\nよろしいですか？", "utterance": "はい、進行中リストに移動してください。"}, "id": "ja-00052", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "メモを移動します。\nメモ: 会議の議事録\n移動先: プロジェクトNotes\nよろしいですか？", "utterance": "移動先はどこですか？"}, "id": "ja-00053", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "メモを共有します。\nメモ: 企画書ドラフト\n共有相手: 田中さん\nよろしいですか？", "utterance": "やってください。"}, "id": "ja-00054", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ファイルを移動します。\nファイル: 請求書_2025年1月.pdf\n移動先: 経理フォルダ\nよろしいですか？", "utterance": "はい、でも移動するファイルは見積書.docxです。"}, "id": "ja-00055", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク作成: 「企画書のドラフトを書く」を追加します。期限: 明日の15時。優先度: 高。よろしいですか？", "utterance": "はい、お願いします。"}, "id": "ja-00056", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク完了: 「田中さんに資料を送る」を完了にします。よろしいですか？", "utterance": "あ、はい、ありがとうございます。完了で大丈夫です。"}, "id": "ja-00058", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク移動: 「会議の議事録を作成する」を今日のリストから明日のリストに移動します。よろしいですか？", "utterance": "そういえば、明日の会議の場所ってどこに変更になったんだっけ？"}, "id": "ja-00059", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ノート移動: 「プロジェクトメモ」を「仕事」フォルダから「進行中」フォルダに移動します。よろしいですか？", "utterance": "はい、プロジェクトメモを進行中に移動してください。"}, "id": "ja-00060", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ノート共有: 「打ち合わせメモ」を佐藤さんと共有します。よろしいですか？", "utterance": "うーん、それはちょっと……あ、いや、共有って、えっと…"}, "id": "ja-00061", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ファイル移動: 「提案書_v2.pdf」を「ドキュメント」フォルダから「納品済み」フォルダに移動します。よろしいですか？", "utterance": "ああ、それでいいよ。移動しておいて。"}, "id": "ja-00062", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク作成: 「請求書を送付する」を今日のタスクに追加します。よろしいですか？", "utterance": "はい、明日の打ち合わせの準備はできてます。あ、タスクの追加はちょっと待ってください。"}, "id": "ja-00063", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク更新。ID 42。タイトル: 企画書の修正。期限: 明日18時。担当: 佐藤。", "utterance": "はい、それでお願いします。"}, "id": "ja-00064", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク完了。ID 15。タイトル: 納品書の送付。", "utterance": "いや、まだ完了にしないでください。まだ送れてないです。"}, "id": "ja-00065", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク移動。ID 7。タイトル: 会議資料作成。移動先: 明日。", "utterance": "うん、ありがとう、それで移動して。"}, "id": "ja-00066", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ノート移動。タイトル: 打ち合わせメモ。移動先: プロジェクトA。", "utterance": "ちょっと待って、えっと、本当にそれでいいかな。"}, "id": "ja-00067", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ノート共有。タイトル: 定例会議メモ。共有先: 田中さん。", "utterance": "はい、田中さんに共有してください。それで合ってます。"}, "id": "ja-00068", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ファイル移動。ファイル名: 予算表.xlsx。移動先: 経理フォルダ。", "utterance": "あれ、それって元の場所から消えちゃうんですか？"}, "id": "ja-00069", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク作成。タイトル: 請求書の発行。期限: 金曜日。", "utterance": "いいよ、それで作成して。"}, "id": "ja-00070", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク更新。ID 3。タイトル: 報告書提出。期限: 5月20日。", "utterance": "はい、それでいいです。あ、でも期限は5月22日に変えてください。"}, "id": "ja-00071", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク完了のカードです。タスク「企画書の提出」を完了にします。よろしいですか？", "utterance": "はい。"}, "id": "ja-00072", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク移動のカードです。「請求書の作成」を「作業中」から「レビュー待ち」に移動します。よろしいですか？", "utterance": "はい、でもレビュー待ちにする前に、まず確認してもらわないと。"}, "id": "ja-00073", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ノート移動のカードです。ノート「会議メモ」を「個人」フォルダから「プロジェクト」フォルダに移動します。よろしいですか？", "utterance": "はい、ありがとうございます。"}, "id": "ja-00074", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ノート共有のカードです。ノート「設計メモ」を田中さんと共有します。よろしいですか？", "utterance": "あれ、今日の午後の会議って何時からでしたっけ？"}, "id": "ja-00075", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ファイル移動のカードです。「予算.xlsx」を資料フォルダから会計フォルダに移動します。よろしいですか？", "utterance": "はい、予算.xlsxを会計フォルダに移動してください。"}, "id": "ja-00076", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク作成のカードです。「新規顧客への提案書作成」を締め切り明日で作成します。よろしいですか？", "utterance": "えっと、それって…あの…"}, "id": "ja-00077", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク更新のカードです。タスク「報告書の作成」の期限を金曜日に更新します。よろしいですか？", "utterance": "やってください。"}, "id": "ja-00078", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: tasks.move\nタスク: 報告書提出\n移動先: 明日", "utterance": "はい"}, "id": "ja-00080", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: notes.move\nノート: 会議メモ\n移動先: 個人フォルダ", "utterance": "いいえ"}, "id": "ja-00081", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: notes.share\nノート: プロジェクト計画\n共有先: 田中さん", "utterance": "うん、ありがとう"}, "id": "ja-00082", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: files.move\nファイル: 売上データ.xlsx\n移動先: 資料フォルダ", "utterance": "ちょっと待って"}, "id": "ja-00083", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: tasks.create\nタスク名: クライアント訪問\n日時: 明日午前10時", "utterance": "はい、明日午前10時でお願いします"}, "id": "ja-00084", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: tasks.update\nタスク: 資料作成\n変更内容: 担当者を佐藤さんに変更", "utterance": "これって何を更新するんですか？"}, "id": "ja-00085", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: tasks.complete\nタスク: プレゼン準備", "utterance": "やってください"}, "id": "ja-00086", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: tasks.move\nタスク: 契約書送付\n移動先: 明日", "utterance": "はい、でも明後日にしてください"}, "id": "ja-00087", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ノートを移動します。タイトル「会議メモ」をフォルダ「プロジェクトA」から「完了済み」に移動します。よろしいですか？", "utterance": "はい、お願いします。"}, "id": "ja-00088", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ノートを共有します。タイトル「週報」をユーザー「田中さん」と共有します。よろしいですか？", "utterance": "はい、でもまだ内容を確認してないので、確認してからにします。"}, "id": "ja-00089", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ファイルを移動します。名前「報告書.pdf」をフォルダ「提出用」から「バックアップ」に移動します。よろしいですか？", "utterance": "うん、ありがとう、動かして。"}, "id": "ja-00090", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスクを作成します。タイトル「資料作成」、期限明日午後3時。作成しますか？", "utterance": "あ、それよりさっきのメール、返信した？"}, "id": "ja-00091", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクを更新します。タイトル「プレゼン準備」の期限を金曜日に変更します。よろしいですか？", "utterance": "はい、プレゼン準備の期限を金曜日に変更してください。"}, "id": "ja-00092", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスクを完了にします。タイトル「経費精算」のタスクを完了します。よろしいですか？", "utterance": "えっと、ちょっと待って、そのタスクは..."}, "id": "ja-00093", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスクを移動します。タイトル「企画書レビュー」をリスト「進行中」から「完了」に移動します。よろしいですか？", "utterance": "いいよ、やって。"}, "id": "ja-00094", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: メモ共有\nメモタイトル: 会議のメモ\n共有先: 佐藤さん\n期限: 今日中", "utterance": "はい。"}, "id": "ja-00096", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: ファイル移動\nファイル名: 経費精算.xlsx\n移動先: 完了済みフォルダ", "utterance": "いいえ、それはまだ移動しないでください。"}, "id": "ja-00097", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: タスク作成\nタスク名: 提案資料の作成\n期限: 金曜日\n担当: 自分", "utterance": "あ、はい、お願いします。"}, "id": "ja-00098", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: タスク更新\nタスク名: クライアントへの連絡\n変更内容: 期限を明日に変更", "utterance": "えっと、ちょっと考えさせてください。"}, "id": "ja-00099", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: タスク完了\nタスク名: 月次レポート提出\n完了日: 今日", "utterance": "はい、月次レポート提出を完了でいいです。"}, "id": "ja-00100", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: タスク移動\nタスク名: デザイン確認\n移動先: 進行中リスト", "utterance": "移動先は進行中リストで合ってる？"}, "id": "ja-00101", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ツール: メモ移動\nメモタイトル: 打ち合わせメモ\n移動先: プロジェクトAフォルダ", "utterance": "進めてください。"}, "id": "ja-00102", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ツール: メモ共有\nメモタイトル: 週報\n共有先: 田中さん\n期限: 明日", "utterance": "はい、共有してください。あ、でも共有先は田中さんじゃなくて鈴木さんで。"}, "id": "ja-00103", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ファイル移動。\nファイル名：見積書_v2.pdf\n移動先：請求書", "utterance": "はい"}, "id": "ja-00104", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク作成。\nタスク名：クライアントへの報告書作成\n期限：金曜日", "utterance": "うん、いいけど、まだ先方のデータが届いてないから、届いてからにして"}, "id": "ja-00105", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク更新。\nタスク名：デザイン修正\n新しい期限：明日の17時", "utterance": "あ、はい、ありがとうございます"}, "id": "ja-00106", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク完了。\nタスク名：会議室予約", "utterance": "そういえば、その予約って確認メール来たっけ？"}, "id": "ja-00107", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク移動。\nタスク名：経費精算\n移動先：来週の月曜日", "utterance": "はい、来週の月曜日に移動して"}, "id": "ja-00108", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ノート移動。\nノート名：打ち合わせメモ\n移動先：プロジェクトA", "utterance": "えっと、それは..."}, "id": "ja-00109", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ノート共有。\nノート名：採用面接メモ\n共有相手：田中さん", "utterance": "うん、田中さんに送っておいて"}, "id": "ja-00110", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ファイル移動。\nファイル名：プレゼン資料.pptx\n移動先：アーカイブ", "utterance": "うん、コピーして"}, "id": "ja-00111", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク「四半期レポートの作成」を今日の予定に追加します。", "utterance": "はい、それでお願いします。"}, "id": "ja-00112", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク「クライアントへのメール送信」の期限を明日に更新します。", "utterance": "いいえ、それはやめてください。"}, "id": "ja-00113", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "タスク「プレゼン資料の校正」を完了にします。", "utterance": "えっと、はい、完了でいいです。ありがとう。"}, "id": "ja-00114", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク「会議室の予約」を明日から明後日に移動します。", "utterance": "ちょっと待って、考えさせて。"}, "id": "ja-00115", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ノート「プロジェクト方針」を「2025年」フォルダから「重要」フォルダに移動します。", "utterance": "はい、その通り、重要フォルダに移動して。"}, "id": "ja-00116", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "ノート「会議メモ」を田中さんと共有します。", "utterance": "え、誰と共有するって？田中さん？"}, "id": "ja-00117", "labels": {"approves": false}, "language": "ja"}
+{"facts": {"read_back": "ファイル「予算.xlsx」を「経理」フォルダから「共有」フォルダに移動します。", "utterance": "どうぞ、実行して。"}, "id": "ja-00118", "labels": {"approves": true}, "language": "ja"}
+{"facts": {"read_back": "タスク「顧客訪問」を来週の月曜に追加します。", "utterance": "うん、いいけど、水曜にしてくれる？"}, "id": "ja-00119", "labels": {"approves": false}, "language": "ja"}

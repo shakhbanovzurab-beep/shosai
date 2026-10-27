@@ -133,6 +133,17 @@ async def test_an_unreadable_answer_loses_the_case_never_guesses() -> None:
     assert (lost, kept) == ([], [])
 
 
+async def test_a_json_literal_written_as_a_string_is_read_as_that_literal() -> None:
+    targets = BRIEFS["action.friction"].targets(1, 0)
+    wanted = dict(targets[0].labels)
+    spelled = {name: str(value).lower() for name, value in wanted.items()}
+    models = Models("action.friction", labels=[spelled])
+
+    [case] = await maker(models).generate(ACTION_FRICTION, "en", 1, 0)
+
+    assert case.labels == wanted
+
+
 async def test_generated_cases_append_drafts_hide_labels_machine_labels_sit_beside(
     tmp_path: Path,
 ) -> None:

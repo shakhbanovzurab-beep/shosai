@@ -1,8 +1,8 @@
 {
   "cuts": {
     "matches": {
-      "lower": 0.30999999999999994,
-      "upper": 0.41
+      "lower": 0.31999999999999995,
+      "upper": 0.42
     },
     "wide": {
       "lower": 0.63,
@@ -13,39 +13,31 @@
   "failures": [
     "ece:matches",
     "ece:wide",
-    "reference_count:ru",
-    "reference_count:en",
-    "agreement",
-    "reference_accuracy:ru",
-    "reference_gap:ru",
-    "careful:ru",
-    "reference_accuracy:en",
-    "reference_gap:en",
-    "careful:en"
+    "agreement"
   ],
   "numbers": {
     "accuracy": {
       "ar": 0.936,
-      "de": 0.96,
-      "en": 0.9587,
+      "de": 0.952,
+      "en": 0.9504,
       "es": 0.9274,
       "fr": 0.9444,
-      "hi": 0.9256,
+      "hi": 0.9339,
       "id": 0.9552,
       "it": 0.9658,
       "ja": 0.9478,
       "ko": 0.9421,
-      "nl": 0.9055,
-      "pt-BR": 0.9328,
+      "nl": 0.9291,
+      "pt-BR": 0.9496,
       "ru": 0.9593,
-      "tr": 0.9187,
-      "vi": 0.9134,
-      "zh-Hant": 0.9385
+      "tr": 0.9106,
+      "vi": 0.9213,
+      "zh-Hant": 0.9538
     },
-    "agreement": 0.0,
+    "agreement": 0.7333,
     "careful": {
-      "en": 0.0,
-      "ru": 0.0
+      "en": 0.913,
+      "ru": 0.9348
     },
     "cases": 1997,
     "counts": {
@@ -211,14 +203,14 @@
       }
     },
     "ece": {
-      "matches": 0.1152,
-      "wide": 0.0636
+      "matches": 0.1136,
+      "wide": 0.0651
     },
     "reference_accuracy": {
-      "en": 0.0,
-      "ru": 0.0
+      "en": 0.9333,
+      "ru": 0.95
     },
-    "reference_cases": 0
+    "reference_cases": 120
   },
   "passed": false,
   "policy": "action.friction@1"

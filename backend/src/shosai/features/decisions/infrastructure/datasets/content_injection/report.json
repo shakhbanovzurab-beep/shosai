@@ -6,149 +6,139 @@
     }
   },
   "digest": "f3d7594f78842f5e",
-  "failures": [
-    "reference_count:ru",
-    "reference_count:en",
-    "agreement",
-    "reference_accuracy:ru",
-    "reference_gap:ru",
-    "careful:ru",
-    "reference_accuracy:en",
-    "reference_gap:en",
-    "careful:en"
-  ],
+  "failures": [],
   "numbers": {
     "accuracy": {
-      "ar": 1.0,
-      "de": 1.0,
-      "en": 0.9904,
+      "ar": 0.9669,
+      "de": 0.9924,
+      "en": 0.9821,
       "es": 1.0,
-      "fr": 1.0,
-      "hi": 0.9333,
+      "fr": 0.9917,
+      "hi": 0.9397,
       "id": 1.0,
-      "it": 1.0,
-      "ja": 0.9907,
-      "ko": 0.9811,
-      "nl": 0.9907,
-      "pt-BR": 0.9808,
-      "ru": 1.0,
-      "tr": 0.9907,
-      "vi": 0.9903,
+      "it": 0.9909,
+      "ja": 0.9829,
+      "ko": 0.9744,
+      "nl": 0.9746,
+      "pt-BR": 0.9828,
+      "ru": 0.991,
+      "tr": 0.9916,
+      "vi": 0.9909,
       "zh-Hant": 1.0
     },
-    "agreement": 0.0,
+    "agreement": 0.9871,
     "careful": {
-      "en": 0.0,
-      "ru": 0.0
+      "en": 1.0,
+      "ru": 1.0
     },
-    "cases": 1719,
+    "cases": 1892,
     "counts": {
       "ar": {
+        "instructions": {
+          "no": 62,
+          "yes": 59
+        }
+      },
+      "de": {
+        "instructions": {
+          "no": 69,
+          "yes": 63
+        }
+      },
+      "en": {
+        "instructions": {
+          "no": 58,
+          "yes": 54
+        }
+      },
+      "es": {
+        "instructions": {
+          "no": 63,
+          "yes": 59
+        }
+      },
+      "fr": {
+        "instructions": {
+          "no": 60,
+          "yes": 60
+        }
+      },
+      "hi": {
+        "instructions": {
+          "no": 59,
+          "yes": 57
+        }
+      },
+      "id": {
+        "instructions": {
+          "no": 84,
+          "yes": 54
+        }
+      },
+      "it": {
+        "instructions": {
+          "no": 58,
+          "yes": 52
+        }
+      },
+      "ja": {
+        "instructions": {
+          "no": 62,
+          "yes": 55
+        }
+      },
+      "ko": {
+        "instructions": {
+          "no": 62,
+          "yes": 55
+        }
+      },
+      "nl": {
+        "instructions": {
+          "no": 62,
+          "yes": 56
+        }
+      },
+      "pt-BR": {
+        "instructions": {
+          "no": 60,
+          "yes": 56
+        }
+      },
+      "ru": {
         "instructions": {
           "no": 56,
           "yes": 55
         }
       },
-      "de": {
-        "instructions": {
-          "no": 60,
-          "yes": 59
-        }
-      },
-      "en": {
-        "instructions": {
-          "no": 53,
-          "yes": 51
-        }
-      },
-      "es": {
-        "instructions": {
-          "no": 54,
-          "yes": 51
-        }
-      },
-      "fr": {
-        "instructions": {
-          "no": 54,
-          "yes": 54
-        }
-      },
-      "hi": {
-        "instructions": {
-          "no": 54,
-          "yes": 51
-        }
-      },
-      "id": {
-        "instructions": {
-          "no": 76,
-          "yes": 51
-        }
-      },
-      "it": {
-        "instructions": {
-          "no": 52,
-          "yes": 50
-        }
-      },
-      "ja": {
-        "instructions": {
-          "no": 56,
-          "yes": 51
-        }
-      },
-      "ko": {
-        "instructions": {
-          "no": 55,
-          "yes": 51
-        }
-      },
-      "nl": {
-        "instructions": {
-          "no": 56,
-          "yes": 52
-        }
-      },
-      "pt-BR": {
-        "instructions": {
-          "no": 52,
-          "yes": 52
-        }
-      },
-      "ru": {
-        "instructions": {
-          "no": 51,
-          "yes": 50
-        }
-      },
       "tr": {
         "instructions": {
-          "no": 55,
-          "yes": 53
+          "no": 61,
+          "yes": 58
         }
       },
       "vi": {
         "instructions": {
-          "no": 53,
-          "yes": 50
+          "no": 57,
+          "yes": 53
         }
       },
       "zh-Hant": {
         "instructions": {
-          "no": 51,
-          "yes": 50
+          "no": 55,
+          "yes": 58
         }
       }
     },
     "ece": {
-      "instructions": 0.0238
+      "instructions": 0.0258
     },
     "reference_accuracy": {
-      "en": 0.0,
-      "ru": 0.0
+      "en": 0.9359,
+      "ru": 0.9221
     },
-    "reference_cases": 0
+    "reference_cases": 155
   },
-  "passed": false,
+  "passed": true,
   "policy": "content.injection@1"
 }

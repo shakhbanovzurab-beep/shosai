@@ -1,0 +1,119 @@
+{"facts": {"read_back": "任務建立：標題「季度簡報準備」，截止日期 三月五日，負責人 我。", "utterance": "好，可以。"}, "id": "zh-Hant-00000", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務更新：將任務「客戶拜訪」的截止日期改為 四月十二日，優先級改為 高。", "utterance": "不是，這個不要改。"}, "id": "zh-Hant-00001", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務完成：將任務「撰寫會議記錄」標記為完成。", "utterance": "嗯，對，完成了，謝謝。"}, "id": "zh-Hant-00002", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務移動：將任務「整理報銷單據」從 待辦清單 移動到 進行中。", "utterance": "等等，讓我想一下。"}, "id": "zh-Hant-00003", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "筆記移動：將筆記「產品上線檢查清單」從 工作筆記 移動到 專案資料夾。", "utterance": "好，把產品上線檢查清單移到專案資料夾，沒錯。"}, "id": "zh-Hant-00004", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "筆記分享：將筆記「新人訓練手冊」分享給 行銷部門。", "utterance": "這個是要寄連結給他們嗎？"}, "id": "zh-Hant-00005", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "檔案移動：將檔案「預算表_v4.xlsx」從 下載 移動到 財務報表。", "utterance": "好，搬吧。"}, "id": "zh-Hant-00006", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務建立：標題「預約牙醫」，日期 五月六日，地點 仁愛診所。", "utterance": "好，可以，但日期改成五月七號。"}, "id": "zh-Hant-00007", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "更新任務：季度報告，截止日期改為下週五。", "utterance": "好。"}, "id": "zh-Hant-00008", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "完成任務：整理會議記錄。", "utterance": "可以，但等我確認附檔上傳了沒。"}, "id": "zh-Hant-00009", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "移動任務：回覆客戶郵件，到「待辦」清單。", "utterance": "嗯，好，謝謝。"}, "id": "zh-Hant-00010", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "移動筆記：產品腦力激盪，到「專案」資料夾。", "utterance": "那個，等等中午要吃什麼？"}, "id": "zh-Hant-00011", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "分享筆記：會議決議，給行銷團隊。", "utterance": "好，分享給行銷團隊。"}, "id": "zh-Hant-00012", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "移動檔案：預算表.xlsx，到「財務」資料夾。", "utterance": "嗯... 那個..."}, "id": "zh-Hant-00013", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "建立任務：撰寫提案初稿，截止日期明天。", "utterance": "好，去做吧。"}, "id": "zh-Hant-00014", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "更新任務：客戶簡報，優先級改為高。", "utterance": "好，請幫我把燈光調亮一點。"}, "id": "zh-Hant-00015", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務完成\n任務：回覆客戶郵件\n截止日期：今天下午", "utterance": "好"}, "id": "zh-Hant-00016", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務移動\n任務：準備簡報\n從：今天\n到：明天", "utterance": "不要移動"}, "id": "zh-Hant-00017", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "筆記移動\n筆記：會議重點\n從：工作專案\n到：個人", "utterance": "嗯，好的，謝謝"}, "id": "zh-Hant-00018", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "筆記分享\n筆記：產品創意\n分享對象：行銷團隊", "utterance": "等一下，讓我想想"}, "id": "zh-Hant-00019", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "檔案移動\n檔案：預算表.xlsx\n從：下載\n到：專案資料夾", "utterance": "好，移到專案資料夾"}, "id": "zh-Hant-00020", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務建立\n任務：整理會議記錄\n截止日期：星期五", "utterance": "這個截止日期是這個星期五嗎？"}, "id": "zh-Hant-00021", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務更新\n任務：聯絡供應商\n更新內容：將截止日期改為下週一", "utterance": "好，執行吧"}, "id": "zh-Hant-00022", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務完成\n任務：提交報帳單\n截止日期：今天", "utterance": "好，但改成明天"}, "id": "zh-Hant-00023", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：tasks.move。動作：將任務「拜訪客戶A」從「待辦事項」移動至「已完成」。", "utterance": "好。"}, "id": "zh-Hant-00024", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：notes.move。動作：將筆記「會議記錄0325」從「個人」移動至「專案資料夾」。", "utterance": "可以，但你先幫我確認那個資料夾已經開好了。"}, "id": "zh-Hant-00025", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：notes.share。動作：將筆記「規格書v2」分享給行銷部門。", "utterance": "嗯，好的，謝謝。"}, "id": "zh-Hant-00026", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：files.move。動作：將檔案「報價單Q1.pdf」從「下載」移動至「客戶合約」。", "utterance": "等一下，我剛剛講的飲料單你記了嗎？"}, "id": "zh-Hant-00027", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：tasks.create。動作：建立新任務「準備季報簡報」，截止日期為本週五。", "utterance": "好，幫我建立一個「準備季報簡報」的任務，截止日這週五。"}, "id": "zh-Hant-00028", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：tasks.update。動作：將任務「聯繫供應商」的到期日改為下週一。", "utterance": "嗯……那個……"}, "id": "zh-Hant-00029", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：tasks.complete。動作：將任務「寄出合約」標記為完成。", "utterance": "可以，執行吧。"}, "id": "zh-Hant-00030", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：tasks.move。動作：將任務「整理報表」從「進行中」移動至「已完成」。", "utterance": "好，你可以幫我把那份筆記分享給老王嗎？"}, "id": "zh-Hant-00031", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "好的，這裡有一個動作卡片，工具是「移動筆記」。您要將筆記「會議記錄」從「工作筆記」資料夾移動到「歸檔」資料夾。請問要執行嗎？", "utterance": "好，移動吧。"}, "id": "zh-Hant-00032", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "動作卡片：工具是「分享筆記」。您要將筆記「預算草案」分享給「張經理」並設定為唯讀權限。請問要執行嗎？", "utterance": "不要，先不要分享。"}, "id": "zh-Hant-00033", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具是「移動檔案」。您要將檔案「第三季財報.xlsx」從「下載」移動到「財務」資料夾。請問要執行嗎？", "utterance": "嗯，好，謝謝，移動吧。"}, "id": "zh-Hant-00034", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具是「建立任務」。您要建立一個任務，標題為「準備簡報」，截止日期是明天下午五點，分配給您自己。請問要執行嗎？", "utterance": "等等，讓我想一下。"}, "id": "zh-Hant-00035", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具是「更新任務」。您要將任務「客戶拜訪」的截止日期從本週五改為下週一。請問要執行嗎？", "utterance": "對，請把截止日改成下週一。"}, "id": "zh-Hant-00036", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具是「完成任務」。您要將任務「寄送合約」標記為已完成。請問要執行嗎？", "utterance": "那這個任務完成後會通知相關人員嗎？"}, "id": "zh-Hant-00037", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具是「移動任務」。您要將任務「設計初稿」從「進行中」列表移到「審核中」列表。請問要執行嗎？", "utterance": "好，就這麼做。"}, "id": "zh-Hant-00038", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "好的，工具是「移動筆記」。您要將筆記「購物清單」從「待辦」資料夾移動到「日常」資料夾。請問要執行嗎？", "utterance": "好，不過改移到「生活」資料夾好了。"}, "id": "zh-Hant-00039", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "分享筆記\n工具：notes.share\n筆記名稱：產品會議記錄\n分享對象：行銷團隊\n權限：檢視", "utterance": "好，分享吧。"}, "id": "zh-Hant-00040", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "移動檔案\n工具：files.move\n檔案：Q3財報簡報.pptx\n從：桌面\n到：財報資料夾", "utterance": "可以，不過先等我匯出最新版本再移動。"}, "id": "zh-Hant-00041", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "建立任務\n工具：tasks.create\n任務名稱：回覆客戶來信\n截止時間：今天下午五點\n負責人：我", "utterance": "嗯，謝謝，麻煩你了。"}, "id": "zh-Hant-00042", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "更新任務\n工具：tasks.update\n任務：網站改版\n更新欄位：截止日期\n改為：12月15日", "utterance": "你剛剛是不是也有排週五的會議？"}, "id": "zh-Hant-00043", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "完成任務\n工具：tasks.complete\n任務：撰寫季報草稿\n專案：第三季財報", "utterance": "對，請把「撰寫季報草稿」標記完成。"}, "id": "zh-Hant-00044", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "移動任務\n工具：tasks.move\n任務：設計提案簡報\n從：待辦清單\n到：進行中", "utterance": "嗯……等等，你說移到哪個……"}, "id": "zh-Hant-00045", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "移動筆記\n工具：notes.move\n筆記：面試重點整理\n從：工作筆記\n到：求職資料", "utterance": "去吧，就照這樣搬。"}, "id": "zh-Hant-00046", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "分享筆記\n工具：notes.share\n筆記：出差行程表\n分享對象：專案群組\n權限：可編輯", "utterance": "好，那你記得提醒我帶護照。"}, "id": "zh-Hant-00047", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動檔案。檔案：季度報告.pdf。從：下載。到：報告資料夾。", "utterance": "好。"}, "id": "zh-Hant-00048", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：建立任務。任務：下午三點拜訪客戶。日期：明天。", "utterance": "不要。"}, "id": "zh-Hant-00049", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：更新任務。任務：撰寫週報。變更：截止日期改為星期五。", "utterance": "嗯，好的，謝謝。"}, "id": "zh-Hant-00050", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：完成任務。任務：整理會議紀錄。", "utterance": "等等，讓我想一下。"}, "id": "zh-Hant-00051", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動任務。任務：準備簡報。從：待辦。到：進行中。", "utterance": "好，把「準備簡報」移到「進行中」。"}, "id": "zh-Hant-00052", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動筆記。筆記：訪談重點。從：工作。到：個人。", "utterance": "你是說移到個人嗎？"}, "id": "zh-Hant-00053", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：分享筆記。筆記：專案想法。對象：同事阿明。", "utterance": "好，就這麼做。"}, "id": "zh-Hant-00054", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動檔案。檔案：合約草稿.docx。從：下載。到：合約。", "utterance": "好，不過改成移動「合約最終版.docx」。"}, "id": "zh-Hant-00055", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項：設計會議議程，截止日期為本週五，請確認是否建立。", "utterance": "是，請建立。"}, "id": "zh-Hant-00056", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項：修改報告標題，從『季初摘要』改為『季中進度』，請確認是否更新。", "utterance": "可以，但先等我確認過最新版本再說。"}, "id": "zh-Hant-00057", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項：標記『客戶提案』為已完成，請確認。", "utterance": "嗯，完成它吧，謝謝。"}, "id": "zh-Hant-00058", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項：將『拜訪供應商』從進行中移至已完成，請確認是否移動。", "utterance": "我昨天已經跟供應商通過電話了。"}, "id": "zh-Hant-00059", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "筆記：將『面試要點』移至資料夾『招聘相關』，請確認。", "utterance": "是，移到招聘相關那個資料夾。"}, "id": "zh-Hant-00060", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "檔案：將『合約草案.pdf』從我的文件移至專案資料夾，請確認。", "utterance": "就這麼做吧。"}, "id": "zh-Hant-00062", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項：建立『週報模板』，優先級為高，請確認是否建立。", "utterance": "對，我同意你寄出那封郵件。"}, "id": "zh-Hant-00063", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項更新。\n事項：繳交季報。\n更新內容：截止日期改為三月十五日。\n是否執行？", "utterance": "好，執行。"}, "id": "zh-Hant-00064", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項完成。\n事項：整理會議紀錄。\n將標示為已完成。\n是否執行？", "utterance": "不要，我還沒弄完。"}, "id": "zh-Hant-00065", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項移動。\n事項：買印表機碳粉。\n從工作清單 A 移到工作清單 B。\n是否執行？", "utterance": "嗯，好，謝謝你。"}, "id": "zh-Hant-00066", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "筆記移動。\n筆記：產品訪談重點。\n從資料夾「訪談」移到資料夾「競品分析」。\n是否執行？", "utterance": "等等，讓我想一下……"}, "id": "zh-Hant-00067", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "筆記分享。\n筆記：官網改版意見。\n與陳設計師分享。\n權限：可檢視。\n是否執行？", "utterance": "對，分享給陳設計師，可以檢視就好。"}, "id": "zh-Hant-00068", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "檔案移動。\n檔案：合約草案.pdf。\n從雲端硬碟「草稿」移到「合約」。\n是否執行？", "utterance": "這樣會不會影響原本的共享連結？"}, "id": "zh-Hant-00069", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項建立。\n事項：預訂客戶拜訪的餐廳。\n截止日期：後天上午十點。\n是否建立？", "utterance": "去做吧。"}, "id": "zh-Hant-00070", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工作事項更新。\n事項：準備簡報。\n截止日期改為四月二日。\n是否執行？", "utterance": "好，但截止日改成四月三日。"}, "id": "zh-Hant-00071", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務完成（tasks.complete）\n任務：回覆設計團隊的提案\n狀態：待完成", "utterance": "對，完成。"}, "id": "zh-Hant-00072", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務移動（tasks.move）\n任務：整理季度報表\n來源清單：工作\n目標清單：歸檔", "utterance": "好，可以移動，不過要先等報表簽核完再移。"}, "id": "zh-Hant-00073", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "筆記移動（notes.move）\n筆記：客戶訪談重點\n來源資料夾：暫存\n目標資料夾：會議紀錄", "utterance": "喔，好，麻煩你了，幫我移過去。"}, "id": "zh-Hant-00074", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "筆記分享（notes.share）\n筆記：產品上線檢查清單\n分享對象：行銷部", "utterance": "那個我等一下再看，先幫我查下午兩點有沒有會議。"}, "id": "zh-Hant-00075", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "檔案移動（files.move）\n檔案：產品簡報_final.pdf\n目標資料夾：專案A", "utterance": "對，把產品簡報 final 移到專案 A 資料夾。"}, "id": "zh-Hant-00076", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務建立（tasks.create）\n任務：草擬合作備忘錄\n專案：新客戶提案", "utterance": "嗯，有一個任務……我還沒想好，晚點再跟你說。"}, "id": "zh-Hant-00077", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務更新（tasks.update）\n任務：訂購辦公室文具\n更新欄位：到期日\n新日期：明天下午三點", "utterance": "好，就照這樣更新吧。"}, "id": "zh-Hant-00078", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "任務完成（tasks.complete）\n任務：寄送合約給律師\n狀態：待完成", "utterance": "對，那個合約可以先刪掉。"}, "id": "zh-Hant-00079", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動任務\n任務：拜訪客戶\n目前日期：明天\n新日期：後天", "utterance": "好"}, "id": "zh-Hant-00080", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動筆記\n筆記：會議紀錄\n資料夾：工作\n目標資料夾：個人", "utterance": "不要"}, "id": "zh-Hant-00081", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：分享筆記\n筆記：旅遊規劃\n對象：小明", "utterance": "嗯，好，謝謝"}, "id": "zh-Hant-00082", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動檔案\n檔案：報告.pdf\n來源：下載\n目標：文件", "utterance": "等等，讓我想一下"}, "id": "zh-Hant-00083", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：建立任務\n任務：準備簡報\n截止時間：星期五下午五點", "utterance": "好，星期五下午五點準備簡報，對"}, "id": "zh-Hant-00084", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：更新任務\n任務：回覆客戶郵件\n新狀態：進行中", "utterance": "你是說要改成進行中嗎？"}, "id": "zh-Hant-00085", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：完成任務\n任務：繳交水電費", "utterance": "好，去做吧"}, "id": "zh-Hant-00086", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動任務\n任務：開會\n目前日期：明天\n新日期：下週一", "utterance": "好，但改成下週三好了"}, "id": "zh-Hant-00087", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "將筆記「季度報告草稿」移動到「工作」資料夾，是否執行？", "utterance": "是"}, "id": "zh-Hant-00088", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "將筆記「會議紀錄」分享給團隊成員，是否執行？", "utterance": "可以，但等我先修改完再分享"}, "id": "zh-Hant-00089", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "將檔案「預算表.xlsx」移動到「財務」資料夾，是否執行？", "utterance": "嗯，好，謝謝"}, "id": "zh-Hant-00090", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "建立任務「撰寫產品說明書」，截止日期明天下午三點，是否執行？", "utterance": "我下午有個會議，改到後天吧"}, "id": "zh-Hant-00091", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "將任務「準備簡報」的截止日期更新為星期五上午十點，是否執行？", "utterance": "是，把截止日期改成星期五上午十點"}, "id": "zh-Hant-00092", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "將任務「回覆客戶郵件」標記為完成，是否執行？", "utterance": "應該…嗯，就是那個…"}, "id": "zh-Hant-00093", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "將任務「整理數據」移動到「進行中」清單，是否執行？", "utterance": "執行吧"}, "id": "zh-Hant-00094", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "將筆記「靈感收集」移動到「封存」資料夾，是否執行？", "utterance": "對，就照你剛剛說的，把那個任務標記為完成吧"}, "id": "zh-Hant-00095", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：分享筆記。您要分享筆記「季度檢討重點」給團隊成員。確認要執行嗎？", "utterance": "是"}, "id": "zh-Hant-00096", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動檔案。您要將檔案「預算報告.xlsx」從「專案A」資料夾移動到「專案B」資料夾。確認要執行嗎？", "utterance": "不要"}, "id": "zh-Hant-00097", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：建立任務。您要建立任務「準備客戶簡報」，截止日期為明天下午五點。確認要執行嗎？", "utterance": "嗯，好，謝謝"}, "id": "zh-Hant-00098", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：更新任務。您要將任務「開發進度報告」的狀態從「進行中」改為「待審核」。確認要執行嗎？", "utterance": "等等，讓我想想"}, "id": "zh-Hant-00099", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：完成任務。您要將任務「設計初稿提交」標記為已完成。確認要執行嗎？", "utterance": "是的，設計初稿提交，可以完成"}, "id": "zh-Hant-00100", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動任務。您要將任務「測試新功能」從「進行中」清單移動到「已完成」清單。確認要執行嗎？", "utterance": "這是移到哪個清單？"}, "id": "zh-Hant-00101", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動筆記。您要將筆記「會議記錄0325」從「工作」資料夾移動到「個人」資料夾。確認要執行嗎？", "utterance": "Go ahead"}, "id": "zh-Hant-00102", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：分享筆記。您要將筆記「專案時程」分享給張經理。確認要執行嗎？", "utterance": "好，但是分享給李組長好了"}, "id": "zh-Hant-00103", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動檔案。\n檔案：季度預算表。\n目的地：專案資料夾。\n要移動嗎？", "utterance": "好，移動。"}, "id": "zh-Hant-00104", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：建立任務。\n任務名稱：整理會議紀錄。\n截止時間：明天下午五點。\n要建立嗎？", "utterance": "可以，等我先把手上這份合約寄出去再建立。"}, "id": "zh-Hant-00105", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：更新任務。\n任務：客戶簡報。\n要將截止日期改為後天上午十點。\n要更新嗎？", "utterance": "嗯，謝謝，改吧。"}, "id": "zh-Hant-00106", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：完成任務。\n任務：申請場地。\n要將這個任務標記為完成嗎？", "utterance": "對了，場地廠商剛剛回信說週五才能確認。"}, "id": "zh-Hant-00107", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動任務。\n任務：撰寫季報。\n從工作清單移到已完成清單。\n要移動嗎？", "utterance": "好，把撰寫季報移到已完成清單。"}, "id": "zh-Hant-00108", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動筆記。\n筆記：面試重點。\n目的地：求職資料夾。\n要移動嗎？", "utterance": "嗯...那個筆記應該是..."}, "id": "zh-Hant-00109", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：分享筆記。\n筆記：旅遊行程規劃。\n要分享給聯絡人陳小明嗎？", "utterance": "去吧。"}, "id": "zh-Hant-00110", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "工具：移動檔案。\n檔案：產品型錄。\n目的地：行銷資料夾。\n要移動嗎？", "utterance": "可以，先幫我把那封電子郵件寄出去。"}, "id": "zh-Hant-00111", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "建立任務\n任務名稱：整理季度報告\n截止日期：明天下午五點\n負責人：我", "utterance": "好，建立吧。"}, "id": "zh-Hant-00112", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "更新任務\n任務名稱：準備簡報\n修改截止日期：改為週五", "utterance": "不要，先不要改。"}, "id": "zh-Hant-00113", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "完成任務\n任務名稱：回覆客戶來信", "utterance": "嗯，可以，謝謝。"}, "id": "zh-Hant-00114", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "移動任務\n任務名稱：申請經費\n從：工作清單\n到：待辦事項", "utterance": "等等，讓我想一下。"}, "id": "zh-Hant-00115", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "移動筆記\n筆記名稱：產品會議紀錄\n從：工作筆記\n到：專案筆記", "utterance": "好，把產品會議紀錄移到專案筆記。"}, "id": "zh-Hant-00116", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "分享筆記\n筆記名稱：客戶拜訪紀錄\n分享對象：行銷團隊", "utterance": "這個要分享給誰？"}, "id": "zh-Hant-00117", "labels": {"approves": false}, "language": "zh-Hant"}
+{"facts": {"read_back": "移動檔案\n檔案名稱：預算表.xlsx\n從：下載\n到：財務資料", "utterance": "好，去吧。"}, "id": "zh-Hant-00118", "labels": {"approves": true}, "language": "zh-Hant"}
+{"facts": {"read_back": "建立任務\n任務名稱：聯絡供應商\n截止日期：明天\n負責人：我", "utterance": "好，改成後天好了。"}, "id": "zh-Hant-00119", "labels": {"approves": false}, "language": "zh-Hant"}

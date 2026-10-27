@@ -83,3 +83,18 @@ Leo §8.4 and the voice plan's Q-6 let a reversible or compensable card read bac
 - the yes side is fitted for 99 % precision, an unsure answer is no, and at least 99 % of the cases that must not approve are found;
 - reversible and compensable actions only, never tainted or screen-only cards — the agent offers voice approval only for those;
 - synthetic sets in the 16 languages and the owner's reference labels, as for every point.
+
+## Amendment: reference labels by model annotators, audited by the owner (the owner's, 2026-10-27)
+
+DL-D8 asked for a reference labelled blind by the owner or a person the owner names. On 2026-10-27 the owner delegated the labelling and kept an audit:
+
+- two model annotators (Claude Opus 5.5 and Claude Sonnet 5.5) label every draft independently under written guidelines, seeing neither each other's labels nor the synthetic sets, the runs or the policies;
+- agreement is measured per question (exact share, Cohen's kappa); every split case is adjudicated with its reason, and a split that shows an open rule settles the rule in the guidelines for every case it covers;
+- the owner confirms the rules adjudication settled and checks a stratified random sample of 8 cases per point, 4 per language; a rule or a case the owner corrects changes the reference and its report;
+- `datasets/REFERENCE_LABELLING.md` beside the sets records the process, the guidelines, the agreement, the adjudications and the audit.
+- the owner's audit of 2026-10-27 confirmed the four settled rules and found no reference error in the 32-case sample (three slips of the owner's own, retracted when asked).
+
+Consequences:
+
+- the `agreement` gate compares the dataset labeller with model annotators, not with a person; the owner's audit is the human check, and it bounds the reference's error through its sample;
+- the same day the briefs' rotations were fixed (`turn.route` never needed five tool sets, `content.injection` never hid an instruction in mail, speech or someone else's file); the synthetic sets were topped up and each of the two references got 20 more drafts per language, so they cover what the old rotation never wrote.

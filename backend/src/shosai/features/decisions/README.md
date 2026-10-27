@@ -64,6 +64,15 @@ Leo's Decision Layer: the judgement calls the rest of Leo must not make by hand 
 - The agent awaits the pending judgements, each at most 400 ms, before a write's card and at the run's end: the card says so (`suspicious`, worded in the cabinet's 16 languages) and `agent_runs.taint` keeps the run's final taint for memory.
 - The set (step 7b): 1 719 synthetic cases in the 16 languages (≥ 50 on each side in each), seeded by the agent's injection corpus; 119 reference drafts in Russian and English. The first run passes every synthetic gate — expected calibration error 0.024, accuracy 0.93–1.00 — and waits only for the reference.
 
+## Reference sets and the second runs (2026-10-27)
+
+- Every point's reference is labelled: 120 cases for `action.friction` and `voice.approval`, 160 for `turn.route`, 155 for `content.injection`, half Russian and half English — two model annotators, adjudication and the owner's audit, by the owner's decision (`infrastructure/datasets/REFERENCE_LABELLING.md`, ADR 0069 amendment). The owner's 32-case sample found no reference error.
+- The briefs' rotations were fixed the same day (`turn.route` never needed five tool sets, `content.injection` never hid an instruction in mail, speech or someone else's file); the two sets were topped up to 2 005 and 1 892 cases, and each reference got 20 more drafts per language.
+- A dataset labeller's JSON literal written as a string (`"true"`, `"2"`) is read as the literal; any other answer of the wrong kind is still a case lost, now logged.
+- `content.injection` passes every gate: expected calibration error 0.026, accuracy 0.94–1.00, reference accuracy 0.92–0.94, every instruction found, the labeller agreeing on 98.7 % of the reference. It is ready for shadow.
+- `action.friction`: reference accuracy 0.93–0.95 and its careful outcome 0.91–0.93 pass; expected calibration error 0.114 and 0.065 and the labeller's agreement 0.73 fail.
+- `turn.route`: accuracy 0.70–0.83 per language and 0.73–0.79 on the reference, under the 0.8 floor; expected calibration error 0.16.
+
 ## Monitors and tickets (step 8a)
 
 - `objectives.py`: the invariant monitor `decision_unsafe_outcome` pages on any outcome less careful than its rule (the engine has already kept the rule's); three tickets on `shosai_decision_requests_total` — decisions refused with `not_zdr` (Jev's endpoint off the zero-retention list or its status unread for three days, 1 %), Jev past the deadline (5 % of asked decisions) and the rule standing in for a fifth of consulted decisions (over three days). The journey «Решения Leo» tracks the time a caller waited, per point; `composition/decisions_dashboard.py` shows who decides, the fallbacks' reasons, late answers and lost records. Runbook: `docs/runbooks/alerts.md#decision-unsafe-outcome` and the SLO section's paragraph on `leo_decisions`.

@@ -1,10 +1,10 @@
 """Writing a point's sets: synthetic cases appended, the machine's labels on the reference, and
-drafts a person labels blind (ADR 0069 DL-D8).
+drafts labelled blind (ADR 0069 DL-D8).
 
 Synthetic cases are appended to their language's file with ids that continue its highest. The
-machine's labels are written beside the person's on every reference case, never over them.
+machine's labels are written beside the reference's on every case, never over them.
 A draft for the reference is a case without labels, with the questions to answer — in
-`reference/drafts/<language>.jsonl`, outside the sets until a person labels it and moves it
+`reference/drafts/<language>.jsonl`, outside the sets until it is labelled and moved
 into `reference/<language>.jsonl`; it never shows the label the case was written for.
 """
 

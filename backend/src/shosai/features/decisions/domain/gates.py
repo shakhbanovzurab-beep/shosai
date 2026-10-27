@@ -8,10 +8,10 @@ synthetic set:
 - an expected calibration error of at most 0.05 per cut,
 - an accuracy of the judged outcome at least the policy's floor in every language,
 
-and on the reference set, labelled by a person:
+and on the reference set, labelled blind (`datasets/REFERENCE_LABELLING.md`):
 
 - at least 50 cases in Russian and 50 in English,
-- the machine's labels agreeing with the person's on at least 90 % of the cases,
+- the machine's labels agreeing with the reference's on at least 90 % of the cases,
 - in each language an accuracy at least the floor and no more than 10 points below the
   synthetic one,
 - the careful outcome found in at least the policy's careful share of the cases that call
@@ -154,7 +154,7 @@ def reference_gates(
     reference: Sequence[Answered],
     numbers: dict[str, Any],
 ) -> list[str]:
-    """The person's set: its size, the machine's agreement, accuracy, the careful outcome."""
+    """The reference set: its size, the machine's agreement, accuracy, the careful outcome."""
     failures: list[str] = []
     sizes = Counter(item.case.language for item in reference)
     failures += [

@@ -1,0 +1,117 @@
+{"facts": {"read_back": "작업 생성: 제목 '분기 보고서 작성', 마감일 4월 15일.", "utterance": "네, 좋아요."}, "id": "ko-00000", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 수정: '회의 준비'의 담당자를 홍길동에서 김철수로 변경.", "utterance": "아니요, 그대로 둡시다."}, "id": "ko-00001", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 이동: '기획안 검토'를 '진행 중'에서 '완료'로 이동.", "utterance": "잠깐만요, 생각 좀 할게요."}, "id": "ko-00003", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "메모 이동: '아이디어 노트'를 '개인' 폴더에서 '프로젝트 A' 폴더로 이동.", "utterance": "네, '아이디어 노트'를 '프로젝트 A'로 옮겨 주세요."}, "id": "ko-00004", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "메모 공유: '회의록'을 팀원 세 명과 공유.", "utterance": "누구랑 공유하는 거죠?"}, "id": "ko-00005", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "파일 이동: '사진.zip'을 '다운로드'에서 '백업' 폴더로 이동.", "utterance": "네, 실행하세요."}, "id": "ko-00006", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 생성: 제목 '발표 자료 준비', 마감일 5월 1일.", "utterance": "네, 그런데 마감일을 4월 28일로 바꿔 주세요."}, "id": "ko-00007", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 [보고서 초안]을 마감일을 수요일로 업데이트합니다. 승인하시겠습니까?", "utterance": "네."}, "id": "ko-00008", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 [회의 준비]를 '진행 중' 리스트로 이동합니다. 승인하시겠습니까?", "utterance": "아, 네, 감사합니다."}, "id": "ko-00010", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "노트 [아이디어 목록]을 '기획' 폴더로 이동합니다. 승인하시겠습니까?", "utterance": "아까 그 이메일은 보냈어?"}, "id": "ko-00011", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "노트 [프로젝트 일정]을 김 대리님과 공유합니다. 승인하시겠습니까?", "utterance": "네, 김 대리님과 공유해 주세요."}, "id": "ko-00012", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "파일 [계약서.pdf]를 '보관' 폴더로 이동합니다. 승인하시겠습니까?", "utterance": "음... 그냥... 잠시만요."}, "id": "ko-00013", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 [명함 디자인]을 새로 만듭니다. 승인하시겠습니까?", "utterance": "네, 그렇게 해."}, "id": "ko-00014", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 [보고서 초안]의 마감일을 금요일로 업데이트합니다. 승인하시겠습니까?", "utterance": "네, 지난번 회의록은 다 썼어요."}, "id": "ko-00015", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 완료 카드: 작업 '출장 보고서 제출', 완료일 오늘. 이대로 완료로 표시할까요?", "utterance": "네."}, "id": "ko-00016", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 이동 카드: '프레젠테이션 자료 준비' 작업을 '진행 중'에서 '보류'로 이동할까요?", "utterance": "아니요, 그건 아직 진행 중이에요."}, "id": "ko-00017", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "메모 이동 카드: '고객 인터뷰 내용' 노트를 '영업' 폴더로 이동할까요?", "utterance": "어, 네. 감사합니다."}, "id": "ko-00018", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "메모 공유 카드: '주간 회의록' 노트를 박 대리와 공유할까요?", "utterance": "잠깐만요, 그 노트는 아직 수정해야 돼서요."}, "id": "ko-00019", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "파일 이동 카드: '2025 예산안.xlsx' 파일을 '재무' 폴더에서 '예산' 폴더로 이동할까요?", "utterance": "네, '2025 예산안.xlsx'를 '예산' 폴더로 옮겨 주세요."}, "id": "ko-00020", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 생성 카드: '고객사 방문 일정 조율', 시작일 내일 오전 10시, 마감일 모레 오후 5시. 이대로 만들까요?", "utterance": "그 일은 누구랑 같이 진행하는 건가요?"}, "id": "ko-00021", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 수정 카드: '분기 실적 분석' 작업의 마감일을 다음 주 월요일로 변경할까요?", "utterance": "그렇게 하세요. 진행해 주세요."}, "id": "ko-00022", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 완료 카드: '계약서 검토' 작업을 오늘 완료로 표시할까요?", "utterance": "네, 그런데 완료 날짜는 내일로 해 주세요."}, "id": "ko-00023", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 이동\n작업: 보고서 제출\n이동할 목록: 완료", "utterance": "네."}, "id": "ko-00024", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "메모 이동\n메모: 회의 준비\n이동할 폴더: 프로젝트", "utterance": "네, 하지만 아직 회의 준비가 끝나지 않았어요."}, "id": "ko-00025", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "메모 공유\n메모: 여행 계획\n공유 대상: 팀", "utterance": "네, 감사합니다."}, "id": "ko-00026", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "파일 이동\n파일: 발표 자료.pptx\n이동할 폴더: 회의", "utterance": "오늘 회의는 몇 시에 시작하죠?"}, "id": "ko-00027", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 생성\n제목: 분기 보고서 작성\n마감일: 금요일", "utterance": "네, 분기 보고서 작성 작업을 만들어 주세요."}, "id": "ko-00028", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 업데이트\n작업: 프로젝트 기획\n변경 내용: 마감일을 다음 주로", "utterance": "음, 그게..."}, "id": "ko-00029", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 완료\n작업: 이메일 보내기", "utterance": "그렇게 하세요."}, "id": "ko-00030", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 이동\n작업: 디자인 검토\n이동할 목록: 대기", "utterance": "네, 그 알림은 꺼 주세요."}, "id": "ko-00031", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "노트 이동\n노트: 회의 준비 사항\n이동 위치: 업무 노트/프로젝트 A", "utterance": "네, 옮겨 주세요."}, "id": "ko-00032", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "노트 공유\n노트: 주간 보고\n공유 대상: 김대리\n권한: 보기", "utterance": "아니요, 공유하지 마세요."}, "id": "ko-00033", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "파일 이동\n파일: 2024년 예산안.xlsx\n이동 위치: 재무팀/확정", "utterance": "어, 네 옮겨 주세요. 고맙습니다."}, "id": "ko-00034", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 생성\n제목: 발표 자료 검토\n마감: 금요일 오후 3시\n담당자: 나", "utterance": "잠깐만요, 좀 생각해 볼게요."}, "id": "ko-00035", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 수정\n할 일: 분기 보고서 작성\n변경 내용: 마감일을 다음 주 화요일로 변경", "utterance": "네, 마감일을 다음 주 화요일로 바꿔 주세요."}, "id": "ko-00036", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 완료 처리\n할 일: 고객에게 이메일 보내기", "utterance": "이거 완료로 하면 그 이메일은 다시 안 보내도 되는 거죠?"}, "id": "ko-00037", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 이동\n할 일: 회의실 예약\n이동 위치: 오늘 할 일", "utterance": "응, 진행해."}, "id": "ko-00038", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "노트 이동\n노트: 아이디어 정리\n이동 위치: 개인 노트/다음 주", "utterance": "네, 근데 다음 주가 아니라 오늘로 옮겨 주세요."}, "id": "ko-00039", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "다음 작업을 진행하려고 합니다. 노트 공유: '프로젝트 계획서'를 팀원 3명과 공유합니다.", "utterance": "네, 좋아요."}, "id": "ko-00040", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "파일 이동: '보고서.docx'를 '완료된 작업' 폴더로 이동합니다.", "utterance": "네, 그런데 먼저 백업을 해야 해요."}, "id": "ko-00041", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 생성: 제목 '회의 준비', 마감일 내일 오후 3시.", "utterance": "네, 고마워요."}, "id": "ko-00042", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 업데이트: '디자인 초안'의 상태를 '진행 중'으로 변경합니다.", "utterance": "아, 그거 말고 오늘 점심 약속이 어떻게 됐어요?"}, "id": "ko-00043", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 완료: '자료 조사'를 완료 처리합니다.", "utterance": "네, 자료 조사 완료되었어요."}, "id": "ko-00044", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 이동: '기획서 작성'을 '다음 주' 목록으로 이동합니다.", "utterance": "음, 그게..."}, "id": "ko-00045", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "노트 이동: '회의록'을 '프로젝트 A' 폴더로 이동합니다.", "utterance": "좋아, 실행해."}, "id": "ko-00046", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "노트 공유: '휴가 일정'을 팀 전체와 공유합니다.", "utterance": "네, 그 이메일 보내는 건 승인할게요."}, "id": "ko-00047", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "파일 이동: '회의록' 파일을 '프로젝트 문서' 폴더로 이동합니다.", "utterance": "네, 하세요."}, "id": "ko-00048", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 생성: '월간 보고서 작성' 작업을 오늘로 생성합니다.", "utterance": "아니요, 하지 마세요."}, "id": "ko-00049", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 수정: '프레젠테이션 준비' 작업의 마감일을 내일로 변경합니다.", "utterance": "네, 감사합니다."}, "id": "ko-00050", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 완료: '이메일 답장' 작업을 완료 처리합니다.", "utterance": "잠깐만요, 생각 좀 해볼게요."}, "id": "ko-00051", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 이동: '디자인 수정' 작업을 '진행 중' 목록으로 이동합니다.", "utterance": "네, '디자인 수정' 작업을 '진행 중'으로 옮기세요."}, "id": "ko-00052", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "메모 이동: '회의 아이디어' 메모를 '프로젝트 노트'로 이동합니다.", "utterance": "어디로 옮긴다고요?"}, "id": "ko-00053", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "메모 공유: '출장 계획' 메모를 김 팀장님과 공유합니다.", "utterance": "좋아요, 그렇게 하세요."}, "id": "ko-00054", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "파일 이동: '계약서 초안' 파일을 '2024년 문서' 폴더로 이동합니다.", "utterance": "네, 그런데 '2025년 문서' 폴더로 옮겨주세요."}, "id": "ko-00055", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 생성: 제목은 '주간 보고서 작성', 마감일은 금요일, 설명은 '팀 회의 자료 준비'", "utterance": "네, 해"}, "id": "ko-00056", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 업데이트: '기획안 초안' 작업의 상태를 '진행 중'에서 '완료'로 변경", "utterance": "응, 근데 일단 승인받고 나서 해줘"}, "id": "ko-00057", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 이동: '디자인 회의' 작업을 '프로젝트 A' 목록에서 '프로젝트 B' 목록으로 이동", "utterance": "아, 그거 말고 오늘 점심 뭐 먹지?"}, "id": "ko-00059", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "노트 이동: '회의록' 노트를 '3월' 폴더에서 '4월' 폴더로 이동", "utterance": "네, 4월 폴더로 이동해 줘"}, "id": "ko-00060", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "노트 공유: '기술 문서' 노트를 '김철수'와 공유, 읽기 권한", "utterance": "응, 그게... 음..."}, "id": "ko-00061", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "파일 이동: '발표자료.pptx' 파일을 '작업 폴더'에서 '공유 폴더'로 이동", "utterance": "좋아, 실행해"}, "id": "ko-00062", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 생성: 제목은 '고객 미팅 준비', 마감일은 내일, 설명은 '자료 검토 및 질문 목록 작성'", "utterance": "네, 그 메일 보내 주세요"}, "id": "ko-00063", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 업데이트: 할 일 '보고서 작성'의 마감일을 내일로 변경할까요?", "utterance": "네."}, "id": "ko-00064", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 완료: 할 일 '회의 준비'를 완료로 표시할까요?", "utterance": "아니요."}, "id": "ko-00065", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 이동: 할 일 '구매 요청'을 '진행 중' 상태로 이동할까요?", "utterance": "네, 감사합니다."}, "id": "ko-00066", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "쪽지 이동: 쪽지 '아이디어 모음'을 '프로젝트 A' 폴더로 이동할까요?", "utterance": "잠깐만요."}, "id": "ko-00067", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "쪽지 공유: 쪽지 '회의록'을 '김대리'와 공유할까요?", "utterance": "네, '회의록'을 김대리와 공유해 주세요."}, "id": "ko-00068", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "파일 이동: 파일 '2024 예산.xlsx'를 '재무' 폴더로 이동할까요?", "utterance": "어디로 이동하는 건가요?"}, "id": "ko-00069", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 생성: 새 할 일 '이메일 확인'을 오늘 오후 3시에 만들까요?", "utterance": "네, 해 주세요."}, "id": "ko-00070", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 업데이트: 할 일 '프로젝트 발표'의 담당자를 '홍길동'으로 변경할까요?", "utterance": "네, 그런데 마감일을 다음 주 월요일로 변경해 주세요."}, "id": "ko-00071", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "tasks.complete: '보고서 초안 검토 요청' 태스크를 완료로 표시하시겠습니까?", "utterance": "네, 완료하세요."}, "id": "ko-00072", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "tasks.move: '회의 준비' 태스크를 '진행 중'에서 '대기'로 이동하시겠습니까?", "utterance": "네, 근데 먼저 담당자가 확인을 했는지부터 봐야 해요."}, "id": "ko-00073", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "notes.move: '아이디어 스케치' 노트를 '프로젝트X' 폴더로 이동하시겠습니까?", "utterance": "네, 고마워요. 이동해 주세요."}, "id": "ko-00074", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "notes.share: '회의록 0315' 노트를 '기획팀' 채널에 공유하시겠습니까?", "utterance": "아, 근데 오늘 점심 뭐 먹지?"}, "id": "ko-00075", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "files.move: '예산안_v3.xlsx' 파일을 '회계' 폴더로 이동하시겠습니까?", "utterance": "네, '예산안_v3.xlsx'를 '회계' 폴더로 옮기세요."}, "id": "ko-00076", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "tasks.create: '발표자료 피드백 취합'이라는 새 태스크를 만들겠습니다, 기한은 다음 주 금요일로 할까요?", "utterance": "음, 그게… 일단 태스크 이름만…"}, "id": "ko-00077", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "tasks.update: '디자인 시안 수정' 태스크의 상태를 '진행 중'에서 '검토 중'으로 변경하시겠습니까?", "utterance": "좋아요, 진행하세요."}, "id": "ko-00078", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "tasks.complete: '서버 점검 보고서 작성'을 완료로 표시하시겠습니까?", "utterance": "네, 그거 말고 다른 거 얘기할게요."}, "id": "ko-00079", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 이동\n할 일: 보고서 초안 작성\n현재 목록: 오늘\n이동할 목록: 다음 주", "utterance": "네, 이동하세요."}, "id": "ko-00080", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "메모 이동\n메모: 회의 준비 아이디어\n현재 폴더: 받은 편지함\n이동할 폴더: 프로젝트 A", "utterance": "아니요, 그 메모는 옮기지 마세요."}, "id": "ko-00081", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "메모 공유\n메모: 주간 보고 초안\n공유 대상: 김민수", "utterance": "네, 고맙습니다. 공유해 주세요."}, "id": "ko-00082", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "파일 이동\n파일: 예산안_2025.xlsx\n현재 위치: 다운로드\n이동할 위치: 회계/예산", "utterance": "잠깐만요, 좀 생각해 볼게요."}, "id": "ko-00083", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 생성\n제목: 클라이언트에게 견적서 보내기\n기한: 3월 5일 오후 3시\n목록: 업무", "utterance": "네, 견적서를 3월 5일 오후 3시까지 보내는 할 일로 만들어 주세요."}, "id": "ko-00084", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 수정\n할 일: 팀 회의 준비\n변경 내용: 날짜를 4월 2일로 변경", "utterance": "그러면 기존 날짜는 어떻게 되나요?"}, "id": "ko-00085", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 완료 처리\n할 일: 보고서 제출", "utterance": "좋아요, 진행하세요."}, "id": "ko-00086", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 이동\n할 일: 발표 자료 준비\n현재 목록: 오늘\n이동할 목록: 내일", "utterance": "네, 근데 다음 주로 옮겨 주세요."}, "id": "ko-00087", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "노트 이동\n노트: 업무 회의록\n대상 폴더: 프로젝트 문서", "utterance": "네, 이동해 주세요."}, "id": "ko-00088", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "노트 공유\n노트: 주간 보고서\n공유 대상: 김대리\n권한: 편집", "utterance": "네, 공유해 주세요. 근데 아직 최종본이 아니니까 다음에 다시 말해줘요."}, "id": "ko-00089", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "파일 이동\n파일: 2024년 결산.xlsx\n대상 폴더: 회계자료", "utterance": "네, 옮겨주세요. 고맙습니다."}, "id": "ko-00090", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 생성\n제목: 발표 자료 준비\n마감일: 3월 15일\n우선순위: 높음", "utterance": "오늘 점심 뭐 먹을까요? 아 맞다, 그 회의는 몇 시였죠?"}, "id": "ko-00091", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 수정\n할 일: 고객사 미팅 준비\n변경 내용: 담당자를 홍팀장으로 변경", "utterance": "네, 담당자를 홍팀장으로 바꿔주세요."}, "id": "ko-00092", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 완료\n할 일: 분기 보고서 제출", "utterance": "어, 그거..."}, "id": "ko-00093", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 이동\n할 일: 사무실 비품 주문\n이동 위치: 다음 주", "utterance": "좋아요, 그렇게 하세요."}, "id": "ko-00094", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "노트 이동\n노트: 아이디어 메모\n대상 폴더: 개인", "utterance": "네, 그 노트는 삭제해 주세요."}, "id": "ko-00095", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "노트 공유 카드입니다. '회의 준비' 노트를 김민수 님과 공유할까요?", "utterance": "네."}, "id": "ko-00096", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "파일 이동 카드입니다. '계약서 초안.pdf'를 '완료' 폴더로 이동할까요?", "utterance": "아니요."}, "id": "ko-00097", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 추가 카드입니다. '분기 보고서 작성' 작업을 오늘 마감으로 추가할까요?", "utterance": "음, 네, 고마워요."}, "id": "ko-00098", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 수정 카드입니다. '클라이언트 미팅' 작업의 마감일을 금요일로 변경할까요?", "utterance": "잠깐만요, 생각 좀 해볼게요."}, "id": "ko-00099", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 완료 카드입니다. '이메일 답장 보내기' 작업을 완료 처리할까요?", "utterance": "네, '이메일 답장 보내기' 완료로 해주세요."}, "id": "ko-00100", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 이동 카드입니다. '디자인 검토' 작업을 '진행 중' 목록으로 이동할까요?", "utterance": "어디로 이동한다고요?"}, "id": "ko-00101", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "노트 이동 카드입니다. '아이디어 메모' 노트를 '프로젝트' 폴더로 이동할까요?", "utterance": "응, 그렇게 해."}, "id": "ko-00102", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "노트 공유 카드입니다. '여행 계획' 노트를 박지훈 님과 공유할까요?", "utterance": "네, 그런데 김영희 님과 공유해주세요."}, "id": "ko-00103", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "파일 이동: '분기 보고서.docx'를 '2024년' 폴더에서 '2025년' 폴더로 이동합니다.", "utterance": "네."}, "id": "ko-00104", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "새 작업 생성: '고객사 미팅 준비' 마감일 3월 15일.", "utterance": "네, 그런데 예산안이 먼저 확정된 후에 만들어 주세요."}, "id": "ko-00105", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 수정: '출장 보고서 작성'의 마감일을 4월 2일에서 4월 5일로 변경합니다.", "utterance": "네, 감사합니다."}, "id": "ko-00106", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "작업 완료 처리: '지난주 주간 보고서 제출'을 완료로 표시합니다.", "utterance": "아, 그거 말고 다른 건 없어요?"}, "id": "ko-00107", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "작업 이동: '프레젠테이션 자료 검토'를 오늘에서 내일로 이동합니다.", "utterance": "네, 내일로 옮기세요."}, "id": "ko-00108", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "메모 이동: '아이디어 스케치'를 '개인'에서 '업무'로 이동합니다.", "utterance": "음... 그거... 아무거나..."}, "id": "ko-00109", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "메모 공유: '회의록 초안'을 김대리와 공유합니다.", "utterance": "진행해."}, "id": "ko-00110", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "파일 이동: '계약서.pdf'를 '완료' 폴더에서 '보관' 폴더로 이동합니다.", "utterance": "네, 그 파일 삭제해 주세요."}, "id": "ko-00111", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 생성: '분기 보고서 작성', 마감일: 내일 오후 5시. 실행하시겠습니까?", "utterance": "네."}, "id": "ko-00112", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 업데이트: '회의 준비'의 마감일을 오늘에서 다음 주 월요일로 변경. 실행하시겠습니까?", "utterance": "아니요."}, "id": "ko-00113", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "할 일 완료: '이메일 답장 보내기'를 완료 처리합니다. 맞습니까?", "utterance": "네, 감사합니다."}, "id": "ko-00114", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 이동: '기획서 초안'을 '진행 중'에서 '완료'로 이동. 실행하시겠습니까?", "utterance": "잠깐만요, 생각 좀 해볼게요."}, "id": "ko-00115", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "메모 이동: '아이디어 노트'를 '개인' 폴더에서 '프로젝트' 폴더로 이동. 실행하시겠습니까?", "utterance": "네, '아이디어 노트'를 '프로젝트' 폴더로 옮겨 주세요."}, "id": "ko-00116", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "메모 공유: '회의록'을 김대리님과 공유. 실행하시겠습니까?", "utterance": "그럼 상대방도 편집이 가능한가요?"}, "id": "ko-00117", "labels": {"approves": false}, "language": "ko"}
+{"facts": {"read_back": "파일 이동: '발표자료.pptx'를 '작업' 폴더에서 '최종' 폴더로 이동. 실행하시겠습니까?", "utterance": "네, 그렇게 해 주세요."}, "id": "ko-00118", "labels": {"approves": true}, "language": "ko"}
+{"facts": {"read_back": "할 일 생성: '디자인 피드백 수집', 마감일: 이번 주 금요일. 실행하시겠습니까?", "utterance": "네, 그런데 마감일은 다음 주 수요일로 해 주세요."}, "id": "ko-00119", "labels": {"approves": false}, "language": "ko"}

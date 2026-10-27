@@ -1,0 +1,147 @@
+{
+  "cuts": {
+    "approves": {
+      "lower": 0.41000000000000003,
+      "upper": 0.51
+    }
+  },
+  "digest": "bd976930f1b2ab66",
+  "failures": [
+    "ece:approves",
+    "careful:en"
+  ],
+  "numbers": {
+    "accuracy": {
+      "ar": 1.0,
+      "de": 1.0,
+      "en": 0.9915,
+      "es": 1.0,
+      "fr": 1.0,
+      "hi": 0.9913,
+      "id": 0.9741,
+      "it": 0.9915,
+      "ja": 1.0,
+      "ko": 0.9915,
+      "nl": 0.9744,
+      "pt-BR": 1.0,
+      "ru": 1.0,
+      "tr": 0.9741,
+      "vi": 1.0,
+      "zh-Hant": 0.9916
+    },
+    "agreement": 0.975,
+    "careful": {
+      "en": 0.9333,
+      "ru": 1.0
+    },
+    "cases": 1870,
+    "counts": {
+      "ar": {
+        "approves": {
+          "no": 60,
+          "yes": 59
+        }
+      },
+      "de": {
+        "approves": {
+          "no": 57,
+          "yes": 58
+        }
+      },
+      "en": {
+        "approves": {
+          "no": 59,
+          "yes": 59
+        }
+      },
+      "es": {
+        "approves": {
+          "no": 57,
+          "yes": 60
+        }
+      },
+      "fr": {
+        "approves": {
+          "no": 58,
+          "yes": 58
+        }
+      },
+      "hi": {
+        "approves": {
+          "no": 56,
+          "yes": 59
+        }
+      },
+      "id": {
+        "approves": {
+          "no": 56,
+          "yes": 60
+        }
+      },
+      "it": {
+        "approves": {
+          "no": 59,
+          "yes": 58
+        }
+      },
+      "ja": {
+        "approves": {
+          "no": 56,
+          "yes": 59
+        }
+      },
+      "ko": {
+        "approves": {
+          "no": 59,
+          "yes": 58
+        }
+      },
+      "nl": {
+        "approves": {
+          "no": 58,
+          "yes": 59
+        }
+      },
+      "pt-BR": {
+        "approves": {
+          "no": 58,
+          "yes": 60
+        }
+      },
+      "ru": {
+        "approves": {
+          "no": 59,
+          "yes": 59
+        }
+      },
+      "tr": {
+        "approves": {
+          "no": 58,
+          "yes": 58
+        }
+      },
+      "vi": {
+        "approves": {
+          "no": 57,
+          "yes": 60
+        }
+      },
+      "zh-Hant": {
+        "approves": {
+          "no": 59,
+          "yes": 60
+        }
+      }
+    },
+    "ece": {
+      "approves": 0.052
+    },
+    "reference_accuracy": {
+      "en": 0.95,
+      "ru": 0.9833
+    },
+    "reference_cases": 120
+  },
+  "passed": false,
+  "policy": "voice.approval@1"
+}
