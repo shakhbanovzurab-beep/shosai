@@ -15,16 +15,8 @@ from shosai.features.identity.contracts import Principal
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.domain.admission import Admission
 from shosai.features.memory.infrastructure.metrics import ADMISSION_LAG, EXTRACTIONS
-from tests.features.memory.admission_bench import AdmissionBench
+from tests.features.memory.admission_bench import AdmissionBench, said
 from tests.features.memory.recall_bench import axis
-
-
-def said(statement: str, *, explicit: bool = False, kind: str = "fact") -> dict[str, object]:
-    """One statement as the extraction model answers it."""
-    return {
-        "statement": statement, "kind": kind, "explicit": explicit, "sensitive": False,
-        "about_person": True,
-    }  # fmt: skip
 
 
 async def test_an_explicit_request_is_saved_and_a_guess_is_asked(
@@ -51,7 +43,7 @@ async def test_an_explicit_request_is_saved_and_a_guess_is_asked(
         "message_id": str(words.message_id),
     }
     assert {fact.org_id for fact in facts} == {org}
-    assert all(fact.embedding is not None for fact in facts)
+    assert await admission_bench.embedded(person) == 2
 
 
 async def test_no_more_than_three_new_candidates_a_day(admission_bench: AdmissionBench) -> None:

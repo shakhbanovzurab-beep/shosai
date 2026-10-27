@@ -1,16 +1,17 @@
 """A turn's admission over the slot's homes: the turn's words, the extraction model and the
 embeddings as doubles (memory step 5)."""
 
+import asyncio
 import json
 import uuid
 from collections.abc import AsyncIterator, Sequence
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 import pytest_asyncio
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.agent_tools.context import Taint
@@ -38,13 +39,23 @@ from tests.harness.database_access import DatabaseAccess
 CHAT = ModelRoute(ModelRef(Provider.OPENROUTER, "google/gemini-3.8-flash"))
 
 
+def said(statement: str, *, explicit: bool = False, kind: str = "fact") -> dict[str, object]:
+    """One statement as the extraction model answers it."""
+    return {
+        "statement": statement, "kind": kind, "explicit": explicit, "sensitive": False,
+        "about_person": True,
+    }  # fmt: skip
+
+
 @dataclass
 class Statements:
-    """The extraction model: the statements it finds, as its JSON answer, or its failure."""
+    """The extraction model: the statements it finds, as its JSON answer after its delay, or
+    its failure."""
 
     found: list[dict[str, object]] = field(default_factory=list)
     calls: list[ChatRequest] = field(default_factory=list)
     failure: AiCallError | None = None
+    delay: timedelta = timedelta(0)
 
     async def chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
@@ -52,6 +63,7 @@ class Statements:
         """The JSON object of the statements."""
         del context
         self.calls.append(request)
+        await asyncio.sleep(self.delay.total_seconds())
         if self.failure is not None:
             raise self.failure
         text = json.dumps({"statements": self.found})
@@ -94,6 +106,17 @@ class AdmissionBench:
     vectors: VectorModel
     consents: Consents
     registry: CollectorRegistry
+
+    async def embedded(self, person: uuid.UUID) -> int:
+        """How many of the person's facts hold a vector."""
+        scope = TenancyScope(Home.RU, person)
+        async with self.homes.transactions.begin(scope, read_only=True) as session:
+            held = await session.scalar(
+                select(func.count()).where(
+                    MemoryFactRecord.user_id == person, MemoryFactRecord.embedding.is_not(None)
+                )
+            )
+            return int(held or 0)
 
     async def facts(self, person: uuid.UUID) -> Sequence[MemoryFactRecord]:
         """Every fact of the person, ended ones too, oldest first."""

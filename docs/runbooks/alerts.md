@@ -272,7 +272,7 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Means.** For half an hour 5 % of Leo's turns took memory more than a minute to read after the answer ended (`shosai_memory_admission_lag_seconds`, memory step 11). The quiet "Leo may remember" line under the answer comes late and new facts reach answers later; nothing is lost.
 
-**Fix.** The task `memory.admit_turn` waits in the `default` queue → see [TaskQueueOld](#task-queue-old) and the workers' count; the model call is slow → the `ai.call` spans of the task's traces and `shosai_ai_call_duration_seconds` by `provider`, with `MEMORY_FALLBACK_MODEL` as the switch; the person's admission lock is held long → a meeting's recollection or the upkeep of the same person in the workers' logs.
+**Fix.** The task `memory.admit_turn` waits in the `default` queue → see [TaskQueueOld](#task-queue-old) and the workers' count: one `default` worker admits about 2.6 turns a second while the model answers in 1.8 s (memory step 11), and memory alone needs two of them at 10 000 DAU's peak; the model call is slow → the `ai.call` spans of the task's traces and `shosai_ai_call_duration_seconds` by `provider`, with `MEMORY_FALLBACK_MODEL` as the switch; the person's admission lock is held long → a meeting's recollection or the upkeep of the same person in the workers' logs.
 
 <a id="memory-extraction-failing"></a>
 ### MemoryExtractionFailing

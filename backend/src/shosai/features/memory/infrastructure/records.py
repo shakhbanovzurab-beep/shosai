@@ -132,7 +132,11 @@ class MemoryFactRecord(ModelBase):
     last_confirmed_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
-    embedding: Mapped[list[float] | None] = mapped_column(HALFVEC(EMBEDDING_DIMENSIONS))
+    # Вектор читают только запросы расстояния в SQL: строка его не грузит, а случайное чтение
+    # падает сразу. Вспоминание на пике тянуло 40 векторов по 1 024 числа на ход.
+    embedding: Mapped[list[float] | None] = mapped_column(
+        HALFVEC(EMBEDDING_DIMENSIONS), deferred=True, deferred_raiseload=True
+    )
     embedding_model: Mapped[str | None] = mapped_column(Text)
     erase_after: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
