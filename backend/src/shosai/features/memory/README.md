@@ -56,6 +56,12 @@ What Leo knows about the person: their preferences, facts about them and their w
 
 - `channels/subscriptions.py` sends `memory.recollect_meeting` for revision 1 of `notes.meeting.notes_ready`; `application/meeting_recollection.py` reads the owner's switch and consent and the meeting through `MEETING_READER` and `MEETING_FINDINGS` as the owner, asks `infrastructure/recollector.py` for at most five statements, embeds them in one call and writes them through `application/admission_writer.py` as candidates in the meeting's space, labelled as its speech, each citing its finding or the summary. A statement about the owner needs evidence that names them (`domain/recollections.py`). The write is keyed by the meeting; a key already written answers before the model is asked.
 
+## Upkeep and departures (step 8)
+
+- `application/upkeep.py` and `channels/tasks.py` (`memory.upkeep`, every ten minutes per home): each person who holds a fact is tended once a day on the day's Valkey cursor, under their admission lock — faded facts and candidates unanswered for 30 days end as `expired` (pinned and carried-over ones never), facts ended or replaced over 180 days ago are purged, a stale summary is queued.
+- `application/departures.py` and `channels/departure_events.py`: a workspace's departure marks the person's facts of it seven days on, its deletion erases them at once; a meeting's deletion marks its facts for its purge, its restore settles them; `memory.settle_marks` (hourly) erases a due fact whose workspace or meeting the person no longer has and lifts any other mark.
+- `application/invariants.py` (`memory.check_invariant`, hourly): the facts a writer created after their person switched memory off, through the sweep role — `shosai_memory_written_while_off{home}`, which must stay 0.
+
 ## What the models read (step 1)
 
 `infrastructure/extraction_prompts.py` (a turn's and a meeting's extraction) and `infrastructure/summary_prompts.py` (the summary and the box): English instructions with the output language stated in each, and their answer schemas — registered in the model-facing English test.

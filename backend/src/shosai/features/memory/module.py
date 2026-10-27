@@ -10,7 +10,7 @@ routes of Settings > Memory's facts and switch, and the switch's mirror in the n
 Step 5 a turn's admission after `agent.turn.completed`. Step 6 Leo's `memory` toolset —
 `memory.recall` and `memory.forget` — offered while the person's memory is on. Step 7 the
 summary, its "Ask or update" box and restore. Step 9 a meeting's recollection after its first
-notes.
+notes. Step 8 the daily upkeep, the facts that follow their sources and the invariant's check.
 """
 
 from collections.abc import AsyncIterator
@@ -23,20 +23,24 @@ from shosai.features.agent.contracts.memory import MEMORY_RECALL, PROFILE_FACTS
 from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 from shosai.features.memory.application.account_data import ACCOUNT_DATA, MemoryAccountData
 from shosai.features.memory.application.box_messages import BoxMessages
+from shosai.features.memory.application.departures import Departures
 from shosai.features.memory.application.embedding_pass import EmbeddingPass
 from shosai.features.memory.application.fact_changes import FactChanges
 from shosai.features.memory.application.fact_forgets import FactForgets
 from shosai.features.memory.application.fact_list import FactLists
 from shosai.features.memory.application.fact_restore import FactRestore
 from shosai.features.memory.application.fact_search import FactSearch
+from shosai.features.memory.application.invariants import MemoryInvariants
 from shosai.features.memory.application.meeting_recollection import MeetingRecollection
 from shosai.features.memory.application.recall import Recall
 from shosai.features.memory.application.summaries import Summaries
 from shosai.features.memory.application.summary_facts import SummaryFacts
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.application.turn_admission import TurnAdmission
+from shosai.features.memory.application.upkeep import Upkeep
 from shosai.features.memory.channels.agent_tool_handlers import MemoryTools
 from shosai.features.memory.channels.agent_tools import MEMORY_TOOLS
+from shosai.features.memory.channels.departure_events import departure_subscriptions
 from shosai.features.memory.channels.http.facts import build_memory_router
 from shosai.features.memory.channels.http.summary import build_summary_router
 from shosai.features.memory.channels.subscriptions import subscriptions
@@ -47,6 +51,7 @@ from shosai.features.memory.channels.tasks import (
     summary_queue,
     summary_writes,
     turn_admission,
+    upkeep_ticks,
 )
 from shosai.features.memory.infrastructure.embeddings import Embedder
 from shosai.features.memory.infrastructure.extractor import Extractor
@@ -103,6 +108,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     items = ActionItems(services.effects, services.outbox)
     tools = MemoryTools(transactions, (search, FactForgets(lists), items))
     summaries, box = summary_parts(services, lists, metrics, settings)
+    departures = Departures(transactions, (ports, metrics))
+    upkeep = Upkeep(transactions, (summaries, services.valkey, metrics))
     restore = FactRestore(transactions, (lists, services.valkey))
     yield FeatureParts(
         http_routers=(
@@ -115,8 +122,9 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             turn_admission(admission),
             summary_writes(summaries),
             meeting_recollection(recollection),
+            *upkeep_ticks(upkeep, departures, MemoryInvariants(transactions, metrics)),
         ),
-        subscriptions=subscriptions(services.tasks),
+        subscriptions=(*subscriptions(services.tasks), *departure_subscriptions(departures)),
         periodic_jobs=PERIODIC_JOBS,
         provides=(
             ACCOUNT_DATA_HANDLERS.bind(MemoryAccountData(transactions, services.valkey)),

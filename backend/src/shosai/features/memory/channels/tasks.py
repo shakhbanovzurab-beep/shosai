@@ -1,6 +1,8 @@
 """Memory's tasks: a turn's admission after `agent.turn.completed` (step 5), the embedding pass
 of each home, once a minute (step 4), a person's summary rewritten in the background (step 7),
-and a meeting's recollection after its first notes (step 9).
+a meeting's recollection after its first notes (step 9), and per home the day's upkeep on a
+cursor every ten minutes, the hourly settling of erasure marks and the hourly check of the
+switch's invariant (step 8).
 
 A fact written without a vector is recalled from the next minute on; a pass lost or repeated
 changes nothing the next one would not, since a vector lands only on a fact still waiting for
@@ -25,10 +27,13 @@ from shosai.core.tasks.declaration import (
 )
 from shosai.core.tasks.payloads import HomeTaskPayload
 from shosai.core.tasks.queues import TaskQueue
+from shosai.features.memory.application.departures import Departures
 from shosai.features.memory.application.embedding_pass import EmbeddingPass
+from shosai.features.memory.application.invariants import MemoryInvariants
 from shosai.features.memory.application.meeting_recollection import MeetingRecollection
 from shosai.features.memory.application.summaries import Summaries, SummaryQueue
 from shosai.features.memory.application.turn_admission import TurnAdmission
+from shosai.features.memory.application.upkeep import Upkeep
 from shosai.features.memory.infrastructure.metrics import SummaryTrigger
 
 
@@ -84,7 +89,36 @@ EMBED_WAITING: Final = TaskDeclaration(
     retry=NO_RETRY,
     kind=TaskKind.TICK,
 )
-PERIODIC_JOBS: Final = (PeriodicJob(EMBED_WAITING, every=timedelta(minutes=1)),)
+UPKEEP: Final = TaskDeclaration(
+    name="memory.upkeep",
+    queue=TaskQueue.DEFAULT,
+    payload=HomeTaskPayload,
+    deadline=timedelta(minutes=8),
+    retry=NO_RETRY,
+    kind=TaskKind.TICK,
+)
+SETTLE_MARKS: Final = TaskDeclaration(
+    name="memory.settle_marks",
+    queue=TaskQueue.DEFAULT,
+    payload=HomeTaskPayload,
+    deadline=timedelta(minutes=10),
+    retry=NO_RETRY,
+    kind=TaskKind.TICK,
+)
+CHECK_INVARIANT: Final = TaskDeclaration(
+    name="memory.check_invariant",
+    queue=TaskQueue.DEFAULT,
+    payload=HomeTaskPayload,
+    deadline=timedelta(minutes=2),
+    retry=NO_RETRY,
+    kind=TaskKind.TICK,
+)
+PERIODIC_JOBS: Final = (
+    PeriodicJob(EMBED_WAITING, every=timedelta(minutes=1)),
+    PeriodicJob(UPKEEP, every=timedelta(minutes=10)),
+    PeriodicJob(SETTLE_MARKS, every=timedelta(hours=1)),
+    PeriodicJob(CHECK_INVARIANT, every=timedelta(hours=1)),
+)
 
 
 def embedding_tick(embedding: EmbeddingPass) -> TaskHandler[HomeTaskPayload]:
@@ -142,3 +176,24 @@ def meeting_recollection(recollection: MeetingRecollection) -> TaskHandler[Meeti
             await recollection.recollect(payload.home, payload.user_id, payload.meeting_id)
 
     return TaskHandler(RECOLLECT, recollect)
+
+
+def upkeep_ticks(
+    upkeep: Upkeep, departures: Departures, invariants: MemoryInvariants
+) -> tuple[TaskHandler[HomeTaskPayload], ...]:
+    """The upkeep's day, the settling of marks and the invariant's check of a home."""
+
+    async def tend(payload: HomeTaskPayload) -> None:
+        await upkeep.run(payload.home)
+
+    async def settle(payload: HomeTaskPayload) -> None:
+        await departures.settle(payload.home)
+
+    async def check(payload: HomeTaskPayload) -> None:
+        await invariants.check(payload.home)
+
+    return (
+        TaskHandler(UPKEEP, tend),
+        TaskHandler(SETTLE_MARKS, settle),
+        TaskHandler(CHECK_INVARIANT, check),
+    )

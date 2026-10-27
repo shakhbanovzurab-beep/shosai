@@ -5,14 +5,19 @@ nothing to give, late, memory off, no consent, failed — and `shosai_memory_rec
 long it took; `shosai_memory_recall_facts` how many facts reached the turn. The embedding pass
 counts the facts it gave vectors to and those it could not (`shosai_memory_embedded_total`).
 `shosai_memory_summary_writes_total{trigger, outcome}` counts the summary's writes: why — a
-stale open, a refresh, a box message, the upkeep — and how they ended.
+stale open, a refresh, a box message, the upkeep — and how they ended. The upkeep counts the
+facts it expired, purged, erased with their source and brought back
+(`shosai_memory_upkeep_facts_total{part}`); the hourly check sets the facts a writer created
+after their person switched memory off (`shosai_memory_written_while_off{home}`, must stay 0).
 """
 
 from collections.abc import Sequence
 from enum import StrEnum
 from typing import Final
 
-from prometheus_client import CollectorRegistry, Counter, Histogram
+from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
+
+from shosai.core.kernel.homes import Home
 
 RECALL_SECONDS: Final = "shosai_memory_recall_seconds"
 RECALL_BUCKETS: Final = (0.01, 0.025, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.5, 1)
@@ -46,7 +51,17 @@ class SummaryTrigger(StrEnum):
     UPKEEP = "upkeep"
 
 
+class UpkeepPart(StrEnum):
+    """What the upkeep did to facts."""
+
+    EXPIRED = "expired"
+    PURGED = "purged"
+    ERASED = "erased"
+    RESTORED = "restored"
+
+
 ADMISSIONS: Final = "shosai_memory_admissions_total"
+WRITTEN_WHILE_OFF: Final = "shosai_memory_written_while_off"
 
 
 class MemoryMetrics:
@@ -83,6 +98,18 @@ class MemoryMetrics:
             ("trigger", "outcome"),
             registry=registry,
         )
+        self._upkeep = Counter(
+            "shosai_memory_upkeep_facts",
+            "Факты, которые уход за памятью завершил, вычистил, стёр с источником или вернул",
+            ("part",),
+            registry=registry,
+        )
+        self._while_off = Gauge(
+            WRITTEN_WHILE_OFF,
+            "Факты, записанные после выключения памяти человеком, по дому; должно быть 0",
+            ("home",),
+            registry=registry,
+        )
         self._embedded = Counter(
             "shosai_memory_embedded",
             "Факты, которым проход эмбеддингов дал вектор или не смог",
@@ -99,6 +126,15 @@ class MemoryMetrics:
     def summary_written(self, trigger: SummaryTrigger, outcome: str) -> None:
         """One write of a summary: why and how it ended."""
         self._summaries.labels(trigger.value, outcome).inc()
+
+    def upkept(self, part: UpkeepPart, facts: int) -> None:
+        """Facts the upkeep handled one way."""
+        if facts:
+            self._upkeep.labels(part.value).inc(facts)
+
+    def written_while_off(self, home: Home, facts: int) -> None:
+        """The hourly check's count of one home."""
+        self._while_off.labels(home.value).set(facts)
 
     def embedded(self, outcome: EmbedOutcome, facts: int) -> None:
         """Facts the embedding pass handled one way."""
