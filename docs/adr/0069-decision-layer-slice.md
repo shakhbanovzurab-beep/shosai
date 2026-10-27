@@ -61,3 +61,15 @@ ADR 0026 made Leo's judgement calls one layer of versioned policies over Jev, wi
 - A policy's online precision stays below its rule's for 4 weeks (ADR 0026): that point returns to its rule.
 - Warned cards are approved as often as standard ones: friction's questions, or "refuse and explain", are reconsidered with the data.
 - The toolset catalog makes `load_toolset` exceed 5% of turns while `turn.route` is active: its questions are reconsidered.
+
+## As built (steps 5–8, 2026-10-27)
+
+Refinements the implementation needed, decided by the agent within this decision and recorded in the plan's step rows:
+
+- **`turn.route` is asked only when a toolset cannot be offered even for reading.** Since the agent's reads-first rule, a person's catalog no longer fits segment 2 whole (≈ 7 300 tokens against 4 000; its reads ≈ 3 500), so "asked when the rule defers" would mean most turns. Keeping DL-D3's "no call, no cost, no latency today", the router waits until reads overflow; ranking writes too is an open question for the owner.
+- **The agent's ports carry what the decision needs.** `TurnRouter` reads a `RouteRequest` (candidates with their tools' registered first sentences, the question, the last answer's start, the page, the turn count, the scope, consent and run) rather than an additive `question` on the rule's `RouteFacts`; `FrictionFacts` carries the rendered card and the action's id; `InjectionPiece` carries the text as written, without the wrapper's markers, and the piece's number.
+- **A run's final taint is kept** (`agent_runs.taint`), so "ready for memory's admission" has a place to be ready in; the card's additive `suspicious` field states a suspicious run.
+- **A committed set is held to its report, not to the gates.** `calibrate` writes `report.json` beside the recorded run; CI checks every committed case is answered under the current wording and the report is the run's. Only `promote` requires passing gates, since sets are committed before a person labels their reference, and a step may end with a failing gate recorded.
+- **Reference drafts are never filtered by the labeller,** whose agreement with the person is what the reference measures.
+- **Reliability counts keep the shadow flag** beside the planned key, so a shadow revision's counts never mix with the active one's.
+- **The tickets are objectives over `shosai_decision_requests_total`**; the rule generator renders only the burns an objective's share can reach.
