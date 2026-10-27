@@ -59,6 +59,7 @@ def plan_of(row: TariffRecord) -> Plan:
             ModelTier.FRONTIER: row.weekly_frontier_tokens,
         },
         daily_standard_tokens=row.daily_standard_tokens,
+        room_participants=row.room_participants,
     )
     return Plan(
         slug=row.slug, name=row.name, audience=Audience(row.audience), limits=limits,
@@ -85,6 +86,7 @@ def write_plan(row: TariffRecord, plan: Plan, now: datetime) -> None:
     row.weekly_standard_tokens = limits.weekly_tokens[ModelTier.STANDARD]
     row.weekly_frontier_tokens = limits.weekly_tokens[ModelTier.FRONTIER]
     row.daily_standard_tokens = limits.daily_standard_tokens
+    row.room_participants = limits.room_participants
     row.capabilities = sorted(item.value for item in plan.capabilities)
     row.features = list(plan.features)
     row.is_active, row.is_featured, row.sort_order = plan.on_sale, plan.featured, plan.sort_order

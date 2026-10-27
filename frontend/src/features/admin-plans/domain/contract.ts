@@ -28,6 +28,8 @@ export type PlanLimits = {
   file_manager_gb: number | null;
   /** Knowledge base storage, in MB (1024 MB is shown as 1 GB). */
   knowledge_base_mb: number | null;
+  /** People in one video call, 2–1000; `null` takes the platform's ceiling (50). */
+  room_participants?: number | null;
 };
 
 /** Which tab of the pricing page the plan is on. */

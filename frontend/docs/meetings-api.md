@@ -21,8 +21,9 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
 | `DELETE` | `/v1/meetings/rooms/{id}/recording`                    | —                                      | `202 RecordingOut` |
 
 - **`RoomOut`** is `{id, title, state: open | closed, notes_on, workspace_id, link, created_at, closed_at,
-  call: {started_at, participants} | null, recording: RecordingOut | null}`. `title` is null for an untitled room
-  (the cabinet names it); `link` is the full invitation, `https://shosai.tech/meet/{token}`.
+  call: {started_at, participants} | null}`, and `recording: RecordingOut | null` once recording ships (A7).
+  `title` is null for an untitled room (the cabinet names it); `link` is the full invitation,
+  `https://shosai.tech/meet/{token}`; `call.participants` is null when the call server does not answer.
 - **New meeting** creates the room and opens its `link` path in the cabinet (`/app/meet/{token}`), which joins like
   anyone else. The scope is Personal without `workspace_id`, or a workspace the person belongs to.
 - **Only the owner** reads, changes, ends and records a room; any other room is `404 room_not_found`. The list holds

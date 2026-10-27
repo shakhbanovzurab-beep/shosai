@@ -137,6 +137,10 @@ class VideoServer(Protocol):
         """The sessions in a room; none when the SFU does not hold it."""
         ...
 
+    async def set_metadata(self, room_name: str, metadata: str) -> bool:
+        """Replace a room's metadata; False when the SFU no longer holds the room."""
+        ...
+
     def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
         """A pass for one session, valid for the join's 10 minutes."""
         ...

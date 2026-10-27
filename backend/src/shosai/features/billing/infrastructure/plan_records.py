@@ -83,6 +83,10 @@ class TariffRecord(ModelBase):
             name="limits_not_negative",
         ),
         CheckConstraint(
+            "room_participants IS NULL OR room_participants BETWEEN 2 AND 1000",
+            name="room_participants_range",
+        ),
+        CheckConstraint(
             f"capabilities <@ ARRAY[{CAPABILITIES}]::text[]", name="capabilities_known"
         ),
         CheckConstraint("cardinality(features) <= 20", name="features_count"),
@@ -114,6 +118,7 @@ class TariffRecord(ModelBase):
     weekly_standard_tokens: Mapped[int | None] = mapped_column(BigInteger)
     weekly_frontier_tokens: Mapped[int | None] = mapped_column(BigInteger)
     daily_standard_tokens: Mapped[int | None] = mapped_column(BigInteger)
+    room_participants: Mapped[int | None] = mapped_column(Integer)
     capabilities: Mapped[list[str]] = mapped_column(
         ARRAY(Text), server_default=text("'{}'::text[]")
     )

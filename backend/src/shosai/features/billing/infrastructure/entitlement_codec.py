@@ -32,6 +32,8 @@ class LimitsJson(BaseModel):
     knowledge_base_mb: int | None
     weekly_tokens: dict[ModelTier, int | None]
     daily_standard_tokens: int | None
+    # Записи кэша до поля его не несут: такая запись читается как «потолок платформы».
+    room_participants: int | None = None
 
 
 class SnapshotJson(BaseModel):
@@ -91,6 +93,7 @@ def encode(entry: EntitlementEntry) -> bytes:
                 file_manager_gb=limits.file_manager_gb, knowledge_base_mb=limits.knowledge_base_mb,
                 weekly_tokens=dict(limits.weekly_tokens),
                 daily_standard_tokens=limits.daily_standard_tokens,
+                room_participants=limits.room_participants,
             ),
             capabilities=sorted(snapshot.capabilities), source=snapshot.source,
             workspace_id=snapshot.workspace_id, version=snapshot.version,
@@ -120,6 +123,7 @@ def decode(raw: bytes) -> EntitlementEntry:
                 file_manager_gb=limits.file_manager_gb, knowledge_base_mb=limits.knowledge_base_mb,
                 weekly_tokens=limits.weekly_tokens,
                 daily_standard_tokens=limits.daily_standard_tokens,
+                room_participants=limits.room_participants,
             ),
             capabilities=frozenset(snapshot.capabilities), source=snapshot.source,
             workspace_id=snapshot.workspace_id, version=snapshot.version,

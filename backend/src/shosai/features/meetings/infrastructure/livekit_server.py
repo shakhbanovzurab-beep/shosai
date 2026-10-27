@@ -30,6 +30,7 @@ from livekit.protocol.room import (
     DeleteRoomRequest,
     ListParticipantsRequest,
     ListRoomsRequest,
+    UpdateRoomMetadataRequest,
 )
 from pydantic import ValidationError
 
@@ -120,6 +121,17 @@ class LiveKitServer:
                 return []
             raise
         return [participant_of(participant) for participant in answer.participants]
+
+    async def set_metadata(self, room_name: str, metadata: str) -> bool:
+        """Replace a room's metadata; False when the SFU no longer holds the room."""
+        request = UpdateRoomMetadataRequest(room=room_name, metadata=metadata)
+        try:
+            await self._call("set_metadata", self._client.room.update_room_metadata(request))
+        except ServerError as error:
+            if error.code == NOT_FOUND:
+                return False
+            raise
+        return True
 
     def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
         """A pass for one session, valid for the join's 10 minutes."""
@@ -217,6 +229,10 @@ class UnconfiguredVideoServer:
         raise VideoUnavailableError
 
     async def participants(self, room_name: str) -> Sequence[SfuParticipant]:
+        """Calls are unavailable."""
+        raise VideoUnavailableError
+
+    async def set_metadata(self, room_name: str, metadata: str) -> bool:
         """Calls are unavailable."""
         raise VideoUnavailableError
 

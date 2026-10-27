@@ -3520,6 +3520,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/rooms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Meeting Rooms
+         * @description Your rooms with a call going on, latest call first.
+         */
+        get: operations["list_meeting_rooms_v1_meetings_rooms_get"];
+        put?: never;
+        /**
+         * Create Meeting Room
+         * @description Open a room; its link is the invitation.
+         */
+        post: operations["create_meeting_room_v1_meetings_rooms_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/rooms/{room_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Meeting Room
+         * @description Your room, with its call if one goes on.
+         */
+        get: operations["get_meeting_room_v1_meetings_rooms__room_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Patch Meeting Room
+         * @description Rename your room or switch Leo's notes; everyone in the call sees the mark.
+         */
+        patch: operations["patch_meeting_room_v1_meetings_rooms__room_id__patch"];
+        trace?: never;
+    };
+    "/v1/meetings/rooms/{room_id}/end": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * End Meeting Room
+         * @description End the call for everyone and close the room for good.
+         */
+        post: operations["end_meeting_room_v1_meetings_rooms__room_id__end_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -3980,6 +4048,22 @@ export interface components {
             /** Items */
             items: components["schemas"]["BoardSummaryOut"][];
             incoming: components["schemas"]["IncomingOut"];
+        };
+        /**
+         * CallOut
+         * @description The call going on in a room.
+         */
+        CallOut: {
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /**
+             * Participants
+             * @description How many are in the call; null when unknown.
+             */
+            participants: number | null;
         };
         /**
          * CapabilitiesBody
@@ -5524,6 +5608,11 @@ export interface components {
             weekly_frontier_tokens: number | null;
             /** Daily Standard Tokens */
             daily_standard_tokens?: number | null;
+            /**
+             * Room Participants
+             * @description People in one video call; null takes the platform's ceiling (50).
+             */
+            room_participants?: number | null;
         };
         /**
          * LoginRequest
@@ -6077,6 +6166,16 @@ export interface components {
          */
         MyNotesOut: {
             notes: components["schemas"]["OwnNotesOut"] | null;
+        };
+        /**
+         * NewRoom
+         * @description A room in Personal, or in a workspace the person belongs to.
+         */
+        NewRoom: {
+            /** Title */
+            title?: string | null;
+            /** Workspace Id */
+            workspace_id?: string | null;
         };
         /**
          * NoteClient
@@ -7059,6 +7158,69 @@ export interface components {
              * @description A shipped template's code, such as `oneOnOne`, or the id of your own.
              */
             template_id: string;
+        };
+        /**
+         * RoomOut
+         * @description A room as its owner sees it.
+         */
+        RoomOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Title
+             * @description Null for an untitled room; the cabinet names it.
+             */
+            title: string | null;
+            state: components["schemas"]["RoomState"];
+            /**
+             * Notes On
+             * @description Leo takes notes of the room's calls.
+             */
+            notes_on: boolean;
+            /** Workspace Id */
+            workspace_id: string | null;
+            /**
+             * Link
+             * @description The invitation: `https://…/meet/{token}`.
+             */
+            link: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Closed At */
+            closed_at: string | null;
+            call: components["schemas"]["CallOut"] | null;
+        };
+        /**
+         * RoomPatch
+         * @description A new title (empty clears it), the notes switch, or both.
+         */
+        RoomPatch: {
+            /** Title */
+            title?: string | null;
+            /** Notes On */
+            notes_on?: boolean | null;
+        };
+        /**
+         * RoomState
+         * @description Whether a room still admits anyone.
+         * @enum {string}
+         */
+        RoomState: "open" | "closed";
+        /**
+         * RoomsPageOut
+         * @description A page of rooms and the next page's cursor.
+         */
+        RoomsPageOut: {
+            /** Items */
+            items: components["schemas"]["RoomOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
         };
         /**
          * RunOut
@@ -16604,6 +16766,186 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MemoryFactOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_meeting_rooms_v1_meetings_rooms_get: {
+        parameters: {
+            query?: {
+                /** @description `live`: rooms with a call going on. */
+                state?: "live";
+                /** @description A workspace; Personal if absent. */
+                workspace_id?: string | null;
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomsPageOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_meeting_room_v1_meetings_rooms_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewRoom"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_meeting_room_v1_meetings_rooms__room_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    patch_meeting_room_v1_meetings_rooms__room_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoomPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    end_meeting_room_v1_meetings_rooms__room_id__end_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

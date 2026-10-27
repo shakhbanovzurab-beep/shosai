@@ -4,7 +4,7 @@ Step A1 published the contract — the ports calendar binds and uses, and the sl
 and the domain. Step A2 added LiveKit: the `LIVEKIT_*` settings with their production check,
 the SFU behind the `VideoServer` port, opened with the process and closed with it, and its
 readiness probe when it is configured. Step A3 added the tables of each home and their
-account data handler. Routes and tasks come with the next steps.
+account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`.
 """
 
 from collections.abc import AsyncIterator
@@ -18,11 +18,17 @@ from shosai.features.meetings.application.account_data import (
     MODELS,
     MeetingsAccountData,
 )
+from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.video_server import VideoUnavailableError
+from shosai.features.meetings.channels.http.rooms import build_rooms_router
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
 from shosai.features.meetings.infrastructure.livekit_server import open_video_server
-from shosai.features.meetings.settings import LiveKitSettings, livekit_settings_safe
+from shosai.features.meetings.settings import (
+    LiveKitSettings,
+    MeetingsSettings,
+    livekit_settings_safe,
+)
 
 
 @asynccontextmanager
@@ -36,7 +42,10 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
             if settings.configured
             else ()
         )
+        book = RoomBook(services.transactions, (services.effects, services.ports), server)
+        origin = str(services.settings.email.public_base_url)
         yield FeatureParts(
+            http_routers=(build_rooms_router(book, services.ports, origin),),
             probes=probes,
             provides=(ACCOUNT_DATA_HANDLERS.bind(MeetingsAccountData(services.transactions)),),
         )
@@ -48,6 +57,6 @@ MEETINGS = FeatureModule(
     models=MODELS,
     events=(CallStarted, CallEnded, RecordingReady),
     production_checks=(livekit_settings_safe,),
-    settings=(LiveKitSettings,),
+    settings=(LiveKitSettings, MeetingsSettings),
     account_data=(ACCOUNT_DATA,),
 )

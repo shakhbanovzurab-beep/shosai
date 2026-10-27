@@ -115,6 +115,8 @@ class PlanLimits:
         default_factory=lambda: {ModelTier.STANDARD: None, ModelTier.FRONTIER: 0}
     )
     daily_standard_tokens: int | None = None
+    # Участников в звонке комнаты (meetings MR-D2): None — потолок платформы.
+    room_participants: int | None = None
 
     def __post_init__(self) -> None:
         values = [
@@ -122,6 +124,7 @@ class PlanLimits:
             self.file_manager_gb,
             self.knowledge_base_mb,
             self.daily_standard_tokens,
+            self.room_participants,
             *self.weekly_tokens.values(),
         ]
         negative = any(value is not None and value < 0 for value in values)
@@ -135,6 +138,7 @@ class PlanLimits:
             (self.file_manager_gb, other.file_manager_gb),
             (self.knowledge_base_mb, other.knowledge_base_mb),
             (self.daily_standard_tokens, other.daily_standard_tokens),
+            (self.room_participants, other.room_participants),
             *((self.weekly_tokens[tier], other.weekly_tokens[tier]) for tier in ModelTier),
         ]
         return all(_at_least(mine, theirs) for mine, theirs in pairs)

@@ -1,4 +1,4 @@
-"""The meetings slice's settings (`LIVEKIT_*`) and their production check (meetings plan A2).
+"""The meetings slice's settings (`LIVEKIT_*`, `MEETINGS_*`) and their production check.
 
 Calls run on LiveKit: clients connect to its public signalling address, the API talks to its
 server API on the plane's network, and both sign with one key and secret. All four are set
@@ -10,7 +10,7 @@ enough to sign tokens safely.
 from collections.abc import Iterator
 from typing import Final
 
-from pydantic import AnyUrl, HttpUrl, SecretStr, UrlConstraints
+from pydantic import AnyUrl, Field, HttpUrl, SecretStr, UrlConstraints
 
 from shosai.core.config.gate import GateViolation
 from shosai.core.config.loading import Settings
@@ -46,6 +46,13 @@ class LiveKitSettings(SettingsSection):
             self.livekit_api_key,
             self.livekit_api_secret,
         )
+
+
+class MeetingsSettings(SettingsSection):
+    """The platform's bounds on calls."""
+
+    # Потолок участников звонка над значением тарифа (MR-D2): 50, на стейджинге 4.
+    meetings_room_participants_ceiling: int = Field(default=50, ge=2, le=1_000)
 
 
 def livekit_settings_safe(settings: Settings) -> Iterator[GateViolation]:

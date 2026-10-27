@@ -36,14 +36,14 @@ type PlanEntitlementsFieldsProps = {
   onCapability: (capability: PlanCapability, enabled: boolean) => void;
 };
 
-/** What the plan includes: meeting minutes, File Manager and knowledge base storage, enterprise extras. */
+/** What the plan includes: meeting minutes, storage, people in a call, enterprise extras. */
 export function PlanEntitlementsFields({ text, capabilities, disabled, onCapability }: PlanEntitlementsFieldsProps) {
   return (
     <>
       <FieldSet>
         <FieldLegend>Лимиты</FieldLegend>
         <p className="-mt-2 text-muted-foreground text-sm">Пустое поле — без ограничений, 0 — недоступно.</p>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <TextField
             label="Минуты встреч в месяц"
             inputMode="numeric"
@@ -56,6 +56,12 @@ export function PlanEntitlementsFields({ text, capabilities, disabled, onCapabil
             inputMode="numeric"
             description="1024 МБ показываются как 1 ГБ."
             {...text("knowledge_base_mb")}
+          />
+          <TextField
+            label="Участников в звонке"
+            inputMode="numeric"
+            description="Пустое поле — потолок платформы (50)."
+            {...text("room_participants")}
           />
         </div>
       </FieldSet>

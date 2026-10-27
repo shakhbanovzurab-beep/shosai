@@ -28,6 +28,7 @@ export type PlanValues = {
   meeting_minutes_per_month: string;
   file_manager_gb: string;
   knowledge_base_mb: string;
+  room_participants: string;
   capabilities: PlanCapabilities;
   features: string;
   is_active: boolean;
@@ -53,6 +54,7 @@ export const EMPTY_PLAN: PlanValues = {
   meeting_minutes_per_month: "",
   file_manager_gb: "",
   knowledge_base_mb: "",
+  room_participants: "",
   capabilities: Object.fromEntries(PLAN_CAPABILITIES.map((c) => [c, false])) as PlanCapabilities,
   features: "",
   is_active: true,
@@ -79,6 +81,7 @@ export function planValuesOf(plan: Plan): PlanValues {
     meeting_minutes_per_month: optionalIntInput(plan.limits.meeting_minutes_per_month),
     file_manager_gb: optionalIntInput(plan.limits.file_manager_gb),
     knowledge_base_mb: optionalIntInput(plan.limits.knowledge_base_mb),
+    room_participants: optionalIntInput(plan.limits.room_participants ?? null),
     capabilities: { ...plan.capabilities },
     features: plan.features.join("\n"),
     is_active: plan.is_active,
@@ -106,6 +109,7 @@ export function planCandidateOf(values: PlanValues) {
       meeting_minutes_per_month: parseOptionalInt(values.meeting_minutes_per_month),
       file_manager_gb: parseOptionalInt(values.file_manager_gb),
       knowledge_base_mb: parseOptionalInt(values.knowledge_base_mb),
+      room_participants: parseOptionalInt(values.room_participants),
     },
     capabilities: values.capabilities,
     features: values.features

@@ -71,6 +71,14 @@ class LimitsBody(Strict):
     weekly_standard_tokens: Tokens | None = None
     weekly_frontier_tokens: Tokens | None = 0
     daily_standard_tokens: Tokens | None = None
+    room_participants: Annotated[
+        int | None,
+        Field(
+            ge=2,
+            le=1_000,
+            description="People in one video call; null takes the platform's ceiling (50).",
+        ),
+    ] = None
 
 
 class CapabilitiesBody(Strict):
@@ -164,6 +172,7 @@ def draft_of(plan: Plan) -> PlanDraftBody:
             weekly_standard_tokens=limits.weekly_tokens[ModelTier.STANDARD],
             weekly_frontier_tokens=limits.weekly_tokens[ModelTier.FRONTIER],
             daily_standard_tokens=limits.daily_standard_tokens,
+            room_participants=limits.room_participants,
         ),
         capabilities=CapabilitiesBody(
             **{capability.value: capability in plan.capabilities for capability in Capability}
@@ -187,6 +196,7 @@ def plan_of(body: PlanDraftBody, *, archived: bool) -> Plan:
                 ModelTier.FRONTIER: limits.weekly_frontier_tokens,
             },
             daily_standard_tokens=limits.daily_standard_tokens,
+            room_participants=limits.room_participants,
         ),
         capabilities=frozenset(Capability(name) for name, on in capabilities.items() if on),
         prices={

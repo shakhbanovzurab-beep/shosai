@@ -51,6 +51,11 @@ export const planFields = z.object({
     meeting_minutes_per_month: limit("Минуты встреч в месяц", 1_000_000),
     file_manager_gb: limit("File Manager", 1_000_000),
     knowledge_base_mb: limit("База знаний", 100_000_000),
+    room_participants: z
+      .int({ error: "Участников в звонке: укажите целое число или оставьте поле пустым." })
+      .min(2, "Участников в звонке: от 2 до 1000.")
+      .max(1_000, "Участников в звонке: от 2 до 1000.")
+      .nullable(),
   }),
   capabilities: z.object(
     Object.fromEntries(PLAN_CAPABILITIES.map((c) => [c, z.boolean()])) as Record<
