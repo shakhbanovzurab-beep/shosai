@@ -5,6 +5,8 @@
 # the application's secrets stay on the host, so GitHub holds the key, the host's public key and
 # the cabinet's build variables only.
 name: Release
+# The released commit names the run, so the next run knows what staging runs.
+run-name: Release ${{ github.event.workflow_run.head_sha }}
 
 on:
   workflow_run:
@@ -20,15 +22,56 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  images:
-    name: Images
-    # For workflow_run, github.sha is the head of main when CI finished. Equal to the commit CI
-    # checked, it is still current: a slower CI run of an older commit never replaces a newer release,
-    # and the default checkout below is exactly the commit that passed.
+  pick:
+    name: Pick the commit
+    # A commit whose CI passed is released when it is newer than the commit staging runs: a slower
+    # CI run of an older commit never replaces a newer release, and pushes faster than CI no longer
+    # starve staging, as releasing only the head of main did (2026-10-27). Staging runs the commit
+    # of the latest run whose deploy succeeded; runs before 2026-10-27 released their head.
     if: >-
       github.event.workflow_run.conclusion == 'success'
       && github.event.workflow_run.event == 'push'
-      && github.sha == github.event.workflow_run.head_sha
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      release: ${{ steps.newer.outputs.release }}
+    steps:
+      - id: newer
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/workflows/release.yml/runs?status=success&per_page=30" \
+            --jq '.workflow_runs[]
+              | [.id, ((.display_title | capture("^Release (?<sha>[0-9a-f]{40})$").sha) // .head_sha)]
+              | @tsv' > "$RUNNER_TEMP/runs"
+          released=""
+          while IFS=$'\t' read -r run commit; do
+            deployed="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/jobs" \
+              --jq '.jobs[] | select(.name == "Deploy to staging") | .conclusion')"
+            if [ "$deployed" = "success" ]; then
+              released="$commit"
+              break
+            fi
+          done < "$RUNNER_TEMP/runs"
+          status="ahead"
+          if [ -n "$released" ]; then
+            status="$(gh api "repos/$GITHUB_REPOSITORY/compare/$released...$CANDIDATE" --jq .status)"
+          fi
+          echo "staging runs ${released:-nothing}; $CANDIDATE is $status of it"
+          if [ "$status" = "ahead" ]; then
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  images:
+    name: Images
+    needs: pick
+    if: needs.pick.outputs.release == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     # The environment holds CABINET_ENV, the cabinet's build variables.
@@ -41,15 +84,29 @@ jobs:
       edge: ${{ steps.names.outputs.edge }}@${{ steps.edge.outputs.digest }}
       observability: ${{ steps.names.outputs.observability }}@${{ steps.observability.outputs.digest }}
     steps:
+      # The head of main, then exactly the commit whose CI passed — which may be behind the head by
+      # now — once it is shown to be on main's history, so no other branch's code is ever built.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
+      - name: The commit that passed
+        env:
+          COMMIT: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          if ! git merge-base --is-ancestor "$COMMIT" HEAD; then
+            echo "::error::$COMMIT is not on main"
+            exit 1
+          fi
+          git checkout --quiet --detach "$COMMIT"
       - id: names
+        env:
+          COMMIT: ${{ github.event.workflow_run.head_sha }}
         run: |
           registry="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}"
-          echo "backend=$registry/shosai-backend:$GITHUB_SHA" >> "$GITHUB_OUTPUT"
-          echo "edge=$registry/shosai-edge:$GITHUB_SHA" >> "$GITHUB_OUTPUT"
-          echo "observability=$registry/shosai-observability:$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+          echo "backend=$registry/shosai-backend:$COMMIT" >> "$GITHUB_OUTPUT"
+          echo "edge=$registry/shosai-edge:$COMMIT" >> "$GITHUB_OUTPUT"
+          echo "observability=$registry/shosai-observability:$COMMIT" >> "$GITHUB_OUTPUT"
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
       - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:

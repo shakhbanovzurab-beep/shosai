@@ -101,7 +101,7 @@ F5 ([plan](../../docs/plan/packages/F5-observability.md), step 10): the stack of
 
 ## Release from CI
 
-[ADR 0050](../../docs/adr/0050-staging-release-from-ci.md). When CI passes on a push to `main` and the commit is still the head of `main`, [release.yml](../../.github/workflows/release.yml) builds the three images, pushes them to GHCR as `ghcr.io/shakhbanovzurab-beep/shosai-<backend|edge|observability>:<commit>` and calls the host over SSH. The observability image holds files only — the stack's configs, rules and dashboards (F5-D6). Releases queue; none is cancelled midway.
+[ADR 0050](../../docs/adr/0050-staging-release-from-ci.md). When CI passes on a push to `main` and the commit is newer than the one staging runs (the latest successful deploy's), [release.yml](../../.github/workflows/release.yml) builds the three images, pushes them to GHCR as `ghcr.io/shakhbanovzurab-beep/shosai-<backend|edge|observability>:<commit>` and calls the host over SSH. The observability image holds files only — the stack's configs, rules and dashboards (F5-D6). Releases queue; none is cancelled midway.
 
 The application's secrets never leave the host: `render-env.py` stays their only source. The GitHub environment `staging` holds only:
 

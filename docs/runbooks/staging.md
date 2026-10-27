@@ -37,7 +37,7 @@ The next green commit on `main` releases over a rollback. To keep staging on the
 
 ## Release a commit again
 
-In GitHub, open the commit's Release run and choose "Re-run all jobs". Only the head of `main` is released: a re-run of an older commit skips itself.
+In GitHub, open the commit's Release run and choose "Re-run all jobs". A commit is released only when it is newer than the one staging runs (the latest successful deploy's): a re-run of an older or the same commit skips itself after its first job, which says so in its log.
 
 ## Change a setting or a secret
 
