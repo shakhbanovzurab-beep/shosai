@@ -2,7 +2,9 @@
 
 Reading never calls a model: the last good summary comes back with whether it is stale — the
 facts changed since it was written, or the person's language did — and a stale one older than
-an hour is queued for a rewrite, once per ten minutes, while the open goes on. The writer reads
+an hour is queued for a rewrite, once per ten minutes, while the open goes on. A change made in
+the box always queues one: the dialog tells the person the summary is being rewritten, and the
+box's own limit bounds the calls. The writer reads
 the facts in the person's transaction, calls the model outside it, and keeps the summary only
 when its shape holds; an empty memory writes an empty summary with no call. Memory off or a
 Russian-home person without cross-border consent writes nothing.
@@ -108,9 +110,11 @@ class Summaries:
         return SummaryView(summary_of(row) if digest else EMPTY_SUMMARY, written, stale)
 
     async def queue(self, scope: TenancyScope, trigger: SummaryTrigger) -> None:
-        """Queue a rewrite unless one was queued in the last ten minutes."""
+        """Queue a rewrite unless one was queued in the last ten minutes; the box's always."""
         key = f"{QUEUED_PREFIX}{_person(scope)}"
-        if await self._valkey.set(key, "1", nx=True, ex=int(QUEUED_FOR.total_seconds())):
+        # Изменение из поля сводки ставится всегда и сдвигает окно: открытие следом не повторит.
+        only_first = trigger is not SummaryTrigger.BOX
+        if await self._valkey.set(key, "1", nx=only_first, ex=int(QUEUED_FOR.total_seconds())):
             await self._queue(scope, trigger)
 
     async def write(self, scope: TenancyScope, trigger: SummaryTrigger) -> Written:

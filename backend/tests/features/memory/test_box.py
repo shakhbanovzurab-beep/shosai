@@ -1,6 +1,7 @@
 """The "Ask or update" box and restore: a question is answered, "I moved to…", "forget that I…"
 and "remember that…" change the right facts once per key, each restorable for a day, and memory
-off is 409 (memory step 7, MM-D3)."""
+off is 409 (memory step 7, MM-D3); a change always queues the summary's rewrite, even right
+after an open queued one (step 11)."""
 
 import uuid
 from typing import Any
@@ -9,6 +10,7 @@ import httpx
 
 from shosai.core.kernel.homes import Home
 from shosai.features.identity.contracts import Principal
+from shosai.features.memory.infrastructure.metrics import SummaryTrigger
 from tests.features.billing.people_bench import bearer
 from tests.features.memory.summary_bench import SummaryBench
 
@@ -94,6 +96,27 @@ async def test_moving_forgetting_and_remembering_change_the_right_facts_once(
         "Smokes": ("forgotten", False), "Kept": ("active", False), "Likes tea": ("active", False),
     }  # fmt: skip
     assert len(summary_bench.queued) == 1
+
+
+async def test_a_change_in_the_box_queues_the_summary_even_right_after_an_open_did(
+    summary_bench: SummaryBench,
+) -> None:
+    person = uuid.uuid4()
+    summary_bench.consents.given.add(person)
+    await summary_bench.add(person, [{"statement": "Lives in Moscow"}])
+    summary_bench.writer.answers["memory.box"] = [
+        NOTHING | {"remember": [{"statement": "Likes tea", "kind": "preference"}]}
+    ]
+    headers = bearer((Home.RU, person))
+
+    await summary_bench.http.get("/v1/agent/memory/summary", headers=headers)
+    await say(summary_bench, person, "Remember that I like tea")
+    await summary_bench.http.get("/v1/agent/memory/summary", headers=headers)
+
+    assert [trigger for _, trigger in summary_bench.queued] == [
+        SummaryTrigger.OPEN,
+        SummaryTrigger.BOX,
+    ]
 
 
 async def test_each_change_is_undone_by_restoring_within_a_day(
