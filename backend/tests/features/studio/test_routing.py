@@ -9,7 +9,7 @@ from shosai.features.studio.domain.defaults import RoleDefault
 from shosai.features.studio.domain.roles import (
     REQUIRED,
     TEXT_AND_VISION,
-    Capability,
+    ModelCapability,
     ModelRole,
     Tier,
 )
@@ -25,7 +25,7 @@ from tests.features.studio.catalogue_kit import catalogue, catalogue_models, mod
 
 DEFAULT = model("default", capabilities=TEXT_AND_VISION)
 FALLBACK = model("fallback", capabilities=TEXT_AND_VISION)
-needs_sets = st.sampled_from([frozenset[Capability](), frozenset({Capability.VISION})])
+needs_sets = st.sampled_from([frozenset[ModelCapability](), frozenset({ModelCapability.VISION})])
 
 
 @st.composite
@@ -46,7 +46,7 @@ def test_a_resolved_route_never_names_a_model_that_may_not_answer(
     *,
     world: tuple[list[CatalogueModel], str | None],
     role: ModelRole,
-    needs: frozenset[Capability],
+    needs: frozenset[ModelCapability],
     frontier_on_plan: bool,
 ) -> None:
     models, choice = world
@@ -74,7 +74,7 @@ def test_a_resolved_route_never_names_a_model_that_may_not_answer(
 
 @given(role=st.sampled_from(ModelRole), needs=needs_sets)
 def test_a_frontier_choice_whose_week_is_used_up_gives_way_to_the_default(
-    *, role: ModelRole, needs: frozenset[Capability]
+    *, role: ModelRole, needs: frozenset[ModelCapability]
 ) -> None:
     view = catalogue([DEFAULT, FALLBACK], {role: RoleDefault(role, DEFAULT.id, FALLBACK.id)})
 
@@ -116,7 +116,7 @@ def test_the_fallback_answers_when_the_default_cannot() -> None:
         [model("default"), FALLBACK], {role: RoleDefault(role, "default", FALLBACK.id)}
     )
 
-    chosen = pick(role, None, frozenset({Capability.VISION}), view, frontier_on_plan=True)
+    chosen = pick(role, None, frozenset({ModelCapability.VISION}), view, frontier_on_plan=True)
 
     assert chosen.model == FALLBACK
 

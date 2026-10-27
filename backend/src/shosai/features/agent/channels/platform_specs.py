@@ -73,7 +73,7 @@ class NothingIn(Strict):
 
 
 class ForecastOut(BaseModel):
-    """The month so far and where it ends at the same pace, in USD."""
+    """The month so far and where it ends at the pace of the last seven full days, in USD."""
 
     month_to_date_usd: float
     projected_usd: float
@@ -179,7 +179,8 @@ SPEND_DAILY: Final = platform_spec(
 )
 SPEND_FORECAST: Final = platform_spec(
     "spend_forecast",
-    "This month's AI spend so far and where the month ends at the same pace.",
+    "This month's AI spend so far and where the month ends at the pace of the last seven "
+    "full days.",
     (NothingIn, ForecastOut),
 )
 OPENROUTER_BALANCE: Final = platform_spec(

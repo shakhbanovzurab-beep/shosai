@@ -14,7 +14,7 @@ from types import MappingProxyType
 from typing import Final
 
 
-class Capability(StrEnum):
+class ModelCapability(StrEnum):
     """What a model can read: text, and pictures besides text."""
 
     TEXT = "text"
@@ -54,14 +54,14 @@ def model_role_of(role: PromptRole) -> ModelRole:
     return ModelRole(role.value)
 
 
-TEXT: Final = frozenset({Capability.TEXT})
-TEXT_AND_VISION: Final = frozenset({Capability.TEXT, Capability.VISION})
+TEXT: Final = frozenset({ModelCapability.TEXT})
+TEXT_AND_VISION: Final = frozenset({ModelCapability.TEXT, ModelCapability.VISION})
 # Что должна уметь любая модель роли — выбранная человеком или по умолчанию.
-REQUIRED: Final[Mapping[ModelRole, frozenset[Capability]]] = MappingProxyType(
+REQUIRED: Final[Mapping[ModelRole, frozenset[ModelCapability]]] = MappingProxyType(
     {role: TEXT_AND_VISION if role is ModelRole.SCREENSHOTS else TEXT for role in ModelRole}
 )
 # Модель Leo по умолчанию читает и картинки: ход с картинкой не остаётся без модели.
-DEFAULT_REQUIRED: Final[Mapping[ModelRole, frozenset[Capability]]] = MappingProxyType(
+DEFAULT_REQUIRED: Final[Mapping[ModelRole, frozenset[ModelCapability]]] = MappingProxyType(
     {**REQUIRED, ModelRole.LEO: TEXT_AND_VISION}
 )
 # Ответы человеку берут его контекст; записи встреч читают коллеги — им контекст не идёт.

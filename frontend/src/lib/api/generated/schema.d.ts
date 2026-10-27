@@ -3736,6 +3736,114 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/ai-models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ai Models
+         * @description The catalogue, the defaults, the month's spend and the OpenRouter balance.
+         */
+        get: operations["ai_models_v1_admin_ai_models_get"];
+        put?: never;
+        /**
+         * Add Model
+         * @description List a model OpenRouter lists, switched off, in the tier its price proposes.
+         */
+        post: operations["add_model_v1_admin_ai_models_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/ai-models/{model_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Retire Model
+         * @description Take a switched-off model no role uses out of the catalogue.
+         */
+        delete: operations["retire_model_v1_admin_ai_models__model_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Switch Model
+         * @description Switch a model on or off; a model a default holds stays on.
+         */
+        patch: operations["switch_model_v1_admin_ai_models__model_id__patch"];
+        trace?: never;
+    };
+    "/v1/admin/ai-models/{model_id}/tier": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Decide Tier
+         * @description Confirm or decline the tier the model's price proposes; it counts from now.
+         */
+        post: operations["decide_tier_v1_admin_ai_models__model_id__tier_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/ai-models/defaults/{role}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set Default
+         * @description A role's default and optional fallback: switched on, standard, able to serve it.
+         */
+        put: operations["set_default_v1_admin_ai_models_defaults__role__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/ai-models/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check Connection
+         * @description Ask OpenRouter's balance now and time the answer.
+         */
+        post: operations["check_connection_v1_admin_ai_models_check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -3792,6 +3900,177 @@ export interface components {
         ActionReason: {
             /** Reason Code */
             reason_code: string;
+        };
+        /**
+         * AdminAiModel
+         * @description A model of the catalogue.
+         */
+        AdminAiModel: {
+            /** Id */
+            id: string;
+            /** Openrouter Id */
+            openrouter_id: string;
+            /** Name */
+            name: string;
+            /**
+             * Provider
+             * @description The model's maker.
+             */
+            provider: string;
+            /** Context Length */
+            context_length: number;
+            /** Max Output Tokens */
+            max_output_tokens: number;
+            /** Capabilities */
+            capabilities: components["schemas"]["ModelCapability"][];
+            /** Price Input Per M */
+            price_input_per_m: number | null;
+            /** Price Output Per M */
+            price_output_per_m: number | null;
+            /** Month Spend */
+            month_spend: number;
+            /** Month Requests */
+            month_requests: number;
+            /** Enabled */
+            enabled: boolean;
+            /**
+             * Is Default
+             * @description Whether the model is Leo's default.
+             */
+            is_default: boolean;
+            tier: components["schemas"]["Tier"];
+            tier_proposed: components["schemas"]["Tier"] | null;
+        };
+        /**
+         * AdminAiModelAdd
+         * @description A model to list, by OpenRouter's id; the tier its price proposes unless given.
+         */
+        AdminAiModelAdd: {
+            /** Openrouter Id */
+            openrouter_id: string;
+            tier?: components["schemas"]["Tier"] | null;
+        };
+        /**
+         * AdminAiModelSwitch
+         * @description Switch a model on or off.
+         */
+        AdminAiModelSwitch: {
+            /** Enabled */
+            enabled: boolean;
+        };
+        /**
+         * AdminAiModels
+         * @description The whole screen.
+         */
+        AdminAiModels: {
+            provider: components["schemas"]["AdminProviderStatus"];
+            spend: components["schemas"]["AdminSpendSummary"];
+            /** Models */
+            models: components["schemas"]["AdminAiModel"][];
+            /** Defaults */
+            defaults: components["schemas"]["AdminRoleDefault"][];
+        };
+        /**
+         * AdminConnectionCheck
+         * @description The connection check's answer.
+         */
+        AdminConnectionCheck: {
+            /** Ok */
+            ok: boolean;
+            /** Latency Ms */
+            latency_ms: number | null;
+            /** Code */
+            code: string | null;
+            /**
+             * Checked At
+             * Format: date-time
+             */
+            checked_at: string;
+            provider: components["schemas"]["AdminProviderStatus"];
+        };
+        /**
+         * AdminCredits
+         * @description OpenRouter's credits, USD.
+         */
+        AdminCredits: {
+            /** Total */
+            total: number;
+            /** Used */
+            used: number;
+            /** Remaining */
+            remaining: number;
+        };
+        /**
+         * AdminDailySpend
+         * @description One business day's spend.
+         */
+        AdminDailySpend: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Cost */
+            cost: number;
+        };
+        /**
+         * AdminOutsideCatalogue
+         * @description This month's spend on models outside the catalogue.
+         */
+        AdminOutsideCatalogue: {
+            /** Spend */
+            spend: number;
+            /** Requests */
+            requests: number;
+        };
+        /**
+         * AdminProviderStatus
+         * @description The OpenRouter key and balance.
+         */
+        AdminProviderStatus: {
+            /**
+             * Provider
+             * @default openrouter
+             * @constant
+             */
+            provider: "openrouter";
+            /** Key Configured */
+            key_configured: boolean;
+            /** Key Hint */
+            key_hint: string | null;
+            credits: components["schemas"]["AdminCredits"] | null;
+            /**
+             * Source
+             * @default backend
+             * @constant
+             */
+            source: "backend";
+            /**
+             * Sync Error
+             * @description An error code when the balance was not read.
+             */
+            sync_error: string | null;
+        };
+        /**
+         * AdminRoleDefault
+         * @description A role's default and fallback.
+         */
+        AdminRoleDefault: {
+            role: components["schemas"]["ModelRole"];
+            /** Model Id */
+            model_id: string;
+            /** Fallback Model Id */
+            fallback_model_id: string | null;
+        };
+        /**
+         * AdminRoleDefaultBody
+         * @description A role's new default and optional fallback.
+         */
+        AdminRoleDefaultBody: {
+            /** Model Id */
+            model_id: string;
+            /** Fallback Model Id */
+            fallback_model_id?: string | null;
         };
         /**
          * AdminSession
@@ -3869,6 +4148,38 @@ export interface components {
             week_usd: string;
             /** Month Usd */
             month_usd: string;
+        };
+        /**
+         * AdminSpendSummary
+         * @description The platform's AI spend this business month.
+         */
+        AdminSpendSummary: {
+            /** Today */
+            today: number;
+            /** Month */
+            month: number;
+            /** Forecast Month */
+            forecast_month: number;
+            /** Tokens In Month */
+            tokens_in_month: number;
+            /** Tokens Out Month */
+            tokens_out_month: number;
+            /** Requests Month */
+            requests_month: number;
+            outside_catalogue: components["schemas"]["AdminOutsideCatalogue"];
+            /** Daily */
+            daily: components["schemas"]["AdminDailySpend"][];
+        };
+        /**
+         * AdminTierDecision
+         * @description The admin's answer to a tier the price proposes.
+         */
+        AdminTierDecision: {
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "confirm" | "decline";
         };
         /**
          * AdminUser
@@ -6417,6 +6728,18 @@ export interface components {
          * @enum {string}
          */
         Messenger: "telegram" | "slack";
+        /**
+         * ModelCapability
+         * @description What a model can read: text, and pictures besides text.
+         * @enum {string}
+         */
+        ModelCapability: "text" | "vision";
+        /**
+         * ModelRole
+         * @description A role that runs on a model: Leo's and the five a person sets in Studio.
+         * @enum {string}
+         */
+        ModelRole: "leo" | "live_answers" | "screenshots" | "code" | "system_design" | "notes";
         /**
          * ModelTier
          * @description The classes of models a weekly token allowance is counted in (BL-D4).
@@ -9075,6 +9398,12 @@ export interface components {
             /** Ticket */
             ticket: string;
         };
+        /**
+         * Tier
+         * @description The class a model's tokens are counted in; billing's `ModelTier` by value.
+         * @enum {string}
+         */
+        Tier: "standard" | "frontier";
         /**
          * TimeTrackingOut
          * @description Plan and fact in minutes.
@@ -17584,6 +17913,245 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PassOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    ai_models_v1_admin_ai_models_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiModels"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    add_model_v1_admin_ai_models_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminAiModelAdd"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiModel"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    retire_model_v1_admin_ai_models__model_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    switch_model_v1_admin_ai_models__model_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminAiModelSwitch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiModel"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    decide_tier_v1_admin_ai_models__model_id__tier_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminTierDecision"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiModel"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    set_default_v1_admin_ai_models_defaults__role__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                role: components["schemas"]["ModelRole"];
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminRoleDefaultBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminRoleDefault"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    check_connection_v1_admin_ai_models_check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminConnectionCheck"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

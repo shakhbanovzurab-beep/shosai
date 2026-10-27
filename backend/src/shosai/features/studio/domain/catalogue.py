@@ -14,7 +14,7 @@ from dataclasses import dataclass, replace
 from decimal import Decimal
 from typing import Final
 
-from shosai.features.studio.domain.roles import MAX_TOKENS_CAP, Capability, Tier
+from shosai.features.studio.domain.roles import MAX_TOKENS_CAP, ModelCapability, Tier
 
 # Id модели входит в события, а код события — до 64 символов.
 SLUG_MAX: Final = 64
@@ -47,7 +47,7 @@ class CatalogueModel:
     maker: str
     context_length: int
     max_output_tokens: int
-    capabilities: frozenset[Capability]
+    capabilities: frozenset[ModelCapability]
     supports_temperature: bool
     supports_reasoning: bool
     tier: Tier
@@ -66,7 +66,7 @@ class CatalogueModel:
         """The most output tokens a person may ask of it."""
         return min(self.max_output_tokens, MAX_TOKENS_CAP)
 
-    def can(self, needs: frozenset[Capability]) -> bool:
+    def can(self, needs: frozenset[ModelCapability]) -> bool:
         """Whether the model reads everything a call needs."""
         return needs <= self.capabilities
 
@@ -91,13 +91,13 @@ def hashed_slug(openrouter_id: str) -> str:
     return f"{slug[: SLUG_MAX - SLUG_HASH - 1].rstrip('-')}-{digest}"
 
 
-def capabilities_of(listing: Listing) -> frozenset[Capability]:
+def capabilities_of(listing: Listing) -> frozenset[ModelCapability]:
     """What the model reads, from its modalities: text out, and pictures in besides text."""
     if "text" not in listing.output_modalities:
         return frozenset()
     if "image" in listing.input_modalities:
-        return frozenset({Capability.TEXT, Capability.VISION})
-    return frozenset({Capability.TEXT})
+        return frozenset({ModelCapability.TEXT, ModelCapability.VISION})
+    return frozenset({ModelCapability.TEXT})
 
 
 def maker_and_name(listing: Listing) -> tuple[str, str]:

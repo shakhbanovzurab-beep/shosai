@@ -118,12 +118,14 @@ class OpenRouterCredits:
         self._client = client
         self._kept: tuple[Credits, float] | None = None
 
-    async def credits(self) -> Credits | None:
-        """The balance; None without the management key."""
+    async def credits(self, *, fresh: bool = False) -> Credits | None:
+        """The balance; None without the management key. `fresh` asks OpenRouter now, past
+        the five minutes kept — the operator's connection check."""
         if self._client is None:
             return None
-        if self._kept is not None and time.monotonic() - self._kept[1] < CREDITS_TTL:
-            return self._kept[0]
+        kept = self._kept
+        if not fresh and kept is not None and time.monotonic() - kept[1] < CREDITS_TTL:
+            return kept[0]
         request = self._client.build_request("GET", "credits")
         answer = await call_json(self._client, Provider.OPENROUTER, request)
         raw = answer.get("data")

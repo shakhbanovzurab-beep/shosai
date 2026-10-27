@@ -23,14 +23,14 @@ from shosai.core.ports.keys import PortKey
 from shosai.features.billing.contracts import EntitlementSnapshot
 from shosai.features.studio.domain.platform_layer import PlatformFeature
 from shosai.features.studio.domain.prompts import SkillText
-from shosai.features.studio.domain.roles import Capability, ModelRole, PromptRole, Tier
+from shosai.features.studio.domain.roles import ModelCapability, ModelRole, PromptRole, Tier
 from shosai.features.studio.domain.routing import Substitution
 
 __all__ = [
     "MODEL_CATALOGUE",
     "MODEL_ROUTES",
     "PROMPT_RESOLVER",
-    "Capability",
+    "ModelCapability",
     "ModelCatalogue",
     "ModelRole",
     "ModelRoleUnconfiguredError",
@@ -84,7 +84,7 @@ class OfferedModel:
     maker: str
     name: str
     tier: Tier
-    capabilities: frozenset[Capability]
+    capabilities: frozenset[ModelCapability]
     supports_temperature: bool
     supports_reasoning: bool
     max_output_tokens: int
@@ -125,7 +125,7 @@ class ModelRoutes(Protocol):
         person: RoutePerson,
         role: ModelRole,
         chosen: str | None = None,
-        needs: frozenset[Capability] = frozenset(),
+        needs: frozenset[ModelCapability] = frozenset(),
     ) -> ResolvedRoute:
         """The route; `chosen` is Leo's model from Settings > Leo, `needs` what this call
         reads beyond the role (a picture). Raises `ModelRoleUnconfiguredError`, and billing's
@@ -137,7 +137,7 @@ class ModelCatalogue(Protocol):
     """The models a person may choose."""
 
     async def offered(
-        self, person: RoutePerson, capability: Capability | None = None
+        self, person: RoutePerson, capability: ModelCapability | None = None
     ) -> tuple[OfferedModel, ...]:
         """The usable models the person's plan offers, optionally only those that read it."""
         ...

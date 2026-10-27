@@ -93,14 +93,19 @@ async def test_a_daily_series_carries_each_model_s_tokens(homes: DatabaseAccess)
     assert covered == tuple(AT.date() - timedelta(days=back) for back in (2, 1, 0))
 
 
-async def test_the_forecast_runs_the_month_at_its_pace(homes: DatabaseAccess) -> None:
+async def test_the_forecast_runs_the_rest_of_the_month_at_the_last_seven_days_pace(
+    homes: DatabaseAccess,
+) -> None:
     reports = await seeded(homes)
 
     forecast = await reports.forecast(AT)
 
-    elapsed = Decimal(timedelta(days=2, hours=2).total_seconds()) / Decimal(86_400)
+    # Полные дни — с 1-го по 2-е число и пять дней прошлого месяца; сегодня, 3-е, не в счёт.
+    pace = Decimal("0.50") / 7
+    days_after_today = forecast.days_in_month - 3
     assert forecast.month_to_date_usd == Decimal("1.10")
-    assert forecast.projected_usd == (Decimal("1.10") / elapsed * forecast.days_in_month).quantize(
+    assert forecast.daily_pace_usd == pace.quantize(Decimal("0.01"))
+    assert forecast.projected_usd == (Decimal("1.10") + pace * days_after_today).quantize(
         Decimal("0.01")
     )
 

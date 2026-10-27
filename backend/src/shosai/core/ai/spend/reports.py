@@ -25,7 +25,9 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 
 ZERO: Final = Decimal(0)
+CENTS: Final = Decimal("0.01")
 SHORTEST_ELAPSED: Final = timedelta(hours=1)
+PACE_DAYS: Final = 7
 
 
 class SummaryGroup(StrEnum):
@@ -71,12 +73,23 @@ class DailyRow:
 
 @dataclass(frozen=True, slots=True)
 class Forecast:
-    """The month so far and where it ends at the same pace."""
+    """The month so far and where it ends at the pace of the last seven full days."""
 
     month_to_date_usd: Decimal
     projected_usd: Decimal
     elapsed_days: Decimal
     days_in_month: int
+    # Средний расход последних семи полных деловых дней: им продолжается месяц.
+    daily_pace_usd: Decimal = ZERO
+
+
+@dataclass(frozen=True, slots=True)
+class MonthTotals:
+    """The month's calls and tokens across every model, both homes."""
+
+    calls: int
+    input_tokens: int
+    output_tokens: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -153,15 +166,42 @@ class SpendReports:
         return tuple(DailyRow(*key, *values) for key, values in sorted(totals.items()))
 
     async def forecast(self, at: datetime) -> Forecast:
-        """The month to date, and the month's end at the pace of the days elapsed."""
+        """The month to date, then each day after today at the mean of the last seven full
+        business days — a pace that follows a change within a week, where the month's own
+        pace over its first days would swing."""
         start, _ = self._business.month_window(at)
-        statement = select(func.sum(ProviderCost.cost_usd)).where(ProviderCost.created_at >= start)
-        so_far = sum((usd or ZERO for (usd,) in await self._both(statement)), ZERO)
+        today = self._business.date_of(at)
+        week = self._business.midnight(today - timedelta(days=PACE_DAYS))
+        midnight = self._business.midnight(today)
+        usd = ProviderCost.cost_usd
+        statement = select(
+            func.sum(usd).filter(ProviderCost.created_at >= start),
+            func.sum(usd).filter(
+                ProviderCost.created_at >= week, ProviderCost.created_at < midnight
+            ),
+        ).where(ProviderCost.created_at >= min(start, week))
+        rows = await self._both(statement)
+        so_far = sum((month or ZERO for month, _ in rows), ZERO)
+        pace = sum((days or ZERO for _, days in rows), ZERO) / PACE_DAYS
         elapsed = max(at - start, SHORTEST_ELAPSED)
         elapsed_days = Decimal(elapsed.total_seconds()) / Decimal(86_400)
         length = monthrange(start.year, start.month)[1]
-        projected = (so_far / elapsed_days * length).quantize(Decimal("0.01"))
-        return Forecast(so_far, projected, elapsed_days.quantize(Decimal("0.001")), length)
+        projected = (so_far + pace * (length - today.day)).quantize(CENTS)
+        return Forecast(
+            so_far, projected, elapsed_days.quantize(Decimal("0.001")), length, pace.quantize(CENTS)
+        )
+
+    async def month_totals(self, at: datetime) -> MonthTotals:
+        """The business month's calls and text tokens so far."""
+        start, _ = self._business.month_window(at)
+        statement = select(
+            func.count(), func.sum(ProviderCost.input_tokens), func.sum(ProviderCost.output_tokens)
+        ).where(ProviderCost.created_at >= start)
+        totals = [0, 0, 0]
+        for row in await self._both(statement):
+            for index, number in enumerate(row):
+                totals[index] += number or 0
+        return MonthTotals(*totals)
 
     async def user_spend(self, home: Home, user_id: UUID, at: datetime) -> UserSpend:
         """One person's spend from their home's rows."""
@@ -178,7 +218,7 @@ class SpendReports:
             row = (await session.execute(statement)).one()
         return UserSpend(*(value or ZERO for value in row))
 
-    async def _both(self, statement: Select[Any]) -> Sequence[Any]:
+    async def _both(self, statement: Select[*tuple[Any, ...]]) -> Sequence[Any]:
         """The statement's rows from the RU home, then the EU home."""
         rows: list[Any] = []
         for home in Home:

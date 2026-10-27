@@ -15294,6 +15294,427 @@
           }
         }
       }
+    },
+    "/v1/admin/ai-models": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Ai Models",
+        "description": "The catalogue, the defaults, the month's spend and the OpenRouter balance.",
+        "operationId": "ai_models_v1_admin_ai_models_get",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAiModels"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Add Model",
+        "description": "List a model OpenRouter lists, switched off, in the tier its price proposes.",
+        "operationId": "add_model_v1_admin_ai_models_post",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminAiModelAdd"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAiModel"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/ai-models/{model_id}": {
+      "patch": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Switch Model",
+        "description": "Switch a model on or off; a model a default holds stays on.",
+        "operationId": "switch_model_v1_admin_ai_models__model_id__patch",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Model Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminAiModelSwitch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAiModel"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Retire Model",
+        "description": "Take a switched-off model no role uses out of the catalogue.",
+        "operationId": "retire_model_v1_admin_ai_models__model_id__delete",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Model Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/ai-models/{model_id}/tier": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Decide Tier",
+        "description": "Confirm or decline the tier the model's price proposes; it counts from now.",
+        "operationId": "decide_tier_v1_admin_ai_models__model_id__tier_post",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Model Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminTierDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAiModel"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/ai-models/defaults/{role}": {
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Set Default",
+        "description": "A role's default and optional fallback: switched on, standard, able to serve it.",
+        "operationId": "set_default_v1_admin_ai_models_defaults__role__put",
+        "parameters": [
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ModelRole"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminRoleDefaultBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminRoleDefault"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/ai-models/check": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Check Connection",
+        "description": "Ask OpenRouter's balance now and time the answer.",
+        "operationId": "check_connection_v1_admin_ai_models_check_post",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminConnectionCheck"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -15398,6 +15819,422 @@
         ],
         "title": "ActionReason",
         "description": "Why the admin acts, as a code the audit log keeps."
+      },
+      "AdminAiModel": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "openrouter_id": {
+            "type": "string",
+            "title": "Openrouter Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider",
+            "description": "The model's maker."
+          },
+          "context_length": {
+            "type": "integer",
+            "title": "Context Length"
+          },
+          "max_output_tokens": {
+            "type": "integer",
+            "title": "Max Output Tokens"
+          },
+          "capabilities": {
+            "items": {
+              "$ref": "#/components/schemas/ModelCapability"
+            },
+            "type": "array",
+            "title": "Capabilities"
+          },
+          "price_input_per_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Input Per M"
+          },
+          "price_output_per_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Output Per M"
+          },
+          "month_spend": {
+            "type": "number",
+            "title": "Month Spend"
+          },
+          "month_requests": {
+            "type": "integer",
+            "title": "Month Requests"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "description": "Whether the model is Leo's default."
+          },
+          "tier": {
+            "$ref": "#/components/schemas/Tier"
+          },
+          "tier_proposed": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Tier"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "openrouter_id",
+          "name",
+          "provider",
+          "context_length",
+          "max_output_tokens",
+          "capabilities",
+          "price_input_per_m",
+          "price_output_per_m",
+          "month_spend",
+          "month_requests",
+          "enabled",
+          "is_default",
+          "tier",
+          "tier_proposed"
+        ],
+        "title": "AdminAiModel",
+        "description": "A model of the catalogue."
+      },
+      "AdminAiModelAdd": {
+        "properties": {
+          "openrouter_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Openrouter Id"
+          },
+          "tier": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Tier"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "openrouter_id"
+        ],
+        "title": "AdminAiModelAdd",
+        "description": "A model to list, by OpenRouter's id; the tier its price proposes unless given."
+      },
+      "AdminAiModelSwitch": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "title": "AdminAiModelSwitch",
+        "description": "Switch a model on or off."
+      },
+      "AdminAiModels": {
+        "properties": {
+          "provider": {
+            "$ref": "#/components/schemas/AdminProviderStatus"
+          },
+          "spend": {
+            "$ref": "#/components/schemas/AdminSpendSummary"
+          },
+          "models": {
+            "items": {
+              "$ref": "#/components/schemas/AdminAiModel"
+            },
+            "type": "array",
+            "title": "Models"
+          },
+          "defaults": {
+            "items": {
+              "$ref": "#/components/schemas/AdminRoleDefault"
+            },
+            "type": "array",
+            "title": "Defaults"
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider",
+          "spend",
+          "models",
+          "defaults"
+        ],
+        "title": "AdminAiModels",
+        "description": "The whole screen."
+      },
+      "AdminConnectionCheck": {
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "latency_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latency Ms"
+          },
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          },
+          "checked_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Checked At"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/AdminProviderStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ok",
+          "latency_ms",
+          "code",
+          "checked_at",
+          "provider"
+        ],
+        "title": "AdminConnectionCheck",
+        "description": "The connection check's answer."
+      },
+      "AdminCredits": {
+        "properties": {
+          "total": {
+            "type": "number",
+            "title": "Total"
+          },
+          "used": {
+            "type": "number",
+            "title": "Used"
+          },
+          "remaining": {
+            "type": "number",
+            "title": "Remaining"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "used",
+          "remaining"
+        ],
+        "title": "AdminCredits",
+        "description": "OpenRouter's credits, USD."
+      },
+      "AdminDailySpend": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "cost": {
+            "type": "number",
+            "title": "Cost"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "cost"
+        ],
+        "title": "AdminDailySpend",
+        "description": "One business day's spend."
+      },
+      "AdminOutsideCatalogue": {
+        "properties": {
+          "spend": {
+            "type": "number",
+            "title": "Spend"
+          },
+          "requests": {
+            "type": "integer",
+            "title": "Requests"
+          }
+        },
+        "type": "object",
+        "required": [
+          "spend",
+          "requests"
+        ],
+        "title": "AdminOutsideCatalogue",
+        "description": "This month's spend on models outside the catalogue."
+      },
+      "AdminProviderStatus": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "const": "openrouter",
+            "title": "Provider",
+            "default": "openrouter"
+          },
+          "key_configured": {
+            "type": "boolean",
+            "title": "Key Configured"
+          },
+          "key_hint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key Hint"
+          },
+          "credits": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdminCredits"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source": {
+            "type": "string",
+            "const": "backend",
+            "title": "Source",
+            "default": "backend"
+          },
+          "sync_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sync Error",
+            "description": "An error code when the balance was not read."
+          }
+        },
+        "type": "object",
+        "required": [
+          "key_configured",
+          "key_hint",
+          "credits",
+          "sync_error"
+        ],
+        "title": "AdminProviderStatus",
+        "description": "The OpenRouter key and balance."
+      },
+      "AdminRoleDefault": {
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/ModelRole"
+          },
+          "model_id": {
+            "type": "string",
+            "title": "Model Id"
+          },
+          "fallback_model_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fallback Model Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "role",
+          "model_id",
+          "fallback_model_id"
+        ],
+        "title": "AdminRoleDefault",
+        "description": "A role's default and fallback."
+      },
+      "AdminRoleDefaultBody": {
+        "properties": {
+          "model_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Model Id"
+          },
+          "fallback_model_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fallback Model Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "model_id"
+        ],
+        "title": "AdminRoleDefaultBody",
+        "description": "A role's new default and optional fallback."
       },
       "AdminSession": {
         "properties": {
@@ -15557,6 +16394,76 @@
         ],
         "title": "AdminSpend",
         "description": "The account's AI spend in USD, UTC periods."
+      },
+      "AdminSpendSummary": {
+        "properties": {
+          "today": {
+            "type": "number",
+            "title": "Today"
+          },
+          "month": {
+            "type": "number",
+            "title": "Month"
+          },
+          "forecast_month": {
+            "type": "number",
+            "title": "Forecast Month"
+          },
+          "tokens_in_month": {
+            "type": "integer",
+            "title": "Tokens In Month"
+          },
+          "tokens_out_month": {
+            "type": "integer",
+            "title": "Tokens Out Month"
+          },
+          "requests_month": {
+            "type": "integer",
+            "title": "Requests Month"
+          },
+          "outside_catalogue": {
+            "$ref": "#/components/schemas/AdminOutsideCatalogue"
+          },
+          "daily": {
+            "items": {
+              "$ref": "#/components/schemas/AdminDailySpend"
+            },
+            "type": "array",
+            "title": "Daily"
+          }
+        },
+        "type": "object",
+        "required": [
+          "today",
+          "month",
+          "forecast_month",
+          "tokens_in_month",
+          "tokens_out_month",
+          "requests_month",
+          "outside_catalogue",
+          "daily"
+        ],
+        "title": "AdminSpendSummary",
+        "description": "The platform's AI spend this business month."
+      },
+      "AdminTierDecision": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": [
+              "confirm",
+              "decline"
+            ],
+            "title": "Decision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "decision"
+        ],
+        "title": "AdminTierDecision",
+        "description": "The admin's answer to a tier the price proposes."
       },
       "AdminUser": {
         "properties": {
@@ -21477,6 +22384,28 @@
         ],
         "title": "Messenger",
         "description": "A messenger a team chat lives in (chats §1.1)."
+      },
+      "ModelCapability": {
+        "type": "string",
+        "enum": [
+          "text",
+          "vision"
+        ],
+        "title": "ModelCapability",
+        "description": "What a model can read: text, and pictures besides text."
+      },
+      "ModelRole": {
+        "type": "string",
+        "enum": [
+          "leo",
+          "live_answers",
+          "screenshots",
+          "code",
+          "system_design",
+          "notes"
+        ],
+        "title": "ModelRole",
+        "description": "A role that runs on a model: Leo's and the five a person sets in Studio."
       },
       "ModelTier": {
         "type": "string",
@@ -28296,6 +29225,15 @@
         ],
         "title": "TicketRequest",
         "description": "A session ticket from the redirect or the widget."
+      },
+      "Tier": {
+        "type": "string",
+        "enum": [
+          "standard",
+          "frontier"
+        ],
+        "title": "Tier",
+        "description": "The class a model's tokens are counted in; billing's `ModelTier` by value."
       },
       "TimeTrackingOut": {
         "properties": {

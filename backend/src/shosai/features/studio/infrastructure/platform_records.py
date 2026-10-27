@@ -29,13 +29,13 @@ from sqlalchemy.orm import Mapped, mapped_column
 from shosai.core.db.model_base import ModelBase, table_info
 from shosai.core.kernel.homes import Home
 from shosai.features.studio.domain.catalogue import SLUG_MAX
-from shosai.features.studio.domain.roles import Capability, ModelRole, Tier
+from shosai.features.studio.domain.roles import ModelCapability, ModelRole, Tier
 from shosai.features.studio.domain.versions import COMMENT_MAX
 
 EU_ONLY: Final = table_info(homes=(Home.EU,))
 TIERS: Final = ", ".join(f"'{tier}'" for tier in Tier)
 ROLES: Final = ", ".join(f"'{role}'" for role in ModelRole)
-CAPABILITIES: Final = ", ".join(f"'{capability}'" for capability in Capability)
+CAPABILITIES: Final = ", ".join(f"'{capability}'" for capability in ModelCapability)
 OPENROUTER_ID_MAX: Final = 128
 NAME_MAX: Final = 256
 MAKER_MAX: Final = 128

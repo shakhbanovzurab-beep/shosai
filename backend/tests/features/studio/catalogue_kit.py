@@ -8,14 +8,20 @@ from hypothesis import strategies as st
 
 from shosai.features.studio.domain.catalogue import CatalogueModel
 from shosai.features.studio.domain.defaults import RoleDefault
-from shosai.features.studio.domain.roles import TEXT, TEXT_AND_VISION, Capability, ModelRole, Tier
+from shosai.features.studio.domain.roles import (
+    TEXT,
+    TEXT_AND_VISION,
+    ModelCapability,
+    ModelRole,
+    Tier,
+)
 from shosai.features.studio.domain.routing import Catalogue
 
 
 class ModelChanges(TypedDict, total=False):
     """The fields of a catalogue model a test may set."""
 
-    capabilities: frozenset[Capability]
+    capabilities: frozenset[ModelCapability]
     tier: Tier
     tier_proposed: Tier | None
     tier_declined: Tier | None
@@ -52,7 +58,7 @@ def catalogue(
     )
 
 
-capability_sets = st.sampled_from([frozenset[Capability](), TEXT, TEXT_AND_VISION])
+capability_sets = st.sampled_from([frozenset[ModelCapability](), TEXT, TEXT_AND_VISION])
 
 
 @st.composite

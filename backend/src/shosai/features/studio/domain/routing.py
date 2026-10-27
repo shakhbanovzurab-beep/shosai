@@ -14,7 +14,7 @@ from enum import StrEnum
 
 from shosai.features.studio.domain.catalogue import CatalogueModel
 from shosai.features.studio.domain.defaults import RoleDefault
-from shosai.features.studio.domain.roles import REQUIRED, Capability, ModelRole, Tier
+from shosai.features.studio.domain.roles import REQUIRED, ModelCapability, ModelRole, Tier
 
 
 class Substitution(StrEnum):
@@ -63,7 +63,7 @@ class RouteModels:
 def refusal(
     model: CatalogueModel | None,
     role: ModelRole,
-    needs: frozenset[Capability],
+    needs: frozenset[ModelCapability],
     *,
     frontier_on_plan: bool,
 ) -> Substitution | None:
@@ -80,7 +80,7 @@ def refusal(
 
 
 def role_models(
-    role: ModelRole, needs: frozenset[Capability], catalogue: Catalogue
+    role: ModelRole, needs: frozenset[ModelCapability], catalogue: Catalogue
 ) -> tuple[CatalogueModel, ...]:
     """The role's default and fallback that can answer this call, in order."""
     default = catalogue.defaults.get(role)
@@ -97,7 +97,7 @@ def role_models(
 
 
 def default_model(
-    role: ModelRole, needs: frozenset[Capability], catalogue: Catalogue
+    role: ModelRole, needs: frozenset[ModelCapability], catalogue: Catalogue
 ) -> CatalogueModel:
     """The first of the role's defaults that can answer; none is a role not configured."""
     models = role_models(role, needs, catalogue)
@@ -109,7 +109,7 @@ def default_model(
 def pick(
     role: ModelRole,
     choice: str | None,
-    needs: frozenset[Capability],
+    needs: frozenset[ModelCapability],
     catalogue: Catalogue,
     *,
     frontier_on_plan: bool,
@@ -124,13 +124,15 @@ def pick(
     return Pick(default_model(role, needs, catalogue), reason)
 
 
-def allowance_used(role: ModelRole, needs: frozenset[Capability], catalogue: Catalogue) -> Pick:
+def allowance_used(
+    role: ModelRole, needs: frozenset[ModelCapability], catalogue: Catalogue
+) -> Pick:
     """The default in place of a frontier choice whose week is used up (BL-D4)."""
     return Pick(default_model(role, needs, catalogue), Substitution.FRONTIER_ALLOWANCE_USED)
 
 
 def route_models(
-    chosen: Pick, role: ModelRole, needs: frozenset[Capability], catalogue: Catalogue
+    chosen: Pick, role: ModelRole, needs: frozenset[ModelCapability], catalogue: Catalogue
 ) -> RouteModels:
     """The models a call tries: same-tier fallbacks for a standard model, none for frontier."""
     primary = chosen.model

@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.features.studio.domain.catalogue import CatalogueModel
 from shosai.features.studio.domain.defaults import RoleDefault
-from shosai.features.studio.domain.roles import Capability, ModelRole, Tier
+from shosai.features.studio.domain.roles import ModelCapability, ModelRole, Tier
 from shosai.features.studio.infrastructure.platform_records import (
     CatalogueRecord,
     RoleDefaultRecord,
@@ -31,7 +31,7 @@ def model_of(record: CatalogueRecord) -> CatalogueModel:
         maker=record.maker,
         context_length=record.context_length,
         max_output_tokens=record.max_output_tokens,
-        capabilities=frozenset(Capability(value) for value in record.capabilities),
+        capabilities=frozenset(ModelCapability(value) for value in record.capabilities),
         supports_temperature=record.supports_temperature,
         supports_reasoning=record.supports_reasoning,
         tier=Tier(record.tier),

@@ -7,7 +7,8 @@ and its versions. Step 2 the tables — the platform's in the EU home, a person'
 and the handler of what studio holds of a person. Step 3a the catalogue: models added from
 OpenRouter's list, switched, retired, their tier decided, defaults per role under row locks,
 the process's snapshot and `MODEL_CATALOGUE`. Step 3b the daily refresh from OpenRouter's
-list. `MODEL_ROUTES` and `PROMPT_RESOLVER` are bound with the resolution (step 10).
+list. Step 4 Admin > AI models on `/v1/admin/ai-models*`. `MODEL_ROUTES` and
+`PROMPT_RESOLVER` are bound with the resolution (step 10).
 """
 
 from collections.abc import AsyncIterator
@@ -16,8 +17,11 @@ from contextlib import asynccontextmanager
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.studio.application.account_data import ACCOUNT_DATA, StudioAccountData
+from shosai.features.studio.application.ai_models_screen import AiModelsScreen
+from shosai.features.studio.application.catalogue_admin import CatalogueAdmin
 from shosai.features.studio.application.catalogue_refresh import CatalogueRefresh
 from shosai.features.studio.application.offers import CatalogueOffers
+from shosai.features.studio.channels.http.admin_ai_models import build_admin_ai_models_router
 from shosai.features.studio.channels.tasks import PERIODIC_JOBS, refresh_tick
 from shosai.features.studio.contracts import MODEL_CATALOGUE
 from shosai.features.studio.contracts.events import STUDIO_EVENTS
@@ -33,12 +37,19 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """Studio's parts for this process."""
     snapshot = PlatformSnapshot(services.transactions, services.registry)
     settings = services.settings.features.get(StudioSettings)
+    line = settings.studio_frontier_output_usd_per_m
+    sources = (services.ai_listing, services.outbox, snapshot)
     refresh = CatalogueRefresh(
+        services.transactions, (*sources, StudioMetrics(services.registry)), line
+    )
+    admin = CatalogueAdmin(services.transactions, sources, line)
+    screen = AiModelsScreen(
         services.transactions,
-        (services.ai_listing, services.outbox, snapshot, StudioMetrics(services.registry)),
-        settings.studio_frontier_output_usd_per_m,
+        (services.ai_spend.reports, services.ai_spend.credits, services.ai_listing),
+        services.settings.ai.openrouter_api_key,
     )
     yield FeatureParts(
+        http_routers=(build_admin_ai_models_router((admin, screen), services.ports),),
         task_handlers=(refresh_tick(refresh),),
         periodic_jobs=PERIODIC_JOBS,
         provides=(

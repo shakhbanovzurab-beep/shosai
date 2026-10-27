@@ -9,7 +9,7 @@ from shosai.features.billing.contracts import Capability as PlanCapability
 from shosai.features.studio.contracts import OfferedModel, RoutePerson
 from shosai.features.studio.domain.catalogue import CatalogueModel
 from shosai.features.studio.domain.model_settings import offered
-from shosai.features.studio.domain.roles import Capability, ModelRole
+from shosai.features.studio.domain.roles import ModelCapability, ModelRole
 from shosai.features.studio.domain.routing import Substitution, refusal
 from shosai.features.studio.infrastructure.platform_snapshot import PlatformSnapshot
 
@@ -40,7 +40,7 @@ class CatalogueOffers:
         self._snapshot = snapshot
 
     async def offered(
-        self, person: RoutePerson, capability: Capability | None = None
+        self, person: RoutePerson, capability: ModelCapability | None = None
     ) -> tuple[OfferedModel, ...]:
         """The usable models the person's plan offers, optionally only those that read it."""
         catalogue = await self._snapshot.catalogue()

@@ -12,7 +12,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.studio.application.offers import CatalogueOffers
 from shosai.features.studio.domain.errors import StudioRule, StudioRuleError
-from shosai.features.studio.domain.roles import Capability, ModelRole, Tier
+from shosai.features.studio.domain.roles import ModelCapability, ModelRole, Tier
 from shosai.features.studio.domain.routing import Substitution
 from shosai.features.studio.infrastructure.platform_records import CatalogueRecord
 from tests.features.studio.catalogue_bench import (
@@ -60,7 +60,7 @@ async def test_a_model_is_described_by_openrouter_priced_into_its_tier_and_start
         "Claude-Sonnet-5",
     )
     assert model.tier is Tier.FRONTIER
-    assert model.capabilities == {Capability.TEXT, Capability.VISION}
+    assert model.capabilities == {ModelCapability.TEXT, ModelCapability.VISION}
     assert (model.supports_reasoning, model.enabled, model.max_output_tokens) == (
         True,
         False,
