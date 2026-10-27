@@ -71,7 +71,7 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 | Desktop recording | `WS /v1/ws/realtime`: audio frames → `transcript` lines with server `seq`, durable queue before the frame (inv-6), resume, `ask`, `vision`, `answer.*` | in-meeting hints and answers through the agent port, user context from memory and studio | Re, Wa | capture |
 | Phone-to-Mac translation relay | `WS /v1/ws/sessions/{id}` | — | Cd | capture |
 | Simultaneous voice translation | `POST /v1/ai/voice-translate/{token,usage}`, `WS /v1/ws/voice-translate` | — | Cd | capture |
-| Studio roles for the desktop assistant | prompts and models per role (`live_answers`, `screenshots`, `code`, `system_design`, `notes`, `transcript`) | — | Re | studio |
+| Studio roles for the desktop assistant | prompts and models per role (`live_answers`, `screenshots`, `code`, `system_design`, `notes`); live transcription stays the platform's choice ([ADR 0074](../adr/0074-studio-slice.md) ST-D2) | — | Re | studio |
 
 ### 2.4 Leo
 
@@ -172,7 +172,7 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 | Two places to connect sources | One connection registry in `connectors` (§8 SM-13) |
 | Year skyline with streaks on the home screen — gamification the hub explicitly rejects ("no streaks") | Dropped (§8 SM-4) |
 | Plan identity enumerated four ways (catalogue, billing `PLANS`, support `SupportPlan`, workspace plan name) | One catalogue in `billing`; others reference it by id |
-| "Default model" twice (AI models, platform prompts) | One, in `studio` |
+| "Default model" twice (AI models, platform prompts) | One per role, in `studio`'s AI models screen ([ADR 0074](../adr/0074-studio-slice.md) ST-D3) |
 | Operator directory twice (error assignees, support teammates) | One, in `identity` |
 | Owners as free text (hub topics, kanban cards) | People from `commitments` and members from `workspaces` |
 | Manual filing: folders, hubs, projects | Kept, with Leo's suggestions (A1/A3 in `proactive`) and the hub's series memory |
@@ -373,11 +373,12 @@ Scope, data and routes as the [Leo architecture](../design/leo/ARCHITECTURE.md) 
 
 #### 19. studio
 - **Scope:** the model catalogue and prices view (from F6), enable and default per model, role assignments; platform prompts (system prompt, behaviour, guardrails, feature prompts, versions, publish); the user's prompts per role, the active prompt per role and model settings per role; the user's personal context ("About you"); the Studio screen and the admin AI models and Platform prompts screens; the `PromptResolver` and `ModelRoutes` contracts used by capture, meetings, agent and memory.
-- **Owns:** platform (EU) `models_registry`, `model_defaults`, platform `prompt_templates`; home `model_role_assignments`, user `prompt_templates`, `prompt_skills` (a prompt's skills, composed by studio from agent's `SkillReader`; [ADR 0068](../adr/0068-leo-agent-slice.md) AG-D11), `user_contexts`, `user_context_files` (L2 → object).
+- **Owns:** platform (EU) `models_registry`, `model_defaults` (a default and a fallback per role), `platform_prompt_drafts`, `platform_prompt_versions`; home `model_role_assignments`, user `prompt_templates`, `role_prompts` (the active prompt per role), `prompt_skills` (a prompt's skills, composed by studio from agent's `SkillReader`; [ADR 0068](../adr/0068-leo-agent-slice.md) AG-D11), `user_contexts`. No `user_context_files` ([ADR 0074](../adr/0074-studio-slice.md) ST-D6).
 - **Routes:** no native or external; `/v1/studio/*`, `/v1/admin/{ai-models,platform-prompts}*`.
 - **Admin screens on the API** (owner, 2026-10-26): studio's plan has a step that moves the cabinet's AI models screen off its sample `/api/admin/ai-models` onto `/v1/admin/ai-models*` — the catalogue, enable and default from studio; spend today and this month by model, the daily series, the month's forecast and OpenRouter's credits from F6's reports (`SpendOperator`: `SpendReports`, `OpenRouterCredits`) — and the Platform prompts screen off `/api/admin/platform-prompts` the same way; done when no admin mock of either screen is left.
 - **Depends on:** F6 (provider price sync, spend reports, OpenRouter credits), billing (models on the plan), agent (skills store).
-- **Emits:** `studio.prompts_published`, `studio.model_disabled`.
+- **Emits:** `studio.model_disabled`, `studio.model_tier_proposed` (both to `alerting`); `studio.prompts_published` only once a consumer needs it (ADR 0074).
+- **Plan:** [slices/studio.md](slices/studio.md), approved on 2026-10-27 ([ADR 0074](../adr/0074-studio-slice.md)): five roles a person sets (`live_answers`, `screenshots`, `code`, `system_design`, `notes`) — Leo's model in Settings › Leo, no `transcript` choice, the personal context in every answer given to the person and never in notes (ST-D2); a default and a fallback per role on the AI models screen, engineering models kept by their slices (ST-D3); a curated OpenRouter catalogue whose tier the price proposes and the admin confirms (ST-D4); a short English platform layer instead of the drawn Behaviour tab, confirm actions, overrides and placeholders (ST-D1).
 - **Leo tools:** `studio` toolset: read the personal context (read); update it (W; a persistent-injection sink, never exposed over MCP).
 
 #### 20. mcp

@@ -431,17 +431,17 @@ Recall does **not** refresh decay. Only use the model cites, or the user's confi
 
 | # | Segment | Changes | Cap (default tier) | Notes |
 |---|---|---|---|---|
-| 1 | Platform system policy (versioned, English) | per release | 1 500 | role, rules, confirmation protocol, language directive |
+| 1 | Platform system policy (versioned, English) | per release | 2 500 | role, rules, confirmation protocol, language directive; then studio's platform layer, the operator's published English text (≤ 1 000, [ADR 0074](../../adr/0074-studio-slice.md)) |
 | 2 | Tool schemas of the selected toolsets, canonical order | per thread, rarely | 4 000 | core toolset ≈ 600; draft: 20–25 K |
 | 3 | Active skill playbook | per skill | 1 500 | |
-| 4 | Profile core | per user, rarely | 600 | pinned memory, personalization, timezone, answer language |
+| 4 | Profile core | per user, rarely | 3 200 | pinned memory, personalization, Studio's personal context (≤ 4 000 characters, ≤ 2 700, ADR 0074), timezone, answer language |
 | ↑ | **cache breakpoint** | | | explicit where the provider supports it |
 | 5 | Thread summary | every few turns | 1 000 | rolling, written in the background |
 | 6 | Recent messages, verbatim | per turn | 5 000 | questions and answers; earlier turns' tool rounds left out (agent step 6) |
 | 7 | Volatile context | per turn | 2 500 | time to the minute, surface and subject digest, recalled memory, mentions, attachment digests, retrieved knowledge; all external text wrapped |
 | 8 | User message | per turn | 4 000 | longer input becomes an attachment |
 
-**Total ≈ 20 K at the caps, ≈ 10–12 K typical.** The draft measured about 30 K before any history (T1, T2).
+**Total ≈ 23.6 K at the caps (≈ 20 K before ADR 0074's platform layer and personal context), ≈ 10–12 K typical.** The draft measured about 30 K before any history (T1, T2). ADR 0074's growth is bounded by +3 870 tokens; on the deterministic suite the worst first round is 8 740 tokens p50 (the [studio plan](../../plan/slices/studio.md) §1.4).
 
 **Rules:**
 
@@ -607,7 +607,8 @@ A skill is a **versioned package** that shapes behaviour without granting rights
 | Autonomy ceiling | declared (e.g. `prepare` for a background brief) | `answer` only |
 | Eval suite | required | — |
 
-- **Activation:** explicit (`/skill`, a chip in the UI), by `turn.route`, or by a proactive routine (a trigger bound to a skill; the morning brief = `daily_brief` at the user's 08:30).
+- **Activation:** explicit (`/skill`, a chip in the UI), by `turn.route`, or by a proactive routine (a trigger bound to a skill; the morning brief = `daily_brief` at the user's 08:30). Leo activates a person's installed skills from the agent's store itself; Studio has no Leo role ([ADR 0074](../../adr/0074-studio-slice.md) ST-D2).
+- **In Studio's roles:** a person may also attach installed skills to their prompts for the desktop answers and the notes; studio composes them, the consumer wraps each as `skill:user`.
 - **First platform skills:** `meeting_prep`, `meeting_follow_up`, `daily_brief`, `inbox_triage`, `weekly_review`, `research_web`, `data_analysis` (deterministic statistics, as the draft's CSV insights).
 
 This fixes M6: in the draft, skills never reached Leo.
@@ -925,7 +926,7 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 
 | Direction | Port | Owner | Use |
 |---|---|---|---|
-| uses | model routes and prompts: `ModelRoutes`, `PromptResolver` | `studio` | model choice per role, fallbacks, system and feature prompts |
+| uses | model routes and prompts: `ModelRoutes`, `ModelCatalogue`, `PromptResolver` ([ADR 0074](../../adr/0074-studio-slice.md)) | `studio` | the `leo` role's route (the person's `leo_model` within the plan, else the default and its fallback; the frontier allowance inside), the models Settings › Leo offers, the platform layer, feature prompts, the person's role prompts with their skills and the personal context |
 | uses | provider port: `stream_chat`, `complete`, `embed`, `rerank`, **`decide`** (Jev), with effect key, spend reservation | F6 | every model and decision call (inv-9, §14 rule 4); fixes C3 |
 | uses | identity: token → principal claims | `identity` | `PrincipalFactory` |
 | uses | entitlements, spend balance | `billing` | admission, tool gates |

@@ -288,7 +288,7 @@ These start empty: `directory_domains`, `organizations`, `memberships`, `resourc
 | `memory` | 2 | 1 | 1 | 0 | 0 |
 | `proactive` | 4 | 2 | 1 | 0 | 1 |
 | `errands` | 1 | 0 | 1 | 0 | 0 |
-| `studio` | 8 | 6 | 1 | 0 | 1 |
+| `studio` | 8 | 1 | 5 | 0 | 2 |
 | `mcp` | 5 | 4 | 1 | 0 | 0 |
 | `support` | 4 | 3 | 1 | 0 | 0 |
 | `releases` | 1 | 0 | 1 | 0 | 0 |
@@ -296,7 +296,7 @@ These start empty: `directory_domains`, `organizations`, `memberships`, `resourc
 | `meetings` | 10 | 8 | 0 | 0 | 2 |
 | F1 — Backend foundation (platform tables) | 1 | 0 | 0 | 0 | 1 |
 | F6 — Platform services | 7 | 1 | 3 | 0 | 3 |
-| **Total** | **131** | **74** | **32** | **5** | **20** |
+| **Total** | **131** | **69** | **36** | **5** | **21** |
 
 Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 dropped (columns of derived and dropped tables are counted with their table; the columns of `voice_sessions` and `translation_session`, folded into cost rows, count as transformed). These column totals predate the notes plan of 2026-10-19, which moved five tables to dropped and four to transformed; M1 recounts them.
 
@@ -996,35 +996,33 @@ Amended on 2026-10-27 by the [memory plan](slices/memory.md) ([ADR 0071](../adr/
 
 ### 5.16 `studio`
 
-#### `models_registry` → `models_registry` · **moved**
+Amended on 2026-10-27 by the [studio plan](slices/studio.md) ([ADR 0074](../adr/0074-studio-slice.md)); the rows below replace the earlier "moved" targets. The draft's role ids map once, everywhere: `responses` → `live_answers`, `vision` → `screenshots`, `coding` → `code`, `system_design` → `system_design`, `generation` → `notes`; `agent` → agent's `leo_model`; `transcription`, `embedding`, `image` and the platform-only roles (`guardrail`, `global_instructions`, `agent_instructions`, `recap`, `chat`) have no person's row in Shosai.
 
-- **Owner → home:** platform catalog (R12).
-- **Columns:** 20 of 22 move unchanged; exceptions:
-  - `openrouter_model_id` — *moved*. Verbatim: referenced softly by costs, defaults and user choices.
-  - `tier` — *moved*. Decides premium gating.
+#### `models_registry` → `models_registry` · **transformed**
 
-#### `model_defaults` → `model_defaults` · **moved**
+- **Owner → home:** platform catalogue, EU (R12).
+- **Rows:** enabled `chat` models only; the rest are not carried (the operator adds what is missing; the first daily refresh fills every carried row's metadata).
+- **Columns:** `openrouter_model_id` → `openrouter_id` (verbatim: costs and choices reference it softly); `id` → a slug of `openrouter_model_id`; `display` → `name`; `provider` → `maker`; `context_window` → `context_length`; `enabled` → `enabled`; `tier` → the confirmed `tier` (`start` and `standard` → `standard`, `premium` → `frontier`), with no pending proposal; `capabilities` → `capabilities` (`vision` when the draft listed it). `pricing_input`, `pricing_output` (F6's price list holds prices), `type`, `version`, `created_by_user_id`, `description`, `description_source`, `description_i18n`, `description_hash`, `released_at`, `reasoning`, `metrics` are not carried.
 
-- **Owner → home:** platform catalog (R12).
-- **Columns:** all 6 move unchanged.
+#### `model_defaults` → no v2 table rows · **dropped**
 
-#### `model_role_assignments` → `model_role_assignments` · **moved**
+- Defaults per tariff and role do not exist in Shosai (ST-D3, ST-D4): the operator sets one default and fallback per role on the AI models screen before cutover (M2's runbook); no draft row is carried.
 
-- **Owner → home:** own `user_id`.
-- **Columns:** 9 of 10 move unchanged; exceptions:
-  - `reasoning_enabled` — *moved*. NULL means the user never chose; never coerced to false.
+#### `model_role_assignments` → `model_role_assignments` · **transformed**
 
-#### `prompt_templates` → `prompt_templates` · **moved**
+- **Owner → home:** own `user_id` (no FK).
+- **Rows:** roles that map to one of studio's five; a row whose model is not carried is dropped (the role takes its default). The `agent` row becomes agent's `leo_model` when its model is carried and reads text, else `auto`.
+- **Columns:** `role` → mapped; `model_id` → the carried model's slug; `temperature` → `temperature`; `max_tokens` → `max_tokens`, cut to 32 768; `reasoning_enabled` → `reasoning` (NULL → false, the default since the draft's `1c581580d`); `id`, `model_type`, `created_at` are not carried.
 
-- **Owner → home:** own `user_id`; NULL = platform prompt (R12).
-- **Columns:** all 14 move unchanged.
-- Platform rows (`user_id IS NULL`) stay platform rows; they are never attributed to an admin.
+#### `prompt_templates` → `prompt_templates` and the platform draft · **transformed**
+
+- **People's rows** (`user_id` set, own home): non-archived rows with a role that maps to one of the five; `name` → `name` (cut to 80); `system_prompt` → `content` (≤ 16 000 in the draft, within 20 000); `created_at` → `created_at`, `updated_at`. For each person and role the newest active non-archived row — the draft's implicit rule — becomes the `role_prompts` row. `version_tag`, `user_prompt_template`, `variable_schema`, `llm_config`, `is_active`, `experiment_tag`, `tags`, `is_archived` are not carried; archived rows are dropped (the draft's archive was its delete).
+- **Platform rows** (`user_id IS NULL`): the active `guardrail`, `global_instructions` and `agent_instructions` texts become the platform draft's system prompt, in that order, **not published** — the operator cuts them to the layer's budget and publishes; global role defaults are not carried (the built-in prompts are the consumers'). Never attributed to an admin.
 
 #### `prompt_skills` → `prompt_skills` · **moved**
 
-- **Owner → home:** via `prompt_id` → `prompt_templates.user_id`. Studio's since the agent plan ([ADR 0068](../adr/0068-leo-agent-slice.md) AG-D11): a prompt's composition lives with the prompt; the skills themselves stay agent's `agent_skills`.
-- **Columns:** all 7 move unchanged.
-- Links a prompt to skills; a platform prompt with an admin's skill crosses homes and becomes a soft reference.
+- **Owner → home:** via `prompt_id` → `prompt_templates.user_id`. Studio's since the agent plan ([ADR 0068](../adr/0068-leo-agent-slice.md) AG-D11).
+- **Columns:** `prompt_id`, `skill_id`, `position` move; `mode` is dropped (every skill is appended: a draft `replace` row is appended too); `id`, `created_at`, `updated_at` are not carried. Rows of prompts that are not carried go with them; at most 20 per prompt, the first by `position`.
 
 #### `prompt_role_bindings` → no v2 table · **dropped**
 
@@ -1032,18 +1030,15 @@ Amended on 2026-10-27 by the [memory plan](slices/memory.md) ([ADR 0071](../adr/
 - **Columns:** 6, none copied.
 - Dead: no reader or writer in the draft; roles resolve through `prompt_templates.role`. Platform configuration, no user data.
 
-#### `user_contexts` → `user_contexts` · **moved**
+#### `user_contexts` → `user_contexts` · **transformed**
 
-- **Owner → home:** own `user_id`.
-- **Columns:** all 6 move unchanged.
-- Personal context text injected into Leo's system prompt.
+- **Owner → home:** own `user_id` (no FK).
+- **Columns:** `text` → `content`, trimmed; longer than 4 000 characters → its first 4 000, cut at the last paragraph or sentence boundary before the limit, and the full text becomes a file "About you (Whisperer).md" in the person's Files (ST-D6); memory's MM-D2 appends `leo_personalization.instructions` under the same rule. `roles` is not carried: the context goes to every answer given to the person and never to notes (ST-D2).
 
-#### `user_context_files` → `user_context_files` · **transformed**
+#### `user_context_files` → files in the person's Files · **transformed**
 
-- **Owner → home:** via `user_context_id` → `user_contexts.user_id`.
-- **Columns:** 7 of 9 move unchanged; exceptions:
-  - `storage_path` — *transformed*. Local-disk path → object in the owner's home bucket (ADR 0044); the column becomes `s3_key` (section 6, L2).
-  - `extracted_text` — *moved*. Personal text.
+- **Owner → home:** via `user_context_id` → `user_contexts.user_id`; no `user_context_files` table in Shosai (ST-D6).
+- **Rows:** each file becomes a `storage_files` object of the person in their home bucket (ADR 0044), in the folder "About you (Whisperer)", read from the draft's local disk (`storage_path`); `filename`, `mime_type`, `size_bytes` move to the file. `extracted_text` is not carried and nothing of the file is injected into prompts.
 
 ### 5.17 `mcp`
 
