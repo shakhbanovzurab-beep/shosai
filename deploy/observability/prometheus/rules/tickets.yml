@@ -151,6 +151,41 @@ groups:
           description: 'За четыре недели меньше 70 % ответов на «Запомнить?» — «Запомнить». Leo предлагает лишнее и отнимает внимание людей; отбор кандидатов стоит пересмотреть.'
           runbook: docs/runbooks/alerts.md#memory-candidates-turned-down
 
+  - name: tickets-studio
+    rules:
+      - alert: StudioCatalogueRefreshStale
+        expr: |
+          (sum(increase(shosai_studio_catalogue_refresh_total{outcome="done"}[2d])) or vector(0)) == 0
+        for: 1h
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Каталог моделей двое суток не сверялся с OpenRouter'
+          description: 'Ежедневная сверка каталога studio двое суток не закончилась: список OpenRouter не читается или в нём не хватает доли каталога. Модели живут со вчерашним описанием; выключенных и предложений уровня нет.'
+          runbook: docs/runbooks/alerts.md#studio-catalogue-refresh-stale
+
+      - alert: StudioDefaultBroken
+        expr: |
+          sum(increase(shosai_studio_broken_defaults_total[25h])) > 0
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Модель по умолчанию одной из ролей не может отвечать'
+          description: 'Сверка каталога нашла умолчание или запасную модель роли, которой нет в списке OpenRouter или которая больше не читает нужное роли. Роль отвечает запасной моделью, а без неё — ошибкой. Назначьте другое умолчание на экране AI-моделей.'
+          runbook: docs/runbooks/alerts.md#studio-default-broken
+
+      - alert: StudioTierProposalWaiting
+        expr: |
+          sum(increase(shosai_studio_waiting_tier_proposals_total[25h])) > 0
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Предложение уровня модели ждёт админа больше трёх дней'
+          description: 'Цена модели предложила другой уровень, а решения нет. Пока его нет, модель считается в прежнем уровне — в лимитах людей и в расходах платформы. Подтвердите или отклоните предложение на экране AI-моделей.'
+          runbook: docs/runbooks/alerts.md#studio-tier-proposal-waiting
+
   - name: tickets-targets
     rules:
       - alert: ScrapeTargetDown

@@ -9,6 +9,8 @@ Business events to the owner's monitoring chat through Alertmanager, with ids, a
 | `ai.user_spend.exceeded` (core's AI port) | ticket, silent | `user-spend-exceeded` |
 | `identity.account.deleted` | notice, batched by kind for 5 min | `account-deleted` |
 | `billing.sales_inquiry.received` | notice, batched by kind for 5 min | `sales-inquiry-received` |
+| `studio.model.disabled` (OpenRouter dropped the model; the admin's own switch is not sent) | ticket | `studio-model-unlisted` |
+| `studio.model.tier_proposed` | ticket | `studio-tier-proposed` |
 
 A new kind: a builder of its texts in `domain/alerts.py`, a handler and a subscription in `channels/subscriptions.py`, a section in [docs/runbooks/alerts.md](../../../../../docs/runbooks/alerts.md); the tests check that every kind has one.
 

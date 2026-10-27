@@ -83,6 +83,8 @@ class CatalogueBench:
 
     homes: DatabaseAccess
     openrouter: ScriptedOpenRouter
+    listing: ModelListing
+    outbox: EventOutbox
     snapshot: PlatformSnapshot
     admin: CatalogueAdmin
 
@@ -106,4 +108,4 @@ def catalogue_bench(
     snapshot = PlatformSnapshot(homes.transactions, CollectorRegistry())
     outbox = EventOutbox(EventTypes(list(events)))
     admin = CatalogueAdmin(homes.transactions, (listing, outbox, snapshot), LINE)
-    return CatalogueBench(homes, openrouter, snapshot, admin)
+    return CatalogueBench(homes, openrouter, listing, outbox, snapshot, admin)

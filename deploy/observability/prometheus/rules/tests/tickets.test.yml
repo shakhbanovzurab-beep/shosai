@@ -349,3 +349,50 @@ tests:
       - eval_time: 700h
         alertname: MemoryCandidatesTurnedDown
         exp_alerts: []
+
+  - interval: 1h
+    input_series:
+      - series: 'shosai_studio_catalogue_refresh_total{outcome="done"}'
+        values: "0 1 1+0x60"
+    alert_rule_test:
+      - eval_time: 30h
+        alertname: StudioCatalogueRefreshStale
+        exp_alerts: []
+      - eval_time: 52h
+        alertname: StudioCatalogueRefreshStale
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "Каталог моделей двое суток не сверялся с OpenRouter"
+              description: "Ежедневная сверка каталога studio двое суток не закончилась: список OpenRouter не читается или в нём не хватает доли каталога. Модели живут со вчерашним описанием; выключенных и предложений уровня нет."
+              runbook: docs/runbooks/alerts.md#studio-catalogue-refresh-stale
+
+  - interval: 1h
+    input_series:
+      - series: 'shosai_studio_broken_defaults_total{reason="unlisted"}'
+        values: "0 0 1 1+0x40"
+      - series: 'shosai_studio_waiting_tier_proposals_total'
+        values: "0 0 0 2 2+0x40"
+    alert_rule_test:
+      - eval_time: 4h
+        alertname: StudioDefaultBroken
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "Модель по умолчанию одной из ролей не может отвечать"
+              description: "Сверка каталога нашла умолчание или запасную модель роли, которой нет в списке OpenRouter или которая больше не читает нужное роли. Роль отвечает запасной моделью, а без неё — ошибкой. Назначьте другое умолчание на экране AI-моделей."
+              runbook: docs/runbooks/alerts.md#studio-default-broken
+      - eval_time: 40h
+        alertname: StudioDefaultBroken
+        exp_alerts: []
+      - eval_time: 5h
+        alertname: StudioTierProposalWaiting
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "Предложение уровня модели ждёт админа больше трёх дней"
+              description: "Цена модели предложила другой уровень, а решения нет. Пока его нет, модель считается в прежнем уровне — в лимитах людей и в расходах платформы. Подтвердите или отклоните предложение на экране AI-моделей."
+              runbook: docs/runbooks/alerts.md#studio-tier-proposal-waiting
+      - eval_time: 40h
+        alertname: StudioTierProposalWaiting
+        exp_alerts: []

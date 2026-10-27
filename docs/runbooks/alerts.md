@@ -288,6 +288,27 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Compare `source="user_statement"` with `source="meeting"`: one source turned down far more often points at its prompt (`extraction_prompts.py`). Read the turned-down statements of the staging accounts, not people's, and tighten what the prompt calls durable; the decisions slice's `memory.admit` calibration (MM-D1) is the lasting answer.
 
+<a id="studio-catalogue-refresh-stale"></a>
+### StudioCatalogueRefreshStale
+
+**Means.** For two days no refresh of studio's catalogue finished (`shosai_studio_catalogue_refresh_total{outcome="done"}`): either OpenRouter's model list could not be read (`outcome="unreadable"`) or it missed a fifth of the catalogue and was not believed (`outcome="fused"`, ADR 0074). Models keep yesterday's description; nothing is switched off and no tier is proposed.
+
+**Fix.** The worker's logs of `studio.refresh_catalogue` in Loki: an unreadable list → OpenRouter's status and the outbound route from the plane; a fused one → compare the catalogue with `GET https://openrouter.ai/api/v1/models` by hand. The next daily run repeats by itself.
+
+<a id="studio-default-broken"></a>
+### StudioDefaultBroken
+
+**Means.** A role's default or fallback cannot answer (`shosai_studio_broken_defaults_total{reason}`): OpenRouter no longer lists its model (`unlisted` — the model stays on, since a default is never switched off by the refresh), or its model no longer reads what the role needs (`cannot_serve`). The role answers with its fallback, or answers `model_role_unconfigured` when neither can.
+
+**Fix.** Admin › AI models: choose another default (and fallback) for the role; then the old model can be switched off. A renamed model → add its new id first.
+
+<a id="studio-tier-proposal-waiting"></a>
+### StudioTierProposalWaiting
+
+**Means.** A tier the price proposed has waited for the admin for over three days (`shosai_studio_waiting_tier_proposals_total`, ST-D4 as amended). Until it is decided the model counts in its old tier: a model priced as frontier may still draw on people's standard tokens, at the platform's cost.
+
+**Fix.** Admin › AI models: confirm or decline the proposal. A default cannot be made frontier: set another default first.
+
 <a id="scrape-target-down"></a>
 ### ScrapeTargetDown
 
@@ -370,6 +391,20 @@ The slice `alerting` posts these to Alertmanager from events, not from Prometheu
 **Means.** A signed-in person sent the Enterprise form on the Upgrade page: a custom-priced plan for a team of the size in the message (billing, step 6). The work email, company and message are in `sales_inquiries` of the person's home, never in the chat.
 
 **Fix.** Answer the person at the work email of the inquiry. Until Admin › Billing lists inquiries (billing step 14), read it in the person's home: `SELECT work_email, company, team_size, message, created_at FROM sales_inquiries WHERE user_id = '<id from the card link>' ORDER BY created_at DESC LIMIT 1;`.
+
+<a id="studio-model-unlisted"></a>
+### StudioModelUnlisted — `studio.model.disabled`, ticket
+
+**Means.** The daily refresh did not find a catalogue model in OpenRouter's list and switched it off (studio, ADR 0074). People who chose it answer with their role's default; nobody's settings change. A model switched off by the admin sends no message.
+
+**Fix.** A renamed model → add its new id on Admin › AI models and switch it on; people choose it again themselves. A model gone for good → nothing; retire it on the same screen once no default holds it.
+
+<a id="studio-tier-proposed"></a>
+### StudioTierProposed — `studio.model.tier_proposed`, ticket
+
+**Means.** A model's output price in force crossed `STUDIO_FRONTIER_OUTPUT_USD_PER_M` (6 $ per million tokens by default): its price proposes the other tier. Nothing changes until the admin decides (ST-D4 as amended); tokens already counted stay in their old tier.
+
+**Fix.** Admin › AI models: confirm the proposal — the model counts in its new tier from that moment — or decline it, and it is not proposed again while the price stays on the same side of the line.
 
 ## Heartbeat
 

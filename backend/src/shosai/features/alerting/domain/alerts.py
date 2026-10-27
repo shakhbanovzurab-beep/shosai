@@ -102,3 +102,47 @@ def sales_inquiry(site: str, user_id: UUID, team_size: str) -> BusinessAlert:
         runbook="sales-inquiry-received",
         admin_card=admin_card(site, user_id),
     )
+
+
+# Названия уровней моделей для владельца; ключи — значения уровней studio.
+TIER_NAMES: Final = {"standard": "стандартный", "frontier": "frontier"}
+
+
+def ai_models_screen(site: str) -> str:
+    """The address of the AI models screen in the admin panel."""
+    return f"{site.rstrip('/')}/admin/ai-models"
+
+
+def model_unlisted(site: str, model_id: str) -> BusinessAlert:
+    """OpenRouter no longer lists a model of the catalogue: it was switched off."""
+    return BusinessAlert(
+        kind="studio.model.disabled",
+        name="StudioModelUnlisted",
+        severity=Severity.TICKET,
+        summary=f"OpenRouter убрал модель {model_id}: она выключена в каталоге",
+        description=(
+            "Ежедневная сверка не нашла модель в списке OpenRouter и выключила её. Люди, которые "
+            "её выбрали, отвечают моделью роли по умолчанию. Если модель переименовали, добавьте "
+            "её новый id на экране AI-моделей; сама она не включится."
+        ),
+        runbook="studio-model-unlisted",
+        admin_card=ai_models_screen(site),
+    )
+
+
+def model_tier_proposed(site: str, model_id: str, confirmed: str, proposed: str) -> BusinessAlert:
+    """A model's price proposes another tier: a ticket to confirm or decline it."""
+    was, would = TIER_NAMES.get(confirmed, confirmed), TIER_NAMES.get(proposed, proposed)
+    return BusinessAlert(
+        kind="studio.model.tier_proposed",
+        name="StudioTierProposed",
+        severity=Severity.TICKET,
+        summary=f"Цена модели {model_id} предлагает уровень {would} вместо уровня {was}",
+        description=(
+            "Цена выхода модели пересекла линию уровня. Пока предложение не подтверждено, модель "
+            "считается в прежнем уровне — в лимитах людей и в расходах. Подтвердите или отклоните "
+            "его на экране AI-моделей; уже списанное не пересчитывается."
+        ),
+        runbook="studio-tier-proposed",
+        admin_card=ai_models_screen(site),
+    )

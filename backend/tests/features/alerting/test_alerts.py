@@ -12,6 +12,8 @@ from shosai.features.alerting.domain.alerts import (
     Severity,
     account_deleted,
     dollars,
+    model_tier_proposed,
+    model_unlisted,
     sales_inquiry,
     spend_exceeded,
 )
@@ -29,6 +31,8 @@ def every_alert() -> list[BusinessAlert]:
         spend_exceeded(SITE, USER_ID, date(2026, 10, 16), 23_456_789, 20_000_000),
         account_deleted(SITE, USER_ID),
         sales_inquiry(SITE, USER_ID, "51-200"),
+        model_unlisted(SITE, "anthropic-claude-sonnet-5"),
+        model_tier_proposed(SITE, "anthropic-claude-sonnet-5", "standard", "frontier"),
     ]
 
 
@@ -69,3 +73,12 @@ def test_an_alert_carries_an_id_and_numbers_only(alert: BusinessAlert) -> None:
 @pytest.mark.parametrize("alert", every_alert(), ids=lambda alert: alert.kind)
 def test_every_kind_has_its_section_in_the_runbook(alert: BusinessAlert) -> None:
     assert f'<a id="{alert.runbook}"></a>' in RUNBOOK.read_text(encoding="utf-8")
+
+
+def test_a_catalogue_ticket_names_the_model_and_opens_the_ai_models_screen() -> None:
+    alert = model_tier_proposed(SITE, "google-gemini-3-8-flash", "standard", "frontier")
+
+    assert alert.severity is Severity.TICKET
+    assert "google-gemini-3-8-flash" in alert.summary
+    assert "frontier" in alert.summary
+    assert alert.admin_card == "https://shosai.tech/admin/ai-models"

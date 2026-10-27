@@ -25,6 +25,7 @@ from shosai.features.alerting.channels.subscriptions import BusinessAlerts
 from shosai.features.alerting.channels.tasks import POST_ALERT, AlertPayload
 from shosai.features.billing.contracts.events import SalesInquiryReceived
 from shosai.features.identity.contracts import AccountDeleted
+from shosai.features.studio.contracts.events import STUDIO_EVENTS
 from tests.core.events.relay_bench import RecordingSender
 from tests.core.tasks.workbench import bound_workbench, eventually, running, settled
 from tests.harness.database_access import DatabaseAccess
@@ -47,7 +48,12 @@ class QueuedTasks:
 
 def resources(homes: DatabaseAccess, alerts: BusinessAlerts) -> EventResources:
     """The business events and alerting's consumers over the run's slot."""
-    events: list[type[DomainEvent]] = [UserSpendExceeded, AccountDeleted, SalesInquiryReceived]
+    events: list[type[DomainEvent]] = [
+        UserSpendExceeded,
+        AccountDeleted,
+        SalesInquiryReceived,
+        *STUDIO_EVENTS,
+    ]
     return EventResources(
         catalog=EventCatalog(events, alerts.subscriptions()),
         transactions=homes.transactions,

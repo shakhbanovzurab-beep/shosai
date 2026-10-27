@@ -20,11 +20,14 @@ from shosai.features.alerting.channels.tasks import POST_ALERT, AlertPayload
 from shosai.features.alerting.domain.alerts import (
     BusinessAlert,
     account_deleted,
+    model_tier_proposed,
+    model_unlisted,
     sales_inquiry,
     spend_exceeded,
 )
 from shosai.features.billing.contracts.events import SalesInquiryReceived
 from shosai.features.identity.contracts import AccountDeleted
+from shosai.features.studio.contracts.events import DisabledBy, ModelDisabled, ModelTierProposed
 
 DEADLINE: Final = timedelta(seconds=30)
 log = structlog.stdlib.get_logger(__name__)
@@ -86,6 +89,25 @@ class BusinessAlerts:
         event = received.event
         await self.raise_alert(received, sales_inquiry(self._site, event.user_id, event.team_size))
 
+    async def model_disabled(
+        self, session: AsyncSession, received: ReceivedEvent[ModelDisabled]
+    ) -> None:
+        """A ticket when OpenRouter dropped a model; the admin's own switch is not news."""
+        del session
+        event = received.event
+        if event.reason is DisabledBy.ADMIN:
+            return
+        await self.raise_alert(received, model_unlisted(self._site, event.model_id))
+
+    async def tier_proposed(
+        self, session: AsyncSession, received: ReceivedEvent[ModelTierProposed]
+    ) -> None:
+        """A ticket: a model's price proposes another tier for the admin to decide."""
+        del session
+        event = received.event
+        alert = model_tier_proposed(self._site, event.model_id, event.confirmed, event.proposed)
+        await self.raise_alert(received, alert)
+
     def subscriptions(self) -> tuple[EventSubscription[Any], ...]:
         """One consumer per event kind; the names are the keys of their delivery marks."""
         return (
@@ -109,5 +131,19 @@ class BusinessAlerts:
                 queue=TaskQueue.DEFAULT,
                 deadline=DEADLINE,
                 handle=self.sales_inquiry,
+            ),
+            EventSubscription(
+                consumer="alerting.model_unlisted_ticket",
+                event=ModelDisabled,
+                queue=TaskQueue.DEFAULT,
+                deadline=DEADLINE,
+                handle=self.model_disabled,
+            ),
+            EventSubscription(
+                consumer="alerting.tier_proposed_ticket",
+                event=ModelTierProposed,
+                queue=TaskQueue.DEFAULT,
+                deadline=DEADLINE,
+                handle=self.tier_proposed,
             ),
         )
