@@ -77,7 +77,8 @@ async def test_a_read_answers_the_voice_model_and_the_exchange_lands_in_a_new_th
     await talk.record(exchange("What about the budget?", "Travel was cut by a fifth."))
 
     names = {tool.name for tool in talk.tools}
-    assert {"notes__search", "tasks__create"} <= names
+    # Догрузить набор голос не может: и большой `archive` приходит сразу, целиком.
+    assert {"notes__search", "tasks__create", "archive__search"} <= names
     assert not names & {"core__load_toolset", "core__navigate"}
     assert "Budget review" in json.loads(answer)["result"]
     assert "Speak in the language the person speaks" in talk.instruction

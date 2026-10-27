@@ -163,7 +163,9 @@ class VoiceRelay:
             case LiveTurnEnd():
                 if self._exchange.answered:
                     await self._close_exchange(interrupted=False)
-                await self._show(VoiceState.LISTENING)
+                # Конец хода сразу после вызова: Leo ещё ждёт инструмент и заговорит после него.
+                if not self._calls:
+                    await self._show(VoiceState.LISTENING)
 
     def _call(self, call: LiveToolCall) -> None:
         self._exchange.call(self._clock())

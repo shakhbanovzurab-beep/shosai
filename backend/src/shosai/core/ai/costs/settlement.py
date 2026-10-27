@@ -3,17 +3,22 @@
 `billing` registers a `CostSettlement` that debits credits for a user's call. The writer runs
 every settlement in the cost row's transaction, only when the row is written — a replayed
 effect key runs none — so inv-9's "at most one debit" follows from the same insert that
-makes one row. A settlement makes no external call (§14 rule 1).
+makes one row. A settlement makes no external call (§14 rule 1). A row tells its kind: the
+minute rows of a live session (`LIVE_SESSION_KINDS`) are counted by the slice that holds the
+session, in the plan's minutes (ADR 0070 LV-D7), not by the tokens they carry.
 """
 
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
-from typing import Protocol
+from typing import Final, Protocol
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
+
+# Виды живых сессий порта: их строки пишутся поминутно, а минуты считает срез сессии.
+LIVE_SESSION_KINDS: Final = frozenset({"live_transcription", "live_translation", "voice"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -34,6 +39,13 @@ class SettledCost:
     # недельные и дневные токены тарифа (BL-D4).
     created_at: datetime
     tokens: int
+    # Вид вызова строки: `chat`, `voice`, `live_transcription`…
+    kind: str = "chat"
+
+    @property
+    def live(self) -> bool:
+        """A minute row of a live session: its slice counts its minutes."""
+        return self.kind in LIVE_SESSION_KINDS
 
 
 class CostSettlement(Protocol):

@@ -1,7 +1,8 @@
 """A Gemini Live conversation for the voice route's tests, on the local live server.
 
-At the person's first audio Gemini hears a question and calls `notes__search`; once the tool
-answers it speaks, says what it said and ends its turn with usage. The server then waits
+At the person's first audio Gemini hears a question, calls `notes__search` and, as the real
+Gemini Live does, ends its turn at once; once the tool answers it speaks, says what it said and
+ends its turn again with usage. The server then waits
 for the session to close.
 """
 
@@ -39,6 +40,8 @@ def budget_question() -> Scenario:
                 "inputTranscription": {"text": QUESTION, "finished": True}}})  # fmt: skip
             call = {"id": "call-1", "name": "notes__search", "args": {"query": "budget"}}
             await send(connection, {"toolCall": {"functionCalls": [call]}})
+            # Так делает настоящий Gemini Live: ход кончается сразу после вызова, до ответа.
+            await send(connection, {"serverContent": {"turnComplete": True}})
             await until_message(connection, server, "toolResponse", "tool_response")
             await send(connection, {"serverContent": {
                 "outputTranscription": {"text": ANSWER, "finished": True}}})  # fmt: skip

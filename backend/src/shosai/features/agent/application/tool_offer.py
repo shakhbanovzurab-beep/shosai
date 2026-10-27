@@ -30,6 +30,7 @@ from shosai.features.agent.application.tool_registry import (
     is_write,
 )
 from shosai.features.agent.application.turn_task import TurnPayload
+from shosai.features.agent.domain.budgets import SEGMENT_CAPS, Segment
 from shosai.features.agent.domain.core_tools import LOAD_TOOLSET
 from shosai.features.agent.domain.operator import is_operator
 from shosai.features.agent.domain.routing import (
@@ -47,6 +48,7 @@ from shosai.features.billing.contracts import ENTITLEMENTS, EntitlementsUnavaila
 
 RUN = AgentRunRecord
 STICKY_TURNS: Final = 3
+TOOLS_CAP: Final = SEGMENT_CAPS[Segment.TOOLS]
 log = structlog.stdlib.get_logger(__name__)
 
 
@@ -188,8 +190,11 @@ class TurnRouting:
         self._ports = ports
         self._ranking = RouteRanking(ports)
 
-    async def offer(self, session: AsyncSession, payload: TurnPayload) -> TurnOffer:
-        """The run's offer: the page's, the sticky and then the others while they fit."""
+    async def offer(
+        self, session: AsyncSession, payload: TurnPayload, *, cap: int = TOOLS_CAP
+    ) -> TurnOffer:
+        """The run's offer: the page's, the sticky and then the others while they fit in `cap`
+        tokens of schemas — wider for a voice session, which cannot load a toolset later."""
         toolsets = self._registry.toolsets()
         operator = is_operator(payload.user_id)
         capabilities = None if operator else await self._capabilities(payload, toolsets)
@@ -202,7 +207,7 @@ class TurnRouting:
             facts.append(ToolsetFacts(name, total, bool(admitted), read_tokens=reads))
         sticky, recent = await self._sticky(session, payload)
         kept = RouteFacts(
-            tuple(facts), surface=surface_toolsets(payload), sticky=sticky, recent=recent
+            tuple(facts), surface=surface_toolsets(payload), sticky=sticky, recent=recent, cap=cap
         )
         return TurnOffer(toolsets, gates, route(kept), kept)
 

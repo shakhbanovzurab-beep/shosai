@@ -1,14 +1,14 @@
 """A person's model tokens: counted from cost rows, spent from packs, read before a request.
 
 The tier follows the call class: an expensive call is a frontier one, a standard call a
-standard one; essential calls (meetings) and Leo's background work are not counted
-(F6-D6, Leo §5.4). `TokenSettlement` runs in the cost row's own transaction, once per
-row: it adds the row's tokens to the Monday week and, for standard, the day — both of the
-business calendar (ADR 0058) — then
-debits packs for what the row used past the frontier week's allowance, with the cost id
-as the debit's unique key. The week's row is locked by its update, so two settlements of
-a person never spend the same pack tokens. `TokenStanding` reads the use live and gives
-the agent the route of the next request (BL-D4).
+standard one; essential calls (meetings), Leo's background work and live sessions — Leo's
+voice counts against the plan's minutes instead (ADR 0070 LV-D7) — are not counted (F6-D6,
+Leo §5.4). `TokenSettlement` runs in the cost row's own transaction, once per row: it adds
+the row's tokens to the Monday week and, for standard, the day — both of the business
+calendar (ADR 0058) — then debits packs for what the row used past the frontier week's
+allowance, with the cost id as the debit's unique key. The week's row is locked by its
+update, so two settlements of a person never spend the same pack tokens. `TokenStanding`
+reads the use live and gives the agent the route of the next request (BL-D4).
 """
 
 from collections.abc import Callable
@@ -109,6 +109,8 @@ class TokenSettlement:
         tier = TIER_OF_CLASS.get(cost.call_class)
         user_id = cost.user_id
         if tier is None or user_id is None or cost.origin != COUNTED_ORIGIN or cost.tokens <= 0:
+            return
+        if cost.live:
             return
         moment = cost.created_at
         week = week_of(moment, self._business)

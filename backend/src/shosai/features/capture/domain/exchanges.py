@@ -47,13 +47,14 @@ class Exchange:
 
     @property
     def answered(self) -> bool:
-        """Leo said something or called a tool: a turn's end closes the exchange."""
-        return bool(self.answer) or self.calls > 0
+        """Leo said something: a turn's end closes the exchange. Gemini ends a turn right after
+        a tool call too, before the tool answers; that one leaves the exchange open."""
+        return bool(self.answer)
 
     @property
     def empty(self) -> bool:
         """Nothing was said and no tool was called."""
-        return not self.question and not self.answered
+        return not self.question and not self.answer and not self.calls
 
     def hear(self, piece: str, at: datetime, *, final: bool) -> Phrase:
         """A piece of the person's speech; the phrase it belongs to."""

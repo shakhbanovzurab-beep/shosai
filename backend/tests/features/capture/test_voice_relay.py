@@ -51,7 +51,12 @@ async def test_a_question_a_read_and_a_spoken_answer_make_one_exchange() -> None
     relay, cabinet, gemini, talk = relay_of()
     running = asyncio.create_task(relay.run())
     await cabinet.inbox.put(SPEECH)
+    talk.gate.clear()
     await gemini.put(heard("What about the budget?"), LiveToolCall("c-1", "notes__search", "{}"))
+    # Gemini заканчивает ход сразу после вызова, до ответа инструмента.
+    await gemini.put(LiveTurnEnd())
+    await until(lambda: talk.calls)
+    talk.gate.set()
     await until(lambda: gemini.results)
     await gemini.put(said("Travel was cut."), LiveAudio(SPEECH, 24_000), LiveTurnEnd())
     await until(lambda: talk.exchanges)

@@ -9,8 +9,8 @@ counted, and the monitor of §16.4 shows it. A call on a latency budget — a Je
 (ADR 0069 DL-D2) — hands its row to the same task at once (`later`), so the home's
 transaction never sits on its caller's path.
 
-Minute rows of live sessions (F6-C5) are written in batches: one transaction per home and
-company claims every key of the batch at once, inserts the new rows with one statement and
+Minute rows of live sessions (F6-C5) are written in batches: one transaction per home, person
+and company claims every key of the batch at once, inserts the new rows with one statement and
 skips the keys already written, so a replayed flush writes nothing.
 """
 
@@ -137,12 +137,14 @@ class CostWriter:
         await self._marks.mark("repeated", ((entry.home, entry.created_at) for entry in entries))
 
     async def record_many(self, entries: Sequence[CostEntry]) -> None:
-        """Write rows in one transaction per home and company; defer a group whose home is down."""
+        """Write rows in one transaction per home, person and company; defer a home that is down."""
         groups: dict[TenancyScope, dict[str, CostEntry]] = {}
         doubles: list[CostEntry] = []
         for entry in entries:
             # Совпавший ключ в одной пачке — одна строка: первая побеждает, как и в реестре.
-            group = groups.setdefault(TenancyScope(entry.home, org_id=entry.org_id), {})
+            # Область — человека строки: расчёты пишут его строки под его row-level security.
+            scope = TenancyScope(entry.home, entry.user_id, entry.org_id)
+            group = groups.setdefault(scope, {})
             if group.setdefault(entry.effect_key, entry) is not entry:
                 doubles.append(entry)
         await self._repeated(doubles)
@@ -202,6 +204,7 @@ class CostWriter:
                 + entry.input_image_tokens
                 + entry.output_image_tokens
             ),
+            kind=entry.kind,
         )
         for settlement in self._settlements.all():
             await settlement.settle(session, settled)

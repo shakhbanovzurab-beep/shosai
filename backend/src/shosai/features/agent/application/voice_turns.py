@@ -3,8 +3,9 @@
 A conversation opens on the person's thread of a space, or on a new one, after the same
 checks as a text turn: the thread is theirs and in that space, the cross-border consent of the
 RU home, and voice mode switched on in Settings > Leo. The voice model gets the instruction in
-English with the answer language, and the tools a text turn on that page would offer, but for
-loading toolsets and opening pages, which a session fixed at its start cannot use. A tool call
+English with the answer language, and the page's tools from the same routing — but whole,
+within a wider budget, and without loading toolsets or opening pages: a session is fixed at
+its start and cannot load a toolset later. A tool call
 runs through the same round as a text turn's — reads under the access policy with their
 sources, a write as a card, never executed — and each exchange is recorded as a run of channel
 `voice`. An operator has no voice conversation: the admin panel's Leo is text only.
@@ -51,6 +52,9 @@ from shosai.features.identity.contracts import CONSENT_READER, Principal
 
 # Сессия голоса задаёт инструменты один раз: догрузка наборов и переход по страницам ей не подходят.
 FIXED_SESSION_SKIPS: Final = frozenset({LOAD_TOOLSET, NAVIGATE})
+# Догрузить набор голос не может, поэтому схемы приходят целиком: сегодня все наборы — ≈ 7 700
+# токенов; набор сверх бюджета остаётся без записей (найдено на Gemini Live, LEO-voice шаг 7).
+VOICE_TOOLS_CAP: Final = 12_000
 
 
 @dataclass(frozen=True, slots=True)
@@ -192,6 +196,6 @@ class AgentVoiceTurns:
             switches_on=tuple(s.value for s in Switch if preferences.switched_on(s)),
         )  # fmt: skip
         async with parts.transactions.begin(principal.scope(), read_only=True) as session:
-            offer = await parts.routing.offer(session, terms)
+            offer = await parts.routing.offer(session, terms, cap=VOICE_TOOLS_CAP)
         instruction = voice_instruction(language, fixed=preferences.response_language != AUTO)
         return VoiceTalk(parts, terms, offer, instruction, self._clock)

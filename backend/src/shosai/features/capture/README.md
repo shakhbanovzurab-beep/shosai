@@ -23,11 +23,11 @@ The relay (`channels/voice_relay.py`) runs the cabinet's frames (PCM16 16 kHz to
 | `interrupted` | the person spoke over Leo: the cabinet drops what it still plays |
 | `ended {code}` | `ended`, `idle` (2 min without speech), `time_limit` (30 min), `minutes_exhausted` (closes 4402), `voice_unavailable` (Gemini lost, 4503), `server_shutdown` (1012) |
 
-A tool call runs beside the loops through the agent (`VoiceConversation.call`); one Gemini cancels is cancelled; one the agent cannot answer gets a registered English error, so Gemini never waits. An exchange is recorded when Leo, having said something, ends its turn, or when the person interrupts it; what was said when the conversation ends is recorded as interrupted (`domain/exchanges.py`).
+A tool call runs beside the loops through the agent (`VoiceConversation.call`); Gemini ends its turn right after a call, before the tool answers, so that turn end closes nothing and the orb stays on thinking; one Gemini cancels is cancelled; one the agent cannot answer gets a registered English error, so Gemini never waits. An exchange is recorded when Leo, having said something, ends its turn, or when the person interrupts it; what was said when the conversation ends is recorded as interrupted (`domain/exchanges.py`).
 
 ## Minutes
 
-`capture_voice_sessions` (each home, personal by row-level security, monthly partitions keeping the current and the previous month): a row per conversation, its seconds written every minute and at the end with its end code. `VoiceMinutesCount` binds billing's `MEETING_MINUTES` beside notes' meetings, so voice minutes count against the plan's monthly minutes (BL-D3); every minute the conversation asks billing again and ends when none are left. The AI port meters the provider's cost minute by minute on its own (F6).
+`capture_voice_sessions` (each home, personal by row-level security, monthly partitions keeping the current and the previous month): a row per conversation, its seconds written every minute and at the end with its end code. `VoiceMinutesCount` binds billing's `MEETING_MINUTES` beside notes' meetings, so voice minutes count against the plan's monthly minutes (BL-D3); every minute the conversation asks billing again and ends when none are left. The AI port meters the provider's cost minute by minute on its own (F6): the rows are written in the person's scope, and billing does not count a live session's tokens against Leo's allowance — voice is paid in minutes only.
 
 ## Data, settings, metrics
 

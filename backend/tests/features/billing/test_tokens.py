@@ -140,7 +140,7 @@ async def test_the_standard_day_stops_with_its_reason_and_the_week_resets_on_the
     assert fresh.route is day_after.route is TokenRoute.WITHIN_ALLOWANCE
 
 
-async def test_meetings_background_work_and_last_week_s_rows_are_not_counted(
+async def test_meetings_background_work_voice_and_last_week_s_rows_are_not_counted(
     entitlements: EntitlementBench,
 ) -> None:
     person = await subscribed(entitlements, packs=0)
@@ -153,9 +153,29 @@ async def test_meetings_background_work_and_last_week_s_rows_are_not_counted(
     )
     await costs.write(row(person, now, 5000, call=("essential", "interactive")))
     await costs.write(row(person, now, 5000, call=("expensive", "background")))
+    # Голос Leo считается минутами тарифа, не токенами (ADR 0070 LV-D7).
+    await costs.record_many([row(person, now, 5000).model_copy(update={"kind": "voice"})])
     await costs.write(row(person, now, 10))
     await costs.write(row(person, MOSCOW.week_window(now)[0] - timedelta(hours=1), 5000))
 
     decision = await standing.decision(*person, ModelTier.FRONTIER)
 
     assert decision.route is TokenRoute.WITHIN_ALLOWANCE
+
+
+async def test_a_batch_of_a_person_s_rows_is_settled_under_their_row_level_security(
+    entitlements: EntitlementBench,
+) -> None:
+    person = await subscribed(entitlements, packs=0)
+    costs, now = writer(entitlements), entitlements.clock.now
+    standing = TokenStanding(
+        entitlements.homes.transactions,
+        entitlements.snapshots,
+        entitlements.clock,
+        business=MOSCOW,
+    )
+
+    await costs.record_many([row(person, now, 600), row(person, now, 600)])
+    decision = await standing.decision(*person, ModelTier.FRONTIER)
+
+    assert (decision.route, decision.reason) == (TokenRoute.FALL_BACK, TokenLimit.FRONTIER_WEEK)
