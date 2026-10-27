@@ -64,6 +64,7 @@ async def test_a_question_a_read_and_a_spoken_answer_make_one_exchange() -> None
 
     assert await running is VoiceEnd.ENDED
     assert (gemini.audio, cabinet.audio, gemini.results) == ([SPEECH], [SPEECH], [("c-1", FOUND)])
+    assert talk.heard == ["What about the budget?"]
     assert cabinet.kinds() == [
         "state:listening", "transcript:person", "state:thinking", "step:running", "step:done",
         "transcript:leo", "state:speaking", "state:listening",

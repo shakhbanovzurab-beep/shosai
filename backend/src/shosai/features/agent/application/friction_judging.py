@@ -58,7 +58,7 @@ class FrictionJudging:
         facts = FrictionFacts(
             tool=item.tool, toolset=item.tool.split(".", 1)[0],
             reversibility=Reversibility(item.reversibility), taint=work.taint, rule=rule,
-            question=await self._question(payload), card=self._card(item, payload.language),
+            question=await self._question(payload), card=self._cards.words(item, payload.language),
             items=len(item.targets), other_space=org_id != payload.scope().org_id,
             rounds=work.rounds_before + len(work.rounds), language=payload.language,
             scope=payload.scope(), cross_border_consent=payload.cross_border_consent,
@@ -79,14 +79,6 @@ class FrictionJudging:
 
     def _judges(self) -> Sequence[FrictionJudge]:
         return () if self._ports is None else self._ports.all(FRICTION_JUDGE)
-
-    def _card(self, item: ActionItem, language: str) -> str:
-        """The card's title and fields as the person will read them."""
-        rendered = self._cards.rendered(item, language)
-        lines = [rendered.title, *(f"{label}: {value}" for label, value in rendered.fields)]
-        if rendered.body:
-            lines.append(rendered.body)
-        return "\n".join(lines)
 
     async def _question(self, payload: TurnPayload) -> str:
         """The person's question of this turn."""

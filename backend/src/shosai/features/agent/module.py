@@ -64,6 +64,7 @@ from shosai.features.agent.application.tool_registry import ToolRegistry
 from shosai.features.agent.application.tool_round import ToolParts
 from shosai.features.agent.application.turn_commit import TurnParts
 from shosai.features.agent.application.turn_start import TurnStarter
+from shosai.features.agent.application.voice_approval import VoiceApproval
 from shosai.features.agent.application.voice_turns import AgentVoiceTurns, VoiceParts
 from shosai.features.agent.channels.agent_tools import CORE_TOOLS, core_tools
 from shosai.features.agent.channels.http.actions import build_actions_router
@@ -147,12 +148,16 @@ def action_gateway(
 
 
 def voice_turns(
-    services: CoreServices, threads: Threads, routing: TurnRouting, tools: ToolParts
+    services: CoreServices,
+    parts: tuple[Threads, TurnRouting, ToolParts, ActionCards, ActionDecisions],
 ) -> AgentVoiceTurns:
-    """Leo's voice conversations on the threads, the routing and the tools of text turns."""
+    """Leo's voice conversations on the threads, the routing and the tools of text turns, with
+    cards read back and approved by voice through the gateway."""
+    threads, routing, tools, cards, decisions = parts
     transactions, ports = services.transactions, services.ports
+    approval = VoiceApproval(transactions, ports, cards, decisions)
     return AgentVoiceTurns(
-        VoiceParts(transactions, ports, threads, routing, tools, services.outbox)
+        VoiceParts(transactions, ports, threads, routing, tools, services.outbox, approval)
     )
 
 
@@ -232,6 +237,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     care = ThreadCare(transactions, (services.ai, settings.utility_route()), ports)
     decisions, actions = action_gateway(services, cards, (run_log, frames), pages)
     feedback = Feedback((transactions, ports, threads), FeedbackMetrics(services.registry))
+    voice = voice_turns(services, (threads, routing, tools, cards, decisions))
     person, operator = person_mount(ports), operator_mount(ports)
     try:
         yield FeatureParts(
@@ -260,7 +266,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 ),
                 ME_CONTRIBUTIONS.bind(preferences),
                 SKILL_READER.bind(InstalledSkills()),
-                VOICE_TURNS.bind(voice_turns(services, threads, routing, tools)),
+                VOICE_TURNS.bind(voice),
             ),
         )
     finally:

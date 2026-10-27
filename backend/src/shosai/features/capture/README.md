@@ -23,7 +23,7 @@ The relay (`channels/voice_relay.py`) runs the cabinet's frames (PCM16 16 kHz to
 | `interrupted` | the person spoke over Leo: the cabinet drops what it still plays |
 | `ended {code}` | `ended`, `idle` (2 min without speech), `time_limit` (30 min), `minutes_exhausted` (closes 4402), `voice_unavailable` (Gemini lost, 4503), `server_shutdown` (1012) |
 
-A tool call runs beside the loops through the agent (`VoiceConversation.call`); Gemini ends its turn right after a call, before the tool answers, so that turn end closes nothing and the orb stays on thinking; one Gemini cancels is cancelled; one the agent cannot answer gets a registered English error, so Gemini never waits. An exchange is recorded when Leo, having said something, ends its turn, or when the person interrupts it; what was said when the conversation ends is recorded as interrupted (`domain/exchanges.py`).
+A tool call runs beside the loops through the agent (`VoiceConversation.call`), with the person's phrase of the exchange as the server transcribed it — what a spoken approval of a card rests on (the agent's step 8); Gemini ends its turn right after a call, before the tool answers, so that turn end closes nothing and the orb stays on thinking; one Gemini cancels is cancelled; one the agent cannot answer gets a registered English error, so Gemini never waits. An exchange is recorded when Leo, having said something, ends its turn, or when the person interrupts it; what was said when the conversation ends is recorded as interrupted (`domain/exchanges.py`).
 
 ## Minutes
 

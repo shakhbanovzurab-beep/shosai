@@ -175,7 +175,11 @@ class VoiceRelay:
 
     async def _answer(self, call: LiveToolCall) -> None:
         try:
-            result = await self._talk.call(call.call_id, call.name, call.arguments, self._events)
+            # Подтверждение голосом опирается на фразу человека, как её расшифровал сервер.
+            heard = self._exchange.question
+            result = await self._talk.call(
+                (call.call_id, call.name, call.arguments), self._events, heard=heard
+            )
         except Exception:
             log.exception("Инструмент голосового разговора не ответил", tool=call.name)
             result = TOOL_FAILED

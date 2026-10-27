@@ -105,6 +105,14 @@ class ActionCards:
             for record in records
         ]
 
+    def words(self, item: ActionItem, language: str) -> str:
+        """The card as the person reads it: the title, the labelled fields and the body."""
+        rendered = self.rendered(item, language)
+        lines = [rendered.title, *(f"{label}: {value}" for label, value in rendered.fields)]
+        if rendered.body:
+            lines.append(rendered.body)
+        return "\n".join(lines)
+
     def rendered(self, item: ActionItem, language: str) -> RenderedPreview:
         """The item's preview in the language; the tool's name when its slice has no words."""
         wording = self.wording(item.tool, item.preview_key)

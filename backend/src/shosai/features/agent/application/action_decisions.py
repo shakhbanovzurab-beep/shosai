@@ -113,9 +113,11 @@ class ActionDecisions:
         self._wait = wait
         self._judging = judging
 
-    async def approve(self, principal: Principal, action_id: UUID, nonce: str) -> Decided:
-        """Approve the card and wait a while for its outcome."""
-        record = await self._decide(principal, (action_id, nonce), ActionEvent.APPROVE)
+    async def approve(
+        self, principal: Principal, action_id: UUID, nonce: str, via: ApprovedVia = ApprovedVia.WEB
+    ) -> Decided:
+        """Approve the card where the person did and wait a while for its outcome."""
+        record = await self._decide(principal, (action_id, nonce), ActionEvent.APPROVE, via)
         self._metrics.approved((record.updated_at - record.created_at).total_seconds())
         if self._judging is not None:
             self._judging.ended(principal.home, record.id, record.status, approved=True)
@@ -132,14 +134,18 @@ class ActionDecisions:
         return Decided(await self._decide(principal, (action_id, nonce), ActionEvent.REJECT))
 
     async def _decide(
-        self, principal: Principal, card: tuple[UUID, str], event: ActionEvent
+        self,
+        principal: Principal,
+        card: tuple[UUID, str],
+        event: ActionEvent,
+        via: ApprovedVia = ApprovedVia.WEB,
     ) -> AgentActionRecord:
         action_id, nonce = card
         now = self._clock()
         async with self._transactions.begin(principal.scope()) as session:
             values: dict[str, object] = {"updated_at": now}
             if event is ActionEvent.APPROVE:
-                values |= {"approved_at": now, "approved_via": ApprovedVia.WEB.value}
+                values |= {"approved_at": now, "approved_via": via.value}
             record = await moved(
                 session, action_id, transition(ActionStatus.PROPOSED, event), values,
                 ACTION.user_id == principal.user_id, ACTION.nonce == nonce, ACTION.expires_at > now,
@@ -151,7 +157,7 @@ class ActionDecisions:
                 audited = (
                     AuditEvent.APPROVED if event is ActionEvent.APPROVE else AuditEvent.REJECTED
                 )
-                audit(session, record, AuditEntry(audited, via=ApprovedVia.WEB.value), now)
+                audit(session, record, AuditEntry(audited, via=via.value), now)
             settled = await self._paused.settle(session, ended) if ended is not None else None
         if ended is not None:
             self._metrics.decided(ended.origin, ended.status)

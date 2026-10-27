@@ -34,6 +34,7 @@ from shosai.features.agent.application.token_admission import standard_tokens
 from shosai.features.agent.application.tool_offer import TurnOffer, TurnRouting
 from shosai.features.agent.application.tool_round import ToolParts, ToolRound
 from shosai.features.agent.application.turn_task import TurnPayload
+from shosai.features.agent.application.voice_approval import ReadBack, VoiceApproval
 from shosai.features.agent.application.voice_emitter import VoiceEmitter
 from shosai.features.agent.application.voice_records import (
     VoiceRecord,
@@ -47,7 +48,12 @@ from shosai.features.agent.domain.preferences import AUTO, Switch, answer_langua
 from shosai.features.agent.domain.threads import ScopeKind, ThreadScope
 from shosai.features.agent.infrastructure.person_records import AgentSettingsRecord
 from shosai.features.agent.infrastructure.turn_graph import ModelAnswer
-from shosai.features.agent.infrastructure.voice_prompts import voice_instruction
+from shosai.features.agent.infrastructure.voice_prompts import (
+    CONFIRM_ACTION_ID,
+    CONFIRM_DESCRIPTION,
+    CONFIRM_TOOL,
+    voice_instruction,
+)
 from shosai.features.identity.contracts import CONSENT_READER, Principal
 
 # Сессия голоса задаёт инструменты один раз: догрузка наборов и переход по страницам ей не подходят.
@@ -55,6 +61,16 @@ FIXED_SESSION_SKIPS: Final = frozenset({LOAD_TOOLSET, NAVIGATE})
 # Догрузить набор голос не может, поэтому схемы приходят целиком: сегодня все наборы — ≈ 7 700
 # токенов; набор сверх бюджета остаётся без записей (найдено на Gemini Live, LEO-voice шаг 7).
 VOICE_TOOLS_CAP: Final = 12_000
+CONFIRM_SCHEMA: Final = ToolSchema(
+    CONFIRM_TOOL,
+    CONFIRM_DESCRIPTION,
+    {
+        "type": "object",
+        "properties": {"action_id": {"type": "string", "description": CONFIRM_ACTION_ID}},
+        "required": ["action_id"],
+        "additionalProperties": False,
+    },
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,6 +83,7 @@ class VoiceParts:
     routing: TurnRouting
     tools: ToolParts
     outbox: EventOutbox
+    approval: VoiceApproval
 
 
 @dataclass(slots=True)
@@ -83,6 +100,7 @@ class VoiceTalk:
     """An open conversation; `exchange` is the one in progress, if any."""
 
     parts: VoiceParts
+    person: Principal
     terms: TurnPayload
     offer: TurnOffer
     instruction: str
@@ -90,6 +108,8 @@ class VoiceTalk:
     exchange: Exchange | None = None
     # Вызовы и запись обмена идут по одному: строка прогона пишется один раз.
     turn: asyncio.Lock = field(default_factory=asyncio.Lock)
+    # Карточки, которые Leo прочёл вслух в этом разговоре: подтвердить голосом можно только их.
+    read: dict[UUID, ReadBack] = field(default_factory=dict)
 
     @property
     def thread_id(self) -> UUID:
@@ -103,13 +123,15 @@ class VoiceTalk:
 
     @property
     def tools(self) -> tuple[ToolSchema, ...]:
-        """The page's tools for the voice model, without the ones a fixed session cannot use."""
-        return tuple(
+        """The page's tools for the voice model, without the ones a fixed session cannot use,
+        and `core.confirm` while a judge of spoken approval is bound."""
+        offered = tuple(
             schema
             for schema in self.offer.schemas()
-            if (offered := self.offer.tool(schema.name)) is not None
-            and offered.spec.name not in FIXED_SESSION_SKIPS
+            if (tool := self.offer.tool(schema.name)) is not None
+            and tool.spec.name not in FIXED_SESSION_SKIPS
         )
+        return (*offered, CONFIRM_SCHEMA) if self.parts.approval.available else offered
 
     def current(self) -> Exchange:
         """The exchange in progress, begun now when there is none."""
@@ -123,8 +145,13 @@ class VoiceTalk:
             self.exchange = Exchange(payload, RunWork(offer=self.offer))
         return self.exchange
 
-    async def call(self, call_id: str, name: str, arguments: str, events: VoiceEvents) -> str:
-        """One tool call of the voice model, answered as a text turn's round answers it."""
+    async def call(self, call: tuple[str, str, str], events: VoiceEvents, *, heard: str) -> str:
+        """One tool call of the voice model, answered as a text turn's round answers it; a
+        card it made is read back, and `core.confirm` approves one by the person's words."""
+        call_id, name, arguments = call
+        if name == CONFIRM_TOOL:
+            read = self.read.get(action_of(arguments) or new_id())
+            return await self.parts.approval.confirm(self.person, self.terms, read, heard)
         async with self.turn:
             exchange = self.current()
             if not exchange.run_open:
@@ -136,11 +163,18 @@ class VoiceTalk:
             )  # fmt: skip
             work = exchange.work
             work.answers.append(answer)
+            cards = len(work.cards)
             run = (exchange.payload, work, VoiceEmitter(events))
             produced = await ToolRound(self.parts.tools, run).run(work.round_number, answer)
+            made = work.cards[cards:]
         replied = produced[-1].parts
-        content = replied[0].text if replied and isinstance(replied[0], TextPart) else ""
-        return json.dumps({"result": content}, ensure_ascii=False)
+        told: dict[str, object] = {
+            "result": replied[0].text if replied and isinstance(replied[0], TextPart) else ""
+        }
+        for action_id in made:
+            self.read[action_id] = await self.parts.approval.read_back(exchange.payload, action_id)
+            told["card"] = self.read[action_id].told()
+        return json.dumps(told, ensure_ascii=False)
 
     async def record(self, exchange: VoiceExchange) -> None:
         """Write the exchange to the thread and begin the next one fresh."""
@@ -149,6 +183,15 @@ class VoiceTalk:
             self.exchange = None
             record = VoiceRecord(current.payload, current.work, current.run_open)
             await record_exchange((self.parts.transactions, self.parts.outbox), record, exchange)
+
+
+def action_of(arguments: str) -> UUID | None:
+    """The card `core.confirm` names; None for arguments that name none."""
+    try:
+        named = json.loads(arguments).get("action_id")
+        return UUID(named) if isinstance(named, str) else None
+    except ValueError, AttributeError:
+        return None
 
 
 class AgentVoiceTurns:
@@ -198,4 +241,4 @@ class AgentVoiceTurns:
         async with parts.transactions.begin(principal.scope(), read_only=True) as session:
             offer = await parts.routing.offer(session, terms, cap=VOICE_TOOLS_CAP)
         instruction = voice_instruction(language, fixed=preferences.response_language != AUTO)
-        return VoiceTalk(parts, terms, offer, instruction, self._clock)
+        return VoiceTalk(parts, principal, terms, offer, instruction, self._clock)

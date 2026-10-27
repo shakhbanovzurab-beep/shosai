@@ -11,19 +11,16 @@ import uuid
 from datetime import UTC, datetime, timedelta
 
 import pytest
-from prometheus_client import CollectorRegistry
 
-from shosai.core.idempotency.ledger import EffectLedger
-from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
-from shosai.features.agent.application.threads import Threads
-from shosai.features.agent.application.voice_turns import AgentVoiceTurns, VoiceParts
 from shosai.features.agent.contracts.voice import VoiceExchange, VoiceStart
 from shosai.features.agent.infrastructure.person_records import AgentSettingsRecord
 from shosai.features.identity.contracts import Principal
+from tests.features.agent.action_bench import ActionBench
 from tests.features.agent.turn_bench import HOME, TurnBench
+from tests.features.agent.voice_doubles import Heard, agent_voices
 from tests.harness.connections import fetch_rows
 
 PLAIN = VoiceStart(workspace_id=None, thread_id=None, path=None, locale="en")
@@ -34,32 +31,6 @@ MESSAGES = (
 )
 
 
-class Heard:
-    """What a call told the conversation's socket."""
-
-    def __init__(self) -> None:
-        self.steps: list[tuple[str, str]] = []
-        self.cards: list[uuid.UUID] = []
-
-    async def step(self, activity: str, status: str) -> None:
-        """A step and its status."""
-        self.steps.append((activity, status))
-
-    async def proposed(self, action_id: uuid.UUID) -> None:
-        """A card."""
-        self.cards.append(action_id)
-
-
-def voices(bench: TurnBench) -> AgentVoiceTurns:
-    """The agent's voice turns over the bench's parts."""
-    transactions, ports = bench.homes.transactions, bench.ports
-    threads = Threads(transactions, (ports, EffectLedger(EffectKeyMetrics(CollectorRegistry()))))
-    parts = bench.parts
-    return AgentVoiceTurns(
-        VoiceParts(transactions, ports, threads, parts.routing, parts.tools, parts.outbox)
-    )
-
-
 def exchange(question: str, answer: str, *, interrupted: bool = False) -> VoiceExchange:
     """An exchange that took two seconds."""
     ended = datetime.now(UTC)
@@ -67,19 +38,21 @@ def exchange(question: str, answer: str, *, interrupted: bool = False) -> VoiceE
 
 
 async def test_a_read_answers_the_voice_model_and_the_exchange_lands_in_a_new_thread(
-    turn_bench: TurnBench,
+    turn_bench: TurnBench, action_bench: ActionBench
 ) -> None:
     person = uuid.uuid4()
-    talk = await voices(turn_bench).open(Principal(person, HOME, 0), PLAIN)
+    talk = await agent_voices(action_bench).open(Principal(person, HOME, 0), PLAIN)
     heard = Heard()
 
-    answer = await talk.call("c-1", "notes__search", '{"query": "budget"}', heard)
+    read = ("c-1", "notes__search", '{"query": "budget"}')
+    answer = await talk.call(read, heard, heard="What about the budget?")
     await talk.record(exchange("What about the budget?", "Travel was cut by a fifth."))
 
     names = {tool.name for tool in talk.tools}
     # Догрузить набор голос не может: и большой `archive` приходит сразу, целиком.
     assert {"notes__search", "tasks__create", "archive__search"} <= names
-    assert not names & {"core__load_toolset", "core__navigate"}
+    # Без судьи голосового одобрения инструмента подтверждения нет.
+    assert not names & {"core__load_toolset", "core__navigate", "core__confirm"}
     assert "Budget review" in json.loads(answer)["result"]
     assert "Speak in the language the person speaks" in talk.instruction
     assert talk.cross_border_consent is False
@@ -97,20 +70,24 @@ async def test_a_read_answers_the_voice_model_and_the_exchange_lands_in_a_new_th
 
 
 async def test_a_write_becomes_a_card_that_never_runs_and_an_interruption_is_stopped(
-    turn_bench: TurnBench,
+    turn_bench: TurnBench, action_bench: ActionBench
 ) -> None:
     person = uuid.uuid4()
     thread = uuid.UUID(await turn_bench.thread(person))
     start = VoiceStart(workspace_id=None, thread_id=thread, path=None, locale="en")
-    talk = await voices(turn_bench).open(Principal(person, HOME, 0), start)
+    talk = await agent_voices(action_bench).open(Principal(person, HOME, 0), start)
     heard = Heard()
 
-    await talk.call("c-1", "tasks__create", '{"query": "Call Anna"}', heard)
+    write = ("c-1", "tasks__create", '{"query": "Call Anna"}')
+    told = json.loads(await talk.call(write, heard, heard="Remind me to call Anna."))
     await talk.record(exchange("Remind me to call Anna.", "It is ready to", interrupted=True))
     await talk.record(exchange("", ""))
 
     assert talk.thread_id == thread
     assert len(heard.cards) == 1
+    # Без судьи карточку одобряют только на экране, и Leo говорит об этом.
+    assert told["card"]["action_id"] == str(heard.cards[0])
+    assert "only be approved there" in told["card"]["next"]
     assert turn_bench.tools.executed == []
     messages = await fetch_rows(turn_bench.connection, MESSAGES, (thread,))
     assert [(m["role"], m["status"]) for m in messages] == [
@@ -122,11 +99,11 @@ async def test_a_write_becomes_a_card_that_never_runs_and_an_interruption_is_sto
 
 
 async def test_voice_is_refused_when_switched_off_without_consent_or_in_another_space(
-    turn_bench: TurnBench,
+    turn_bench: TurnBench, action_bench: ActionBench
 ) -> None:
     person, stranger = uuid.uuid4(), uuid.uuid4()
     thread = uuid.UUID(await turn_bench.thread(person))
-    turns = voices(turn_bench)
+    turns = agent_voices(action_bench)
     elsewhere = VoiceStart(workspace_id=uuid.uuid4(), thread_id=thread, path=None, locale="en")
     theirs = VoiceStart(workspace_id=None, thread_id=thread, path=None, locale="en")
 

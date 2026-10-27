@@ -15,17 +15,12 @@ from websockets.typing import Origin
 
 from shosai.core.ai.adapters.gemini_live import GeminiLive, gemini_client
 from shosai.core.ai.calls import ModelRef, Provider
-from shosai.core.idempotency.ledger import EffectLedger
-from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.kernel.homes import Home
 from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.metrics import KeyValueMetrics
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.runtime.servers import HttpServer, server_config
 from shosai.core.web.sockets import SocketGateway, SocketMetrics
-from shosai.features.agent.application.threads import Threads
-from shosai.features.agent.application.voice_turns import AgentVoiceTurns
-from shosai.features.agent.application.voice_turns import VoiceParts as AgentVoiceParts
 from shosai.features.agent.contracts.voice import VOICE_TURNS
 from shosai.features.billing.contracts import MINUTES_ALLOWANCE, MinutesExhaustedError
 from shosai.features.billing.domain.meters import MinutesLeft
@@ -36,7 +31,9 @@ from shosai.features.capture.infrastructure.voice_metrics import VoiceMetrics
 from shosai.features.identity.contracts import AUTHENTICATOR
 from tests.core.ai.bench import Doubles, ai_bench, set_prices
 from tests.doubles.live_server import LiveServer, client_tls, live_server
+from tests.features.agent.action_bench import ActionBench
 from tests.features.agent.turn_bench import TurnBench
+from tests.features.agent.voice_doubles import agent_voices
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.features.capture.voice_scenario import budget_question
 from tests.harness.process_environ import LOOPBACK, loopback_socket
@@ -91,18 +88,10 @@ def hello(person: uuid.UUID, **fields: object) -> dict[str, object]:
     return frame | fields
 
 
-def agent_voices(turn: TurnBench) -> AgentVoiceTurns:
-    """The agent's voice turns over the turn bench."""
-    transactions, ports = turn.homes.transactions, turn.ports
-    threads = Threads(transactions, (ports, EffectLedger(EffectKeyMetrics(CollectorRegistry()))))
-    parts = turn.parts
-    return AgentVoiceTurns(
-        AgentVoiceParts(transactions, ports, threads, parts.routing, parts.tools, parts.outbox)
-    )
-
-
 @pytest_asyncio.fixture
-async def voice_bench(turn_bench: TurnBench) -> AsyncIterator[VoiceBench]:
+async def voice_bench(
+    turn_bench: TurnBench, action_bench: ActionBench
+) -> AsyncIterator[VoiceBench]:
     """The route over the turn bench, with Gemini playing the budget question."""
     transactions = turn_bench.homes.transactions
     await set_prices(
@@ -114,7 +103,7 @@ async def voice_bench(turn_bench: TurnBench) -> AsyncIterator[VoiceBench]:
     ports.install(
         [
             AUTHENTICATOR.bind(BearerOfTheTest()),
-            VOICE_TURNS.bind(agent_voices(turn_bench)),
+            VOICE_TURNS.bind(agent_voices(action_bench)),
             MINUTES_ALLOWANCE.bind(allowance),
         ]
     )

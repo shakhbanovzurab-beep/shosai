@@ -40,7 +40,7 @@ ACTION_STATUSES: Final = (
     "'outcome_unknown', 'rejected', 'expired', 'superseded'"
 )
 ORIGINS: Final = "'turn', 'proposal_port'"
-VIAS: Final = "'web', 'inbox'"
+VIAS: Final = "'web', 'inbox', 'voice'"
 AUDIT_EVENTS: Final = ", ".join(f"'{event.value}'" for event in AuditEvent)
 CODE_FORM: Final = "~ '^[a-z0-9_.:-]{1,64}$'"
 

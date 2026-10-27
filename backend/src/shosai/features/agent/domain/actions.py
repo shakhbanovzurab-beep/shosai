@@ -151,6 +151,8 @@ class ApprovedVia(StrEnum):
 
     WEB = "web"
     INBOX = "inbox"
+    # Карточка, прочитанная вслух в голосовом разговоре и одобренная словами (Leo §8.4, Q-6).
+    VOICE = "voice"
 
 
 class PublicStatus(StrEnum):

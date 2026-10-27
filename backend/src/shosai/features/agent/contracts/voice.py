@@ -7,7 +7,9 @@ become cards for the screen. Each tool call the voice model makes runs through t
 text turn's would, under the same access policy, and tells `capture` its steps and cards. Each
 exchange — the person's phrase and Leo's answer, from the session's transcripts — is written
 to the thread as a question and an answer with a run of channel `voice`, the run's sources and
-cards with them; a completed exchange is told through the outbox like a text turn.
+cards with them; a completed exchange is told through the outbox like a text turn. A card read
+back may be approved by voice when the person's phrase, as the server heard it, is judged a
+clear yes (`VOICE_APPROVAL_JUDGE`, Leo §8.4).
 """
 
 from dataclasses import dataclass
@@ -16,6 +18,7 @@ from typing import Final, Protocol
 from uuid import UUID
 
 from shosai.core.ai.requests import ToolSchema
+from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.keys import PortKey
 from shosai.features.identity.contracts import Principal
 
@@ -78,8 +81,10 @@ class VoiceConversation(Protocol):
         """The tools offered to the voice model, by their wire names."""
         ...
 
-    async def call(self, call_id: str, name: str, arguments: str, events: VoiceEvents) -> str:
-        """The tool's answer for the model, a JSON object; a refusal is an answer too."""
+    async def call(self, call: tuple[str, str, str], events: VoiceEvents, *, heard: str) -> str:
+        """The tool's answer for the model, a JSON object; a refusal is an answer too. `call`
+        is the call's id, the tool's wire name and its JSON arguments; `heard` is the person's
+        phrase of the exchange as the server transcribed it — what a spoken approval rests on."""
         ...
 
     async def record(self, exchange: VoiceExchange) -> None:
@@ -97,4 +102,28 @@ class VoiceTurns(Protocol):
         ...
 
 
+@dataclass(frozen=True, slots=True)
+class VoiceApprovalFacts:
+    """What a judge of a spoken approval reads: the card as Leo read it back, what the person
+    said after it as the server heard it, and whom the judgement is for (Leo §8.4)."""
+
+    read_back: str
+    utterance: str
+    language: str
+    scope: TenancyScope
+    cross_border_consent: bool
+    action_id: UUID
+
+
+class VoiceApprovalJudge(Protocol):
+    """Judges whether the person's words approve the action just read back (decisions'
+    `voice.approval`, calibrated in the platform's 16 languages). Without one bound, nothing
+    is approved by voice: the card waits on the screen."""
+
+    async def approved(self, facts: VoiceApprovalFacts) -> bool | None:
+        """True only for a clear approval of that action; None when the judge cannot say."""
+        ...
+
+
 VOICE_TURNS: Final = PortKey[VoiceTurns]("agent.voice_turns")
+VOICE_APPROVAL_JUDGE: Final = PortKey[VoiceApprovalJudge]("agent.voice_approval_judge")

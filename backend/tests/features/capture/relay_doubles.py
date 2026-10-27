@@ -87,15 +87,18 @@ class Talk:
     gate: asyncio.Event = field(default_factory=asyncio.Event)
     fail: bool = False
     calls: list[str] = field(default_factory=list)
+    # Фраза человека, с которой пришёл каждый вызов.
+    heard: list[str] = field(default_factory=list)
     exchanges: list[VoiceExchange] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.gate.set()
 
-    async def call(self, call_id: str, name: str, arguments: str, events: VoiceEvents) -> str:
+    async def call(self, call: tuple[str, str, str], events: VoiceEvents, *, heard: str) -> str:
         """A step, the gate, then the result or a card."""
-        del call_id, arguments
+        _, name, _ = call
         self.calls.append(name)
+        self.heard.append(heard)
         await events.step(name, "running")
         await self.gate.wait()
         if self.fail:
