@@ -56,8 +56,11 @@ def openai_scenario(
     return run
 
 
-def gemini_scenario(*, tool_call: bool = False, drop: bool = False) -> Scenario:
-    """A Live session: every audio piece is answered with texts, speech and usage."""
+def gemini_scenario(
+    *, tool_call: bool = False, drop: bool = False, interrupted: bool = False
+) -> Scenario:
+    """A Live session: every audio piece is answered with texts, speech and usage; with
+    `interrupted`, the person speaks over the model and it drops its pending tool call."""
 
     async def run(connection: ServerConnection, server: LiveServer) -> None:
         await server.receive(connection)
@@ -68,6 +71,9 @@ def gemini_scenario(*, tool_call: bool = False, drop: bool = False) -> Scenario:
                 # Gemini принимает ключи и в camelCase, и в snake_case; SDK шлёт snake_case.
                 streamed = message.get("realtimeInput") or message.get("realtime_input") or {}
                 if "audio" not in streamed:
+                    continue
+                if interrupted:
+                    await interruption(connection)
                     continue
                 await answer(connection, tool_call=tool_call)
                 if drop:
@@ -97,6 +103,17 @@ async def answer(connection: ServerConnection, *, tool_call: bool) -> None:
                                       {"modality": "TEXT", "tokenCount": 10}],
         },
     })  # fmt: skip
+
+
+async def interruption(connection: ServerConnection) -> None:
+    """The model starts speaking and calling a tool, the person speaks over it."""
+    await send(connection, {"serverContent": {"modelTurn": {"parts": [
+        {"inlineData": {"mimeType": "audio/pcm;rate=24000", "data": SPOKEN}}]}}})  # fmt: skip
+    await send(connection, {"toolCall": {"functionCalls": [
+        {"id": "call-1", "name": "consult", "args": {}}]}})  # fmt: skip
+    await send(connection, {"serverContent": {"interrupted": True}})
+    await send(connection, {"toolCallCancellation": {"ids": ["call-1"]}})
+    await send(connection, {"serverContent": {"turnComplete": True}})
 
 
 @dataclass

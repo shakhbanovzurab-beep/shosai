@@ -20,8 +20,11 @@ from shosai.core.ai.results import (
     LiveChannel,
     LiveEnd,
     LiveEvent,
+    LiveInterrupted,
     LiveText,
     LiveToolCall,
+    LiveToolsCancelled,
+    LiveTurnEnd,
 )
 from shosai.core.kernel.homes import Home
 from tests.core.ai.bench import AiBench, Doubles, ai_bench, context, set_prices
@@ -219,6 +222,27 @@ async def test_a_voice_session_hands_tool_calls_over_and_returns_their_results(
     assert sent["systemInstruction"]["parts"] == [{"text": "You are a careful assistant."}]
     assert sent["tools"][0]["functionDeclarations"][0]["name"] == "consult"
     assert response["functionResponses"][0]["id"] == "call-1"
+
+
+async def test_a_voice_session_says_when_the_model_ends_its_turn_or_is_interrupted(
+    homes: DatabaseAccess,
+) -> None:
+    setup = VoiceSetup("You are a careful assistant.", "Charon")
+    async with live_server(gemini_scenario(interrupted=True)) as server:
+        bench = await speaking(homes, server)
+        async with bench.providers.open_voice_session(context(), VOICE, setup) as session:
+            reader = Reader().start(session)
+            await session.send_audio(SECOND_AT_16K)
+            await reader.until(lambda events: any(isinstance(e, LiveTurnEnd) for e in events))
+        events = await reader.finished()
+
+    kinds = [type(event) for event in events]
+    assert kinds[:5] == [LiveAudio, LiveToolCall, LiveInterrupted, LiveToolsCancelled, LiveTurnEnd]
+    assert next(e for e in events if isinstance(e, LiveToolsCancelled)).call_ids == ("call-1",)
+    [sent] = server.keyed("setup")
+    # SDK пишет вложенные поля настройки голоса в snake_case.
+    speech = sent["generationConfig"]["speechConfig"]
+    assert speech == {"voice_config": {"prebuilt_voice_config": {"voice_name": "Charon"}}}
 
 
 async def test_a_broken_live_session_is_billed_at_its_audio_floor(

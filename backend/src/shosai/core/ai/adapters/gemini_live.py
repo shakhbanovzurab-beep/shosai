@@ -11,6 +11,8 @@ Google's documentation (Live API, live translate guide and pricing, read on 2026
   voice, waiting for the speaker's pause, and calls tools
 - `usageMetadata` counts tokens per modality; audio is counted at 25 tokens per second
 - `receive()` of the client ends after each turn and is called again for the next one
+- `serverContent.turnComplete` ends the model's turn; `serverContent.interrupted` says the
+  person spoke over it; `toolCallCancellation.ids` names the calls it stopped waiting for
 """
 
 import json
@@ -33,8 +35,11 @@ from shosai.core.ai.results import (
     LiveChannel,
     LiveEnd,
     LiveEvent,
+    LiveInterrupted,
     LiveText,
     LiveToolCall,
+    LiveToolsCancelled,
+    LiveTurnEnd,
     LiveUsage,
     Usage,
 )
@@ -145,10 +150,17 @@ def tool_calls_of(call: types.LiveServerToolCall) -> list[LiveEvent | LiveUsage]
 def events_of(message: types.LiveServerMessage) -> list[LiveEvent | LiveUsage]:
     """What one server message means for the session."""
     found: list[LiveEvent | LiveUsage] = []
-    if message.server_content is not None:
-        found += texts_of(message.server_content) + speech_of(message.server_content)
+    content = message.server_content
+    if content is not None:
+        found += texts_of(content) + speech_of(content)
+        if content.interrupted:
+            found.append(LiveInterrupted())
+        if content.turn_complete:
+            found.append(LiveTurnEnd())
     if message.tool_call is not None:
         found += tool_calls_of(message.tool_call)
+    if message.tool_call_cancellation is not None:
+        found.append(LiveToolsCancelled(tuple(message.tool_call_cancellation.ids or ())))
     if message.usage_metadata is not None:
         found.append(LiveUsage(usage_of(message.usage_metadata)))
     if message.go_away is not None:

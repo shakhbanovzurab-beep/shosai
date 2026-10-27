@@ -191,6 +191,24 @@ class LiveToolCall:
 
 
 @dataclass(frozen=True, slots=True)
+class LiveTurnEnd:
+    """The model finished its turn: all it says to the person's last phrase has been sent."""
+
+
+@dataclass(frozen=True, slots=True)
+class LiveInterrupted:
+    """The person spoke over the model: what it was saying is void, and a client drops
+    the speech it still has buffered."""
+
+
+@dataclass(frozen=True, slots=True)
+class LiveToolsCancelled:
+    """The model no longer waits for these tool calls: the person interrupted it."""
+
+    call_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class LiveUsage:
     """Usage the provider reported during a session; the port meters it, callers never see it."""
 
@@ -204,4 +222,12 @@ class LiveEnd:
     failure: AiFailure | None
 
 
-type LiveEvent = LiveText | LiveAudio | LiveToolCall | LiveEnd
+type LiveEvent = (
+    LiveText
+    | LiveAudio
+    | LiveToolCall
+    | LiveTurnEnd
+    | LiveInterrupted
+    | LiveToolsCancelled
+    | LiveEnd
+)
