@@ -30,14 +30,6 @@ def test_a_language_short_of_cases_fails_its_count() -> None:
     assert "count:ja:wide:yes" in report.failures
 
 
-def test_answers_that_overstate_fail_the_calibration_error() -> None:
-    synthetic, reference = friction_sets(lean=0.3)
-
-    report = calibrated(ACTION_FRICTION, synthetic, reference, SUPPORTED_LANGUAGES)
-
-    assert {"ece:matches", "ece:wide"} <= set(report.failures)
-
-
 def test_the_machine_disagreeing_with_the_person_fails_the_reference() -> None:
     synthetic, reference = friction_sets()
     flipped = [

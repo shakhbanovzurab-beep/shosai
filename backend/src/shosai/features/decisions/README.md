@@ -73,6 +73,12 @@ Leo's Decision Layer: the judgement calls the rest of Leo must not make by hand 
 - `action.friction`: reference accuracy 0.93–0.95 and its careful outcome 0.91–0.93 pass; expected calibration error 0.114 and 0.065 and the labeller's agreement 0.73 fail.
 - `turn.route`: accuracy 0.70–0.83 per language and 0.73–0.79 on the reference, under the 0.8 floor; expected calibration error 0.16.
 
+## A calibration curve per version (the owner's decision, 2026-10-27)
+
+- Each cut carries a curve (`Cut.curve`): the isotonic regression of the truth on Jev's probability, fitted per policy version on the synthetic set (`domain/calibration.py` `fit_curve`) and stored with the edges (`cuts_json`; a revision without one reads probabilities as they are). The engine and the gates read every probability through it (`domain/verdicts.py` `read`); the edges are fitted on calibrated probabilities.
+- The 0.05 gate is measured through curves fitted without the case, five folds (`cross_fitted`); `ece_raw` in the report keeps Jev's own error.
+- Runs from the recorded answers, no call: expected calibration error 0.002–0.007 on every point. `content.injection` passes every gate (accuracy 0.99–1.00, reference 0.97–0.99). `action.friction` fails only the dataset labeller's agreement with the reference (0.73; Jev's reference accuracy 0.95–0.97). `voice.approval` fails only its careful outcome in English (0.967: "Yeah, go..."). `turn.route` fails its accuracy floor (0.73–0.83, reference 0.73–0.79).
+
 ## Monitors and tickets (step 8a)
 
 - `objectives.py`: the invariant monitor `decision_unsafe_outcome` pages on any outcome less careful than its rule (the engine has already kept the rule's); three tickets on `shosai_decision_requests_total` — decisions refused with `not_zdr` (Jev's endpoint off the zero-retention list or its status unread for three days, 1 %), Jev past the deadline (5 % of asked decisions) and the rule standing in for a fifth of consulted decisions (over three days). The journey «Решения Leo» tracks the time a caller waited, per point; `composition/decisions_dashboard.py` shows who decides, the fallbacks' reasons, late answers and lost records. Runbook: `docs/runbooks/alerts.md#decision-unsafe-outcome` and the SLO section's paragraph on `leo_decisions`.

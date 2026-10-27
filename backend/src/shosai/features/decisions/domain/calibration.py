@@ -6,8 +6,11 @@ edge between that side and the other: that edge is placed exactly where the fit 
 and the unsure band (twice the margin wide) falls on the joined side. The fit takes the
 boundary that keeps the most cases on the aimed side while its precision holds.
 
+Jev's probabilities are first read through a curve: the isotonic regression of the truth on
+them, fitted per policy version on the synthetic set (the owner's decision of 2026-10-27).
 Expected calibration error (ECE) compares stated probabilities with observed frequencies,
-in equal-width bins weighted by their size; the gate is ECE ≤ 0.05 (§6.4).
+in equal-width bins weighted by their size; the gate is ECE ≤ 0.05 (§6.4), on probabilities
+read through curves fitted without the case — five folds — so a curve never grades itself.
 """
 
 import math
@@ -15,10 +18,12 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Final
 
-from shosai.features.decisions.domain.verdicts import MAX_MARGIN, Cut, Verdict
+from shosai.features.decisions.domain.verdicts import MAX_MARGIN, Curve, Cut, Verdict, on_curve
 
 ECE_BINS: Final = 10
 ECE_GATE: Final = 0.05
+# Сколько частей у перекрёстной подгонки кривой: каждая проверяется кривой, её не видевшей.
+CROSS_FOLDS: Final = 5
 
 type Labelled = tuple[float, bool]
 
@@ -107,6 +112,43 @@ def no_boundary(cases: Sequence[Labelled], precision: float) -> float | None:
             # число над ней: без деления, которое на крохотных числах округлится вниз.
             best = following if following is not None else math.nextafter(chance, 1.0)
     return best
+
+
+def fit_curve(cases: Sequence[Labelled]) -> Curve:
+    """The isotonic regression of truth on Jev's probability (pool adjacent violators): the
+    knots of a non-decreasing map, flat across each pooled block and straight between."""
+    grouped: dict[float, list[float]] = {}
+    for chance, label in cases:
+        group = grouped.setdefault(chance, [0.0, 0.0])
+        group[0] += label
+        group[1] += 1
+    # Блок: [нижняя вероятность, верхняя, сумма меток, число случаев].
+    blocks: list[list[float]] = []
+    for chance in sorted(grouped):
+        blocks.append([chance, chance, *grouped[chance]])
+        while len(blocks) > 1 and share(blocks[-2]) >= share(blocks[-1]):
+            pooled, last = blocks[-2], blocks.pop()
+            pooled[1], pooled[2], pooled[3] = last[1], pooled[2] + last[2], pooled[3] + last[3]
+    knots: list[tuple[float, float]] = []
+    for block in blocks:
+        low, high, value = block[0], block[1], share(block)
+        knots += [(low, value)] + ([(high, value)] if high > low else [])
+    return tuple(knots)
+
+
+def share(block: Sequence[float]) -> float:
+    """The share of true cases in a block."""
+    return block[2] / block[3]
+
+
+def cross_fitted(cases: Sequence[Labelled], folds: int = CROSS_FOLDS) -> list[Labelled]:
+    """Every case read through a curve fitted without it, fold by fold, so the calibration
+    error is measured on cases the curve never saw."""
+    read: list[Labelled] = []
+    for fold in range(folds):
+        curve = fit_curve([case for i, case in enumerate(cases) if i % folds != fold])
+        read += [(on_curve(curve, p), t) for i, (p, t) in enumerate(cases) if i % folds == fold]
+    return read
 
 
 def expected_calibration_error(cases: Sequence[Labelled], bins: int = ECE_BINS) -> float:

@@ -98,3 +98,14 @@ Consequences:
 
 - the `agreement` gate compares the dataset labeller with model annotators, not with a person; the owner's audit is the human check, and it bounds the reference's error through its sample;
 - the same day the briefs' rotations were fixed (`turn.route` never needed five tool sets, `content.injection` never hid an instruction in mail, speech or someone else's file); the synthetic sets were topped up and each of the two references got 20 more drafts per language, so they cover what the old rotation never wrote.
+
+## Amendment: a calibration curve per policy version (the owner's, 2026-10-27)
+
+Jev's stated probabilities did not match its observed frequencies on three points (expected calibration error 0.054 for `voice.approval`, 0.114 for `action.friction`, 0.158 for `turn.route`, against Leo §6.4's 0.05), while it separated the cases well. The owner chose the standard correction over a looser gate:
+
+- each cut carries a curve: the isotonic regression of the truth on Jev's probability (pool adjacent violators), fitted per policy version on its synthetic set and stored with the cut's edges; a revision from before curves reads probabilities as they are;
+- the engine and the gates read every probability through its cut's curve; the edges are fitted on the calibrated probabilities;
+- the 0.05 gate stays, measured through curves fitted without the case (five folds), so a curve never grades itself; the raw error is reported beside it;
+- the curve is fitted on recorded answers: it costs no call.
+
+The first runs with curves: expected calibration error 0.002–0.007 on every point; `content.injection` still passes every gate; `action.friction` now fails only the dataset labeller's agreement with the reference (0.73); `voice.approval` only its careful outcome in English (one case, "Yeah, go..."); `turn.route` its accuracy floor.

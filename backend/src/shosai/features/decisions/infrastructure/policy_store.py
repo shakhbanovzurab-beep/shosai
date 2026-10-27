@@ -6,6 +6,7 @@ in force, so its point runs its rule.
 """
 
 from collections.abc import Mapping, Sequence
+from typing import Any
 
 import structlog
 from sqlalchemy import and_, select
@@ -16,7 +17,7 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.decisions.application.in_force import PoliciesUnreadableError, StoredPolicy
-from shosai.features.decisions.domain.verdicts import Cut
+from shosai.features.decisions.domain.verdicts import Curve, Cut
 from shosai.features.decisions.infrastructure.records import PolicyStateRow, ThresholdRevisionRow
 
 POLICY = PolicyStateRow
@@ -76,16 +77,30 @@ def parsed_cuts(raw: object) -> dict[str, Cut] | None:
 
 
 def parsed_cut(edges: object) -> Cut | None:
-    """One cut's edges, or None."""
+    """One cut's edges and its curve, or None; a revision from before curves has none."""
     if not isinstance(edges, dict):
         return None
     lower, upper = number(edges.get("lower")), number(edges.get("upper"))
-    if lower is None or upper is None:
+    curve = parsed_curve(edges.get("curve", []))
+    if lower is None or upper is None or curve is None:
         return None
     try:
-        return Cut(lower=lower, upper=upper)
+        return Cut(lower=lower, upper=upper, curve=curve)
     except ValueError:
         return None
+
+
+def parsed_curve(raw: object) -> Curve | None:
+    """`[[probability, calibrated], …]` as a curve's knots; None when anything is off."""
+    if not isinstance(raw, list):
+        return None
+    knots: list[tuple[float, float]] = []
+    for knot in raw:
+        pair = [number(value) for value in knot] if isinstance(knot, list) else []
+        if len(pair) != 2 or pair[0] is None or pair[1] is None:
+            return None
+        knots.append((pair[0], pair[1]))
+    return tuple(knots)
 
 
 def number(raw: object) -> float | None:
@@ -95,6 +110,9 @@ def number(raw: object) -> float | None:
     return float(raw)
 
 
-def cuts_json(cuts: Mapping[str, Cut]) -> dict[str, dict[str, float]]:
-    """Cuts as a revision stores them."""
-    return {name: {"lower": cut.lower, "upper": cut.upper} for name, cut in cuts.items()}
+def cuts_json(cuts: Mapping[str, Cut]) -> dict[str, dict[str, Any]]:
+    """Cuts as a revision stores them: the edges and the curve's knots."""
+    return {
+        name: {"lower": cut.lower, "upper": cut.upper, "curve": [list(knot) for knot in cut.curve]}
+        for name, cut in cuts.items()
+    }

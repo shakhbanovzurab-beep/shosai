@@ -1,11 +1,12 @@
 """Whether a policy version may be released: its gates on synthetic and reference cases
 (Leo §6.4, ADR 0069 DL-D8).
 
-Cuts are fitted on the synthetic cases of all languages. A release then needs, on the
-synthetic set:
+A cut's curve and then its edges are fitted on the synthetic cases of all languages. A
+release then needs, on the synthetic set:
 
 - at least 50 cases on each side of each cut in each of the 16 languages,
-- an expected calibration error of at most 0.05 per cut,
+- an expected calibration error of at most 0.05 per cut, measured through curves fitted
+  without the case (the raw error is reported beside it),
 - an accuracy of the judged outcome at least the policy's floor in every language,
 
 and on the reference set, labelled blind (`datasets/REFERENCE_LABELLING.md`):
@@ -22,19 +23,21 @@ A failed gate is named by a short code; the report keeps numbers only.
 
 from collections import Counter, defaultdict
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any, Final
 
 from shosai.core.ai.decisions import Answer
 from shosai.features.decisions.domain.calibration import (
     ECE_GATE,
     accuracy,
+    cross_fitted,
     expected_calibration_error,
+    fit_curve,
     fit_cut,
 )
 from shosai.features.decisions.domain.examples import Case, expected, truth
 from shosai.features.decisions.domain.policy import Policy
-from shosai.features.decisions.domain.verdicts import Cut, probability, read
+from shosai.features.decisions.domain.verdicts import Cut, on_curve, probability, read
 
 SIDE_MINIMUM: Final = 50
 REFERENCE_MINIMUM: Final = 50
@@ -77,14 +80,20 @@ def calibrated(
     pairs = labelled_pairs(policy, synthetic)
     cuts: dict[str, Cut] = {}
     for name in policy.cuts:
-        cut = fit_cut(pairs[name], policy.aims.cuts[name], policy.aims.margin)
+        curve = fit_curve(pairs[name])
+        through = [(on_curve(curve, chance), label) for chance, label in pairs[name]]
+        cut = fit_cut(through, policy.aims.cuts[name], policy.aims.margin)
         if cut is None:
             failures.append(f"fit:{name}")
         else:
-            cuts[name] = cut
+            cuts[name] = replace(cut, curve=curve)
     failures += side_counts(policy, synthetic, languages, numbers)
-    numbers["ece"] = {
+    numbers["ece_raw"] = {
         name: round(expected_calibration_error(pairs[name]), 4) for name in policy.cuts
+    }
+    numbers["ece"] = {
+        name: round(expected_calibration_error(cross_fitted(pairs[name])), 4)
+        for name in policy.cuts
     }
     failures += [f"ece:{name}" for name, ece in numbers["ece"].items() if ece > ECE_GATE]
     if len(cuts) == len(policy.cuts):
