@@ -129,7 +129,7 @@ Memory's tables (revision `e8bc01bd5bb4`, ADR 0071 MM-D6) need pgvector 0.5 or l
 CREATE EXTENSION IF NOT EXISTS vector;
 ```
 
-Check, as the migrator: `SELECT extversion FROM pg_extension WHERE extname = 'vector';` returns a version, and `SELECT '[1,2]'::halfvec(2);` succeeds. Then release the commit again ([Release a commit again](#release-a-commit-again)). Not yet done on the staging homes: releases from `f25187da` (2026-10-27 14:40 UTC) on rolled back on this error.
+Check, as the migrator: `SELECT extversion FROM pg_extension WHERE extname = 'vector';` returns a version, and `SELECT '[1,2]'::halfvec(2);` succeeds. Then release the commit again ([Release a commit again](#release-a-commit-again)). Done on both staging homes on 2026-10-27: the RU home already had it, the owner enabled it in the EU home after releases from `f25187da` (14:40 UTC) on had rolled back on this error, and the release of `2f963992` (17:05 UTC) migrated both.
 
 ## TLS certificate
 
