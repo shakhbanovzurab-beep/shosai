@@ -1,6 +1,6 @@
 # ADR 0033 — pgvector for Leo's memory, Qdrant for knowledge and meetings
 
-- **Status:** accepted by the owner on 2026-10-08. Closes the "role of `pgvector`" item of [CLAUDE.md](../../.claude/CLAUDE.md) "Undecided" and question Q-1 of the [Leo architecture](../design/leo/ARCHITECTURE.md) §17.
+- **Status:** accepted by the owner on 2026-10-08. Closes the "role of `pgvector`" item of [CLAUDE.md](../../.claude/CLAUDE.md) "Undecided" and question Q-1 of the [Leo architecture](../design/leo/ARCHITECTURE.md) §17. Amended on 2026-10-27 by [ADR 0071](0071-leo-memory-slice.md): memory recall is an exact scan of the person's own current facts through a b-tree on the person, not HNSW (a global graph filtered to one person loses results); vectors are `halfvec(1024)`; the revisit rule below stands.
 - **Packages:** S09 (`memory`), S04 (meeting windows), S07 (knowledge).
 - **Context documents:** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §3, §4.2, §7, §8.1, §18.2; [ADR 0030](0030-leo-memory-v2.md).
 

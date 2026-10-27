@@ -943,17 +943,18 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 ### 5.13 `memory`
 
-#### `leo_personalization` → `leo_personalization` · **moved**
+Amended on 2026-10-27 by the [memory plan](slices/memory.md) ([ADR 0071](../adr/0071-leo-memory-slice.md) MM-D2, MM-D8); the rows below replace the earlier "moved" and "transformed" targets.
+
+#### `leo_personalization` → `memory_facts` and studio's personal context · **transformed**
+
+- **Owner → home:** own `user_id` (no FK); no `leo_personalization` table in v2.
+- **Columns:** `occupation` (non-empty) → one pinned `fact`; each of `style`, `warmth`, `enthusiasm`, `structure`, `emoji` that is not `default` → one pinned `preference` worded in the person's interface language ("Prefers a candid tone", "Prefers no emoji"); all with `source_kind = settings`, `confirmed = true`, `explicit = true`, embedded by the new model. `instructions` (non-empty) → studio's personal context ("About you", ≤ 4 000 characters), appended to anything already there. `id`, `created_at`, `updated_at` are not carried.
+
+#### `memory_items` → `memory_facts` · **transformed**
 
 - **Owner → home:** own `user_id` (no FK).
-- **Columns:** all 11 move unchanged.
-
-#### `memory_items` → `memory_items` · **transformed**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** 10 of 12 move unchanged; exceptions:
-  - `embedding` — *derived*. `vector(384)`, rebuilt from `text` by the v2 indexer (R7).
-  - `text` — *moved*. The authoritative memory text.
+- **Rows:** only `forgotten = false`, `kind` in (`fact`, `procedure`), of people with `memory_enabled = true`; `episode` rows are dropped (raw commands, M4).
+- **Columns:** `text` → `statement` (cut to 500); `kind` → `kind`; `importance > 0.85` (the person asked) → `status = active`, `explicit = true`, `confirmed = true`; otherwise `status = candidate`, outside the daily candidates, waiting in Settings › Memory's list of carried-over candidates; `source_kind = imported`; `confirmations` → `confirmations`; `last_used_at` → `last_confirmed_at`; `created_at` → `valid_from`, `created_at`; `embedding` *derived* — the old `vector(384)` is dropped and the statement re-embedded by `MEMORY_EMBEDDING_MODEL` (`halfvec(1024)`); `scope`, `forgotten`, `updated_at` are not carried.
 
 ### 5.14 `proactive`
 

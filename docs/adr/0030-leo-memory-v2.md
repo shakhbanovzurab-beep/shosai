@@ -1,6 +1,6 @@
 # ADR 0030 — Memory v2: admitted facts with provenance and supersession, rendered as untrusted
 
-- **Status:** accepted by the owner on 2026-10-08. Memory vectors live in pgvector in the home DB ([ADR 0033](0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md), accepted).
+- **Status:** accepted by the owner on 2026-10-08. Memory vectors live in pgvector in the home DB ([ADR 0033](0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md), accepted). Amended on 2026-10-27 by [ADR 0071](0071-leo-memory-slice.md): until `memory.admit` earns auto-save on the person's answers, every statement that is not an explicit request is a candidate (point 2); a fact the person confirmed raises no taint and segment 4 is wrapped with a keyed boundary (point 5); no personalization table — instructions about Leo's behaviour are preferences or skipped (point 5); meeting recollections arrive by `notes.meeting.notes_ready` instead of a port; consolidation is the daily upkeep, with no model rewriting facts (point 8); facts follow their source's space, meeting or team chat.
 - **Packages:** S09 (`memory`); S04 (memory port); S05 (user-context port).
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §7.1, §7.2, §7.4; [Leo audit](../design/leo/AUDIT.md) M1–M5, A6; ARCHITECTURE.md fr-8, nfr-13, nfr-14.
 
