@@ -6,6 +6,7 @@ long it took; `shosai_memory_recall_facts` how many facts reached the turn. The 
 counts the facts it gave vectors to and those it could not (`shosai_memory_embedded_total`).
 """
 
+from collections.abc import Sequence
 from enum import StrEnum
 from typing import Final
 
@@ -34,6 +35,9 @@ class EmbedOutcome(StrEnum):
     FAILED = "failed"
 
 
+ADMISSIONS: Final = "shosai_memory_admissions_total"
+
+
 class MemoryMetrics:
     """Memory's counters and times, in the process's registry."""
 
@@ -56,6 +60,12 @@ class MemoryMetrics:
             buckets=(0, 1, 2, 4, 6, 8, 10, 12),
             registry=registry,
         )
+        self._admissions = Counter(
+            ADMISSIONS.removesuffix("_total"),
+            "Утверждения, найденные в ходе или встрече, по тому, чем они стали",
+            ("source", "outcome"),
+            registry=registry,
+        )
         self._embedded = Counter(
             "shosai_memory_embedded",
             "Факты, которым проход эмбеддингов дал вектор или не смог",
@@ -72,3 +82,10 @@ class MemoryMetrics:
     def embedded(self, outcome: EmbedOutcome, facts: int) -> None:
         """Facts the embedding pass handled one way."""
         self._embedded.labels(outcome.value).inc(facts)
+
+    def admitted(self, source: str, outcomes: Sequence[StrEnum]) -> None:
+        """What the statements of one turn or meeting became; `none` when there were none."""
+        if not outcomes:
+            self._admissions.labels(source, "none").inc()
+        for outcome in outcomes:
+            self._admissions.labels(source, outcome.value).inc()

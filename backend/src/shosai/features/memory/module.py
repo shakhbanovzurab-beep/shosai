@@ -7,7 +7,7 @@ home, the `vector` extension and the handler of what memory holds of a person. S
 routes of Settings > Memory's facts and switch, and the switch's mirror in the native
 `/v1/auth/me`. Step 4 the vectors — the embedding pass once a minute per home on the owner's
 `google/gemini-embedding-2` — and the agent's `MEMORY_RECALL` and `PROFILE_FACTS` bound.
-Admission and the toolset come with the plan's next steps.
+Step 5 a turn's admission after `agent.turn.completed`. The toolset comes with the next step.
 """
 
 from collections.abc import AsyncIterator
@@ -23,9 +23,12 @@ from shosai.features.memory.application.fact_changes import FactChanges
 from shosai.features.memory.application.fact_list import FactLists
 from shosai.features.memory.application.recall import Recall
 from shosai.features.memory.application.switch import MemorySwitch
+from shosai.features.memory.application.turn_admission import TurnAdmission
 from shosai.features.memory.channels.http.facts import build_memory_router
-from shosai.features.memory.channels.tasks import PERIODIC_JOBS, embedding_tick
+from shosai.features.memory.channels.subscriptions import subscriptions
+from shosai.features.memory.channels.tasks import PERIODIC_JOBS, embedding_tick, turn_admission
 from shosai.features.memory.infrastructure.embeddings import Embedder
+from shosai.features.memory.infrastructure.extractor import Extractor
 from shosai.features.memory.infrastructure.metrics import MemoryMetrics
 from shosai.features.memory.infrastructure.records import MEMORY_MODELS
 from shosai.features.memory.settings import MemorySettings
@@ -43,9 +46,15 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     metrics = MemoryMetrics(services.registry)
     recall = Recall(transactions, (lists, embedder, services.valkey, metrics))
     embedding = EmbeddingPass(transactions, (ports, embedder, services.valkey, metrics))
+    admission = TurnAdmission(
+        transactions,
+        (Extractor(services.ai, settings.model_route()), embedder),
+        (ports, services.effects, services.valkey, metrics),
+    )
     yield FeatureParts(
         http_routers=(build_memory_router((lists, changes, switch), ports),),
-        task_handlers=(embedding_tick(embedding),),
+        task_handlers=(embedding_tick(embedding), turn_admission(admission)),
+        subscriptions=subscriptions(services.tasks),
         periodic_jobs=PERIODIC_JOBS,
         provides=(
             ACCOUNT_DATA_HANDLERS.bind(MemoryAccountData(transactions, services.valkey)),

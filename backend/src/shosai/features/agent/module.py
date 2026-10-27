@@ -14,6 +14,8 @@ import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
+from opentelemetry.trace import Tracer
+
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.documents.extraction import DocumentReader
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, QueueCompanion
@@ -31,6 +33,7 @@ from shosai.features.agent.application.history import History
 from shosai.features.agent.application.installed_skills import InstalledSkills
 from shosai.features.agent.application.lost_runs import LostRuns
 from shosai.features.agent.application.memory_context import MemoryContext
+from shosai.features.agent.application.person_words import AgentPersonWords
 from shosai.features.agent.application.preferences import AgentPreferences
 from shosai.features.agent.application.proposal_port import PortProposals
 from shosai.features.agent.application.result_pages import ResultPages
@@ -76,6 +79,7 @@ from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_h
 from shosai.features.agent.channels.web_tools import WEB_TOOLS
 from shosai.features.agent.contracts import ACTION_PROPOSALS, SKILL_READER
 from shosai.features.agent.contracts.events import TurnCompleted
+from shosai.features.agent.contracts.memory import PERSON_WORDS
 from shosai.features.agent.contracts.voice import VOICE_TURNS
 from shosai.features.agent.infrastructure.feedback_metrics import FeedbackMetrics
 from shosai.features.agent.infrastructure.fleet import Fleet
@@ -101,6 +105,20 @@ from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 TRACER_NAME = "shosai.agent"
 
 
+def tool_parts(
+    services: CoreServices, tracer: Tracer
+) -> tuple[ToolParts, ResultPages, ActionCards]:
+    """A run's tools: stored results, sources, the bulkhead, their metrics and the cards."""
+    ports = services.ports
+    pages = ResultPages(services.transactions, ports)
+    cards = ActionCards(services.agent_tools, ports)
+    tools = ToolParts(
+        pages, RunSources(services.transactions, ports), tool_bulkhead(services.role),
+        ToolMetrics(services.registry), tracer, card_proposer(services, cards),
+    )  # fmt: skip
+    return tools, pages, cards
+
+
 def context_builder(services: CoreServices, ports: PortDirectory) -> ContextBuilder:
     """The turn's context, its profile core's boundary keyed to the platform's key."""
     memory = MemoryContext(ports, profile_boundary_key(services.settings.crypto))
@@ -119,12 +137,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     settings = services.settings.features.get(AgentSettings)
     skill_clients = (github_client(settings.github_token()), directory_client())
     tracer = services.tracer_provider.get_tracer(TRACER_NAME)
-    metrics, pages = RunMetrics(services.registry), ResultPages(transactions, ports)
-    cards = ActionCards(services.agent_tools, ports)
-    tools = ToolParts(
-        pages, RunSources(transactions, ports), tool_bulkhead(services.role),
-        ToolMetrics(services.registry), tracer, card_proposer(services, cards),
-    )  # fmt: skip
+    metrics = RunMetrics(services.registry)
+    tools, pages, cards = tool_parts(services, tracer)
     routing, frames = TurnRouting(ToolRegistry(services.agent_tools), ports), TurnSaver(valkey)
     engine = RunEngine(
         EngineParts(
@@ -177,6 +191,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 ACTION_PROPOSALS.bind(proposals),
                 ME_CONTRIBUTIONS.bind(preferences),
                 SKILL_READER.bind(InstalledSkills()),
+                PERSON_WORDS.bind(AgentPersonWords()),
                 VOICE_TURNS.bind(voice),
             ),
         )

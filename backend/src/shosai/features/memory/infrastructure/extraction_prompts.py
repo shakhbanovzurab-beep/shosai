@@ -81,6 +81,15 @@ MEETING_INSTRUCTIONS: Final = "\n\n".join(
     )
 )
 
+EARLIER: Final = "Earlier in the conversation, for references only:"
+PERSON_SAID: Final = "The person: {text}"
+LEO_SAID: Final = "Leo: {text}"
+LATEST: Final = "The person's latest message:"
+ASK_AGAIN: Final = (
+    "That answer was not the JSON object asked for. Answer again with that one JSON object and "
+    "nothing else."
+)
+
 KindName = Literal["preference", "fact", "relationship", "goal", "procedure"]
 
 
@@ -125,6 +134,11 @@ class MeetingAnswer(BaseModel):
 
 
 EXTRACTION_TEXTS: Final[tuple[object, ...]] = (
+    EARLIER,
+    PERSON_SAID,
+    LEO_SAID,
+    LATEST,
+    ASK_AGAIN,
     TURN_INSTRUCTIONS,
     MEETING_INSTRUCTIONS,
     TurnAnswer,

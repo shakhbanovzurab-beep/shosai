@@ -35,6 +35,10 @@ What Leo knows about the person: their preferences, facts about them and their w
 - `application/embedding_pass.py` and `channels/tasks.py`: once a minute per home, facts waiting for the current model's vector — through the partial index `ix_memory_facts_unembedded` — person by person after the last one served, as the person; the vector lands only on the same statement, still waiting.
 - `application/recall.py` binds the agent's `MEMORY_RECALL` and `PROFILE_FACTS`: no consent, a clear "has memories" bit, memory off, nothing held, late or failed all give nothing, counted in `shosai_memory_recall_total{outcome}`; otherwise the exact nearest 40, the floor, 12 facts and 600 tokens. The profile core is read in the agent's transaction: memory on or off, pinned facts and preferences.
 
+## Admission from turns (step 5)
+
+- `channels/subscriptions.py` sends `memory.admit_turn` for each `agent.turn.completed`; `application/turn_admission.py` reads the agent's `PERSON_WORDS` with the switch and the consent, asks `infrastructure/extractor.py` (`MEMORY_MODEL`, one more ask on an unreadable answer) for at most three statements, embeds them in one call, and `application/admission_writer.py` decides and writes under the person's admission lock, reading the switch again inside it. The write is keyed by the run; a suspicious run, memory off, the operator or a missing consent take nothing.
+
 ## What the models read (step 1)
 
 `infrastructure/extraction_prompts.py` (a turn's and a meeting's extraction) and `infrastructure/summary_prompts.py` (the summary and the box): English instructions with the output language stated in each, and their answer schemas — registered in the model-facing English test.
