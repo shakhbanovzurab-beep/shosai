@@ -98,6 +98,8 @@ class TurnRequest:
     again: Replacement = field(default_factory=lambda: Replacement(TurnKind.NEW, None))
     # Готовые загрузки `leo_attachment` нового вопроса.
     attachments: tuple[UUID, ...] = ()
+    # Человек попросил подумать дольше: модель ответа рассуждает в полную силу.
+    think_longer: bool = False
 
 
 class TurnPrint(BaseModel):
@@ -185,6 +187,7 @@ class TurnStarter:
             subject_kind=page.subject.kind if page.subject else None,
             subject_id=page.subject.subject_id if page.subject else None,
             switches_on=switches, attachments=request.attachments,
+            think_longer=request.think_longer,
         )  # fmt: skip
         return await self._admitted(
             principal, terms, (effect, question), supersede=request.supersede

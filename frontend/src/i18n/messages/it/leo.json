@@ -100,7 +100,9 @@
     "stop": "Interrompi Leo",
     "send": "Invia messaggio",
     "startVoice": "Avvia modalità vocale",
-    "voiceMode": "Modalità vocale"
+    "voiceMode": "Modalità vocale",
+    "thinkLonger": "Pensa più a lungo",
+    "thinkLongerHint": "Leo ragiona più a fondo prima di rispondere; la risposta richiede più tempo"
   },
   "message": {
     "copy": "Copia",

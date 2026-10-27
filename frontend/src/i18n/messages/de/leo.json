@@ -100,7 +100,9 @@
     "stop": "Leo stoppen",
     "send": "Nachricht senden",
     "startVoice": "Sprachmodus starten",
-    "voiceMode": "Sprachmodus"
+    "voiceMode": "Sprachmodus",
+    "thinkLonger": "Länger nachdenken",
+    "thinkLongerHint": "Leo denkt vor der Antwort gründlicher nach; die Antwort dauert länger"
   },
   "message": {
     "copy": "Kopieren",

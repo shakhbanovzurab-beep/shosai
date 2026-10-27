@@ -74,8 +74,12 @@ Message = {id, role: user | assistant | server, text, status: done | stopped | f
 ```text
 {text (1–4 000), upload_ids (≤ 5, presigned uploads of purpose leo_attachment),
  surface: {path ≤ 200, subject?: {kind: meeting | task | board | file, id}}, locale,
- regenerate_of?: <the last question's id>, edit_of?: <the last question's id>, supersede?: bool}
+ regenerate_of?: <the last question's id>, edit_of?: <the last question's id>, supersede?: bool,
+ think_longer?: bool}
 ```
+
+- `think_longer` (2026-10-27, the owner's choice): the composer's "Think longer" toggle, held by `useAgentChat` until
+  the person turns it off; the turn's model reasons at its highest effort, slower and dearer.
 
 - A regenerate or an edit sends the question's text as well (the edited text for an edit); naming both is `422`.
 - `upload_ids` (agent step 12b): ready uploads of purpose `leo_attachment` (files' presigned uploads, ≤ 10 MiB each),

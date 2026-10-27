@@ -100,7 +100,9 @@
     "stop": "Stop Leo",
     "send": "Send message",
     "startVoice": "Start voice mode",
-    "voiceMode": "Voice mode"
+    "voiceMode": "Voice mode",
+    "thinkLonger": "Think longer",
+    "thinkLongerHint": "Leo reasons more carefully before answering; the answer takes longer"
   },
   "message": {
     "copy": "Copy",

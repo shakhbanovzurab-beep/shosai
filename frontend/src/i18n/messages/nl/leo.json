@@ -100,7 +100,9 @@
     "stop": "Leo stoppen",
     "send": "Bericht verzenden",
     "startVoice": "Spraakmodus starten",
-    "voiceMode": "Spraakmodus"
+    "voiceMode": "Spraakmodus",
+    "thinkLonger": "Langer nadenken",
+    "thinkLongerHint": "Leo denkt grondiger na voor het antwoord; het antwoord duurt langer"
   },
   "message": {
     "copy": "Kopiëren",

@@ -1,8 +1,10 @@
-"""A turn from admission to its one end, over the API (agent step 5a)."""
+"""A turn from admission to its one end, over the API (agent step 5a); a turn the person asked
+to think longer reasons at its model's highest effort."""
 
 import asyncio
 import uuid
 
+from shosai.core.ai.requests import ReasoningEffort
 from shosai.features.agent.domain.runs import ENDED_LOG
 from shosai.features.agent.infrastructure.run_keys import log_key
 from tests.features.agent.turn_bench import TurnBench, stream_of
@@ -123,3 +125,15 @@ async def test_stop_keeps_the_text_written_so_far(turn_bench: TurnBench) -> None
         (uuid.UUID(run_id),),
     )
     assert [tuple(row.values()) for row in kept] == [("stopped", "Hello")]
+
+
+async def test_a_turn_asked_to_think_longer_reasons_at_the_highest_effort(
+    turn_bench: TurnBench,
+) -> None:
+    person = uuid.uuid4()
+    thread = await turn_bench.thread(person)
+
+    await turn_bench.ask(person, thread, "Plan my week.", think_longer=True)
+    await turn_bench.ask(person, thread, "Thanks!")
+
+    assert [call.reasoning for call in turn_bench.model.calls] == [ReasoningEffort.HIGH, None]

@@ -9876,6 +9876,12 @@ export interface components {
              * @description Ready `leo_attachment` uploads attached to a new question, at most five.
              */
             upload_ids?: string[];
+            /**
+             * Think Longer
+             * @description The person asked Leo to think longer: the answer's model reasons at its highest effort, slower and dearer.
+             * @default false
+             */
+            think_longer: boolean;
         };
         /**
          * UnsubscribeAnswer

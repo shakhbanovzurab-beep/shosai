@@ -100,7 +100,9 @@
     "stop": "Arrêter Leo",
     "send": "Envoyer le message",
     "startVoice": "Activer le mode vocal",
-    "voiceMode": "Mode vocal"
+    "voiceMode": "Mode vocal",
+    "thinkLonger": "Réfléchir plus longtemps",
+    "thinkLongerHint": "Leo réfléchit plus en profondeur avant de répondre ; la réponse prend plus de temps"
   },
   "message": {
     "copy": "Copier",

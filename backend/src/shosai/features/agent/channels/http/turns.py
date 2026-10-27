@@ -82,6 +82,11 @@ class TurnBody(Strict):
         max_length=MAX_ATTACHMENTS,
         description="Ready `leo_attachment` uploads attached to a new question, at most five.",
     )
+    think_longer: bool = Field(
+        default=False,
+        description="The person asked Leo to think longer: the answer's model reasons at its "
+        "highest effort, slower and dearer.",
+    )
 
     @model_validator(mode="after")
     def one_replacement(self) -> Self:
@@ -112,8 +117,9 @@ class TurnBody(Strict):
         else:
             again = Replacement(TurnKind.NEW, None)
         return TurnRequest(
-            self.text, self.locale, self.supersede, page, again, tuple(self.upload_ids)
-        )
+            self.text, self.locale, self.supersede, page, again, tuple(self.upload_ids),
+            think_longer=self.think_longer,
+        )  # fmt: skip
 
 
 def server_event(event: StreamEvent) -> ServerSentEvent:

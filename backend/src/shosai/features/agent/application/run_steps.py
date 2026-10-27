@@ -24,7 +24,7 @@ from uuid import UUID
 
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
-from shosai.core.ai.requests import ChatMessage, ChatRequest, ImagePart, Role
+from shosai.core.ai.requests import ChatMessage, ChatRequest, ImagePart, ReasoningEffort, Role
 from shosai.features.agent.application.egress_answers import EgressAnswers, kept_call
 from shosai.features.agent.application.model_stream import AnswerBuffer, stream_answer
 from shosai.features.agent.application.run_context import PreparedContext, text_message
@@ -154,6 +154,8 @@ class RunSteps:
     ) -> None:
         work = self._run.work
         work.offer = offer
+        if self._run.payload.think_longer:
+            request = replace(request, reasoning=ReasoningEffort.HIGH)
         for provenance, text in labels:
             work.read_wrapped(Label.of(provenance), unwrapped(text))
         self._run.times.sizes[Segment.TOOLS] = offer.tokens()

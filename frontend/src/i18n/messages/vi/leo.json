@@ -100,7 +100,9 @@
     "stop": "Dừng Leo",
     "send": "Gửi tin nhắn",
     "startVoice": "Bật chế độ giọng nói",
-    "voiceMode": "Chế độ giọng nói"
+    "voiceMode": "Chế độ giọng nói",
+    "thinkLonger": "Suy nghĩ lâu hơn",
+    "thinkLongerHint": "Leo suy luận kỹ hơn trước khi trả lời; câu trả lời sẽ lâu hơn"
   },
   "message": {
     "copy": "Sao chép",

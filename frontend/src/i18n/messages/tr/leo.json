@@ -100,7 +100,9 @@
     "stop": "Leo’yu durdur",
     "send": "Mesajı gönder",
     "startVoice": "Sesli modu başlat",
-    "voiceMode": "Sesli mod"
+    "voiceMode": "Sesli mod",
+    "thinkLonger": "Daha uzun düşün",
+    "thinkLongerHint": "Leo yanıt vermeden önce daha ayrıntılı düşünür; yanıt daha uzun sürer"
   },
   "message": {
     "copy": "Kopyala",

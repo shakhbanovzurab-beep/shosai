@@ -100,7 +100,9 @@
     "stop": "Hentikan Leo",
     "send": "Kirim pesan",
     "startVoice": "Mulai mode suara",
-    "voiceMode": "Mode suara"
+    "voiceMode": "Mode suara",
+    "thinkLonger": "Berpikir lebih lama",
+    "thinkLongerHint": "Leo bernalar lebih cermat sebelum menjawab; jawabannya butuh waktu lebih lama"
   },
   "message": {
     "copy": "Salin",

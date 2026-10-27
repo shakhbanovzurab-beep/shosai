@@ -36,6 +36,8 @@ interface LeoComposerProps {
   readonly caption?: string | null;
   /** Текст, с которым поле открывается, например вопрос из ⌘K, пока Leo отвечал. */
   readonly initialValue?: string;
+  /** Кнопки рядом со скрепкой, например «Думать дольше». */
+  readonly extra?: React.ReactNode;
 }
 
 export function LeoComposer({
@@ -47,6 +49,7 @@ export function LeoComposer({
   voiceEnabled,
   caption,
   initialValue = "",
+  extra,
 }: LeoComposerProps) {
   const t = useTranslations("leo");
   const locale = useLocale();
@@ -113,34 +116,39 @@ export function LeoComposer({
       ) : null}
       {/* One row like ChatGPT: attach, the message, then voice / send / stop; buttons stay on the last line. */}
       <InputGroup data-multiline={isMultiline} className="flex-wrap items-center rounded-3xl px-1">
-        {attachments === null ? null : (
+        {attachments === null && !extra ? null : (
           <InputGroupAddon
             align="inline-start"
             className="py-1 group-data-[multiline=true]/input-group:order-2 group-data-[multiline=true]/input-group:pt-0"
           >
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              className="sr-only"
-              tabIndex={-1}
-              aria-hidden="true"
-              onChange={(event) => {
-                if (event.target.files) attachments.addFiles(event.target.files);
-                event.target.value = "";
-              }}
-            />
-            <InputGroupButton
-              type="button"
-              size="icon-sm"
-              className="rounded-full"
-              aria-label={t("composer.attach")}
-              title={t("composer.attachLimit", { max: LEO_MAX_ATTACHMENTS })}
-              disabled={files.length >= LEO_MAX_ATTACHMENTS}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <Plus />
-            </InputGroupButton>
+            {attachments === null ? null : (
+              <>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  className="sr-only"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  onChange={(event) => {
+                    if (event.target.files) attachments.addFiles(event.target.files);
+                    event.target.value = "";
+                  }}
+                />
+                <InputGroupButton
+                  type="button"
+                  size="icon-sm"
+                  className="rounded-full"
+                  aria-label={t("composer.attach")}
+                  title={t("composer.attachLimit", { max: LEO_MAX_ATTACHMENTS })}
+                  disabled={files.length >= LEO_MAX_ATTACHMENTS}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Plus />
+                </InputGroupButton>
+              </>
+            )}
+            {extra}
           </InputGroupAddon>
         )}
         <InputGroupTextarea

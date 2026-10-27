@@ -40,6 +40,7 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     () => liveTurns(scopeKey),
   );
   const epilogues = React.useSyncExternalStore(subscribeEpilogues, liveEpilogues, liveEpilogues);
+  const [thinkLonger, setThinkLonger] = React.useState(false);
   const asking = turns.some((turn) => turn.reply.status === "streaming");
   const thread = useAgentThread(channel.routes, scopeKey, scope, !asking);
   const threads = useAgentThreads(channel.routes, scopeKey, scope, thread.threadId);
@@ -115,7 +116,7 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
   // Строка запроса читается в момент вопроса: фильтры страницы в адресе не перерисовывают Leo.
   const base = () => {
     const surface = { path: page, subject: pageSubject(page, window.location.search) };
-    return { locale, surface, supersede: false };
+    return { locale, surface, supersede: false, think_longer: thinkLonger };
   };
 
   const send = (content: string, files: File[] = []): Promise<LeoMessage | undefined> => {
@@ -190,5 +191,6 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     memoryThreadId: channel.owner === "person" ? thread.threadId : null,
     threads,
     voice,
+    thinkLonger: { on: thinkLonger, toggle: () => setThinkLonger((on) => !on) },
   };
 }

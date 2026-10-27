@@ -100,7 +100,9 @@
     "stop": "Leo 중지",
     "send": "메시지 보내기",
     "startVoice": "음성 모드 시작",
-    "voiceMode": "음성 모드"
+    "voiceMode": "음성 모드",
+    "thinkLonger": "더 오래 생각하기",
+    "thinkLongerHint": "Leo가 답하기 전에 더 깊이 생각합니다. 답변이 더 오래 걸립니다"
   },
   "message": {
     "copy": "복사",

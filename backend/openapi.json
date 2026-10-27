@@ -30434,6 +30434,12 @@
             "maxItems": 5,
             "title": "Upload Ids",
             "description": "Ready `leo_attachment` uploads attached to a new question, at most five."
+          },
+          "think_longer": {
+            "type": "boolean",
+            "title": "Think Longer",
+            "description": "The person asked Leo to think longer: the answer's model reasons at its highest effort, slower and dearer.",
+            "default": false
           }
         },
         "additionalProperties": false,

@@ -100,7 +100,9 @@
     "stop": "Leo を停止",
     "send": "メッセージを送信",
     "startVoice": "音声モードを開始",
-    "voiceMode": "音声モード"
+    "voiceMode": "音声モード",
+    "thinkLonger": "じっくり考える",
+    "thinkLongerHint": "Leo が回答前により深く考えます。回答までに時間がかかります"
   },
   "message": {
     "copy": "コピー",

@@ -37,4 +37,6 @@ export interface LeoChat {
    * их записал сервер. Только у разговора человека на API; у оператора и у примерного чата голоса нет.
    */
   readonly voice?: { readonly target: VoiceTarget; readonly refresh: (threadId: string | null) => void };
+  /** «Думать дольше»: пока включено, вопросы идут с полным рассуждением модели. Только у разговора на API. */
+  readonly thinkLonger?: { readonly on: boolean; readonly toggle: () => void };
 }

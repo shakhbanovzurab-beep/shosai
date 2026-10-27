@@ -46,6 +46,8 @@ class TurnPayload(HomeTaskPayload):
     switches_on: tuple[str, ...] = ()
     # Загрузки нового вопроса: приём хода берёт их у files и называет на вопросе.
     attachments: tuple[UUID, ...] = ()
+    # «Думать дольше»: модель ответа рассуждает в полную силу, медленнее и дороже.
+    think_longer: bool = False
 
 
 RUN_TURN: Final = TaskDeclaration(

@@ -19,6 +19,7 @@ import { LeoComposer } from "./leo-composer";
 import { LeoConversation } from "./leo-conversation";
 import { LeoPanelHeader } from "./leo-panel-header";
 import type { LeoPlace } from "./leo-place";
+import { LeoThinkLonger } from "./leo-think-longer";
 import { LeoVoiceMode } from "./leo-voice-mode";
 import { RecentChats } from "./recent-chats";
 import { useFileDrop } from "./use-file-drop";
@@ -136,6 +137,9 @@ function PanelView({
               onStop={stop}
               onStartVoice={() => void voice.start()}
               voiceEnabled={voiceEnabled}
+              extra={
+                chat.thinkLonger ? <LeoThinkLonger on={chat.thinkLonger.on} onToggle={chat.thinkLonger.toggle} /> : null
+              }
             />
           </m.div>
         </>

@@ -100,7 +100,9 @@
     "stop": "停止 Leo",
     "send": "傳送訊息",
     "startVoice": "開啟語音模式",
-    "voiceMode": "語音模式"
+    "voiceMode": "語音模式",
+    "thinkLonger": "思考更久",
+    "thinkLongerHint": "Leo 會在回答前更深入地思考，回答需要更長時間"
   },
   "message": {
     "copy": "複製",
