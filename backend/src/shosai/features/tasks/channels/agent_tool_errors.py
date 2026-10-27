@@ -19,10 +19,11 @@ GONE: Final = frozenset(
 BROKEN: Final = frozenset(
     {
         "validation_error", "title_required", "title_too_long", "description_too_long",
-        "range_invalid", "recurrence_invalid",
+        "range_invalid", "recurrence_invalid", "name_required", "name_too_long",
+        "board_kinds_missing", "last_column_of_kind",
     }
 )  # fmt: skip
-FULL: Final = frozenset({"board_full"})
+FULL: Final = frozenset({"board_full", "boards_full", "board_columns_full"})
 
 
 def person(context: ToolContext) -> Principal:

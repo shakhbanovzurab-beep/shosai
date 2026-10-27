@@ -2,8 +2,8 @@
 
 Every bound tool of the process is in core's catalog, installed once all slices are built; the
 registry reads it on the first turn and groups the tools by toolset in a fixed order — core,
-notes, tasks, files, account, then any other in the order it was bound — at most eight to a
-toolset. Each name is spelled for the wire (`notes__search`: providers allow no dot), and its
+notes, tasks, boards, files, account, then any other in the order it was bound — at most eight
+to a toolset. Each name is spelled for the wire (`notes__search`: providers allow no dot), and its
 schema is measured once. Reads, egress, cabinet actions and writes are offered; a write's call
 becomes a card through the Action Gateway (step 9a), never an effect, and an egress call waits
 for its card once the run is tainted (step 13b). A tool behind a switch the person turned off,
@@ -25,7 +25,7 @@ from shosai.features.agent.domain.operator import offered_to
 from shosai.features.agent.domain.routing import CORE
 from shosai.features.agent.domain.wrapper import egress_needs_card
 
-TOOLSET_ORDER: Final[tuple[str, ...]] = (CORE, "notes", "tasks", "files", "account")
+TOOLSET_ORDER: Final[tuple[str, ...]] = (CORE, "notes", "tasks", "boards", "files", "account")
 TOOLS_PER_TOOLSET: Final = 8
 OFFERED_EFFECTS: Final = frozenset(
     {ToolEffect.READ, ToolEffect.EGRESS, ToolEffect.CLIENT, ToolEffect.WRITE}

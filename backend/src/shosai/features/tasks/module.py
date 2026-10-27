@@ -32,6 +32,10 @@ from shosai.features.tasks.application.task_edits import TaskEdits
 from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import TaskWrites
 from shosai.features.tasks.application.values import Values
+from shosai.features.tasks.channels.agent_board_specs import BOARD_TOOLS
+from shosai.features.tasks.channels.agent_board_tools import BoardTools
+from shosai.features.tasks.channels.agent_board_work import BoardWork
+from shosai.features.tasks.channels.agent_column_tools import ColumnTools
 from shosai.features.tasks.channels.agent_task_changes import TaskChanges
 from shosai.features.tasks.channels.agent_task_creates import TaskCreates
 from shosai.features.tasks.channels.agent_tool_reads import agent_tools
@@ -95,6 +99,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     threads = (Subtasks(transactions, ports), Comments(transactions, ports, services.effects))
     boards = (BoardReads(transactions, ports), BoardWrites(transactions, ports, services.outbox))
     items = ActionItems(services.effects, services.outbox)
+    releases = AttachmentReleases(transactions, ports)
+    board_work = BoardWork(transactions, items, services.outbox)
     yield FeatureParts(
         http_routers=(
             build_tasks_router((reads, writes, edits), ports),
@@ -108,12 +114,14 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             build_values_router(Values(transactions, ports), ports),
             build_clocks_router(Clocks(transactions, ports), ports),
         ),
-        task_handlers=task_handlers(AttachmentReleases(transactions, ports)),
+        task_handlers=task_handlers(releases),
         subscriptions=subscriptions(ports),
         agent_tools=(
             *agent_tools(LeoReads(transactions, ports)),
             TaskCreates(transactions, (writes, items)).bound(),
             *TaskChanges(transactions, ports, (edits, items)).bound(),
+            *BoardTools(board_work, (boards[0], ports, releases)).bound(),
+            *ColumnTools(board_work).bound(),
         ),
         periodic_jobs=PERIODIC_JOBS,
         provides=(
@@ -147,5 +155,5 @@ TASKS = FeatureModule(
     events=(TaskAssigned, TaskDueChanged, TaskCompleted, TaskReopened, TaskDeleted),
     account_data=(ACCOUNT_DATA,),
     shareable=(TASK_RESOURCE,),
-    agent_tools=(*READ_TOOLS, *WRITE_TOOLS),
+    agent_tools=(*READ_TOOLS, *WRITE_TOOLS, *BOARD_TOOLS),
 )

@@ -77,21 +77,10 @@ class Columns:
     async def create(self, principal: Principal, board_id: UUID, new: NewColumn) -> ColumnView:
         """The new column at its position, the end past it."""
         try:
-            title = checked_column_title(new.title)
             async with self._transactions.begin(principal.scope()) as session:
-                board = await owned_board(session, principal.user_id, board_id, lock=True)
-                order = await _columns(session, board_id)
-                check_column_room(len(order))
-                column = COLUMNS(
-                    id=new_id(), board_id=board_id, user_id=principal.user_id, title=title,
-                    kind=new.kind.value, position=len(order),
-                    color=None if new.color is None else new.color.value, collapsed=False,
-                )  # fmt: skip
-                session.add(column)
-                await session.flush()
-                order.insert(min(max(new.position, 0), len(order)), column)
-                await _arrange(session, order)
-                _touched(board, self._clock())
+                column = await column_added(
+                    session, principal.user_id, (board_id, new), self._clock()
+                )
                 return column_of(column)
         except BoardRuleError as error:
             raise board_failure(error) from error
@@ -101,48 +90,97 @@ class Columns:
     ) -> ColumnView:
         """The column renamed, recoloured, collapsed or moved."""
         try:
-            title = None if change.title is None else checked_column_title(change.title)
+            async with self._transactions.begin(principal.scope()) as session:
+                column = await column_changed(
+                    session, principal.user_id, (board_id, column_id, change), self._clock()
+                )
+                return column_of(column)
         except BoardRuleError as error:
             raise board_failure(error) from error
-        async with self._transactions.begin(principal.scope()) as session:
-            board = await owned_board(session, principal.user_id, board_id, lock=True)
-            order = await _columns(session, board_id)
-            column = next((found for found in order if found.id == column_id), None)
-            if column is None:
-                raise not_found()
-            column.title = title or column.title
-            if change.color_sent:
-                column.color = None if change.color is None else change.color.value
-            if change.collapsed is not None:
-                column.collapsed = change.collapsed
-            if change.position is not None:
-                order.remove(column)
-                order.insert(min(max(change.position, 0), len(order)), column)
-                await _arrange(session, order)
-            _touched(board, self._clock())
-            await session.flush()
-            return column_of(column)
 
     async def delete(self, principal: Principal, board_id: UUID, column_id: UUID) -> None:
         """Remove the column; its cards go on top of the next column of its kind."""
-        now = self._clock()
-        async with self._transactions.begin(principal.scope()) as session:
-            board = await owned_board(session, principal.user_id, board_id, lock=True)
-            order = await _columns(session, board_id)
-            column = next((found for found in order if found.id == column_id), None)
-            if column is None:
-                raise not_found()
-            heir = next((c for c in order if c.id != column_id and c.kind == column.kind), None)
-            if heir is None:
-                raise board_failure(BoardRuleError(BoardRule.LAST_COLUMN_OF_KIND))
-            cards = [task_id for task_id, _ in await column_cards(session, board_id, column_id)]
-            spot = CardSpot(board_id, heir.id, 0)
-            await put_on_top(session, principal.user_id, spot, cards, now)
-            await session.delete(column)
-            await session.flush()
-            order.remove(column)
-            await _arrange(session, order)
-            _touched(board, now)
+        try:
+            async with self._transactions.begin(principal.scope()) as session:
+                await column_removed(
+                    session, principal.user_id, (board_id, column_id), self._clock()
+                )
+        except BoardRuleError as error:
+            raise board_failure(error) from error
+
+
+async def column_added(
+    session: AsyncSession, viewer: UUID, adding: tuple[UUID, NewColumn], now: datetime
+) -> BoardColumnRecord:
+    """The new column at its position in the caller's transaction; `BoardRuleError` past the
+    rules."""
+    board_id, new = adding
+    title = checked_column_title(new.title)
+    board = await owned_board(session, viewer, board_id, lock=True)
+    order = await _columns(session, board_id)
+    check_column_room(len(order))
+    column = COLUMNS(
+        id=new_id(), board_id=board_id, user_id=viewer, title=title, kind=new.kind.value,
+        position=len(order), color=None if new.color is None else new.color.value,
+        collapsed=False,
+    )  # fmt: skip
+    session.add(column)
+    await session.flush()
+    order.insert(min(max(new.position, 0), len(order)), column)
+    await _arrange(session, order)
+    _touched(board, now)
+    return column
+
+
+async def column_changed(
+    session: AsyncSession,
+    viewer: UUID,
+    changing: tuple[UUID, UUID, ColumnChange],
+    now: datetime,
+) -> BoardColumnRecord:
+    """The column renamed, recoloured, collapsed or moved in the caller's transaction."""
+    board_id, column_id, change = changing
+    title = None if change.title is None else checked_column_title(change.title)
+    board = await owned_board(session, viewer, board_id, lock=True)
+    order = await _columns(session, board_id)
+    column = next((found for found in order if found.id == column_id), None)
+    if column is None:
+        raise not_found()
+    column.title = title or column.title
+    if change.color_sent:
+        column.color = None if change.color is None else change.color.value
+    if change.collapsed is not None:
+        column.collapsed = change.collapsed
+    if change.position is not None:
+        order.remove(column)
+        order.insert(min(max(change.position, 0), len(order)), column)
+        await _arrange(session, order)
+    _touched(board, now)
+    await session.flush()
+    return column
+
+
+async def column_removed(
+    session: AsyncSession, viewer: UUID, removing: tuple[UUID, UUID], now: datetime
+) -> None:
+    """Remove the column in the caller's transaction; its cards go on top of the next column
+    of its kind, and the last column of a kind stays (`BoardRuleError`)."""
+    board_id, column_id = removing
+    board = await owned_board(session, viewer, board_id, lock=True)
+    order = await _columns(session, board_id)
+    column = next((found for found in order if found.id == column_id), None)
+    if column is None:
+        raise not_found()
+    heir = next((c for c in order if c.id != column_id and c.kind == column.kind), None)
+    if heir is None:
+        raise BoardRuleError(BoardRule.LAST_COLUMN_OF_KIND)
+    cards = [task_id for task_id, _ in await column_cards(session, board_id, column_id)]
+    await put_on_top(session, viewer, CardSpot(board_id, heir.id, 0), cards, now)
+    await session.delete(column)
+    await session.flush()
+    order.remove(column)
+    await _arrange(session, order)
+    _touched(board, now)
 
 
 async def _columns(session: AsyncSession, board_id: UUID) -> list[BoardColumnRecord]:

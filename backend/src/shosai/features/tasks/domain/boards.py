@@ -88,6 +88,8 @@ class BoardRule(StrEnum):
     COLUMNS_FULL = "board_columns_full"
     BOARD_FULL = "board_full"
     LAST_COLUMN_OF_KIND = "last_column_of_kind"
+    # У новой доски со своими колонками нет колонки какого-то вида.
+    KINDS_MISSING = "board_kinds_missing"
     BOARD_CHANGED = "board_changed"
 
 
@@ -118,6 +120,20 @@ def checked_column_title(raw: str) -> str:
     if len(title) > COLUMN_TITLE_MAX:
         raise BoardRuleError(BoardRule.TITLE_TOO_LONG)
     return title
+
+
+def checked_board_columns(
+    columns: Sequence[tuple[str, TaskStatus]],
+) -> tuple[tuple[str, TaskStatus], ...]:
+    """A new board's own columns, titles checked: 1 to 20, and each kind at least once."""
+    if not columns:
+        raise BoardRuleError(BoardRule.KINDS_MISSING)
+    if len(columns) > BOARD_COLUMNS_MAX:
+        raise BoardRuleError(BoardRule.COLUMNS_FULL)
+    checked = tuple((checked_column_title(title), kind) for title, kind in columns)
+    if {kind for _, kind in checked} != set(TaskStatus):
+        raise BoardRuleError(BoardRule.KINDS_MISSING)
+    return checked
 
 
 def check_board_room(boards: int) -> None:
