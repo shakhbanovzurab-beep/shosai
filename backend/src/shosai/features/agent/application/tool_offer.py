@@ -2,13 +2,15 @@
 
 Routing reads in the run's own transaction: the toolsets the page brings — its path and the
 subject it shows — and those the thread's last three runs called; then, while segment 2's
-4 000 tokens hold, everything else the person may use, in the fixed order. What is left is
-named in `core.load_toolset`'s description, which is not offered when nothing is left; a call
-of it adds that toolset from the next round. The run's row keeps the choice, the toolsets
-loaded and those called, so the next turns stick to what this one used.
+4 000 tokens hold, everything else the person may use, in the fixed order — or, when that
+order leaves one out and a router is bound, those it found the turn needs first
+(`route_ranking.py`). What is left is named in `core.load_toolset`'s description, which is
+not offered when nothing is left; a call of it adds that toolset from the next round. The
+run's row keeps the choice, the toolsets loaded, routed and called, so the next turns stick
+to what this one used.
 """
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import replace
 from typing import Any, Final
 
@@ -18,7 +20,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ai.requests import ToolSchema
 from shosai.core.ports.directory import PortDirectory
-from shosai.features.agent.application.surface_digest import SubjectKind
+from shosai.features.agent.application.page_toolsets import page_section, surface_toolsets
+from shosai.features.agent.application.route_ranking import Asked, RouteRanking
 from shosai.features.agent.application.tool_registry import (
     Gates,
     OfferedTool,
@@ -27,15 +30,16 @@ from shosai.features.agent.application.tool_registry import (
     is_write,
 )
 from shosai.features.agent.application.turn_task import TurnPayload
-from shosai.features.agent.domain.context import clean_path
 from shosai.features.agent.domain.core_tools import LOAD_TOOLSET
 from shosai.features.agent.domain.operator import is_operator
 from shosai.features.agent.domain.routing import (
     Route,
     RouteFacts,
     ToolsetFacts,
+    candidates,
     route,
     sticky_toolsets,
+    wanted,
 )
 from shosai.features.agent.infrastructure.prompts import LOADABLE
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
@@ -43,27 +47,18 @@ from shosai.features.billing.contracts import ENTITLEMENTS, EntitlementsUnavaila
 
 RUN = AgentRunRecord
 STICKY_TURNS: Final = 3
-# Раздел кабинета (`/app/<раздел>`) и наборы, которые он приносит.
-SURFACE_TOOLSETS: Final[Mapping[str, str]] = {
-    "meetings": "notes", "notes": "notes", "kanban": "tasks", "tasks": "tasks",
-    "projects": "tasks", "file-manager": "files", "folders": "files", "billing": "account",
-    "plans": "account", "upgrade": "account", "profile": "account",
-}  # fmt: skip
-SUBJECT_TOOLSETS: Final[Mapping[SubjectKind, str]] = {
-    SubjectKind.MEETING: "notes",
-    SubjectKind.TASK: "tasks",
-    SubjectKind.BOARD: "tasks",
-    SubjectKind.FILE: "files",
-}
 log = structlog.stdlib.get_logger(__name__)
 
 
 class TurnOffer:
     """The run's tools: those offered now, those it may still load, those it called."""
 
-    def __init__(self, toolsets: Toolsets, gates: Gates, chosen: Route) -> None:
+    def __init__(
+        self, toolsets: Toolsets, gates: Gates, chosen: Route, facts: RouteFacts | None = None
+    ) -> None:
         self._toolsets = toolsets
         self._gates = gates
+        self._facts = facts
         self.rule = chosen.rule
         self.selected = list(chosen.selected)
         self.deferred = list(chosen.deferred)
@@ -73,6 +68,9 @@ class TurnOffer:
         self.used: list[str] = []
         # Наборы, в которые ход предложил запись: следующие ходы получают их целиком.
         self.wrote: list[str] = []
+        # Наборы, которые привёл роутер: их чтение остаётся треду на три хода.
+        self.routed: list[str] = []
+        self.asked = False
         self._tools = self._offered()
 
     def tool(self, wire: str) -> OfferedTool | None:
@@ -122,8 +120,44 @@ class TurnOffer:
         if is_write(tool) and toolset not in self.wrote:
             self.wrote.append(toolset)
 
+    def to_rank(self) -> tuple[str, ...]:
+        """The toolsets that fill the room, when the rule could not offer one of them even
+        for reading (it is only named); else none — then every toolset's reads are here and
+        its writes one `load_toolset` away (DL-D3: not asked while everything fits)."""
+        names = candidates(self._facts) if self._facts is not None else ()
+        offered = set(self.selected) | set(self.reading)
+        return names if any(name not in offered for name in names) else ()
+
+    def summary(self, name: str) -> str:
+        """A toolset's tools and the first sentence of each one's registered description."""
+        tools = self._toolsets.admitted(name, self._gates)
+        return " ".join(
+            f"{tool.spec.name}: {first_sentence(tool.spec.description)}" for tool in tools
+        )
+
+    def kept(self) -> tuple[int, int]:
+        """How many toolsets the rule keeps whole, and the tokens of segment 2 left."""
+        if self._facts is None:
+            return 0, 0
+        forced = wanted(self._facts) | self._facts.recent
+        return len(forced & set(self.selected)), max(self._facts.cap - self.tokens(), 0)
+
+    def rank(self, ranked: Sequence[str]) -> None:
+        """Fill the room with the ranked toolsets first; those that came in are kept as routed."""
+        if self._facts is None or not ranked:
+            return
+        chosen = route(self._facts, ranked)
+        self.selected, self.deferred = list(chosen.selected), list(chosen.deferred)
+        self.reading = list(chosen.reading)
+        offered = set(self.selected) | set(self.reading)
+        self.routed = [name for name in ranked if name in offered]
+        self._tools = self._offered()
+
     def restore(self, routing: Mapping[str, Any]) -> None:
-        """Go on with what a resumed run loaded, called and wrote to before its card."""
+        """Go on with what a resumed run was routed to, loaded, called and wrote to before
+        its card."""
+        self.asked = routing.get("asked") is True
+        self.rank(listed_names(routing, "routed"))
         for name in listed_names(routing, "loaded"):
             self.load(name)
         for kept, key in ((self.used, "used"), (self.wrote, "wrote")):
@@ -133,7 +167,7 @@ class TurnOffer:
         """What the run's row keeps: names and the rule's code."""
         return {"rule": self.rule, "selected": self.selected, "reading": self.reading,
                 "deferred": self.deferred, "loaded": self.loaded, "used": self.used,
-                "wrote": self.wrote}  # fmt: skip
+                "wrote": self.wrote, "routed": self.routed, "asked": self.asked}  # fmt: skip
 
     def _offered(self) -> dict[str, OfferedTool]:
         chosen, reading = set(self.selected), set(self.reading)
@@ -152,6 +186,7 @@ class TurnRouting:
     def __init__(self, registry: ToolRegistry, ports: PortDirectory) -> None:
         self._registry = registry
         self._ports = ports
+        self._ranking = RouteRanking(ports)
 
     async def offer(self, session: AsyncSession, payload: TurnPayload) -> TurnOffer:
         """The run's offer: the page's, the sticky and then the others while they fit."""
@@ -166,15 +201,31 @@ class TurnRouting:
             total = sum(tool.tokens for tool in admitted)
             facts.append(ToolsetFacts(name, total, bool(admitted), read_tokens=reads))
         sticky, recent = await self._sticky(session, payload)
-        chosen = route(
-            RouteFacts(
-                tuple(facts),
-                surface=surface_toolsets(payload),
-                sticky=sticky,
-                recent=recent,
-            )
+        kept = RouteFacts(
+            tuple(facts), surface=surface_toolsets(payload), sticky=sticky, recent=recent
         )
-        return TurnOffer(toolsets, gates, chosen)
+        return TurnOffer(toolsets, gates, route(kept), kept)
+
+    async def ask(
+        self, session: AsyncSession, payload: TurnPayload, offer: TurnOffer
+    ) -> Asked | None:
+        """Start a bound router on what fills the offer's room; None when nothing is to rank."""
+        return await self._ranking.ask(session, payload, offer, page_section(payload))
+
+    async def settle(self, offer: TurnOffer, asked: Asked | None) -> None:
+        """The router's ranking applied to the offer, within the turn's wait."""
+        offer.asked = await self._ranking.settle(offer, asked)
+
+    @staticmethod
+    def drop(asked: Asked | None) -> None:
+        """Stop waiting for a router the run no longer needs."""
+        if asked is not None:
+            asked.cancel()
+
+    def ended(self, payload: TurnPayload, offer: TurnOffer | None) -> None:
+        """Tell the router which toolsets a run it was asked about called."""
+        if offer is not None and offer.asked:
+            self._ranking.ended(payload, offer.used)
 
     async def _capabilities(
         self, payload: TurnPayload, toolsets: Toolsets
@@ -205,9 +256,13 @@ class TurnRouting:
             .limit(STICKY_TURNS)
         )
         routings = list(rows)
+        read = [
+            used | routed
+            for used, routed in zip(names(routings, "used"), names(routings, "routed"), strict=True)
+        ]
         return (
             sticky_toolsets(names(routings, "wrote"), STICKY_TURNS),
-            sticky_toolsets(names(routings, "used"), STICKY_TURNS),
+            sticky_toolsets(read, STICKY_TURNS),
         )
 
 
@@ -225,14 +280,7 @@ def names(routings: list[dict[str, Any]], key: str) -> list[frozenset[str]]:
     ]
 
 
-def surface_toolsets(payload: TurnPayload) -> frozenset[str]:
-    """The toolsets the page brings: its section and the subject it shows."""
-    names: set[str] = set()
-    path = clean_path(payload.path)
-    if path is not None:
-        parts = path.strip("/").split("/")
-        if len(parts) > 1 and parts[0] == "app" and parts[1] in SURFACE_TOOLSETS:
-            names.add(SURFACE_TOOLSETS[parts[1]])
-    if payload.subject_kind is not None:
-        names.add(SUBJECT_TOOLSETS[payload.subject_kind])
-    return frozenset(names)
+def first_sentence(description: str) -> str:
+    """A description's first sentence."""
+    head, _, _ = description.strip().partition(". ")
+    return head if head.endswith(".") else f"{head}."

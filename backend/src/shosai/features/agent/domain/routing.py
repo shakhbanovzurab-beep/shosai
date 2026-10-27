@@ -65,15 +65,18 @@ class Route:
     reading: tuple[str, ...] = ()
 
 
-def route(facts: RouteFacts) -> Route:
+def route(facts: RouteFacts, ranked: Sequence[str] = ()) -> Route:
     """Core, the page's and the written-to toolsets whole, the read-from ones' reads; then
-    others' reads, then their writes, in order while they fit."""
+    others' reads, then their writes, while they fit — the `ranked` ones (those a judge found
+    the turn needs, likeliest first) before the rest, which keep the fixed order. The route
+    names them in the fixed order whatever filled the room, so the tools' order stays put."""
     allowed = [toolset for toolset in facts.toolsets if toolset.allowed]
     whole = {toolset.name for toolset in allowed if toolset.name in wanted(facts)}
     reading = [toolset.name for toolset in allowed if toolset.name in facts.recent - whole]
     room = facts.cap - used_room(allowed, whole, reading)
-    room = fill_reads(allowed, (whole, reading), room)
-    add_writes(allowed, (whole, reading), room)
+    filling = by_rank(allowed, ranked)
+    room = fill_reads(filling, (whole, reading), room)
+    add_writes(filling, (whole, reading), room)
     order = [toolset.name for toolset in allowed]
     return Route(
         selected=tuple(name for name in order if name in whole),
@@ -85,6 +88,18 @@ def route(facts: RouteFacts) -> Route:
 def wanted(facts: RouteFacts) -> frozenset[str]:
     """The toolsets that come whole whatever their size."""
     return frozenset({CORE}) | facts.surface | facts.sticky
+
+
+def candidates(facts: RouteFacts) -> tuple[str, ...]:
+    """The allowed toolsets beyond the forced part — those that fill the room — in order."""
+    forced = wanted(facts) | facts.recent
+    return tuple(t.name for t in facts.toolsets if t.allowed and t.name not in forced)
+
+
+def by_rank(allowed: Sequence[ToolsetFacts], ranked: Sequence[str]) -> list[ToolsetFacts]:
+    """The ranked toolsets first, in their rank; the others after them in the fixed order."""
+    rank = {name: place for place, name in enumerate(ranked)}
+    return sorted(allowed, key=lambda toolset: rank.get(toolset.name, len(rank)))
 
 
 def used_room(allowed: Sequence[ToolsetFacts], whole: set[str], reading: list[str]) -> int:

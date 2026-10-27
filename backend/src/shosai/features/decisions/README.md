@@ -49,3 +49,8 @@ Leo's Decision Layer: the judgement calls the rest of Leo must not make by hand 
 
 - `FRICTION_JUDGE` is bound over the engine (`channels/agent_ports.py`). The agent asks it only for a card its rule left standard (`features/agent/application/friction_judging.py`), with the person's question of the turn and the card as rendered in their language; the decision's subject is the action's id. A card takes a warning only from an active version: a shadow version is asked and recorded, and the card stays as the rule made it; a warning is never asked, so it never becomes standard.
 - Each card's end — approved, rejected, expired — reaches `observe` as `CardResolution`, buffered in the person's home, never blocking the decision or the sweep that ended it.
+
+## `turn.route` beside the agent's rule (step 6)
+
+- `TURN_ROUTER` is bound over the engine (`channels/agent_ports.py`). The agent asks it only when its rule cannot offer some toolset even for reading (`features/agent/application/route_ranking.py`): while every toolset's reads fit, a write is one `load_toolset` away and nothing is asked (DL-D3). Today a person's catalog is ≈ 7 300 tokens whole and ≈ 3 500 in reads against segment 2's 4 000, so no turn asks.
+- When asked, the person's question, the start of the last answer and the thread's turn count are read in one statement; Jev runs while the context is read, and the first model request waits for it at most 400 ms. An active version's ranking — the candidates surely needed, likeliest first — fills the room before the rule's order; a shadow's is only recorded. The decision's subject is the run; what the run called reaches `observe` as `ToolsetsCalled`.

@@ -11,8 +11,8 @@ from pydantic import JsonValue
 
 from shosai.composition.features import FEATURES
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.agent.application.page_toolsets import surface_toolsets
 from shosai.features.agent.application.surface_digest import SubjectKind
-from shosai.features.agent.application.tool_offer import surface_toolsets
 from shosai.features.agent.application.tool_registry import (
     OFFERED_EFFECTS,
     TOOLS_PER_TOOLSET,

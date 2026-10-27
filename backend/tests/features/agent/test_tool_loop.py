@@ -92,7 +92,7 @@ async def test_leo_reads_with_a_tool_and_answers_from_what_it_returned(
         "rounds": 2, "tool_calls": 1,
         "routing": {"rule": "rules_v2", "selected": ["core", "notes", "tasks", "files"],
                     "reading": [], "deferred": ["archive"], "loaded": [], "used": ["notes"],
-                    "wrote": []},
+                    "wrote": [], "routed": [], "asked": False},
     }  # fmt: skip
     traced = dict(spans["tool.notes.search"].attributes or {})
     assert (traced["tool.effect"], traced["tool.outcome"]) == ("read", "ok")

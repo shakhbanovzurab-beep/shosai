@@ -28,7 +28,6 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.keys import PortKey
 from shosai.features.agent.domain.actions import ProposalOrigin, PublicStatus
 from shosai.features.agent.domain.friction import CardEnd, Friction
-from shosai.features.agent.domain.routing import Route, RouteFacts
 
 __all__ = [
     "ACTION_PROPOSALS",
@@ -51,8 +50,7 @@ __all__ = [
     "ProposalRequest",
     "PublicStatus",
     "RecalledFact",
-    "Route",
-    "RouteFacts",
+    "RouteRequest",
     "SkillReader",
     "TurnRouter",
 ]
@@ -125,11 +123,38 @@ class ActionProposals(Protocol):
         ...
 
 
-class TurnRouter(Protocol):
-    """Picks a turn's toolsets (decisions' `turn.route`); agent's rule decides without it."""
+@dataclass(frozen=True, slots=True)
+class RouteRequest:
+    """What a router of a turn's toolsets reads: the toolsets the rule fills the room with,
+    each with what its tools do (their registered English), the person's question and the
+    start of the last answer, and whom the routing is for."""
 
-    async def route(self, facts: RouteFacts) -> Route | None:
-        """The toolsets, or None to leave it to agent's rule."""
+    # (набор, его инструменты и первые фразы их описаний) — в порядке правила.
+    candidates: tuple[tuple[str, str], ...]
+    # Сколько наборов правило держит целиком и сколько токенов сегмента 2 осталось.
+    forced: int
+    room: int
+    question: str
+    previous: str
+    # Раздел страницы кабинета; пусто, когда ход задан не со страницы.
+    section: str
+    turn: int
+    language: str
+    scope: TenancyScope
+    cross_border_consent: bool
+    run_id: UUID
+
+
+class TurnRouter(Protocol):
+    """Ranks the toolsets that fill a turn's room (decisions' `turn.route`); the rule keeps
+    its forced part and decides alone without it. Hears which toolsets a routed run called."""
+
+    async def route(self, request: RouteRequest) -> tuple[str, ...] | None:
+        """The candidates the turn surely needs, likeliest first; None leaves the rule's order."""
+        ...
+
+    def ended(self, home: Home, run_id: UUID, called: frozenset[str]) -> None:
+        """The toolsets a routed run called; never blocks, never fails."""
         ...
 
 

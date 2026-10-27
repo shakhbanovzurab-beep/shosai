@@ -181,6 +181,8 @@ class RunEngine:
             )
             if recorded is not None:
                 self._parts.telemetry.ended(payload, (recorded, answer), times, now)
+                if recorded.status is not RunStatus.PAUSED:
+                    self._parts.routing.ended(payload, state.work.offer)
                 await state.emitter.emit(*recorded.terminal(payload.reply_id))
                 if recorded.status is RunStatus.PAUSED:
                     # Решение по карточке продолжит тот же журнал: он живёт, пока карточка ждёт.

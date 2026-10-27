@@ -1,19 +1,26 @@
-"""The agent's `FrictionJudge` over the engine: a stronger card only from an active version,
-each card's end kept by its subject (decisions step 5; ADR 0069 DL-D4)."""
+"""The agent's ports over the engine: a stronger card only from an active version, each card's
+end kept by its subject (decisions step 5; DL-D4); a turn's toolsets ranked only by an active
+version, what a routed run called kept by the run (step 6; DL-D3)."""
 
 import uuid
 
 from shosai.core.agent_tools.context import Taint
 from shosai.core.agent_tools.spec import Reversibility
+from shosai.core.ai.decisions import NoulAnswer
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
-from shosai.features.agent.contracts import CardEnd, Friction, FrictionFacts
-from shosai.features.decisions.channels.agent_ports import AgentFrictionJudge
+from shosai.features.agent.contracts import CardEnd, Friction, FrictionFacts, RouteRequest
+from shosai.features.decisions.channels.agent_ports import AgentFrictionJudge, AgentTurnRouter
 from shosai.features.decisions.domain.policies.action_friction import ACTION_FRICTION
+from shosai.features.decisions.domain.policies.turn_route import TURN_ROUTE
+from shosai.features.decisions.domain.verdicts import Cut
 from tests.features.decisions.engine_bench import FRICTION_CUTS, bench, matching, stored
 
 ACTIVE = stored(ACTION_FRICTION, "active", FRICTION_CUTS)
 SHADOW = stored(ACTION_FRICTION, "shadow", FRICTION_CUTS)
+ROUTE_CUTS = {"needs": Cut(lower=0.5, upper=0.6)}
+ROUTING = stored(TURN_ROUTE, "active", ROUTE_CUTS)
+ROUTING_SHADOW = stored(TURN_ROUTE, "shadow", ROUTE_CUTS)
 
 
 def facts(rule: Friction = Friction.STANDARD) -> FrictionFacts:
@@ -73,3 +80,57 @@ async def test_a_card_s_end_is_kept_by_its_subject_in_the_person_s_home() -> Non
         Home.RU, "action.friction", "action", action_id,
     )  # fmt: skip
     assert row["observation"] == {"resolution": "expired"}
+
+
+def route_request(*names: str) -> RouteRequest:
+    """A turn whose room the rule fills with `names`."""
+    return RouteRequest(
+        candidates=tuple((name, f"{name}.search: Find {name}.") for name in names), forced=1,
+        room=900, question="What did we promise the client last week?", previous="",
+        section="", turn=2, language="en", scope=TenancyScope(Home.EU, uuid.uuid4()),
+        cross_border_consent=True, run_id=uuid.uuid4(),
+    )  # fmt: skip
+
+
+async def test_an_active_version_ranks_the_needed_toolsets_likeliest_first() -> None:
+    test = bench(ROUTING)
+    test.jev.answers = {
+        "needs_mail": NoulAnswer(0.7), "needs_calendar": NoulAnswer(0.2),
+        "needs_memory": NoulAnswer(0.95),
+    }  # fmt: skip
+    request = route_request("mail", "calendar", "memory", "Not A Name")
+
+    ranked = await AgentTurnRouter(test.engine).route(request)
+
+    assert ranked == ("memory", "mail")
+    [(home, row)] = test.rows.decisions
+    assert (home, row["subject_kind"], row["subject_id"]) == (Home.EU, "run", request.run_id)
+    [(_, asked)] = test.jev.asked
+    assert set(asked.questions) == {"needs_mail", "needs_calendar", "needs_memory"}
+
+
+async def test_a_shadow_version_or_no_need_leaves_the_rule_s_order() -> None:
+    shadow, idle = bench(ROUTING_SHADOW), bench(ROUTING)
+    shadow.jev.answers = {"needs_mail": NoulAnswer(0.95)}
+    idle.jev.answers = {"needs_mail": NoulAnswer(0.1)}
+
+    ranked = [
+        await AgentTurnRouter(test.engine).route(route_request("mail")) for test in (shadow, idle)
+    ]
+    await shadow.engine.drain()
+
+    assert ranked == [None, None]
+    assert [len(test.rows.decisions) for test in (shadow, idle)] == [1, 1]
+
+
+async def test_what_a_routed_run_called_is_kept_by_the_run() -> None:
+    test = bench(ROUTING)
+    run_id = uuid.uuid4()
+
+    AgentTurnRouter(test.engine).ended(Home.RU, run_id, frozenset({"mail", "notes"}))
+
+    [(home, row)] = test.rows.outcomes
+    assert (home, row["point"], row["subject_kind"], row["subject_id"]) == (
+        Home.RU, "turn.route", "run", run_id,
+    )  # fmt: skip
+    assert row["observation"] == {"called": ["mail", "notes"]}

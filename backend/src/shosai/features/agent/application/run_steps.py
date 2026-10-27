@@ -82,14 +82,22 @@ class RunSteps:
 
     async def context(self) -> None:
         """The question's attachments, then the policy, the recent conversation and the
-        question with its images; the run's toolsets."""
+        question with its images; the run's toolsets, ranked by a bound router while the
+        context is read when the rule leaves one out."""
         payload, sizes, run = self._run.payload, self._run.times.sizes, self._run
         images = await self._parts.attachments.read(payload, run.work, run.emitter)
         labels: list[Provenance] = []
+        routing = self._parts.routing
         with self._parts.telemetry.context():
             async with self._parts.transactions.begin(payload.scope(), read_only=True) as session:
-                request = await self._parts.context.request(session, payload, sizes, labels)
-                offer = await self._parts.routing.offer(session, payload)
+                offer = await routing.offer(session, payload)
+                asked = await routing.ask(session, payload, offer)
+                try:
+                    request = await self._parts.context.request(session, payload, sizes, labels)
+                except BaseException:
+                    routing.drop(asked)
+                    raise
+            await routing.settle(offer, asked)
         self._begin(with_images(request, images), offer, labels)
 
     async def resume(self, action_id: UUID) -> None:
