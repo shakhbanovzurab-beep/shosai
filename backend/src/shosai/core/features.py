@@ -30,6 +30,7 @@ from shosai.core.agent_tools.bindings import AgentTool
 from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.agent_tools.spec import ToolSpec
 from shosai.core.ai.costs.settlement import CostSettlement
+from shosai.core.ai.listing import ModelListing
 from shosai.core.ai.port import AiProviders
 from shosai.core.ai.spend.operator import SpendOperator
 from shosai.core.cache.port import Cache
@@ -81,6 +82,8 @@ class CoreServices:
     ai: AiProviders
     # Отчёты о расходах, баланс OpenRouter и аварийный выключатель — для экранов оператора.
     ai_spend: SpendOperator
+    # Модели OpenRouter с их описанием и цены в силе — для каталога studio (ADR 0074).
+    ai_listing: ModelListing
     # Письма пишутся в транзакции вызывающего; отправляет их обход дома (F6-C10).
     email: EmailPort
     # Инструменты всех срезов для агента: каталог заполняется, когда срезы собраны (ADR 0029).

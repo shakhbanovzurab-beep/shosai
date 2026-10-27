@@ -30,6 +30,7 @@ from shosai.core.ai.costs.billing import BillingMarks
 from shosai.core.ai.costs.reconciliation import CostReconciliation, reconcile_costs_handler
 from shosai.core.ai.costs.settlement import CostSettlements
 from shosai.core.ai.costs.writer import CostWriter, WorkSender, record_cost_handler
+from shosai.core.ai.listing import ModelListing, OpenRouterModels
 from shosai.core.ai.metrics import AiMetrics
 from shosai.core.ai.port import AiProviders
 from shosai.core.ai.pricing.prices import PriceBook
@@ -75,6 +76,7 @@ class PlatformAi:
     cbr_url: str
     openrouter_url: str
     reconciliation: CostReconciliation
+    listing: ModelListing
 
     def task_handlers(self) -> list[TaskHandler[Any]]:
         """The deferred cost record, the reconciliation, the rate fetch and the price sync."""
@@ -213,13 +215,16 @@ async def open_ai(
     )
     writer.observe(spend.count)
     writer.observe(spend_alert(settings, dependencies, transactions).observe)
-    admission = Admission(PriceBook(transactions), metrics)
+    prices = PriceBook(transactions)
+    admission = Admission(prices, metrics)
     telemetry = CallTelemetry(registry, dependencies.tracer_provider)
     runner = RouteRunner(
         admission, recorder, resilience(settings.ai, dependencies), spend, telemetry
     )
     guards = user_guards(settings.ai_guards, dependencies.valkey)
     providers = AiProviders(clients, runner, LiveSessions(minutes, spend), guards)
+    base = settings.ai.openrouter_base_url
+    openrouter_url = OPENROUTER_API if base is None else str(base)
     return PlatformAi(
         providers=providers,
         operator=operator,
@@ -229,10 +234,7 @@ async def open_ai(
         transactions=transactions,
         outbound=outbound,
         cbr_url=str(settings.exchange_rates.cbr_daily_url),
-        openrouter_url=(
-            OPENROUTER_API
-            if settings.ai.openrouter_base_url is None
-            else str(settings.ai.openrouter_base_url)
-        ),
+        openrouter_url=openrouter_url,
         reconciliation=CostReconciliation(transactions, marks, registry),
+        listing=ModelListing(OpenRouterModels(outbound, openrouter_url), prices),
     )

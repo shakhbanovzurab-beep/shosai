@@ -63,7 +63,7 @@ from shosai.core.events.resources import EventResources
 from shosai.core.events.system import event_task_handlers
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, combine_parts
 from shosai.core.health.dependencies import home_probe, redis_probe, storage_probe
-from shosai.core.health.probes import DependencyProbe
+from shosai.core.health.probes import DependencyProbe, check_probe_names
 from shosai.core.idempotency.batch import EffectBatch
 from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.idempotency.metrics import EffectKeyMetrics
@@ -209,15 +209,6 @@ async def open_platform(
         yield Platform(services, tasks, events, parts, probes, jobs)
 
 
-def check_probe_names(probes: Sequence[DependencyProbe]) -> None:
-    """Refuse two probes with one name: the readiness report could not tell them apart."""
-    names = [probe.name for probe in probes]
-    duplicates = sorted({name for name in names if names.count(name) > 1})
-    if duplicates:
-        message = f"пробы готовности названы дважды: {', '.join(duplicates)}"
-        raise ValueError(message)
-
-
 async def _open_homes(process: _Process, stack: AsyncExitStack) -> _Homes:
     telemetry = process.telemetry
     databases = HomeDatabases.create(
@@ -275,6 +266,7 @@ def _core_services(
         effects=writers.effects,
         ai=writers.ai.providers,
         ai_spend=writers.ai.operator,
+        ai_listing=writers.ai.listing,
         email=writers.email.port,
         agent_tools=AgentToolCatalog(),
         exchange_rates=writers.ai.rates,

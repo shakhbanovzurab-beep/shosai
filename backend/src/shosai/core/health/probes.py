@@ -57,3 +57,12 @@ async def run_probe(probe: DependencyProbe, within: timedelta) -> ProbeStatus:
         )
         return "down"
     return "ok"
+
+
+def check_probe_names(probes: Sequence[DependencyProbe]) -> None:
+    """Refuse two probes with one name: the readiness report could not tell them apart."""
+    names = [probe.name for probe in probes]
+    duplicates = sorted({name for name in names if names.count(name) > 1})
+    if duplicates:
+        message = f"пробы готовности названы дважды: {', '.join(duplicates)}"
+        raise ValueError(message)

@@ -80,6 +80,13 @@ def slug_of(openrouter_id: str) -> str:
         raise ValueError(message)
     if len(slug) <= SLUG_MAX:
         return slug
+    return hashed_slug(openrouter_id)
+
+
+def hashed_slug(openrouter_id: str) -> str:
+    """The slug ending with a hash of the whole id: for a long id, or one whose plain slug
+    another model already holds (`a/b.c` and `a/b-c`)."""
+    slug = _NOT_SLUG.sub("-", openrouter_id.lower()).strip("-")
     digest = hashlib.sha256(openrouter_id.encode()).hexdigest()[:SLUG_HASH]
     return f"{slug[: SLUG_MAX - SLUG_HASH - 1].rstrip('-')}-{digest}"
 
