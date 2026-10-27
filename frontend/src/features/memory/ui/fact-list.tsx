@@ -1,39 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Search } from "lucide-react";
-import { useLocale } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { ItemGroup } from "@/components/ui/item";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
-import { MEMORY_KINDS, type MemoryFact } from "../domain/contract";
-import { countByKind, filterFacts, groupByKind, type KindFilter } from "../domain/facts";
+import { MEMORY_KINDS, type MemoryFact, type MemoryKind, WORDS_MAX } from "../domain/contract";
+import { groupByKind } from "../domain/facts";
 import type { MemoryWords } from "../model/fact-actions";
+import { setFactsQuery, useFactsQuery } from "../model/facts-resource";
 import { FactItem } from "./fact-item";
 
-const isKindFilter = (value: string): value is KindFilter =>
-  value === "all" || MEMORY_KINDS.some((kind) => kind === value);
+// Поиск уходит на сервер, когда человек перестал печатать.
+const SEARCH_PAUSE_MS = 300;
+const ALL = "all";
+
+const kindOf = (value: string): MemoryKind | null | undefined =>
+  value === ALL ? null : MEMORY_KINDS.find((kind) => kind === value);
 
 type FactListProps = {
   active: MemoryFact[];
+  /** Сколько фактов во всей памяти — у «Все». */
+  total: number;
   words: MemoryWords;
   /** «Показать ещё» — пока у сервера есть следующая страница. */
   onMore: (() => void) | null;
 };
 
-/** Принятые факты: фильтр по видам со счётчиками, поиск и группы по видам. */
-export function FactList({ active, words, onMore }: FactListProps) {
+/** Принятые факты: вид и поиск по всей памяти на сервере, группы по видам. */
+export function FactList({ active, total, words, onMore }: FactListProps) {
   const { t } = words;
-  const locale = useLocale();
-  const [kind, setKind] = useState<KindFilter>("all");
-  const [query, setQuery] = useState("");
-  const counts = countByKind(active);
-  const shown = filterFacts(active, kind, query, locale);
-  const groups = groupByKind(shown);
+  const query = useFactsQuery();
+  const [text, setText] = useState(query.words);
+  const pause = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const groups = groupByKind(active);
+
+  const search = (next: string) => {
+    setText(next);
+    clearTimeout(pause.current);
+    pause.current = setTimeout(() => setFactsQuery({ ...query, words: next.trim() }), SEARCH_PAUSE_MS);
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -42,19 +52,21 @@ export function FactList({ active, words, onMore }: FactListProps) {
           type="single"
           variant="outline"
           size="sm"
-          value={kind}
+          value={query.kind ?? ALL}
           aria-label={t("kinds.label")}
           className="flex-wrap"
-          onValueChange={(value) => (isKindFilter(value) ? setKind(value) : undefined)}
+          onValueChange={(value) => {
+            const kind = kindOf(value);
+            if (kind !== undefined) setFactsQuery({ ...query, kind });
+          }}
         >
-          <ToggleGroupItem value="all">
+          <ToggleGroupItem value={ALL}>
             {t("kinds.all")}
-            <span className="text-muted-foreground tabular-nums">{active.length}</span>
+            <span className="text-muted-foreground tabular-nums">{total}</span>
           </ToggleGroupItem>
-          {MEMORY_KINDS.filter((k) => counts[k] > 0).map((k) => (
-            <ToggleGroupItem key={k} value={k}>
-              {t(`kinds.${k}`)}
-              <span className="text-muted-foreground tabular-nums">{counts[k]}</span>
+          {MEMORY_KINDS.map((kind) => (
+            <ToggleGroupItem key={kind} value={kind}>
+              {t(`kinds.${kind}`)}
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
@@ -64,17 +76,18 @@ export function FactList({ active, words, onMore }: FactListProps) {
           </InputGroupAddon>
           <InputGroupInput
             type="search"
-            value={query}
+            value={text}
+            maxLength={WORDS_MAX}
             placeholder={t("search")}
             aria-label={t("search")}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => search(event.target.value)}
           />
         </InputGroup>
       </div>
-      {shown.length === 0 ? <p className="py-6 text-center text-muted-foreground text-sm">{t("noMatch")}</p> : null}
+      {active.length === 0 ? <p className="py-6 text-center text-muted-foreground text-sm">{t("noMatch")}</p> : null}
       {groups.map(([group, facts]) => (
         <section key={group} aria-label={t(`kinds.${group}`)} className="flex flex-col gap-1">
-          {kind === "all" ? (
+          {query.kind === null ? (
             <h3 className="px-3 font-medium text-muted-foreground text-xs uppercase tracking-wide">
               {t(`kinds.${group}`)}
             </h3>

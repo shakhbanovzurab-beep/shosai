@@ -35,8 +35,10 @@
     "user_statement": "Из чата",
     "meeting": "Со встречи",
     "meetingNamed": "Со встречи «{title}»",
+    "team_chat": "Из командного чата",
     "settings": "Добавлено в настройках",
-    "user_edit": "Изменено вами"
+    "user_edit": "Изменено вами",
+    "imported": "Из прежней памяти"
   },
   "meta": "{source} · {date}",
   "pinned": "Закреплено",

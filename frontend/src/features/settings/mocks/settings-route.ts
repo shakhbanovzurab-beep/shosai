@@ -13,7 +13,6 @@ type Fixable = (typeof FIXABLE)[number];
 
 const patchSchema = z
   .object({
-    memory_enabled: z.boolean(),
     hotkeys: z.partialRecord(
       z.enum(HOTKEY_IDS),
       z
@@ -38,7 +37,7 @@ function hotkeysProblem(hotkeys: HotkeyBindings) {
   return null;
 }
 
-/** /api/settings: the preferences memory and capture still serve from mocks (Leo's are agent's `/v1/agent/settings`). */
+/** /api/settings: the hotkeys capture still serves from mocks (Leo's are agent's, memory's switch is memory's). */
 export const settingsRoute = {
   async GET(_request: Request) {
     return JsonResponse.json<UserSettings>(getSettings());

@@ -35,8 +35,10 @@
     "user_statement": "來自對話",
     "meeting": "來自會議",
     "meetingNamed": "來自會議「{title}」",
+    "team_chat": "來自團隊對話",
     "settings": "在設定中新增",
-    "user_edit": "由你編輯"
+    "user_edit": "由你編輯",
+    "imported": "來自你先前的記憶"
   },
   "meta": "{source} · {date}",
   "pinned": "已釘選",

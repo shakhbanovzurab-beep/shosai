@@ -42,7 +42,7 @@ artifacts, uploaded files, feedback) return when their owners serve them.
   `response_language` (a code from `src/lib/language.ts` or `auto`, `422 response_language_invalid`),
   `response_length` (`concise | balanced | detailed`) and the switches `web_search`, `voice_mode` (off also hides
   the microphone), `knowledge_base_search`, `connected_services_search` — anything off is neither offered nor
-  used. Everything is on by default. The fields left on `/api/settings` are memory's and capture's.
+  used. Everything is on by default. The fields left on `/api/settings` are capture's.
 - **Billing / Usage** are read-only. Invoices carry a human-facing `number`, a `description` and a
   `status` of `paid | pending | failed`; `download_url` points at the PDF (null until issued).
   `payment_methods` lists saved cards (exactly one `is_default`). Adding or updating a card never
@@ -60,9 +60,10 @@ artifacts, uploaded files, feedback) return when their owners serve them.
 - **MCP.** Remote servers only (`streamable_http` or `sse`). `auth_header` is write-only: store it
   encrypted, never return it; report `has_auth` instead. `tools` is the tool count from the last
   successful connection, or `null`.
-- **Memory.** `memory_enabled: false` stops new memories; existing ones stay until deleted. The facts one by
-  one, with their sources, are the `memory` slice's (`/v1/agent/memory`, see `memory-api.md`); Settings ›
-  Memory opens them from its "What Leo remembers" row under the summary.
+- **Memory** is the `memory` slice's and runs on the real API (see `memory-api.md`): the switch is `GET` and
+  `PATCH /v1/agent/memory/settings` — off stops Leo using and saving memories and deletes nothing — and the
+  facts one by one, with their sources, are `/v1/agent/memory`; Settings › Memory opens them from its "What
+  Leo remembers" row under the summary.
 - **Hotkeys.** `hotkeys` holds only the desktop app's global shortcuts the user changed, e.g.
   `{"prompter": "Mod+Alt+Y", "close_app": null}`; `null` turns a shortcut off and a missing id uses
   its default. Ids and defaults are in `src/features/settings/domain/hotkeys.ts` (`open_app` ⌥⌘Z,

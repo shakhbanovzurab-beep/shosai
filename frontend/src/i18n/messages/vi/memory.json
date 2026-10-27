@@ -35,8 +35,10 @@
     "user_statement": "Từ một cuộc trò chuyện",
     "meeting": "Từ một cuộc họp",
     "meetingNamed": "Từ cuộc họp “{title}”",
+    "team_chat": "Từ cuộc trò chuyện nhóm",
     "settings": "Đã thêm trong Cài đặt",
-    "user_edit": "Do bạn chỉnh sửa"
+    "user_edit": "Do bạn chỉnh sửa",
+    "imported": "Từ bộ nhớ trước đây của bạn"
   },
   "meta": "{source} · {date}",
   "pinned": "Đã ghim",

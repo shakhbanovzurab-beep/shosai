@@ -120,7 +120,7 @@ export function FactItem({ fact, words }: { fact: MemoryFact; words: MemoryWords
             size="icon-sm"
             aria-label={t("actions.forget")}
             aria-describedby={statementId}
-            onClick={() => forgetFact(fact, words)}
+            onClick={() => void forgetFact(fact, words)}
           >
             <Trash2 />
           </Button>

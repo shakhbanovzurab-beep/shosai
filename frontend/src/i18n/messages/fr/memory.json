@@ -35,8 +35,10 @@
     "user_statement": "D’une conversation",
     "meeting": "D’une réunion",
     "meetingNamed": "De la réunion « {title} »",
+    "team_chat": "D’une discussion d’équipe",
     "settings": "Ajouté dans les paramètres",
-    "user_edit": "Modifié par vous"
+    "user_edit": "Modifié par vous",
+    "imported": "De votre mémoire précédente"
   },
   "meta": "{source} · {date}",
   "pinned": "Épinglé",

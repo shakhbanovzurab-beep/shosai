@@ -35,8 +35,10 @@
     "user_statement": "De un chat",
     "meeting": "De una reunión",
     "meetingNamed": "De la reunión «{title}»",
+    "team_chat": "De un chat de equipo",
     "settings": "Agregado en Configuración",
-    "user_edit": "Editado por ti"
+    "user_edit": "Editado por ti",
+    "imported": "De tu memoria anterior"
   },
   "meta": "{source} · {date}",
   "pinned": "Fijado",

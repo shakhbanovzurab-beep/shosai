@@ -35,8 +35,10 @@
     "user_statement": "चैट से",
     "meeting": "मीटिंग से",
     "meetingNamed": "“{title}” मीटिंग से",
+    "team_chat": "टीम चैट से",
     "settings": "सेटिंग में जोड़ा गया",
-    "user_edit": "आपने बदला"
+    "user_edit": "आपने बदला",
+    "imported": "आपकी पिछली मेमोरी से"
   },
   "meta": "{source} · {date}",
   "pinned": "पिन किया गया",

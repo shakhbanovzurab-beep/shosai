@@ -35,8 +35,10 @@
     "user_statement": "Dari chat",
     "meeting": "Dari rapat",
     "meetingNamed": "Dari rapat “{title}”",
+    "team_chat": "Dari chat tim",
     "settings": "Ditambahkan di Pengaturan",
-    "user_edit": "Diedit oleh Anda"
+    "user_edit": "Diedit oleh Anda",
+    "imported": "Dari memori Anda sebelumnya"
   },
   "meta": "{source} · {date}",
   "pinned": "Disematkan",

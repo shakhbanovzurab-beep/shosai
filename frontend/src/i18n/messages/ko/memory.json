@@ -35,8 +35,10 @@
     "user_statement": "채팅에서",
     "meeting": "회의에서",
     "meetingNamed": "“{title}” 회의에서",
+    "team_chat": "팀 채팅에서",
     "settings": "설정에서 추가함",
-    "user_edit": "직접 편집함"
+    "user_edit": "직접 편집함",
+    "imported": "이전 메모리에서"
   },
   "meta": "{source} · {date}",
   "pinned": "고정됨",

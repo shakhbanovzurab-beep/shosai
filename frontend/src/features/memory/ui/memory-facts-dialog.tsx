@@ -12,65 +12,68 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { FactsPage } from "../domain/contract";
 import { splitFacts } from "../domain/facts";
 import { type MemoryWords, useMemoryWords } from "../model/fact-actions";
-import { factsResource, loadMoreFacts, useFacts } from "../model/facts-resource";
+import { factsResource, loadMoreFacts, useFacts, useFactsQuery } from "../model/facts-resource";
+import { useMemorySwitch } from "../model/memory-switch";
 import { undoForget, usePendingForget } from "../model/pending-forget";
 import { FactCandidates } from "./fact-candidates";
 import { FactList } from "./fact-list";
 import { ForgetAll } from "./forget-all";
 
-function FactsBody({ page, memoryOn, words }: { page: FactsPage; memoryOn: boolean; words: MemoryWords }) {
+function EmptyMemory({ words }: { words: MemoryWords }) {
   const { t } = words;
-  const { candidates, active } = splitFacts(page.facts);
+  return (
+    <Empty className="min-h-56">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <Brain />
+        </EmptyMedia>
+        <EmptyTitle>{t("empty.title")}</EmptyTitle>
+        <EmptyDescription>{t("empty.description")}</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  );
+}
+
+function FactsBody({ page, words }: { page: FactsPage; words: MemoryWords }) {
+  const { t } = words;
+  const memory = useMemorySwitch();
+  const query = useFactsQuery();
+  const { candidates, active } = splitFacts(page.items);
+  const filtered = query.kind !== null || query.words !== "";
+  const nothing = page.counts.active === 0 && page.counts.candidates === 0 && !filtered;
   return (
     <div className="flex flex-col gap-5">
-      {memoryOn ? null : (
+      {memory.status === "ready" && !memory.data ? (
         <Alert>
           <CircleOff />
           <AlertDescription>{t("off")}</AlertDescription>
         </Alert>
-      )}
-      <FactCandidates candidates={candidates} words={words} />
-      {page.facts.length === 0 ? (
-        <Empty className="min-h-56">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Brain />
-            </EmptyMedia>
-            <EmptyTitle>{t("empty.title")}</EmptyTitle>
-            <EmptyDescription>{t("empty.description")}</EmptyDescription>
-          </EmptyHeader>
-        </Empty>
       ) : null}
-      {active.length > 0 ? (
+      <FactCandidates candidates={candidates} words={words} />
+      {nothing ? <EmptyMemory words={words} /> : null}
+      {nothing ? null : (
         <FactList
           active={active}
+          total={page.counts.active}
           words={words}
           onMore={page.next_cursor === null ? null : () => void loadMoreFacts()}
         />
-      ) : null}
+      )}
     </div>
   );
 }
 
 /**
  * Что помнит Leo, по фактам (SM-6): у каждого источник, любой можно поправить, закрепить или забыть; кандидаты
- * ждут ответа сверху. `memoryOn` — переключатель памяти: выключенная память ничего не удаляет.
+ * ждут ответа сверху. Выключенная память ничего не удаляет — окно говорит об этом сверху.
  */
-export function MemoryFactsDialog({
-  open,
-  onClose,
-  memoryOn,
-}: {
-  open: boolean;
-  onClose: () => void;
-  memoryOn: boolean;
-}) {
+export function MemoryFactsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const words = useMemoryWords();
   const { t } = words;
   const state = useFacts();
   const forgotten = usePendingForget();
-  // Внизу — факты, которые Leo использует; кандидаты ждут ответа и не в счёт.
-  const { active } = splitFacts(state.status === "ready" ? state.data.facts : []);
+  // Внизу — сколько фактов Leo использует во всей памяти; кандидаты ждут ответа и не в счёт.
+  const total = state.status === "ready" ? state.data.counts.active : 0;
 
   return (
     <Dialog open={open} onOpenChange={(next) => (next ? undefined : onClose())}>
@@ -84,21 +87,21 @@ export function MemoryFactsDialog({
           {state.status === "error" ? (
             <LoadError title={t("failed.load")} message={state.message} onRetry={() => void factsResource.refresh()} />
           ) : null}
-          {state.status === "ready" ? <FactsBody page={state.data} memoryOn={memoryOn} words={words} /> : null}
+          {state.status === "ready" ? <FactsBody page={state.data} words={words} /> : null}
         </div>
-        {active.length > 0 || forgotten ? (
+        {total > 0 || forgotten ? (
           <div className="flex items-center justify-between gap-3 border-t px-6 py-3">
             {/* Отмена — здесь, а не в тосте: модальное окно делает тосты недоступными. */}
             <span role="status" className="min-w-0 truncate text-muted-foreground text-sm tabular-nums">
-              {forgotten ? t("forgotten") : t("dialog.count", { count: active.length })}
+              {forgotten ? t("forgotten") : t("dialog.count", { count: total })}
             </span>
             {forgotten ? (
-              <Button variant="outline" size="sm" onClick={undoForget}>
+              <Button variant="outline" size="sm" onClick={() => void undoForget()}>
                 <Undo2 data-icon="inline-start" className="rtl:-scale-x-100" />
                 {words.common("actions.undo")}
               </Button>
             ) : (
-              <ForgetAll count={active.length} words={words} />
+              <ForgetAll count={total} words={words} />
             )}
           </div>
         ) : null}

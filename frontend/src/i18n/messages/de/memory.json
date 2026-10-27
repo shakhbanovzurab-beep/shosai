@@ -35,8 +35,10 @@
     "user_statement": "Aus einem Chat",
     "meeting": "Aus einem Meeting",
     "meetingNamed": "Aus dem Meeting „{title}“",
+    "team_chat": "Aus einem Team-Chat",
     "settings": "In den Einstellungen hinzugefügt",
-    "user_edit": "Von dir bearbeitet"
+    "user_edit": "Von dir bearbeitet",
+    "imported": "Aus deinem früheren Gedächtnis"
   },
   "meta": "{source} · {date}",
   "pinned": "Angeheftet",

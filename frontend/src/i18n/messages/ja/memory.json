@@ -35,8 +35,10 @@
     "user_statement": "チャットから",
     "meeting": "会議から",
     "meetingNamed": "会議「{title}」から",
+    "team_chat": "チームチャットから",
     "settings": "設定で追加",
-    "user_edit": "あなたが編集"
+    "user_edit": "あなたが編集",
+    "imported": "以前のメモリから"
   },
   "meta": "{source} · {date}",
   "pinned": "ピン留め済み",

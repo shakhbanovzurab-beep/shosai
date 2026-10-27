@@ -35,8 +35,10 @@
     "user_statement": "Uit een chat",
     "meeting": "Uit een vergadering",
     "meetingNamed": "Uit de vergadering ‘{title}’",
+    "team_chat": "Uit een teamchat",
     "settings": "Toegevoegd in Instellingen",
-    "user_edit": "Door jou bewerkt"
+    "user_edit": "Door jou bewerkt",
+    "imported": "Uit je eerdere geheugen"
   },
   "meta": "{source} · {date}",
   "pinned": "Vastgezet",

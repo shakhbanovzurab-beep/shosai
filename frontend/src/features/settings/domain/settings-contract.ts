@@ -1,5 +1,5 @@
 /**
- * Settings API contract for the preferences other slices still own (Leo, memory, hotkeys), served under
+ * Settings API contract for the preferences other slices still own (hotkeys), served under
  * `/api/settings` by the development mocks until their owners publish routes. snake_case to match Pydantic.
  * See docs/settings-api.md. The account, avatar, consents, devices, export and deletion belong to identity
  * (`/v1/me*`). Billing and usage, MCP, memory and connectors have their own contract files beside this one.
@@ -14,12 +14,11 @@ export const RESPONSE_LENGTHS = ["concise", "balanced", "detailed"] as const;
 export type ResponseLength = (typeof RESPONSE_LENGTHS)[number];
 
 /**
- * The preferences still served by mocks: memory's switch and capture's hotkeys. Settings › Leo is agent's
- * (`/v1/agent/settings`, see docs/leo-api.md); `RESPONSE_LENGTHS` names its length options in order.
+ * The preferences still served by mocks: capture's hotkeys. Settings › Leo is agent's (`/v1/agent/settings`,
+ * see docs/leo-api.md), memory's switch is memory's (`/v1/agent/memory/settings`, see docs/memory-api.md);
+ * `RESPONSE_LENGTHS` names Leo's length options in order.
  */
 export type UserSettings = {
-  /* Memory */
-  memory_enabled: boolean;
   /* Hotkeys */
   /**
    * The desktop app's global shortcuts the user changed (see domain/hotkeys.ts): a combo such as

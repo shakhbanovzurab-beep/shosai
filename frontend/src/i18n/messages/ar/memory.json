@@ -35,8 +35,10 @@
     "user_statement": "من محادثة",
     "meeting": "من اجتماع",
     "meetingNamed": "من اجتماع «{title}»",
+    "team_chat": "من محادثة الفريق",
     "settings": "أُضيفت في الإعدادات",
-    "user_edit": "عدّلتها أنت"
+    "user_edit": "عدّلتها أنت",
+    "imported": "من ذاكرتك السابقة"
   },
   "meta": "{source} · {date}",
   "pinned": "مثبّتة",

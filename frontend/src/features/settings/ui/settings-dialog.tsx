@@ -61,11 +61,11 @@ function SectionBody({ section }: { section: SettingsSection }) {
   if (section === "mcp") return <McpSection />;
   if (section === "connectors") return <ConnectorsSection />;
   if (section === "leo") return <LeoSettingsBody />;
+  if (section === "memory") return <MemorySection />;
   return (
     <SectionState state={settings} onRetry={() => void settingsResource.refresh()}>
       {(data) => {
-        if (section === "hotkeys") return <HotkeysSection settings={data} />;
-        return <MemorySection settings={data} />;
+        return <HotkeysSection settings={data} />;
       }}
     </SectionState>
   );

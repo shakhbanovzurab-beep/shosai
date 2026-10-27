@@ -9,11 +9,11 @@ import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { memoryApi } from "../api/memory-api";
 import type { MemoryFact } from "../domain/contract";
-import { changeFacts } from "./facts-resource";
+import { changeFacts, clearFacts, count } from "./facts-resource";
 
 /*
- * Действия со страницы памяти. Список меняется сразу; если сервер откажет, правка откатывается и тост говорит
- * почему. «Забыть» с отменой — в `pending-forget.ts`.
+ * Действия в окне памяти. Список меняется сразу; если сервер откажет, правка откатывается и тост говорит почему.
+ * «Забыть» с отменой — в `pending-forget.ts`.
  */
 
 export type MemoryWords = {
@@ -31,17 +31,19 @@ const replace = (id: string, next: MemoryFact) => changeFacts((facts) => facts.m
 const without = (id: string) => changeFacts((facts) => facts.filter((f) => f.id !== id));
 const restore = (fact: MemoryFact) => changeFacts((facts) => [...facts.filter((f) => f.id !== fact.id), fact]);
 
-function failed(error: unknown, title: string) {
+export function failed(error: unknown, title: string) {
   toast.error(title, { description: apiErrorDescription(error) });
 }
 
 /** «Запомнить»: кандидат становится фактом, который Leo использует. */
 export async function acceptFact(fact: MemoryFact, { t }: MemoryWords) {
   replace(fact.id, { ...fact, status: "active" });
+  count(1, -1);
   try {
     replace(fact.id, await memoryApi.accept(fact.id));
   } catch (error) {
     replace(fact.id, fact);
+    count(-1, 1);
     failed(error, t("failed.save"));
   }
 }
@@ -49,10 +51,12 @@ export async function acceptFact(fact: MemoryFact, { t }: MemoryWords) {
 /** «Не запоминать»: кандидат уходит, Leo его не использует. */
 export async function rejectFact(fact: MemoryFact, { t }: MemoryWords) {
   without(fact.id);
+  count(0, -1);
   try {
     await memoryApi.forget(fact.id);
   } catch (error) {
     restore(fact);
+    count(0, 1);
     failed(error, t("failed.save"));
   }
 }
@@ -60,34 +64,30 @@ export async function rejectFact(fact: MemoryFact, { t }: MemoryWords) {
 export async function setPinned(fact: MemoryFact, pinned: boolean, { t }: MemoryWords) {
   replace(fact.id, { ...fact, pinned });
   try {
-    replace(fact.id, await memoryApi.update(fact.id, { pinned }));
+    replace(fact.id, await memoryApi.update(fact.id, { pinned }, crypto.randomUUID()));
   } catch (error) {
     replace(fact.id, fact);
     failed(error, t("failed.save"));
   }
 }
 
-/** Новый текст заменяет факт (supersession): у ответа новый id. true — сохранено. */
-export async function editFact(fact: MemoryFact, statement: string, { t }: MemoryWords): Promise<boolean> {
-  try {
-    replace(fact.id, await memoryApi.update(fact.id, { statement }));
-    return true;
-  } catch (error) {
-    failed(error, t("failed.save"));
-    return false;
-  }
-}
-
-/** Правка из редактора: флаг занятости держится, пока идёт запрос, и снимается в любом исходе. */
+/**
+ * Правка из редактора: новый текст заменяет факт, у ответа новый id. Ключ один на правку, флаг занятости держится,
+ * пока идёт запрос. true — сохранено.
+ */
 export async function saveFactEdit(
   fact: MemoryFact,
   statement: string,
-  words: MemoryWords,
+  { t }: MemoryWords,
   setBusy: (busy: boolean) => void,
 ): Promise<boolean> {
   setBusy(true);
   try {
-    return await editFact(fact, statement, words);
+    replace(fact.id, await memoryApi.update(fact.id, { statement }, crypto.randomUUID()));
+    return true;
+  } catch (error) {
+    failed(error, t("failed.save"));
+    return false;
   } finally {
     setBusy(false);
   }
@@ -97,7 +97,7 @@ export async function saveFactEdit(
 export async function forgetAll({ t }: MemoryWords) {
   try {
     await memoryApi.forgetAll();
-    changeFacts(() => []);
+    clearFacts();
     toast.success(t("forgetAll.done"));
   } catch (error) {
     failed(error, t("failed.forget"));

@@ -35,8 +35,10 @@
     "user_statement": "From a chat",
     "meeting": "From a meeting",
     "meetingNamed": "From the meeting “{title}”",
+    "team_chat": "From a team chat",
     "settings": "Added in Settings",
-    "user_edit": "Edited by you"
+    "user_edit": "Edited by you",
+    "imported": "From your earlier memory"
   },
   "meta": "{source} · {date}",
   "pinned": "Pinned",

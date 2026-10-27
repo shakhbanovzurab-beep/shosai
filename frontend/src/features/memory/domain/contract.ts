@@ -1,41 +1,31 @@
-/**
- * Memory API contract: what Leo remembers about the person (ADR 0030, Leo architecture §7.2), on the
- * routes of Leo architecture §13.2. The backend's `memory` slice is not built yet; until it is, the
- * development mocks answer the same `/v1` paths. See docs/memory-api.md.
- *
- * GET    /v1/agent/memory?cursor=       → FactsPage   (candidates and active facts; forgotten ones are never listed)
- * PATCH  /v1/agent/memory/{id}          → MemoryFact  (FactUpdate; a new statement supersedes, so the answer has a new id)
- * POST   /v1/agent/memory/{id}/accept   → MemoryFact  (a candidate becomes active)
- * DELETE /v1/agent/memory/{id}          → 204         (forgets a fact, or turns a candidate down)
- * DELETE /v1/agent/memory               → 204         (forgets everything)
+import type { components } from "@/lib/api/generated/schema";
+
+/*
+ * Что помнит Leo о человеке (ADR 0071, Leo §7.2) — маршруты `/v1/agent/memory*` бэкенда `memory` (план memory §3.3),
+ * типы из его OpenAPI. Подробно — docs/memory-api.md.
  */
 
-/** Preference, fact, relationship (people), goal, procedure (how the person works). */
+type Schemas = components["schemas"];
+
+/** Предпочтение, факт о человеке, люди, цели, как человек работает. */
 export const MEMORY_KINDS = ["preference", "fact", "relationship", "goal", "procedure"] as const;
-export type MemoryKind = (typeof MEMORY_KINDS)[number];
+export type MemoryKind = Schemas["FactKind"];
 
-/** Where a fact came from: the person said it in a chat, a meeting, Settings, or the person edited it. */
-export const SOURCE_KINDS = ["user_statement", "meeting", "settings", "user_edit"] as const;
-export type SourceKind = (typeof SOURCE_KINDS)[number];
+/** Откуда факт: чат с Leo, встреча, командный чат, настройки, правка человека, прежняя память. */
+export type SourceKind = Schemas["MemorySource"];
 
-/** Every fact shows its source; `title` names the meeting for `meeting` and is null otherwise. */
-export type MemorySource = { kind: SourceKind; title: string | null };
+/** Факт или кандидат; `statement` — данные человека, показываются как написаны (`dir="auto"`). */
+export type MemoryFact = Schemas["MemoryFactOut"];
 
-export type MemoryFact = {
-  id: string;
-  kind: MemoryKind;
-  /** In the person's language; it is the person's data, shown as written (`dir="auto"`). */
-  statement: string;
-  /** A candidate waits for "Should Leo remember this?" and is not used in answers until accepted. */
-  status: "candidate" | "active";
-  /** Pinned facts are always part of Leo's profile of the person. */
-  pinned: boolean;
-  source: MemorySource;
-  created_at: string;
-};
+/** Страница фактов: кандидаты первыми, потом факты, новые сверху; счётчики — по всей памяти. */
+export type FactsPage = Schemas["FactsPageOut"];
+export type MemoryCounts = Schemas["MemoryCountsOut"];
 
-export type FactsPage = { facts: MemoryFact[]; next_cursor: string | null };
+/** Новый текст (заменяет факт: у ответа новый id) или закрепление. */
+export type FactUpdate = Schemas["FactPatch"];
 
-export type FactUpdate = { statement?: string; pinned?: boolean };
+/** Что выбрано в окне памяти: вид и слова; фильтрует сервер, поэтому они покрывают все страницы. */
+export type FactsQuery = { kind: MemoryKind | null; words: string };
 
 export const STATEMENT_MAX = 500;
+export const WORDS_MAX = 200;

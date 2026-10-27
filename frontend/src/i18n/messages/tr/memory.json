@@ -35,8 +35,10 @@
     "user_statement": "Bir sohbetten",
     "meeting": "Bir toplantıdan",
     "meetingNamed": "“{title}” toplantısından",
+    "team_chat": "Bir ekip sohbetinden",
     "settings": "Ayarlarda eklendi",
-    "user_edit": "Sizin düzenlediğiniz"
+    "user_edit": "Sizin düzenlediğiniz",
+    "imported": "Önceki belleğinizden"
   },
   "meta": "{source} · {date}",
   "pinned": "Sabitlendi",

@@ -1,17 +1,33 @@
-import { apiRequest, jsonBody } from "@/lib/api/request";
+import { apiClient } from "@/lib/api/app-client";
+import { dataOf } from "@/lib/api/client";
 
-import type { FactsPage, FactUpdate, MemoryFact } from "../domain/contract";
+import type { FactsPage, FactsQuery, FactUpdate, MemoryFact } from "../domain/contract";
 
-// Маршруты Leo §13.2; бэкенда `memory` ещё нет, и в OpenAPI их нет, поэтому запрос без сгенерированного клиента.
-const BASE = "/v1/agent/memory";
-const fact = (id: string) => `${BASE}/${encodeURIComponent(id)}`;
+/* Память Leo на `/v1/agent/memory*` (план memory §3.3): факты по страницам с фильтрами сервера и правки. */
 
-/** What Leo remembers (ADR 0030): list by pages, accept, edit or pin, forget one or all. */
+const fact = (id: string) => ({ params: { path: { fact_id: id } } });
+
 export const memoryApi = {
-  list: (cursor?: string): Promise<FactsPage> =>
-    apiRequest(cursor ? `${BASE}?cursor=${encodeURIComponent(cursor)}` : BASE),
-  update: (id: string, update: FactUpdate): Promise<MemoryFact> => apiRequest(fact(id), jsonBody("PATCH", update)),
-  accept: (id: string): Promise<MemoryFact> => apiRequest(`${fact(id)}/accept`, { method: "POST" }),
-  forget: (id: string): Promise<void> => apiRequest(fact(id), { method: "DELETE" }),
-  forgetAll: (): Promise<void> => apiRequest(BASE, { method: "DELETE" }),
+  list: (query: FactsQuery, cursor: string | null): Promise<FactsPage> =>
+    dataOf(
+      apiClient.GET("/v1/agent/memory", {
+        params: { query: { kind: query.kind, q: query.words || null, cursor } },
+      }),
+    ),
+  /** Новый текст требует ключа идемпотентности: повтор отвечает первым результатом, а не 404 на заменённый факт. */
+  update: (id: string, body: FactUpdate, key: string): Promise<MemoryFact> =>
+    dataOf(
+      apiClient.PATCH("/v1/agent/memory/{fact_id}", {
+        params: { path: { fact_id: id }, header: { "Idempotency-Key": key } },
+        body,
+      }),
+    ),
+  accept: (id: string): Promise<MemoryFact> => dataOf(apiClient.POST("/v1/agent/memory/{fact_id}/accept", fact(id))),
+  forget: (id: string): Promise<void> => dataOf(apiClient.DELETE("/v1/agent/memory/{fact_id}", fact(id))),
+  /** Вернуть забытый или заменённый в последние сутки факт. */
+  restore: (id: string): Promise<MemoryFact> => dataOf(apiClient.POST("/v1/agent/memory/{fact_id}/restore", fact(id))),
+  forgetAll: (): Promise<void> => dataOf(apiClient.DELETE("/v1/agent/memory")),
+  enabled: async (): Promise<boolean> => (await dataOf(apiClient.GET("/v1/agent/memory/settings"))).enabled,
+  setEnabled: async (enabled: boolean): Promise<boolean> =>
+    (await dataOf(apiClient.PATCH("/v1/agent/memory/settings", { body: { enabled } }))).enabled,
 };

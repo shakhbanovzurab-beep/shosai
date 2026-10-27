@@ -20,7 +20,6 @@ const section = (title: string, body: string) => ({ title, body });
 const shared = globalThis as typeof globalThis & { settingsDemo?: State };
 shared.settingsDemo ??= {
   settings: {
-    memory_enabled: true,
     hotkeys: {},
   },
   summary: {

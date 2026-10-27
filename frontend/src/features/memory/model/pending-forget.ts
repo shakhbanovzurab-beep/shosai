@@ -2,19 +2,15 @@
 
 import { useSyncExternalStore } from "react";
 
-import { toast } from "sonner";
-
-import { apiErrorDescription } from "@/lib/api/error-description";
-
 import { memoryApi } from "../api/memory-api";
 import type { MemoryFact } from "../domain/contract";
-import type { MemoryWords } from "./fact-actions";
-import { changeFacts, factsResource } from "./facts-resource";
+import { failed, type MemoryWords } from "./fact-actions";
+import { changeFacts, count, factsResource } from "./facts-resource";
 
 /*
- * «Забыть» с отменой внутри окна памяти: факт пропадает сразу, а запрос уходит через несколько секунд, если
- * человек не нажал «Отменить». Тост здесь не годится — модальное окно делает всё вокруг недоступным, и кнопку
- * в тосте не нажать. Ожидает одно забывание: следующее отправляет предыдущее сразу.
+ * «Забыть» с отменой внутри окна памяти: факт забывается на сервере сразу, а «Отменить» в подвале окна несколько
+ * секунд возвращает его (сервер восстанавливает забытое в течение суток). Тост здесь не годится — модальное окно
+ * делает всё вокруг недоступным, и кнопку в тосте не нажать. Отменить можно последнее забывание.
  */
 
 const UNDO_MS = 5_000;
@@ -28,33 +24,40 @@ const emit = () => {
   for (const listener of listeners) listener();
 };
 
-/** Отправляет ожидающее забывание сейчас. */
-export function commitForget() {
-  if (!pending) return;
-  const { fact, words, timer } = pending;
-  clearTimeout(timer);
+function settle() {
+  if (pending) clearTimeout(pending.timer);
   pending = null;
   emit();
-  memoryApi.forget(fact.id).catch((error: unknown) => {
-    toast.error(words.t("failed.forget"), { description: apiErrorDescription(error) });
-    void factsResource.refresh();
-  });
 }
 
-export function forgetFact(fact: MemoryFact, words: MemoryWords) {
-  commitForget();
+export async function forgetFact(fact: MemoryFact, words: MemoryWords) {
+  settle();
   changeFacts((facts) => facts.filter((f) => f.id !== fact.id));
-  pending = { fact, words, timer: setTimeout(commitForget, UNDO_MS) };
+  count(-1, 0);
+  try {
+    await memoryApi.forget(fact.id);
+  } catch (error) {
+    changeFacts((facts) => [...facts.filter((f) => f.id !== fact.id), fact]);
+    count(1, 0);
+    failed(error, words.t("failed.forget"));
+    return;
+  }
+  pending = { fact, words, timer: setTimeout(settle, UNDO_MS) };
   emit();
 }
 
-export function undoForget() {
+export async function undoForget() {
   if (!pending) return;
-  const { fact, timer } = pending;
-  clearTimeout(timer);
-  pending = null;
-  changeFacts((facts) => [...facts.filter((f) => f.id !== fact.id), fact]);
-  emit();
+  const { fact, words } = pending;
+  settle();
+  try {
+    const back = await memoryApi.restore(fact.id);
+    changeFacts((facts) => [...facts.filter((f) => f.id !== back.id), back]);
+    count(1, 0);
+  } catch (error) {
+    failed(error, words.t("failed.save"));
+    void factsResource.refresh();
+  }
 }
 
 const subscribe = (listener: () => void) => {
