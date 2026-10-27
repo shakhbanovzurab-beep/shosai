@@ -57,6 +57,10 @@ NOT_APPROVED: Final = (
     "The person's words were not a clear yes to this action, so nothing was done. Ask once more "
     "or leave the card on the screen."
 )
+STILL_UNCLEAR: Final = (
+    "The person's words were again not a clear yes, so nothing was done. Do not ask again: tell "
+    "them in one sentence to confirm the card on the screen, and do not call core__confirm for it."
+)
 SCREEN_ONLY: Final = (
     "This action cannot be approved by voice. Tell the person to confirm it on the screen."
 )
@@ -64,7 +68,8 @@ NOT_WAITING: Final = "This card is no longer waiting for a decision; nothing was
 
 VOICE_PROMPT_TEXTS: Final = (
     VOICE_POLICY, VOICE_LANGUAGE_SET, VOICE_LANGUAGE_AUTO, CONFIRM_DESCRIPTION, CONFIRM_ACTION_ID,
-    CARD_BY_VOICE, CARD_ON_SCREEN, CONFIRMED, NOT_APPROVED, SCREEN_ONLY, NOT_WAITING,
+    CARD_BY_VOICE, CARD_ON_SCREEN, CONFIRMED, NOT_APPROVED, STILL_UNCLEAR, SCREEN_ONLY,
+    NOT_WAITING,
 )  # fmt: skip
 
 

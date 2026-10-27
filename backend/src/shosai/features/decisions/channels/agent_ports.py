@@ -15,6 +15,8 @@ its subject the run and the piece's number; only an active version's finding rea
 `VoiceApprovalJudge`: the person's reply to a card read back is asked as `voice.approval`,
 its subject the action; the owner's bounded exception — approved only when an active
 version's answer in time found a clear yes, never from a shadow, a late answer or a fallback.
+It is ready only while an active version is in force, so until then Leo sends every card to
+the screen instead of asking for a yes no one could find.
 """
 
 from typing import Final
@@ -138,6 +140,10 @@ class AgentVoiceApprovalJudge:
 
     def __init__(self, decisions: Decisions) -> None:
         self._decisions = decisions
+
+    async def ready(self) -> bool:
+        """Whether an active version is in force: until one is, no card goes by voice."""
+        return await self._decisions.judges(VOICE_APPROVAL)
 
     async def approved(self, facts: VoiceApprovalFacts) -> bool | None:
         """True only when an active version's answer in time found a clear yes."""

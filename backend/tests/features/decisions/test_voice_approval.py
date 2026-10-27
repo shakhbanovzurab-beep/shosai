@@ -71,6 +71,15 @@ async def test_a_shadow_an_unsure_answer_or_a_failure_never_approves() -> None:
     assert [counted(test, CONSENTS) for test in (shadow, unsure, failing)] == [0, 0, 0]
 
 
+async def test_the_judge_is_ready_only_while_an_active_version_is_in_force() -> None:
+    ready = [
+        await AgentVoiceApprovalJudge(test.engine).ready()
+        for test in (bench(ACTIVE), bench(SHADOW), bench())
+    ]
+
+    assert ready == [True, False, False]
+
+
 async def test_an_empty_reply_asks_nothing() -> None:
     test = bench(ACTIVE)
 

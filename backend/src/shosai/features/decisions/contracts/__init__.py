@@ -122,6 +122,11 @@ class Decisions(Protocol):
         """The outcome, never less careful than `call.rule`."""
         ...
 
+    async def judges[F, V, O](self, point: DecisionPoint[F, V, O]) -> bool:
+        """Whether an active version decides at the point now, as last read (at most a minute
+        old); without one every call gets its rule."""
+        ...
+
     def observe[F, V, O](
         self, point: DecisionPoint[F, V, O], home: Home, subject: Subject, seen: O
     ) -> None:

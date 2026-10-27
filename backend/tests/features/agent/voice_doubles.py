@@ -44,10 +44,16 @@ class Heard:
 
 @dataclass
 class ApprovalJudge:
-    """Decisions' `voice.approval` as a test sets it: one verdict for every phrase it hears."""
+    """Decisions' `voice.approval` as a test sets it: one verdict for every phrase it hears,
+    and whether an active version is in force."""
 
     verdict: bool | None = True
+    active: bool = True
     heard: list[VoiceApprovalFacts] = field(default_factory=list)
+
+    async def ready(self) -> bool:
+        """Whether the test put an active version in force."""
+        return self.active
 
     async def approved(self, facts: VoiceApprovalFacts) -> bool | None:
         """The verdict the test set."""

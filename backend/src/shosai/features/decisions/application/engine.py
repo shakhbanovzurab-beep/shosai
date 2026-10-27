@@ -71,6 +71,10 @@ class DecisionEngine:
         )  # fmt: skip
         return outcome
 
+    async def judges[F, V, O](self, point: DecisionPoint[F, V, O]) -> bool:
+        """Whether an active version decides at the point now, as last read."""
+        return (await self._in_force.of(point.name)).active is not None
+
     def _bounded[V](self, point: str, rule: V, outcome: Outcome[V]) -> Outcome[V]:
         """The outcome within its bounds, else the rule's — counted, logged, paged."""
         if within_bounds(rule, outcome):

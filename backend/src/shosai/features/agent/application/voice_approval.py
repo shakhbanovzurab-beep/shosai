@@ -5,11 +5,12 @@ server's rendering — the words the person also sees. A card the rule left stan
 or compensable, after no one else's text) may then be approved by voice, and only when both
 hold: the voice model calls `core.confirm` for that card, and every bound judge (decisions'
 `voice.approval`) finds the person's phrase, as the server transcribed it, a clear approval of
-what was read back. No judge, a judge in doubt, a card with a warning, one not read back in
-this conversation, one no longer waiting — the card stays on the screen. An approval by voice
-goes the screen's way: one conditional update, the audit, the worker, with `approved_via =
-voice`; the conversation's socket is then told, so the screen re-reads the card and the data
-it changed.
+what was read back. No judge, a judge that cannot find a yes yet (no active version), a judge
+in doubt, a card with a warning, one not read back in this conversation, one no longer waiting
+— the card stays on the screen; Leo asks for a spoken yes only when a yes could be found. An
+approval by voice goes the screen's way: one conditional update, the audit, the worker, with
+`approved_via = voice`; the conversation's socket is then told, so the screen re-reads the card
+and the data it changed.
 """
 
 import json
@@ -63,10 +64,12 @@ class ReadBack:
 
 @dataclass(frozen=True, slots=True)
 class Confirmation:
-    """The answer `core.confirm` gives the voice model, and the card it approved, if any."""
+    """The answer `core.confirm` gives the voice model, the card it approved, if any, and
+    whether the person's words were simply not a clear yes."""
 
     answer: str
     approved: UUID | None = None
+    unclear: bool = False
 
 
 class VoiceApproval:
@@ -84,13 +87,15 @@ class VoiceApproval:
         self._cards = cards
         self._decisions = decisions
 
-    @property
-    def available(self) -> bool:
-        """Whether a judge of spoken approval is bound: without one, no card goes by voice."""
-        return bool(self._judges())
+    async def ready(self) -> bool:
+        """Whether cards may go by voice in a conversation opening now: a judge is bound and
+        every bound judge can find a clear yes."""
+        judges = self._judges()
+        return bool(judges) and all([await judge.ready() for judge in judges])
 
-    async def read_back(self, payload: TurnPayload, action_id: UUID) -> ReadBack:
-        """The card in the person's words; by voice only when standard and a judge is bound."""
+    async def read_back(self, payload: TurnPayload, action_id: UUID, *, by_voice: bool) -> ReadBack:
+        """The card in the person's words; by voice only when standard and the conversation
+        takes approvals by voice."""
         async with self._transactions.begin(payload.scope(), read_only=True) as session:
             record = await session.get(AgentActionRecord, action_id)
         if record is None:
@@ -98,7 +103,7 @@ class VoiceApproval:
         items = items_of(record)
         words = "\n".join(self._cards.words(item, payload.language) for item in items)
         standard = record.friction == Friction.STANDARD and len(items) == 1
-        return ReadBack(action_id, words, by_voice=standard and self.available)
+        return ReadBack(action_id, words, by_voice=standard and by_voice)
 
     async def confirm(
         self, person: Principal, terms: TurnPayload, read: ReadBack | None, heard: str
@@ -115,7 +120,7 @@ class VoiceApproval:
         verdicts = [await judge.approved(facts) for judge in judges]
         if not facts.utterance or not judges or not all(v is True for v in verdicts):
             log.info("Голосовое одобрение не принято", action_id=str(read.action_id))
-            return Confirmation(told(NOT_APPROVED))
+            return Confirmation(told(NOT_APPROVED), unclear=True)
         async with self._transactions.begin(person.scope(), read_only=True) as session:
             nonce = await session.scalar(
                 select(AgentActionRecord.nonce).where(AgentActionRecord.id == read.action_id)

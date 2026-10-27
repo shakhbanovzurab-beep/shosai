@@ -1,20 +1,22 @@
 """Leo's voice conversations on the agent's threads (ADR 0070, LV-D4…LV-D6).
 
-A conversation opens on the person's thread of a space, or on a new one, after the same
-checks as a text turn: the thread is theirs and in that space, the cross-border consent of the
-RU home, and voice mode switched on in Settings > Leo. The voice model gets the instruction in
+A conversation opens on the person's thread of a space, or on a new one, after the same checks
+as a text turn: the thread is theirs and in that space, the cross-border consent of the RU
+home, and voice mode switched on in Settings > Leo. The voice model gets the instruction in
 English with the answer language, and the page's tools from the same routing — but whole,
-within a wider budget, and without loading toolsets or opening pages: a session is fixed at
-its start and cannot load a toolset later. A tool call
-runs through the same round as a text turn's — reads under the access policy with their
-sources, a write as a card, never executed — and each exchange is recorded as a run of channel
-`voice`. An operator has no voice conversation: the admin panel's Leo is text only.
+within a wider budget, and without loading toolsets or opening pages: a session is fixed at its
+start and cannot load a toolset later. A tool call runs through the same round as a text turn's
+— reads under the access policy with their sources, a write as a card, never executed — and
+each exchange is recorded as a run of channel `voice`. A card is approved by voice only in a
+conversation that opened while a judge could find a yes; after a second reply that is not a
+clear yes, Leo sends the card to the screen. An operator has no voice conversation: the admin
+panel's Leo is text only.
 """
 
 import asyncio
 import json
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
 from http import HTTPStatus
 from typing import Final
@@ -35,7 +37,7 @@ from shosai.features.agent.application.token_admission import standard_tokens
 from shosai.features.agent.application.tool_offer import TurnOffer, TurnRouting
 from shosai.features.agent.application.tool_round import ToolParts, ToolRound
 from shosai.features.agent.application.turn_task import TurnPayload
-from shosai.features.agent.application.voice_approval import ReadBack, VoiceApproval
+from shosai.features.agent.application.voice_approval import ReadBack, VoiceApproval, told
 from shosai.features.agent.application.voice_emitter import VoiceEmitter
 from shosai.features.agent.application.voice_records import (
     VoiceRecord,
@@ -53,12 +55,16 @@ from shosai.features.agent.infrastructure.voice_prompts import (
     CONFIRM_ACTION_ID,
     CONFIRM_DESCRIPTION,
     CONFIRM_TOOL,
+    NOT_APPROVED,
+    STILL_UNCLEAR,
     voice_instruction,
 )
 from shosai.features.identity.contracts import CONSENT_READER, Principal
 
 # Сессия голоса задаёт инструменты один раз: догрузка наборов и переход по страницам ей не подходят.
 FIXED_SESSION_SKIPS: Final = frozenset({LOAD_TOOLSET, NAVIGATE})
+# Ответов «не ясно да» на одну карточку, после которых Leo больше не переспрашивает.
+UNCLEAR_REPLIES: Final = 2
 # Догрузить набор голос не может, поэтому схемы приходят целиком: сегодня все наборы — ≈ 7 700
 # токенов; набор сверх бюджета остаётся без записей (найдено на Gemini Live, LEO-voice шаг 7).
 VOICE_TOOLS_CAP: Final = 12_000
@@ -111,6 +117,10 @@ class VoiceTalk:
     turn: asyncio.Lock = field(default_factory=asyncio.Lock)
     # Карточки, которые Leo прочёл вслух в этом разговоре: подтвердить голосом можно только их.
     read: dict[UUID, ReadBack] = field(default_factory=dict)
+    # Судья мог найти «да», когда разговор открылся: только тогда Leo просит подтвердить голосом.
+    by_voice: bool = False
+    # Сколько раз ответ на карточку не был ясным «да»: со второго раза — только экран.
+    unclear: dict[UUID, int] = field(default_factory=dict)
 
     @property
     def thread_id(self) -> UUID:
@@ -132,7 +142,7 @@ class VoiceTalk:
             if (tool := self.offer.tool(schema.name)) is not None
             and tool.spec.name not in FIXED_SESSION_SKIPS
         )
-        return (*offered, CONFIRM_SCHEMA) if self.parts.approval.available else offered
+        return (*offered, CONFIRM_SCHEMA) if self.by_voice else offered
 
     def current(self) -> Exchange:
         """The exchange in progress, begun now when there is none."""
@@ -155,6 +165,8 @@ class VoiceTalk:
             confirmed = await self.parts.approval.confirm(self.person, self.terms, read, heard)
             if confirmed.approved is not None:
                 await events.decided(confirmed.approved)
+            if read is not None and confirmed.unclear:
+                return self.unclear_again(read)
             return confirmed.answer
         async with self.turn:
             exchange = self.current()
@@ -176,9 +188,20 @@ class VoiceTalk:
             "result": replied[0].text if replied and isinstance(replied[0], TextPart) else ""
         }
         for action_id in made:
-            self.read[action_id] = await self.parts.approval.read_back(exchange.payload, action_id)
+            self.read[action_id] = await self.parts.approval.read_back(
+                exchange.payload, action_id, by_voice=self.by_voice
+            )
             told["card"] = self.read[action_id].told()
         return json.dumps(told, ensure_ascii=False)
+
+    def unclear_again(self, read: ReadBack) -> str:
+        """Ask once more after the first unclear reply; after the second, the screen only."""
+        times = self.unclear.get(read.action_id, 0) + 1
+        self.unclear[read.action_id] = times
+        if times < UNCLEAR_REPLIES:
+            return told(NOT_APPROVED)
+        self.read[read.action_id] = replace(read, by_voice=False)
+        return told(STILL_UNCLEAR)
 
     async def record(self, exchange: VoiceExchange) -> None:
         """Write the exchange to the thread and begin the next one fresh."""
@@ -246,4 +269,6 @@ class AgentVoiceTurns:
         async with parts.transactions.begin(principal.scope(), read_only=True) as session:
             offer = await parts.routing.offer(session, terms, cap=VOICE_TOOLS_CAP)
         instruction = voice_instruction(language, fixed=preferences.response_language != AUTO)
-        return VoiceTalk(parts, principal, terms, offer, instruction, self._clock)
+        talk = VoiceTalk(parts, principal, terms, offer, instruction, self._clock)
+        talk.by_voice = await parts.approval.ready()
+        return talk

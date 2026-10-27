@@ -124,6 +124,11 @@ class VoiceApprovalJudge(Protocol):
     `voice.approval`, calibrated in the platform's 16 languages). Without one bound, nothing
     is approved by voice: the card waits on the screen."""
 
+    async def ready(self) -> bool:
+        """Whether it can find a clear yes now; while it cannot, cards wait on the screen and
+        Leo does not ask for a spoken yes."""
+        ...
+
     async def approved(self, facts: VoiceApprovalFacts) -> bool | None:
         """True only for a clear approval of that action; None when the judge cannot say."""
         ...

@@ -3,7 +3,9 @@
 A write in a voice exchange becomes a card that Leo reads back from the server's rendering. It
 is approved by voice only when the voice model calls `core.confirm` for that card and the bound
 judge finds the person's words, as the server heard them, a clear yes; then it goes the
-screen's way with `approved_via = voice`. Everything else leaves it on the screen (A2).
+screen's way with `approved_via = voice`. Everything else leaves it on the screen (A2). Until
+the judge can find a yes — no active version — Leo does not ask for one; after a second reply
+that is not a clear yes, Leo sends the card to the screen instead of asking again.
 """
 
 import json
@@ -16,6 +18,7 @@ from shosai.features.agent.infrastructure.voice_prompts import (
     CARD_ON_SCREEN,
     NOT_APPROVED,
     SCREEN_ONLY,
+    STILL_UNCLEAR,
 )
 from shosai.features.identity.contracts import Principal
 from tests.features.agent.action_bench import ActionBench
@@ -89,7 +92,7 @@ async def test_no_clear_yes_no_judge_a_warning_or_an_unread_card_leaves_it_on_th
     warned = json.loads(await tainted.call(confirm(third["action_id"]), heard, heard="Yes."))
     unread = json.loads(await tainted.call(confirm(first["action_id"]), heard, heard="Yes."))
 
-    assert [unsure["next"], silent["next"]] == [NOT_APPROVED, NOT_APPROVED]
+    assert [unsure["next"], silent["next"]] == [NOT_APPROVED, STILL_UNCLEAR]
     assert (second["next"], unjudged["next"]) == (CARD_ON_SCREEN, SCREEN_ONLY)
     assert "core__confirm" not in {tool.name for tool in alone.tools}
     assert (third["next"], warned["next"], unread["next"]) == (
@@ -100,3 +103,41 @@ async def test_no_clear_yes_no_judge_a_warning_or_an_unread_card_leaves_it_on_th
     for card in (first, second, third):
         row = await card_row(action_bench, card["action_id"])
         assert (row["status"], row["approved_via"]) == ("proposed", None)
+
+
+async def test_without_an_active_version_leo_sends_the_card_to_the_screen_at_once(
+    action_bench: ActionBench,
+) -> None:
+    person = Principal(uuid.uuid4(), HOME, 0)
+    judge = ApprovalJudge(verdict=True, active=False)
+    talk = await agent_voices(action_bench, judge).open(person, PLAIN)
+    heard = Heard()
+
+    card = json.loads(await talk.call(WRITE, heard, heard="Remind me to call Anna."))["card"]
+    asked = json.loads(await talk.call(confirm(card["action_id"]), heard, heard="Yes."))
+
+    assert "core__confirm" not in {tool.name for tool in talk.tools}
+    assert (card["next"], asked["next"]) == (CARD_ON_SCREEN, SCREEN_ONLY)
+    assert judge.heard == []
+    row = await card_row(action_bench, card["action_id"])
+    assert (row["status"], row["approved_via"]) == ("proposed", None)
+
+
+async def test_after_two_unclear_replies_the_card_goes_to_the_screen(
+    action_bench: ActionBench,
+) -> None:
+    person = Principal(uuid.uuid4(), HOME, 0)
+    judge = ApprovalJudge(verdict=None)
+    talk = await agent_voices(action_bench, judge).open(person, PLAIN)
+    heard = Heard()
+
+    card = json.loads(await talk.call(WRITE, heard, heard="Call Anna."))["card"]
+    replies = [
+        json.loads(await talk.call(confirm(card["action_id"]), heard, heard=said))["next"]
+        for said in ("Project again.", "Yes.", "Yes, I confirm.")
+    ]
+
+    assert card["next"] == CARD_BY_VOICE
+    assert replies == [NOT_APPROVED, STILL_UNCLEAR, SCREEN_ONLY]
+    assert len(judge.heard) == 2
+    assert heard.approvals == []
