@@ -125,7 +125,8 @@ async def test_a_fact_written_by_a_writer_while_memory_is_off_is_counted(
     upkeep_bench: UpkeepBench,
 ) -> None:
     person = uuid.uuid4()
-    await MemorySwitch(upkeep_bench.homes.transactions).turn(
+    # Момент выключения — тот же NOW, что у фактов: в долгом прогоне часы ушли бы вперёд.
+    await MemorySwitch(upkeep_bench.homes.transactions, lambda: NOW).turn(
         Principal(person, Home.RU, 0), enabled=False
     )
     before = await upkeep_bench.invariants.check(Home.RU)
