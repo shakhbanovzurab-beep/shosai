@@ -12,6 +12,9 @@ const api = vi.hoisted(() => ({
 }));
 
 vi.mock("../api/memory-api", () => api);
+vi.mock("../api/summary-api", () => ({
+  summaryApi: { get: vi.fn().mockResolvedValue({ sections: [], suggestions: [], updated_at: null, stale: false }) },
+}));
 vi.mock("sonner", () => ({ toast: { error: vi.fn() } }));
 
 const { undoChange } = await import("./summary");
@@ -36,6 +39,11 @@ describe("undoing a change of the summary's box", () => {
   beforeEach(() => {
     api.memoryApi.forget.mockReset().mockResolvedValue(undefined);
     api.memoryApi.restore.mockReset().mockResolvedValue({});
+    api.memoryApi.list.mockResolvedValue({
+      items: [],
+      next_cursor: null,
+      counts: { active: 0, candidates: 0, imported: 0 },
+    });
   });
 
   it("forgets a remembered fact, and restores what a correction replaced or a forget ended", async () => {
