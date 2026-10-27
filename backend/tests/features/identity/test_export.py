@@ -25,6 +25,7 @@ from shosai.features.identity.application.export_runner import ExportRunner
 from shosai.features.meetings.application.account_data import MeetingsAccountData
 from shosai.features.memory.application.account_data import MemoryAccountData
 from shosai.features.notes.application.account_data import NotesAccountData
+from shosai.features.studio.application.account_data import StudioAccountData
 from shosai.features.tasks.application.account_data import TasksAccountData
 from shosai.features.workspaces.application.account_data import WorkspacesAccountData
 from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLog
@@ -72,6 +73,7 @@ def runner_of(
             ACCOUNT_DATA_HANDLERS.bind(CaptureAccountData(homes.transactions)),
             ACCOUNT_DATA_HANDLERS.bind(MemoryAccountData(homes.transactions, valkey)),
             ACCOUNT_DATA_HANDLERS.bind(MeetingsAccountData(homes.transactions)),
+            ACCOUNT_DATA_HANDLERS.bind(StudioAccountData(homes.transactions)),
         ]
     )
     return ExportRunner(homes.transactions, ports, (objects, uploads), bench.services.email)
