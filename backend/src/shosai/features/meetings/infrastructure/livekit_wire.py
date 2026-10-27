@@ -39,6 +39,7 @@ def room_of(room: Room) -> SfuRoom:
         participants=room.num_participants,
         metadata=room.metadata,
         created_at=utc_time(room.creation_time, room.creation_time_ms),
+        max_participants=room.max_participants,
     )
 
 

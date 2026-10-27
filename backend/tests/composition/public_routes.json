@@ -195,6 +195,8 @@
     "POST /v1/me/sessions/{session_id}/end",
     "POST /v1/me/uploads",
     "POST /v1/me/uploads/{upload_id}/complete",
+    "POST /v1/meetings/join/{token}",
+    "POST /v1/meetings/passes/refresh",
     "POST /v1/meetings/rooms",
     "POST /v1/meetings/rooms/{room_id}/end",
     "POST /v1/notes/folders",

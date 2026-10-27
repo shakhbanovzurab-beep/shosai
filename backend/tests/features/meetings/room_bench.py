@@ -8,12 +8,28 @@ from datetime import UTC, datetime, timedelta
 import httpx
 import pytest_asyncio
 from prometheus_client import CollectorRegistry
+from redis.asyncio import Redis
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.kernel.homes import Home
+from shosai.core.kv.metrics import KeyValueMetrics
+from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.ports.directory import PortDirectory
-from shosai.features.identity.contracts import AUTHENTICATOR
+from shosai.features.billing.contracts import (
+    ENTITLEMENTS,
+    EntitlementSnapshot,
+    EntitlementSource,
+)
+from shosai.features.billing.domain.plans import Audience, PlanLimits
+from shosai.features.identity.contracts import (
+    ACCOUNT_PROFILE_READER,
+    AUTHENTICATOR,
+    AccountProfile,
+)
+from shosai.features.meetings.application.joining import JoinDesk
+from shosai.features.meetings.application.passes import PassCheck
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.video_server import (
     PassRequest,
@@ -25,7 +41,9 @@ from shosai.features.meetings.application.video_server import (
     VideoUnavailableError,
     WebhookRejectedError,
 )
+from shosai.features.meetings.channels.http.joining import build_joining_router
 from shosai.features.meetings.channels.http.rooms import build_rooms_router
+from shosai.features.meetings.infrastructure.room_passes import RoomPasses
 from shosai.features.workspaces.contracts import MEMBERSHIP_READER
 from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.billing.people_bench import BearerOfTheTest
@@ -33,6 +51,7 @@ from tests.features.memory.facts_api_bench import Spaces
 from tests.harness.database_access import DatabaseAccess
 
 ORIGIN = "https://shosai.tech"
+PLATFORM_CEILING = 6
 NOW = datetime(2026, 10, 27, 12, tzinfo=UTC)
 
 
@@ -54,8 +73,12 @@ class SfuDouble:
         """The room, made once."""
         self._answering()
         room = self.rooms_held.setdefault(
-            spec.name, SfuRoom(spec.name, f"RM_{uuid.uuid4().hex[:12]}", 0, spec.metadata, NOW)
-        )
+            spec.name,
+            SfuRoom(
+                spec.name, f"RM_{uuid.uuid4().hex[:12]}", 0, spec.metadata, NOW,
+                spec.max_participants,
+            ),
+        )  # fmt: skip
         self.metadata[spec.name] = spec.metadata
         return room
 
@@ -109,8 +132,40 @@ class SfuDouble:
         ]
         held = self.rooms_held[room_name]
         self.rooms_held[room_name] = SfuRoom(
-            held.name, held.sid, len(identities), held.metadata, NOW
+            held.name, held.sid, len(identities), held.metadata, NOW, held.max_participants
         )
+
+
+@dataclass
+class People:
+    """The plan's ceiling of every owner and the names of signed-in people."""
+
+    room_participants: int | None = None
+    named: dict[uuid.UUID, str] = field(default_factory=dict)
+
+    async def snapshot(self, home: Home, user_id: uuid.UUID) -> EntitlementSnapshot:
+        """A plan with the test's ceiling."""
+        del home
+        return EntitlementSnapshot(
+            user_id=user_id, plan_slug="pro", plan_name="Pro", audience=Audience.INDIVIDUAL,
+            paid=True, in_grace=False, paid_until=None,
+            limits=PlanLimits(None, None, None, room_participants=self.room_participants),
+            capabilities=frozenset(), source=EntitlementSource.PERSONAL, workspace_id=None,
+            version=1,
+        )  # fmt: skip
+
+    async def profile(self, session: AsyncSession, user_id: uuid.UUID) -> AccountProfile | None:
+        """The person's name."""
+        del session
+        name = self.named.get(user_id)
+        return None if name is None else AccountProfile(name, "ru", None)
+
+    async def names(
+        self, session: AsyncSession, user_ids: Collection[uuid.UUID]
+    ) -> Mapping[uuid.UUID, str]:
+        """The names of the people among the ids."""
+        del session
+        return {user_id: self.named[user_id] for user_id in user_ids if user_id in self.named}
 
 
 @dataclass(frozen=True, slots=True)
@@ -121,6 +176,7 @@ class RoomsBench:
     homes: DatabaseAccess
     sfu: SfuDouble
     spaces: Spaces
+    people: People
 
     def bearer(self, person: uuid.UUID, home: Home = Home.RU) -> Mapping[str, str]:
         """The person's authorization header."""
@@ -128,12 +184,26 @@ class RoomsBench:
 
 
 @pytest_asyncio.fixture
-async def rooms_bench(homes: DatabaseAccess) -> AsyncIterator[RoomsBench]:
-    sfu, spaces = SfuDouble(), Spaces()
+async def rooms_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[RoomsBench]:
+    sfu, spaces, people = SfuDouble(), Spaces(), People()
     ports = PortDirectory()
-    ports.install([AUTHENTICATOR.bind(BearerOfTheTest()), MEMBERSHIP_READER.bind(spaces)])
-    effects = EffectLedger(EffectKeyMetrics(CollectorRegistry()))
+    ports.install(
+        [
+            AUTHENTICATOR.bind(BearerOfTheTest()),
+            MEMBERSHIP_READER.bind(spaces),
+            ENTITLEMENTS.bind(people),
+            ACCOUNT_PROFILE_READER.bind(people),
+        ]
+    )
+    registry = CollectorRegistry()
+    effects = EffectLedger(EffectKeyMetrics(registry))
     book = RoomBook(homes.transactions, (effects, ports), sfu, lambda: NOW)
-    router = build_rooms_router(book, ports, ORIGIN)
-    async with client_of(build_probe_app(extra=(router,)).app) as http:
-        yield RoomsBench(http, homes, sfu, spaces)
+    passes = RoomPasses(valkey)
+    desk = JoinDesk(homes.transactions, (sfu, passes, ports), PLATFORM_CEILING, lambda: NOW)
+    limiter = RateLimiter(valkey, KeyValueMetrics(registry))
+    routers = (
+        build_rooms_router(book, ports, ORIGIN),
+        build_joining_router(desk, PassCheck(homes.transactions, passes), ports, limiter),
+    )
+    async with client_of(build_probe_app(extra=routers).app) as http:
+        yield RoomsBench(http, homes, sfu, spaces, people)

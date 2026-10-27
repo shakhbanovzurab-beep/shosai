@@ -14707,6 +14707,127 @@
           }
         }
       }
+    },
+    "/v1/meetings/join/{token}": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Join Meeting",
+        "description": "Join a call by its link, signed in or as a guest.",
+        "operationId": "join_meeting_v1_meetings_join__token__post",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JoinBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/passes/refresh": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Refresh Room Pass",
+        "description": "Renew your room pass while the room is open.",
+        "operationId": "refresh_room_pass_v1_meetings_passes_refresh_post",
+        "parameters": [
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -15812,6 +15933,15 @@
         ],
         "title": "CallOut",
         "description": "The call going on in a room."
+      },
+      "CallRole": {
+        "type": "string",
+        "enum": [
+          "owner",
+          "participant"
+        ],
+        "title": "CallRole",
+        "description": "A principal's part in a call."
       },
       "CapabilitiesBody": {
         "properties": {
@@ -17366,6 +17496,78 @@
             "type": "boolean"
           }
         ]
+      },
+      "Device": {
+        "properties": {
+          "os": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Os"
+          },
+          "os_version": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Os Version"
+          },
+          "client": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "web",
+                  "desktop",
+                  "mobile"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client"
+          },
+          "client_version": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Version"
+          },
+          "browser": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Browser"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Device",
+        "description": "The joining device, shown on the admin's screen."
       },
       "DeviceView": {
         "properties": {
@@ -19167,6 +19369,133 @@
         ],
         "title": "JobStage",
         "description": "An import job's stage, as the shipped clients decode it."
+      },
+      "JoinBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "device": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Device"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "JoinBody",
+        "description": "A guest's name; a signed-in person joins under their profile's name."
+      },
+      "JoinOut": {
+        "properties": {
+          "room": {
+            "$ref": "#/components/schemas/JoinRoomOut"
+          },
+          "livekit_url": {
+            "type": "string",
+            "title": "Livekit Url"
+          },
+          "livekit_token": {
+            "type": "string",
+            "title": "Livekit Token",
+            "description": "Valid 10 minutes, enough to connect."
+          },
+          "room_pass": {
+            "type": "string",
+            "title": "Room Pass",
+            "description": "Sent as `X-Room-Pass` to the call's routes."
+          },
+          "pass_expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Pass Expires At"
+          },
+          "identity": {
+            "type": "string",
+            "title": "Identity"
+          },
+          "role": {
+            "$ref": "#/components/schemas/CallRole"
+          },
+          "ceiling": {
+            "type": "integer",
+            "title": "Ceiling"
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Room Id",
+            "description": "The room's id, for its owner only."
+          }
+        },
+        "type": "object",
+        "required": [
+          "room",
+          "livekit_url",
+          "livekit_token",
+          "room_pass",
+          "pass_expires_at",
+          "identity",
+          "role",
+          "ceiling",
+          "room_id"
+        ],
+        "title": "JoinOut",
+        "description": "What the session connects and acts with."
+      },
+      "JoinRoomOut": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "notes_on": {
+            "type": "boolean",
+            "title": "Notes On",
+            "description": "Leo is taking notes."
+          },
+          "recording": {
+            "type": "boolean",
+            "title": "Recording",
+            "description": "The call is being recorded."
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "notes_on",
+          "recording"
+        ],
+        "title": "JoinRoomOut",
+        "description": "The room as the join page and the call show it."
       },
       "LayoutBody": {
         "properties": {
@@ -21448,6 +21777,26 @@
         ],
         "title": "ParticipantOut",
         "description": "A participant of the meeting."
+      },
+      "PassOut": {
+        "properties": {
+          "room_pass": {
+            "type": "string",
+            "title": "Room Pass"
+          },
+          "pass_expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Pass Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "room_pass",
+          "pass_expires_at"
+        ],
+        "title": "PassOut",
+        "description": "A renewed room pass."
       },
       "PeriodScope": {
         "type": "string",

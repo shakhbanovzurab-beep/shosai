@@ -73,6 +73,8 @@ class SfuRoom:
     participants: int
     metadata: str
     created_at: datetime
+    # Потолок, с которым комната создана; 0 — без потолка.
+    max_participants: int = 0
 
 
 @dataclass(frozen=True, slots=True)

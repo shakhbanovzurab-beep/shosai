@@ -4,7 +4,8 @@ Step A1 published the contract — the ports calendar binds and uses, and the sl
 and the domain. Step A2 added LiveKit: the `LIVEKIT_*` settings with their production check,
 the SFU behind the `VideoServer` port, opened with the process and closed with it, and its
 readiness probe when it is configured. Step A3 added the tables of each home and their
-account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`.
+account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`, the public
+join with its room passes in Valkey and their renewal.
 """
 
 from collections.abc import AsyncIterator
@@ -18,12 +19,16 @@ from shosai.features.meetings.application.account_data import (
     MODELS,
     MeetingsAccountData,
 )
+from shosai.features.meetings.application.joining import JoinDesk
+from shosai.features.meetings.application.passes import PassCheck
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.video_server import VideoUnavailableError
+from shosai.features.meetings.channels.http.joining import build_joining_router
 from shosai.features.meetings.channels.http.rooms import build_rooms_router
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
 from shosai.features.meetings.infrastructure.livekit_server import open_video_server
+from shosai.features.meetings.infrastructure.room_passes import RoomPasses
 from shosai.features.meetings.settings import (
     LiveKitSettings,
     MeetingsSettings,
@@ -42,10 +47,21 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
             if settings.configured
             else ()
         )
-        book = RoomBook(services.transactions, (services.effects, services.ports), server)
+        transactions, ports = services.transactions, services.ports
+        book = RoomBook(transactions, (services.effects, ports), server)
+        passes = RoomPasses(services.valkey)
+        ceiling = services.settings.features.get(
+            MeetingsSettings
+        ).meetings_room_participants_ceiling
+        desk = JoinDesk(transactions, (server, passes, ports), ceiling)
         origin = str(services.settings.email.public_base_url)
         yield FeatureParts(
-            http_routers=(build_rooms_router(book, services.ports, origin),),
+            http_routers=(
+                build_rooms_router(book, ports, origin),
+                build_joining_router(
+                    desk, PassCheck(transactions, passes), ports, services.rate_limiter
+                ),
+            ),
             probes=probes,
             provides=(ACCOUNT_DATA_HANDLERS.bind(MeetingsAccountData(services.transactions)),),
         )

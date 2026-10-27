@@ -3588,6 +3588,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/join/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Join Meeting
+         * @description Join a call by its link, signed in or as a guest.
+         */
+        post: operations["join_meeting_v1_meetings_join__token__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/passes/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Refresh Room Pass
+         * @description Renew your room pass while the room is open.
+         */
+        post: operations["refresh_room_pass_v1_meetings_passes_refresh_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -4065,6 +4105,12 @@ export interface components {
              */
             participants: number | null;
         };
+        /**
+         * CallRole
+         * @description A principal's part in a call.
+         * @enum {string}
+         */
+        CallRole: "owner" | "participant";
         /**
          * CapabilitiesBody
          * @description The extras a plan switches on.
@@ -4720,6 +4766,22 @@ export interface components {
             token_type: string;
         };
         DetailValue: string | number | boolean;
+        /**
+         * Device
+         * @description The joining device, shown on the admin's screen.
+         */
+        Device: {
+            /** Os */
+            os?: string | null;
+            /** Os Version */
+            os_version?: string | null;
+            /** Client */
+            client?: ("web" | "desktop" | "mobile") | null;
+            /** Client Version */
+            client_version?: string | null;
+            /** Browser */
+            browser?: string | null;
+        };
         /**
          * DeviceView
          * @description A signed-in device: where it signed in and when it was last used.
@@ -5539,6 +5601,67 @@ export interface components {
          * @enum {string}
          */
         JobStage: "uploading" | "transcribing" | "enhancing" | "ready" | "failed";
+        /**
+         * JoinBody
+         * @description A guest's name; a signed-in person joins under their profile's name.
+         */
+        JoinBody: {
+            /** Name */
+            name?: string | null;
+            device?: components["schemas"]["Device"] | null;
+        };
+        /**
+         * JoinOut
+         * @description What the session connects and acts with.
+         */
+        JoinOut: {
+            room: components["schemas"]["JoinRoomOut"];
+            /** Livekit Url */
+            livekit_url: string;
+            /**
+             * Livekit Token
+             * @description Valid 10 minutes, enough to connect.
+             */
+            livekit_token: string;
+            /**
+             * Room Pass
+             * @description Sent as `X-Room-Pass` to the call's routes.
+             */
+            room_pass: string;
+            /**
+             * Pass Expires At
+             * Format: date-time
+             */
+            pass_expires_at: string;
+            /** Identity */
+            identity: string;
+            role: components["schemas"]["CallRole"];
+            /** Ceiling */
+            ceiling: number;
+            /**
+             * Room Id
+             * @description The room's id, for its owner only.
+             */
+            room_id: string | null;
+        };
+        /**
+         * JoinRoomOut
+         * @description The room as the join page and the call show it.
+         */
+        JoinRoomOut: {
+            /** Title */
+            title: string | null;
+            /**
+             * Notes On
+             * @description Leo is taking notes.
+             */
+            notes_on: boolean;
+            /**
+             * Recording
+             * @description The call is being recorded.
+             */
+            recording: boolean;
+        };
         /**
          * LayoutBody
          * @description The whole layout of a board.
@@ -6455,6 +6578,19 @@ export interface components {
             email: string | null;
             /** Source */
             source: string;
+        };
+        /**
+         * PassOut
+         * @description A renewed room pass.
+         */
+        PassOut: {
+            /** Room Pass */
+            room_pass: string;
+            /**
+             * Pass Expires At
+             * Format: date-time
+             */
+            pass_expires_at: string;
         };
         /** @enum {string} */
         PeriodScope: "month" | "year" | "both";
@@ -16946,6 +17082,75 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RoomOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    join_meeting_v1_meetings_join__token__post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JoinBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JoinOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    refresh_room_pass_v1_meetings_passes_refresh_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PassOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
