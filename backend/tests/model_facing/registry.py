@@ -28,6 +28,8 @@ from shosai.features.agent.infrastructure.voice_prompts import VOICE_PROMPT_TEXT
 from shosai.features.capture.infrastructure.voice_texts import VOICE_TEXTS
 from shosai.features.decisions.domain.policies import policy_wording
 from shosai.features.decisions.infrastructure.generation_texts import generation_texts
+from shosai.features.memory.infrastructure.extraction_prompts import EXTRACTION_TEXTS
+from shosai.features.memory.infrastructure.summary_prompts import SUMMARY_TEXTS
 from shosai.features.notes.infrastructure.prompts import PROMPT_TEXTS as NOTES_PROMPTS
 
 
@@ -83,5 +85,9 @@ MODEL_FACING_SOURCES: tuple[ModelFacingSource, ...] = (
     ModelFacingSource(owner="agent", name="the evaluation's judge", collect=lambda: JUDGE_TEXTS),
     ModelFacingSource(owner="decisions", name="Jev questions", collect=lambda: [policy_wording()]),
     ModelFacingSource(owner="decisions", name="dataset tools", collect=generation_texts),
+    ModelFacingSource(owner="memory", name="extraction prompts", collect=lambda: EXTRACTION_TEXTS),
+    ModelFacingSource(
+        owner="memory", name="summary and box prompts", collect=lambda: SUMMARY_TEXTS
+    ),
     *slice_tool_sources(),
 )

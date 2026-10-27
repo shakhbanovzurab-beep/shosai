@@ -4,10 +4,10 @@
 without a model round (AG-R2): chats makes tasks from a digest's items this way. The other
 ports are agent's needs, bound by the slices that answer them: `decisions` judges routing
 and friction (`TurnRouter`, `FrictionJudge`; until then agent's own rules decide, ADR 0068
-AG-D7), `memory` recalls facts and the profile core (`MemoryRecall`, `ProfileFacts`), and
-agent itself offers studio the person's installed skills (`SkillReader`). An unbound port
-is read as absent (`PortDirectory.all`), never as a failure. Events are in
-`contracts.events`.
+AG-D7), `memory` recalls facts and the profile core (`contracts.memory`), and agent itself
+offers studio the person's installed skills (`SkillReader`) and memory the person's words of
+a turn (`contracts.memory`). An unbound port is read as absent (`PortDirectory.all`), never as
+a failure. Events are in `contracts.events`.
 """
 
 from collections.abc import Collection, Mapping
@@ -33,8 +33,6 @@ __all__ = [
     "ACTION_PROPOSALS",
     "FRICTION_JUDGE",
     "INJECTION_JUDGE",
-    "MEMORY_RECALL",
-    "PROFILE_FACTS",
     "SKILL_READER",
     "TURN_ROUTER",
     "ActionProposals",
@@ -45,14 +43,11 @@ __all__ = [
     "InjectionJudge",
     "InjectionPiece",
     "InstalledSkill",
-    "MemoryRecall",
-    "ProfileFacts",
     "ProposalCard",
     "ProposalOrigin",
     "ProposalRefusedError",
     "ProposalRequest",
     "PublicStatus",
-    "RecalledFact",
     "RouteRequest",
     "SkillReader",
     "TurnRouter",
@@ -227,34 +222,6 @@ class InjectionJudge(Protocol):
 
 
 @dataclass(frozen=True, slots=True)
-class RecalledFact:
-    """A fact memory recalls for a turn: the person's statement and where it came from."""
-
-    statement: str
-    kind: str
-    # Метка происхождения: факт из встречи — чужая речь, оборачивается как недоверенный текст.
-    source: str
-
-
-class MemoryRecall(Protocol):
-    """Recalls what Leo remembers about the person for a turn (memory)."""
-
-    async def recall(
-        self, home: Home, user_id: UUID, query: str, max_tokens: int
-    ) -> tuple[RecalledFact, ...]:
-        """The facts that matter for the query, within the budget."""
-        ...
-
-
-class ProfileFacts(Protocol):
-    """The person's profile core for the context: pinned facts and personalization (memory)."""
-
-    async def profile(self, home: Home, user_id: UUID, max_tokens: int) -> tuple[str, ...]:
-        """Lines of the profile core, within the budget; empty when there is none."""
-        ...
-
-
-@dataclass(frozen=True, slots=True)
 class InstalledSkill:
     """A skill the person installed, pinned to the commit it was read at."""
 
@@ -281,6 +248,4 @@ ACTION_PROPOSALS: Final = PortKey[ActionProposals]("agent.action_proposals")
 TURN_ROUTER: Final = PortKey[TurnRouter]("agent.turn_router")
 FRICTION_JUDGE: Final = PortKey[FrictionJudge]("agent.friction_judge")
 INJECTION_JUDGE: Final = PortKey[InjectionJudge]("agent.injection_judge")
-MEMORY_RECALL: Final = PortKey[MemoryRecall]("agent.memory_recall")
-PROFILE_FACTS: Final = PortKey[ProfileFacts]("agent.profile_facts")
 SKILL_READER: Final = PortKey[SkillReader]("agent.skill_reader")

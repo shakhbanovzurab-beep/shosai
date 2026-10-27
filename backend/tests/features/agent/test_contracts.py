@@ -11,7 +11,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.keys import PortKey
 from shosai.features.agent import contracts
-from shosai.features.agent.contracts import ProposalRefusedError, ProposalRequest, events
+from shosai.features.agent.contracts import ProposalRefusedError, ProposalRequest, events, memory
 from shosai.features.agent.contracts.events import TurnCompleted
 from shosai.features.agent.domain.actions import ProposalOrigin
 from shosai.features.agent.module import AGENT
@@ -30,7 +30,12 @@ def test_the_published_event_is_registered_and_named_for_the_slice() -> None:
 
 
 def test_the_ports_are_named_for_the_slice() -> None:
-    keys = {value.name for value in vars(contracts).values() if isinstance(value, PortKey)}
+    keys = {
+        value.name
+        for module in (contracts, memory)
+        for value in vars(module).values()
+        if isinstance(value, PortKey)
+    }
 
     assert keys == {
         "agent.action_proposals",
@@ -39,6 +44,7 @@ def test_the_ports_are_named_for_the_slice() -> None:
         "agent.injection_judge",
         "agent.memory_recall",
         "agent.profile_facts",
+        "agent.person_words",
         "agent.skill_reader",
     }
 
