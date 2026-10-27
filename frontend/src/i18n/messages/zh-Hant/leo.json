@@ -140,20 +140,6 @@
     "sizeLimit": "檔案大小上限為 {size}。",
     "tooMany": "最多可附加 {max, plural, other {# 個檔案}}。"
   },
-  "voice": {
-    "unavailable": "無法使用語音模式",
-    "listening": "正在聆聽…",
-    "thinking": "Leo 正在思考…",
-    "speaking": "Leo 正在說話…",
-    "micOff": "麥克風已關閉",
-    "turnMicOn": "開啟麥克風",
-    "turnMicOff": "關閉麥克風",
-    "end": "結束語音模式",
-    "micBlocked": "麥克風存取權已被封鎖",
-    "micBlockedHint": "允許使用麥克風，即可與 Leo 對話。",
-    "needsHttps": "語音模式需要安全連線（HTTPS）才能使用麥克風。",
-    "unsupported": "這個瀏覽器不支援語音模式。請改用最新版的 Chrome、Edge 或 Safari。"
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {你已達到今天的 Leo 使用上限。上限明天會重置，或升級方案以繼續使用。} other {你已達到本週的 Leo 使用上限。上限下週會重置，或升級方案以繼續使用。}}",
     "consent_required": "Leo 會在歐盟處理你的資料。請在「設定 › 隱私權」中開啟「在歐盟處理」以使用 Leo。",

@@ -140,20 +140,6 @@
     "sizeLimit": "Bestanden mogen maximaal {size} groot zijn.",
     "tooMany": "Je kunt maximaal {max, plural, one {# bestand} other {# bestanden}} bijvoegen."
   },
-  "voice": {
-    "unavailable": "Spraakmodus is niet beschikbaar",
-    "listening": "Luisteren…",
-    "thinking": "Leo denkt na…",
-    "speaking": "Leo spreekt…",
-    "micOff": "Microfoon staat uit",
-    "turnMicOn": "Microfoon aanzetten",
-    "turnMicOff": "Microfoon uitzetten",
-    "end": "Spraakmodus beëindigen",
-    "micBlocked": "Microfoontoegang is geblokkeerd",
-    "micBlockedHint": "Geef toegang tot de microfoon om met Leo te praten.",
-    "needsHttps": "Spraakmodus heeft een beveiligde verbinding (HTTPS) nodig om de microfoon te gebruiken.",
-    "unsupported": "Deze browser ondersteunt geen spraakmodus. Probeer de nieuwste versie van Chrome, Edge of Safari."
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {Je hebt het Leo-tegoed van vandaag gebruikt. Het wordt morgen aangevuld, of upgrade je abonnement om door te gaan.} other {Je hebt het Leo-tegoed van deze week gebruikt. Het wordt volgende week aangevuld, of upgrade je abonnement om door te gaan.}}",
     "consent_required": "Leo verwerkt je gegevens in de EU. Zet ‘Verwerking in de EU’ aan in Instellingen › Privacy om Leo te gebruiken.",

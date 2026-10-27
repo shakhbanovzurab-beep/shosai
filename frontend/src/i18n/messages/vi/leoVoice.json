@@ -1,0 +1,26 @@
+{
+  "unavailable": "Chế độ giọng nói không khả dụng",
+  "listening": "Đang nghe…",
+  "thinking": "Leo đang suy nghĩ…",
+  "speaking": "Leo đang nói…",
+  "micOff": "Micrô đang tắt",
+  "turnMicOn": "Bật micrô",
+  "turnMicOff": "Tắt micrô",
+  "end": "Tắt chế độ giọng nói",
+  "micBlocked": "Quyền truy cập micrô bị chặn",
+  "micBlockedHint": "Hãy cho phép dùng micrô để nói chuyện với Leo.",
+  "needsHttps": "Chế độ giọng nói cần kết nối bảo mật (HTTPS) để dùng micrô.",
+  "unsupported": "Trình duyệt này không hỗ trợ chế độ giọng nói. Hãy thử phiên bản mới nhất của Chrome, Edge hoặc Safari.",
+  "connecting": "Đang kết nối…",
+  "endReason": {
+    "reconnect": "Kết nối bị gián đoạn. Hãy bật lại chế độ giọng nói.",
+    "signedOut": "Hãy đăng nhập lại để nói chuyện với Leo.",
+    "minutes": "Số phút của tháng này đã hết. Bạn vẫn có thể nhắn cho Leo.",
+    "tokens": "Bạn đã dùng hết hạn mức Leo hiện tại. Hạn mức sẽ sớm được làm mới, hoặc nâng cấp gói để tiếp tục.",
+    "busy": "Chế độ giọng nói đang bật ở một thẻ hoặc thiết bị khác.",
+    "limit": "Hiện có quá nhiều phiên giọng nói. Hãy thử lại sau một phút.",
+    "failed": "Chế độ giọng nói không kết nối được. Hãy thử lại sau giây lát."
+  },
+  "proposed": "Leo đã chuẩn bị một thao tác — hãy xác nhận trong cuộc trò chuyện.",
+  "openChat": "Mở trò chuyện"
+}

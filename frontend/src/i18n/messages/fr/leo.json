@@ -140,20 +140,6 @@
     "sizeLimit": "Les fichiers ne doivent pas dépasser {size}.",
     "tooMany": "Vous pouvez joindre jusqu’à {max, plural, one {# fichier} many {# de fichiers} other {# fichiers}}."
   },
-  "voice": {
-    "unavailable": "Le mode vocal est indisponible",
-    "listening": "J’écoute…",
-    "thinking": "Leo réfléchit…",
-    "speaking": "Leo parle…",
-    "micOff": "Micro désactivé",
-    "turnMicOn": "Activer le micro",
-    "turnMicOff": "Désactiver le micro",
-    "end": "Quitter le mode vocal",
-    "micBlocked": "L’accès au micro est bloqué",
-    "micBlockedHint": "Autorisez l’accès au micro pour parler à Leo.",
-    "needsHttps": "Le mode vocal nécessite une connexion sécurisée (HTTPS) pour utiliser le micro.",
-    "unsupported": "Ce navigateur ne prend pas en charge le mode vocal. Essayez la dernière version de Chrome, Edge ou Safari."
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {Vous avez utilisé le quota Leo du jour. Il se renouvelle demain, ou passez à un forfait supérieur pour continuer.} other {Vous avez utilisé le quota Leo de la semaine. Il se renouvelle la semaine prochaine, ou passez à un forfait supérieur pour continuer.}}",
     "consent_required": "Leo traite vos données dans l’UE. Activez « Traitement dans l’UE » dans Paramètres › Confidentialité pour l’utiliser.",

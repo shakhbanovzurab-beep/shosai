@@ -1,0 +1,26 @@
+{
+  "unavailable": "無法使用語音模式",
+  "listening": "正在聆聽…",
+  "thinking": "Leo 正在思考…",
+  "speaking": "Leo 正在說話…",
+  "micOff": "麥克風已關閉",
+  "turnMicOn": "開啟麥克風",
+  "turnMicOff": "關閉麥克風",
+  "end": "結束語音模式",
+  "micBlocked": "麥克風存取權已被封鎖",
+  "micBlockedHint": "允許使用麥克風，即可與 Leo 對話。",
+  "needsHttps": "語音模式需要安全連線（HTTPS）才能使用麥克風。",
+  "unsupported": "這個瀏覽器不支援語音模式。請改用最新版的 Chrome、Edge 或 Safari。",
+  "connecting": "連線中…",
+  "endReason": {
+    "reconnect": "連線中斷了。請重新開啟語音模式。",
+    "signedOut": "請重新登入才能和 Leo 交談。",
+    "minutes": "本月的分鐘數已用完。你仍然可以傳訊息給 Leo。",
+    "tokens": "你已達到 Leo 的使用上限。上限很快會重置，或升級方案以繼續使用。",
+    "busy": "語音模式已在其他分頁或裝置上開啟。",
+    "limit": "目前語音工作階段太多。請一分鐘後再試。",
+    "failed": "語音模式無法連線。請稍後再試。"
+  },
+  "proposed": "Leo 已準備好一項操作，請在對話中確認。",
+  "openChat": "開啟對話"
+}

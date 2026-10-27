@@ -71,8 +71,12 @@ function PanelView({
   const t = useTranslations("leo");
   const { messages, isBusy, send, stop, reset } = chat;
   const attachments = useLeoAttachments();
-  const voice = useLeoVoice({ onSend: send, answerLanguage: voiceSettings.answerLanguage });
-  const voiceEnabled = voiceSettings.enabled;
+  const voice = useLeoVoice({
+    target: chat.voice?.target ?? null,
+    onEnded: (threadId) => chat.voice?.refresh(threadId),
+  });
+  // Голос — где у разговора он есть (ADR 0070) и пока он включён в Settings › Leo.
+  const voiceEnabled = voiceSettings.enabled && chat.voice !== undefined;
 
   // Switching Voice mode off in Settings mid-conversation hangs up, so the microphone stops listening.
   React.useEffect(() => {
@@ -130,7 +134,7 @@ function PanelView({
               attachments={chat.attachments ? attachments : null}
               onSend={send}
               onStop={stop}
-              onStartVoice={voice.start}
+              onStartVoice={() => void voice.start()}
               voiceEnabled={voiceEnabled}
             />
           </m.div>

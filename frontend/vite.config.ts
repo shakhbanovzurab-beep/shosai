@@ -34,7 +34,8 @@ export default defineConfig(({ mode }) => ({
     proxy:
       mode === "api"
         ? {
-            "/v1": process.env.BACKEND_URL ?? "http://localhost:8000",
+            // ws: сокет голосового режима Leo (/v1/ws/voice) идёт в тот же бэкенд.
+            "/v1": { target: process.env.BACKEND_URL ?? "http://localhost:8000", ws: true },
             // Скачивания как через edge (FL-D9): /dl/{дом}/… уходит в бакет тем же запросом.
             "^/dl/(ru|eu)/": {
               target: process.env.BUCKET_URL ?? "http://127.0.0.1:18333",

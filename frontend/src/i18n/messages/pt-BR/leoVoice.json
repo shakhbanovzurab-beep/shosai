@@ -1,0 +1,26 @@
+{
+  "unavailable": "Modo de voz indisponível",
+  "listening": "Ouvindo…",
+  "thinking": "O Leo está pensando…",
+  "speaking": "O Leo está falando…",
+  "micOff": "Microfone desligado",
+  "turnMicOn": "Ligar o microfone",
+  "turnMicOff": "Desligar o microfone",
+  "end": "Encerrar modo de voz",
+  "micBlocked": "O acesso ao microfone está bloqueado",
+  "micBlockedHint": "Permita o acesso ao microfone para falar com o Leo.",
+  "needsHttps": "O modo de voz precisa de uma conexão segura (HTTPS) para usar o microfone.",
+  "unsupported": "Este navegador não é compatível com o modo de voz. Use a versão mais recente do Chrome, Edge ou Safari.",
+  "connecting": "Conectando…",
+  "endReason": {
+    "reconnect": "A conexão caiu. Ative o modo de voz de novo.",
+    "signedOut": "Entre de novo para falar com o Leo.",
+    "minutes": "Os minutos deste mês acabaram. Você ainda pode escrever para o Leo.",
+    "tokens": "Você usou a cota do Leo por enquanto. Ela renova em breve, ou faça upgrade do plano para continuar.",
+    "busy": "O modo de voz já está ativo em outra aba ou em outro dispositivo.",
+    "limit": "Há sessões de voz demais agora. Tente de novo em um minuto.",
+    "failed": "O modo de voz não conseguiu se conectar. Tente de novo em instantes."
+  },
+  "proposed": "O Leo preparou uma ação — confirme no chat.",
+  "openChat": "Abrir chat"
+}

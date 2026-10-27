@@ -140,20 +140,6 @@
     "sizeLimit": "Dosyalar en fazla {size} olabilir.",
     "tooMany": "En fazla {max, plural, one {# dosya} other {# dosya}} ekleyebilirsiniz."
   },
-  "voice": {
-    "unavailable": "Sesli mod kullanılamıyor",
-    "listening": "Dinliyorum…",
-    "thinking": "Leo düşünüyor…",
-    "speaking": "Leo konuşuyor…",
-    "micOff": "Mikrofon kapalı",
-    "turnMicOn": "Mikrofonu aç",
-    "turnMicOff": "Mikrofonu kapat",
-    "end": "Sesli modu sonlandır",
-    "micBlocked": "Mikrofon erişimi engellendi",
-    "micBlockedHint": "Leo ile konuşmak için mikrofona izin verin.",
-    "needsHttps": "Sesli modun mikrofonu kullanabilmesi için güvenli (HTTPS) bağlantı gerekir.",
-    "unsupported": "Bu tarayıcı sesli modu desteklemiyor. Chrome, Edge veya Safari’nin en son sürümünü deneyin."
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {Bugünkü Leo kotanızı kullandınız. Yarın yenilenir ya da devam etmek için planınızı yükseltin.} other {Bu haftaki Leo kotanızı kullandınız. Gelecek hafta yenilenir ya da devam etmek için planınızı yükseltin.}}",
     "consent_required": "Leo verilerinizi AB’de işler. Kullanmak için Ayarlar › Gizlilik bölümünde “AB’de işleme” seçeneğini açın.",

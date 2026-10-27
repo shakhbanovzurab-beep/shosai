@@ -1,0 +1,26 @@
+{
+  "unavailable": "Sesli mod kullanılamıyor",
+  "listening": "Dinliyorum…",
+  "thinking": "Leo düşünüyor…",
+  "speaking": "Leo konuşuyor…",
+  "micOff": "Mikrofon kapalı",
+  "turnMicOn": "Mikrofonu aç",
+  "turnMicOff": "Mikrofonu kapat",
+  "end": "Sesli modu sonlandır",
+  "micBlocked": "Mikrofon erişimi engellendi",
+  "micBlockedHint": "Leo ile konuşmak için mikrofona izin verin.",
+  "needsHttps": "Sesli modun mikrofonu kullanabilmesi için güvenli (HTTPS) bağlantı gerekir.",
+  "unsupported": "Bu tarayıcı sesli modu desteklemiyor. Chrome, Edge veya Safari’nin en son sürümünü deneyin.",
+  "connecting": "Bağlanıyor…",
+  "endReason": {
+    "reconnect": "Bağlantı koptu. Sesli modu yeniden açın.",
+    "signedOut": "Leo’yla konuşmak için yeniden giriş yapın.",
+    "minutes": "Bu ayın dakikaları bitti. Leo’ya yazmaya devam edebilirsiniz.",
+    "tokens": "Leo kotanızı şimdilik kullandınız. Yakında yenilenir ya da devam etmek için planınızı yükseltin.",
+    "busy": "Sesli mod başka bir sekmede veya cihazda zaten açık.",
+    "limit": "Şu anda çok fazla sesli oturum var. Bir dakika sonra tekrar deneyin.",
+    "failed": "Sesli mod bağlanamadı. Birazdan tekrar deneyin."
+  },
+  "proposed": "Leo bir işlem hazırladı — sohbette onaylayın.",
+  "openChat": "Sohbeti aç"
+}

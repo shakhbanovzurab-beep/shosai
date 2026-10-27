@@ -140,20 +140,6 @@
     "sizeLimit": "ファイルサイズの上限は {size} です。",
     "tooMany": "{max, plural, other {添付できるファイルは最大 # 件です。}}"
   },
-  "voice": {
-    "unavailable": "音声モードは利用できません",
-    "listening": "聞いています…",
-    "thinking": "Leo が考えています…",
-    "speaking": "Leo が話しています…",
-    "micOff": "マイクはオフです",
-    "turnMicOn": "マイクをオンにする",
-    "turnMicOff": "マイクをオフにする",
-    "end": "音声モードを終了",
-    "micBlocked": "マイクへのアクセスがブロックされています",
-    "micBlockedHint": "Leo と話すには、マイクへのアクセスを許可してください。",
-    "needsHttps": "音声モードでマイクを使うには、安全な接続（HTTPS）が必要です。",
-    "unsupported": "このブラウザは音声モードに対応していません。最新の Chrome、Edge、Safari をお試しください。"
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {本日の Leo の利用枠を使い切りました。明日リセットされます。続けるにはプランをアップグレードしてください。} other {今週の Leo の利用枠を使い切りました。来週リセットされます。続けるにはプランをアップグレードしてください。}}",
     "consent_required": "Leo は EU でデータを処理します。利用するには「設定 › プライバシー」で「EU でのデータ処理」をオンにしてください。",

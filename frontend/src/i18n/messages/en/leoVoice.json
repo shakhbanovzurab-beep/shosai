@@ -1,0 +1,26 @@
+{
+  "unavailable": "Voice mode is unavailable",
+  "listening": "Listening…",
+  "thinking": "Leo is thinking…",
+  "speaking": "Leo is speaking…",
+  "micOff": "Microphone is off",
+  "turnMicOn": "Turn microphone on",
+  "turnMicOff": "Turn microphone off",
+  "end": "End voice mode",
+  "micBlocked": "Microphone access is blocked",
+  "micBlockedHint": "Allow the microphone to talk to Leo.",
+  "needsHttps": "Voice mode needs a secure (HTTPS) connection to use the microphone.",
+  "unsupported": "This browser doesn’t support voice mode. Try the latest Chrome, Edge or Safari.",
+  "connecting": "Connecting…",
+  "endReason": {
+    "reconnect": "The connection dropped. Start voice mode again.",
+    "signedOut": "Sign in again to talk to Leo.",
+    "minutes": "This month’s minutes are used up. You can still write to Leo.",
+    "tokens": "You’ve used your Leo allowance for now. It renews soon, or upgrade your plan to keep going.",
+    "busy": "Voice mode is already on in another tab or on another device.",
+    "limit": "Too many voice sessions right now. Try again in a minute.",
+    "failed": "Voice mode couldn’t connect. Try again in a moment."
+  },
+  "proposed": "Leo prepared an action — confirm it in the chat.",
+  "openChat": "Open chat"
+}

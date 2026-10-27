@@ -2,166 +2,149 @@
 
 import * as React from "react";
 
-import { toast } from "sonner";
 import { useTranslations } from "use-intl";
 
-import { useUiLanguage } from "@/hooks/use-ui-language";
+import type { VoiceEnd, VoiceServerFrame } from "../domain/voice-wire";
+import { openVoiceAudio, type VoiceAudio } from "./voice/voice-audio";
+import { VoiceSocket, type VoiceTarget } from "./voice/voice-socket";
 
-import type { LeoMessage } from "../domain/types";
+/*
+ * Голосовой режим Leo — разговор с Gemini Live голосом Charon через сервер (ADR 0070). Хук держит микрофон,
+ * динамик и сокет; фазу ведут кадры сервера и сам звук: «говорит» — пока играет голос Leo. Перебил человек —
+ * голос Leo замолкает сразу. Закончился разговор — тред перечитывается: в нём уже записаны реплики.
+ */
 
-// The Web Speech recognition API is not in TypeScript's DOM lib yet; this is the subset Leo uses.
-interface SpeechRecognitionLike extends EventTarget {
-  lang: string;
-  interimResults: boolean;
-  continuous: boolean;
-  start: () => void;
-  abort: () => void;
-  onresult: ((event: { results: SpeechRecognitionResultList }) => void) | null;
-  onerror: ((event: { error: string }) => void) | null;
-  onend: (() => void) | null;
-}
-
-type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
-
-function getRecognitionConstructor(): SpeechRecognitionConstructor | undefined {
-  const scope = window as unknown as {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  };
-  return scope.SpeechRecognition ?? scope.webkitSpeechRecognition;
-}
-
-export type LeoVoicePhase = "off" | "unavailable" | "listening" | "thinking" | "speaking";
+export type LeoVoicePhase = "off" | "connecting" | "unavailable" | "listening" | "thinking" | "speaking";
 
 interface UseLeoVoiceOptions {
-  // Resolves with Leo's finished reply, so voice mode can read it out as soon as it is ready.
-  readonly onSend: (content: string) => Promise<LeoMessage | undefined>;
-  /** The language Leo's answers are written in: the reply is read out in it. */
-  readonly answerLanguage: string;
+  /** Куда говорить: пространство и тред панели; null — у этого разговора голоса нет. */
+  readonly target: VoiceTarget | null;
+  /** Разговор закончился: реплики уже в треде, который назвал сервер. */
+  readonly onEnded: (threadId: string | null) => void;
 }
 
-export function useLeoVoice({ onSend, answerLanguage }: UseLeoVoiceOptions) {
-  const t = useTranslations("leo");
-  // The user is heard in the interface language; Leo's answer is read out in the language it is written in.
-  const speechLanguage = useUiLanguage();
+type Live = { readonly socket: VoiceSocket; readonly audio: VoiceAudio };
+
+/** Голос Leo зазвучал — «говорит»; очередь опустела — снова «слушаю», если он говорил. */
+function phaseWhenSpeech(now: LeoVoicePhase, playing: boolean): LeoVoicePhase {
+  if (playing) return "speaking";
+  return now === "speaking" ? "listening" : now;
+}
+
+export function useLeoVoice({ target, onEnded }: UseLeoVoiceOptions) {
+  const t = useTranslations("leoVoice");
   const [phase, setPhase] = React.useState<LeoVoicePhase>("off");
   const [transcript, setTranscript] = React.useState("");
   const [muted, setMuted] = React.useState(false);
   const [unavailableReason, setUnavailableReason] = React.useState("");
-  const recognitionRef = React.useRef<SpeechRecognitionLike | null>(null);
-  const activeRef = React.useRef<boolean>(false);
-  const mutedRef = React.useRef<boolean>(false);
+  // Leo подготовил действие: карточка ждёт решения в чате.
+  const [proposed, setProposed] = React.useState(false);
+  // Громкость микрофона меняется 50 раз в секунду: сфера читает её из ref, без перерисовок.
+  const level = React.useRef(0);
+  const live = React.useRef<Live | null>(null);
 
-  // A function, not an inline ref read: voice mode can end while a reply or a recognition is still pending.
-  const isVoiceActive = () => activeRef.current;
-
-  const stopListening = () => {
-    const recognition = recognitionRef.current;
-    recognitionRef.current = null;
-    if (recognition) {
-      recognition.onend = null;
-      recognition.abort();
-    }
+  const unavailable = (reason: string) => {
+    setUnavailableReason(reason);
+    setPhase("unavailable");
   };
 
-  const listen = () => {
-    const Recognition = getRecognitionConstructor();
-    if (!Recognition || !activeRef.current || mutedRef.current) return;
-
-    let finalText = "";
-    const recognition = new Recognition();
-    recognition.lang = speechLanguage;
-    recognition.interimResults = true;
-    recognition.continuous = false;
-    recognition.onresult = (event) => {
-      const text = Array.from(event.results, (result) => result[0].transcript).join("");
-      setTranscript(text);
-      if (event.results[event.results.length - 1].isFinal) finalText = text;
-    };
-    recognition.onerror = (event) => {
-      if (event.error === "not-allowed" || event.error === "service-not-allowed") {
-        toast.error(t("voice.micBlocked"), { description: t("voice.micBlockedHint") });
-        end();
-      }
-    };
-    recognition.onend = () => {
-      recognitionRef.current = null;
-      if (!isVoiceActive()) return;
-      if (finalText.trim()) {
-        setPhase("thinking");
-        void onSend(finalText.trim()).then(handleReply);
-      } else {
-        // Nothing was said before the browser timed out: keep listening.
-        listen();
-      }
-    };
-
-    recognitionRef.current = recognition;
+  const finish = (end: VoiceEnd) => {
+    const current = live.current;
+    live.current = null;
+    void current?.audio.close();
+    level.current = 0;
     setTranscript("");
-    setPhase("listening");
-    recognition.start();
+    onEnded(current?.socket.threadId ?? target?.threadId ?? null);
+    if (end === "ended") setPhase("off");
+    else unavailable(t(`endReason.${end}`));
   };
 
-  const speak = (text: string) => {
-    if (!isVoiceActive()) return;
-    const utterance = new SpeechSynthesisUtterance(text.replaceAll("**", ""));
-    utterance.lang = answerLanguage;
-    utterance.onend = () => listen();
-    setPhase("speaking");
-    window.speechSynthesis.speak(utterance);
-  };
-
-  // Read Leo's answer out and listen again; a failed or stopped reply goes straight back to listening.
-  const handleReply = (reply: LeoMessage | undefined) => {
-    const answer = reply?.status === "done" ? reply.content : "";
-    if (answer) speak(answer);
-    else listen();
-  };
-
-  const start = () => {
-    // Voice mode always opens; when the microphone can't be used, the screen explains why instead.
-    if (!window.isSecureContext) {
-      setUnavailableReason(t("voice.needsHttps"));
-      setPhase("unavailable");
-      return;
+  const handle = (frame: VoiceServerFrame) => {
+    switch (frame.type) {
+      case "ready":
+        setPhase("listening");
+        break;
+      case "state":
+        // «Говорит» ведёт сам звук: сервер шлёт речь раньше, чем она прозвучит.
+        if (frame.state !== "speaking") setPhase(frame.state);
+        break;
+      case "transcript":
+        setTranscript(frame.text);
+        break;
+      case "interrupted":
+        live.current?.audio.flush();
+        setPhase("listening");
+        break;
+      case "action.proposed":
+        setProposed(true);
+        break;
+      default:
+        break;
     }
-    if (!getRecognitionConstructor() || !("speechSynthesis" in window)) {
-      setUnavailableReason(t("voice.unsupported"));
-      setPhase("unavailable");
-      return;
+  };
+
+  const start = async () => {
+    if (target === null) return;
+    if (!window.isSecureContext) return unavailable(t("needsHttps"));
+    if (!navigator.mediaDevices?.getUserMedia || typeof AudioWorkletNode === "undefined") {
+      return unavailable(t("unsupported"));
     }
-    activeRef.current = true;
-    mutedRef.current = false;
     setMuted(false);
-    listen();
+    setProposed(false);
+    setPhase("connecting");
+    const socket = new VoiceSocket(target, {
+      frame: handle,
+      audio: (pcm) => live.current?.audio.play(pcm),
+      ended: finish,
+    });
+    try {
+      const audio = await openVoiceAudio({
+        frame: (frame) => socket.send(frame),
+        level: (value) => {
+          level.current = value;
+        },
+        speaking: (playing) => setPhase((now) => phaseWhenSpeech(now, playing)),
+      });
+      live.current = { socket, audio };
+    } catch (error) {
+      const blocked = error instanceof DOMException && error.name === "NotAllowedError";
+      return unavailable(t(blocked ? "micBlocked" : "unsupported"));
+    }
+    await socket.open();
   };
 
   const end = () => {
-    activeRef.current = false;
-    stopListening();
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-    setTranscript("");
-    setPhase("off");
+    if (live.current === null) {
+      setPhase("off");
+      return;
+    }
+    live.current.socket.close();
   };
 
   const toggleMute = () => {
-    const next = !mutedRef.current;
-    mutedRef.current = next;
+    const next = !muted;
     setMuted(next);
-    if (next) stopListening();
-    else if (phase === "listening") listen();
+    live.current?.audio.setMuted(next);
   };
-
-  // listen() is a no-op once voice mode has ended.
 
   React.useEffect(
     () => () => {
-      activeRef.current = false;
-      recognitionRef.current?.abort();
-      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      live.current?.socket.close();
+      void live.current?.audio.close();
     },
     [],
   );
 
-  return { phase, transcript, muted, unavailableReason, start, end, toggleMute, isActive: phase !== "off" };
+  return {
+    phase,
+    transcript,
+    muted,
+    proposed,
+    level,
+    unavailableReason,
+    start,
+    end,
+    toggleMute,
+    isActive: phase !== "off",
+  };
 }

@@ -14,6 +14,7 @@ import { withEpilogues } from "../domain/epilogues";
 import { isRecorded, type LiveTurn, mergedConversation, type TurnKind } from "../domain/live-turns";
 import { pageSubject } from "../domain/page-subject";
 import type { LeoMessage } from "../domain/types";
+import { voiceScopeOf } from "../domain/voice-wire";
 import { channelOf, shownIn } from "./agent-channel";
 import { chooseThread, messagesKey, scopeOf, threadsKey, useAgentThread } from "./agent-thread";
 import { refusal, runTurn, stopTurn } from "./agent-turn-runner";
@@ -159,6 +160,19 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
   // Карточку из пунктов дайджеста сервер кладёт в тот же ответ (AG-R2): история перечитывается и показывает её.
   const addProposal = () => void queryClient.invalidateQueries({ queryKey: messagesKey(thread.threadId) });
 
+  // Голос — у разговора человека в его пространстве или workspace; реплики разговора сервер пишет в тред.
+  const voiceScope = channel.owner === "person" ? voiceScopeOf(context) : null;
+  const voice = voiceScope
+    ? {
+        target: { scope: voiceScope, threadId: thread.threadId, path: page, locale },
+        refresh: (threadId: string | null) => {
+          if (threadId !== null && threadId !== thread.threadId) chooseThread(scopeKey, threadId);
+          void queryClient.invalidateQueries({ queryKey: messagesKey(threadId ?? thread.threadId) });
+          void queryClient.invalidateQueries({ queryKey: threadsKey(scopeKey) });
+        },
+      }
+    : undefined;
+
   return {
     messages,
     isBusy,
@@ -173,5 +187,6 @@ export function useAgentChat({ page, context }: { page: string; context: LeoCont
     attachments: channel.attachments,
     owner: channel.owner,
     threads,
+    voice,
   };
 }

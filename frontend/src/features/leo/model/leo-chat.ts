@@ -1,6 +1,7 @@
 import type { LeoProposal } from "../domain/proposals";
 import type { LeoMessage } from "../domain/types";
 import type { LeoThreads } from "./use-agent-threads";
+import type { VoiceTarget } from "./voice/voice-socket";
 
 /*
  * Что панель Leo получает от разговора, откуда бы он ни шёл: с настоящего API (`useAgentChat`) или с примерного
@@ -26,4 +27,9 @@ export interface LeoChat {
   readonly owner: "person" | "operator";
   /** «Недавние чаты» пространства; у примерного чата их нет. */
   readonly threads?: LeoThreads;
+  /**
+   * Голосовой режим (ADR 0070): куда говорить и как показать реплики после разговора — тред, в который
+   * их записал сервер. Только у разговора человека на API; у оператора и у примерного чата голоса нет.
+   */
+  readonly voice?: { readonly target: VoiceTarget; readonly refresh: (threadId: string | null) => void };
 }

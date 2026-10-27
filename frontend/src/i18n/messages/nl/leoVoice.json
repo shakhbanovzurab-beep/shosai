@@ -1,0 +1,26 @@
+{
+  "unavailable": "Spraakmodus is niet beschikbaar",
+  "listening": "Luisteren…",
+  "thinking": "Leo denkt na…",
+  "speaking": "Leo spreekt…",
+  "micOff": "Microfoon staat uit",
+  "turnMicOn": "Microfoon aanzetten",
+  "turnMicOff": "Microfoon uitzetten",
+  "end": "Spraakmodus beëindigen",
+  "micBlocked": "Microfoontoegang is geblokkeerd",
+  "micBlockedHint": "Geef toegang tot de microfoon om met Leo te praten.",
+  "needsHttps": "Spraakmodus heeft een beveiligde verbinding (HTTPS) nodig om de microfoon te gebruiken.",
+  "unsupported": "Deze browser ondersteunt geen spraakmodus. Probeer de nieuwste versie van Chrome, Edge of Safari.",
+  "connecting": "Verbinden…",
+  "endReason": {
+    "reconnect": "De verbinding is verbroken. Zet de spraakmodus opnieuw aan.",
+    "signedOut": "Log opnieuw in om met Leo te praten.",
+    "minutes": "De minuten van deze maand zijn op. Je kunt Leo nog steeds schrijven.",
+    "tokens": "Je hebt het Leo-tegoed voorlopig gebruikt. Het wordt binnenkort aangevuld, of upgrade je abonnement om door te gaan.",
+    "busy": "De spraakmodus staat al aan in een ander tabblad of op een ander apparaat.",
+    "limit": "Er lopen nu te veel spraaksessies. Probeer het over een minuut opnieuw.",
+    "failed": "De spraakmodus kon geen verbinding maken. Probeer het zo opnieuw."
+  },
+  "proposed": "Leo heeft een actie voorbereid – bevestig die in de chat.",
+  "openChat": "Chat openen"
+}

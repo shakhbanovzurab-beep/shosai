@@ -1,0 +1,26 @@
+{
+  "unavailable": "음성 모드를 사용할 수 없어요",
+  "listening": "듣는 중…",
+  "thinking": "Leo 생각 중…",
+  "speaking": "Leo 응답 중…",
+  "micOff": "마이크가 꺼져 있어요",
+  "turnMicOn": "마이크 켜기",
+  "turnMicOff": "마이크 끄기",
+  "end": "음성 모드 종료",
+  "micBlocked": "마이크 접근이 차단되어 있어요",
+  "micBlockedHint": "Leo 음성 대화를 이용하려면 마이크 접근을 허용해 주세요.",
+  "needsHttps": "음성 모드에서 마이크를 사용하려면 보안 연결(HTTPS)이 필요해요.",
+  "unsupported": "이 브라우저는 음성 모드를 지원하지 않아요. 최신 버전의 Chrome, Edge 또는 Safari를 사용해 보세요.",
+  "connecting": "연결 중…",
+  "endReason": {
+    "reconnect": "연결이 끊어졌어요. 음성 모드를 다시 켜 주세요.",
+    "signedOut": "Leo와 대화하려면 다시 로그인하세요.",
+    "minutes": "이번 달 사용 시간을 모두 썼어요. Leo에게 메시지는 계속 보낼 수 있어요.",
+    "tokens": "Leo 사용 한도를 모두 사용했습니다. 곧 다시 채워지며, 계속하려면 플랜을 업그레이드하세요.",
+    "busy": "다른 탭이나 기기에서 음성 모드가 이미 켜져 있어요.",
+    "limit": "지금 음성 세션이 너무 많아요. 1분 후에 다시 시도하세요.",
+    "failed": "음성 모드에 연결하지 못했어요. 잠시 후 다시 시도하세요."
+  },
+  "proposed": "Leo가 작업을 준비했어요. 채팅에서 확인해 주세요.",
+  "openChat": "채팅 열기"
+}

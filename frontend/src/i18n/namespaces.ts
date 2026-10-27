@@ -38,6 +38,7 @@ export const NAMESPACES = [
   "layoutControls",
   "leo",
   "leoActions",
+  "leoVoice",
   "leoCards",
   "mail",
   "mailLeo",

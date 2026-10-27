@@ -140,20 +140,6 @@
     "sizeLimit": "Dateien dürfen höchstens {size} groß sein.",
     "tooMany": "Du kannst bis zu {max, plural, one {# Datei} other {# Dateien}} anhängen."
   },
-  "voice": {
-    "unavailable": "Sprachmodus ist nicht verfügbar",
-    "listening": "Hört zu…",
-    "thinking": "Leo denkt nach…",
-    "speaking": "Leo spricht…",
-    "micOff": "Mikrofon ist aus",
-    "turnMicOn": "Mikrofon einschalten",
-    "turnMicOff": "Mikrofon ausschalten",
-    "end": "Sprachmodus beenden",
-    "micBlocked": "Mikrofonzugriff ist blockiert",
-    "micBlockedHint": "Erlaube den Mikrofonzugriff, um mit Leo zu sprechen.",
-    "needsHttps": "Der Sprachmodus braucht eine sichere Verbindung (HTTPS), um das Mikrofon zu nutzen.",
-    "unsupported": "Dieser Browser unterstützt den Sprachmodus nicht. Probiere die neueste Version von Chrome, Edge oder Safari."
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {Du hast dein heutiges Leo-Limit erreicht. Es erneuert sich morgen, oder wechsle zu einem höheren Tarif, um weiterzumachen.} other {Du hast dein Leo-Limit dieser Woche erreicht. Es erneuert sich nächste Woche, oder wechsle zu einem höheren Tarif, um weiterzumachen.}}",
     "consent_required": "Leo verarbeitet deine Daten in der EU. Aktiviere „Verarbeitung in der EU“ unter Einstellungen › Datenschutz, um Leo zu nutzen.",

@@ -1,0 +1,26 @@
+{
+  "unavailable": "Sprachmodus ist nicht verfügbar",
+  "listening": "Hört zu…",
+  "thinking": "Leo denkt nach…",
+  "speaking": "Leo spricht…",
+  "micOff": "Mikrofon ist aus",
+  "turnMicOn": "Mikrofon einschalten",
+  "turnMicOff": "Mikrofon ausschalten",
+  "end": "Sprachmodus beenden",
+  "micBlocked": "Mikrofonzugriff ist blockiert",
+  "micBlockedHint": "Erlaube den Mikrofonzugriff, um mit Leo zu sprechen.",
+  "needsHttps": "Der Sprachmodus braucht eine sichere Verbindung (HTTPS), um das Mikrofon zu nutzen.",
+  "unsupported": "Dieser Browser unterstützt den Sprachmodus nicht. Probiere die neueste Version von Chrome, Edge oder Safari.",
+  "connecting": "Verbinde…",
+  "endReason": {
+    "reconnect": "Die Verbindung ist abgebrochen. Starte den Sprachmodus erneut.",
+    "signedOut": "Melde dich erneut an, um mit Leo zu sprechen.",
+    "minutes": "Die Minuten dieses Monats sind aufgebraucht. Du kannst Leo weiterhin schreiben.",
+    "tokens": "Du hast dein Leo-Limit erreicht. Es erneuert sich bald, oder wechsle zu einem höheren Tarif, um weiterzumachen.",
+    "busy": "Der Sprachmodus ist bereits in einem anderen Tab oder auf einem anderen Gerät aktiv.",
+    "limit": "Gerade laufen zu viele Sprachsitzungen. Versuche es in einer Minute erneut.",
+    "failed": "Der Sprachmodus konnte keine Verbindung herstellen. Versuche es gleich noch einmal."
+  },
+  "proposed": "Leo hat eine Aktion vorbereitet – bestätige sie im Chat.",
+  "openChat": "Chat öffnen"
+}

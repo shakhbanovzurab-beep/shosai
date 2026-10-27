@@ -140,20 +140,6 @@
     "sizeLimit": "Kích thước tệp tối đa là {size}.",
     "tooMany": "Bạn có thể đính kèm tối đa {max, plural, other {# tệp}}."
   },
-  "voice": {
-    "unavailable": "Chế độ giọng nói không khả dụng",
-    "listening": "Đang nghe…",
-    "thinking": "Leo đang suy nghĩ…",
-    "speaking": "Leo đang nói…",
-    "micOff": "Micrô đang tắt",
-    "turnMicOn": "Bật micrô",
-    "turnMicOff": "Tắt micrô",
-    "end": "Tắt chế độ giọng nói",
-    "micBlocked": "Quyền truy cập micrô bị chặn",
-    "micBlockedHint": "Hãy cho phép dùng micrô để nói chuyện với Leo.",
-    "needsHttps": "Chế độ giọng nói cần kết nối bảo mật (HTTPS) để dùng micrô.",
-    "unsupported": "Trình duyệt này không hỗ trợ chế độ giọng nói. Hãy thử phiên bản mới nhất của Chrome, Edge hoặc Safari."
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {Bạn đã dùng hết hạn mức Leo hôm nay. Hạn mức sẽ được làm mới vào ngày mai, hoặc nâng cấp gói để tiếp tục.} other {Bạn đã dùng hết hạn mức Leo tuần này. Hạn mức sẽ được làm mới vào tuần sau, hoặc nâng cấp gói để tiếp tục.}}",
     "consent_required": "Leo xử lý dữ liệu của bạn tại EU. Hãy bật “Xử lý tại EU” trong Cài đặt › Quyền riêng tư để sử dụng.",

@@ -140,20 +140,6 @@
     "sizeLimit": "Files can be up to {size}.",
     "tooMany": "You can attach up to {max, plural, one {# file} other {# files}}."
   },
-  "voice": {
-    "unavailable": "Voice mode is unavailable",
-    "listening": "Listening…",
-    "thinking": "Leo is thinking…",
-    "speaking": "Leo is speaking…",
-    "micOff": "Microphone is off",
-    "turnMicOn": "Turn microphone on",
-    "turnMicOff": "Turn microphone off",
-    "end": "End voice mode",
-    "micBlocked": "Microphone access is blocked",
-    "micBlockedHint": "Allow the microphone to talk to Leo.",
-    "needsHttps": "Voice mode needs a secure (HTTPS) connection to use the microphone.",
-    "unsupported": "This browser doesn’t support voice mode. Try the latest Chrome, Edge or Safari."
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {You’ve used today’s Leo allowance. It renews tomorrow, or upgrade your plan to keep going.} other {You’ve used this week’s Leo allowance. It renews next week, or upgrade your plan to keep going.}}",
     "consent_required": "Leo processes your data in the EU. Turn on “Processing in the EU” in Settings › Privacy to use it.",

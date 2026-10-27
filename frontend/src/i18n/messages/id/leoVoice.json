@@ -1,0 +1,26 @@
+{
+  "unavailable": "Mode suara tidak tersedia",
+  "listening": "Mendengarkan…",
+  "thinking": "Leo berpikir…",
+  "speaking": "Leo berbicara…",
+  "micOff": "Mikrofon nonaktif",
+  "turnMicOn": "Aktifkan mikrofon",
+  "turnMicOff": "Nonaktifkan mikrofon",
+  "end": "Akhiri mode suara",
+  "micBlocked": "Akses mikrofon diblokir",
+  "micBlockedHint": "Izinkan akses mikrofon untuk berbicara dengan Leo.",
+  "needsHttps": "Mode suara memerlukan koneksi aman (HTTPS) untuk menggunakan mikrofon.",
+  "unsupported": "Browser ini tidak mendukung mode suara. Coba versi terbaru Chrome, Edge, atau Safari.",
+  "connecting": "Menghubungkan…",
+  "endReason": {
+    "reconnect": "Koneksi terputus. Aktifkan mode suara lagi.",
+    "signedOut": "Masuk lagi untuk berbicara dengan Leo.",
+    "minutes": "Menit bulan ini sudah habis. Anda masih bisa menulis ke Leo.",
+    "tokens": "Kuota Leo sudah habis untuk saat ini. Kuota segera diperbarui, atau tingkatkan paket Anda untuk melanjutkan.",
+    "busy": "Mode suara sudah aktif di tab atau perangkat lain.",
+    "limit": "Terlalu banyak sesi suara saat ini. Coba lagi dalam satu menit.",
+    "failed": "Mode suara tidak dapat terhubung. Coba lagi sebentar lagi."
+  },
+  "proposed": "Leo telah menyiapkan tindakan — konfirmasi di chat.",
+  "openChat": "Buka chat"
+}

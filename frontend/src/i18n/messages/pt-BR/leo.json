@@ -140,20 +140,6 @@
     "sizeLimit": "Os arquivos podem ter até {size}.",
     "tooMany": "Você pode anexar até {max, plural, one {# arquivo} many {# de arquivos} other {# arquivos}}."
   },
-  "voice": {
-    "unavailable": "Modo de voz indisponível",
-    "listening": "Ouvindo…",
-    "thinking": "O Leo está pensando…",
-    "speaking": "O Leo está falando…",
-    "micOff": "Microfone desligado",
-    "turnMicOn": "Ligar o microfone",
-    "turnMicOff": "Desligar o microfone",
-    "end": "Encerrar modo de voz",
-    "micBlocked": "O acesso ao microfone está bloqueado",
-    "micBlockedHint": "Permita o acesso ao microfone para falar com o Leo.",
-    "needsHttps": "O modo de voz precisa de uma conexão segura (HTTPS) para usar o microfone.",
-    "unsupported": "Este navegador não é compatível com o modo de voz. Use a versão mais recente do Chrome, Edge ou Safari."
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {Você usou a cota do Leo de hoje. Ela renova amanhã, ou faça upgrade do plano para continuar.} other {Você usou a cota do Leo desta semana. Ela renova na próxima semana, ou faça upgrade do plano para continuar.}}",
     "consent_required": "O Leo processa seus dados na UE. Ative “Tratamento na UE” em Configurações › Privacidade para usá-lo.",

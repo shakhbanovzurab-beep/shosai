@@ -32,6 +32,7 @@ import type layoutControls from "./messages/en/layoutControls.json";
 import type leo from "./messages/en/leo.json";
 import type leoActions from "./messages/en/leoActions.json";
 import type leoCards from "./messages/en/leoCards.json";
+import type leoVoice from "./messages/en/leoVoice.json";
 import type mail from "./messages/en/mail.json";
 import type mailLeo from "./messages/en/mailLeo.json";
 import type meetings from "./messages/en/meetings.json";
@@ -113,6 +114,7 @@ export type Messages = {
   layoutControls: typeof layoutControls;
   leo: typeof leo;
   leoActions: typeof leoActions;
+  leoVoice: typeof leoVoice;
   leoCards: typeof leoCards;
   mail: typeof mail;
   mailLeo: typeof mailLeo;

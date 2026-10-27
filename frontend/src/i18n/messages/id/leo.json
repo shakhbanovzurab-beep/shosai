@@ -140,20 +140,6 @@
     "sizeLimit": "Ukuran file maksimal {size}.",
     "tooMany": "Anda dapat melampirkan hingga {max, plural, other {# file}}."
   },
-  "voice": {
-    "unavailable": "Mode suara tidak tersedia",
-    "listening": "Mendengarkan…",
-    "thinking": "Leo berpikir…",
-    "speaking": "Leo berbicara…",
-    "micOff": "Mikrofon nonaktif",
-    "turnMicOn": "Aktifkan mikrofon",
-    "turnMicOff": "Nonaktifkan mikrofon",
-    "end": "Akhiri mode suara",
-    "micBlocked": "Akses mikrofon diblokir",
-    "micBlockedHint": "Izinkan akses mikrofon untuk berbicara dengan Leo.",
-    "needsHttps": "Mode suara memerlukan koneksi aman (HTTPS) untuk menggunakan mikrofon.",
-    "unsupported": "Browser ini tidak mendukung mode suara. Coba versi terbaru Chrome, Edge, atau Safari."
-  },
   "failure": {
     "token_limit": "{limit, select, standard_daily_tokens {Kuota Leo hari ini sudah habis. Kuota diperbarui besok, atau tingkatkan paket Anda untuk melanjutkan.} other {Kuota Leo minggu ini sudah habis. Kuota diperbarui minggu depan, atau tingkatkan paket Anda untuk melanjutkan.}}",
     "consent_required": "Leo memproses data Anda di UE. Aktifkan “Pemrosesan di UE” di Pengaturan › Privasi untuk menggunakannya.",
