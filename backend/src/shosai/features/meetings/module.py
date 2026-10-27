@@ -3,14 +3,21 @@
 Step A1 published the contract — the ports calendar binds and uses, and the slice's events —
 and the domain. Step A2 added LiveKit: the `LIVEKIT_*` settings with their production check,
 the SFU behind the `VideoServer` port, opened with the process and closed with it, and its
-readiness probe when it is configured. Tables, routes and tasks come with the next steps.
+readiness probe when it is configured. Step A3 added the tables of each home and their
+account data handler. Routes and tasks come with the next steps.
 """
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
+from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.core.health.probes import DependencyProbe
+from shosai.features.meetings.application.account_data import (
+    ACCOUNT_DATA,
+    MODELS,
+    MeetingsAccountData,
+)
 from shosai.features.meetings.application.video_server import VideoUnavailableError
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
@@ -29,13 +36,18 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
             if settings.configured
             else ()
         )
-        yield FeatureParts(probes=probes)
+        yield FeatureParts(
+            probes=probes,
+            provides=(ACCOUNT_DATA_HANDLERS.bind(MeetingsAccountData(services.transactions)),),
+        )
 
 
 MEETINGS = FeatureModule(
     name="meetings",
     build=build_meetings,
+    models=MODELS,
     events=(CallStarted, CallEnded, RecordingReady),
     production_checks=(livekit_settings_safe,),
     settings=(LiveKitSettings,),
+    account_data=(ACCOUNT_DATA,),
 )
