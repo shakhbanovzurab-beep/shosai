@@ -13,6 +13,7 @@ from datetime import timedelta
 from enum import StrEnum
 from typing import Final
 
+from shosai.core.ai.requests import ReasoningEffort
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 
@@ -85,6 +86,9 @@ class ModelRoute:
     primary: ModelRef
     fallbacks: tuple[ModelRef, ...] = ()
     standard: ModelRef | None = None
+    # Рассуждение основной модели; запасные и стандартная — как решит их провайдер, иначе
+    # уровень включил бы рассуждение модели, что без него отвечает быстрее.
+    reasoning: ReasoningEffort | None = None
 
     @property
     def models(self) -> tuple[ModelRef, ...]:

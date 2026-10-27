@@ -90,6 +90,8 @@ def chat_body(model: str, request: ChatRequest, *, stream: bool) -> Json:
     }
     if request.temperature is not None:
         body["temperature"] = request.temperature
+    if request.reasoning is not None:
+        body["reasoning"] = {"effort": request.reasoning.value}
     if tools:
         body["tools"] = tools
     return body

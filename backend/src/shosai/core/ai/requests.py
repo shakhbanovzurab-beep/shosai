@@ -71,6 +71,15 @@ class ToolSchema:
     parameters: dict[str, Any]
 
 
+class ReasoningEffort(StrEnum):
+    """How hard a reasoning model thinks before it answers (OpenRouter's `reasoning.effort`)."""
+
+    MINIMAL = "minimal"
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+
 @dataclass(frozen=True, slots=True)
 class ChatRequest:
     """A conversation for a chat model and how to answer it."""
@@ -81,6 +90,8 @@ class ChatRequest:
     tools: tuple[ToolSchema, ...] = ()
     # Серверный инструмент OpenRouter: поиск в сети с ссылками на источники.
     web_search_results: int = 0
+    # Сколько модель рассуждает перед ответом; None — как решит провайдер.
+    reasoning: ReasoningEffort | None = None
 
     def __post_init__(self) -> None:
         if not self.messages:

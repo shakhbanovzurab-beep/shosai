@@ -1,4 +1,5 @@
-"""Calls along their routes through the port: fallback, breakers, the first-byte rule."""
+"""Calls along their routes through the port: fallback, breakers, the first-byte rule, and the
+route's reasoning, which only its primary model gets."""
 
 import json
 from decimal import Decimal
@@ -12,6 +13,7 @@ from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.requests import (
     ChatMessage,
     ChatRequest,
+    ReasoningEffort,
     Role,
     TextPart,
 )
@@ -69,6 +71,28 @@ async def test_a_failing_model_hands_the_call_to_the_next_one(
         ("probe/fallback", "ok"),
     ]  # fmt: skip
     assert bench.sample("shosai_ai_fallbacks_total", provider="openrouter", kind="chat") == 1
+
+
+async def test_the_route_s_reasoning_goes_to_its_primary_model_only(
+    homes: DatabaseAccess, valkey: Redis
+) -> None:
+    bench = await routed(homes, valkey)
+    reasoning = ModelRoute(PRIMARY, (FALLBACK,), reasoning=ReasoningEffort.LOW)
+    for answer in (BUSY, BUSY, chat_answer("Hello.", usage(10, 2, cost=0.0001))):
+        bench.openrouter.answer("chat/completions", answer)
+    bench.openrouter.answer("chat/completions", chat_answer("Hi.", usage(10, 2, cost=0.0001)))
+
+    await bench.providers.chat(context("turn:r1"), reasoning, QUESTION)
+    await bench.providers.chat(context("turn:r2"), ROUTE, QUESTION)
+
+    sent = [
+        (body["model"], body.get("reasoning"))
+        for body in bench.openrouter.bodies("chat/completions")
+    ]
+    assert sent == [
+        ("probe/primary", {"effort": "low"}), ("probe/primary", {"effort": "low"}),
+        ("probe/fallback", None), ("probe/primary", None),
+    ]  # fmt: skip
 
 
 async def test_a_refusal_of_the_input_is_not_handed_on(

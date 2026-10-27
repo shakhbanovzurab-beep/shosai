@@ -12,7 +12,7 @@ with F6 step 6.
 
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable
 from contextlib import AbstractAsyncContextManager, aclosing, asynccontextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from decimal import Decimal
 
 from shosai.core.ai.adapters.mistral_ocr import MistralOcr
@@ -87,7 +87,7 @@ class AiProviders:
         """A model's answer to a conversation."""
         self._guards.caps.check_chat(request)
         operation = Operation(
-            "chat", self._openrouter("chat"), lambda c, m: c.chat(m, request),
+            "chat", self._openrouter("chat"), lambda c, m: c.chat(m, reasoned(request, route, m)),
             chat_estimate(request),
         )  # fmt: skip
         return await self._routed(context, route, operation)
@@ -97,7 +97,7 @@ class AiProviders:
     ) -> AsyncGenerator[ChatDelta]:
         """A model's answer as it is written; the cost is recorded when the usage arrives."""
         operation = StreamOperation(
-            self._openrouter("chat"), lambda c, m: c.stream_chat(m, request),
+            self._openrouter("chat"), lambda c, m: c.stream_chat(m, reasoned(request, route, m)),
             chat_estimate(request),
         )  # fmt: skip
         self._guards.caps.check_chat(request)
@@ -262,3 +262,11 @@ class AiProviders:
         return lambda model: self._runner.admission.client(
             self._clients.mistral, Provider.MISTRAL, model, kind
         )
+
+
+def reasoned(request: ChatRequest, route: ModelRoute, model: ModelRef) -> ChatRequest:
+    """The request as `model` gets it: the route's reasoning for its primary model, unless the
+    caller set one; the fallbacks keep their providers' default."""
+    if request.reasoning is not None or route.reasoning is None or model != route.primary:
+        return request
+    return replace(request, reasoning=route.reasoning)
