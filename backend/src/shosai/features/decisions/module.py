@@ -42,6 +42,11 @@ from shosai.features.decisions.infrastructure.records import (
     DecisionRow,
 )
 from shosai.features.decisions.infrastructure.state_key import state_hash_key
+from shosai.features.decisions.objectives import (
+    DECISIONS_MONITORS,
+    DECISIONS_OBJECTIVES,
+    DECISIONS_TRACKED,
+)
 from shosai.features.decisions.settings import DecisionsSettings
 
 # Трассировщик среза: спаны decision.<точка> без состояния и текста.
@@ -99,4 +104,7 @@ DECISIONS = FeatureModule(
     models=DECISION_MODELS,
     settings=(DecisionsSettings,),
     account_data=(ACCOUNT_DATA,),
+    objectives=DECISIONS_OBJECTIVES,
+    monitors=DECISIONS_MONITORS,
+    tracked=DECISIONS_TRACKED,
 )

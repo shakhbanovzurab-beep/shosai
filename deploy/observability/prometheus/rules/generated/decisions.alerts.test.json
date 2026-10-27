@@ -1,0 +1,291 @@
+{
+  "rule_files": [
+    "decisions.alerts.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "slo:leo_decisions_zero_retention:bad_ratio:rate5m{slo=\"leo_decisions_zero_retention\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_zero_retention:bad_ratio:rate30m{slo=\"leo_decisions_zero_retention\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_zero_retention:bad_ratio:rate1h{slo=\"leo_decisions_zero_retention\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_zero_retention:bad_ratio:rate6h{slo=\"leo_decisions_zero_retention\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_zero_retention:bad_ratio:rate3d{slo=\"leo_decisions_zero_retention\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "LeoDecisionsZeroRetentionBudgetBurnFast",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "leo_decisions_zero_retention",
+                "journey": "leo_decisions"
+              },
+              "exp_annotations": {
+                "summary": "Решения Leo идут по правилам: Jev не подтверждён как хранящий ноль",
+                "description": "Мы обещаем, что решения Leo не остаются без Jev из-за того, что его адрес у OpenRouter перестал быть адресом с нулевым хранением данных, в 99 % случаев. Сбоев сейчас очень много: если так продолжится, обещание на этот месяц будет нарушено примерно через 2 дня.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-leo-decisions"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "LeoDecisionsZeroRetentionBudgetBurnSlow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "leo_decisions_zero_retention",
+                "journey": "leo_decisions"
+              },
+              "exp_annotations": {
+                "summary": "Решения Leo идут по правилам: Jev не подтверждён как хранящий ноль",
+                "description": "Мы обещаем, что решения Leo не остаются без Jev из-за того, что его адрес у OpenRouter перестал быть адресом с нулевым хранением данных, в 99 % случаев. Сбоев больше нормы уже несколько часов: если так продолжится, обещание на этот месяц будет нарушено примерно через 5 дней.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-leo-decisions"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "LeoDecisionsZeroRetentionBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "leo_decisions_zero_retention",
+                "journey": "leo_decisions"
+              },
+              "exp_annotations": {
+                "summary": "Решения Leo идут по правилам: Jev не подтверждён как хранящий ноль",
+                "description": "Мы обещаем, что решения Leo не остаются без Jev из-за того, что его адрес у OpenRouter перестал быть адресом с нулевым хранением данных, в 99 % случаев. Сбоев понемногу больше нормы уже три дня: если ничего не делать, обещание будет нарушено до конца месяца.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-leo-decisions"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "LeoDecisionsZeroRetentionBudgetBurnFast",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "LeoDecisionsZeroRetentionBudgetBurnSlow",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "LeoDecisionsZeroRetentionBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "slo:leo_decisions_jev_on_time:bad_ratio:rate5m{slo=\"leo_decisions_jev_on_time\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_jev_on_time:bad_ratio:rate30m{slo=\"leo_decisions_jev_on_time\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_jev_on_time:bad_ratio:rate1h{slo=\"leo_decisions_jev_on_time\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_jev_on_time:bad_ratio:rate6h{slo=\"leo_decisions_jev_on_time\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_jev_on_time:bad_ratio:rate3d{slo=\"leo_decisions_jev_on_time\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "LeoDecisionsJevOnTimeBudgetBurnFast",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "leo_decisions_jev_on_time",
+                "journey": "leo_decisions"
+              },
+              "exp_annotations": {
+                "summary": "Jev отвечает на решения Leo позже срока",
+                "description": "Мы обещаем, что Jev отвечает на решение Leo в его срок в 95 % случаев. Сбоев сейчас очень много: если так продолжится, обещание на этот месяц будет нарушено примерно через 2 дня.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-leo-decisions"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "LeoDecisionsJevOnTimeBudgetBurnSlow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "leo_decisions_jev_on_time",
+                "journey": "leo_decisions"
+              },
+              "exp_annotations": {
+                "summary": "Jev отвечает на решения Leo позже срока",
+                "description": "Мы обещаем, что Jev отвечает на решение Leo в его срок в 95 % случаев. Сбоев больше нормы уже несколько часов: если так продолжится, обещание на этот месяц будет нарушено примерно через 5 дней.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-leo-decisions"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "LeoDecisionsJevOnTimeBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "leo_decisions_jev_on_time",
+                "journey": "leo_decisions"
+              },
+              "exp_annotations": {
+                "summary": "Jev отвечает на решения Leo позже срока",
+                "description": "Мы обещаем, что Jev отвечает на решение Leo в его срок в 95 % случаев. Сбоев понемногу больше нормы уже три дня: если ничего не делать, обещание будет нарушено до конца месяца.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-leo-decisions"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "LeoDecisionsJevOnTimeBudgetBurnFast",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "LeoDecisionsJevOnTimeBudgetBurnSlow",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "LeoDecisionsJevOnTimeBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "slo:leo_decisions_fallbacks:bad_ratio:rate5m{slo=\"leo_decisions_fallbacks\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_fallbacks:bad_ratio:rate30m{slo=\"leo_decisions_fallbacks\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_fallbacks:bad_ratio:rate1h{slo=\"leo_decisions_fallbacks\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_fallbacks:bad_ratio:rate6h{slo=\"leo_decisions_fallbacks\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:leo_decisions_fallbacks:bad_ratio:rate3d{slo=\"leo_decisions_fallbacks\",journey=\"leo_decisions\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "LeoDecisionsFallbacksBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "leo_decisions_fallbacks",
+                "journey": "leo_decisions"
+              },
+              "exp_annotations": {
+                "summary": "Решения Leo слишком часто уходят в запасное правило",
+                "description": "Мы обещаем, что решение Leo, для которого есть политика, принимается ею, а не запасным правилом, в 80 % случаев. Сбоев понемногу больше нормы уже три дня: если ничего не делать, обещание будет нарушено до конца месяца.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-leo-decisions"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "LeoDecisionsFallbacksBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_decision_unsafe_outcomes_total",
+          "values": "0x10 1x50"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "DecisionUnsafeOutcome",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "ADR 0069"
+              },
+              "exp_annotations": {
+                "summary": "Политика решений Leo предложила исход мягче правила",
+                "description": "Политика решений ответила менее осторожно, чем жёсткое правило: например, обычная карточка вместо предупреждения. Слой решений отбросил этот ответ и оставил исход правила, так что человек защищён, но версия политики сломана — её надо снять, пока она в силе.",
+                "runbook": "docs/runbooks/alerts.md#decision-unsafe-outcome",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "DecisionUnsafeOutcome",
+          "exp_alerts": []
+        }
+      ]
+    }
+  ]
+}

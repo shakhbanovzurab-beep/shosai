@@ -95,6 +95,18 @@ def test_each_owner_gets_its_files_and_the_burn_limits_follow_the_budget() -> No
     )
 
 
+def test_a_large_budget_keeps_only_the_burn_its_share_can_reach() -> None:
+    loose = replace(BASE, name="fallbacks", target=0.8, alerting=AlertClass.TICKET)
+    files = render({"core": OwnerRules((loose,))})
+
+    [group] = json.loads(files["core.alerts.json"])["groups"]
+    tests = json.loads(files["core.alerts.test.json"])["tests"][0]["alert_rule_test"]
+
+    assert [rule["alert"] for rule in group["rules"]] == ["FallbacksBudgetBurnTicket"]
+    assert group["rules"][0]["expr"].endswith("> 0.2")
+    assert {test["alertname"] for test in tests} == {"FallbacksBudgetBurnTicket"}
+
+
 def test_a_tracked_latency_joins_its_journey_s_dashboard_without_a_promise_line() -> None:
     tracked = TrackedLatency(
         BASE.journey, "Скорость по домам", "Без обещания.", "http_server_request_duration_seconds",

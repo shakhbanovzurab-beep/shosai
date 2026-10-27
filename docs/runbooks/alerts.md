@@ -25,7 +25,18 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Leo's approved actions (`journey="leo_action"`).** `shosai_agent_approved_actions_total` by `result`: `late` — actions ended more than 30 s after their approval: the `agent` queue's age (`TaskQueueOld`), a slow slice's `execute` (`shosai_agent_action_execution_seconds`, the trace's `tool.<name>`), or the minute's sweep handing an unclaimed approval over again ("Одобренное действие снова не передано" in `workers-default`); `unknown` — an item's outcome nobody can tell: "Пункт действия Leo упал" in `workers-agent` with its stack, a slice's timeout, or an executor lost mid-action (the sweep's "Обход действий Leo").
 
+**Leo's decisions (`journey="leo_decisions"`, tickets only).** `shosai_decision_requests_total` by `point`, `source` and `reason`, and the dashboard «Решения Leo: кто решает». `leo_decisions_zero_retention` — decisions refused with `not_zdr`: Jev's pinned endpoint left OpenRouter's zero-retention list or its status went three days unread; check the gauge `shosai_decision_zero_retention` and the `workers-default` log of the daily task `decisions.check_zero_retention` («Эндпоинт Jev вне списка нулевого хранения: решают правила», or «Статус нулевого хранения Jev не прочитан: решают правила» from the asking process), and read OpenRouter's `/api/v1/endpoints/zdr` by hand — while it lasts every point runs on its rules, which is safe; nothing to fix on our side unless the task itself fails. `leo_decisions_jev_on_time` — `reason="deadline"` above 5 % of asked decisions: Jev slow (`shosai_ai_call_duration_seconds{model="typesafe/jev-1.13"}`) or the process's in-flight cap (`shosai_decision_in_flight`); a late answer is still recorded (`shosai_decision_late_total`). `leo_decisions_fallbacks` — the rule stood in for more than a fifth of consulted decisions over three days: the dashboard's «Запасное правило: почему» names the reason; `no_consent` is expected for Russian-home people without cross-border consent and is not a fault.
+
 ## Pages: invariant monitors (§16.4)
+
+<a id="decision-unsafe-outcome"></a>
+### DecisionUnsafeOutcome — ADR 0069
+
+**Means.** A Decision Layer policy answered less carefully than its consumer's rule — for example a standard card where the agent's rule asked for a warning, or a toolset ranking that would drop a forced one (`shosai_decision_unsafe_outcomes_total` by `point`). The engine overruled the answer and kept the rule's outcome, so the person was protected; the policy version itself is broken and must not stay in force.
+
+**Look.** The counter's `point`; `shosai decisions report <point>` names the version and revision in force; the log line «Политика смягчила исход правила» (in the process that asked: `workers-agent` for the agent's points) carries the point, never text.
+
+**Fix.** `shosai decisions retire <point>@<version>` returns the point to its rule within a minute. Then fix the policy's `outcome` or `careful` in `features/decisions/domain/policies/`, with a Hypothesis test that no outcome is less careful than the rule, and release it as a new version through its gates and shadow.
 
 <a id="unknown-task-dropped"></a>
 ### UnknownTaskDropped — §14 rule 9

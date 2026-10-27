@@ -1434,6 +1434,94 @@
         }
       },
       "id": 16
+    },
+    {
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 40,
+        "w": 12,
+        "h": 5
+      },
+      "title": "Политика решений Leo предложила исход мягче правила",
+      "description": "Политика решений ответила менее осторожно, чем жёсткое правило: например, обычная карточка вместо предупреждения. Слой решений отбросил этот ответ и оставил исход правила, так что человек защищён, но версия политики сломана — её надо снять, пока она в силе.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(increase(shosai_decision_unsafe_outcomes_total[15m])) or vector(0)",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "нет данных",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#0ca30c",
+                "value": -1000000000000000.0
+              },
+              {
+                "color": "#d03b3b",
+                "value": 1e-09
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": -1000000000000000.0,
+                "to": 0,
+                "result": {
+                  "text": "нет ✓"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1e-09,
+                "to": 1000000000000000.0,
+                "result": {
+                  "text": "да ✗"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 17
     }
   ]
 }

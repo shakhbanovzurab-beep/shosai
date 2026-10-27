@@ -1,0 +1,129 @@
+{
+  "groups": [
+    {
+      "name": "decisions-slo-recording",
+      "rules": [
+        {
+          "record": "slo:leo_decisions_zero_retention:bad_ratio:rate5m",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"not_zdr\"}[5m])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[5m]))",
+          "labels": {
+            "slo": "leo_decisions_zero_retention",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_zero_retention:bad_ratio:rate30m",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"not_zdr\"}[30m])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[30m]))",
+          "labels": {
+            "slo": "leo_decisions_zero_retention",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_zero_retention:bad_ratio:rate1h",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"not_zdr\"}[1h])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[1h]))",
+          "labels": {
+            "slo": "leo_decisions_zero_retention",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_zero_retention:bad_ratio:rate6h",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"not_zdr\"}[6h])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[6h]))",
+          "labels": {
+            "slo": "leo_decisions_zero_retention",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_zero_retention:bad_ratio:rate3d",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"not_zdr\"}[3d])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[3d]))",
+          "labels": {
+            "slo": "leo_decisions_zero_retention",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_jev_on_time:bad_ratio:rate5m",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"deadline\"}[5m])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason=~\"judged|deadline|provider_error|contract\"}[5m]))",
+          "labels": {
+            "slo": "leo_decisions_jev_on_time",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_jev_on_time:bad_ratio:rate30m",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"deadline\"}[30m])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason=~\"judged|deadline|provider_error|contract\"}[30m]))",
+          "labels": {
+            "slo": "leo_decisions_jev_on_time",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_jev_on_time:bad_ratio:rate1h",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"deadline\"}[1h])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason=~\"judged|deadline|provider_error|contract\"}[1h]))",
+          "labels": {
+            "slo": "leo_decisions_jev_on_time",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_jev_on_time:bad_ratio:rate6h",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"deadline\"}[6h])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason=~\"judged|deadline|provider_error|contract\"}[6h]))",
+          "labels": {
+            "slo": "leo_decisions_jev_on_time",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_jev_on_time:bad_ratio:rate3d",
+          "expr": "(sum(rate(shosai_decision_requests_total{reason=\"deadline\"}[3d])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason=~\"judged|deadline|provider_error|contract\"}[3d]))",
+          "labels": {
+            "slo": "leo_decisions_jev_on_time",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_fallbacks:bad_ratio:rate5m",
+          "expr": "(sum(rate(shosai_decision_requests_total{source=\"fallback\"}[5m])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[5m]))",
+          "labels": {
+            "slo": "leo_decisions_fallbacks",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_fallbacks:bad_ratio:rate30m",
+          "expr": "(sum(rate(shosai_decision_requests_total{source=\"fallback\"}[30m])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[30m]))",
+          "labels": {
+            "slo": "leo_decisions_fallbacks",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_fallbacks:bad_ratio:rate1h",
+          "expr": "(sum(rate(shosai_decision_requests_total{source=\"fallback\"}[1h])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[1h]))",
+          "labels": {
+            "slo": "leo_decisions_fallbacks",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_fallbacks:bad_ratio:rate6h",
+          "expr": "(sum(rate(shosai_decision_requests_total{source=\"fallback\"}[6h])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[6h]))",
+          "labels": {
+            "slo": "leo_decisions_fallbacks",
+            "journey": "leo_decisions"
+          }
+        },
+        {
+          "record": "slo:leo_decisions_fallbacks:bad_ratio:rate3d",
+          "expr": "(sum(rate(shosai_decision_requests_total{source=\"fallback\"}[3d])) or vector(0)) / sum(rate(shosai_decision_requests_total{reason!~\"nothing_to_decide|policy_off\"}[3d]))",
+          "labels": {
+            "slo": "leo_decisions_fallbacks",
+            "journey": "leo_decisions"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -14,6 +14,8 @@ from typing import Final
 from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
 
 UNSAFE_OUTCOMES: Final = "shosai_decision_unsafe_outcomes_total"
+REQUESTS: Final = "shosai_decision_requests_total"
+DECISION_SECONDS: Final = "shosai_decision_seconds"
 DECISION_BUCKETS: Final = (0.001, 0.005, 0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 1, 2)
 
 
@@ -22,13 +24,13 @@ class DecisionMetrics:
 
     def __init__(self, registry: CollectorRegistry) -> None:
         self._requests = Counter(
-            "shosai_decision_requests",
+            REQUESTS.removesuffix("_total"),
             "Решения по точке, источнику, причине и тому, изменили ли они исход правила",
             ("point", "source", "reason", "changed"),
             registry=registry,
         )
         self._seconds = Histogram(
-            "shosai_decision_seconds",
+            DECISION_SECONDS,
             "Сколько вызывающий ждал решения",
             ("point", "source"),
             buckets=DECISION_BUCKETS,

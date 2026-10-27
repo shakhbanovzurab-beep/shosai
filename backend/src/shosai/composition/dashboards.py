@@ -10,6 +10,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from shosai.composition.ai_dashboard import providers
+from shosai.composition.decisions_dashboard import decisions
 from shosai.composition.objectives import declared_rules
 from shosai.core.features import FeatureModule
 from shosai.core.observability.dashboards import invariants_dashboard, journey_dashboards
@@ -248,6 +249,7 @@ def rendered_dashboards(features: Sequence[FeatureModule]) -> dict[str, str]:
         "process-roles": processes(),
         "data-homes": homes(),
         "ai-providers": providers(),
+        "leo-decisions": decisions(),
     }
     return {
         f"{uid}.json": json.dumps(board, indent=2, ensure_ascii=False) + "\n"

@@ -97,6 +97,13 @@ def series_of(name: str, labels: Mapping[str, str]) -> str:
     return name + "{" + ",".join(f'{key}="{value}"' for key, value in labels.items()) + "}"
 
 
+def reachable_burns(slo: ServiceLevelObjective) -> tuple[Burn, ...]:
+    """The burns whose threshold a share of bad events can exceed: with a large error budget
+    (a ticket on a fifth of events failing) the fast ones' threshold is above 1 and only the
+    3-day burn is rendered."""
+    return tuple(burn for burn in BURNS if burn.factor * slo.error_budget < 1)
+
+
 def burn_alert(slo: ServiceLevelObjective, burn: Burn) -> dict[str, object]:
     limit = f"{burn.factor * slo.error_budget:.6g}"
     severity = AlertClass.TICKET if burn.always_ticket else slo.alerting
@@ -159,7 +166,7 @@ def recording_file(owner: str, rules: OwnerRules) -> dict[str, object]:
 def alerts_file(owner: str, rules: OwnerRules) -> dict[str, object]:
     groups: list[dict[str, object]] = []
     if rules.objectives:
-        burns = [burn_alert(slo, burn) for slo in rules.objectives for burn in BURNS]
+        burns = [burn_alert(slo, burn) for slo in rules.objectives for burn in reachable_burns(slo)]
         groups.append({"name": f"{owner}-slo", "rules": burns})
     if rules.monitors:
         monitors = [monitor_alert(monitor) for monitor in rules.monitors]
@@ -184,11 +191,11 @@ def slo_test(slo: ServiceLevelObjective) -> dict[str, object]:
                 }
             ],
         }
-        for burn in BURNS
+        for burn in reachable_burns(slo)
     ]
     resolved = [
         {"eval_time": "150m", "alertname": camel(slo.name) + burn.suffix, "exp_alerts": []}
-        for burn in BURNS
+        for burn in reachable_burns(slo)
     ]
     return {"interval": TEST_INTERVAL, "input_series": series, "alert_rule_test": firing + resolved}
 

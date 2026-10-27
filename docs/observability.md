@@ -105,7 +105,7 @@ MEETINGS = FeatureModule(name="meetings", ..., objectives=MEETING_OBJECTIVES)
 
 - `summary` is what people experience, `promise` completes «Мы обещаем, что …»: both are plain Russian for the owner, without terms. They become the alert's message and the dashboard's heading.
 - `EventRatio` counts bad events among all; `LatencyRatio(histogram, matchers, threshold)` counts events slower than a histogram bucket — the threshold must be one of the histogram's buckets.
-- `alerting=AlertClass.TICKET` tracks the promise without waking anyone, as for the Russian home's latency.
+- `alerting=AlertClass.TICKET` tracks the promise without waking anyone, as for the Russian home's latency. A burn whose threshold (its factor × the error budget) is 1 or more cannot fire and is not rendered: an objective of 80 % keeps only the 3-day ticket.
 - Then, in `backend/`: `uv run --env-file ../.env.example pytest tests/composition/test_observability_rules.py --update-rules`. It renders the recording rules, the multi-window burn-rate alerts, their promtool tests and the journey's dashboard into `deploy/observability/`; commit them with the code. The same test fails while they differ from the declarations.
 
 ## An invariant monitor (§16.4)
