@@ -1,0 +1,166 @@
+{
+  "cuts": {
+    "needs": {
+      "lower": 0.6,
+      "upper": 0.7
+    }
+  },
+  "digest": "ab140eb12dc748ce",
+  "failures": [
+    "ece:needs",
+    "accuracy:en",
+    "accuracy:fr",
+    "accuracy:it",
+    "accuracy:es",
+    "accuracy:pt-BR",
+    "accuracy:ar",
+    "accuracy:tr",
+    "accuracy:ko",
+    "accuracy:vi",
+    "accuracy:ja",
+    "accuracy:id",
+    "reference_count:ru",
+    "reference_count:en",
+    "agreement",
+    "reference_accuracy:ru",
+    "reference_gap:ru",
+    "careful:ru",
+    "reference_accuracy:en",
+    "reference_gap:en",
+    "careful:en"
+  ],
+  "numbers": {
+    "accuracy": {
+      "ar": 0.7476,
+      "de": 0.8019,
+      "en": 0.7748,
+      "es": 0.7885,
+      "fr": 0.7387,
+      "hi": 0.8462,
+      "id": 0.7818,
+      "it": 0.7264,
+      "ja": 0.7885,
+      "ko": 0.7864,
+      "nl": 0.8131,
+      "pt-BR": 0.7615,
+      "ru": 0.8384,
+      "tr": 0.766,
+      "vi": 0.7431,
+      "zh-Hant": 0.8113
+    },
+    "agreement": 0.0,
+    "careful": {
+      "en": 0.0,
+      "ru": 0.0
+    },
+    "cases": 1686,
+    "counts": {
+      "ar": {
+        "needs": {
+          "no": 356,
+          "yes": 97
+        }
+      },
+      "de": {
+        "needs": {
+          "no": 368,
+          "yes": 104
+        }
+      },
+      "en": {
+        "needs": {
+          "no": 388,
+          "yes": 110
+        }
+      },
+      "es": {
+        "needs": {
+          "no": 362,
+          "yes": 101
+        }
+      },
+      "fr": {
+        "needs": {
+          "no": 388,
+          "yes": 110
+        }
+      },
+      "hi": {
+        "needs": {
+          "no": 364,
+          "yes": 104
+        }
+      },
+      "id": {
+        "needs": {
+          "no": 384,
+          "yes": 110
+        }
+      },
+      "it": {
+        "needs": {
+          "no": 370,
+          "yes": 105
+        }
+      },
+      "ja": {
+        "needs": {
+          "no": 361,
+          "yes": 99
+        }
+      },
+      "ko": {
+        "needs": {
+          "no": 356,
+          "yes": 98
+        }
+      },
+      "nl": {
+        "needs": {
+          "no": 372,
+          "yes": 102
+        }
+      },
+      "pt-BR": {
+        "needs": {
+          "no": 380,
+          "yes": 106
+        }
+      },
+      "ru": {
+        "needs": {
+          "no": 346,
+          "yes": 97
+        }
+      },
+      "tr": {
+        "needs": {
+          "no": 323,
+          "yes": 85
+        }
+      },
+      "vi": {
+        "needs": {
+          "no": 381,
+          "yes": 107
+        }
+      },
+      "zh-Hant": {
+        "needs": {
+          "no": 370,
+          "yes": 105
+        }
+      }
+    },
+    "ece": {
+      "needs": 0.1615
+    },
+    "reference_accuracy": {
+      "en": 0.0,
+      "ru": 0.0
+    },
+    "reference_cases": 0
+  },
+  "passed": false,
+  "policy": "turn.route@1"
+}
