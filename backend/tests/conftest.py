@@ -56,6 +56,7 @@ pytest_plugins = (
     "tests.features.memory.recall_bench",
     "tests.features.memory.admission_bench",
     "tests.features.memory.tools_bench",
+    "tests.features.memory.summary_bench",
 )
 
 

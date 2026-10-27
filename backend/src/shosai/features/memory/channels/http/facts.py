@@ -2,16 +2,17 @@
 
 The cabinet lists facts and candidates by cursor with the counts its settings row shows,
 filtered on the server; edits a statement (a new fact takes the old one's place), pins,
-accepts a candidate, forgets one fact or everything, and turns down the draft's carried-over
-candidates in one go. The switch is `GET` and `PATCH /v1/agent/memory/settings`. Errors use
-the platform's envelope: `memory_fact_not_found` for a fact the person cannot change — gone,
-another person's or never there — `memory_fact_invalid`, `invalid_cursor`, `validation_error`,
-`idempotency_key_reused`. No route is gated by plan: a person's memory is never held back.
+accepts a candidate, forgets one fact or everything, restores one forgotten or replaced in the
+last day (step 7), and turns down the draft's carried-over candidates in one go. The switch is
+`GET` and `PATCH /v1/agent/memory/settings`. Errors use the platform's envelope:
+`memory_fact_not_found` for a fact the person cannot change — gone, another person's or never
+there — `memory_fact_invalid`, `invalid_cursor`, `validation_error`, `idempotency_key_reused`.
+No route is gated by plan: a person's memory is never held back.
 """
 
 from datetime import datetime
 from http import HTTPStatus
-from typing import Annotated, Literal
+from typing import Annotated, Final, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, Response
@@ -23,10 +24,15 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal, bearer_principal
 from shosai.features.memory.application.fact_changes import FactChanges
 from shosai.features.memory.application.fact_list import Counts, FactLists, FactQuery, FactView
+from shosai.features.memory.application.fact_restore import FactRestore
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.domain.facts import STATEMENT_MAX, FactKind, FactStatus, MemorySource
 
 WORDS_MAX = 200
+STATUS_OUT: Final[dict[FactStatus, Literal["candidate", "forgotten"]]] = {
+    FactStatus.CANDIDATE: "candidate",
+    FactStatus.FORGOTTEN: "forgotten",
+}
 
 
 class Strict(BaseModel):
@@ -56,7 +62,9 @@ class MemoryFactOut(Out):
     id: UUID
     kind: FactKind
     statement: str
-    status: Literal["candidate", "active"]
+    status: Literal["candidate", "active", "forgotten"] = Field(
+        description="`forgotten` only for a fact a summary message just forgot."
+    )
     pinned: bool
     source: MemorySourceOut
     created_at: datetime
@@ -103,7 +111,7 @@ def fact_out(view: FactView) -> MemoryFactOut:
         id=view.id,
         kind=view.kind,
         statement=view.statement,
-        status="candidate" if view.status is FactStatus.CANDIDATE else "active",
+        status=STATUS_OUT.get(view.status, "active"),
         pinned=view.pinned,
         source=MemorySourceOut(
             kind=view.source, title=view.title, thread_id=view.thread_id, message_id=view.message_id
@@ -141,10 +149,10 @@ def fact_query(
 
 
 def build_memory_router(
-    services: tuple[FactLists, FactChanges, MemorySwitch], ports: PortDirectory
+    services: tuple[FactLists, FactChanges, MemorySwitch, FactRestore], ports: PortDirectory
 ) -> APIRouter:
     """Settings > Memory's facts and switch."""
-    lists, changes, switch = services
+    lists, changes, switch, restore = services
     router = APIRouter(prefix="/v1/agent/memory", tags=["memory"])
     signed_in = Annotated[Principal, Depends(bearer_principal(ports))]
 
@@ -194,6 +202,11 @@ def build_memory_router(
     async def accept_memory_fact(principal: signed_in, fact_id: UUID) -> MemoryFactOut:
         """Remember a candidate."""
         return fact_out(await changes.accept(principal, fact_id))
+
+    @router.post("/{fact_id}/restore")
+    async def restore_memory_fact(principal: signed_in, fact_id: UUID) -> MemoryFactOut:
+        """Bring back a fact forgotten or replaced in the last day."""
+        return fact_out(await restore.restore(principal, fact_id))
 
     @router.delete("/{fact_id}", status_code=HTTPStatus.NO_CONTENT, response_class=Response)
     async def forget_memory_fact(principal: signed_in, fact_id: UUID) -> None:

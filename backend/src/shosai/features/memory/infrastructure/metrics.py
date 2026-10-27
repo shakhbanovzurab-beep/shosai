@@ -4,6 +4,8 @@
 nothing to give, late, memory off, no consent, failed — and `shosai_memory_recall_seconds` how
 long it took; `shosai_memory_recall_facts` how many facts reached the turn. The embedding pass
 counts the facts it gave vectors to and those it could not (`shosai_memory_embedded_total`).
+`shosai_memory_summary_writes_total{trigger, outcome}` counts the summary's writes: why — a
+stale open, a refresh, a box message, the upkeep — and how they ended.
 """
 
 from collections.abc import Sequence
@@ -33,6 +35,15 @@ class EmbedOutcome(StrEnum):
     EMBEDDED = "embedded"
     NO_CONSENT = "no_consent"
     FAILED = "failed"
+
+
+class SummaryTrigger(StrEnum):
+    """Why the summary is written."""
+
+    OPEN = "open"
+    REFRESH = "refresh"
+    BOX = "box"
+    UPKEEP = "upkeep"
 
 
 ADMISSIONS: Final = "shosai_memory_admissions_total"
@@ -66,6 +77,12 @@ class MemoryMetrics:
             ("source", "outcome"),
             registry=registry,
         )
+        self._summaries = Counter(
+            "shosai_memory_summary_writes",
+            "Записи сводки памяти по поводу и исходу",
+            ("trigger", "outcome"),
+            registry=registry,
+        )
         self._embedded = Counter(
             "shosai_memory_embedded",
             "Факты, которым проход эмбеддингов дал вектор или не смог",
@@ -78,6 +95,10 @@ class MemoryMetrics:
         self._recalls.labels(outcome.value).inc()
         self._seconds.observe(seconds)
         self._facts.observe(facts)
+
+    def summary_written(self, trigger: SummaryTrigger, outcome: str) -> None:
+        """One write of a summary: why and how it ended."""
+        self._summaries.labels(trigger.value, outcome).inc()
 
     def embedded(self, outcome: EmbedOutcome, facts: int) -> None:
         """Facts the embedding pass handled one way."""

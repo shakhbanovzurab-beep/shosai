@@ -69,6 +69,10 @@ class EndReason(StrEnum):
     FORGOT_ALL = "forgot_all"
 
 
+# Концы, после которых факт не возвращается: истёк сам или забыт вместе со всем.
+FINAL_ENDS: Final = frozenset({EndReason.EXPIRED, EndReason.FORGOT_ALL})
+
+
 class Sensitivity(StrEnum):
     """Whether a fact is personal in the sense of special categories of data."""
 
@@ -194,16 +198,18 @@ def supersede(old: Fact, new: Fact, now: datetime) -> tuple[Fact, Fact]:
 
 
 def restore(fact: Fact, successor: Fact | None, now: datetime) -> tuple[Fact, Fact | None]:
-    """Within a day, a forgotten fact comes back, or a superseded one takes its place again
-    and its successor ends."""
+    """Within a day, a forgotten fact comes back — a turned-down candidate as a candidate — or
+    a superseded one takes its place again and its successor ends. An expiry and forgetting
+    everything are final, and so is a replacement that was itself replaced since."""
     if fact.status is FactStatus.FORGOTTEN and fact.ended_at is not None:
-        if now - fact.ended_at > RESTORE_WINDOW or fact.ended_reason is EndReason.EXPIRED:
+        if now - fact.ended_at > RESTORE_WINDOW or fact.ended_reason in FINAL_ENDS:
             raise MemoryRuleError(MemoryRule.RESTORE_CLOSED)
-        back = replace(fact, status=FactStatus.ACTIVE, ended_reason=None, ended_at=None)
-        return back, None
+        waits = fact.ended_reason is EndReason.TURNED_DOWN
+        status = FactStatus.CANDIDATE if waits else FactStatus.ACTIVE
+        return replace(fact, status=status, ended_reason=None, ended_at=None), None
     if fact.valid_to is None or successor is None or successor.id != fact.superseded_by:
         raise MemoryRuleError(MemoryRule.RESTORE_CLOSED)
-    if now - fact.valid_to > RESTORE_WINDOW:
+    if now - fact.valid_to > RESTORE_WINDOW or successor.valid_to is not None:
         raise MemoryRuleError(MemoryRule.RESTORE_CLOSED)
     back = replace(fact, valid_to=None, superseded_by=None, pinned=successor.pinned)
     return back, forget(successor, EndReason.FORGOT, now) if successor.current else successor

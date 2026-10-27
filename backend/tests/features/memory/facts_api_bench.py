@@ -20,6 +20,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import AUTHENTICATOR
 from shosai.features.memory.application.fact_changes import FactChanges
 from shosai.features.memory.application.fact_list import FactLists
+from shosai.features.memory.application.fact_restore import FactRestore
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.channels.http.facts import build_memory_router
 from shosai.features.memory.infrastructure.records import MemoryFactRecord
@@ -147,6 +148,7 @@ async def facts_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[Fac
     effects = EffectLedger(EffectKeyMetrics(CollectorRegistry()))
     changes = FactChanges(homes.transactions, (lists, effects, valkey))
     switch = MemorySwitch(homes.transactions)
-    router = build_memory_router((lists, changes, switch), ports)
+    restore = FactRestore(homes.transactions, (lists, valkey))
+    router = build_memory_router((lists, changes, switch, restore), ports)
     async with client_of(build_probe_app(extra=(router,)).app) as http:
         yield FactsBench(http, homes, spaces, meetings)

@@ -3328,6 +3328,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agent/memory/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Memory Summary
+         * @description What Leo has learned about you; a stale summary is rewritten in the background.
+         */
+        get: operations["get_memory_summary_v1_agent_memory_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/memory/summary/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Refresh Memory Summary
+         * @description Rewrite the summary now.
+         */
+        post: operations["refresh_memory_summary_v1_agent_memory_summary_refresh_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/memory/summary/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Post Memory Message
+         * @description Ask about what Leo remembers, or tell it what to remember, correct or forget.
+         */
+        post: operations["post_memory_message_v1_agent_memory_summary_messages_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/agent/memory": {
         parameters: {
             query?: never;
@@ -3434,6 +3494,26 @@ export interface paths {
          * @description Remember a candidate.
          */
         post: operations["accept_memory_fact_v1_agent_memory__fact_id__accept_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent/memory/{fact_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Restore Memory Fact
+         * @description Bring back a fact forgotten or replaced in the last day.
+         */
+        post: operations["restore_memory_fact_v1_agent_memory__fact_id__restore_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4021,6 +4101,12 @@ export interface components {
             /** Challenge */
             challenge: string;
         };
+        /**
+         * ChangeKind
+         * @description What a message did to a fact.
+         * @enum {string}
+         */
+        ChangeKind: "remembered" | "updated" | "forgotten";
         /**
          * ChangeRequest
          * @description The current password (none for an account without one) and the new one.
@@ -5742,6 +5828,20 @@ export interface components {
             resets_at: string;
         };
         /**
+         * MemoryChangeOut
+         * @description A fact the message changed.
+         */
+        MemoryChangeOut: {
+            change: components["schemas"]["ChangeKind"];
+            /** @description The fact as it is now. */
+            fact: components["schemas"]["MemoryFactOut"];
+            /**
+             * Replaced Id
+             * @description For `updated`, the fact it replaced: restoring that one undoes the change.
+             */
+            replaced_id: string | null;
+        };
+        /**
          * MemoryCountsOut
          * @description How many facts, waiting candidates and carried-over candidates the person has.
          */
@@ -5768,9 +5868,10 @@ export interface components {
             statement: string;
             /**
              * Status
+             * @description `forgotten` only for a fact a summary message just forgot.
              * @enum {string}
              */
-            status: "candidate" | "active";
+            status: "candidate" | "active" | "forgotten";
             /** Pinned */
             pinned: boolean;
             source: components["schemas"]["MemorySourceOut"];
@@ -5779,6 +5880,28 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+        };
+        /**
+         * MemoryMessageIn
+         * @description A question about what Leo remembers, or what to change in it.
+         */
+        MemoryMessageIn: {
+            /** Message */
+            message: string;
+        };
+        /**
+         * MemoryMessageOut
+         * @description The answer, the changes and the summary after them.
+         */
+        MemoryMessageOut: {
+            /**
+             * Answer
+             * @description The answer to a question; null if none was asked.
+             */
+            answer: string | null;
+            /** Changes */
+            changes: components["schemas"]["MemoryChangeOut"][];
+            summary: components["schemas"]["MemorySummaryOut"];
         };
         /**
          * MemorySettingsOut
@@ -5826,6 +5949,42 @@ export interface components {
              * @description The message a fact came from, if any.
              */
             message_id: string | null;
+        };
+        /**
+         * MemorySummaryOut
+         * @description What Leo has learned about you, in your interface language.
+         */
+        MemorySummaryOut: {
+            /**
+             * Sections
+             * @description Empty when nothing is known.
+             */
+            sections: components["schemas"]["MemorySummarySectionOut"][];
+            /**
+             * Suggestions
+             * @description Up to three questions to ask about it.
+             */
+            suggestions: string[];
+            /**
+             * Updated At
+             * @description When it was written; null if never.
+             */
+            updated_at: string | null;
+            /**
+             * Stale
+             * @description Facts changed since; a rewrite is on its way.
+             */
+            stale: boolean;
+        };
+        /**
+         * MemorySummarySectionOut
+         * @description A titled part of the summary.
+         */
+        MemorySummarySectionOut: {
+            /** Title */
+            title: string;
+            /** Body */
+            body: string;
         };
         /**
          * MessageOut
@@ -16045,6 +16204,105 @@ export interface operations {
             };
         };
     };
+    get_memory_summary_v1_agent_memory_summary_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemorySummaryOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    refresh_memory_summary_v1_agent_memory_summary_refresh_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemorySummaryOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    post_memory_message_v1_agent_memory_summary_messages_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MemoryMessageIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemoryMessageOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     list_memory_facts_v1_agent_memory_get: {
         parameters: {
             query?: {
@@ -16284,6 +16542,39 @@ export interface operations {
         };
     };
     accept_memory_fact_v1_agent_memory__fact_id__accept_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                fact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemoryFactOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    restore_memory_fact_v1_agent_memory__fact_id__restore_post: {
         parameters: {
             query?: never;
             header?: {

@@ -13536,6 +13536,180 @@
         }
       }
     },
+    "/v1/agent/memory/summary": {
+      "get": {
+        "tags": [
+          "memory"
+        ],
+        "summary": "Get Memory Summary",
+        "description": "What Leo has learned about you; a stale summary is rewritten in the background.",
+        "operationId": "get_memory_summary_v1_agent_memory_summary_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemorySummaryOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent/memory/summary/refresh": {
+      "post": {
+        "tags": [
+          "memory"
+        ],
+        "summary": "Refresh Memory Summary",
+        "description": "Rewrite the summary now.",
+        "operationId": "refresh_memory_summary_v1_agent_memory_summary_refresh_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemorySummaryOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent/memory/summary/messages": {
+      "post": {
+        "tags": [
+          "memory"
+        ],
+        "summary": "Post Memory Message",
+        "description": "Ask about what Leo remembers, or tell it what to remember, correct or forget.",
+        "operationId": "post_memory_message_v1_agent_memory_summary_messages_post",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again.",
+              "title": "Idempotency-Key"
+            },
+            "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MemoryMessageIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryMessageOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/agent/memory": {
       "get": {
         "tags": [
@@ -14047,6 +14221,66 @@
         "summary": "Accept Memory Fact",
         "description": "Remember a candidate.",
         "operationId": "accept_memory_fact_v1_agent_memory__fact_id__accept_post",
+        "parameters": [
+          {
+            "name": "fact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fact Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryFactOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent/memory/{fact_id}/restore": {
+      "post": {
+        "tags": [
+          "memory"
+        ],
+        "summary": "Restore Memory Fact",
+        "description": "Bring back a fact forgotten or replaced in the last day.",
+        "operationId": "restore_memory_fact_v1_agent_memory__fact_id__restore_post",
         "parameters": [
           {
             "name": "fact_id",
@@ -15533,6 +15767,16 @@
         ],
         "title": "ChallengeRequest",
         "description": "A challenge, for a new code."
+      },
+      "ChangeKind": {
+        "type": "string",
+        "enum": [
+          "remembered",
+          "updated",
+          "forgotten"
+        ],
+        "title": "ChangeKind",
+        "description": "What a message did to a fact."
       },
       "ChangeRequest": {
         "properties": {
@@ -19473,6 +19717,38 @@
         "title": "MeetingUsageView",
         "description": "The month's meeting minutes; `limit_minutes` is null on unlimited plans."
       },
+      "MemoryChangeOut": {
+        "properties": {
+          "change": {
+            "$ref": "#/components/schemas/ChangeKind"
+          },
+          "fact": {
+            "$ref": "#/components/schemas/MemoryFactOut",
+            "description": "The fact as it is now."
+          },
+          "replaced_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Replaced Id",
+            "description": "For `updated`, the fact it replaced: restoring that one undoes the change."
+          }
+        },
+        "type": "object",
+        "required": [
+          "change",
+          "fact",
+          "replaced_id"
+        ],
+        "title": "MemoryChangeOut",
+        "description": "A fact the message changed."
+      },
       "MemoryCountsOut": {
         "properties": {
           "active": {
@@ -19515,9 +19791,11 @@
             "type": "string",
             "enum": [
               "candidate",
-              "active"
+              "active",
+              "forgotten"
             ],
-            "title": "Status"
+            "title": "Status",
+            "description": "`forgotten` only for a fact a summary message just forgot."
           },
           "pinned": {
             "type": "boolean",
@@ -19544,6 +19822,57 @@
         ],
         "title": "MemoryFactOut",
         "description": "A fact, or a candidate waiting for the person."
+      },
+      "MemoryMessageIn": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "MemoryMessageIn",
+        "description": "A question about what Leo remembers, or what to change in it."
+      },
+      "MemoryMessageOut": {
+        "properties": {
+          "answer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Answer",
+            "description": "The answer to a question; null if none was asked."
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/MemoryChangeOut"
+            },
+            "type": "array",
+            "title": "Changes"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/MemorySummaryOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "answer",
+          "changes",
+          "summary"
+        ],
+        "title": "MemoryMessageOut",
+        "description": "The answer, the changes and the summary after them."
       },
       "MemorySettingsOut": {
         "properties": {
@@ -19641,6 +19970,72 @@
         ],
         "title": "MemorySourceOut",
         "description": "Where a fact came from."
+      },
+      "MemorySummaryOut": {
+        "properties": {
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/MemorySummarySectionOut"
+            },
+            "type": "array",
+            "title": "Sections",
+            "description": "Empty when nothing is known."
+          },
+          "suggestions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Suggestions",
+            "description": "Up to three questions to ask about it."
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At",
+            "description": "When it was written; null if never."
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale",
+            "description": "Facts changed since; a rewrite is on its way."
+          }
+        },
+        "type": "object",
+        "required": [
+          "sections",
+          "suggestions",
+          "updated_at",
+          "stale"
+        ],
+        "title": "MemorySummaryOut",
+        "description": "What Leo has learned about you, in your interface language."
+      },
+      "MemorySummarySectionOut": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "body"
+        ],
+        "title": "MemorySummarySectionOut",
+        "description": "A titled part of the summary."
       },
       "MessageOut": {
         "properties": {

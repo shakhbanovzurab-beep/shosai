@@ -135,3 +135,19 @@ def test_only_the_persons_own_act_confirms_a_new_fact(
     source: MemorySource, *, explicit: bool, confirmed: bool
 ) -> None:
     assert confirmed_on_write(source, explicit=explicit) is confirmed
+
+
+def test_a_turned_down_candidate_comes_back_waiting_and_forgetting_everything_is_final() -> None:
+    turned_down = forget(fact(status=FactStatus.CANDIDATE), EndReason.FORGOT, NOW)
+    back, _ = restore(turned_down, None, LATER)
+    assert turned_down.ended_reason is EndReason.TURNED_DOWN
+    assert back.pending
+    with pytest.raises(MemoryRuleError):
+        restore(forget(fact(), EndReason.FORGOT_ALL, NOW), None, LATER)
+
+
+def test_a_replacement_replaced_again_closes_the_way_back() -> None:
+    closed, opened = supersede(fact(), fact(), NOW)
+    replaced, _ = supersede(opened, fact(), NOW)
+    with pytest.raises(MemoryRuleError):
+        restore(closed, replaced, LATER)
