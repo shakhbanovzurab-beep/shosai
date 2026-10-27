@@ -7,7 +7,7 @@ deterministic: a warning when the run read external text or the write cannot be 
 otherwise a standard card. A judge bound later may only add friction, never remove it.
 """
 
-from enum import IntEnum
+from enum import IntEnum, StrEnum
 
 from shosai.core.agent_tools.context import Taint
 from shosai.core.agent_tools.spec import Reversibility
@@ -37,3 +37,11 @@ def combine(rule: Friction, judged: Friction | None) -> Friction:
 def screen_only(friction: Friction) -> bool:
     """Whether the card may be approved on the screen only."""
     return friction >= Friction.WARNING
+
+
+class CardEnd(StrEnum):
+    """How a card ended for the person: what a friction judge measures itself against."""
+
+    APPROVED = "approved"
+    REJECTED = "rejected"
+    EXPIRED = "expired"

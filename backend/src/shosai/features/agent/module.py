@@ -38,6 +38,7 @@ from shosai.features.agent.application.departures import Departures
 from shosai.features.agent.application.egress_calls import EgressCalls
 from shosai.features.agent.application.feedback import Feedback
 from shosai.features.agent.application.fleet_presence import present_in_fleet
+from shosai.features.agent.application.friction_judging import FrictionJudging
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.installed_skills import InstalledSkills
 from shosai.features.agent.application.lost_runs import LostRuns
@@ -113,6 +114,13 @@ def tool_bulkhead(role: ProcessRole) -> asyncio.Semaphore:
     return asyncio.Semaphore(max(profile.pool_size - SPARE_CONNECTIONS, 1))
 
 
+def card_proposer(services: CoreServices, cards: ActionCards) -> ActionProposer:
+    """The proposer of cards, with a bound friction judge beside the rule."""
+    transactions = services.transactions
+    judging = FrictionJudging(services.ports, cards, transactions)
+    return ActionProposer(transactions, cards, judging=judging)
+
+
 def action_gateway(
     services: CoreServices,
     cards: ActionCards,
@@ -127,9 +135,11 @@ def action_gateway(
     executor = ActionExecution(
         transactions, (services.agent_tools, paused, metrics, EgressCalls(pages))
     )
-    return ActionDecisions(transactions, (services.tasks, paused, metrics)), (
+    judging = FrictionJudging(services.ports, cards, transactions)
+    parts = (services.tasks, paused, metrics)
+    return ActionDecisions(transactions, parts, judging=judging), (
         executor,
-        ActionSweeps(transactions, (services.tasks, paused, metrics)),
+        ActionSweeps(transactions, parts, judging=judging),
         ActionInvariants(transactions, metrics),
     )
 
@@ -189,7 +199,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     cards = ActionCards(services.agent_tools, ports)
     tools = ToolParts(
         pages, RunSources(transactions, ports), tool_bulkhead(services.role),
-        ToolMetrics(services.registry), tracer, ActionProposer(transactions, cards),
+        ToolMetrics(services.registry), tracer, card_proposer(services, cards),
     )  # fmt: skip
     routing, frames = TurnRouting(ToolRegistry(services.agent_tools), ports), TurnSaver(valkey)
     engine = RunEngine(

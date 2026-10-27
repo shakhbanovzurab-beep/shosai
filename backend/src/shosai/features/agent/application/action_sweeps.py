@@ -39,6 +39,7 @@ from shosai.features.agent.application.action_rows import (
     items_of,
     moved,
 )
+from shosai.features.agent.application.friction_judging import FrictionJudging
 from shosai.features.agent.application.paused_runs import AFTER_APPROVAL, PausedRuns, Settled
 from shosai.features.agent.application.run_resumption import ResumePayload
 from shosai.features.agent.domain.action_items import ItemCode, ItemState, lost
@@ -78,10 +79,12 @@ class ActionSweeps:
         transactions: HomeTransactions,
         parts: tuple[ActionQueue, PausedRuns, ActionMetrics],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        judging: FrictionJudging | None = None,
     ) -> None:
         self._transactions = transactions
         self._tasks, self._paused, self._metrics = parts
         self._clock = clock
+        self._judging = judging
 
     async def sweep(self, home: Home) -> int:
         """Settle what is due in the home; how many actions moved or were handed over, and runs
@@ -198,6 +201,8 @@ class ActionSweeps:
         if record is None:
             return 0
         self._metrics.decided(record.origin, record.status)
+        if self._judging is not None:
+            self._judging.ended(scope.home, record.id, record.status)
         if record.approved_at is not None:
             waited = (record.updated_at - record.approved_at).total_seconds()
             self._metrics.ended_after_approval(record.status, waited)

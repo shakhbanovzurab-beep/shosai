@@ -36,6 +36,7 @@ from shosai.features.agent.application.action_rows import (
     audit,
     moved,
 )
+from shosai.features.agent.application.friction_judging import FrictionJudging
 from shosai.features.agent.application.paused_runs import PausedRuns
 from shosai.features.agent.domain.actions import (
     TERMINAL,
@@ -104,16 +105,20 @@ class ActionDecisions:
         parts: tuple[ActionQueue, PausedRuns, ActionMetrics],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
         wait: timedelta = APPROVAL_WAIT,
+        judging: FrictionJudging | None = None,
     ) -> None:
         self._transactions = transactions
         self._tasks, self._paused, self._metrics = parts
         self._clock = clock
         self._wait = wait
+        self._judging = judging
 
     async def approve(self, principal: Principal, action_id: UUID, nonce: str) -> Decided:
         """Approve the card and wait a while for its outcome."""
         record = await self._decide(principal, (action_id, nonce), ActionEvent.APPROVE)
         self._metrics.approved((record.updated_at - record.created_at).total_seconds())
+        if self._judging is not None:
+            self._judging.ended(principal.home, record.id, record.status, approved=True)
         payload = ActionPayload(home=principal.home, user_id=principal.user_id, action_id=record.id)
         try:
             await self._tasks.send(RUN_ACTION, payload)
@@ -150,6 +155,8 @@ class ActionDecisions:
             settled = await self._paused.settle(session, ended) if ended is not None else None
         if ended is not None:
             self._metrics.decided(ended.origin, ended.status)
+            if self._judging is not None:
+                self._judging.ended(principal.home, ended.id, ended.status)
             await self._paused.tell(principal.home, ended, settled)
         if record is None:
             raise (

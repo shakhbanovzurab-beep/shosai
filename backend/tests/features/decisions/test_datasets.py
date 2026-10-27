@@ -24,13 +24,15 @@ from shosai.features.decisions.infrastructure.datasets import (
     answered,
     point_folder,
     read_recorded,
+    read_report,
     read_sets,
+    report_data,
 )
 from tests.features.decisions.sets_bench import facts_json, facts_of
 
 
 @pytest.mark.parametrize("policy", POLICIES, ids=lambda policy: policy.key)
-def test_a_committed_set_passes_its_gates_on_its_recorded_run(policy: Policy[Any, Any]) -> None:
+def test_a_committed_set_is_answered_and_its_report_is_its_run_s(policy: Policy[Any, Any]) -> None:
     if not point_folder(policy.point).exists():
         pytest.skip("this point has no set yet: its policy cannot be promoted")
     sets = read_sets(policy)
@@ -44,7 +46,7 @@ def test_a_committed_set_passes_its_gates_on_its_recorded_run(policy: Policy[Any
     )
 
     assert len(recorded) == len(sets.synthetic) + len(sets.reference)
-    assert report.failures == ()
+    assert read_report(policy) == report_data(policy, report)
 
 
 def case_line(case_id: str, language: str, **change: object) -> str:

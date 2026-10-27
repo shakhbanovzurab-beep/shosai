@@ -38,6 +38,7 @@ from shosai.core.kv.rate_limits import RateLimit, RateLimiter
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.action_proposal import ActionProposer
+from shosai.features.agent.application.friction_judging import FrictionJudging
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.model_stream import Pace
 from shosai.features.agent.application.result_pages import ResultPages
@@ -59,6 +60,7 @@ from shosai.features.agent.channels.agent_tools import core_tools
 from shosai.features.agent.channels.http.callers import operator_mount, person_mount
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
+from shosai.features.agent.contracts import FRICTION_JUDGE
 from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.run_log import RunLog
@@ -226,6 +228,7 @@ async def turn_bench(
             MEETING_READER.bind(meetings),
             WORKSPACE_READER.bind(WorkspaceDirectory()),
             UPLOADS.bind(upload_bench.claims),
+            *(FRICTION_JUDGE.bind(judge) for judge in bench_doubles.judges),
         ]
     )
     registry = CollectorRegistry()
@@ -243,9 +246,10 @@ async def turn_bench(
     catalog.install([*core_tools(pages), *tools.bound()])
     sources = RunSources(homes.transactions, ports)
     cards = ActionCards(catalog, ports)
+    judging = FrictionJudging(ports, cards, homes.transactions)
     tool_parts = ToolParts(
         pages, sources, asyncio.Semaphore(4), ToolMetrics(registry), tracer,
-        ActionProposer(homes.transactions, cards),
+        ActionProposer(homes.transactions, cards, judging=judging),
     )  # fmt: skip
     frames = TurnSaver(valkey)
     parts = EngineParts(

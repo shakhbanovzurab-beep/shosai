@@ -5,7 +5,7 @@ Live, every case of the synthetic and the reference set is asked as the platform
 — the cases hold no person's data — a few at a time, and the answers are written as the
 point's recorded run. From a recorded run, nothing is asked. Either way the cuts are fitted,
 every gate is checked, and the result is stored as the version's next revision, passing or
-not, with a report of numbers only.
+not, with a report of numbers only — written beside the run as well, for CI and review.
 """
 
 import asyncio
@@ -32,6 +32,7 @@ from shosai.features.decisions.infrastructure.datasets import (
     read_recorded,
     read_sets,
     write_recorded,
+    write_report,
 )
 from shosai.features.decisions.infrastructure.policy_store import cuts_json
 
@@ -83,6 +84,7 @@ class Calibration:
         synthetic = answered(sets.synthetic, recorded)
         reference = answered(sets.reference, recorded)
         report = calibrated(policy, synthetic, reference, SUPPORTED_LANGUAGES)
+        write_report(policy, report, self._root)
         numbers = dict(report.numbers) | {"failures": list(report.failures)}
         revision = await self._revisions.add_revision(
             policy.point, policy.version, policy.digest(),

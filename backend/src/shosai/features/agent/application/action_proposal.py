@@ -3,7 +3,8 @@
 The write's slice plans it — freezing the exact targets and the data its `execute` reads back,
 or refusing with a typed error the model can act on — and previews it for the card. The card's
 friction follows AG-D7's rule: a warning, approved on the screen only, when the run read text
-someone else wrote or the write cannot be undone. One transaction stores the action as
+someone else wrote or the write cannot be undone, raised by a bound judge (decisions'
+`action.friction`) when it asks for more. One transaction stores the action as
 `proposed` with its nonce, its hour and the space the change goes to, audits the proposal and
 renders its card in the person's language; a preview its slice has no words for is refused,
 since no card could show it. Nothing is written to the slice's data until the person approves.
@@ -30,6 +31,7 @@ from shosai.core.kernel.ids import new_id
 from shosai.features.agent.application.action_cards import ActionCards
 from shosai.features.agent.application.action_rows import AuditEntry, audit
 from shosai.features.agent.application.egress_calls import egress_item
+from shosai.features.agent.application.friction_judging import FrictionJudging
 from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.action_items import ActionItem, redacted
@@ -63,10 +65,12 @@ class ActionProposer:
         transactions: HomeTransactions,
         cards: ActionCards,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        judging: FrictionJudging | None = None,
     ) -> None:
         self._transactions = transactions
         self._cards = cards
         self._clock = clock
+        self._judging = judging
 
     async def propose(
         self,
@@ -111,14 +115,19 @@ class ActionProposer:
     ) -> Proposed:
         """The action stored as `proposed`, audited, with its card."""
         payload, work = run
+        action_id = new_id()
+        if self._judging is None:
+            friction = friction_rule(work.taint, Reversibility(item.reversibility))
+        else:
+            friction = await self._judging.friction(item, org_id, run, action_id)
         now = self._clock()
         record = AgentActionRecord(
-            id=new_id(), user_id=payload.user_id, org_id=org_id,
+            id=action_id, user_id=payload.user_id, org_id=org_id,
             thread_id=payload.thread_id, run_id=payload.run_id, message_id=payload.reply_id,
             origin=ProposalOrigin.TURN.value, origin_key=None,
             status=ActionStatus.PROPOSED.value, nonce=secrets.token_urlsafe(NONCE_BYTES),
             items=[item.stored()],
-            friction=int(friction_rule(work.taint, Reversibility(item.reversibility))),
+            friction=int(friction),
             taint=int(work.taint), taint_sources=list(work.taint_sources), not_before=None,
             expires_at=expires_at(now, ProposalOrigin.TURN), created_at=now, updated_at=now,
         )  # fmt: skip

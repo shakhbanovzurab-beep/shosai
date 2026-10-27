@@ -27,7 +27,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.keys import PortKey
 from shosai.features.agent.domain.actions import ProposalOrigin, PublicStatus
-from shosai.features.agent.domain.friction import Friction
+from shosai.features.agent.domain.friction import CardEnd, Friction
 from shosai.features.agent.domain.routing import Route, RouteFacts
 
 __all__ = [
@@ -38,6 +38,7 @@ __all__ = [
     "SKILL_READER",
     "TURN_ROUTER",
     "ActionProposals",
+    "CardEnd",
     "Friction",
     "FrictionFacts",
     "FrictionJudge",
@@ -134,22 +135,38 @@ class TurnRouter(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class FrictionFacts:
-    """What a judge of a card's friction reads."""
+    """What a judge of a card's friction reads: the write, the run, the person's request and
+    the card as they see it, and whom the judgement is for."""
 
     tool: str
+    toolset: str
     reversibility: Reversibility
     taint: Taint
     # Решение правила: судья может только добавить строгости.
     rule: Friction
+    # Вопрос человека в этом ходе и карточка словами — заголовок и поля, как он их видит.
     question: str
-    card_title: str
+    card: str
+    items: int
+    # Запись в другое пространство, чем у треда (Leo §11.2).
+    other_space: bool
+    rounds: int
+    language: str
+    scope: TenancyScope
+    cross_border_consent: bool
+    action_id: UUID
 
 
 class FrictionJudge(Protocol):
-    """Judges a card's friction (decisions' `action.friction`); it may only add friction."""
+    """Judges a card's friction (decisions' `action.friction`); it may only add friction, and
+    hears how each card ended so its judgements can be measured."""
 
     async def judge(self, facts: FrictionFacts) -> Friction | None:
         """The friction asked for, or None when the judge has nothing to add."""
+        ...
+
+    def ended(self, home: Home, action_id: UUID, end: CardEnd) -> None:
+        """How a card ended — approved, rejected or expired; never blocks, never fails."""
         ...
 
 

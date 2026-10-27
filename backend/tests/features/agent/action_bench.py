@@ -25,6 +25,7 @@ from shosai.features.agent.application.action_execution import ActionExecution
 from shosai.features.agent.application.action_inbox import ActionInbox
 from shosai.features.agent.application.action_sweeps import ActionSweeps
 from shosai.features.agent.application.egress_calls import EgressCalls
+from shosai.features.agent.application.friction_judging import FrictionJudging
 from shosai.features.agent.application.paused_runs import PausedRuns
 from shosai.features.agent.application.result_pages import ResultPages
 from shosai.features.agent.application.run_engine import RunEngine
@@ -84,11 +85,12 @@ class ActionBench:
     queue: InlineActions
     parts: tuple[InlineActions, PausedRuns, ActionMetrics]
     registry: CollectorRegistry
+    judging: FrictionJudging
 
     async def sweep(self) -> int:
         """The minute's sweep, as a worker runs it."""
         async with self.turns.sweeping() as transactions:
-            return await ActionSweeps(transactions, self.parts).sweep(HOME)
+            return await ActionSweeps(transactions, self.parts, judging=self.judging).sweep(HOME)
 
     async def paused_turn(self, person: uuid.UUID, text: str = "Make the task.") -> dict[str, Any]:
         """A turn whose model proposes the probe's write: its thread, run and card."""
@@ -133,11 +135,14 @@ async def action_bench(turn_bench: TurnBench) -> AsyncIterator[ActionBench]:
     egress = EgressCalls(ResultPages(transactions, turn_bench.ports))
     execution = ActionExecution(transactions, (turn_bench.catalog, paused, metrics, egress))
     queue.execution = execution
-    decisions = ActionDecisions(transactions, (queue, paused, metrics), wait=WAIT)
+    judging = FrictionJudging(turn_bench.ports, cards, transactions)
+    decisions = ActionDecisions(transactions, (queue, paused, metrics), wait=WAIT, judging=judging)
     ports = PortDirectory()
     ports.install([AUTHENTICATOR.bind(BearerOfTheTest())])
     inbox = ActionInbox(transactions, cards)
     app = build_probe_app(extra=(build_actions_router((decisions, inbox), ports),)).app
     async with client_of(app) as http:
-        yield ActionBench(turn_bench, http, execution, queue, (queue, paused, metrics), registry)
+        yield ActionBench(
+            turn_bench, http, execution, queue, (queue, paused, metrics), registry, judging
+        )
         await queue.settle()

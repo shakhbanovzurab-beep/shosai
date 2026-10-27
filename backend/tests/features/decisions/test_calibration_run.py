@@ -1,5 +1,5 @@
 """A calibration run: live answers recorded beside the sets, a recorded run re-read without a
-call, a revision stored either way (Leo §6.4, DL-D6)."""
+call, a revision stored and its report written beside the run either way (Leo §6.4, DL-D6)."""
 
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -11,7 +11,13 @@ from shosai.core.ai.decisions import Decision, DecisionRequest
 from shosai.core.ai.results import Usage
 from shosai.features.decisions.application.calibration import Calibration
 from shosai.features.decisions.domain.policies.action_friction import ACTION_FRICTION
-from shosai.features.decisions.infrastructure.datasets import RECORDED, read_recorded, read_sets
+from shosai.features.decisions.infrastructure.datasets import (
+    RECORDED,
+    read_recorded,
+    read_report,
+    read_sets,
+    report_data,
+)
 from tests.features.decisions.engine_bench import JEV, ScriptedJev
 from tests.features.decisions.sets_bench import (
     answers_for,
@@ -88,6 +94,21 @@ async def test_a_live_run_is_recorded_then_re_read_without_a_call(tmp_path: Path
     )
     assert set(cuts) == {"matches", "wide"}
     assert numbers["failures"] == []
+    assert read_report(ACTION_FRICTION, tmp_path) == report_data(ACTION_FRICTION, again.report)
+
+
+async def test_a_failing_run_is_reported_as_it_failed(tmp_path: Path) -> None:
+    synthetic, _ = friction_sets(per_language=160, reference=0)
+    write_sets(tmp_path, synthetic, [])
+    calibration = Calibration(Revisions(), (CaseJev(), ModelRoute(JEV)), tmp_path)
+
+    run = await calibration.run(ACTION_FRICTION, live=True, concurrency=8)
+
+    report = read_report(ACTION_FRICTION, tmp_path)
+    assert report is not None
+    assert (report["passed"], report["policy"]) == (False, "action.friction@1")
+    assert report["failures"] == list(run.report.failures)
+    assert any(failure.startswith("reference") for failure in report["failures"])
 
 
 async def test_a_reworded_policy_never_reuses_a_recorded_run(tmp_path: Path) -> None:

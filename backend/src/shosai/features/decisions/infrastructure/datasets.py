@@ -6,7 +6,9 @@ Each point has a folder named after it (`action_friction/`):
 - `reference/ru.jsonl`, `reference/en.jsonl` — cases a person labelled, with the machine's
   labels beside the person's;
 - `recorded.jsonl` — Jev's answers to every case, keyed by the case and the policy's wording,
-  so CI re-reads them exactly without a call and a reworded policy never reuses them.
+  so CI re-reads them exactly without a call and a reworded policy never reuses them;
+- `report.json` — the gates on that run as `calibrate` found them, passing or not: CI checks
+  it is the report the committed sets and run give, so a set never changes without one.
 
 None of them holds a person's data: the cases are written for the purpose.
 """
@@ -20,11 +22,13 @@ from typing import Any, Final
 from shosai.core.ai.decisions import Answer
 from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
 from shosai.features.decisions.domain.examples import Case, answer_json, answer_of, parsed_case
-from shosai.features.decisions.domain.gates import Answered
+from shosai.features.decisions.domain.gates import Answered, Report
 from shosai.features.decisions.domain.policy import Policy
+from shosai.features.decisions.infrastructure.policy_store import cuts_json
 
 DATASETS: Final = Path(__file__).parent / "datasets"
 RECORDED: Final = "recorded.jsonl"
+REPORT: Final = "report.json"
 
 
 @dataclass(frozen=True, slots=True)
@@ -127,3 +131,28 @@ def write_recorded(
 def answered(cases: Sequence[Case], recorded: Mapping[str, Mapping[str, Answer]]) -> list[Answered]:
     """The cases that have answers, with them."""
     return [Answered(case, recorded[case.id]) for case in cases if case.id in recorded]
+
+
+def report_data(policy: Policy[Any, Any], report: Report) -> dict[str, Any]:
+    """A run's report as it is committed: the version, its wording, the gates and numbers."""
+    data = {
+        "policy": policy.key, "digest": policy.digest(), "passed": report.passed,
+        "failures": list(report.failures), "cuts": cuts_json(report.cuts),
+        "numbers": dict(report.numbers),
+    }  # fmt: skip
+    return dict(json.loads(json.dumps(data, sort_keys=True)))
+
+
+def write_report(policy: Policy[Any, Any], report: Report, root: Path = DATASETS) -> Path:
+    """Write the report of the point's recorded run, replacing the last."""
+    path = point_folder(policy.point, root) / REPORT
+    path.parent.mkdir(parents=True, exist_ok=True)
+    text = json.dumps(report_data(policy, report), ensure_ascii=False, indent=2, sort_keys=True)
+    path.write_text(text + "\n", encoding="utf-8")
+    return path
+
+
+def read_report(policy: Policy[Any, Any], root: Path = DATASETS) -> dict[str, Any] | None:
+    """The committed report of the point's run; None when there is none."""
+    path = point_folder(policy.point, root) / REPORT
+    return dict(json.loads(path.read_text(encoding="utf-8"))) if path.exists() else None

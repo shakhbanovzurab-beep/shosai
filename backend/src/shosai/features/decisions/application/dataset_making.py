@@ -7,6 +7,7 @@ of a person's reference cases. Every call is the platform's own, keyed by the ru
 case, and answers JSON; an answer that is not is a case lost, logged, never a guess.
 """
 
+import asyncio
 import json
 import uuid
 from collections.abc import Mapping, Sequence
@@ -33,6 +34,8 @@ from shosai.features.decisions.infrastructure.generation_texts import (
 )
 
 BATCH: Final = 8
+# Пакетов в работе разом: до 32 вызовов разметчика, а не три часа подряд на 2 400 случаев.
+BATCHES_AT_ONCE: Final = 4
 GENERATION_TOKENS: Final = 8_000
 LABEL_TOKENS: Final = 400
 log = structlog.stdlib.get_logger(__name__)
@@ -96,19 +99,38 @@ class DatasetMaker:
     async def generate(
         self, policy: Policy[Any, Any], language: str, count: int, offset: int
     ) -> list[Case]:
-        """Cases written to the code's labels and confirmed by the labeller."""
+        """Cases written to the code's labels and confirmed by the labeller, in their order;
+        a few batches at a time, each batch's cases labelled together."""
+        return await self._made(policy, language, (count, offset), confirm=True)
+
+    async def draft(
+        self, policy: Policy[Any, Any], language: str, count: int, offset: int
+    ) -> list[Case]:
+        """Cases for a person to label blind: never filtered by the labeller, since its
+        agreement with the person is what the reference measures."""
+        return await self._made(policy, language, (count, offset), confirm=False)
+
+    async def _made(
+        self, policy: Policy[Any, Any], language: str, sizing: tuple[int, int], *, confirm: bool
+    ) -> list[Case]:
+        count, offset = sizing
         targets = BRIEFS[policy.point].targets(count, offset)
-        kept: list[Case] = []
-        for start in range(0, len(targets), BATCH):
-            batch = targets[start : start + BATCH]
-            written = await self._written(policy.point, language, batch, offset + start)
-            for number, (target, text) in enumerate(zip(batch, written, strict=False)):
-                case = await self._confirmed(
-                    policy, language, target, (text, offset + start + number)
-                )
-                if case is not None:
-                    kept.append(case)
-        return kept
+        gate = asyncio.Semaphore(BATCHES_AT_ONCE)
+
+        async def batch_of(start: int) -> list[Case | None]:
+            async with gate:
+                batch = targets[start : start + BATCH]
+                written = await self._written(policy.point, language, batch, offset + start)
+                cases = [
+                    self._parsed(policy, language, target, (text, offset + start + number))
+                    for number, (target, text) in enumerate(zip(batch, written, strict=False))
+                ]
+                if not confirm:
+                    return cases
+                return await asyncio.gather(*(self._confirmed(policy, case) for case in cases))
+
+        batches = await asyncio.gather(*(batch_of(at) for at in range(0, len(targets), BATCH)))
+        return [case for batch in batches for case in batch if case is not None]
 
     async def _written(
         self, point: str, language: str, batch: Sequence[Target], first: int
@@ -126,20 +148,25 @@ class DatasetMaker:
         cases = (answer or {}).get("cases")
         return [case for case in cases if isinstance(case, dict)] if isinstance(cases, list) else []
 
-    async def _confirmed(
+    def _parsed(
         self,
         policy: Policy[Any, Any],
         language: str,
         target: Target,
         written: tuple[Mapping[str, object], int],
     ) -> Case | None:
-        """The case when its facts are in shape and the labeller agrees with its labels."""
+        """The case when its facts are in shape."""
         text, number = written
         try:
             facts = policy.parse_facts(BRIEFS[policy.point].facts(target, text))
         except ValueError:
             return None
-        case = Case(f"{language}-{number:05d}", language, facts, dict(target.labels))
+        return Case(f"{language}-{number:05d}", language, facts, dict(target.labels))
+
+    async def _confirmed(self, policy: Policy[Any, Any], case: Case | None) -> Case | None:
+        """The case when the labeller agrees with its labels."""
+        if case is None:
+            return None
         labels = await self.label(policy, case)
         if labels != case.labels:
             log.info("Случай отброшен: разметчик не согласен", point=policy.point, case=case.id)

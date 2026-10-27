@@ -4,8 +4,8 @@ Step 1 published the contract, the domain and the three policies of this plan; s
 the tables and the declaration of what they hold of a person — nothing that outlives its
 partition; step 3 the engine bound to `DECISION_LAYER`: the versions in force, Jev through
 the provider port with the caller waiting only the policy's deadline, records written in
-batches off every path, and the daily check that Jev's endpoint keeps nothing. The agent's
-ports and the operator's command come with the next steps.
+batches off every path, and the daily check that Jev's endpoint keeps nothing; step 5 binds the
+agent's `FrictionJudge` (`action.friction`).
 """
 
 from collections.abc import AsyncIterator
@@ -18,10 +18,12 @@ import httpx
 
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.features.agent.contracts import FRICTION_JUDGE
 from shosai.features.decisions.application.asking import Asker
 from shosai.features.decisions.application.engine import DecisionEngine
 from shosai.features.decisions.application.in_force import PoliciesInForce
 from shosai.features.decisions.application.recording import Recorder
+from shosai.features.decisions.channels.agent_ports import AgentFrictionJudge
 from shosai.features.decisions.channels.tasks import PERIODIC_JOBS, zero_retention_check
 from shosai.features.decisions.contracts import DECISION_LAYER
 from shosai.features.decisions.domain.policies import policies_by_key
@@ -75,7 +77,10 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             yield FeatureParts(
                 task_handlers=(check(client),),
                 periodic_jobs=PERIODIC_JOBS,
-                provides=(DECISION_LAYER.bind(engine),),
+                provides=(
+                    DECISION_LAYER.bind(engine),
+                    FRICTION_JUDGE.bind(AgentFrictionJudge(engine)),
+                ),
             )
         finally:
             await engine.drain()

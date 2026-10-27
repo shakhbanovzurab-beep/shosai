@@ -1,7 +1,7 @@
 """Writing a point's sets: synthetic cases appended, the machine's labels on the reference, and
 drafts a person labels blind (ADR 0069 DL-D8).
 
-Synthetic cases are appended to their language's file with ids that continue it. The
+Synthetic cases are appended to their language's file with ids that continue its highest. The
 machine's labels are written beside the person's on every reference case, never over them.
 A draft for the reference is a case without labels, with the questions to answer — in
 `reference/drafts/<language>.jsonl`, outside the sets until a person labels it and moves it
@@ -29,16 +29,24 @@ def write_lines(path: Path, rows: Sequence[Mapping[str, Any]], *, append: bool) 
         file.write(text)
 
 
-def synthetic_count(policy: Policy[Any, Any], language: str, root: Path = DATASETS) -> int:
-    """How many synthetic cases a language already has: where the next ones start."""
-    path = point_folder(policy.point, root) / "synthetic" / f"{language}.jsonl"
-    return len(lines(path)) if path.exists() else 0
+def next_number(path: Path, first: int = 0) -> int:
+    """The number after the highest a file's ids end with, or `first` for a new file: the
+    labeller drops cases between kept ones, so a count would hand out a kept id again."""
+    numbers = (
+        [int(str(row["id"]).rsplit("-", 1)[1]) for row in lines(path)] if path.exists() else []
+    )
+    return max(numbers, default=first - 1) + 1
 
 
-def draft_count(policy: Policy[Any, Any], language: str, root: Path = DATASETS) -> int:
-    """How many drafts a language already has; drafts number apart from synthetic cases."""
+def next_synthetic(policy: Policy[Any, Any], language: str, root: Path = DATASETS) -> int:
+    """Where a language's next synthetic cases start."""
+    return next_number(point_folder(policy.point, root) / "synthetic" / f"{language}.jsonl")
+
+
+def next_draft(policy: Policy[Any, Any], language: str, root: Path = DATASETS) -> int:
+    """Where a language's next drafts start; drafts number apart from synthetic cases."""
     path = point_folder(policy.point, root) / "reference" / "drafts" / f"{language}.jsonl"
-    return DRAFT_OFFSET + (len(lines(path)) if path.exists() else 0)
+    return next_number(path, DRAFT_OFFSET)
 
 
 def append_synthetic(

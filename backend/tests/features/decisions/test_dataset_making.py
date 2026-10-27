@@ -1,6 +1,7 @@
 """Synthetic cases written to labels and confirmed blind; the machine's labels and drafts for a
 person (ADR 0069 DL-D8)."""
 
+import asyncio
 import json
 from collections import Counter
 from dataclasses import dataclass, field
@@ -13,13 +14,20 @@ from shosai.core.ai.calls import CallContext, CallOrigin, ModelRef, ModelRoute, 
 from shosai.core.ai.requests import ChatRequest, TextPart
 from shosai.core.ai.results import ChatResult, Usage
 from shosai.features.decisions.application.briefs import BRIEFS
-from shosai.features.decisions.application.dataset_making import DatasetMaker, Tooling
+from shosai.features.decisions.application.dataset_making import (
+    BATCHES_AT_ONCE,
+    DatasetMaker,
+    Tooling,
+)
 from shosai.features.decisions.domain.policies import POLICIES
 from shosai.features.decisions.domain.policies.action_friction import ACTION_FRICTION
 from shosai.features.decisions.domain.policies.content_injection import CONTENT_INJECTION
 from shosai.features.decisions.domain.policy import Policy
 from shosai.features.decisions.infrastructure.dataset_files import (
+    DRAFT_OFFSET,
     append_synthetic,
+    next_draft,
+    next_synthetic,
     with_machine_labels,
     write_drafts,
 )
@@ -42,6 +50,9 @@ class Models:
     labels: list[dict[str, Any] | None] = field(default_factory=list)
     generator_text: str | None = None
     calls: list[CallContext] = field(default_factory=list)
+    # Сколько секунд пишет генератор и сколько его вызовов шло разом.
+    writing: float = 0.0
+    at_once: list[int] = field(default_factory=lambda: [0, 0])
 
     async def chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
@@ -53,6 +64,10 @@ class Models:
             assert isinstance(prompt, TextPart)
             count = int(prompt.text.split("Write exactly ")[1].split(" ")[0])
             text = self.generator_text or json.dumps({"cases": [WRITTEN[self.point]] * count})
+            self.at_once[0] += 1
+            self.at_once[1] = max(self.at_once)
+            await asyncio.sleep(self.writing)
+            self.at_once[0] -= 1
         else:
             answer = self.labels.pop(0) if self.labels else None
             text = json.dumps(answer) if answer is not None else "no idea"
@@ -126,3 +141,39 @@ async def test_generated_cases_append_drafts_hide_labels_machine_labels_sit_besi
     assert written == 2
     assert [case.labels["matches_request"] for case in sets.reference] == [False, False]
     assert [case.machine_labels["matches_request"] for case in sets.reference] == [True, True]
+
+
+async def test_cases_after_a_dropped_one_continue_past_the_highest_id(tmp_path: Path) -> None:
+    targets = BRIEFS["action.friction"].targets(3, 0)
+    # Второй случай разметчик не читает: в файле остаются ru-00000 и ru-00002.
+    models = Models(
+        "action.friction", labels=[dict(targets[0].labels), None, dict(targets[2].labels)]
+    )
+    first = await maker(models).generate(ACTION_FRICTION, "ru", 3, 0)
+    append_synthetic(ACTION_FRICTION, "ru", first, tmp_path)
+    offset = next_synthetic(ACTION_FRICTION, "ru", tmp_path)
+    models.labels = [dict(BRIEFS["action.friction"].targets(1, offset)[0].labels)]
+    more = await maker(models).generate(ACTION_FRICTION, "ru", 1, offset)
+    append_synthetic(ACTION_FRICTION, "ru", more, tmp_path)
+
+    ids = [case.id for case in read_sets(ACTION_FRICTION, tmp_path).synthetic]
+    assert ids == ["ru-00000", "ru-00002", "ru-00003"]
+    assert next_draft(ACTION_FRICTION, "ru", tmp_path) == DRAFT_OFFSET
+
+
+async def test_a_few_batches_are_written_at_once() -> None:
+    models = Models("content.injection", writing=0.01)
+
+    await maker(models).generate(CONTENT_INJECTION, "en", 6 * 8, 0)
+
+    assert models.at_once == [0, BATCHES_AT_ONCE]
+
+
+async def test_drafts_are_never_filtered_by_the_labeller() -> None:
+    models = Models("action.friction", labels=[{"matches_request": True, "reach": 3}] * 4)
+
+    drafts = await maker(models).draft(ACTION_FRICTION, "en", 4, DRAFT_OFFSET)
+
+    assert [case.id for case in drafts] == [f"en-{DRAFT_OFFSET + n:05d}" for n in range(4)]
+    assert len(models.calls) == 1
+    assert len(models.labels) == 4

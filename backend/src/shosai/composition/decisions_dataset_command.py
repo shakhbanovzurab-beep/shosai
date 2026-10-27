@@ -21,8 +21,8 @@ from shosai.features.decisions.domain.policies import POLICIES, policies_by_key
 from shosai.features.decisions.domain.policy import Policy
 from shosai.features.decisions.infrastructure.dataset_files import (
     append_synthetic,
-    draft_count,
-    synthetic_count,
+    next_draft,
+    next_synthetic,
     with_machine_labels,
     write_drafts,
 )
@@ -94,10 +94,9 @@ async def made_in(
 ) -> None:
     """One language's generated cases or drafts."""
     language, count, action = job
-    offset = (
-        draft_count(policy, language) if action == "draft" else synthetic_count(policy, language)
-    )
-    cases = await maker.generate(policy, language, count, offset)
+    offset = next_draft(policy, language) if action == "draft" else next_synthetic(policy, language)
+    making = maker.draft if action == "draft" else maker.generate
+    cases = await making(policy, language, count, offset)
     if action == "draft":
         path = write_drafts(policy, language, cases)
     else:
