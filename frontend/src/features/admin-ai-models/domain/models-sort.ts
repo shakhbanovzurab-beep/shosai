@@ -22,9 +22,13 @@ export const COLUMNS: { key: SortKey; label: string; numeric: boolean }[] = [
   { key: "month_requests", label: "Запросы", numeric: true },
 ];
 
+/** Порядок двух моделей по колонке; модель без цены — в конце при любом направлении. */
 export function compare(a: AiModel, b: AiModel, { key, desc }: Sort) {
   const left = a[key];
   const right = b[key];
+  if (left === null && right === null) return 0;
+  if (left === null) return 1;
+  if (right === null) return -1;
   const order =
     typeof left === "number" && typeof right === "number"
       ? left - right

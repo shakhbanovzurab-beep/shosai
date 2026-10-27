@@ -1,17 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { businessZoneLabel, useBusinessZone } from "@/features/admin-sign-in/model/business-zone";
 
-import type { AiDataSource, AiModel, SpendSummary } from "../domain/contract";
+import type { SpendSummary } from "../domain/contract";
 import { formatCompact, formatInteger, formatUsd } from "../domain/format";
 
 type Kpi = { label: string; value: string; note: string };
 
-export function SpendKpis({ spend, models, source }: { spend: SpendSummary; models: AiModel[]; source: AiDataSource }) {
-  const requests = models.reduce((sum, model) => sum + model.month_requests, 0);
+export function SpendKpis({ spend }: { spend: SpendSummary }) {
   const zone = businessZoneLabel(useBusinessZone());
   const kpis: Kpi[] = [
     { label: "Сегодня", value: formatUsd(spend.today), note: `с 00:00 ${zone}` },
-    { label: "С начала месяца", value: formatUsd(spend.month), note: `${formatInteger(requests)} запросов` },
+    {
+      label: "С начала месяца",
+      value: formatUsd(spend.month),
+      note: `${formatInteger(spend.requests_month)} запросов`,
+    },
     { label: "Прогноз на месяц", value: formatUsd(spend.forecast_month), note: "по темпу последних 7 дней" },
     {
       label: "Токены за месяц",
@@ -37,11 +40,6 @@ export function SpendKpis({ spend, models, source }: { spend: SpendSummary; mode
           ))}
         </div>
       </div>
-      {source === "backend" ? null : (
-        <p className="text-muted-foreground text-xs">
-          Расходы — демо-данные: OpenRouter не отдаёт расход по моделям для ключа, его будет считать бэкенд.
-        </p>
-      )}
     </section>
   );
 }

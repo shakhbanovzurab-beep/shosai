@@ -1,13 +1,16 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-import type { AiModel } from "../domain/contract";
+import type { AiModel, SpendSummary } from "../domain/contract";
 import { formatPercent, formatUsd } from "../domain/format";
 
 const TOP = 5;
 
 type Row = { id: string; name: string; provider: string; spend: number };
 
-export function TopModels({ models, total }: { models: AiModel[]; total: number }) {
+/** Топ моделей каталога за месяц; расход вне каталога — распознавание, документы, Jev — отдельной строкой. */
+export function TopModels({ models, spend }: { models: AiModel[]; spend: SpendSummary }) {
+  const total = spend.month;
+  const outside = spend.outside_catalogue;
   const spending = models.filter((model) => model.month_spend > 0).toSorted((a, b) => b.month_spend - a.month_spend);
   const rows: Row[] = spending
     .slice(0, TOP)
@@ -20,7 +23,9 @@ export function TopModels({ models, total }: { models: AiModel[]; total: number 
       provider: `${rest.length} мод.`,
       spend: rest.reduce((sum, model) => sum + model.month_spend, 0),
     });
-  const max = rows[0]?.spend ?? 0;
+  if (outside.spend > 0)
+    rows.push({ id: "outside", name: "Вне каталога", provider: "речь, документы, Jev", spend: outside.spend });
+  const max = Math.max(0, ...rows.map((row) => row.spend));
 
   return (
     <Card className="h-full">

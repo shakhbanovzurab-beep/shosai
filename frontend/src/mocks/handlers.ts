@@ -1,4 +1,3 @@
-import { handlers as adminAiModels } from "@/features/admin-ai-models/mocks/handlers";
 import { handlers as adminApps } from "@/features/admin-apps/mocks/handlers";
 import { handlers as adminBilling } from "@/features/admin-billing/mocks/handlers";
 import { handlers as adminErrors } from "@/features/admin-errors/mocks/handlers";
@@ -25,7 +24,6 @@ import type { MockRoute } from "./routing";
 
 /** Примерные маршруты всех слайсов. Слайс убирает свою строку вместе с обработчиками, когда появляется его API. */
 export const mockRoutes: readonly MockRoute[] = [
-  ...adminAiModels,
   ...adminApps,
   ...adminBilling,
   ...adminErrors,

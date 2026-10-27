@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 
 import { aiModelsResource } from "../model/ai-models-store";
+import { DefaultsCard } from "./defaults-card";
 import { ModelsTable } from "./models-table";
 import { ProviderCard } from "./provider-card";
 import { SpendChart } from "./spend-chart";
@@ -27,22 +28,23 @@ export function AiModelsView() {
       />
     );
 
-  const { provider, spend, models } = state.data;
+  const { provider, spend, models, defaults } = state.data;
   return (
     <div className="flex flex-col gap-4" aria-busy={state.refreshing}>
       <div className="grid gap-4 xl:grid-cols-3">
         <ProviderCard provider={provider} />
         <div className="xl:col-span-2">
-          <SpendKpis spend={spend} models={models} source={provider.source} />
+          <SpendKpis spend={spend} />
         </div>
       </div>
       <div className="grid gap-4 xl:grid-cols-3">
         <div className="min-w-0 xl:col-span-2">
           <SpendChart daily={spend.daily} />
         </div>
-        <TopModels models={models} total={spend.month} />
+        <TopModels models={models} spend={spend} />
       </div>
-      <ModelsTable models={models} />
+      <DefaultsCard models={models} defaults={defaults} />
+      <ModelsTable models={models} defaults={defaults} />
     </div>
   );
 }

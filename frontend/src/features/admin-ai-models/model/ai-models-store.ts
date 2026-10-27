@@ -2,49 +2,58 @@
 
 import { toast } from "sonner";
 
-import { apiErrorDescription } from "@/lib/api/error-description";
 import { createPollingResource } from "@/lib/polling-resource";
 
 import { aiModelsApi } from "../api/ai-models-api";
-import type { AiModel, AiModelPatch, ConnectionCheckResponse } from "../domain/contract";
+import type { AiModel, AiModelsResponse, ModelRole, RoleDefault } from "../domain/contract";
+import { problemOf } from "./problem-description";
 
 export const aiModelsResource = createPollingResource(aiModelsApi.list);
 
-function applyPatch(models: AiModel[], id: string, patch: AiModelPatch): AiModel[] {
-  if ("enabled" in patch)
-    return models.map((model) => (model.id === id ? { ...model, enabled: patch.enabled } : model));
-  return models.map((model) => ({ ...model, is_default: model.id === id }));
+/** Модель Leo по умолчанию отмечена у строк каталога. */
+function withDefaults(data: AiModelsResponse, defaults: RoleDefault[]): AiModelsResponse {
+  const leo = defaults.find((item) => item.role === "leo")?.model_id;
+  return { ...data, defaults, models: data.models.map((model) => ({ ...model, is_default: model.id === leo })) };
 }
 
-/** Shows the change at once, then keeps the server's version, or rolls back and explains why. */
-export async function patchModel(id: string, patch: AiModelPatch) {
+/** Строка каталога после её изменения на сервере. */
+export function replaceModel(saved: AiModel) {
+  aiModelsResource.update((data) => ({
+    ...data,
+    models: data.models.map((model) => (model.id === saved.id ? saved : model)),
+  }));
+}
+
+/** Показывает изменение сразу и откатывает его с объяснением, если сервер отказал. */
+async function optimistic(change: (data: AiModelsResponse) => AiModelsResponse, save: () => Promise<void>) {
   const before = aiModelsResource.getSnapshot();
-  aiModelsResource.update((data) => ({ ...data, models: applyPatch(data.models, id, patch) }));
+  aiModelsResource.update(change);
   try {
-    const saved = await aiModelsApi.patch(id, patch);
-    aiModelsResource.update((data) => ({
-      ...data,
-      models: data.models.map((model) => {
-        if (model.id === saved.id) return saved;
-        return saved.is_default ? { ...model, is_default: false } : model;
-      }),
-    }));
+    await save();
   } catch (error) {
     if (before.status === "ready") aiModelsResource.update(() => before.data);
-    toast.error("Не удалось сохранить", { description: apiErrorDescription(error) });
+    toast.error("Не удалось сохранить", { description: problemOf(error) });
   }
 }
 
-/** Asks the server to reach OpenRouter with its key, then reloads the page data (balance included). */
-export async function checkConnection(): Promise<ConnectionCheckResponse | null> {
-  try {
-    const result = await aiModelsApi.check();
-    if (result.ok) toast.success("OpenRouter доступен", { description: result.message });
-    else toast.error("Подключение не работает", { description: result.message });
-    void aiModelsResource.refresh();
-    return result;
-  } catch (error) {
-    toast.error("Не удалось проверить подключение", { description: apiErrorDescription(error) });
-    return null;
-  }
+export function switchModel(id: string, enabled: boolean) {
+  return optimistic(
+    (data) => ({ ...data, models: data.models.map((model) => (model.id === id ? { ...model, enabled } : model)) }),
+    async () => replaceModel(await aiModelsApi.switch(id, enabled)),
+  );
+}
+
+export function setRoleDefault(role: ModelRole, modelId: string, fallbackId: string | null) {
+  const chosen: RoleDefault = { role, model_id: modelId, fallback_model_id: fallbackId };
+  const place = (defaults: RoleDefault[], item: RoleDefault) => [
+    ...defaults.filter((other) => other.role !== item.role),
+    item,
+  ];
+  return optimistic(
+    (data) => withDefaults(data, place(data.defaults, chosen)),
+    async () => {
+      const saved = await aiModelsApi.setDefault(role, modelId, fallbackId);
+      aiModelsResource.update((data) => withDefaults(data, place(data.defaults, saved)));
+    },
+  );
 }

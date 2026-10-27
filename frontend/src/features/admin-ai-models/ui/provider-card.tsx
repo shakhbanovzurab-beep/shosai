@@ -21,8 +21,8 @@ import { businessZoneLabel, useBusinessZone } from "@/features/admin-sign-in/mod
 
 import type { ConnectionCheckResponse, OpenRouterCredits, ProviderStatus } from "../domain/contract";
 import { formatTime, formatUsd } from "../domain/format";
-import { SOURCE_LABEL } from "../domain/labels";
-import { checkConnection } from "../model/ai-models-store";
+import { problemText } from "../domain/problems";
+import { checkConnection } from "../model/catalogue-actions";
 
 export function ProviderCard({ provider }: { provider: ProviderStatus }) {
   return (
@@ -44,8 +44,6 @@ export function ProviderCard({ provider }: { provider: ProviderStatus }) {
               OPENROUTER_API_KEY{provider.key_hint ? ` ${provider.key_hint}` : ""}
             </span>
           </dd>
-          <dt className="text-muted-foreground">Источник</dt>
-          <dd className="truncate">{SOURCE_LABEL[provider.source]}</dd>
         </dl>
 
         <CreditsBalance credits={provider.credits} keyConfigured={provider.key_configured} />
@@ -53,7 +51,7 @@ export function ProviderCard({ provider }: { provider: ProviderStatus }) {
         {provider.sync_error ? (
           <p className="flex items-start gap-1.5 text-destructive text-sm" role="alert">
             <TriangleAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-            {provider.sync_error}
+            {problemText(provider.sync_error) ?? "OpenRouter не сообщил баланс."}
           </p>
         ) : null}
       </CardContent>
@@ -108,6 +106,7 @@ function CreditsBalance({ credits, keyConfigured }: { credits: OpenRouterCredits
 
 function describeCheck(check: ConnectionCheckResponse, zone: string) {
   const parts = [check.ok ? "Работает" : "Ошибка", formatTime(check.checked_at, zone, businessZoneLabel(zone))];
+  if (!check.ok) parts.push(problemText(check.code) ?? "нет ответа");
   if (check.ok && check.latency_ms !== null) parts.push(`${check.latency_ms} мс`);
   return parts.join(" · ");
 }
