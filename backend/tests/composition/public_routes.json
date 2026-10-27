@@ -187,6 +187,7 @@
     "POST /v1/files/{file_id}/copy",
     "POST /v1/files/{file_id}/reindex",
     "POST /v1/files/{file_id}/transfer",
+    "POST /v1/livekit/webhook",
     "POST /v1/me/deletion",
     "POST /v1/me/devices/sign-out-others",
     "POST /v1/me/exports",

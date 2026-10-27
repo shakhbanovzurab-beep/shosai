@@ -118,6 +118,8 @@ class SfuWebhook:
     room_sid: str
     participants: int | None = None
     identity: str | None = None
+    # Потолок экземпляра комнаты в SFU, с которым его создали.
+    ceiling: int | None = None
 
 
 class VideoServer(Protocol):

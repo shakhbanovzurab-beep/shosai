@@ -14842,6 +14842,49 @@
         }
       }
     },
+    "/v1/livekit/webhook": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Receive Livekit Webhook",
+        "description": "Accept a signed event of the call server.",
+        "operationId": "receive_livekit_webhook_v1_livekit_webhook_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/meetings/join/{token}": {
       "post": {
         "tags": [

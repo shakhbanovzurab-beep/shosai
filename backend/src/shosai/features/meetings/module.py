@@ -5,7 +5,8 @@ and the domain. Step A2 added LiveKit: the `LIVEKIT_*` settings with their produ
 the SFU behind the `VideoServer` port, opened with the process and closed with it, and its
 readiness probe when it is configured. Step A3 added the tables of each home and their
 account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`, the public
-join with its room passes in Valkey and their renewal.
+join with its room passes in Valkey and their renewal, removal with bans, hands and the
+account's rooms. Step A5 added LiveKit's webhook, calls and the sweep of each home.
 """
 
 from collections.abc import AsyncIterator
@@ -20,18 +21,22 @@ from shosai.features.meetings.application.account_data import (
     MeetingsAccountData,
 )
 from shosai.features.meetings.application.account_rooms import AccountRooms
+from shosai.features.meetings.application.calls import Calls
 from shosai.features.meetings.application.joining import JoinDesk
 from shosai.features.meetings.application.passes import PassCheck
 from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.rooms import RoomBook
+from shosai.features.meetings.application.sweep import Sweep
 from shosai.features.meetings.application.video_server import VideoUnavailableError
 from shosai.features.meetings.channels.http.joining import build_joining_router
 from shosai.features.meetings.channels.http.rooms import build_rooms_router
+from shosai.features.meetings.channels.http.webhook import build_webhook_router
 from shosai.features.meetings.channels.subscriptions import subscriptions
-from shosai.features.meetings.channels.tasks import task_handlers
+from shosai.features.meetings.channels.tasks import PERIODIC_JOBS, task_handlers
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
 from shosai.features.meetings.infrastructure.livekit_server import open_video_server
+from shosai.features.meetings.infrastructure.meetings_metrics import MeetingsMetrics
 from shosai.features.meetings.infrastructure.room_passes import RoomPasses
 from shosai.features.meetings.settings import (
     LiveKitSettings,
@@ -55,6 +60,9 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
         book = RoomBook(transactions, (services.effects, ports), server)
         passes = RoomPasses(services.valkey)
         removals = Removals(transactions, server, passes)
+        metrics = MeetingsMetrics(services.registry)
+        calls = Calls(transactions, (services.outbox, services.tasks))
+        sweep = Sweep(transactions, (server, calls, ports, metrics))
         ceiling = services.settings.features.get(
             MeetingsSettings
         ).meetings_room_participants_ceiling
@@ -63,11 +71,13 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
         yield FeatureParts(
             http_routers=(
                 build_rooms_router((book, removals), ports, origin),
+                build_webhook_router(server, calls, metrics),
                 build_joining_router(
                     desk, PassCheck(transactions, passes), ports, services.rate_limiter
                 ),
             ),
-            task_handlers=task_handlers(AccountRooms(transactions, server)),
+            task_handlers=task_handlers(AccountRooms(transactions, server), calls, sweep),
+            periodic_jobs=PERIODIC_JOBS,
             subscriptions=subscriptions(services.tasks),
             probes=probes,
             provides=(ACCOUNT_DATA_HANDLERS.bind(MeetingsAccountData(services.transactions)),),

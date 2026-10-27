@@ -61,6 +61,7 @@ class WireRoom(BaseModel):
     name: str = ""
     sid: str = ""
     participants: int = Field(default=0, alias="numParticipants")
+    ceiling: int = Field(default=0, alias="maxParticipants")
 
 
 class WireParticipant(BaseModel):
@@ -95,4 +96,5 @@ def webhook_of(body: bytes) -> SfuWebhook:
         room_sid=room.sid,
         participants=None if wire.room is None else room.participants,
         identity=None if wire.participant is None else wire.participant.identity,
+        ceiling=None if wire.room is None or not room.ceiling else room.ceiling,
     )

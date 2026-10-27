@@ -3628,6 +3628,26 @@ export interface paths {
         patch: operations["lower_meeting_hand_v1_meetings_rooms__room_id__participants__identity__hand_patch"];
         trace?: never;
     };
+    "/v1/livekit/webhook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Receive Livekit Webhook
+         * @description Accept a signed event of the call server.
+         */
+        post: operations["receive_livekit_webhook_v1_livekit_webhook_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/meetings/join/{token}": {
         parameters: {
             query?: never;
@@ -17195,6 +17215,35 @@ export interface operations {
                 "application/json": components["schemas"]["HandPatch"];
             };
         };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    receive_livekit_webhook_v1_livekit_webhook_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             204: {
