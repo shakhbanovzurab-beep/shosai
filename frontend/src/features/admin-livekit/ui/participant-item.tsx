@@ -1,35 +1,18 @@
 import type { LucideIcon } from "lucide-react";
-import { Globe, Mic, MicOff, Monitor, ScreenShare, Smartphone, UserX, Video, VideoOff } from "lucide-react";
+import { CircleHelp, Globe, Mic, MicOff, Monitor, ScreenShare, Smartphone, UserX, Video, VideoOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
-import type { DeviceOs, LiveKitDevice, LiveKitParticipant, LiveKitTrack } from "../domain/contract";
+import type { LiveKitParticipant, LiveKitTrack } from "../domain/contract";
+import { deviceLabel } from "../domain/device";
 import { formatTime } from "../domain/format";
-import { QualityBadge } from "./status-badge";
 
-const OS_NAMES: Record<DeviceOs, string> = {
-  macos: "macOS",
-  windows: "Windows",
-  linux: "Linux",
-  ios: "iOS",
-  android: "Android",
-};
-
-const CLIENT_ICONS: Record<LiveKitDevice["client"], LucideIcon> = {
+const CLIENT_ICONS: Record<string, LucideIcon> = {
   desktop: Monitor,
   web: Globe,
   mobile: Smartphone,
 };
-
-/** "Leo для macOS 2.4.1 · macOS 15.1", or "Chrome 141 · Ubuntu 24.04" for a browser tab. */
-function deviceLabel(device: LiveKitDevice) {
-  const client =
-    device.client === "web"
-      ? (device.browser ?? "Браузер")
-      : [`Leo для ${OS_NAMES[device.os]}`, device.client_version].filter(Boolean).join(" ");
-  return `${client} · ${device.os_version}`;
-}
 
 const TRACKS: Record<LiveKitTrack["kind"], { label: string; on: LucideIcon; off: LucideIcon }> = {
   audio: { label: "Микрофон", on: Mic, off: MicOff },
@@ -62,15 +45,12 @@ type ParticipantItemProps = {
 };
 
 export function ParticipantItem({ participant, removing, disabled, onRemove }: ParticipantItemProps) {
-  const DeviceIcon = CLIENT_ICONS[participant.device.client];
+  const DeviceIcon = (participant.device.client && CLIENT_ICONS[participant.device.client]) || CircleHelp;
   return (
     <li className="flex flex-col gap-2.5 rounded-lg border p-3">
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <div className="truncate font-medium">{participant.name}</div>
-          <div className="truncate font-mono text-muted-foreground text-xs">{participant.identity}</div>
-        </div>
-        <QualityBadge quality={participant.connection_quality} />
+      <div className="min-w-0">
+        <div className="truncate font-medium">{participant.name}</div>
+        <div className="truncate font-mono text-muted-foreground text-xs">{participant.identity}</div>
       </div>
       <div className="flex items-center gap-1.5 text-muted-foreground text-xs">
         <DeviceIcon aria-hidden="true" className="size-3.5 shrink-0" />

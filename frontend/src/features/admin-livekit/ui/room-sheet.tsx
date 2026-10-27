@@ -59,11 +59,10 @@ function RoomDetails({ room, onEnded }: { room: LiveKitRoom; onEnded: () => void
   return (
     <>
       <SheetHeader className="border-b pr-12">
-        <SheetTitle className="truncate">{room.title}</SheetTitle>
+        <SheetTitle className="truncate font-mono">{room.name}</SheetTitle>
         <SheetDescription>
           Началась в {formatTime(room.started_at)} · {participantsLabel(count)}
         </SheetDescription>
-        <p className="truncate font-mono text-muted-foreground text-xs">{room.name}</p>
       </SheetHeader>
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4">
@@ -84,7 +83,7 @@ function RoomDetails({ room, onEnded }: { room: LiveKitRoom; onEnded: () => void
 
       <ConfirmActionDialog
         action={confirm}
-        roomTitle={room.title}
+        roomName={room.name}
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         onConfirm={() => void runConfirmed()}

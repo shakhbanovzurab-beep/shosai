@@ -6,6 +6,7 @@ the request, never kept in egress's own config. A report reads LiveKit's status 
 it wrote; a webhook's egress arrives as protobuf's JSON and is read the same way.
 """
 
+from datetime import UTC, datetime
 from typing import Final
 
 from livekit.protocol.egress import (
@@ -68,4 +69,11 @@ def report_of(info: EgressInfo) -> EgressReport:
         size_bytes=size,
         duration_seconds=duration // NANOSECONDS,
         error=info.error,
+        started_at=moment_of(info.started_at),
+        ended_at=moment_of(info.ended_at),
     )
+
+
+def moment_of(nanoseconds: int) -> datetime | None:
+    """A time LiveKit gives in nanoseconds since the epoch; None when not reached yet."""
+    return datetime.fromtimestamp(nanoseconds / NANOSECONDS, UTC) if nanoseconds else None

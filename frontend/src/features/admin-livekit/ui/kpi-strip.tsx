@@ -4,9 +4,11 @@ import { ArrowDownToLine, ArrowUpFromLine, AudioLines, CircleDot, DoorOpen, User
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import type { LiveKitStats } from "../domain/contract";
-import { formatInteger, formatMbps } from "../domain/format";
+import { formatInteger, formatMbps, orNoData } from "../domain/format";
 
 type Kpi = { label: string; value: string; hint: string; icon: LucideIcon };
+
+const NO_METRICS = "Нет данных Prometheus";
 
 function kpis(stats: LiveKitStats): Kpi[] {
   return [
@@ -14,20 +16,20 @@ function kpis(stats: LiveKitStats): Kpi[] {
     { label: "Участники онлайн", value: formatInteger(stats.participants), hint: "Во всех комнатах", icon: Users },
     {
       label: "Опубликованные треки",
-      value: formatInteger(stats.published_tracks),
-      hint: "Аудио, видео и экран",
+      value: orNoData(stats.published_tracks, formatInteger),
+      hint: stats.published_tracks === null ? NO_METRICS : "Аудио, видео и экран",
       icon: AudioLines,
     },
     {
       label: "Входящий трафик",
-      value: formatMbps(stats.bandwidth_in_mbps),
-      hint: "От участников",
+      value: orNoData(stats.bandwidth_in_mbps, formatMbps),
+      hint: stats.bandwidth_in_mbps === null ? NO_METRICS : "От участников",
       icon: ArrowDownToLine,
     },
     {
       label: "Исходящий трафик",
-      value: formatMbps(stats.bandwidth_out_mbps),
-      hint: "К участникам",
+      value: orNoData(stats.bandwidth_out_mbps, formatMbps),
+      hint: stats.bandwidth_out_mbps === null ? NO_METRICS : "К участникам",
       icon: ArrowUpFromLine,
     },
     { label: "Запись и экспорт", value: formatInteger(stats.active_egress), hint: "Активные задания", icon: CircleDot },

@@ -17,7 +17,7 @@ import {
   OPEN_ROOMS,
   RECORDING_BYTES_PER_MINUTE,
 } from "./demo-fixtures";
-import { clamp, demoHistory, iso, jitter, pick, round1, shortId } from "./demo-history";
+import { clamp, demoHistory, iso, jitter, pick, roomName, round1, shortId } from "./demo-history";
 
 /*
  * In-memory LiveKit server for the demo. Rooms, participants and nodes drift a little on every
@@ -35,12 +35,11 @@ function seed(): DemoState {
     nextPerson: 0,
     nextRoom: 0,
   };
-  for (const [title, ago, minutes, status] of FINISHED_EGRESS) {
+  for (const [ago, minutes, status] of FINISHED_EGRESS) {
     const bytes = Math.round(minutes * RECORDING_BYTES_PER_MINUTE * (0.9 + Math.random() * 0.2));
     state.egress.push({
       id: `EG_${shortId()}`,
-      room_name: `leo-mtg-${shortId()}`,
-      room_title: title,
+      room_name: roomName(),
       status,
       started_at: iso(now - ago),
       ended_at: iso(now - ago + Math.max(minutes, 2) * MINUTE),
@@ -89,13 +88,10 @@ function health(nodes: LiveKitNode[]): LiveKitHealth {
 
 function serverInfo(nodes: LiveKitNode[]): LiveKitServer {
   return {
-    url: "wss://meet.leo.example",
-    version: "1.8.4",
-    region: "Москва",
+    url: "wss://rtc.shosai.example",
     started_at: iso(state.startedAt),
     health: health(nodes),
     api_key_configured: false,
-    demo: true,
   };
 }
 
@@ -108,12 +104,13 @@ export function getOverview(): LiveKitOverview {
   const nodes = state.nodes.map(({ cpu_base, memory_base, ...node }): LiveKitNode => {
     const hosted = rooms.filter((room) => room.node === node.id);
     const participants = hosted.reduce((sum, room) => sum + room.participants.length, 0);
+    const serving = node.state === "serving";
     return {
       ...node,
       rooms: hosted.length,
       participants,
-      cpu_percent: round1(clamp(cpu_base + participants * 3.2 + jitter(3), 1, 99)),
-      memory_percent: round1(clamp(memory_base + participants * 0.8 + jitter(1.5), 5, 99)),
+      cpu_percent: serving ? round1(clamp(cpu_base + participants * 3.2 + jitter(3), 1, 99)) : null,
+      memory_percent: serving ? round1(clamp(memory_base + participants * 0.8 + jitter(1.5), 5, 99)) : null,
     };
   });
   const participants = rooms.reduce((sum, room) => sum + room.participants.length, 0);
@@ -162,7 +159,8 @@ export function deleteRoom(name: string): boolean {
     if (egress.room_name !== name || egress.ended_at !== null) continue;
     egress.status = "complete";
     egress.ended_at = iso(now);
-    egress.file_size_bytes = Math.round(((now - Date.parse(egress.started_at)) / MINUTE) * RECORDING_BYTES_PER_MINUTE);
+    const started = egress.started_at === null ? now : Date.parse(egress.started_at);
+    egress.file_size_bytes = Math.round(((now - started) / MINUTE) * RECORDING_BYTES_PER_MINUTE);
   }
   return true;
 }

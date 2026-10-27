@@ -1,6 +1,6 @@
 import type { LiveKitEgress, LiveKitParticipant, LiveKitRoom, LiveKitTrack } from "../domain/contract";
-import { type DEMO_NODES, DEVICES, MEETINGS, MINUTE, PEOPLE, QUALITY_STEPS, VIDEO_CODECS } from "./demo-fixtures";
-import { iso, pick, shortId } from "./demo-history";
+import { type DEMO_NODES, DEVICES, MINUTE, PEOPLE, VIDEO_CODECS } from "./demo-fixtures";
+import { iso, pick, roomName, shortId } from "./demo-history";
 
 /* Builds demo rooms and participants for the in-memory LiveKit demo in `demo-store.ts`. */
 
@@ -27,28 +27,24 @@ export function makeParticipant(state: DemoState, joinedAt: number, withScreen: 
   const tracks: LiveKitTrack[] = [{ sid: `TR_A${shortId()}`, kind: "audio", muted: Math.random() < 0.4 }];
   if (Math.random() < 0.8) tracks.push({ sid: `TR_V${shortId()}`, kind: "video", muted: Math.random() < 0.15 });
   if (withScreen) tracks.push({ sid: `TR_S${shortId()}`, kind: "screen", muted: false });
-  const quality = Math.random();
   return {
     identity: lap === 0 ? `usr_${slug}` : `usr_${slug}_${lap + 1}`,
     name,
     joined_at: iso(joinedAt),
     device,
-    connection_quality: QUALITY_STEPS.find(([limit]) => quality < limit)?.[1] ?? "lost",
     tracks,
   };
 }
 
 export function makeRoom(state: DemoState, startedAt: number, size: number, recording: boolean): DemoRoom {
-  const title = MEETINGS[state.nextRoom % MEETINGS.length] ?? MEETINGS[0];
   state.nextRoom += 1;
-  const name = `leo-mtg-${shortId()}`;
+  const name = roomName();
   const participants = Array.from({ length: size }, (_, index) =>
     makeParticipant(state, startedAt + index * 40_000, index === 0 && Math.random() < 0.5),
   );
   const node = pick(state.nodes.filter((n) => n.state === "serving")).id;
   const room = {
     name,
-    title,
     started_at: iso(startedAt),
     recording,
     video_codec: pick(VIDEO_CODECS),
@@ -58,7 +54,6 @@ export function makeRoom(state: DemoState, startedAt: number, size: number, reco
     state.egress.unshift({
       id: `EG_${shortId()}`,
       room_name: name,
-      room_title: title,
       status: "active",
       started_at: iso(startedAt + MINUTE),
       ended_at: null,

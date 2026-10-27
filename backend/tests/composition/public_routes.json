@@ -2,6 +2,8 @@
   "api": [
     "DELETE /v1/admin/agent/threads/{thread_id}",
     "DELETE /v1/admin/ai-models/{model_id}",
+    "DELETE /v1/admin/livekit/rooms/{name}",
+    "DELETE /v1/admin/livekit/rooms/{name}/participants/{identity}",
     "DELETE /v1/admin/plans/{plan_id}",
     "DELETE /v1/admin/promo-codes/{promo_id}",
     "DELETE /v1/admin/session",
@@ -41,6 +43,8 @@
     "GET /v1/admin/agent/threads/{thread_id}",
     "GET /v1/admin/agent/threads/{thread_id}/messages",
     "GET /v1/admin/ai-models",
+    "GET /v1/admin/livekit/overview",
+    "GET /v1/admin/livekit/rooms/{name}",
     "GET /v1/admin/plans",
     "GET /v1/admin/promo-codes",
     "GET /v1/admin/session",

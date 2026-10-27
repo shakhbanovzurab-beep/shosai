@@ -15295,6 +15295,238 @@
         }
       }
     },
+    "/v1/admin/livekit/overview": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Livekit Overview",
+        "description": "The server, its load and day, its nodes, rooms and egress jobs.",
+        "operationId": "livekit_overview_v1_admin_livekit_overview_get",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveKitOverviewOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/livekit/rooms/{name}": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Livekit Room",
+        "description": "A room the SFU holds, with the sessions in it.",
+        "operationId": "livekit_room_v1_admin_livekit_rooms__name__get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 256,
+              "pattern": "^[^/\\x00-\\x1f\\x7f]+$",
+              "title": "Name"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveKitRoomDetailOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "End Livekit Room",
+        "description": "End the room for everyone and close it for good; audited.",
+        "operationId": "end_livekit_room_v1_admin_livekit_rooms__name__delete",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 256,
+              "pattern": "^[^/\\x00-\\x1f\\x7f]+$",
+              "title": "Name"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/livekit/rooms/{name}/participants/{identity}": {
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Remove Livekit Participant",
+        "description": "Ban the session's person or guest from the room and disconnect them; audited.",
+        "operationId": "remove_livekit_participant_v1_admin_livekit_rooms__name__participants__identity__delete",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 256,
+              "pattern": "^[^/\\x00-\\x1f\\x7f]+$",
+              "title": "Name"
+            }
+          },
+          {
+            "name": "identity",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 256,
+              "pattern": "^[^/\\x00-\\x1f\\x7f]+$",
+              "title": "Identity"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/admin/ai-models": {
       "get": {
         "tags": [
@@ -21105,6 +21337,585 @@
         ],
         "title": "LimitsBody",
         "description": "What a plan includes: null is unlimited, 0 is not included."
+      },
+      "LiveKitDeviceOut": {
+        "properties": {
+          "os": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Os"
+          },
+          "os_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Os Version"
+          },
+          "client": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client"
+          },
+          "client_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Version"
+          },
+          "browser": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Browser"
+          }
+        },
+        "type": "object",
+        "required": [
+          "os",
+          "os_version",
+          "client",
+          "client_version",
+          "browser"
+        ],
+        "title": "LiveKitDeviceOut",
+        "description": "The device a session joined from, as its client declared it; null when not declared."
+      },
+      "LiveKitEgressOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "room_name": {
+            "type": "string",
+            "title": "Room Name"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "starting",
+              "active",
+              "ending",
+              "complete",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          },
+          "file_size_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Size Bytes",
+            "description": "Null until the file is written."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "room_name",
+          "status",
+          "started_at",
+          "ended_at",
+          "file_size_bytes"
+        ],
+        "title": "LiveKitEgressOut",
+        "description": "An egress job the SFU runs or still remembers."
+      },
+      "LiveKitHealth": {
+        "type": "string",
+        "enum": [
+          "healthy",
+          "degraded",
+          "down"
+        ],
+        "title": "LiveKitHealth",
+        "description": "How the server stands as the screen sums it up."
+      },
+      "LiveKitHistoryPointOut": {
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          },
+          "participants": {
+            "type": "integer",
+            "title": "Participants"
+          },
+          "bandwidth_in_mbps": {
+            "type": "number",
+            "title": "Bandwidth In Mbps"
+          },
+          "bandwidth_out_mbps": {
+            "type": "number",
+            "title": "Bandwidth Out Mbps"
+          }
+        },
+        "type": "object",
+        "required": [
+          "at",
+          "participants",
+          "bandwidth_in_mbps",
+          "bandwidth_out_mbps"
+        ],
+        "title": "LiveKitHistoryPointOut",
+        "description": "One sample of the last 24 hours."
+      },
+      "LiveKitNodeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "cpu_percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cpu Percent",
+            "description": "Of the CPUs the node may use."
+          },
+          "memory_percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Memory Percent",
+            "description": "Of the node's memory limit."
+          },
+          "rooms": {
+            "type": "integer",
+            "title": "Rooms"
+          },
+          "participants": {
+            "type": "integer",
+            "title": "Participants"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "serving",
+              "down"
+            ],
+            "title": "State"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "cpu_percent",
+          "memory_percent",
+          "rooms",
+          "participants",
+          "state"
+        ],
+        "title": "LiveKitNodeOut",
+        "description": "One node; its load is null when unknown."
+      },
+      "LiveKitOverviewOut": {
+        "properties": {
+          "server": {
+            "$ref": "#/components/schemas/LiveKitServerOut"
+          },
+          "stats": {
+            "$ref": "#/components/schemas/LiveKitStatsOut"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/LiveKitHistoryPointOut"
+            },
+            "type": "array",
+            "title": "History",
+            "description": "Oldest first; empty: no data."
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/LiveKitNodeOut"
+            },
+            "type": "array",
+            "title": "Nodes"
+          },
+          "rooms": {
+            "items": {
+              "$ref": "#/components/schemas/LiveKitRoomOut"
+            },
+            "type": "array",
+            "title": "Rooms"
+          },
+          "egress": {
+            "items": {
+              "$ref": "#/components/schemas/LiveKitEgressOut"
+            },
+            "type": "array",
+            "title": "Egress",
+            "description": "The latest first."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "server",
+          "stats",
+          "history",
+          "nodes",
+          "rooms",
+          "egress",
+          "updated_at"
+        ],
+        "title": "LiveKitOverviewOut",
+        "description": "The admin's LiveKit screen at one moment."
+      },
+      "LiveKitParticipantOut": {
+        "properties": {
+          "identity": {
+            "type": "string",
+            "title": "Identity"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "joined_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Joined At"
+          },
+          "device": {
+            "$ref": "#/components/schemas/LiveKitDeviceOut"
+          },
+          "tracks": {
+            "items": {
+              "$ref": "#/components/schemas/LiveKitTrackOut"
+            },
+            "type": "array",
+            "title": "Tracks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "identity",
+          "name",
+          "joined_at",
+          "device",
+          "tracks"
+        ],
+        "title": "LiveKitParticipantOut",
+        "description": "A session in the room."
+      },
+      "LiveKitRoomDetailOut": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The LiveKit room name; used in the room's URLs."
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "num_participants": {
+            "type": "integer",
+            "title": "Num Participants"
+          },
+          "recording": {
+            "type": "boolean",
+            "title": "Recording"
+          },
+          "video_codec": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Codec"
+          },
+          "audio_codec": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Codec"
+          },
+          "participants": {
+            "items": {
+              "$ref": "#/components/schemas/LiveKitParticipantOut"
+            },
+            "type": "array",
+            "title": "Participants"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "started_at",
+          "num_participants",
+          "recording",
+          "video_codec",
+          "audio_codec",
+          "participants"
+        ],
+        "title": "LiveKitRoomDetailOut",
+        "description": "A room with the sessions in it."
+      },
+      "LiveKitRoomOut": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The LiveKit room name; used in the room's URLs."
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "num_participants": {
+            "type": "integer",
+            "title": "Num Participants"
+          },
+          "recording": {
+            "type": "boolean",
+            "title": "Recording"
+          },
+          "video_codec": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Codec"
+          },
+          "audio_codec": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Codec"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "started_at",
+          "num_participants",
+          "recording",
+          "video_codec",
+          "audio_codec"
+        ],
+        "title": "LiveKitRoomOut",
+        "description": "A room the SFU holds."
+      },
+      "LiveKitServerOut": {
+        "properties": {
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url",
+            "description": "The signalling address clients use; null when not set."
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At",
+            "description": "When the longest-running node started."
+          },
+          "health": {
+            "$ref": "#/components/schemas/LiveKitHealth"
+          },
+          "api_key_configured": {
+            "type": "boolean",
+            "title": "Api Key Configured"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url",
+          "started_at",
+          "health",
+          "api_key_configured"
+        ],
+        "title": "LiveKitServerOut",
+        "description": "The server's card."
+      },
+      "LiveKitStatsOut": {
+        "properties": {
+          "active_rooms": {
+            "type": "integer",
+            "title": "Active Rooms"
+          },
+          "participants": {
+            "type": "integer",
+            "title": "Participants"
+          },
+          "published_tracks": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published Tracks"
+          },
+          "bandwidth_in_mbps": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bandwidth In Mbps"
+          },
+          "bandwidth_out_mbps": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bandwidth Out Mbps"
+          },
+          "active_egress": {
+            "type": "integer",
+            "title": "Active Egress",
+            "description": "Egress jobs starting, running or ending."
+          }
+        },
+        "type": "object",
+        "required": [
+          "active_rooms",
+          "participants",
+          "published_tracks",
+          "bandwidth_in_mbps",
+          "bandwidth_out_mbps",
+          "active_egress"
+        ],
+        "title": "LiveKitStatsOut",
+        "description": "The numbers across the server; null where Prometheus gave no data."
+      },
+      "LiveKitTrackOut": {
+        "properties": {
+          "sid": {
+            "type": "string",
+            "title": "Sid"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/TrackKind"
+          },
+          "muted": {
+            "type": "boolean",
+            "title": "Muted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sid",
+          "kind",
+          "muted"
+        ],
+        "title": "LiveKitTrackOut",
+        "description": "A track a session publishes."
       },
       "LoginRequest": {
         "properties": {
@@ -29404,6 +30215,16 @@
         ],
         "title": "TokenResponse",
         "description": "A session: the access token, its lifetime in seconds and the CSRF value for refresh."
+      },
+      "TrackKind": {
+        "type": "string",
+        "enum": [
+          "audio",
+          "video",
+          "screen"
+        ],
+        "title": "TrackKind",
+        "description": "What a published track carries, as the admin's screen shows it."
       },
       "TranscriptLineOut": {
         "properties": {

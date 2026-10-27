@@ -75,6 +75,26 @@ class SfuRoom:
     created_at: datetime
     # Потолок, с которым комната создана; 0 — без потолка.
     max_participants: int = 0
+    # Идёт ли запись композита комнаты, как её видит SFU.
+    recording: bool = False
+
+
+class TrackKind(StrEnum):
+    """What a published track carries, as the admin's screen shows it."""
+
+    AUDIO = "audio"
+    VIDEO = "video"
+    SCREEN = "screen"
+
+
+@dataclass(frozen=True, slots=True)
+class SfuTrack:
+    """A track a session publishes: its kind, whether it is muted and its codec's MIME type."""
+
+    sid: str
+    kind: TrackKind
+    muted: bool
+    mime_type: str = ""
 
 
 @dataclass(frozen=True, slots=True)
@@ -85,6 +105,7 @@ class SfuParticipant:
     name: str
     joined_at: datetime
     attributes: Mapping[str, str] = field(default_factory=dict)
+    tracks: tuple[SfuTrack, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -129,6 +150,8 @@ class EgressReport:
     size_bytes: int = 0
     duration_seconds: int = 0
     error: str = ""
+    started_at: datetime | None = None
+    ended_at: datetime | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -204,8 +227,11 @@ class VideoServer(Protocol):
         """Stop an egress; one already over is left as it is."""
         ...
 
-    async def egresses(self, room_name: str | None = None) -> Sequence[EgressReport]:
-        """The egresses the SFU runs, a room's only when named."""
+    async def egresses(
+        self, room_name: str | None = None, *, active: bool = True
+    ) -> Sequence[EgressReport]:
+        """The egresses the SFU runs, a room's only when named; with `active` off, also the
+        ones over that the SFU still remembers."""
         ...
 
     async def egress(self, egress_id: str) -> EgressReport | None:

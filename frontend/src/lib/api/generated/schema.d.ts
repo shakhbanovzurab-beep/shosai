@@ -3736,6 +3736,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/livekit/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Livekit Overview
+         * @description The server, its load and day, its nodes, rooms and egress jobs.
+         */
+        get: operations["livekit_overview_v1_admin_livekit_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/livekit/rooms/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Livekit Room
+         * @description A room the SFU holds, with the sessions in it.
+         */
+        get: operations["livekit_room_v1_admin_livekit_rooms__name__get"];
+        put?: never;
+        post?: never;
+        /**
+         * End Livekit Room
+         * @description End the room for everyone and close it for good; audited.
+         */
+        delete: operations["end_livekit_room_v1_admin_livekit_rooms__name__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/livekit/rooms/{name}/participants/{identity}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove Livekit Participant
+         * @description Ban the session's person or guest from the room and disconnect them; audited.
+         */
+        delete: operations["remove_livekit_participant_v1_admin_livekit_rooms__name__participants__identity__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/admin/ai-models": {
         parameters: {
             query?: never;
@@ -6166,6 +6230,242 @@ export interface components {
              * @description People in one video call; null takes the platform's ceiling (50).
              */
             room_participants?: number | null;
+        };
+        /**
+         * LiveKitDeviceOut
+         * @description The device a session joined from, as its client declared it; null when not declared.
+         */
+        LiveKitDeviceOut: {
+            /** Os */
+            os: string | null;
+            /** Os Version */
+            os_version: string | null;
+            /** Client */
+            client: string | null;
+            /** Client Version */
+            client_version: string | null;
+            /** Browser */
+            browser: string | null;
+        };
+        /**
+         * LiveKitEgressOut
+         * @description An egress job the SFU runs or still remembers.
+         */
+        LiveKitEgressOut: {
+            /** Id */
+            id: string;
+            /** Room Name */
+            room_name: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "starting" | "active" | "ending" | "complete" | "failed";
+            /** Started At */
+            started_at: string | null;
+            /** Ended At */
+            ended_at: string | null;
+            /**
+             * File Size Bytes
+             * @description Null until the file is written.
+             */
+            file_size_bytes: number | null;
+        };
+        /**
+         * LiveKitHealth
+         * @description How the server stands as the screen sums it up.
+         * @enum {string}
+         */
+        LiveKitHealth: "healthy" | "degraded" | "down";
+        /**
+         * LiveKitHistoryPointOut
+         * @description One sample of the last 24 hours.
+         */
+        LiveKitHistoryPointOut: {
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /** Participants */
+            participants: number;
+            /** Bandwidth In Mbps */
+            bandwidth_in_mbps: number;
+            /** Bandwidth Out Mbps */
+            bandwidth_out_mbps: number;
+        };
+        /**
+         * LiveKitNodeOut
+         * @description One node; its load is null when unknown.
+         */
+        LiveKitNodeOut: {
+            /** Id */
+            id: string;
+            /**
+             * Cpu Percent
+             * @description Of the CPUs the node may use.
+             */
+            cpu_percent: number | null;
+            /**
+             * Memory Percent
+             * @description Of the node's memory limit.
+             */
+            memory_percent: number | null;
+            /** Rooms */
+            rooms: number;
+            /** Participants */
+            participants: number;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "serving" | "down";
+        };
+        /**
+         * LiveKitOverviewOut
+         * @description The admin's LiveKit screen at one moment.
+         */
+        LiveKitOverviewOut: {
+            server: components["schemas"]["LiveKitServerOut"];
+            stats: components["schemas"]["LiveKitStatsOut"];
+            /**
+             * History
+             * @description Oldest first; empty: no data.
+             */
+            history: components["schemas"]["LiveKitHistoryPointOut"][];
+            /** Nodes */
+            nodes: components["schemas"]["LiveKitNodeOut"][];
+            /** Rooms */
+            rooms: components["schemas"]["LiveKitRoomOut"][];
+            /**
+             * Egress
+             * @description The latest first.
+             */
+            egress: components["schemas"]["LiveKitEgressOut"][];
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /**
+         * LiveKitParticipantOut
+         * @description A session in the room.
+         */
+        LiveKitParticipantOut: {
+            /** Identity */
+            identity: string;
+            /** Name */
+            name: string;
+            /**
+             * Joined At
+             * Format: date-time
+             */
+            joined_at: string;
+            device: components["schemas"]["LiveKitDeviceOut"];
+            /** Tracks */
+            tracks: components["schemas"]["LiveKitTrackOut"][];
+        };
+        /**
+         * LiveKitRoomDetailOut
+         * @description A room with the sessions in it.
+         */
+        LiveKitRoomDetailOut: {
+            /**
+             * Name
+             * @description The LiveKit room name; used in the room's URLs.
+             */
+            name: string;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Num Participants */
+            num_participants: number;
+            /** Recording */
+            recording: boolean;
+            /** Video Codec */
+            video_codec: string | null;
+            /** Audio Codec */
+            audio_codec: string | null;
+            /** Participants */
+            participants: components["schemas"]["LiveKitParticipantOut"][];
+        };
+        /**
+         * LiveKitRoomOut
+         * @description A room the SFU holds.
+         */
+        LiveKitRoomOut: {
+            /**
+             * Name
+             * @description The LiveKit room name; used in the room's URLs.
+             */
+            name: string;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Num Participants */
+            num_participants: number;
+            /** Recording */
+            recording: boolean;
+            /** Video Codec */
+            video_codec: string | null;
+            /** Audio Codec */
+            audio_codec: string | null;
+        };
+        /**
+         * LiveKitServerOut
+         * @description The server's card.
+         */
+        LiveKitServerOut: {
+            /**
+             * Url
+             * @description The signalling address clients use; null when not set.
+             */
+            url: string | null;
+            /**
+             * Started At
+             * @description When the longest-running node started.
+             */
+            started_at: string | null;
+            health: components["schemas"]["LiveKitHealth"];
+            /** Api Key Configured */
+            api_key_configured: boolean;
+        };
+        /**
+         * LiveKitStatsOut
+         * @description The numbers across the server; null where Prometheus gave no data.
+         */
+        LiveKitStatsOut: {
+            /** Active Rooms */
+            active_rooms: number;
+            /** Participants */
+            participants: number;
+            /** Published Tracks */
+            published_tracks: number | null;
+            /** Bandwidth In Mbps */
+            bandwidth_in_mbps: number | null;
+            /** Bandwidth Out Mbps */
+            bandwidth_out_mbps: number | null;
+            /**
+             * Active Egress
+             * @description Egress jobs starting, running or ending.
+             */
+            active_egress: number;
+        };
+        /**
+         * LiveKitTrackOut
+         * @description A track a session publishes.
+         */
+        LiveKitTrackOut: {
+            /** Sid */
+            sid: string;
+            kind: components["schemas"]["TrackKind"];
+            /** Muted */
+            muted: boolean;
         };
         /**
          * LoginRequest
@@ -9473,6 +9773,12 @@ export interface components {
             /** Csrf Token */
             csrf_token?: string | null;
         };
+        /**
+         * TrackKind
+         * @description What a published track carries, as the admin's screen shows it.
+         * @enum {string}
+         */
+        TrackKind: "audio" | "video" | "screen";
         /**
          * TranscriptLineOut
          * @description A line of the transcript: its number, offset, length, speaker and text.
@@ -17914,6 +18220,133 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["PassOut"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    livekit_overview_v1_admin_livekit_overview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveKitOverviewOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    livekit_room_v1_admin_livekit_rooms__name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveKitRoomDetailOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    end_livekit_room_v1_admin_livekit_rooms__name__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    remove_livekit_participant_v1_admin_livekit_rooms__name__participants__identity__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+                identity: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

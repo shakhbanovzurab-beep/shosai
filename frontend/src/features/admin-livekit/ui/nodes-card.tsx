@@ -5,11 +5,18 @@ import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import type { LiveKitNode } from "../domain/contract";
-import { formatInteger, formatPercent } from "../domain/format";
+import { formatInteger, formatPercent, NO_DATA } from "../domain/format";
 import { NodeStateBadge } from "./status-badge";
 
-/** Load bar: amber from 70 %, red from 85 %; the number beside it carries the value. */
-function LoadMeter({ value, label }: { value: number; label: string }) {
+/** Load bar: amber from 70 %, red from 85 %; the number beside it carries the value; null is "no data". */
+function LoadMeter({ value, label }: { value: number | null; label: string }) {
+  if (value === null)
+    return (
+      <span className="text-muted-foreground text-xs">
+        <span aria-hidden="true">{NO_DATA}</span>
+        <span className="sr-only">{`${label}: нет данных`}</span>
+      </span>
+    );
   let tone = "";
   if (value >= 85) tone = "*:data-[slot=progress-indicator]:bg-red-500";
   else if (value >= 70) tone = "*:data-[slot=progress-indicator]:bg-amber-500";
@@ -26,17 +33,18 @@ export function NodesCard({ nodes }: { nodes: LiveKitNode[] }) {
     <Card>
       <CardHeader>
         <CardTitle>Узлы</CardTitle>
-        <CardDescription>Нагрузка на узлы кластера LiveKit.</CardDescription>
+        <CardDescription>Нагрузка на узлы LiveKit по данным Prometheus.</CardDescription>
       </CardHeader>
       <CardContent>
         {nodes.length === 0 ? (
-          <p className="py-6 text-center text-muted-foreground text-sm">Сервер не сообщил ни об одном узле.</p>
+          <p className="py-6 text-center text-muted-foreground text-sm">
+            Нет данных: Prometheus не ответил или ещё не опрашивает LiveKit.
+          </p>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Узел</TableHead>
-                <TableHead>Регион</TableHead>
                 <TableHead>ЦП</TableHead>
                 <TableHead>Память</TableHead>
                 <TableHead className="text-right">Комнаты</TableHead>
@@ -48,7 +56,6 @@ export function NodesCard({ nodes }: { nodes: LiveKitNode[] }) {
               {nodes.map((node) => (
                 <TableRow key={node.id}>
                   <TableCell className="font-mono text-xs">{node.id}</TableCell>
-                  <TableCell>{node.region}</TableCell>
                   <TableCell>
                     <LoadMeter value={node.cpu_percent} label={`Загрузка ЦП узла ${node.id}`} />
                   </TableCell>

@@ -7,7 +7,8 @@ readiness probe when it is configured. Step A3 added the tables of each home and
 account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`, the public
 join with its room passes in Valkey and their renewal, removal with bans, hands and the
 account's rooms. Step A5 added LiveKit's webhook, calls and the sweep of each home; A6 the
-call's chat; A7 its video recording.
+call's chat; A7 its video recording. Step A8 added the admin's LiveKit screen over LiveKit's
+API and Prometheus.
 """
 
 from collections.abc import AsyncIterator
@@ -24,6 +25,9 @@ from shosai.features.meetings.application.account_data import (
     MeetingsAccountData,
 )
 from shosai.features.meetings.application.account_rooms import AccountRooms
+from shosai.features.meetings.application.admin_actions import AdminRoomActions
+from shosai.features.meetings.application.admin_views import ServerFacts
+from shosai.features.meetings.application.admin_watch import LiveKitWatch
 from shosai.features.meetings.application.calls import Calls
 from shosai.features.meetings.application.chat import Chat
 from shosai.features.meetings.application.joining import JoinDesk
@@ -33,6 +37,7 @@ from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.sweep import Sweep
 from shosai.features.meetings.application.video_server import VideoUnavailableError
+from shosai.features.meetings.channels.http.admin_livekit import build_admin_livekit_router
 from shosai.features.meetings.channels.http.chat import build_chat_router
 from shosai.features.meetings.channels.http.joining import build_joining_router
 from shosai.features.meetings.channels.http.recording import build_recording_router
@@ -41,6 +46,7 @@ from shosai.features.meetings.channels.http.webhook import build_webhook_router
 from shosai.features.meetings.channels.subscriptions import subscriptions
 from shosai.features.meetings.channels.tasks import PERIODIC_JOBS, task_handlers
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
+from shosai.features.meetings.infrastructure.livekit_load import open_sfu_metrics
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
 from shosai.features.meetings.infrastructure.livekit_server import open_video_server
 from shosai.features.meetings.infrastructure.meetings_metrics import MeetingsMetrics
@@ -56,7 +62,11 @@ from shosai.features.meetings.settings import (
 async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """The slice's parts for this process; the SFU's client lives as long as the process."""
     settings = services.settings.features.get(LiveKitSettings)
-    async with open_video_server(settings, LiveKitMetrics(services.registry)) as server:
+    meetings = services.settings.features.get(MeetingsSettings)
+    async with (
+        open_video_server(settings, LiveKitMetrics(services.registry)) as server,
+        open_sfu_metrics(meetings.meetings_prometheus_url) as load,
+    ):
         # Без LiveKit проба не нужна: 503 звонков — настройка, а не авария.
         probes = (
             (DependencyProbe("livekit", server.ping, (VideoUnavailableError,)),)
@@ -73,10 +83,14 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
             transactions, (server, ports, services.outbox), recording_limits(services)
         )
         sweep = Sweep(transactions, (server, calls, ports, metrics, recordings))
-        ceiling = services.settings.features.get(
-            MeetingsSettings
-        ).meetings_room_participants_ceiling
-        desk = JoinDesk(transactions, (server, passes, ports), ceiling)
+        desk = JoinDesk(
+            transactions, (server, passes, ports), meetings.meetings_room_participants_ceiling
+        )
+        facts = ServerFacts(
+            url=None if settings.livekit_url is None else str(settings.livekit_url),
+            configured=settings.configured,
+            memory_limit_mb=meetings.meetings_livekit_memory_limit_mb,
+        )
         origin = str(services.settings.email.public_base_url)
         yield FeatureParts(
             http_routers=(
@@ -89,6 +103,11 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 ),
                 build_joining_router(
                     desk, PassCheck(transactions, passes), ports, services.rate_limiter
+                ),
+                build_admin_livekit_router(
+                    LiveKitWatch(server, load, facts),
+                    AdminRoomActions(transactions, (server, passes, ports), calls.find),
+                    ports,
                 ),
             ),
             task_handlers=task_handlers(AccountRooms(transactions, server), calls, sweep),

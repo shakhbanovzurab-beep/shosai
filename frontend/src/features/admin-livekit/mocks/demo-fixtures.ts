@@ -45,43 +45,24 @@ export const DEVICES: LiveKitDevice[] = [
   { os: "android", os_version: "Android 15", client: "mobile", client_version: "2.4.0", browser: null },
 ];
 
-export const MEETINGS = [
-  "Еженедельная планёрка",
-  "Синк по дизайну",
-  "Собеседование: frontend-разработчик",
-  "Демо для клиента «Альфа»",
-  "1:1 Анна и Игорь",
-  "Ретроспектива спринта",
-  "Обзор квартальных целей",
-  "Разбор инцидента",
-  "Онбординг новых сотрудников",
-] as const;
-
-/** Cumulative odds of each connection quality; the rest are "lost". */
-export const QUALITY_STEPS = [
-  [0.6, "excellent"],
-  [0.88, "good"],
-  [0.97, "poor"],
-] as const;
-
-export const VIDEO_CODECS = ["VP8", "VP8", "H.264", "VP9", "AV1"] as const;
+export const VIDEO_CODECS = ["VP8", "VP8", "H264", "VP9", "AV1"] as const;
 
 /** Nodes with the idle load they start from; participants add to it. */
 export const DEMO_NODES: (Omit<LiveKitNode, "rooms" | "participants" | "cpu_percent" | "memory_percent"> & {
   cpu_base: number;
   memory_base: number;
 })[] = [
-  { id: "ND_msk_a1", region: "Москва", state: "serving", cpu_base: 14, memory_base: 38 },
-  { id: "ND_msk_a2", region: "Москва", state: "serving", cpu_base: 22, memory_base: 51 },
-  { id: "ND_spb_b1", region: "Санкт-Петербург", state: "draining", cpu_base: 6, memory_base: 29 },
+  { id: "ND_nx5AiRuYWtxy", state: "serving", cpu_base: 14, memory_base: 38 },
+  { id: "ND_q81LmVf2DcKe", state: "serving", cpu_base: 22, memory_base: 51 },
+  { id: "livekit-3:6789", state: "down", cpu_base: 0, memory_base: 0 },
 ];
 
-/** Finished recordings: title, how long ago they started, minutes recorded, outcome. */
+/** Finished recordings: how long ago they started, minutes recorded, outcome. */
 export const FINISHED_EGRESS = [
-  ["Планирование релиза", 26 * HOUR, 52, "complete"],
-  ["Синк с партнёрами", 20 * HOUR, 38, "complete"],
-  ["Всеобщее собрание", 6 * HOUR, 64, "complete"],
-  ["Демо продукта", 3 * HOUR, 0, "failed"],
+  [26 * HOUR, 52, "complete"],
+  [20 * HOUR, 38, "complete"],
+  [6 * HOUR, 64, "complete"],
+  [3 * HOUR, 0, "failed"],
 ] as const;
 
 /** Rooms open at start: minutes since they began, participants, recording. */

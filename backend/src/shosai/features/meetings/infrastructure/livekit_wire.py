@@ -10,14 +10,16 @@ is kept as `other`, so a newer server never breaks the route.
 from datetime import UTC, datetime
 from typing import Final
 
-from livekit.protocol.models import ParticipantInfo, Room
+from livekit.protocol.models import ParticipantInfo, Room, TrackInfo, TrackSource, TrackType
 from pydantic import BaseModel, ConfigDict, Field
 
 from shosai.features.meetings.application.video_server import (
     EgressReport,
     SfuParticipant,
     SfuRoom,
+    SfuTrack,
     SfuWebhook,
+    TrackKind,
     WebhookKind,
 )
 
@@ -42,7 +44,19 @@ def room_of(room: Room) -> SfuRoom:
         metadata=room.metadata,
         created_at=utc_time(room.creation_time, room.creation_time_ms),
         max_participants=room.max_participants,
+        recording=room.active_recording,
     )
+
+
+def track_of(track: TrackInfo) -> SfuTrack | None:
+    """A published track; None for a data track, which carries no media."""
+    if track.type == TrackType.AUDIO:
+        kind = TrackKind.AUDIO
+    elif track.type == TrackType.VIDEO:
+        kind = TrackKind.SCREEN if track.source == TrackSource.SCREEN_SHARE else TrackKind.VIDEO
+    else:
+        return None
+    return SfuTrack(sid=track.sid, kind=kind, muted=track.muted, mime_type=track.mime_type)
 
 
 def participant_of(participant: ParticipantInfo) -> SfuParticipant:
@@ -52,6 +66,7 @@ def participant_of(participant: ParticipantInfo) -> SfuParticipant:
         name=participant.name,
         joined_at=utc_time(participant.joined_at, participant.joined_at_ms),
         attributes=dict(participant.attributes),
+        tracks=tuple(item for track in participant.tracks if (item := track_of(track))),
     )
 
 

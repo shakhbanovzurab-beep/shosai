@@ -63,6 +63,9 @@ class OperatorAction(StrEnum):
     MEETING_RESTORED = "meeting_restored"
     # Владелец прочёл оценочный случай Leo на хосте (AG-D13): строка называет случай, не его текст.
     EVAL_CASE_READ = "eval_case_read"
+    # Администратор закрыл комнату звонка или удалил из неё участника (meetings MR-D10).
+    ROOM_CLOSED = "room_closed"
+    ROOM_PARTICIPANT_REMOVED = "room_participant_removed"
 
 
 class Authenticator(Protocol):

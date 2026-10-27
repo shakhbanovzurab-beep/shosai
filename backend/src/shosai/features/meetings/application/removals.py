@@ -12,7 +12,7 @@ from http import HTTPStatus
 from uuid import UUID
 
 import structlog
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.dialects.postgresql import Insert, insert
 
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.errors import AppError
@@ -37,6 +37,35 @@ class ParticipantNotFoundError(AppError):
         super().__init__("participant_not_found", HTTPStatus.NOT_FOUND)
 
 
+def ban(room: RoomRecord, target: Principal, banned_by: str) -> Insert:
+    """The ban of the principal from the room; a repeated one changes nothing."""
+    return (
+        insert(RoomBanRecord)
+        .values(
+            id=new_id(),
+            room_id=room.id,
+            owner_id=room.owner_id,
+            org_id=room.org_id,
+            principal=target.value,
+            banned_by=banned_by,
+        )
+        .on_conflict_do_nothing(index_elements=["room_id", "principal"])
+    )
+
+
+async def disconnect(
+    sfu: tuple[VideoServer, RoomPasses], room: RoomRecord, target: Principal
+) -> int:
+    """Revoke the principal's room passes and disconnect each of their sessions; the count of
+    passes revoked."""
+    server, passes = sfu
+    revoked = await passes.revoke(room.id, target.value)
+    for item in await server.participants(room.lk_room_name):
+        if principal_of(item.identity) == target:
+            await server.remove_participant(room.lk_room_name, item.identity)
+    return revoked
+
+
 class Removals:
     """Removals and hands in the owner's rooms."""
 
@@ -58,23 +87,8 @@ class Removals:
             raise AppError("cannot_remove_owner", HTTPStatus.CONFLICT)
         scope = TenancyScope(person.home, person.user_id, record.org_id)
         async with self._transactions.begin(scope) as session:
-            await session.execute(
-                insert(RoomBanRecord)
-                .values(
-                    id=new_id(),
-                    room_id=room_id,
-                    owner_id=person.user_id,
-                    org_id=record.org_id,
-                    principal=target.value,
-                    banned_by=owner.value,
-                )
-                .on_conflict_do_nothing(index_elements=["room_id", "principal"])
-            )
-        revoked = await self._passes.revoke(room_id, target.value)
-        sessions = await self._server.participants(record.lk_room_name)
-        for item in sessions:
-            if principal_of(item.identity) == target:
-                await self._server.remove_participant(record.lk_room_name, item.identity)
+            await session.execute(ban(record, target, owner.value))
+        revoked = await disconnect((self._server, self._passes), record, target)
         log.info("Участник удалён из комнаты", room_id=str(room_id), passes=revoked)
 
     async def lower_hand(self, person: Person, room_id: UUID, identity: str) -> None:

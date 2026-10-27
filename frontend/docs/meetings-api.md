@@ -119,6 +119,18 @@ product, keep working. The edge answers all three with `302 /app/meet/{token}`, 
 ## Admin › LiveKit
 
 `/v1/admin/livekit/overview`, `GET …/rooms/{name}`, `DELETE …/rooms/{name}` and
-`DELETE …/rooms/{name}/participants/{identity}` follow `src/features/admin-livekit/domain/contract.ts` (A8): the
-operator's close ends the room for good, the removal bars the principal from it, and each action is in the
-operator audit log.
+`DELETE …/rooms/{name}/participants/{identity}` (A8, MR-D10), behind the admin session; the types are
+`LiveKit*Out` in the generated schema, aliased in `src/features/admin-livekit/domain/contract.ts`.
+
+- Everything comes from LiveKit's server API and Prometheus, nothing from people's rows: a room is its LiveKit
+  name (`r-…`), never a meeting title. LiveKit tells its API neither its version, a region nor a participant's
+  connection quality, so the contract has none of them.
+- The overview always answers: a LiveKit that does not answer is `health: "down"` with no rooms; a Prometheus
+  that does not answer leaves `published_tracks`, the bandwidths, `nodes` and `history` as null or empty —
+  "no data". A node Prometheus cannot scrape is `state: "down"` and the server `degraded`. A node's
+  `memory_percent` is null until the deploy states LiveKit's memory limit (`MEETINGS_LIVEKIT_MEMORY_LIMIT_MB`).
+- A participant's `device` is what their client declared at the join; an undeclared field is null.
+- Ending a room closes it for good (`closed_by: admin`), then ends it in the SFU; removing a session bans its
+  person or guest from the room (`banned_by: admin`) and disconnects every session of theirs. The room's owner is
+  not removed (`409 cannot_remove_owner`). Each action is one row of the EU audit log, against the owner, naming
+  the room. Errors: `room_not_found`, `participant_not_found`, `cannot_remove_owner`, `video_unavailable`.

@@ -1,21 +1,10 @@
 import { cn } from "cn";
 import type { LucideIcon } from "lucide-react";
-import {
-  CircleCheck,
-  CircleDot,
-  CircleMinus,
-  CircleX,
-  Loader,
-  SignalHigh,
-  SignalLow,
-  SignalMedium,
-  TriangleAlert,
-  WifiOff,
-} from "lucide-react";
+import { CircleCheck, CircleDot, CircleX, Loader, TriangleAlert } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 
-import type { ConnectionQuality, LiveKitEgressStatus, LiveKitHealth, LiveKitNodeState } from "../domain/contract";
+import type { LiveKitEgressStatus, LiveKitHealth, LiveKitNodeState } from "../domain/contract";
 
 type Tone = "good" | "warning" | "critical" | "info" | "neutral";
 
@@ -48,7 +37,6 @@ const HEALTH: Record<LiveKitHealth, Status> = {
 
 const NODE_STATE: Record<LiveKitNodeState, Status> = {
   serving: { label: "Работает", tone: "good", icon: CircleCheck },
-  draining: { label: "Выводится", tone: "warning", icon: CircleMinus },
   down: { label: "Недоступен", tone: "critical", icon: CircleX },
 };
 
@@ -60,14 +48,6 @@ const EGRESS: Record<LiveKitEgressStatus, Status> = {
   failed: { label: "Ошибка", tone: "critical", icon: CircleX },
 };
 
-const QUALITY: Record<ConnectionQuality, Status> = {
-  excellent: { label: "Отличное", tone: "good", icon: SignalHigh },
-  good: { label: "Хорошее", tone: "neutral", icon: SignalMedium },
-  poor: { label: "Слабое", tone: "warning", icon: SignalLow },
-  lost: { label: "Потеряно", tone: "critical", icon: WifiOff },
-};
-
 export const HealthBadge = ({ health }: { health: LiveKitHealth }) => <StatusBadge status={HEALTH[health]} />;
 export const NodeStateBadge = ({ state }: { state: LiveKitNodeState }) => <StatusBadge status={NODE_STATE[state]} />;
 export const EgressBadge = ({ status }: { status: LiveKitEgressStatus }) => <StatusBadge status={EGRESS[status]} />;
-export const QualityBadge = ({ quality }: { quality: ConnectionQuality }) => <StatusBadge status={QUALITY[quality]} />;

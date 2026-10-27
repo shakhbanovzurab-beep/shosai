@@ -110,6 +110,14 @@ scrape_configs:
     static_configs:
       - targets: [nginx-exporter:9113]
 
+  # --- LiveKit (meetings A8): узлы, трафик и история для экрана администратора ---
+  # Цели — файлы каталога targets/livekit: локальная лежит в репозитории, на staging файл
+  # рендерит хост, когда выкладывается LiveKit (meetings A15); нет файла — нет цели, и экран
+  # показывает «нет данных». Метки service нет: у метрик LiveKit своя метка service.
+  - job_name: livekit
+    file_sd_configs:
+      - files: [/etc/prometheus/targets/livekit/*.yml]
+
   # --- Пробы изнутри плоскости; внешние пробы — UptimeRobot (F5-D2) ---
   # Цели и модули — в файлах каталога targets: локальные лежат в репозитории, цели staging
   # (адреса баз домов) рендерятся на хосте.

@@ -200,9 +200,12 @@ class LiveKitServer:
             if error.code not in OVER:
                 raise
 
-    async def egresses(self, room_name: str | None = None) -> Sequence[EgressReport]:
-        """The egresses the SFU runs, a room's only when named."""
-        request = ListEgressRequest(room_name=room_name or "", active=True)
+    async def egresses(
+        self, room_name: str | None = None, *, active: bool = True
+    ) -> Sequence[EgressReport]:
+        """The egresses the SFU runs, a room's only when named; with `active` off, also the
+        ones over that the SFU still remembers."""
+        request = ListEgressRequest(room_name=room_name or "", active=active)
         answer = await self._call("list_egress", self._client.egress.list_egress(request))
         return [report_of(item) for item in answer.items]
 

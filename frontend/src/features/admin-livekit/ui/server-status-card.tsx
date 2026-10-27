@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 
 import { KeyRound, ShieldAlert } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 import type { LiveKitServer } from "../domain/contract";
@@ -25,25 +24,16 @@ export function ServerStatusCard({ server, updatedAt }: { server: LiveKitServer;
     <Card>
       <CardHeader>
         <CardTitle>Сервер</CardTitle>
-        <CardDescription>
-          {server.demo
-            ? "Демо-данные: подключите бэкенд, чтобы видеть реальное состояние LiveKit."
-            : "Состояние сервера LiveKit, через который идут встречи Leo."}
-        </CardDescription>
+        <CardDescription>Состояние сервера LiveKit, через который идут встречи Leo.</CardDescription>
         <CardAction className="flex items-center gap-2">
-          {server.demo ? <Badge variant="outline">Демо</Badge> : null}
           <HealthBadge health={server.health} />
         </CardAction>
       </CardHeader>
       <CardContent>
-        <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_repeat(4,minmax(0,1fr))]">
+        <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_repeat(2,minmax(0,1fr))]">
           <Field label="Адрес">
             {server.url ? <span className="break-all font-mono text-xs leading-5">{server.url}</span> : NOT_SET}
           </Field>
-          <Field label="Версия">
-            {server.version ? <span className="tabular-nums">{server.version}</span> : NOT_SET}
-          </Field>
-          <Field label="Регион">{server.region ?? NOT_SET}</Field>
           <Field label="Время работы">
             {server.started_at ? (
               <span className="tabular-nums">{formatDuration(server.started_at, updatedAt)}</span>

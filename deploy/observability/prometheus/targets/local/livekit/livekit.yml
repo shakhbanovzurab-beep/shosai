@@ -1,0 +1,2 @@
+# LiveKit локального окружения (compose.dev.yaml, профиль meetings): порт метрик только в сети Compose.
+- targets: ["livekit:6789"]

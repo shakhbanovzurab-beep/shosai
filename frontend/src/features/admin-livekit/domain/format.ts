@@ -16,6 +16,10 @@ const dateTime = new Intl.DateTimeFormat("ru-RU", {
 const MINUTE = 60_000;
 
 export const formatInteger = (value: number) => integer.format(value);
+/** Значение или «—», когда Prometheus не дал данных. */
+export const orNoData = (value: number | null, format: (value: number) => string) =>
+  value === null ? NO_DATA : format(value);
+export const NO_DATA = "—";
 export const formatPercent = (value: number) => `${integer.format(value)} %`;
 export const formatMbps = (value: number) => `${decimal.format(value)} Мбит/с`;
 export const formatTime = (iso: string) => timeFormat.format(new Date(iso));

@@ -53,11 +53,11 @@ export async function endRoom(room: LiveKitRoom) {
     }));
     void overviewResource.refresh();
   }, "Не удалось завершить комнату");
-  if (ended) toast.success("Комната завершена", { description: room.title });
+  if (ended) toast.success("Комната завершена", { description: room.name });
   return ended;
 }
 
-/** Disconnects one participant; they can rejoin unless the backend also revokes their token. */
+/** Removes one participant: the backend bans them from the room and disconnects every session of theirs. */
 export async function removeParticipant(name: string, participant: LiveKitParticipant) {
   const removed = await attempt(async () => {
     await livekitApi.removeParticipant(name, participant.identity);

@@ -12,6 +12,8 @@ export const jitter = (spread: number) => (Math.random() * 2 - 1) * spread;
 export const round1 = (value: number) => Math.round(value * 10) / 10;
 export const iso = (time: number) => new Date(time).toISOString();
 export const shortId = () => crypto.randomUUID().replaceAll("-", "").slice(0, 10);
+/** Имя комнаты LiveKit, как его даёт бэкенд: `r-` и 16 шестнадцатеричных знаков. */
+export const roomName = () => `r-${crypto.randomUUID().replaceAll("-", "").slice(0, 16)}`;
 
 /** A gentle working-day curve in Moscow time (UTC+3), low at night and 1 around 14:00. */
 function dayLoad(time: number) {

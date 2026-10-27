@@ -73,7 +73,9 @@ class UnconfiguredVideoServer:
         """Calls are unavailable."""
         raise VideoUnavailableError
 
-    async def egresses(self, room_name: str | None = None) -> Sequence[EgressReport]:
+    async def egresses(
+        self, room_name: str | None = None, *, active: bool = True
+    ) -> Sequence[EgressReport]:
         """Calls are unavailable."""
         raise VideoUnavailableError
 

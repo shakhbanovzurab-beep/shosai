@@ -170,14 +170,16 @@ class SfuDouble:
         report = self.egress_reports[egress_id]
         self.egress_reports[egress_id] = replace(report, status="EGRESS_ENDING")
 
-    async def egresses(self, room_name: str | None = None) -> Sequence[EgressReport]:
-        """The egresses not over."""
+    async def egresses(
+        self, room_name: str | None = None, *, active: bool = True
+    ) -> Sequence[EgressReport]:
+        """The egresses not over, or every one it knows when `active` is off."""
         self._answering()
         running = {"EGRESS_STARTING", "EGRESS_ACTIVE", "EGRESS_ENDING"}
         return [
             report
             for report in self.egress_reports.values()
-            if report.status in running and room_name in {None, report.room_name}
+            if (report.status in running or not active) and room_name in {None, report.room_name}
         ]
 
     async def egress(self, egress_id: str) -> EgressReport | None:

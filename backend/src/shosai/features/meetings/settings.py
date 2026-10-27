@@ -60,6 +60,11 @@ class MeetingsSettings(SettingsSection):
     # имя сервиса в сети Compose); пусто — адрес дома.
     meetings_egress_s3_endpoint_ru: str | None = None
     meetings_egress_s3_endpoint_eu: str | None = None
+    # Prometheus стека наблюдаемости: история и узлы LiveKit на экране администратора (A8).
+    meetings_prometheus_url: HttpUrl = HttpUrl("http://prometheus:9090")
+    # Предел памяти контейнера LiveKit, как его задаёт выкладка; доля памяти узла считается от
+    # него, а без него экран показывает «нет данных».
+    meetings_livekit_memory_limit_mb: int | None = Field(default=None, ge=64, le=1_048_576)
 
 
 def livekit_settings_safe(settings: Settings) -> Iterator[GateViolation]:

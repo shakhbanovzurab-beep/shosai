@@ -38,7 +38,7 @@ export function RoomsCard({ rooms, updatedAt }: { rooms: LiveKitRoom[]; updatedA
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Встреча</TableHead>
+                <TableHead>Комната</TableHead>
                 <TableHead>Начало</TableHead>
                 <TableHead>Длительность</TableHead>
                 <TableHead className="text-right">Участники</TableHead>
@@ -52,10 +52,7 @@ export function RoomsCard({ rooms, updatedAt }: { rooms: LiveKitRoom[]; updatedA
             <TableBody>
               {rooms.map((room) => (
                 <TableRow key={room.name} className="cursor-pointer" onClick={() => openRoom(room)}>
-                  <TableCell className="max-w-72">
-                    <div className="truncate font-medium">{room.title}</div>
-                    <div className="truncate font-mono text-muted-foreground text-xs">{room.name}</div>
-                  </TableCell>
+                  <TableCell className="max-w-72 truncate font-mono text-xs">{room.name}</TableCell>
                   <TableCell className="tabular-nums">{formatTime(room.started_at)}</TableCell>
                   <TableCell className="tabular-nums">{formatDuration(room.started_at, updatedAt)}</TableCell>
                   <TableCell className="text-right tabular-nums">{formatInteger(room.num_participants)}</TableCell>
@@ -71,7 +68,7 @@ export function RoomsCard({ rooms, updatedAt }: { rooms: LiveKitRoom[]; updatedA
                     <Button
                       variant="ghost"
                       size="sm"
-                      aria-label={`Участники встречи «${room.title}»`}
+                      aria-label={`Участники комнаты ${room.name}`}
                       onClick={(event) => {
                         event.stopPropagation();
                         openRoom(room);

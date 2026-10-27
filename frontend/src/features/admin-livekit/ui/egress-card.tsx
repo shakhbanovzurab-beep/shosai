@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import type { LiveKitEgress } from "../domain/contract";
-import { formatBytes, formatDateTime } from "../domain/format";
+import { formatBytes, formatDateTime, NO_DATA } from "../domain/format";
 import { EgressBadge } from "./status-badge";
 
 export function EgressCard({ egress }: { egress: LiveKitEgress[] }) {
@@ -28,14 +28,13 @@ export function EgressCard({ egress }: { egress: LiveKitEgress[] }) {
             <TableBody>
               {egress.map((job) => (
                 <TableRow key={job.id}>
-                  <TableCell className="max-w-64">
-                    <div className="truncate font-medium">{job.room_title}</div>
-                    <div className="truncate font-mono text-muted-foreground text-xs">{job.room_name}</div>
-                  </TableCell>
+                  <TableCell className="max-w-64 truncate font-mono text-xs">{job.room_name}</TableCell>
                   <TableCell>
                     <EgressBadge status={job.status} />
                   </TableCell>
-                  <TableCell className="tabular-nums">{formatDateTime(job.started_at)}</TableCell>
+                  <TableCell className="tabular-nums">
+                    {job.started_at === null ? NO_DATA : formatDateTime(job.started_at)}
+                  </TableCell>
                   <TableCell className="text-right tabular-nums">
                     {job.file_size_bytes === null ? (
                       <>

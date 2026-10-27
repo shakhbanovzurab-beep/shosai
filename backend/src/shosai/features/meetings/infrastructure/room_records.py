@@ -41,6 +41,7 @@ LIVEKIT_SHAPE: Final = "lk_room_name ~ '^r-[0-9a-f]{8,64}$'"
 PRINCIPAL_SHAPE: Final = (
     "~ '^(guest-[0-9a-f]{12}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$'"
 )
+BANNED_BY_ADMIN: Final = "admin"
 OPEN: Final = text("state = 'open'")
 NOT_ENDED: Final = text("state <> 'ended'")
 CEILING_MAX: Final = 1_000
@@ -145,7 +146,11 @@ class RoomBanRecord(ModelBase):
     __table_args__ = (
         UniqueConstraint("room_id", "principal", name="uq_room_bans_room_principal"),
         CheckConstraint(f"principal {PRINCIPAL_SHAPE}", name="principal_shape"),
-        CheckConstraint(f"banned_by {PRINCIPAL_SHAPE}", name="banned_by_shape"),
+        # Бан пишет владелец (его принципал) или администратор (A8).
+        CheckConstraint(
+            f"banned_by = '{BANNED_BY_ADMIN}' OR banned_by {PRINCIPAL_SHAPE}",
+            name="banned_by_shape",
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)

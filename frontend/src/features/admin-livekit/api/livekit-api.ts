@@ -1,14 +1,19 @@
-import { apiRequest } from "@/lib/api/request";
+import { apiClient } from "@/lib/api/app-client";
+import { dataOf } from "@/lib/api/client";
 
 import type { LiveKitOverview, LiveKitRoomDetail } from "../domain/contract";
 
-const BASE = "/api/admin/livekit";
-const room = (name: string) => `${BASE}/rooms/${encodeURIComponent(name)}`;
+const room = (name: string) => ({ params: { path: { name } } });
 
 export const livekitApi = {
-  overview: () => apiRequest<LiveKitOverview>(`${BASE}/overview`),
-  room: (name: string) => apiRequest<LiveKitRoomDetail>(room(name)),
-  endRoom: (name: string) => apiRequest<void>(room(name), { method: "DELETE" }),
-  removeParticipant: (name: string, identity: string) =>
-    apiRequest<void>(`${room(name)}/participants/${encodeURIComponent(identity)}`, { method: "DELETE" }),
+  overview: (): Promise<LiveKitOverview> => dataOf(apiClient.GET("/v1/admin/livekit/overview")),
+  room: (name: string): Promise<LiveKitRoomDetail> =>
+    dataOf(apiClient.GET("/v1/admin/livekit/rooms/{name}", room(name))),
+  endRoom: (name: string): Promise<void> => dataOf(apiClient.DELETE("/v1/admin/livekit/rooms/{name}", room(name))),
+  removeParticipant: (name: string, identity: string): Promise<void> =>
+    dataOf(
+      apiClient.DELETE("/v1/admin/livekit/rooms/{name}/participants/{identity}", {
+        params: { path: { name, identity } },
+      }),
+    ),
 };
