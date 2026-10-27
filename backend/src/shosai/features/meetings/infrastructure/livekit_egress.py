@@ -23,7 +23,8 @@ from shosai.features.meetings.application.video_server import BucketTarget, Egre
 
 NANOSECONDS: Final = 1_000_000_000
 LAYOUT: Final = "speaker"
-# Пресет стейджинга (§1.3): 960×540, 15 кадров, H.264 1,2 Мбит/с, Opus 64 кбит/с; замер — A7b.
+# Пресет стейджинга (§1.3): 960×540, 15 кадров, H.264 1,2 Мбит/с, Opus 64 кбит/с. Замер A7b при
+# лимите 1 CPU: ~0,5 ядра и до 434 МиБ; 720p30 — ~0,75 ядра и до 569 МиБ, у предела лимита.
 RECORDING_PRESET: Final = EncodingOptions(
     width=960,
     height=540,
@@ -46,7 +47,10 @@ def composite(room_name: str, target: BucketTarget) -> RoomCompositeEgressReques
         bucket=target.bucket,
         force_path_style=True,
     )
-    output = EncodedFileOutput(file_type=EncodedFileType.MP4, filepath=target.key, s3=upload)
+    # Без манифеста: рядом с файлом владельца не остаётся объекта, которого не знает files.
+    output = EncodedFileOutput(
+        file_type=EncodedFileType.MP4, filepath=target.key, disable_manifest=True, s3=upload
+    )
     return RoomCompositeEgressRequest(
         room_name=room_name, layout=LAYOUT, file_outputs=[output], advanced=RECORDING_PRESET
     )

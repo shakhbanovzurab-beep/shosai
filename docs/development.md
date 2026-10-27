@@ -158,7 +158,8 @@ docker compose -f compose.dev.yaml --profile meetings --profile meetings-recordi
 docker compose -f compose.dev.yaml --profile meetings --profile meetings-recording stop   # at the session's end
 ```
 
-- Every port is on 127.0.0.1 and differs from staging's media ports: the API and signalling on `LOCAL_LIVEKIT_PORT` (17880), ICE over TCP and UDP on 17881 and 17882, the same numbers inside the container because ICE advertises them. There is no TURN in development.
+- Every port is on 127.0.0.1 and differs from staging's media ports: the API and signalling on `LOCAL_LIVEKIT_PORT` (17880), ICE over TCP and UDP on 17881 and 17882. ICE advertises LiveKit's address on the Compose network, which a browser on this Linux host reaches through the bridge and Chrome in egress reaches as well — Chrome takes no loopback candidate. There is no TURN in development.
+- Egress shares LiveKit's network namespace and its CPU accounting is set to its 1-CPU limit (`cpu_cost`); with the defaults it refuses every room composite.
 - The values of `.env.example` section 2 (`LIVEKIT_*`) point the roles at it; without `LIVEKIT_*` every call route answers 503 `video_unavailable`. LiveKit posts its webhooks to `LOCAL_LIVEKIT_WEBHOOK_URL`, the API run from source on the host by default.
 - The tests against it read `TEST_LIVEKIT_*` (section 3, commented out) and are skipped without them; CI starts the profile and sets them.
 

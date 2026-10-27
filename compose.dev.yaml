@@ -312,8 +312,9 @@ services:
 
   # Видеозвонки (срез meetings, ADR 0072 MR-D14): LiveKit поднимается только в сессиях
   # meetings — `--profile meetings` — и останавливается в их конце. Порты свои, не как у
-  # стейджинга, и только на 127.0.0.1: ICE объявляет 127.0.0.1, поэтому порт RTC внутри
-  # контейнера равен опубликованному. TURN в разработке не нужен. Конфиг — из окружения.
+  # стейджинга, и только на 127.0.0.1. ICE объявляет адрес контейнера в сети Compose: его
+  # видит и браузер на хосте, и Chrome в egress, который loopback-кандидаты не берёт (A7b);
+  # порт RTC внутри контейнера равен опубликованному. TURN в разработке не нужен.
   livekit:
     <<: *service-defaults
     image: livekit/livekit-server:v1.13.11
@@ -330,7 +331,6 @@ services:
           tcp_port: ${LOCAL_LIVEKIT_RTC_TCP_PORT:-17881}
           udp_port: ${LOCAL_LIVEKIT_RTC_UDP_PORT:-17882}
           use_external_ip: false
-          node_ip: 127.0.0.1
         redis:
           address: livekit-redis:6379
           password: ${LOCAL_LIVEKIT_REDIS_PASSWORD:-local-livekit-redis}
@@ -434,6 +434,15 @@ services:
           password: ${LOCAL_LIVEKIT_REDIS_PASSWORD:-local-livekit-redis}
         health_port: 8080
         prometheus_port: 9090
+        # Стоимость задач в долях ядра под жёсткий лимит контейнера: по умолчанию композит
+        # стоит 4 ядра, и при 1 CPU egress отказывался бы от записи (замер — meetings A7b).
+        cpu_cost:
+          room_composite_cpu_cost: 0.9
+          audio_room_composite_cpu_cost: 0.5
+          web_cpu_cost: 0.9
+          participant_cpu_cost: 0.5
+          track_composite_cpu_cost: 0.5
+          track_cpu_cost: 0.1
         logging:
           level: info
           json: true
