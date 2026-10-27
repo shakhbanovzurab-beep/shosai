@@ -115,3 +115,41 @@
 {"facts": {"read_back": "Di chuyển ghi chú 'Ý tưởng dự án' vào thư mục Công việc.", "utterance": "Ừ, chuyển nó vào thư mục Công việc đi."}, "id": "vi-00116", "labels": {"approves": true}, "language": "vi"}
 {"facts": {"read_back": "Chia sẻ ghi chú 'Danh sách việc cần mua' với anh Tuấn.", "utterance": "Chia sẻ cho ai cơ?"}, "id": "vi-00117", "labels": {"approves": false}, "language": "vi"}
 {"facts": {"read_back": "Di chuyển tệp 'Hợp đồng.pdf' vào thư mục Đã ký.", "utterance": "Được, cứ làm đi."}, "id": "vi-00118", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Tạo tác vụ mới: 'Soạn báo cáo tháng'.", "utterance": "Ừ, làm..."}, "id": "vi-00119", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Cập nhật tác vụ 'Họp nhóm' thành đã xong.", "utterance": "Được."}, "id": "vi-00120", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Hoàn thành tác vụ 'Nộp báo cáo'.", "utterance": "Không."}, "id": "vi-00121", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển tác vụ 'Dự án X' đến danh sách 'Đang làm'.", "utterance": "Ừ, cảm ơn."}, "id": "vi-00122", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển ghi chú 'Ghi nhớ cuộc họp' đến thư mục 'Công việc'.", "utterance": "Chờ chút, để tôi nghĩ."}, "id": "vi-00123", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Chia sẻ ghi chú 'Kế hoạch marketing' với nhóm 'Tiếp thị'.", "utterance": "Vâng, chia sẻ với nhóm Tiếp thị."}, "id": "vi-00124", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển tệp 'hinh-anh.zip' đến thư mục 'Ảnh'.", "utterance": "Di chuyển đến thư mục nào?"}, "id": "vi-00125", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Tạo tác vụ mới: 'Mua sắm văn phòng phẩm'.", "utterance": "Cứ làm đi."}, "id": "vi-00126", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Cập nhật tác vụ 'Báo cáo quý' - thay đổi hạn chót thành thứ Sáu tuần này.", "utterance": "Vâng, nhưng chuyển sang thứ Ba tuần sau."}, "id": "vi-00127", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Đánh dấu hoàn thành tác vụ 'Gửi email cho khách hàng'.", "utterance": "Vâng."}, "id": "vi-00128", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển tác vụ 'Chuẩn bị slide' từ danh sách 'Việc cần làm' sang 'Đang làm'.", "utterance": "Vâng, nhưng chỉ khi tôi đã xong phần tài liệu."}, "id": "vi-00129", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển ghi chú 'Ý tưởng dự án' vào thư mục 'Dự án mới'.", "utterance": "Ừ, cảm ơn."}, "id": "vi-00130", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Chia sẻ ghi chú 'Ghi chú cuộc họp' với đồng nghiệp Linh.", "utterance": "Linh vừa gửi email cho tôi về vấn đề đó."}, "id": "vi-00131", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển file 'Hợp đồng A' từ thư mục 'Tải về' sang 'Tài liệu quan trọng'.", "utterance": "Vâng, chuyển hợp đồng A sang tài liệu quan trọng."}, "id": "vi-00132", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Tạo tác vụ mới 'Soạn thảo đề xuất' với hạn chót thứ Sáu.", "utterance": "Tôi nghĩ... chắc thế, nhưng... ừ"}, "id": "vi-00133", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Cập nhật tác vụ 'Kiểm tra bảng tính' - phân công cho Minh.", "utterance": "Cứ làm đi."}, "id": "vi-00134", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Tôi sẽ chuyển tác vụ 'Họp nhóm' từ cột 'Đang làm' sang cột 'Hoàn thành'. Bạn có muốn thực hiện không?", "utterance": "Vâng."}, "id": "vi-00136", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Tôi sẽ di chuyển ghi chú 'Ý tưởng dự án' vào thư mục 'Sáng tạo'. Bạn có muốn tiếp tục không?", "utterance": "Ừ, và sau đó hãy tạo một ghi chú mới cho cuộc họp chiều nay."}, "id": "vi-00137", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Tôi sẽ chia sẻ ghi chú 'Kế hoạch tuần' với nhóm của bạn. Bạn có muốn tiếp tục không?", "utterance": "À vâng, cảm ơn bạn. Hãy chia sẻ đi."}, "id": "vi-00138", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Tôi sẽ tạo tác vụ mới: 'Mua sữa và bánh mì'. Bạn có muốn tiếp tục không?", "utterance": "Vâng, tạo tác vụ mua sữa và bánh mì."}, "id": "vi-00140", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Tôi sẽ cập nhật tác vụ 'Sửa lỗi giao diện' với trạng thái mới là 'Đang chờ'. Bạn có muốn tiếp tục không?", "utterance": "Không, đừng cập nhật."}, "id": "vi-00141", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Tôi sẽ đánh dấu tác vụ 'Viết báo cáo' là hoàn thành. Bạn có muốn thực hiện không?", "utterance": "Cứ làm đi."}, "id": "vi-00142", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển nhiệm vụ 'Báo cáo cuối tháng' từ hôm nay sang ngày mai.", "utterance": "Ừm, chờ chút để tôi nghĩ đã."}, "id": "vi-00143", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển ghi chú 'Danh sách mua sắm' vào thư mục 'Cá nhân'.", "utterance": "Vâng, được."}, "id": "vi-00144", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Chia sẻ ghi chú 'Kế hoạch dự án' với Nguyễn Văn A.", "utterance": "Chia sẻ cho một người hay cả nhóm vậy?"}, "id": "vi-00145", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển tệp 'Bảng lương.xlsx' vào thư mục 'Tài chính'.", "utterance": "Ừ, cảm ơn, di chuyển đi."}, "id": "vi-00146", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Tạo nhiệm vụ 'Họp nhóm' vào ngày 20 tháng 10.", "utterance": "Vâng, nhưng chuyển sang ngày 21 tháng 10 nhé."}, "id": "vi-00147", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Cập nhật nhiệm vụ 'Viết báo cáo' thành trạng thái 'Đang tiến hành'.", "utterance": "Vâng, cập nhật thành 'Đang tiến hành' cho nhiệm vụ Viết báo cáo."}, "id": "vi-00148", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Đánh dấu nhiệm vụ 'Mua thiết bị' là hoàn thành.", "utterance": "Ừ, nhưng thiết bị chưa về, chưa hoàn thành được đâu."}, "id": "vi-00149", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển nhiệm vụ 'Gửi email' lên đầu danh sách.", "utterance": "Cứ làm đi."}, "id": "vi-00150", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển ghi chú\nGhi chú: Ghi chú họp hôm qua\nThư mục đích: Công việc", "utterance": "Ừ, mà này, em có thấy file báo cáo tháng trước đâu không?"}, "id": "vi-00151", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Chia sẻ ghi chú\nGhi chú: Danh sách việc cần làm\nVới: anh Nam", "utterance": "Vâng, chia sẻ đi."}, "id": "vi-00152", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển tệp\nTệp: Bảng tính doanh thu.xlsx\nThư mục đích: Kế toán", "utterance": "Ừ, chuyển... à không, để xem lại đã."}, "id": "vi-00153", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Tạo nhiệm vụ mới\nTên nhiệm vụ: Soạn email khách hàng\nHạn chót: Thứ Sáu", "utterance": "Ừ, tạo nó đi, cảm ơn."}, "id": "vi-00154", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Cập nhật nhiệm vụ\nNhiệm vụ: Chuẩn bị slide\nTrạng thái: Đang thực hiện", "utterance": "Ừ, nhưng mà em muốn hỏi về nhiệm vụ kia cơ."}, "id": "vi-00155", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Hoàn thành nhiệm vụ\nNhiệm vụ: Gửi báo cáo tháng", "utterance": "Vâng, hoàn thành nhiệm vụ 'Gửi báo cáo tháng' đi."}, "id": "vi-00156", "labels": {"approves": true}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển nhiệm vụ\nNhiệm vụ: Viết kịch bản\nDự án mới: Quảng cáo", "utterance": "Ừ, di chuyển nó đi, à mà cho tôi xem danh sách nhiệm vụ luôn."}, "id": "vi-00157", "labels": {"approves": false}, "language": "vi"}
+{"facts": {"read_back": "Di chuyển ghi chú\nGhi chú: Ý tưởng dự án\nThư mục đích: Sáng tạo", "utterance": "Được, làm đi."}, "id": "vi-00158", "labels": {"approves": true}, "language": "vi"}

@@ -116,3 +116,41 @@
 {"facts": {"read_back": "Отправить заметку «План отпуска» коллеге Ивану?", "utterance": "А зачем её отправлять?"}, "id": "ru-00117", "labels": {"approves": false}, "language": "ru"}
 {"facts": {"read_back": "Переместить файл «Договор.pdf» в папку «Архив»?", "utterance": "Давай, делай."}, "id": "ru-00118", "labels": {"approves": true}, "language": "ru"}
 {"facts": {"read_back": "Создать задачу «Купить подарок» на субботу?", "utterance": "Да, только не на субботу, а на пятницу."}, "id": "ru-00119", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Обновить задачу «Подготовить отчёт» до статуса «В работе».", "utterance": "Да."}, "id": "ru-00120", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Отметить задачу «Связаться с клиентом» как выполненную.", "utterance": "Нет."}, "id": "ru-00121", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Переместить задачу «Заказать билеты» из списка «Планы» в «Важное».", "utterance": "Да, спасибо."}, "id": "ru-00122", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Переместить заметку «Идеи для проекта» в папку «Архив».", "utterance": "Подожди, дай подумать."}, "id": "ru-00123", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Отправить заметку «Контакты поставщиков» пользователю Ивану.", "utterance": "Да, отправь заметку «Контакты поставщиков» Ивану."}, "id": "ru-00124", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Переместить файл «презентация.pptx» в папку «Квартальный отчёт».", "utterance": "Переместить в какую именно папку?"}, "id": "ru-00125", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Создать задачу «Купить молоко» на завтра.", "utterance": "Давай, создавай."}, "id": "ru-00126", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Обновить задачу «Встреча с командой», перенести на пятницу.", "utterance": "Да, только перенеси на среду, а не пятницу."}, "id": "ru-00127", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Завершить задачу: написать отчёт по проекту.", "utterance": "Да."}, "id": "ru-00128", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Переместить задачу 'Созвон с клиентом' в раздел 'Завершённые'.", "utterance": "Да, но сначала нужно обсудить с командой."}, "id": "ru-00129", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Переместить заметку о встрече из папки 'Общие' в папку 'Личные'.", "utterance": "Да, спасибо."}, "id": "ru-00130", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Отправить заметку 'Идеи для презентации' пользователю Иван.", "utterance": "А как погода сегодня?"}, "id": "ru-00131", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Переместить файл 'отчёт.xlsx' из папки 'Загрузки' в папку 'Документы'.", "utterance": "Да, перемести 'отчёт.xlsx' в 'Документы'."}, "id": "ru-00132", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Создать задачу: подготовить бюджет на следующий квартал.", "utterance": "Ну, может, потом... не знаю."}, "id": "ru-00133", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Обновить задачу 'Созвон с бухгалтером', изменить срок на завтра.", "utterance": "Давай, делай."}, "id": "ru-00134", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Завершить задачу 'Заказать канцтовары'.", "utterance": "Да, я уже отправил письмо."}, "id": "ru-00135", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Переместить задачу «Подготовить отчёт» в список «Сделано».", "utterance": "Да."}, "id": "ru-00136", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Переместить заметку «Идеи для презентации» в папку «Рабочее».", "utterance": "Да, перемести. И ещё отправь мне вчерашний протокол встречи."}, "id": "ru-00137", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Открыть доступ к заметке «Список контактов» для Анны.", "utterance": "Да, спасибо, открывай."}, "id": "ru-00138", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Создать задачу «Позвонить клиенту» на завтра в 10:00.", "utterance": "Да, создай на завтра на десять утра."}, "id": "ru-00140", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Изменить срок задачи «Сдать отчёт» на пятницу.", "utterance": "Нет, не надо."}, "id": "ru-00141", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Отметить задачу «Купить бумагу» выполненной.", "utterance": "Давай, делай."}, "id": "ru-00142", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Переместить задачу «Подготовить презентацию» в список «В работе».", "utterance": "Подожди, дай подумать."}, "id": "ru-00143", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Перемещение заметки.\nЗаметка: «План встречи».\nИз папки: «Входящие».\nВ папку: «Проекты».", "utterance": "Да."}, "id": "ru-00144", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Поделиться заметкой.\nЗаметка: «Идеи».\nПользователь: Иванов.", "utterance": "С кем именно поделиться?"}, "id": "ru-00145", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Перемещение файла.\nФайл: «Отчет.xlsx».\nИз папки: «Загрузки».\nВ папку: «Документы».", "utterance": "Да, спасибо."}, "id": "ru-00146", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Создание задачи.\nНазвание: «Подготовить презентацию».\nСрок: 15 марта.\nОтветственный: Анна.", "utterance": "Да, но перенеси срок на 20 марта."}, "id": "ru-00147", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Обновление задачи.\nЗадача: «Написать отчет».\nНовое значение: статус «В работе».", "utterance": "Да, обнови статус на «В работе»."}, "id": "ru-00148", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Завершение задачи.\nЗадача: «Заказать оборудование».", "utterance": "Да, когда поставщик подтвердит."}, "id": "ru-00149", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Перемещение задачи.\nЗадача: «Провести собрание».\nИз списка: «Запланировано».\nВ список: «В процессе».", "utterance": "Давай, делай."}, "id": "ru-00150", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Перемещение заметки.\nЗаметка: «Список покупок».\nИз папки: «Личное».\nВ папку: «Работа».", "utterance": "Не сейчас, я лучше проверю почту."}, "id": "ru-00151", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Инструмент: notes.share. Заметка: План встречи. Получатель: Мария.", "utterance": "Да, поделись."}, "id": "ru-00152", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Инструмент: files.move. Файл: Отчет.xlsx. Папка назначения: Архив.", "utterance": "Перемести в... ну, давай посмотрим."}, "id": "ru-00153", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Инструмент: tasks.create. Название задачи: Подготовить презентацию. Срок: пятница.", "utterance": "Да, создай, спасибо."}, "id": "ru-00154", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Инструмент: tasks.update. Задача: Заказать канцтовары. Новый статус: В работе.", "utterance": "Да, отправь сообщение."}, "id": "ru-00155", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Инструмент: tasks.complete. Задача: Написать письмо.", "utterance": "Да, заверши 'Написать письмо'."}, "id": "ru-00156", "labels": {"approves": true}, "language": "ru"}
+{"facts": {"read_back": "Инструмент: tasks.move. Задача: Купить билеты. Новая доска: Поездка.", "utterance": "Да, перемести, и создай напоминание."}, "id": "ru-00157", "labels": {"approves": false}, "language": "ru"}
+{"facts": {"read_back": "Инструмент: notes.move. Заметка: Рецепты. Новая папка: Кулинария.", "utterance": "Давай, перемести."}, "id": "ru-00158", "labels": {"approves": true}, "language": "ru"}

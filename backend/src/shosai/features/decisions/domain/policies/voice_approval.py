@@ -33,11 +33,12 @@ APPROVES_QUESTION: Final = NoulQuestion(
     ),
     when_true=(
         "The reply clearly says yes to doing this action now, as it was read, without "
-        "changing it, adding a condition or asking something first."
+        "changing it, adding a condition or another request, or asking something first."
     ),
     when_false=(
         "The reply refuses, hesitates, asks a question, changes the action or its details, "
-        "adds a condition, is about something else, or is unclear."
+        "adds a condition or another request, is about something else, breaks off before "
+        "it is finished, or is unclear."
     ),
 )
 

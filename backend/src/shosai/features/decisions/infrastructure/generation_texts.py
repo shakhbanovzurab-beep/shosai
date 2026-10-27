@@ -93,6 +93,8 @@ VOICE_NO: Final[tuple[str, ...]] = (
     "a reply about something else",
     "a half-finished or unclear phrase",
     "a yes to something other than this action",
+    "a yes followed at once by a different request",
+    "a yes that breaks off before it is finished, such as yeah, go...",
 )
 FRICTION_MATCH: Final[Mapping[bool, str]] = {
     True: "the action does exactly what the user asked, on the items the user meant",
