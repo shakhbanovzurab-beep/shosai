@@ -11,9 +11,15 @@ within the hour is a new call of the same room.
 """
 
 from dataclasses import dataclass, replace
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import StrEnum
+from typing import Final
 from uuid import UUID
+
+# Таймауты комнаты в SFU: пустая без единого входа живёт 5 минут; ушедший последним
+# закрывает звонок через минуту — переподключение в эту минуту остаётся тем же звонком.
+EMPTY_TIMEOUT: Final = timedelta(seconds=300)
+DEPARTURE_TIMEOUT: Final = timedelta(seconds=60)
 
 
 class CallState(StrEnum):

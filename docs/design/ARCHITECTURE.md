@@ -670,7 +670,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | python-multipart | 0.0.32 | The native import's `multipart/form-data` body parsed as it arrives, streamed to the bucket without a disk copy (notes step 9b) |
 | Backend | FFmpeg (`ffmpeg`, `ffprobe`), Debian packages of the runtime image | 7.1.5 | Recordings read, measured and cut as subprocesses under `prlimit`, without network, on allowed formats (meetings MT-D10) |
 | Backend | aiobotocore | 3.9.2 | S3 client; one per home's bucket ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)); replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |
-| Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
+| Backend | livekit-api, livekit-protocol | 1.2.2, 1.1.29 (meetings A2) | Video rooms and egress control |
 | Backend | Own HTTP metric on prometheus-client, recorded by the request boundary under OpenTelemetry's HTTP semantic conventions | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |
 | Backend | Own GCRA limiter on redis-py, state in Valkey | — | Request rate limits; replaces slowapi, whose storage is synchronous ([ADR 0011](../adr/0011-rate-limits-gcra-in-valkey.md)) |
 | Backend | bcrypt, PyJWT, cryptography | 5.0.0, 2.15.1, 50.0.2 | Passwords and tokens; the token carries the data home |
@@ -686,7 +686,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Data | Valkey, managed (Netherlands) | 9.1 | The managed Redis-compatible service: task queues, transcript queue, locks, meeting state, Leo run state |
 | Data | Redis, container | 8.10.2 | Local LRU cache |
 | Data | S3 Timeweb ru-1 | — | A bucket per data home; the EU home's moves to an EU provider before launch ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)) |
-| Realtime and integrations | LiveKit server, egress, coturn | pinned | Video rooms, recording, per-participant tracks to the ws gateway, TURN |
+| Realtime and integrations | LiveKit server, egress, coturn | v1.13.11, v1.15.0 (meetings A2); coturn pinned when added | Video rooms, recording, per-participant tracks to the ws gateway, TURN |
 | Realtime and integrations | Nango | pinned | OAuth proxy for connectors, one per data home |
 | Realtime and integrations | Web Push (VAPID) | — | PWA notifications |
 | Realtime and integrations | SMTP (Timeweb), two mailboxes | — | Email: account mail from one mailbox, notifications and newsletters from the other; Mailpit 1.31.5 stands in locally |

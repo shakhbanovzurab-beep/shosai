@@ -147,6 +147,21 @@ uv run shosai identity admin-password-hash
 
 Put the printed line, single quotes included, and `IDENTITY_ADMIN_USERNAME` into `.env`, then restart the API. The cabinet's sign-in page of the admin is at `VITE_ADMIN_LOGIN_PATH`. Each block or unblock leaves one row in `operator_audit_events` in the EU home once a worker delivers the event.
 
+### Video calls (LiveKit)
+
+LiveKit is not part of `scripts/local-env.sh up`: it runs only in the sessions that work on meetings, and its recorder only in those that check a recording or the participants' tracks ([ADR 0072](adr/0072-meetings-slice.md) MR-D14).
+
+```bash
+docker compose -f compose.dev.yaml --profile meetings up -d --wait             # LiveKit and its Redis
+free -m                                                                         # egress needs ≥ 1.5 GB available
+docker compose -f compose.dev.yaml --profile meetings --profile meetings-recording up -d --wait   # + egress
+docker compose -f compose.dev.yaml --profile meetings --profile meetings-recording stop   # at the session's end
+```
+
+- Every port is on 127.0.0.1 and differs from staging's media ports: the API and signalling on `LOCAL_LIVEKIT_PORT` (17880), ICE over TCP and UDP on 17881 and 17882, the same numbers inside the container because ICE advertises them. There is no TURN in development.
+- The values of `.env.example` section 2 (`LIVEKIT_*`) point the roles at it; without `LIVEKIT_*` every call route answers 503 `video_unavailable`. LiveKit posts its webhooks to `LOCAL_LIVEKIT_WEBHOOK_URL`, the API run from source on the host by default.
+- The tests against it read `TEST_LIVEKIT_*` (section 3, commented out) and are skipped without them; CI starts the profile and sets them.
+
 ## Observability
 
 The stack of target architecture §16 ([F5 plan](plan/packages/F5-observability.md)) runs next to `compose.dev.yaml` as its own Compose project on the same network; [deploy/observability/README.md](../deploy/observability/README.md) describes it. The local environment must be up first.

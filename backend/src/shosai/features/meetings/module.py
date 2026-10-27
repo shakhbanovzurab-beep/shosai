@@ -1,13 +1,41 @@
 """The meetings slice as composition sees it (meetings plan §3.1).
 
 Step A1 published the contract — the ports calendar binds and uses, and the slice's events —
-and the domain: rooms, invitation tokens, principals and their sessions, joining and rights,
-calls folded from webhooks, the sweep's rule, the chat, recordings and broadcasts, and what
-everyone in a call reads from the SFU. LiveKit's adapter, tables, routes and tasks come with
-the plan's next steps.
+and the domain. Step A2 added LiveKit: the `LIVEKIT_*` settings with their production check,
+the SFU behind the `VideoServer` port, opened with the process and closed with it, and its
+readiness probe when it is configured. Tables, routes and tasks come with the next steps.
 """
 
-from shosai.core.features import FeatureModule
-from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 
-MEETINGS = FeatureModule(name="meetings", events=(CallStarted, CallEnded, RecordingReady))
+from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.core.health.probes import DependencyProbe
+from shosai.features.meetings.application.video_server import VideoUnavailableError
+from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
+from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
+from shosai.features.meetings.infrastructure.livekit_server import open_video_server
+from shosai.features.meetings.settings import LiveKitSettings, livekit_settings_safe
+
+
+@asynccontextmanager
+async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
+    """The slice's parts for this process; the SFU's client lives as long as the process."""
+    settings = services.settings.features.get(LiveKitSettings)
+    async with open_video_server(settings, LiveKitMetrics(services.registry)) as server:
+        # Без LiveKit проба не нужна: 503 звонков — настройка, а не авария.
+        probes = (
+            (DependencyProbe("livekit", server.ping, (VideoUnavailableError,)),)
+            if settings.configured
+            else ()
+        )
+        yield FeatureParts(probes=probes)
+
+
+MEETINGS = FeatureModule(
+    name="meetings",
+    build=build_meetings,
+    events=(CallStarted, CallEnded, RecordingReady),
+    production_checks=(livekit_settings_safe,),
+    settings=(LiveKitSettings,),
+)

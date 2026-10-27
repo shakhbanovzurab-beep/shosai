@@ -35,6 +35,7 @@ jobs:
       - name: Local environment definition and deploy scripts
         run: |
           docker compose --file compose.dev.yaml config --quiet
+          docker compose --file compose.dev.yaml --profile meetings --profile meetings-recording config --quiet
           docker compose --file deploy/local/compose.app.yaml config --quiet
           docker compose --file deploy/observability/compose.yaml --file deploy/observability/compose.local.yaml config --quiet
           docker run --rm -v "$PWD:/mnt:ro" -w /mnt koalaman/shellcheck:v0.11.0 --severity=style \
@@ -173,16 +174,22 @@ jobs:
       TEST_HOME_EU_S3_BUCKET: shosai-eu
       TEST_HOME_EU_S3_ACCESS_KEY_ID: local-s3-access
       TEST_HOME_EU_S3_SECRET_ACCESS_KEY: local-s3-secret
+      # The local LiveKit of the `meetings` profile (meetings A2).
+      TEST_LIVEKIT_URL: ws://127.0.0.1:17880
+      TEST_LIVEKIT_API_URL: http://127.0.0.1:17880
+      TEST_LIVEKIT_API_KEY: local-livekit
+      TEST_LIVEKIT_API_SECRET: local-livekit-secret-for-this-machine-only
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Start both data homes, Valkey, the cache and the bucket
+      - name: Start both data homes, Valkey, the cache, the bucket and LiveKit
         # The same services and topology as local development (docs/development.md).
         working-directory: .
         run: >-
-          docker compose --file compose.dev.yaml up --detach --wait --wait-timeout 180
-          postgres-ru postgres-eu pgbouncer-ru pgbouncer-eu valkey redis-cache s3
+          docker compose --file compose.dev.yaml --profile meetings up --detach --wait
+          --wait-timeout 180 postgres-ru postgres-eu pgbouncer-ru pgbouncer-eu valkey redis-cache
+          s3 livekit livekit-redis
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
           working-directory: backend
