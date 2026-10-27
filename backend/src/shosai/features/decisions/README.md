@@ -14,3 +14,9 @@ Leo's Decision Layer: the judgement calls the rest of Leo must not make by hand 
 - `content.injection@1` (`domain/policies/content_injection.py`): one `noul` per piece of text under an untrusted label — uploads and attachments included, the person's own words never — and anything but a sure "no" makes the run suspicious (DL-D5).
 - Records (`domain/records.py`) keep ids, numbers and codes — the subject, the facts, a keyed hash of the state, the probabilities, the rule's and the final outcome, reason and source — never text and no person's id (DL-D7).
 - Every question's wording is registered in the model-facing English test (`policy_wording`).
+
+## Tables (step 2)
+
+- In each home (`infrastructure/records.py`): `agent_decisions` — one row per consulted decision — and `agent_decision_outcomes` — what followed a subject — in monthly partitions kept four months. Neither has a person's id, so no row-level policy: the application may only insert, the sweep role reads them for the daily reliability pass. The database keeps every code closed (point, subject, reason, source, language, outcome) and a state hash at 16 bytes.
+- In the EU home: `decision_thresholds` — a version's fitted cuts per revision with its calibration report, numbers only — and `decision_policies` — the version in `shadow`, `active` or `retired` and the revision it uses; unique indexes hold one active and one shadow version per point, and a version in force always names an existing revision. The application reads and adds, and changes a state, never deletes.
+- The account data declaration lists both home tables as `expires`: nothing in them outlives its partition, and nothing identifies a person.
