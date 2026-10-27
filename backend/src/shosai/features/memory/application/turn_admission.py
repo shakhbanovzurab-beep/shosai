@@ -8,7 +8,7 @@ person without cross-border consent, the operator, or a run whose text tried to 
 A redelivered task writes nothing twice: the write is keyed by the run.
 """
 
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Final
 from uuid import UUID
 
@@ -16,6 +16,7 @@ from pydantic import BaseModel
 from redis.asyncio import Redis
 
 from shosai.core.agent_tools.context import Taint
+from shosai.core.ai.errors import AiCallError
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.idempotency.ledger import EffectKey, EffectLedger, EffectScope
 from shosai.core.kernel.homes import Home
@@ -29,7 +30,7 @@ from shosai.features.memory.application.admission_writer import (
     turn_origin,
 )
 from shosai.features.memory.application.switch import memory_on
-from shosai.features.memory.domain.admission import Admission
+from shosai.features.memory.domain.admission import Admission, Statement
 from shosai.features.memory.infrastructure.embeddings import Embedder, Payer
 from shosai.features.memory.infrastructure.extractor import Extractor
 from shosai.features.memory.infrastructure.metrics import MemoryMetrics
@@ -59,20 +60,50 @@ class TurnAdmission:
         self._ports, self._effects, self._valkey, self._metrics = collaborators
         self._writer = AdmissionWriter(self._embedder.model)
 
-    async def admit(self, home: Home, user_id: UUID, run_id: UUID) -> list[Admission]:
-        """What the turn's statements became; nothing when the person's memory takes none."""
+    async def admit(
+        self, home: Home, user_id: UUID, run_id: UUID, ended_at: datetime | None = None
+    ) -> list[Admission]:
+        """What the turn's statements became; nothing when the person's memory takes none.
+        `ended_at` is when the turn ended, for the admission's lag."""
         scope = TenancyScope(home, user_id)
         words, consent = await self._read(scope, run_id)
         if words is None:
             return []
-        payer = Payer(scope, consent)
+        try:
+            statements, vectors = await self._found(Payer(scope, consent), words, run_id)
+        except AiCallError:
+            self._metrics.extracted(SOURCE, ok=False)
+            raise
+        self._metrics.extracted(SOURCE, ok=True)
+        outcomes = await self._write(scope, words, (run_id, statements, vectors))
+        if ended_at is not None:
+            self._metrics.admission_lag((datetime.now(UTC) - ended_at).total_seconds())
+        return outcomes
+
+    async def _found(
+        self, payer: Payer, words: TurnWords, run_id: UUID
+    ) -> tuple[list[Statement], list[list[float]]]:
+        """The turn's statements and their vectors, in one call each."""
         statements = await self._extractor.turn(payer, words, str(run_id))
         if not statements:
-            self._metrics.admitted(SOURCE, [])
-            return []
+            return [], []
         vectors = await self._embedder.statements(
             payer, [statement.text for statement in statements], f"admit:{run_id}"
         )
+        return statements, vectors
+
+    async def _write(
+        self,
+        scope: TenancyScope,
+        words: TurnWords,
+        found: tuple[UUID, list[Statement], list[list[float]]],
+    ) -> list[Admission]:
+        """Write the statements once per run; nothing to write is counted as such."""
+        run_id, statements, vectors = found
+        user_id = scope.user_id
+        if user_id is None or not statements:
+            self._metrics.admitted(SOURCE, [])
+            return []
         effect = EffectKey(ADMISSIONS, str(run_id))
         async with self._transactions.begin(scope) as session:
 

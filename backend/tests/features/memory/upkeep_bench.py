@@ -55,6 +55,7 @@ class UpkeepBench:
     upkeep: Upkeep
     departures: Departures
     invariants: MemoryInvariants
+    registry: CollectorRegistry
 
     async def add(self, person: uuid.UUID, rows: Sequence[Mapping[str, object]]) -> list[uuid.UUID]:
         """Facts of the person in the Russian home, confirmed now unless the row says else."""
@@ -98,7 +99,8 @@ async def upkeep_bench(
     async def queue(scope: TenancyScope, trigger: SummaryTrigger) -> None:
         queued.append((scope, trigger))
 
-    metrics = MemoryMetrics(CollectorRegistry())
+    registry = CollectorRegistry()
+    metrics = MemoryMetrics(registry)
     shape = ProcessShape(role=ProcessRole.WORKERS)
     # Обходы читают дом ролью обхода: она открыта только воркерам.
     async with open_database_access(slot_urls(run_slot), shape) as workers:
@@ -114,5 +116,5 @@ async def upkeep_bench(
             homes, valkey, spaces, meetings, queued,
             Upkeep(transactions, (summaries, valkey, metrics)),
             Departures(transactions, (ports, metrics)),
-            MemoryInvariants(transactions, metrics),
+            MemoryInvariants(transactions, metrics), registry,
         )  # fmt: skip

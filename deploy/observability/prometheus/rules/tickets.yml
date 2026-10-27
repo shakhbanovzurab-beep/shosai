@@ -112,6 +112,45 @@ groups:
           description: 'Больше чем в 5 % ходов за сутки модели пришлось загрузить набор инструментов, который маршрутизация не предложила. Каждая загрузка стоит лишнего раунда: ответы Leo приходят медленнее и дороже.'
           runbook: docs/runbooks/alerts.md#leo-toolset-loads-frequent
 
+  - name: tickets-memory
+    rules:
+      - alert: MemoryAdmissionSlow
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(shosai_memory_admission_lag_seconds_bucket[5m]))) > 60
+        for: 30m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Память Leo разбирает ходы медленно'
+          description: 'Полчаса подряд 5 % ходов память разбирает дольше минуты. Строка «Leo может запомнить» под ответом появляется с опозданием, новые факты попадают в ответы позже.'
+          runbook: docs/runbooks/alerts.md#memory-admission-slow
+
+      - alert: MemoryExtractionFailing
+        expr: |
+          sum(increase(shosai_memory_extractions_total{outcome="failed"}[30m]))
+            / sum(increase(shosai_memory_extractions_total[30m])) > 0.05
+          and sum(increase(shosai_memory_extractions_total[30m])) >= 20
+        for: 30m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Память Leo не может разобрать ходы и встречи'
+          description: 'Больше 5 % обращений памяти к модели за полчаса заканчиваются сбоем. Задачи повторяются, но то, что человек просил запомнить, может не сохраниться.'
+          runbook: docs/runbooks/alerts.md#memory-extraction-failing
+
+      - alert: MemoryCandidatesTurnedDown
+        expr: |
+          sum(increase(shosai_memory_candidates_total{source!="imported",answer="accepted"}[28d]))
+            / sum(increase(shosai_memory_candidates_total{source!="imported",answer=~"accepted|turned_down"}[28d])) < 0.7
+          and sum(increase(shosai_memory_candidates_total{source!="imported",answer=~"accepted|turned_down"}[28d])) >= 100
+        for: 1d
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Люди отклоняют больше трети того, что Leo предлагает запомнить'
+          description: 'За четыре недели меньше 70 % ответов на «Запомнить?» — «Запомнить». Leo предлагает лишнее и отнимает внимание людей; отбор кандидатов стоит пересмотреть.'
+          runbook: docs/runbooks/alerts.md#memory-candidates-turned-down
+
   - name: tickets-targets
     rules:
       - alert: ScrapeTargetDown

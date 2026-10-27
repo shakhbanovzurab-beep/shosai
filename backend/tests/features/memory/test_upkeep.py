@@ -12,7 +12,7 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.identity.contracts import Principal
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.application.upkeep import cursor_key
-from shosai.features.memory.infrastructure.metrics import SummaryTrigger
+from shosai.features.memory.infrastructure.metrics import CANDIDATES, SummaryTrigger
 from tests.features.memory.upkeep_bench import NOW, UpkeepBench
 
 LONG_AGO = NOW - timedelta(days=200)
@@ -57,6 +57,8 @@ async def test_the_daily_pass_expires_purges_and_queues_once_a_day(
         "Carried over": ("candidate", None), "Forgotten lately": ("forgotten", "forgot"),
     }  # fmt: skip
     assert (TenancyScope(Home.RU, person), SummaryTrigger.UPKEEP) in upkeep_bench.queued
+    expired = {"source": "user_statement", "answer": "expired"}
+    assert upkeep_bench.registry.get_sample_value(CANDIDATES, expired) == 1
 
 
 async def test_a_left_workspace_s_facts_are_erased_after_a_week_unless_the_person_is_back(

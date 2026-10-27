@@ -51,6 +51,7 @@ from shosai.features.memory.domain.facts import (
     pin,
     supersede,
 )
+from shosai.features.memory.infrastructure.metrics import CandidateAnswer, MemoryMetrics
 from shosai.features.memory.infrastructure.presence import TTL_SECONDS, has_memories_key
 from shosai.features.memory.infrastructure.records import MemoryFactRecord, MemorySummaryRecord
 
@@ -89,11 +90,11 @@ class FactChanges:
     def __init__(
         self,
         transactions: HomeTransactions,
-        collaborators: tuple[FactLists, EffectLedger, Redis],
+        collaborators: tuple[FactLists, EffectLedger, Redis, MemoryMetrics],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._lists, self._effects, self._valkey = collaborators
+        self._lists, self._effects, self._valkey, self._metrics = collaborators
         self._clock = clock
 
     async def _row(
@@ -193,6 +194,9 @@ class FactChanges:
                 await self._replace_proposed(session, row, now)
                 write_back(row, accept(fact, now), now)
             view = await self._view(session, principal, row)
+        # Ответ считается после фиксации: откаченная транзакция ничего не прибавляет.
+        if fact.pending:
+            self._metrics.answered(fact.source.value, CandidateAnswer.ACCEPTED)
         await self._mark_present(principal.user_id)
         return view
 
@@ -221,8 +225,10 @@ class FactChanges:
             if row is not None and row.status == FactStatus.FORGOTTEN.value:
                 return
             row = await self._row(session, principal, fact_id)
-            now = self._clock()
-            write_back(row, forget(fact_of(row), EndReason.FORGOT, now), now)
+            now, fact = self._clock(), fact_of(row)
+            write_back(row, forget(fact, EndReason.FORGOT, now), now)
+        if fact.pending:
+            self._metrics.answered(fact.source.value, CandidateAnswer.TURNED_DOWN)
 
     async def forget_all(self, principal: Principal) -> None:
         """Every fact and candidate ends at once, and the summary is emptied."""
@@ -238,11 +244,16 @@ class FactChanges:
         """Every carried-over candidate is turned down at once (MM-D8)."""
         now = self._clock()
         async with self._transactions.begin(principal.scope()) as session:
-            await session.execute(
+            ended = await session.scalars(
                 self._end(principal.user_id, EndReason.TURNED_DOWN, now)
                 .where(FACT.status == FactStatus.CANDIDATE.value)
                 .where(FACT.source_kind == MemorySource.IMPORTED.value)
+                .returning(FACT.id)
             )
+            turned_down = len(list(ended))
+        self._metrics.answered(
+            MemorySource.IMPORTED.value, CandidateAnswer.TURNED_DOWN, turned_down
+        )
 
     @staticmethod
     def _end(user_id: UUID, reason: EndReason, now: datetime) -> Update:

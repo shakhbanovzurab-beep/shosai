@@ -191,6 +191,15 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Stop the path that executes without the gateway — release a fix or switch the slice's write tools off — then tell the owner which people's data changed. The gauge returns to zero once the rows are older than two hours.
 
+<a id="memory-written-while-off"></a>
+### MemoryWrittenWhileOff — §16.4
+
+**Means.** The hourly check found facts that a writer acting for the person — the admission after a turn, a meeting's recollections, Leo's tool — created after the person switched memory off (memory, from step 11). Leo remembers what the person told it not to. Every writer reads the switch in the transaction that writes, so this should be impossible; the person's own edits in Settings › Memory and the summary's box do not count.
+
+**Look.** `shosai_memory_written_while_off` by `home`; the `workers-default` log line «Факты памяти записаны после выключения памяти» gives the facts' and the people's counts. In that home: `SELECT f.source_kind, f.source_ref, f.created_at, s.changed_at FROM memory_facts f JOIN memory_settings s USING (user_id) WHERE s.enabled IS FALSE AND f.created_at > s.changed_at AND f.source_kind NOT IN ('settings', 'user_edit')` — `source_kind` names the writer, and a run or meeting in `source_ref` leads to its task in the logs.
+
+**Fix.** Find the writer that did not read the switch under the person's admission lock, fix it with a test of the switch turned off between the task's start and its write, and release. Forget the facts for the people concerned (`status = 'forgotten'`, `ended_reason = 'forgot'`) — the person chose that nothing be remembered. The gauge returns to zero at the next hourly check.
+
 ## Tickets (§16.6)
 
 <a id="meeting-run-old"></a>
@@ -257,6 +266,27 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 **Means.** In more than 5 % of the day's Leo turns the model called `core.load_toolset`: routing (ADR 0068 AG-D7) left out a toolset the question needed, so the turn paid an extra round of the model. Answers are slower and cost more; nothing is lost.
 
 **Fix.** Read which toolsets runs loaded and on which pages: `agent_runs.routing` keeps `selected`, `deferred` and `loaded` per run. A page that should bring a toolset → add its section to the surface map in `features/agent/application/tool_offer.py`; segment 2 too full to hold the toolsets turns need → shorten the largest schemas or descriptions of the slice that owns them.
+
+<a id="memory-admission-slow"></a>
+### MemoryAdmissionSlow
+
+**Means.** For half an hour 5 % of Leo's turns took memory more than a minute to read after the answer ended (`shosai_memory_admission_lag_seconds`, memory step 11). The quiet "Leo may remember" line under the answer comes late and new facts reach answers later; nothing is lost.
+
+**Fix.** The task `memory.admit_turn` waits in the `default` queue → see [TaskQueueOld](#task-queue-old) and the workers' count; the model call is slow → the `ai.call` spans of the task's traces and `shosai_ai_call_duration_seconds` by `provider`, with `MEMORY_FALLBACK_MODEL` as the switch; the person's admission lock is held long → a meeting's recollection or the upkeep of the same person in the workers' logs.
+
+<a id="memory-extraction-failing"></a>
+### MemoryExtractionFailing
+
+**Means.** More than 5 % of memory's model calls in half an hour — a turn's extraction or a meeting's recollections — ended in failure (`shosai_memory_extractions_total{outcome="failed"}` by `source`: `turn` or `meeting`; memory step 11). The tasks are retried, but what a person asked Leo to remember may be lost once the retries run out.
+
+**Fix.** `shosai_ai_calls_total` and `shosai_ai_calls_refused_total` show whether the provider fails, refuses for the budget or times out; an unreadable answer twice in a row shows as `memory.extract` errors in the workers' logs — a model change behind `MEMORY_MODEL` is the usual cause; switch to `MEMORY_FALLBACK_MODEL` while it is fixed.
+
+<a id="memory-candidates-turned-down"></a>
+### MemoryCandidatesTurnedDown
+
+**Means.** Over four weeks fewer than 70 % of people's answers to "Should Leo remember this?" were Remember (`shosai_memory_candidates_total{answer}` by `source`, at least 100 answers; MM-D1). Leo proposes what people do not want kept and spends their attention on it. The draft's carried-over candidates are left out: turning them down as a list says nothing about what Leo proposes.
+
+**Fix.** Compare `source="user_statement"` with `source="meeting"`: one source turned down far more often points at its prompt (`extraction_prompts.py`). Read the turned-down statements of the staging accounts, not people's, and tighten what the prompt calls durable; the decisions slice's `memory.admit` calibration (MM-D1) is the lasting answer.
 
 <a id="scrape-target-down"></a>
 ### ScrapeTargetDown

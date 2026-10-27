@@ -1,14 +1,20 @@
 """A turn's admission: explicit requests saved, guesses asked within the day's three, the same
-words confirming, the same subject proposing a replacement, the switches on this writer, and a
-redelivery writing nothing twice (memory step 5, MM-D1)."""
+words confirming, the same subject proposing a replacement, the switches on this writer, a
+redelivery writing nothing twice (memory step 5, MM-D1), and the extraction's end and the lag
+after the turn counted (memory step 11)."""
 
 import uuid
+from datetime import UTC, datetime, timedelta
+
+import pytest
 
 from shosai.core.agent_tools.context import Taint
+from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.kernel.homes import Home
 from shosai.features.identity.contracts import Principal
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.domain.admission import Admission
+from shosai.features.memory.infrastructure.metrics import ADMISSION_LAG, EXTRACTIONS
 from tests.features.memory.admission_bench import AdmissionBench
 from tests.features.memory.recall_bench import axis
 
@@ -102,3 +108,24 @@ async def test_nothing_is_taken_with_memory_off_without_consent_or_from_a_suspic
     assert admission_bench.statements.calls == []
     for person in (off, refusing, steered):
         assert await admission_bench.facts(person) == []
+
+
+async def test_the_extraction_s_end_and_the_lag_after_the_turn_are_counted(
+    admission_bench: AdmissionBench,
+) -> None:
+    person = uuid.uuid4()
+    admission_bench.consents.given.add(person)
+    admission_bench.vectors.known["Works late"] = axis(1)
+    admission_bench.statements.found = [said("Works late")]
+    ended = datetime.now(UTC) - timedelta(seconds=7)
+    await admission_bench.admission.admit(Home.RU, person, admission_bench.turns.said("a"), ended)
+    admission_bench.statements.failure = AiCallError(AiFailure.PROVIDER_ERROR, retryable=True)
+
+    with pytest.raises(AiCallError):
+        await admission_bench.admission.admit(Home.RU, person, admission_bench.turns.said("b"))
+
+    sample = admission_bench.registry.get_sample_value
+    assert sample(EXTRACTIONS, {"source": "turn", "outcome": "ok"}) == 1
+    assert sample(EXTRACTIONS, {"source": "turn", "outcome": "failed"}) == 1
+    assert sample(f"{ADMISSION_LAG}_count") == 1
+    assert 7 <= (sample(f"{ADMISSION_LAG}_sum") or 0) < 60

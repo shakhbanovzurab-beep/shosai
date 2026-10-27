@@ -1,0 +1,228 @@
+{
+  "uid": "journey-leo-memory",
+  "title": "Память Leo",
+  "description": "Что Shosai обещает на пути «Память Leo» и как это выполняется.",
+  "tags": [
+    "shosai"
+  ],
+  "editable": false,
+  "graphTooltip": 1,
+  "links": [
+    {
+      "type": "dashboards",
+      "tags": [
+        "shosai"
+      ],
+      "asDropdown": true,
+      "title": "Другие панели",
+      "includeVars": false,
+      "keepTime": true
+    }
+  ],
+  "schemaVersion": 41,
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "refresh": "1m",
+  "timezone": "browser",
+  "panels": [
+    {
+      "type": "row",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      },
+      "title": "Отслеживаем без обещания и срочных сообщений",
+      "collapsed": false,
+      "panels": [],
+      "id": 1
+    },
+    {
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 12,
+        "h": 9
+      },
+      "title": "Вспоминание в ходе: 95 % быстрее этой линии",
+      "description": "Сколько память ищет факты к вопросу человека, вместе с вектором вопроса. Срок — 350 миллисекунд: опоздавшее вспоминание ход не ждёт, ответ идёт без него.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(shosai_memory_recall_seconds_bucket[5m])))",
+          "legendFormat": "все ходы",
+          "range": true,
+          "exemplar": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix: с",
+          "decimals": null,
+          "min": 0,
+          "noValue": "нет данных",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#3987e5"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "axisLabel": "секунды",
+            "axisSoftMax": null,
+            "axisBorderShow": false,
+            "lineWidth": 2,
+            "lineInterpolation": "linear",
+            "fillOpacity": 18,
+            "gradientMode": "opacity",
+            "showPoints": "never",
+            "spanNulls": true,
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#3987e5"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "showLegend": false,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "id": 2
+    },
+    {
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 1,
+        "w": 12,
+        "h": 9
+      },
+      "title": "Разбор хода памятью: 95 % быстрее этой линии",
+      "description": "Сколько проходит от конца ответа Leo до того, как память записала, что из хода запомнить. Строка «Leo может запомнить» под ответом появляется после этого; больше минуты подряд — тикет.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(shosai_memory_admission_lag_seconds_bucket[5m])))",
+          "legendFormat": "все ходы",
+          "range": true,
+          "exemplar": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix: с",
+          "decimals": null,
+          "min": 0,
+          "noValue": "нет данных",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#3987e5"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "axisLabel": "секунды",
+            "axisSoftMax": null,
+            "axisBorderShow": false,
+            "lineWidth": 2,
+            "lineInterpolation": "linear",
+            "fillOpacity": 18,
+            "gradientMode": "opacity",
+            "showPoints": "never",
+            "spanNulls": true,
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#3987e5"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "showLegend": false,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "id": 3
+    }
+  ]
+}

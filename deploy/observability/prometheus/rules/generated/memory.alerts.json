@@ -1,0 +1,23 @@
+{
+  "groups": [
+    {
+      "name": "memory-invariants",
+      "rules": [
+        {
+          "alert": "MemoryWrittenWhileOff",
+          "expr": "max(shosai_memory_written_while_off) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "§16.4: выключенная память ничего не пишет"
+          },
+          "annotations": {
+            "summary": "Память Leo записала факт после того, как человек её выключил",
+            "description": "Почасовая проверка нашла факт, который Leo сохранил уже после того, как человек выключил память в настройках. Leo нарушил выбор человека: он запоминает то, что запоминать запретили. Число людей — в журнале проверки; найдите, какой путь записи не прочитал переключатель в своей транзакции.",
+            "runbook": "docs/runbooks/alerts.md#memory-written-while-off",
+            "dashboard": "/d/invariant-monitors"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 """The person's changes: an edit supersedes once per key, accept, forget, forget everything,
-the carried-over list and the switch (memory plan §3.3, step 3)."""
+the carried-over list and the switch (memory plan §3.3, step 3); each answer to a candidate is
+counted once, by its source (step 11)."""
 
 import uuid
 
@@ -10,6 +11,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.identity.contracts import Principal
 from shosai.features.memory.application.switch import MemorySwitch
+from shosai.features.memory.infrastructure.metrics import CANDIDATES
 from shosai.features.memory.infrastructure.presence import has_memories_key
 from shosai.features.memory.infrastructure.records import MemoryFactRecord, MemorySummaryRecord
 from tests.features.billing.people_bench import bearer
@@ -22,6 +24,11 @@ async def rows(bench: FactsBench, person: uuid.UUID) -> dict[uuid.UUID, MemoryFa
     """Every row of the person, ended ones too."""
     async with bench.homes.transactions.begin(TenancyScope(Home.RU, person), read_only=True) as s:
         return {row.id: row for row in await s.scalars(select(MemoryFactRecord))}
+
+
+def counted(bench: FactsBench, source: str, answer: str) -> float | None:
+    """How many answers of the kind the bench's metrics counted."""
+    return bench.registry.get_sample_value(CANDIDATES, {"source": source, "answer": answer})
 
 
 async def test_an_edit_supersedes_once_per_key_and_keeps_the_pin(facts_bench: FactsBench) -> None:
@@ -93,6 +100,7 @@ async def test_accepting_a_candidate_replaces_what_it_proposed_to(facts_bench: F
     assert [item["id"] for item in listed] == [str(candidate)]
     assert stored[old].superseded_by == candidate
     assert stored[candidate].confirmed
+    assert counted(facts_bench, "user_statement", "accepted") == 1
 
 
 async def test_forgetting_is_idempotent_and_never_reaches_another_persons_fact(
@@ -111,6 +119,7 @@ async def test_forgetting_is_idempotent_and_never_reaches_another_persons_fact(
 
     assert answers == [204, 204, 204, 404, 404]
     assert (stored[fact].ended_reason, stored[candidate].ended_reason) == ("forgot", "turned_down")
+    assert counted(facts_bench, "user_statement", "turned_down") == 1
     assert (await rows(facts_bench, other))[theirs].status == "active"
 
 
@@ -154,6 +163,7 @@ async def test_the_carried_over_list_is_turned_down_in_one_go(facts_bench: Facts
 
     assert done.status_code == 204
     assert (stored[imported].ended_reason, stored[waiting].status) == ("turned_down", "candidate")
+    assert counted(facts_bench, "imported", "turned_down") == 1
 
 
 async def test_the_switch_starts_on_keeps_its_moment_and_mirrors_into_the_native_me(

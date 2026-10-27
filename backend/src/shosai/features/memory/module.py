@@ -60,6 +60,7 @@ from shosai.features.memory.infrastructure.metrics import MemoryMetrics
 from shosai.features.memory.infrastructure.recollector import Recollector
 from shosai.features.memory.infrastructure.records import MEMORY_MODELS
 from shosai.features.memory.infrastructure.summary_model import SummaryModel
+from shosai.features.memory.objectives import MEMORY_MONITORS, MEMORY_TRACKED
 from shosai.features.memory.settings import MemorySettings
 
 
@@ -86,12 +87,11 @@ def summary_parts(
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """Memory's parts for this process."""
     transactions, ports = services.transactions, services.ports
-    lists = FactLists(transactions, ports)
-    changes = FactChanges(transactions, (lists, services.effects, services.valkey))
+    lists, metrics = FactLists(transactions, ports), MemoryMetrics(services.registry)
+    changes = FactChanges(transactions, (lists, services.effects, services.valkey, metrics))
     switch = MemorySwitch(transactions)
     settings = services.settings.features.get(MemorySettings)
     embedder = Embedder(services.ai, settings.embedding_route())
-    metrics = MemoryMetrics(services.registry)
     recall = Recall(transactions, (lists, embedder, services.valkey, metrics))
     embedding = EmbeddingPass(transactions, (ports, embedder, services.valkey, metrics))
     admission = TurnAdmission(
@@ -142,4 +142,6 @@ MEMORY = FeatureModule(
     settings=(MemorySettings,),
     account_data=(ACCOUNT_DATA,),
     agent_tools=MEMORY_TOOLS,
+    monitors=MEMORY_MONITORS,
+    tracked=MEMORY_TRACKED,
 )

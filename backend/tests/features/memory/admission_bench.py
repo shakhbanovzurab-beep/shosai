@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.agent_tools.context import Taint
 from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute, Provider
+from shosai.core.ai.errors import AiCallError
 from shosai.core.ai.requests import ChatRequest
 from shosai.core.ai.results import ChatResult, Usage
 from shosai.core.idempotency.ledger import EffectLedger
@@ -39,10 +40,11 @@ CHAT = ModelRoute(ModelRef(Provider.OPENROUTER, "google/gemini-3.8-flash"))
 
 @dataclass
 class Statements:
-    """The extraction model: the statements it finds, as its JSON answer."""
+    """The extraction model: the statements it finds, as its JSON answer, or its failure."""
 
     found: list[dict[str, object]] = field(default_factory=list)
     calls: list[ChatRequest] = field(default_factory=list)
+    failure: AiCallError | None = None
 
     async def chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
@@ -50,6 +52,8 @@ class Statements:
         """The JSON object of the statements."""
         del context
         self.calls.append(request)
+        if self.failure is not None:
+            raise self.failure
         text = json.dumps({"statements": self.found})
         return ChatResult(text, (), "stop", route.primary, Usage(input_tokens=1, output_tokens=1))
 
@@ -89,6 +93,7 @@ class AdmissionBench:
     turns: Turns
     vectors: VectorModel
     consents: Consents
+    registry: CollectorRegistry
 
     async def facts(self, person: uuid.UUID) -> Sequence[MemoryFactRecord]:
         """Every fact of the person, ended ones too, oldest first."""
@@ -118,4 +123,4 @@ async def admission_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator
         (Extractor(statements, CHAT), Embedder(vectors, ROUTE)),
         (ports, EffectLedger(EffectKeyMetrics(registry)), valkey, MemoryMetrics(registry)),
     )
-    yield AdmissionBench(homes, admission, statements, turns, vectors, consents)
+    yield AdmissionBench(homes, admission, statements, turns, vectors, consents, registry)

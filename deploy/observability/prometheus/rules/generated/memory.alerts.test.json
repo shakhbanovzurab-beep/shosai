@@ -1,0 +1,42 @@
+{
+  "rule_files": [
+    "memory.alerts.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_memory_written_while_off",
+          "values": "0x10 1x10 0x40"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "MemoryWrittenWhileOff",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "§16.4: выключенная память ничего не пишет"
+              },
+              "exp_annotations": {
+                "summary": "Память Leo записала факт после того, как человек её выключил",
+                "description": "Почасовая проверка нашла факт, который Leo сохранил уже после того, как человек выключил память в настройках. Leo нарушил выбор человека: он запоминает то, что запоминать запретили. Число людей — в журнале проверки; найдите, какой путь записи не прочитал переключатель в своей транзакции.",
+                "runbook": "docs/runbooks/alerts.md#memory-written-while-off",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "MemoryWrittenWhileOff",
+          "exp_alerts": []
+        }
+      ]
+    }
+  ]
+}

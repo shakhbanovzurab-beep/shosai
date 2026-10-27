@@ -18,6 +18,7 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.agent_tools.context import Taint
+from shosai.core.ai.errors import AiCallError
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.idempotency.ledger import EffectKey, EffectLedger, EffectScope
 from shosai.core.kernel.homes import Home
@@ -73,13 +74,22 @@ class MeetingRecollection:
             return []
         meeting, seen, consent = read
         payer = Payer(scope, consent)
-        found = await self._recollector.meeting(payer, seen, str(meeting_id))
+        try:
+            found = await self._recollector.meeting(payer, seen, str(meeting_id))
+            vectors = (
+                await self._embedder.statements(
+                    payer, [item.statement.text for item in found], f"recollect:{meeting_id}"
+                )
+                if found
+                else []
+            )
+        except AiCallError:
+            self._metrics.extracted(MemorySource.MEETING.value, ok=False)
+            raise
+        self._metrics.extracted(MemorySource.MEETING.value, ok=True)
         if not found:
             self._metrics.admitted(MemorySource.MEETING.value, [])
             return []
-        vectors = await self._embedder.statements(
-            payer, [item.statement.text for item in found], f"recollect:{meeting_id}"
-        )
         origin = Origin(
             source=MemorySource.MEETING,
             org_id=meeting.org_id,

@@ -2,7 +2,7 @@
 admission off the turn's path (memory step 5), and a meeting's first notes its recollection
 (step 9, MM-D5); a rewrite of the notes recollects nothing again."""
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Any, Final, Protocol
 from uuid import UUID
 
@@ -35,7 +35,8 @@ def subscriptions(queue: TurnQueue) -> tuple[EventSubscription[Any], ...]:
         del session
         event = received.event
         await queue.send(
-            ADMIT_TURN, turn_task(received.scope.home.value, event.user_id, event.run_id)
+            ADMIT_TURN,
+            turn_task(received.scope.home.value, event.user_id, event.run_id, received.occurred_at),
         )
 
     async def recollect(session: AsyncSession, received: ReceivedEvent[NotesReady]) -> None:
@@ -66,6 +67,8 @@ def subscriptions(queue: TurnQueue) -> tuple[EventSubscription[Any], ...]:
     )
 
 
-def turn_task(home: str, user_id: UUID, run_id: UUID) -> TurnTask:
-    """The admission task of one turn."""
-    return TurnTask.model_validate({"home": home, "user_id": user_id, "run_id": run_id})
+def turn_task(home: str, user_id: UUID, run_id: UUID, ended_at: datetime) -> TurnTask:
+    """The admission task of one turn, with when it ended for the admission's lag."""
+    return TurnTask.model_validate(
+        {"home": home, "user_id": user_id, "run_id": run_id, "ended_at": ended_at}
+    )

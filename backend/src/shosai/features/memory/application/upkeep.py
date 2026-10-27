@@ -31,7 +31,12 @@ from shosai.features.memory.application.switch import memory_on
 from shosai.features.memory.domain.decay import faded
 from shosai.features.memory.domain.facts import EndReason, FactStatus, MemorySource
 from shosai.features.memory.domain.lifetimes import CANDIDATE_LIFETIME, ENDED_KEPT
-from shosai.features.memory.infrastructure.metrics import MemoryMetrics, SummaryTrigger, UpkeepPart
+from shosai.features.memory.infrastructure.metrics import (
+    CandidateAnswer,
+    MemoryMetrics,
+    SummaryTrigger,
+    UpkeepPart,
+)
 
 BATCH: Final = 200
 # Тик укладывается в своё время: остальных людей дня берут следующие тики.
@@ -102,9 +107,12 @@ class Upkeep:
             await session.execute(
                 select(func.pg_advisory_xact_lock(ADMISSION_LOCK_SPACE, person_key(user_id)))
             )
-            expired = await self._expire(session, user_id, now)
+            faded_ones, waited = await self._expire(session, user_id, now)
             purged = await self._purge(session, user_id, now)
             on = await memory_on(session, user_id)
+        expired = faded_ones + len(waited)
+        for source in set(waited):
+            self._metrics.answered(source, CandidateAnswer.EXPIRED, waited.count(source))
         self._metrics.upkept(UpkeepPart.EXPIRED, expired)
         self._metrics.upkept(UpkeepPart.PURGED, purged)
         if on and (await self._summaries.view(scope, rewrite=False)).stale:
@@ -112,8 +120,9 @@ class Upkeep:
         return Tended(expired, purged)
 
     @staticmethod
-    async def _expire(session: AsyncSession, user_id: UUID, now: datetime) -> int:
-        """End the faded facts and the candidates left unanswered."""
+    async def _expire(session: AsyncSession, user_id: UUID, now: datetime) -> tuple[int, list[str]]:
+        """End the faded facts and the candidates left unanswered: how many faded, and the
+        source of each candidate that expired."""
         current = await session.scalars(
             select(FACT)
             .where(FACT.user_id == user_id, FACT.status == FactStatus.ACTIVE.value)
@@ -126,14 +135,19 @@ class Upkeep:
             & (FACT.source_kind != MemorySource.IMPORTED.value)
             & (FACT.created_at < now - CANDIDATE_LIFETIME)
         )
-        ended = await session.scalars(
+        expire = (
             update(FACT)
-            .where(FACT.user_id == user_id, or_(FACT.id.in_(gone), unanswered))
             .values(status=FactStatus.FORGOTTEN.value, pinned=False,
                     ended_reason=EndReason.EXPIRED.value, ended_at=now, updated_at=now)
-            .returning(FACT.id)
+            .returning(FACT.source_kind)
         )  # fmt: skip
-        return len(list(ended))
+        faded_ones = (
+            list(await session.scalars(expire.where(FACT.user_id == user_id, FACT.id.in_(gone))))
+            if gone
+            else []
+        )
+        waited = list(await session.scalars(expire.where(FACT.user_id == user_id, unanswered)))
+        return len(faded_ones), waited
 
     @staticmethod
     async def _purge(session: AsyncSession, user_id: UUID, now: datetime) -> int:

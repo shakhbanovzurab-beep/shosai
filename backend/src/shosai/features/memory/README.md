@@ -62,6 +62,11 @@ What Leo knows about the person: their preferences, facts about them and their w
 - `application/departures.py` and `channels/departure_events.py`: a workspace's departure marks the person's facts of it seven days on, its deletion erases them at once; a meeting's deletion marks its facts for its purge, its restore settles them; `memory.settle_marks` (hourly) erases a due fact whose workspace or meeting the person no longer has and lifts any other mark.
 - `application/invariants.py` (`memory.check_invariant`, hourly): the facts a writer created after their person switched memory off, through the sweep role — `shosai_memory_written_while_off{home}`, which must stay 0.
 
+## Monitors and tickets (step 11)
+
+- `objectives.py`: the invariant monitor `memory_written_while_off` pages on the hourly check's gauge; the journey `leo_memory` shows recall's time and the admission's lag on memory's dashboard, with no promise. The rules and dashboards are generated from it (`pytest --update-rules`).
+- `infrastructure/metrics.py`: `shosai_memory_extractions_total{source, outcome}` (a turn's or a meeting's model call), `shosai_memory_admission_lag_seconds` (from the turn's end, carried by `memory.admit_turn`, to its admission), `shosai_memory_candidates_total{source, answer}` (Remember, Don't remember, expired). The tickets on them are hand-written in `deploy/observability/prometheus/rules/tickets.yml`; each alert has its section in `docs/runbooks/alerts.md`.
+
 ## What the models read (step 1)
 
 `infrastructure/extraction_prompts.py` (a turn's and a meeting's extraction) and `infrastructure/summary_prompts.py` (the summary and the box): English instructions with the output language stated in each, and their answer schemas — registered in the model-facing English test.

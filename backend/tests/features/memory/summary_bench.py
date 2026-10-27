@@ -160,12 +160,11 @@ async def summary_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[S
         queued.append((scope, trigger))
 
     registry = CollectorRegistry()
+    metrics = MemoryMetrics(registry)
     lists, effects = FactLists(homes.transactions, ports), EffectLedger(EffectKeyMetrics(registry))
     model = SummaryModel(MemoryModel(writer, CHAT))
     facts = SummaryFacts(lists)
-    summaries = Summaries(
-        homes.transactions, (facts, model, ports, MemoryMetrics(registry)), (queue, valkey)
-    )
+    summaries = Summaries(homes.transactions, (facts, model, ports, metrics), (queue, valkey))
     limiter = RateLimiter(valkey, KeyValueMetrics(registry))
     box = BoxMessages(
         homes.transactions, (lists, facts, model, summaries), (effects, limiter, valkey, ports)
@@ -175,7 +174,12 @@ async def summary_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[S
     routers = (
         build_summary_router((summaries, box), ports, limiter),
         build_memory_router(
-            (lists, FactChanges(homes.transactions, (lists, effects, valkey)), switch, restore),
+            (
+                lists,
+                FactChanges(homes.transactions, (lists, effects, valkey, metrics)),
+                switch,
+                restore,
+            ),
             ports,
         ),
     )

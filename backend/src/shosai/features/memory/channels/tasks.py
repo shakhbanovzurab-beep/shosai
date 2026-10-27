@@ -9,7 +9,7 @@ changes nothing the next one would not, since a vector lands only on a fact stil
 one.
 """
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Final, Protocol
 from uuid import UUID
 
@@ -38,9 +38,10 @@ from shosai.features.memory.infrastructure.metrics import SummaryTrigger
 
 
 class TurnTask(HomeTaskPayload):
-    """One finished turn of a person."""
+    """One finished turn of a person, and when it ended (none in tasks queued before step 11)."""
 
     run_id: UUID
+    ended_at: datetime | None = None
 
 
 # Сбой поставщика модели — тоже повод повторить: запись приёма идемпотентна по прогону.
@@ -135,7 +136,7 @@ def turn_admission(admission: TurnAdmission) -> TaskHandler[TurnTask]:
 
     async def admit(payload: TurnTask) -> None:
         if payload.user_id is not None:
-            await admission.admit(payload.home, payload.user_id, payload.run_id)
+            await admission.admit(payload.home, payload.user_id, payload.run_id, payload.ended_at)
 
     return TaskHandler(ADMIT_TURN, admit)
 

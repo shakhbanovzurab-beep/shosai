@@ -23,6 +23,7 @@ from shosai.features.memory.application.fact_list import FactLists
 from shosai.features.memory.application.fact_restore import FactRestore
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.channels.http.facts import build_memory_router
+from shosai.features.memory.infrastructure.metrics import MemoryMetrics
 from shosai.features.memory.infrastructure.records import MemoryFactRecord
 from shosai.features.notes.contracts import (
     MEETING_READER,
@@ -116,6 +117,7 @@ class FactsBench:
     homes: DatabaseAccess
     spaces: Spaces
     meetings: Meetings
+    registry: CollectorRegistry
 
     async def add(self, person: uuid.UUID, rows: Sequence[Mapping[str, object]]) -> list[uuid.UUID]:
         """Facts of the person in the Russian home, a minute apart in the given order."""
@@ -145,10 +147,11 @@ async def facts_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[Fac
         ]
     )
     lists = FactLists(homes.transactions, ports)
-    effects = EffectLedger(EffectKeyMetrics(CollectorRegistry()))
-    changes = FactChanges(homes.transactions, (lists, effects, valkey))
+    registry = CollectorRegistry()
+    effects = EffectLedger(EffectKeyMetrics(registry))
+    changes = FactChanges(homes.transactions, (lists, effects, valkey, MemoryMetrics(registry)))
     switch = MemorySwitch(homes.transactions)
     restore = FactRestore(homes.transactions, (lists, valkey))
     router = build_memory_router((lists, changes, switch, restore), ports)
     async with client_of(build_probe_app(extra=(router,)).app) as http:
-        yield FactsBench(http, homes, spaces, meetings)
+        yield FactsBench(http, homes, spaces, meetings, registry)
