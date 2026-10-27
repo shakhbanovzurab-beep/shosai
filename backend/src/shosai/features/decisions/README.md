@@ -49,6 +49,7 @@ Leo's Decision Layer: the judgement calls the rest of Leo must not make by hand 
 
 - `FRICTION_JUDGE` is bound over the engine (`channels/agent_ports.py`). The agent asks it only for a card its rule left standard (`features/agent/application/friction_judging.py`), with the person's question of the turn and the card as rendered in their language; the decision's subject is the action's id. A card takes a warning only from an active version: a shadow version is asked and recorded, and the card stays as the rule made it; a warning is never asked, so it never becomes standard.
 - Each card's end — approved, rejected, expired — reaches `observe` as `CardResolution`, buffered in the person's home, never blocking the decision or the sweep that ended it.
+- The set (step 5b): 1 997 synthetic cases in the 16 languages (≥ 53 on each side of each cut in each), written by the generator to the code's labels and confirmed blind — 80 % kept; 60 reference drafts each in Russian and English in `reference/drafts/` for a person to label. The first run (`report.json`): accuracy 0.905–0.966 in every language, above the floor; expected calibration error 0.115 (`matches`) and 0.064 (`wide`) against the 0.05 gate; no reference yet. The point stays on its rule.
 
 ## `turn.route` beside the agent's rule (step 6)
 

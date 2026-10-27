@@ -1,0 +1,225 @@
+{
+  "cuts": {
+    "matches": {
+      "lower": 0.30999999999999994,
+      "upper": 0.41
+    },
+    "wide": {
+      "lower": 0.63,
+      "upper": 0.73
+    }
+  },
+  "digest": "1e7a032820dd6530",
+  "failures": [
+    "ece:matches",
+    "ece:wide",
+    "reference_count:ru",
+    "reference_count:en",
+    "agreement",
+    "reference_accuracy:ru",
+    "reference_gap:ru",
+    "careful:ru",
+    "reference_accuracy:en",
+    "reference_gap:en",
+    "careful:en"
+  ],
+  "numbers": {
+    "accuracy": {
+      "ar": 0.936,
+      "de": 0.96,
+      "en": 0.9587,
+      "es": 0.9274,
+      "fr": 0.9444,
+      "hi": 0.9256,
+      "id": 0.9552,
+      "it": 0.9658,
+      "ja": 0.9478,
+      "ko": 0.9421,
+      "nl": 0.9055,
+      "pt-BR": 0.9328,
+      "ru": 0.9593,
+      "tr": 0.9187,
+      "vi": 0.9134,
+      "zh-Hant": 0.9385
+    },
+    "agreement": 0.0,
+    "careful": {
+      "en": 0.0,
+      "ru": 0.0
+    },
+    "cases": 1997,
+    "counts": {
+      "ar": {
+        "matches": {
+          "no": 63,
+          "yes": 62
+        },
+        "wide": {
+          "no": 62,
+          "yes": 63
+        }
+      },
+      "de": {
+        "matches": {
+          "no": 62,
+          "yes": 63
+        },
+        "wide": {
+          "no": 64,
+          "yes": 61
+        }
+      },
+      "en": {
+        "matches": {
+          "no": 58,
+          "yes": 63
+        },
+        "wide": {
+          "no": 62,
+          "yes": 59
+        }
+      },
+      "es": {
+        "matches": {
+          "no": 62,
+          "yes": 62
+        },
+        "wide": {
+          "no": 65,
+          "yes": 59
+        }
+      },
+      "fr": {
+        "matches": {
+          "no": 63,
+          "yes": 63
+        },
+        "wide": {
+          "no": 64,
+          "yes": 62
+        }
+      },
+      "hi": {
+        "matches": {
+          "no": 60,
+          "yes": 61
+        },
+        "wide": {
+          "no": 62,
+          "yes": 59
+        }
+      },
+      "id": {
+        "matches": {
+          "no": 69,
+          "yes": 65
+        },
+        "wide": {
+          "no": 67,
+          "yes": 67
+        }
+      },
+      "it": {
+        "matches": {
+          "no": 57,
+          "yes": 60
+        },
+        "wide": {
+          "no": 64,
+          "yes": 53
+        }
+      },
+      "ja": {
+        "matches": {
+          "no": 70,
+          "yes": 64
+        },
+        "wide": {
+          "no": 68,
+          "yes": 66
+        }
+      },
+      "ko": {
+        "matches": {
+          "no": 63,
+          "yes": 58
+        },
+        "wide": {
+          "no": 63,
+          "yes": 58
+        }
+      },
+      "nl": {
+        "matches": {
+          "no": 63,
+          "yes": 64
+        },
+        "wide": {
+          "no": 63,
+          "yes": 64
+        }
+      },
+      "pt-BR": {
+        "matches": {
+          "no": 57,
+          "yes": 62
+        },
+        "wide": {
+          "no": 63,
+          "yes": 56
+        }
+      },
+      "ru": {
+        "matches": {
+          "no": 61,
+          "yes": 62
+        },
+        "wide": {
+          "no": 65,
+          "yes": 58
+        }
+      },
+      "tr": {
+        "matches": {
+          "no": 61,
+          "yes": 62
+        },
+        "wide": {
+          "no": 63,
+          "yes": 60
+        }
+      },
+      "vi": {
+        "matches": {
+          "no": 64,
+          "yes": 63
+        },
+        "wide": {
+          "no": 66,
+          "yes": 61
+        }
+      },
+      "zh-Hant": {
+        "matches": {
+          "no": 65,
+          "yes": 65
+        },
+        "wide": {
+          "no": 64,
+          "yes": 66
+        }
+      }
+    },
+    "ece": {
+      "matches": 0.1152,
+      "wide": 0.0636
+    },
+    "reference_accuracy": {
+      "en": 0.0,
+      "ru": 0.0
+    },
+    "reference_cases": 0
+  },
+  "passed": false,
+  "policy": "action.friction@1"
+}
