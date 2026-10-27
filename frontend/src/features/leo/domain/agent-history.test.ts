@@ -70,6 +70,7 @@ describe("a thread's history", () => {
       created_at: "2026-10-24T10:00:00Z",
       expires_at: "2026-10-24T11:00:00Z",
       resolved_at: "2026-10-24T10:01:00Z",
+      invalidates: ["tasks"],
     } satisfies AgentMessage["actions"][number];
     const artifact = { kind: "chat_digest", ref: "d", alt: "Digest", workspace_id: "w", chat_id: "c" } as const;
     const answer = { ...row("a", "assistant", "done"), actions: [card], artifacts: [artifact] };
