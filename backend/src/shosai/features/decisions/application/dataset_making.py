@@ -33,13 +33,13 @@ from shosai.features.decisions.infrastructure.generation_texts import (
     SHAPES,
 )
 
-BATCH: Final = 8
 # Отказы, после которых звать модели бессмысленно до сброса потолка или выключателя.
 STOPPING: Final = frozenset({AiFailure.SPEND_LIMIT, AiFailure.EXPENSIVE_PAUSED})
 # Пакетов в работе разом: до 32 вызовов разметчика, а не три часа подряд на 2 400 случаев.
 BATCHES_AT_ONCE: Final = 4
 GENERATION_TOKENS: Final = 8_000
-LABEL_TOKENS: Final = 400
+# Рассуждающему разметчику (Qwen 3.7 Flash) 400 токенов не хватало дописать метку.
+LABEL_TOKENS: Final = 2_000
 log = structlog.stdlib.get_logger(__name__)
 
 
@@ -118,12 +118,13 @@ class DatasetMaker:
         self, policy: Policy[Any, Any], language: str, sizing: tuple[int, int], *, confirm: bool
     ) -> list[Case]:
         count, offset = sizing
-        targets = BRIEFS[policy.point].targets(count, offset)
+        brief = BRIEFS[policy.point]
+        targets, size = brief.targets(count, offset), brief.batch
         gate = asyncio.Semaphore(BATCHES_AT_ONCE)
 
         async def batch_of(start: int) -> list[Case | None]:
             async with gate:
-                batch = targets[start : start + BATCH]
+                batch = targets[start : start + size]
                 written = await self._written(policy.point, language, batch, offset + start)
                 cases = [
                     self._parsed(policy, language, target, (text, offset + start + number))
@@ -133,7 +134,7 @@ class DatasetMaker:
                     return cases
                 return await asyncio.gather(*(self._confirmed(policy, case) for case in cases))
 
-        batches = await asyncio.gather(*(batch_of(at) for at in range(0, len(targets), BATCH)))
+        batches = await asyncio.gather(*(batch_of(at) for at in range(0, len(targets), size)))
         return [case for batch in batches for case in batch if case is not None]
 
     async def _written(
@@ -150,7 +151,16 @@ class DatasetMaker:
             self._tooling.generator, (GENERATOR_SYSTEM, prompt), key, GENERATION_TOKENS
         )
         cases = (answer or {}).get("cases")
-        return [case for case in cases if isinstance(case, dict)] if isinstance(cases, list) else []
+        written: list[Mapping[str, object]] = (
+            [c for c in cases if isinstance(c, dict)] if isinstance(cases, list) else []
+        )
+        if len(written) < len(batch):
+            # Отказ модели, обрезанный или не тот ответ: пачка теряет случаи без разметчика.
+            log.warning(
+                "Генератор написал меньше случаев", point=point, language=language,
+                asked=len(batch), written=len(written),
+            )  # fmt: skip
+        return written
 
     def _parsed(
         self,

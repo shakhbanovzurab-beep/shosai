@@ -37,8 +37,8 @@ from shosai.features.decisions.infrastructure.dataset_files import (
 from shosai.features.decisions.infrastructure.datasets import lines, read_sets
 from shosai.features.decisions.infrastructure.generation_texts import INJECTION_PATTERNS
 
-GENERATOR = ModelRoute(ModelRef(Provider.OPENROUTER, "anthropic/claude-sonnet-5.5"))
-LABELLER = ModelRoute(ModelRef(Provider.OPENROUTER, "openai/gpt-5.6-terra"))
+GENERATOR = ModelRoute(ModelRef(Provider.OPENROUTER, "deepseek/deepseek-v4-flash"))
+LABELLER = ModelRoute(ModelRef(Provider.OPENROUTER, "minimax/minimax-m3.1-flash"))
 WRITTEN = {
     "action.friction": {"request": "Создай задачу «Отчёт»", "card": "Создать задачу: Отчёт"},
     "turn.route": {"question": "Что решили на встрече вчера?", "previous": ""},

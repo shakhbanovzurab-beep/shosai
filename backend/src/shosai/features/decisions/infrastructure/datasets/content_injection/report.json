@@ -1,0 +1,154 @@
+{
+  "cuts": {
+    "instructions": {
+      "lower": 0.03,
+      "upper": 0.13
+    }
+  },
+  "digest": "f3d7594f78842f5e",
+  "failures": [
+    "reference_count:ru",
+    "reference_count:en",
+    "agreement",
+    "reference_accuracy:ru",
+    "reference_gap:ru",
+    "careful:ru",
+    "reference_accuracy:en",
+    "reference_gap:en",
+    "careful:en"
+  ],
+  "numbers": {
+    "accuracy": {
+      "ar": 1.0,
+      "de": 1.0,
+      "en": 0.9904,
+      "es": 1.0,
+      "fr": 1.0,
+      "hi": 0.9333,
+      "id": 1.0,
+      "it": 1.0,
+      "ja": 0.9907,
+      "ko": 0.9811,
+      "nl": 0.9907,
+      "pt-BR": 0.9808,
+      "ru": 1.0,
+      "tr": 0.9907,
+      "vi": 0.9903,
+      "zh-Hant": 1.0
+    },
+    "agreement": 0.0,
+    "careful": {
+      "en": 0.0,
+      "ru": 0.0
+    },
+    "cases": 1719,
+    "counts": {
+      "ar": {
+        "instructions": {
+          "no": 56,
+          "yes": 55
+        }
+      },
+      "de": {
+        "instructions": {
+          "no": 60,
+          "yes": 59
+        }
+      },
+      "en": {
+        "instructions": {
+          "no": 53,
+          "yes": 51
+        }
+      },
+      "es": {
+        "instructions": {
+          "no": 54,
+          "yes": 51
+        }
+      },
+      "fr": {
+        "instructions": {
+          "no": 54,
+          "yes": 54
+        }
+      },
+      "hi": {
+        "instructions": {
+          "no": 54,
+          "yes": 51
+        }
+      },
+      "id": {
+        "instructions": {
+          "no": 76,
+          "yes": 51
+        }
+      },
+      "it": {
+        "instructions": {
+          "no": 52,
+          "yes": 50
+        }
+      },
+      "ja": {
+        "instructions": {
+          "no": 56,
+          "yes": 51
+        }
+      },
+      "ko": {
+        "instructions": {
+          "no": 55,
+          "yes": 51
+        }
+      },
+      "nl": {
+        "instructions": {
+          "no": 56,
+          "yes": 52
+        }
+      },
+      "pt-BR": {
+        "instructions": {
+          "no": 52,
+          "yes": 52
+        }
+      },
+      "ru": {
+        "instructions": {
+          "no": 51,
+          "yes": 50
+        }
+      },
+      "tr": {
+        "instructions": {
+          "no": 55,
+          "yes": 53
+        }
+      },
+      "vi": {
+        "instructions": {
+          "no": 53,
+          "yes": 50
+        }
+      },
+      "zh-Hant": {
+        "instructions": {
+          "no": 51,
+          "yes": 50
+        }
+      }
+    },
+    "ece": {
+      "instructions": 0.0238
+    },
+    "reference_accuracy": {
+      "en": 0.0,
+      "ru": 0.0
+    },
+    "reference_cases": 0
+  },
+  "passed": false,
+  "policy": "content.injection@1"
+}

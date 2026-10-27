@@ -42,7 +42,11 @@ class Target:
 
 
 class Brief(Protocol):
-    """One point's plan of cases and how a written case becomes its facts."""
+    """One point's plan of cases, how many the generator writes per call, and how a written
+    case becomes its facts."""
+
+    # Случаев на вызов генератора: длинные тексты — меньшими пачками, чтобы ответ не обрезался.
+    batch: int
 
     def targets(self, count: int, offset: int) -> list[Target]:
         """`count` cases from position `offset` of the rotation."""
@@ -55,6 +59,8 @@ class Brief(Protocol):
 
 class FrictionBrief:
     """Cards that match the request or not, reaching one item to other people's."""
+
+    batch = 8
 
     def targets(self, count: int, offset: int) -> list[Target]:
         """Every match and reach combination in turn."""
@@ -84,6 +90,8 @@ class FrictionBrief:
 
 class RouteBrief:
     """Questions that need none, one or two of the tool sets offered."""
+
+    batch = 8
 
     def targets(self, count: int, offset: int) -> list[Target]:
         """Three to six sets offered, the needed ones by a fixed pattern."""
@@ -123,7 +131,10 @@ def needed_of(offered: Sequence[str], pattern: int) -> list[str]:
 
 class InjectionBrief:
     """Texts of every kind, half of them hiding an instruction to an AI by one of the agent's
-    injection corpus's patterns."""
+    injection corpus's patterns; four a call, since six paragraphs eight times overran the
+    generator's answer and a refused call lost eight cases."""
+
+    batch = 4
 
     def targets(self, count: int, offset: int) -> list[Target]:
         """Kinds, lengths and patterns in turn, instructions every other case."""

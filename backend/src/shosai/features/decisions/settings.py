@@ -28,8 +28,9 @@ class DecisionsSettings(SettingsSection):
     decisions_max_in_flight: PositiveInt = 64
     # Модель, которая пишет синтетические случаи наборов, и независимая модель другого
     # поставщика, которая размечает их вслепую (DL-D8). Только для команды оператора.
-    decisions_generator_model: str = "anthropic/claude-sonnet-5.5"
-    decisions_labeller_model: str = "openai/gpt-5.6-terra"
+    # Дешёвые по умолчанию: Sonnet и GPT-5.6 стоили в 20 раз дороже при том же отсеве.
+    decisions_generator_model: str = "deepseek/deepseek-v4-flash"
+    decisions_labeller_model: str = "minimax/minimax-m3.1-flash"
 
     @model_validator(mode="after")
     def pinned(self) -> Self:
