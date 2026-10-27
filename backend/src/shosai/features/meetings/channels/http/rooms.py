@@ -13,13 +13,14 @@ from http import HTTPStatus
 from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from shosai.core.idempotency.http import IdempotencyKeyHeader
 from shosai.core.pagination.page import PageParameters
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal, bearer_principal
+from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.room_reads import RoomView
 from shosai.features.meetings.application.rooms import RoomBook, RoomChange
 from shosai.features.meetings.domain.invites import room_link
@@ -73,6 +74,12 @@ class NewRoom(Strict):
     workspace_id: UUID | None = None
 
 
+class HandPatch(Strict):
+    """Lower a hand; only lowering is the owner's."""
+
+    raised: Literal[False]
+
+
 class RoomPatch(Strict):
     """A new title (empty clears it), the notes switch, or both."""
 
@@ -98,8 +105,11 @@ def room_out(view: RoomView, origin: str) -> RoomOut:
     )
 
 
-def build_rooms_router(book: RoomBook, ports: PortDirectory, origin: str) -> APIRouter:
-    """The owner's rooms."""
+def build_rooms_router(
+    services: tuple[RoomBook, Removals], ports: PortDirectory, origin: str
+) -> APIRouter:
+    """The owner's rooms, their participants and hands."""
+    book, removals = services
     router = APIRouter(prefix="/v1/meetings/rooms", tags=["meetings"])
     signed_in = Annotated[Principal, Depends(bearer_principal(ports))]
 
@@ -142,5 +152,28 @@ def build_rooms_router(book: RoomBook, ports: PortDirectory, origin: str) -> API
     async def end_meeting_room(principal: signed_in, room_id: UUID) -> RoomOut:
         """End the call for everyone and close the room for good."""
         return room_out(await book.end(principal, room_id), origin)
+
+    @router.delete(
+        "/{room_id}/participants/{identity}",
+        status_code=HTTPStatus.NO_CONTENT,
+        response_class=Response,
+    )
+    async def remove_meeting_participant(
+        principal: signed_in, room_id: UUID, identity: str
+    ) -> None:
+        """Remove someone from the call; they cannot come back to this room."""
+        await removals.remove(principal, room_id, identity)
+
+    @router.patch(
+        "/{room_id}/participants/{identity}/hand",
+        status_code=HTTPStatus.NO_CONTENT,
+        response_class=Response,
+    )
+    async def lower_meeting_hand(
+        principal: signed_in, room_id: UUID, identity: str, body: HandPatch
+    ) -> None:
+        """Lower someone's raised hand."""
+        del body
+        await removals.lower_hand(principal, room_id, identity)
 
     return router

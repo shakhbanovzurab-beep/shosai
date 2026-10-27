@@ -2,7 +2,7 @@
 
 import uuid
 from collections.abc import AsyncIterator, Collection, Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime, timedelta
 
 import httpx
@@ -30,6 +30,7 @@ from shosai.features.identity.contracts import (
 )
 from shosai.features.meetings.application.joining import JoinDesk
 from shosai.features.meetings.application.passes import PassCheck
+from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.video_server import (
     PassRequest,
@@ -106,6 +107,26 @@ class SfuDouble:
             return False
         self.metadata[room_name] = metadata
         return True
+
+    async def remove_participant(self, room_name: str, identity: str) -> bool:
+        """Drop a session."""
+        self._answering()
+        before = self.sessions.get(room_name, [])
+        self.sessions[room_name] = [item for item in before if item.identity != identity]
+        return len(before) != len(self.sessions[room_name])
+
+    async def set_attributes(
+        self, room_name: str, identity: str, attributes: Mapping[str, str]
+    ) -> bool:
+        """Change a session's attributes; an empty value removes one."""
+        self._answering()
+        for index, item in enumerate(self.sessions.get(room_name, [])):
+            if item.identity == identity:
+                merged = {**item.attributes, **attributes}
+                kept = {key: value for key, value in merged.items() if value}
+                self.sessions[room_name][index] = replace(item, attributes=kept)
+                return True
+        return False
 
     def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
         """A readable pass: the room and the identity."""
@@ -202,7 +223,7 @@ async def rooms_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[Roo
     desk = JoinDesk(homes.transactions, (sfu, passes, ports), PLATFORM_CEILING, lambda: NOW)
     limiter = RateLimiter(valkey, KeyValueMetrics(registry))
     routers = (
-        build_rooms_router(book, ports, ORIGIN),
+        build_rooms_router((book, Removals(homes.transactions, sfu, passes)), ports, ORIGIN),
         build_joining_router(desk, PassCheck(homes.transactions, passes), ports, limiter),
     )
     async with client_of(build_probe_app(extra=routers).app) as http:

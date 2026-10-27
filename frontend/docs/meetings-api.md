@@ -31,8 +31,9 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
 - **End** closes the room for good and ends the call for everyone; ending a closed room answers it unchanged. A room
   also closes by itself an hour after its last call, never before its calendar event ends.
 - **Removing** someone ends every session of that principal (signed-in person or guest) and they cannot rejoin the
-  room (`403 removed`); the owner cannot remove themselves (`409 cannot_remove_owner`). **Lowering a hand** is the
-  owner's; the participant lowers their own through their attributes.
+  room (`403 removed`); the owner cannot remove themselves (`409 cannot_remove_owner`); an identity that is not a
+  session of the room is `404 participant_not_found`. **Lowering a hand** is the owner's; the participant lowers their
+  own through their attributes.
 - **`RecordingOut`** is `{id, state: starting | active | ending | complete | failed, started_at, file_id | null}`.
   Starting is refused in this order: `404 room_not_found`, `409 room_closed`, `409 no_live_call`,
   `403 recording_not_in_plan`, `413 storage_limit`, `409 recording_active`, `503 recordings_busy` (with

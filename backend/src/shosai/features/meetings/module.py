@@ -19,12 +19,16 @@ from shosai.features.meetings.application.account_data import (
     MODELS,
     MeetingsAccountData,
 )
+from shosai.features.meetings.application.account_rooms import AccountRooms
 from shosai.features.meetings.application.joining import JoinDesk
 from shosai.features.meetings.application.passes import PassCheck
+from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.video_server import VideoUnavailableError
 from shosai.features.meetings.channels.http.joining import build_joining_router
 from shosai.features.meetings.channels.http.rooms import build_rooms_router
+from shosai.features.meetings.channels.subscriptions import subscriptions
+from shosai.features.meetings.channels.tasks import task_handlers
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
 from shosai.features.meetings.infrastructure.livekit_server import open_video_server
@@ -50,6 +54,7 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
         transactions, ports = services.transactions, services.ports
         book = RoomBook(transactions, (services.effects, ports), server)
         passes = RoomPasses(services.valkey)
+        removals = Removals(transactions, server, passes)
         ceiling = services.settings.features.get(
             MeetingsSettings
         ).meetings_room_participants_ceiling
@@ -57,11 +62,13 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
         origin = str(services.settings.email.public_base_url)
         yield FeatureParts(
             http_routers=(
-                build_rooms_router(book, ports, origin),
+                build_rooms_router((book, removals), ports, origin),
                 build_joining_router(
                     desk, PassCheck(transactions, passes), ports, services.rate_limiter
                 ),
             ),
+            task_handlers=task_handlers(AccountRooms(transactions, server)),
+            subscriptions=subscriptions(services.tasks),
             probes=probes,
             provides=(ACCOUNT_DATA_HANDLERS.bind(MeetingsAccountData(services.transactions)),),
         )

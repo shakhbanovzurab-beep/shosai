@@ -14,7 +14,7 @@ import base64
 import binascii
 import hashlib
 import hmac
-from collections.abc import AsyncIterator, Awaitable, Collection, Sequence
+from collections.abc import AsyncIterator, Awaitable, Collection, Mapping, Sequence
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import Final
@@ -30,6 +30,8 @@ from livekit.protocol.room import (
     DeleteRoomRequest,
     ListParticipantsRequest,
     ListRoomsRequest,
+    RoomParticipantIdentity,
+    UpdateParticipantRequest,
     UpdateRoomMetadataRequest,
 )
 from pydantic import ValidationError
@@ -52,6 +54,9 @@ from shosai.features.meetings.infrastructure.livekit_wire import (
     participant_of,
     room_of,
     webhook_of,
+)
+from shosai.features.meetings.infrastructure.unconfigured_server import (
+    UnconfiguredVideoServer,
 )
 from shosai.features.meetings.settings import LiveKitSettings
 
@@ -127,6 +132,32 @@ class LiveKitServer:
         request = UpdateRoomMetadataRequest(room=room_name, metadata=metadata)
         try:
             await self._call("set_metadata", self._client.room.update_room_metadata(request))
+        except ServerError as error:
+            if error.code == NOT_FOUND:
+                return False
+            raise
+        return True
+
+    async def remove_participant(self, room_name: str, identity: str) -> bool:
+        """Disconnect a session; False when it is no longer in the room."""
+        request = RoomParticipantIdentity(room=room_name, identity=identity)
+        try:
+            await self._call("remove_participant", self._client.room.remove_participant(request))
+        except ServerError as error:
+            if error.code == NOT_FOUND:
+                return False
+            raise
+        return True
+
+    async def set_attributes(
+        self, room_name: str, identity: str, attributes: Mapping[str, str]
+    ) -> bool:
+        """Set a session's attributes, an empty value removing one; False when it is gone."""
+        request = UpdateParticipantRequest(
+            room=room_name, identity=identity, attributes=dict(attributes)
+        )
+        try:
+            await self._call("set_attributes", self._client.room.update_participant(request))
         except ServerError as error:
             if error.code == NOT_FOUND:
                 return False
@@ -211,42 +242,6 @@ class LiveKitServer:
         self._metrics.webhook_verified(accepted=False)
         log.warning("Вебхук LiveKit отклонён", reason=reason)
         return WebhookRejectedError()
-
-
-class UnconfiguredVideoServer:
-    """The SFU when `LIVEKIT_*` is not set: every call is 503, every webhook 401."""
-
-    async def create_room(self, spec: RoomSpec) -> SfuRoom:
-        """Calls are unavailable."""
-        raise VideoUnavailableError
-
-    async def rooms(self, names: Collection[str] = ()) -> Sequence[SfuRoom]:
-        """Calls are unavailable."""
-        raise VideoUnavailableError
-
-    async def delete_room(self, name: str) -> None:
-        """Calls are unavailable."""
-        raise VideoUnavailableError
-
-    async def participants(self, room_name: str) -> Sequence[SfuParticipant]:
-        """Calls are unavailable."""
-        raise VideoUnavailableError
-
-    async def set_metadata(self, room_name: str, metadata: str) -> bool:
-        """Calls are unavailable."""
-        raise VideoUnavailableError
-
-    def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
-        """Calls are unavailable."""
-        raise VideoUnavailableError
-
-    def verify_webhook(self, body: bytes, authorization: str | None) -> SfuWebhook:
-        """Nothing can be verified without the secret."""
-        raise WebhookRejectedError
-
-    async def ping(self) -> None:
-        """Calls are unavailable."""
-        raise VideoUnavailableError
 
 
 @asynccontextmanager

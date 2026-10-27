@@ -14708,6 +14708,140 @@
         }
       }
     },
+    "/v1/meetings/rooms/{room_id}/participants/{identity}": {
+      "delete": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Remove Meeting Participant",
+        "description": "Remove someone from the call; they cannot come back to this room.",
+        "operationId": "remove_meeting_participant_v1_meetings_rooms__room_id__participants__identity__delete",
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Room Id"
+            }
+          },
+          {
+            "name": "identity",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Identity"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/rooms/{room_id}/participants/{identity}/hand": {
+      "patch": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Lower Meeting Hand",
+        "description": "Lower someone's raised hand.",
+        "operationId": "lower_meeting_hand_v1_meetings_rooms__room_id__participants__identity__hand_patch",
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Room Id"
+            }
+          },
+          {
+            "name": "identity",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Identity"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HandPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/meetings/join/{token}": {
       "post": {
         "tags": [
@@ -18776,6 +18910,22 @@
         ],
         "title": "FrontierView",
         "description": "Bought tokens left, this week's frontier models and the packs on sale."
+      },
+      "HandPatch": {
+        "properties": {
+          "raised": {
+            "type": "boolean",
+            "const": false,
+            "title": "Raised"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "raised"
+        ],
+        "title": "HandPatch",
+        "description": "Lower a hand; only lowering is the owner's."
       },
       "HealthStatus": {
         "properties": {
@@ -25640,7 +25790,6 @@
         "enum": [
           "intake",
           "transcribe",
-          "diarize",
           "align",
           "findings",
           "write_up"

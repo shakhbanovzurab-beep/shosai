@@ -131,3 +131,24 @@ async def test_an_unreachable_sfu_is_video_unavailable() -> None:
     async with open_video_server(settings, LiveKitMetrics(CollectorRegistry())) as sfu:
         with pytest.raises(VideoUnavailableError):
             await sfu.ping()
+
+
+async def test_metadata_attributes_and_removal_reach_a_joined_session(
+    sfu: VideoServer, room_name: str
+) -> None:
+    await sfu.create_room(RoomSpec(name=room_name, max_participants=4, metadata="{}"))
+    issued = guest_pass(sfu, room_name)
+
+    async with aiohttp.ClientSession() as http, await join(http, issued) as socket:
+        await socket.receive(timeout=SIGNAL_TIMEOUT)
+        identity = (await sfu.participants(room_name))[0].identity
+        assert await sfu.set_metadata(room_name, '{"v":1}')
+        assert await sfu.set_attributes(room_name, identity, {"hand": "2026-10-27T12:00:00Z"})
+        attributes = (await sfu.participants(room_name))[0].attributes
+        assert attributes["hand"] == "2026-10-27T12:00:00Z"
+        assert await sfu.set_attributes(room_name, identity, {"hand": ""})
+        assert "hand" not in (await sfu.participants(room_name))[0].attributes
+        assert await sfu.remove_participant(room_name, identity)
+        assert not await sfu.remove_participant(room_name, identity)
+    assert [room.metadata for room in await sfu.rooms([room_name])] == ['{"v":1}']
+    assert not await sfu.set_metadata("r-00000000deadbeef", "{}")

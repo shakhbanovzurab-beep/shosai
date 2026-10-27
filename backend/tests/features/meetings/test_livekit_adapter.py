@@ -27,10 +27,8 @@ from shosai.features.meetings.application.video_server import (
 from shosai.features.meetings.domain.broadcasts import AUDIENCE
 from shosai.features.meetings.domain.joining import IN_CALL
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
-from shosai.features.meetings.infrastructure.livekit_server import (
-    LiveKitServer,
-    UnconfiguredVideoServer,
-)
+from shosai.features.meetings.infrastructure.livekit_server import LiveKitServer
+from shosai.features.meetings.infrastructure.unconfigured_server import UnconfiguredVideoServer
 from shosai.features.meetings.settings import LiveKitSettings
 
 KEY = "APItest"

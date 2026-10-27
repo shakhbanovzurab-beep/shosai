@@ -3588,6 +3588,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/rooms/{room_id}/participants/{identity}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove Meeting Participant
+         * @description Remove someone from the call; they cannot come back to this room.
+         */
+        delete: operations["remove_meeting_participant_v1_meetings_rooms__room_id__participants__identity__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/rooms/{room_id}/participants/{identity}/hand": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Lower Meeting Hand
+         * @description Lower someone's raised hand.
+         */
+        patch: operations["lower_meeting_hand_v1_meetings_rooms__room_id__participants__identity__hand_patch"];
+        trace?: never;
+    };
     "/v1/meetings/join/{token}": {
         parameters: {
             query?: never;
@@ -5306,6 +5346,17 @@ export interface components {
             models: components["schemas"]["FrontierModelView"][];
             /** Packs */
             packs: components["schemas"]["TokenPackView"][];
+        };
+        /**
+         * HandPatch
+         * @description Lower a hand; only lowering is the owner's.
+         */
+        HandPatch: {
+            /**
+             * Raised
+             * @constant
+             */
+            raised: false;
         };
         /**
          * HealthStatus
@@ -8163,7 +8214,7 @@ export interface components {
          * @description One stage of a run.
          * @enum {string}
          */
-        Stage: "intake" | "transcribe" | "diarize" | "align" | "findings" | "write_up";
+        Stage: "intake" | "transcribe" | "align" | "findings" | "write_up";
         /**
          * StageStatus
          * @description Where a stage stands.
@@ -17083,6 +17134,74 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["RoomOut"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    remove_meeting_participant_v1_meetings_rooms__room_id__participants__identity__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                room_id: string;
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    lower_meeting_hand_v1_meetings_rooms__room_id__participants__identity__hand_patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                room_id: string;
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HandPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

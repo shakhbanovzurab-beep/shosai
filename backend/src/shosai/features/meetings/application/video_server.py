@@ -143,6 +143,16 @@ class VideoServer(Protocol):
         """Replace a room's metadata; False when the SFU no longer holds the room."""
         ...
 
+    async def remove_participant(self, room_name: str, identity: str) -> bool:
+        """Disconnect a session; False when it is no longer in the room."""
+        ...
+
+    async def set_attributes(
+        self, room_name: str, identity: str, attributes: Mapping[str, str]
+    ) -> bool:
+        """Set a session's attributes, an empty value removing one; False when it is gone."""
+        ...
+
     def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
         """A pass for one session, valid for the join's 10 minutes."""
         ...
