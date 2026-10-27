@@ -28,3 +28,5 @@ class ProcessRole(StrEnum):
     FILES = "files"
     # Разовая команда инженера: наборы оценки Leo (AG-D8), только в разработке.
     AGENT = "agent"
+    # Разовые команды оператора над слоем решений: калибровка, перевод версий в силу (DL-D6).
+    DECISIONS = "decisions"

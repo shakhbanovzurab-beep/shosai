@@ -43,16 +43,24 @@ class CutAim:
 
 @dataclass(frozen=True, slots=True)
 class Aims:
-    """A policy's targets: each cut's aim, the margin, the accuracy floor per language."""
+    """A policy's targets: each cut's aim, the margin, the accuracy floor per language, and
+    the share of careful cases its careful outcome must find (the accuracy floor by default)."""
 
     cuts: Mapping[str, CutAim]
     margin: float
     accuracy_floor: float
+    careful_floor: float | None = None
 
     def __post_init__(self) -> None:
-        if not 0 <= self.margin <= MAX_MARGIN or not 0 < self.accuracy_floor <= 1:
-            message = "поле неуверенности — до 0,5, порог точности — от 0 до 1"
+        floors = (self.accuracy_floor, self.careful_floor or self.accuracy_floor)
+        if not 0 <= self.margin <= MAX_MARGIN or not all(0 < floor <= 1 for floor in floors):
+            message = "поле неуверенности — до 0,5, пороги точности — от 0 до 1"
             raise ValueError(message)
+
+    @property
+    def careful(self) -> float:
+        """The share of careful cases the careful outcome must find."""
+        return self.careful_floor or self.accuracy_floor
 
 
 def fit_cut(cases: Sequence[Labelled], aim: CutAim, margin: float) -> Cut | None:

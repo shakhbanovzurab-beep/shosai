@@ -81,6 +81,18 @@ class Policy[F, V](ABC):
         """The outcome as a record's code."""
 
     @abstractmethod
+    def parse_facts(self, raw: Mapping[str, object]) -> F:
+        """The facts of a dataset's case; `ValueError` when they are not this policy's."""
+
+    @abstractmethod
+    def careful_case(self, expected: V) -> bool:
+        """Whether a case's expected outcome is the careful one its gate counts."""
+
+    def agrees(self, judged: V, expected: V) -> bool:
+        """Whether a judged outcome is the expected one."""
+        return judged == expected
+
+    @abstractmethod
     def wording(self) -> Mapping[str, object]:
         """Every fixed text of the questions, as the model-facing test and the digest read it."""
 

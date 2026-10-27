@@ -38,6 +38,7 @@ from shosai.composition.agent_eval_command import (
 )
 from shosai.composition.ai_command import KillSwitchAction, KillSwitchCommand, run_kill_switch
 from shosai.composition.ai_rebuild import run_rebuild
+from shosai.composition.decisions_command import add_decisions, decisions_command, run_decisions
 from shosai.composition.email_command import MailCheckCommand, run_mail_check
 from shosai.composition.files_command import run_bucket_rules
 from shosai.composition.identity_command import run_admin_password_hash
@@ -94,6 +95,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     add_observability(roles)
     add_agent(roles)
+    add_decisions(roles)
     files = roles.add_parser(ProcessRole.FILES.value, help="operator commands of the buckets")
     bucket_tools = files.add_subparsers(dest="tool", required=True, metavar="TOOL")
     rules = bucket_tools.add_parser(
@@ -219,7 +221,7 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
             return run_process(role, environ, workers_role(TaskQueue(arguments.queue)))
         case ProcessRole.SCHEDULER:
             return run_process(role, environ, scheduler_role)
-        case ProcessRole.OBSERVABILITY | ProcessRole.AGENT:
+        case ProcessRole.OBSERVABILITY | ProcessRole.AGENT | ProcessRole.DECISIONS:
             return engineer_command(role, arguments, environ)
         case (
             ProcessRole.MIGRATE
@@ -234,7 +236,9 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
 def engineer_command(
     role: ProcessRole, arguments: argparse.Namespace, environ: Mapping[str, str]
 ) -> Coroutine[Any, Any, int]:
-    """The coroutine of a debug switch or of Leo's evaluation."""
+    """The coroutine of a debug switch, of Leo's evaluation or of the Decision Layer's policies."""
+    if role is ProcessRole.DECISIONS:
+        return run_decisions(environ, decisions_command(arguments))
     if role is ProcessRole.AGENT and arguments.cases is not None:
         return run_agent_cases(environ, agent_cases_command(arguments))
     if role is ProcessRole.AGENT:

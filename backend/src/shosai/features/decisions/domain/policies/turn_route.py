@@ -17,6 +17,7 @@ from typing import Final
 
 from shosai.core.ai.decisions import NoulQuestion, Question
 from shosai.features.decisions.domain.calibration import Aims, CutAim
+from shosai.features.decisions.domain.case_fields import records, text, whole
 from shosai.features.decisions.domain.policy import Policy, question_text
 from shosai.features.decisions.domain.state import Fact, TextField, build_state, clip
 from shosai.features.decisions.domain.verdicts import Signal, Verdict
@@ -78,6 +79,8 @@ class TurnRoute(Policy[TurnFacts, tuple[str, ...]]):
         cuts={"needs": CutAim(Verdict.YES, precision=0.8, unsure_joins=Verdict.NO)},
         margin=0.05,
         accuracy_floor=0.8,
+        # Leo §8.2: `load_toolset` нужен не чаще чем в 5 % ходов — нужный набор находится в 95 %.
+        careful_floor=0.95,
     )
 
     def settled(self, facts: TurnFacts, rule: tuple[str, ...]) -> bool:
@@ -141,6 +144,26 @@ class TurnRoute(Policy[TurnFacts, tuple[str, ...]]):
     def code(self, value: tuple[str, ...]) -> str:
         """The ranked toolsets, comma-separated; `-` for none."""
         return ",".join(value) or "-"
+
+    def parse_facts(self, raw: Mapping[str, object]) -> TurnFacts:
+        """A turn's facts from a dataset case."""
+        candidates = tuple(
+            ToolsetCandidate(text(item, "name"), text(item, "summary"))
+            for item in records(raw, "candidates")
+        )
+        return TurnFacts(
+            question=text(raw, "question"), previous=text(raw, "previous"),
+            section=text(raw, "section"), candidates=candidates, forced=whole(raw, "forced"),
+            room=whole(raw, "room"), turn=whole(raw, "turn"),
+        )  # fmt: skip
+
+    def careful_case(self, expected: tuple[str, ...]) -> bool:
+        """A turn that needs at least one candidate."""
+        return bool(expected)
+
+    def agrees(self, judged: tuple[str, ...], expected: tuple[str, ...]) -> bool:
+        """Every needed candidate ranked, and nothing that is not needed; order aside."""
+        return set(judged) == set(expected)
 
     def wording(self) -> Mapping[str, object]:
         """The question's fixed words; each candidate's summary is its tools' registered text."""

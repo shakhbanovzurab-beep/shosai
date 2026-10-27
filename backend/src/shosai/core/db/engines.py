@@ -74,6 +74,14 @@ DATABASE_PROFILES: Final[Mapping[ProcessRole, DatabaseProfile]] = MappingProxyTy
             sweeps=True,
             sweeps_read_only=True,
         ),
+        # Команды слоя решений: ревизии и состояния политик в доме ЕС, счёт теневых решений
+        # обоих домов — обходом только на чтение (в записях нет id человека).
+        ProcessRole.DECISIONS: DatabaseProfile(
+            pool_size=2,
+            statement_timeout=timedelta(seconds=60),
+            sweeps=True,
+            sweeps_read_only=True,
+        ),
     }
 )
 

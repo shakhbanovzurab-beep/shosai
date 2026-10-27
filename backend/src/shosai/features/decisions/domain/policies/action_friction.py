@@ -16,6 +16,7 @@ from typing import Final
 from shosai.core.agent_tools.spec import Reversibility
 from shosai.core.ai.decisions import NoulQuestion, Question, ScoreQuestion
 from shosai.features.decisions.domain.calibration import Aims, CutAim
+from shosai.features.decisions.domain.case_fields import flag, text, whole
 from shosai.features.decisions.domain.policy import Policy, question_text
 from shosai.features.decisions.domain.state import Fact, TextField, build_state
 from shosai.features.decisions.domain.verdicts import Signal, Verdict
@@ -149,6 +150,19 @@ class ActionFriction(Policy[CardFacts, CardFriction]):
     def code(self, value: CardFriction) -> str:
         """`standard` or `warning`."""
         return value.name.lower()
+
+    def parse_facts(self, raw: Mapping[str, object]) -> CardFacts:
+        """A card's facts from a dataset case."""
+        return CardFacts(
+            tool=text(raw, "tool"), toolset=text(raw, "toolset"),
+            reversibility=Reversibility(text(raw, "reversibility")), items=whole(raw, "items"),
+            other_space=flag(raw, "other_space"), rounds=whole(raw, "rounds"),
+            request=text(raw, "request"), card=text(raw, "card"),
+        )  # fmt: skip
+
+    def careful_case(self, expected: CardFriction) -> bool:
+        """A card that should warn."""
+        return expected is CardFriction.WARNING
 
     def wording(self) -> Mapping[str, object]:
         """Both questions."""

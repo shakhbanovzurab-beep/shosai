@@ -15,6 +15,7 @@ from typing import Final
 
 from shosai.core.ai.decisions import NoulQuestion, Question
 from shosai.features.decisions.domain.calibration import Aims, CutAim
+from shosai.features.decisions.domain.case_fields import text
 from shosai.features.decisions.domain.policy import Policy, question_text
 from shosai.features.decisions.domain.state import Fact, TextField, build_state, tokens_of
 from shosai.features.decisions.domain.verdicts import Signal, Verdict
@@ -117,6 +118,14 @@ class ContentInjection(Policy[TextFacts, InjectionFinding]):
     def code(self, value: InjectionFinding) -> str:
         """`suspicious` or `clean`."""
         return value.name.lower()
+
+    def parse_facts(self, raw: Mapping[str, object]) -> TextFacts:
+        """A piece of text from a dataset case."""
+        return TextFacts(label=text(raw, "label"), tool=text(raw, "tool"), text=text(raw, "text"))
+
+    def careful_case(self, expected: InjectionFinding) -> bool:
+        """Text that should be found suspicious."""
+        return expected is InjectionFinding.SUSPICIOUS
 
     def wording(self) -> Mapping[str, object]:
         """The one question."""
