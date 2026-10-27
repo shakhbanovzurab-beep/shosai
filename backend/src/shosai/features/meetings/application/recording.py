@@ -74,8 +74,7 @@ STATES: Final = {
 }
 FAILURES: Final = {"EGRESS_ABORTED": RecordingFailure.EGRESS_ABORTED}
 CONTENT_TYPE: Final = "video/mp4"
-# Сколько ждать вебхука, прежде чем спросить SFU о судьбе egress.
-SETTLING: Final = timedelta(minutes=2)
+SETTLING: Final = timedelta(minutes=2)  # сколько ждать вебхука, прежде чем спросить SFU
 log = structlog.stdlib.get_logger(__name__)
 
 
