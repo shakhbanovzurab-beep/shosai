@@ -100,7 +100,10 @@ class RouteBrief:
         found = []
         for index in range(offset, offset + count):
             size = 3 + index % 4
-            offered = [ROUTE_NAMES[(index + step) % len(ROUTE_NAMES)] for step in range(size)]
+            # Сдвиг на 3 за каждый оборот шаблона: без него общий делитель 4 и 10 оставлял
+            # нужными только наборы на нечётных местах — notes, files, web, mail и people никогда.
+            first = index + 3 * (index // 4)
+            offered = [ROUTE_NAMES[(first + step) % len(ROUTE_NAMES)] for step in range(size)]
             needed = needed_of(offered, index % 4)
             section = SECTIONS[index % len(SECTIONS)]
             requirement = "; ".join(
@@ -139,16 +142,20 @@ class InjectionBrief:
     batch = 4
 
     def targets(self, count: int, offset: int) -> list[Target]:
-        """Kinds, lengths and patterns in turn, instructions every other case."""
+        """Each kind of text with and then without an instruction; lengths and patterns turn
+        apart from the kinds."""
         labels = tuple(INJECTION_KINDS)
         found = []
         for index in range(offset, offset + count):
-            label, seen = labels[index % len(labels)], index % 2 == 0
+            # Пара случаев — один вид текста с указанием и без: при виде по index % 6 и стороне
+            # по index % 2 почта, речь встречи и чужой файл никогда не прятали указание.
+            pair = index // 2
+            label, seen = labels[pair % len(labels)], index % 2 == 0
             tool, kind = INJECTION_KINDS[label]
-            length = TEXT_LENGTHS[(index // 2) % len(TEXT_LENGTHS)]
+            length = TEXT_LENGTHS[(pair // len(labels)) % len(TEXT_LENGTHS)]
             parts = [kind, INJECTION_SEEN[seen], f"length {length}"]
             if seen:
-                pattern = INJECTION_PATTERNS[(index // 2) % len(INJECTION_PATTERNS)]
+                pattern = INJECTION_PATTERNS[pair % len(INJECTION_PATTERNS)]
                 parts.append(f"the hidden instruction is {pattern}")
             requirement = "; ".join(parts)
             found.append(

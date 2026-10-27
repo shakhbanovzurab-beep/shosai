@@ -4,7 +4,7 @@ person (ADR 0069 DL-D8)."""
 import asyncio
 import io
 import json
-from collections import Counter
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -13,6 +13,7 @@ import pytest
 
 from shosai.composition.decisions_dataset_command import stopped
 from shosai.core.ai.calls import CallContext, CallOrigin, ModelRef, ModelRoute, Provider
+from shosai.core.ai.decisions import ChoiceQuestion, Question, ScoreQuestion
 from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.requests import ChatRequest, TextPart
 from shosai.core.ai.results import ChatResult, Usage
@@ -22,6 +23,7 @@ from shosai.features.decisions.application.dataset_making import (
     DatasetMaker,
     Tooling,
 )
+from shosai.features.decisions.domain.examples import Label
 from shosai.features.decisions.domain.policies import POLICIES
 from shosai.features.decisions.domain.policies.action_friction import ACTION_FRICTION
 from shosai.features.decisions.domain.policies.content_injection import CONTENT_INJECTION
@@ -35,7 +37,10 @@ from shosai.features.decisions.infrastructure.dataset_files import (
     write_drafts,
 )
 from shosai.features.decisions.infrastructure.datasets import lines, read_sets
-from shosai.features.decisions.infrastructure.generation_texts import INJECTION_PATTERNS
+from shosai.features.decisions.infrastructure.generation_texts import (
+    INJECTION_KINDS,
+    INJECTION_PATTERNS,
+)
 
 GENERATOR = ModelRoute(ModelRef(Provider.OPENROUTER, "deepseek/deepseek-v4-flash"))
 LABELLER = ModelRoute(ModelRef(Provider.OPENROUTER, "minimax/minimax-m3.1-flash"))
@@ -210,3 +215,39 @@ def test_injection_cases_hide_every_pattern_of_the_agent_s_corpus() -> None:
 
     assert all(any(p in r for r in hiding) for p in INJECTION_PATTERNS)
     assert not any(p in r for p in INJECTION_PATTERNS for r in clean)
+
+
+@pytest.mark.parametrize("policy", POLICIES, ids=lambda policy: policy.key)
+@pytest.mark.parametrize("offset", [0, 1, 7])
+def test_every_question_takes_every_value_from_any_start(
+    policy: Policy[Any, Any], offset: int
+) -> None:
+    """Rotations sharing a divisor lock a label to a kind: a tool set was once never needed."""
+    brief = BRIEFS[policy.point]
+    seen: dict[str, set[Label]] = defaultdict(set)
+    wanted: dict[str, set[Label]] = {}
+
+    for target in brief.targets(240, offset):
+        facts = policy.parse_facts(brief.facts(target, WRITTEN[policy.point]))
+        for name, question in policy.questions(facts).items():
+            seen[name].add(target.labels[name])
+            wanted[name] = values_of(question)
+
+    assert seen == wanted
+
+
+def test_every_text_source_comes_with_and_without_a_hidden_instruction() -> None:
+    targets = BRIEFS["content.injection"].targets(2 * len(INJECTION_KINDS), 3)
+
+    pairs = {(t.fixed["label"], t.labels["instructions"]) for t in targets}
+
+    assert pairs == {(label, seen) for label in INJECTION_KINDS for seen in (True, False)}
+
+
+def values_of(question: Question) -> set[Label]:
+    """Every label a question can take."""
+    if isinstance(question, ScoreQuestion):
+        return set(range(len(question.criteria)))
+    if isinstance(question, ChoiceQuestion):
+        return set(question.criteria)
+    return {True, False}
