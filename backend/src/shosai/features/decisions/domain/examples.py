@@ -9,7 +9,8 @@ re-read exactly in CI without a call.
 """
 
 from collections.abc import Mapping
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field, is_dataclass
+from enum import Enum
 from typing import Any
 
 from shosai.core.ai.decisions import (
@@ -129,3 +130,33 @@ def answer_of(raw: Mapping[str, Any]) -> Answer:
         )
     message = "ответ — noul, choice или score"
     raise ValueError(message)
+
+
+def facts_data(facts: object) -> dict[str, object]:
+    """A policy's facts as a dataset line holds them: dataclasses as objects, enums by value."""
+    if not is_dataclass(facts) or isinstance(facts, type):
+        message = "факты политики — экземпляр dataclass"
+        raise TypeError(message)
+    return {name: plain(value) for name, value in asdict(facts).items()}
+
+
+def plain(value: object) -> object:
+    """A fact's value as JSON writes it."""
+    if isinstance(value, Enum):
+        return value.value
+    if isinstance(value, list | tuple):
+        return [plain(item) for item in value]
+    if isinstance(value, dict):
+        return {str(key): plain(item) for key, item in value.items()}
+    return value
+
+
+def case_data(case: Case) -> dict[str, object]:
+    """A case as a dataset line holds it."""
+    line: dict[str, object] = {
+        "id": case.id, "language": case.language, "facts": facts_data(case.facts),
+        "labels": dict(case.labels),
+    }  # fmt: skip
+    if case.machine_labels:
+        line["machine_labels"] = dict(case.machine_labels)
+    return line

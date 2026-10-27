@@ -1,6 +1,6 @@
 """`shosai decisions`: the Decision Layer's policies on the host (ADR 0069 DL-D6).
 
-    shosai decisions dataset check                    every point's sets in shape
+    shosai decisions dataset check|generate|draft-reference|label-reference …   the sets
     shosai decisions calibrate POINT@VERSION [--recorded] [--concurrency N]
     shosai decisions report POINT                     versions in force and revisions
     shosai decisions promote POINT@VERSION --revision N --to shadow|active [--note TEXT]
@@ -20,6 +20,7 @@ from collections.abc import Coroutine, Mapping
 from dataclasses import dataclass
 from typing import Any, Final, Literal, TextIO
 
+from shosai.composition.decisions_dataset_command import add_dataset, checked, made
 from shosai.composition.features import FEATURES
 from shosai.composition.platform import open_platform
 from shosai.composition.startup import load_process_settings
@@ -27,15 +28,23 @@ from shosai.composition.telemetry import open_telemetry
 from shosai.core.config.roles import ProcessRole
 from shosai.features.decisions.application.calibration import Calibration
 from shosai.features.decisions.application.promotion import Promotion
-from shosai.features.decisions.domain.policies import POLICIES, policies_by_key
-from shosai.features.decisions.infrastructure.datasets import read_sets
+from shosai.features.decisions.domain.policies import policies_by_key
 from shosai.features.decisions.infrastructure.policy_admin import PolicyAdmin
 from shosai.features.decisions.settings import DecisionsSettings
 
 EXIT_OK: Final = 0
 EXIT_FAILED: Final = 1
 
-type Action = Literal["check", "calibrate", "report", "promote", "retire"]
+type Action = Literal[
+    "check", "generate", "draft", "label", "calibrate", "report", "promote", "retire"
+]
+
+DATASET_ACTIONS: Final[Mapping[str, Action]] = {
+    "check": "check",
+    "generate": "generate",
+    "draft-reference": "draft",
+    "label-reference": "label",
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,6 +58,8 @@ class DecisionsCommand:
     revision: int | None = None
     state: str | None = None
     note: str | None = None
+    language: str | None = None
+    count: int = 0
 
 
 def add_decisions(roles: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
@@ -57,8 +68,7 @@ def add_decisions(roles: argparse._SubParsersAction[argparse.ArgumentParser]) ->
         ProcessRole.DECISIONS.value, help="operator commands of the Decision Layer"
     )
     actions = decisions.add_subparsers(dest="action", required=True, metavar="ACTION")
-    dataset = actions.add_parser("dataset", help="the labelled sets beside the code")
-    dataset.add_argument("check", choices=["check"], help="every point's sets in shape")
+    add_dataset(actions)
     calibrate = actions.add_parser("calibrate", help="fit and gate a version; store a revision")
     calibrate.add_argument("target", metavar="POINT@VERSION")
     calibrate.add_argument("--recorded", action="store_true", help="re-read the last live run")
@@ -79,7 +89,9 @@ def add_decisions(roles: argparse._SubParsersAction[argparse.ArgumentParser]) ->
 
 def decisions_command(arguments: argparse.Namespace) -> DecisionsCommand:
     """The command from the parsed arguments."""
-    action: Action = "check" if arguments.action == "dataset" else arguments.action
+    action: Action = arguments.action
+    if arguments.action == "dataset":
+        action = DATASET_ACTIONS[arguments.tool]
     return DecisionsCommand(
         action=action,
         target=getattr(arguments, "target", None),
@@ -88,6 +100,8 @@ def decisions_command(arguments: argparse.Namespace) -> DecisionsCommand:
         revision=getattr(arguments, "revision", None),
         state=getattr(arguments, "state", None),
         note=getattr(arguments, "note", None),
+        language=getattr(arguments, "language", None),
+        count=getattr(arguments, "count", 0),
     )
 
 
@@ -113,26 +127,13 @@ async def _run(environ: Mapping[str, str], command: DecisionsCommand, out: TextI
         admin = PolicyAdmin(services.transactions)
         if command.action == "report":
             return await reported(admin, command.target or "", out)
+        if command.action in {"generate", "draft", "label"}:
+            sizing = (command.language, command.count)
+            return await made(services, command.action, command.target or "", sizing, out)
         if command.action == "calibrate":
             route = services.settings.features.get(DecisionsSettings).jev_route()
             return await calibrated(Calibration(admin, (services.ai, route)), command, out)
         return await changed(Promotion(admin, policies_by_key()), command, out)
-
-
-def checked(out: TextIO) -> int:
-    """Read every point's sets; name what is off."""
-    problems = 0
-    for policy in POLICIES:
-        try:
-            sets = read_sets(policy)
-        except ValueError as error:
-            problems += 1
-            out.write(f"{policy.key}: {error}\n")
-            continue
-        out.write(
-            f"{policy.key}: {len(sets.synthetic)} synthetic, {len(sets.reference)} reference\n"
-        )
-    return EXIT_FAILED if problems else EXIT_OK
 
 
 async def calibrated(calibration: Calibration, command: DecisionsCommand, out: TextIO) -> int:

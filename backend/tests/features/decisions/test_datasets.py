@@ -99,6 +99,36 @@ async def test_the_check_reads_every_points_sets() -> None:
     [
         (["decisions", "dataset", "check"], DecisionsCommand(action="check")),
         (
+            [
+                "decisions",
+                "dataset",
+                "generate",
+                "turn.route@1",
+                "--language",
+                "all",
+                "--count",
+                "8",
+            ],
+            DecisionsCommand(action="generate", target="turn.route@1", language="all", count=8),
+        ),
+        (
+            [
+                "decisions",
+                "dataset",
+                "draft-reference",
+                "turn.route@1",
+                "--language",
+                "ru",
+                "--count",
+                "60",
+            ],
+            DecisionsCommand(action="draft", target="turn.route@1", language="ru", count=60),
+        ),
+        (
+            ["decisions", "dataset", "label-reference", "turn.route@1"],
+            DecisionsCommand(action="label", target="turn.route@1"),
+        ),
+        (
             ["decisions", "calibrate", "action.friction@1", "--recorded"],
             DecisionsCommand(action="calibrate", target="action.friction@1", recorded=True),
         ),

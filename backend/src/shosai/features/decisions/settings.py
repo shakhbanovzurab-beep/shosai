@@ -4,7 +4,9 @@
 `~typesafe/jev-latest`, whose answers would change under calibrated thresholds without a
 new version (Leo §6.1). `DECISIONS_MAX_IN_FLIGHT` caps the Jev calls one process keeps in
 flight, late ones included: past it a decision is the rule's outcome (`busy`), so a slow Jev
-can never pile calls up in a process.
+can never pile calls up in a process. `DECISIONS_GENERATOR_MODEL` writes the synthetic cases
+of the labelled sets and `DECISIONS_LABELLER_MODEL`, of another provider, labels cases blind
+(ADR 0069 DL-D8); only the operator's command uses them.
 """
 
 import re
@@ -24,6 +26,10 @@ class DecisionsSettings(SettingsSection):
     # Закреплённая версия Jev: от неё зависят откалиброванные пороги.
     decisions_jev_model: str = "typesafe/jev-1.13"
     decisions_max_in_flight: PositiveInt = 64
+    # Модель, которая пишет синтетические случаи наборов, и независимая модель другого
+    # поставщика, которая размечает их вслепую (DL-D8). Только для команды оператора.
+    decisions_generator_model: str = "anthropic/claude-sonnet-5.5"
+    decisions_labeller_model: str = "openai/gpt-5.6-terra"
 
     @model_validator(mode="after")
     def pinned(self) -> Self:
@@ -33,6 +39,14 @@ class DecisionsSettings(SettingsSection):
             message = "DECISIONS_JEV_MODEL — закреплённая версия Jev, не псевдоним"
             raise ValueError(message)
         return self
+
+    def generator_route(self) -> ModelRoute:
+        """The model that writes synthetic cases."""
+        return ModelRoute(ModelRef(Provider.OPENROUTER, self.decisions_generator_model))
+
+    def labeller_route(self) -> ModelRoute:
+        """The model that labels cases blind."""
+        return ModelRoute(ModelRef(Provider.OPENROUTER, self.decisions_labeller_model))
 
     def jev_route(self) -> ModelRoute:
         """The route of every decision: the pinned model, no fallback of another kind."""
