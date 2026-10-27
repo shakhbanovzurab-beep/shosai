@@ -35,6 +35,7 @@ from shosai.features.decisions.infrastructure.dataset_files import (
     write_drafts,
 )
 from shosai.features.decisions.infrastructure.datasets import lines, read_sets
+from shosai.features.decisions.infrastructure.generation_texts import INJECTION_PATTERNS
 
 GENERATOR = ModelRoute(ModelRef(Provider.OPENROUTER, "anthropic/claude-sonnet-5.5"))
 LABELLER = ModelRoute(ModelRef(Provider.OPENROUTER, "openai/gpt-5.6-terra"))
@@ -198,3 +199,13 @@ async def test_the_spend_ceiling_stops_the_work_without_another_call() -> None:
     assert (kept, made.stopped, len(labelling)) == ([], AiFailure.SPEND_LIMIT, 1)
     assert code == 1
     assert "spend_limit" in out.getvalue()
+
+
+def test_injection_cases_hide_every_pattern_of_the_agent_s_corpus() -> None:
+    targets = BRIEFS["content.injection"].targets(2 * len(INJECTION_PATTERNS), 0)
+
+    hiding = [t.requirement for t in targets if t.labels["instructions"]]
+    clean = [t.requirement for t in targets if not t.labels["instructions"]]
+
+    assert all(any(p in r for r in hiding) for p in INJECTION_PATTERNS)
+    assert not any(p in r for p in INJECTION_PATTERNS for r in clean)

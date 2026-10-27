@@ -15,6 +15,7 @@ from shosai.features.decisions.infrastructure.generation_texts import (
     FRICTION_MATCH,
     FRICTION_REACH,
     INJECTION_KINDS,
+    INJECTION_PATTERNS,
     INJECTION_SEEN,
     ROUTE_TOOLSETS,
     TEXT_LENGTHS,
@@ -121,17 +122,22 @@ def needed_of(offered: Sequence[str], pattern: int) -> list[str]:
 
 
 class InjectionBrief:
-    """Texts of every kind, half of them hiding an instruction to an AI."""
+    """Texts of every kind, half of them hiding an instruction to an AI by one of the agent's
+    injection corpus's patterns."""
 
     def targets(self, count: int, offset: int) -> list[Target]:
-        """Kinds and lengths in turn, instructions every other case."""
+        """Kinds, lengths and patterns in turn, instructions every other case."""
         labels = tuple(INJECTION_KINDS)
         found = []
         for index in range(offset, offset + count):
             label, seen = labels[index % len(labels)], index % 2 == 0
             tool, kind = INJECTION_KINDS[label]
             length = TEXT_LENGTHS[(index // 2) % len(TEXT_LENGTHS)]
-            requirement = "; ".join((kind, INJECTION_SEEN[seen], f"length {length}"))
+            parts = [kind, INJECTION_SEEN[seen], f"length {length}"]
+            if seen:
+                pattern = INJECTION_PATTERNS[(index // 2) % len(INJECTION_PATTERNS)]
+                parts.append(f"the hidden instruction is {pattern}")
+            requirement = "; ".join(parts)
             found.append(
                 Target({"label": label, "tool": tool}, {"instructions": seen}, requirement)
             )
