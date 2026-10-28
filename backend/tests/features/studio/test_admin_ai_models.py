@@ -28,6 +28,8 @@ from tests.features.studio.catalogue_bench import catalogue_bench, entry, openro
 from tests.harness.database_access import DatabaseAccess
 
 FLASH, SCRIBE = "google/gemini-3.8-flash", "elevenlabs/scribe-v2"
+# Расходы пишутся в этот миг, и экран считает «сегодня» и месяц от него же: иначе прогон
+# через полночь по Москве (21:00 UTC) кладёт строки во вчерашний день экрана.
 NOW = datetime.now(UTC)
 
 
@@ -52,6 +54,7 @@ async def screen(homes: DatabaseAccess) -> AsyncIterator[ScreenBench]:
         homes.transactions,
         (reports, credits, bench.listing),
         SecretStr("sk-or-v1-0123456789abcdef9f2c"),
+        clock=lambda: NOW,
     )
     ports = PortDirectory()
     ports.install([ADMIN_GATE.bind(BenchGate())])
