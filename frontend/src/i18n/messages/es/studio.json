@@ -51,14 +51,16 @@
     "savesAutomatically": "Se guarda automáticamente"
   },
   "preview": {
-    "title": "Cómo se envía",
+    "title": "Lo que recibe el modelo",
     "description": "Tu contexto va en cada respuesta que recibes, después de las instrucciones de Shosai y antes del prompt del rol.",
-    "system": "Sistema",
-    "user": "Usuario",
-    "empty": "(vacío: no se envía nada)",
     "platform": "Instrucciones de Shosai",
-    "rolePrompt": "prompt del rol (pestaña Prompts de rol)",
-    "question": "tu pregunta"
+    "platformHint": "Las reglas generales de la plataforma",
+    "contextHint": "Lo que escribes aquí",
+    "rolePrompt": "Prompt del rol",
+    "rolePromptHint": "De la pestaña Prompts de rol",
+    "question": "Tu pregunta",
+    "questionHint": "Lo que preguntas a Leo o a un rol",
+    "empty": "Vacío: no se envía nada"
   },
   "models": {
     "intro": "Elige qué modelo responde en cada rol. La lista muestra solo los modelos incluidos en tu suscripción.",

@@ -51,14 +51,16 @@
     "savesAutomatically": "Enregistrement automatique"
   },
   "preview": {
-    "title": "Ce qui est envoyé",
+    "title": "Ce que reçoit le modèle",
     "description": "Votre contexte accompagne chaque réponse qui vous est adressée, après les instructions de Shosai et avant le prompt du rôle.",
-    "system": "Système",
-    "user": "Utilisateur",
-    "empty": "(vide : rien n’est envoyé)",
     "platform": "Instructions de Shosai",
-    "rolePrompt": "prompt du rôle, depuis Prompts des rôles",
-    "question": "votre question"
+    "platformHint": "Les règles générales de la plateforme",
+    "contextHint": "Ce que vous écrivez ici",
+    "rolePrompt": "Prompt du rôle",
+    "rolePromptHint": "Depuis l’onglet Prompts des rôles",
+    "question": "Votre question",
+    "questionHint": "Ce que vous demandez à Leo ou à un rôle",
+    "empty": "Vide : rien n’est envoyé"
   },
   "models": {
     "intro": "Choisissez le modèle qui répond pour chaque rôle. La liste ne montre que les modèles inclus dans votre abonnement.",

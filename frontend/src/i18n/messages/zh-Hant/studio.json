@@ -51,14 +51,16 @@
     "savesAutomatically": "自動儲存"
   },
   "preview": {
-    "title": "傳送方式",
+    "title": "模型會收到的內容",
     "description": "你的背景資訊會加入給你的每個回答，位置在 Shosai 的指示之後、角色的提示詞之前。",
-    "system": "系統",
-    "user": "使用者",
-    "empty": "（空白，不會傳送任何內容）",
     "platform": "Shosai 的指示",
-    "rolePrompt": "「提示詞」中的角色提示詞",
-    "question": "你的問題"
+    "platformHint": "平台的通用規則",
+    "contextHint": "你在這裡寫的內容",
+    "rolePrompt": "角色提示詞",
+    "rolePromptHint": "來自「提示詞」分頁",
+    "question": "你的問題",
+    "questionHint": "你問 Leo 或角色的內容",
+    "empty": "空白，不會傳送任何內容"
   },
   "models": {
     "intro": "選擇每個角色由哪個模型回答。清單只會顯示你的訂閱所包含的模型。",

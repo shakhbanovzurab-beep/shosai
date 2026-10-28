@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { cn } from "cn";
 import { toast } from "sonner";
 import { useFormatter, useTranslations } from "use-intl";
 
@@ -20,9 +21,11 @@ function Unsupported() {
   return <span className="text-muted-foreground text-sm">{t("models.unsupported")}</span>;
 }
 
-function Labelled({ label, htmlFor, children }: { label: string; htmlFor?: string; children: React.ReactNode }) {
+type LabelledProps = { label: string; htmlFor?: string; className?: string; children: React.ReactNode };
+
+function Labelled({ label, htmlFor, className, children }: LabelledProps) {
   return (
-    <div className="flex min-w-0 flex-col gap-2">
+    <div className={cn("flex min-w-0 flex-col gap-2", className)}>
       <label htmlFor={htmlFor} className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
         {label}
       </label>
@@ -44,6 +47,8 @@ export function RoleModelRow({ role, settings, models }: RoleModelRowProps) {
   const options = models.filter((m) => m.capabilities.includes(role.requires));
   const model = options.find((m) => m.id === settings.model_id);
   const unavailable = settings.model_id !== null && model === undefined;
+  // Переключатель действует, когда отвечающая модель рассуждает; модель по умолчанию выбирает Shosai.
+  const reasoningApplies = model === undefined || model.supports_reasoning;
   // Only edits in progress live here; otherwise the saved settings are shown.
   const [draggedTemperature, setDraggedTemperature] = useState<number | null>(null);
   const [tokensDraft, setTokensDraft] = useState<string | null>(null);
@@ -118,8 +123,13 @@ export function RoleModelRow({ role, settings, models }: RoleModelRowProps) {
           className="font-mono tabular-nums"
         />
       </Labelled>
-      <Labelled label={t("models.reasoning")} htmlFor={model?.supports_reasoning ? `${id}-reasoning` : undefined}>
-        {model?.supports_reasoning ? (
+      {/* В строке таблицы переключатель стоит по центру своей колонки, под подписью. */}
+      <Labelled
+        label={t("models.reasoning")}
+        htmlFor={reasoningApplies ? `${id}-reasoning` : undefined}
+        className="lg:items-center lg:text-center"
+      >
+        {reasoningApplies ? (
           <Switch
             id={`${id}-reasoning`}
             checked={settings.reasoning}

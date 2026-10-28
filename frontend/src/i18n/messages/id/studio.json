@@ -51,14 +51,16 @@
     "savesAutomatically": "Disimpan otomatis"
   },
   "preview": {
-    "title": "Cara pengirimannya",
+    "title": "Yang diterima model",
     "description": "Konteks Anda masuk ke setiap jawaban untuk Anda, setelah instruksi Shosai dan sebelum prompt peran.",
-    "system": "Sistem",
-    "user": "Pengguna",
-    "empty": "(kosong — tidak ada yang dikirim)",
     "platform": "Instruksi Shosai",
-    "rolePrompt": "prompt peran dari Prompt",
-    "question": "pertanyaan Anda"
+    "platformHint": "Aturan umum platform",
+    "contextHint": "Yang Anda tulis di sini",
+    "rolePrompt": "Prompt peran",
+    "rolePromptHint": "Dari tab Prompt",
+    "question": "Pertanyaan Anda",
+    "questionHint": "Yang Anda tanyakan ke Leo atau peran",
+    "empty": "Kosong — tidak ada yang dikirim"
   },
   "models": {
     "intro": "Pilih model yang menjawab untuk setiap peran. Daftar ini hanya menampilkan model yang termasuk dalam langganan Anda.",

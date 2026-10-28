@@ -51,14 +51,16 @@
     "savesAutomatically": "Saves automatically"
   },
   "preview": {
-    "title": "How it’s sent",
+    "title": "What the model receives",
     "description": "Your context goes into every answer to you, after Shosai’s instructions and before the role’s prompt.",
-    "system": "System",
-    "user": "User",
-    "empty": "(empty — nothing is sent)",
     "platform": "Shosai’s instructions",
-    "rolePrompt": "role prompt from Prompts",
-    "question": "your question"
+    "platformHint": "The platform’s general rules",
+    "contextHint": "What you write here",
+    "rolePrompt": "Role prompt",
+    "rolePromptHint": "From the Prompts tab",
+    "question": "Your question",
+    "questionHint": "What you ask Leo or a role",
+    "empty": "Empty — nothing is sent"
   },
   "models": {
     "intro": "Choose which model answers in each role. The list shows only the models on your subscription.",

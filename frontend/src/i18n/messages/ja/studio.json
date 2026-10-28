@@ -51,14 +51,16 @@
     "savesAutomatically": "自動的に保存されます"
   },
   "preview": {
-    "title": "送信される内容",
+    "title": "モデルが受け取る内容",
     "description": "コンテキストは、あなたへのすべての回答で、Shosai の指示の後、役割のプロンプトの前に入ります。",
-    "system": "システム",
-    "user": "ユーザー",
-    "empty": "（空のため、何も送信されません）",
     "platform": "Shosai の指示",
-    "rolePrompt": "プロンプトで設定した役割のプロンプト",
-    "question": "質問内容"
+    "platformHint": "プラットフォーム共通のルール",
+    "contextHint": "ここに書いた内容",
+    "rolePrompt": "役割のプロンプト",
+    "rolePromptHint": "プロンプトタブで設定",
+    "question": "質問内容",
+    "questionHint": "Leo や役割に尋ねる内容",
+    "empty": "空のため、何も送信されません"
   },
   "models": {
     "intro": "役割ごとに回答するモデルを選択します。リストには、現在のサブスクリプションで使えるモデルだけが表示されます。",

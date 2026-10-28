@@ -51,14 +51,16 @@
     "savesAutomatically": "Wird automatisch gespeichert"
   },
   "preview": {
-    "title": "So wird er gesendet",
+    "title": "Was das Modell bekommt",
     "description": "Dein Kontext fließt in jede Antwort an dich ein – nach den Anweisungen von Shosai und vor dem Prompt der Rolle.",
-    "system": "System",
-    "user": "Nutzer",
-    "empty": "(leer – es wird nichts gesendet)",
     "platform": "Anweisungen von Shosai",
-    "rolePrompt": "Rollen-Prompt aus Prompts",
-    "question": "deine Frage"
+    "platformHint": "Die allgemeinen Regeln der Plattform",
+    "contextHint": "Was du hier schreibst",
+    "rolePrompt": "Rollen-Prompt",
+    "rolePromptHint": "Aus dem Tab Prompts",
+    "question": "Deine Frage",
+    "questionHint": "Was du Leo oder eine Rolle fragst",
+    "empty": "Leer – es wird nichts gesendet"
   },
   "models": {
     "intro": "Wähle, welches Modell in jeder Rolle antwortet. Die Liste zeigt nur die Modelle aus deinem Abo.",

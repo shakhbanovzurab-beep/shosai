@@ -51,14 +51,16 @@
     "savesAutomatically": "Salvamento automático"
   },
   "preview": {
-    "title": "Como é enviado",
+    "title": "O que o modelo recebe",
     "description": "Seu contexto entra em toda resposta para você, depois das instruções do Shosai e antes do prompt da função.",
-    "system": "Sistema",
-    "user": "Usuário",
-    "empty": "(vazio — nada é enviado)",
     "platform": "Instruções do Shosai",
-    "rolePrompt": "prompt da função, da aba Seus prompts",
-    "question": "sua pergunta"
+    "platformHint": "As regras gerais da plataforma",
+    "contextHint": "O que você escreve aqui",
+    "rolePrompt": "Prompt da função",
+    "rolePromptHint": "Da aba Seus prompts",
+    "question": "Sua pergunta",
+    "questionHint": "O que você pergunta ao Leo ou a uma função",
+    "empty": "Vazio — nada é enviado"
   },
   "models": {
     "intro": "Escolha qual modelo responde em cada função. A lista mostra apenas os modelos incluídos na sua assinatura.",

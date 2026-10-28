@@ -51,14 +51,16 @@
     "savesAutomatically": "Salvataggio automatico"
   },
   "preview": {
-    "title": "Come viene inviato",
+    "title": "Cosa riceve il modello",
     "description": "Il tuo contesto entra in ogni risposta che ricevi, dopo le istruzioni di Shosai e prima del prompt del ruolo.",
-    "system": "Sistema",
-    "user": "Utente",
-    "empty": "(vuoto: non viene inviato niente)",
     "platform": "Istruzioni di Shosai",
-    "rolePrompt": "prompt del ruolo da Prompt",
-    "question": "la tua domanda"
+    "platformHint": "Le regole generali della piattaforma",
+    "contextHint": "Quello che scrivi qui",
+    "rolePrompt": "Prompt del ruolo",
+    "rolePromptHint": "Dalla scheda Prompt",
+    "question": "La tua domanda",
+    "questionHint": "Quello che chiedi a Leo o a un ruolo",
+    "empty": "Vuoto: non viene inviato niente"
   },
   "models": {
     "intro": "Scegli quale modello risponde in ogni ruolo. L’elenco mostra solo i modelli inclusi nel tuo abbonamento.",

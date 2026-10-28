@@ -51,14 +51,16 @@
     "savesAutomatically": "Otomatik olarak kaydedilir"
   },
   "preview": {
-    "title": "Nasıl gönderilir",
+    "title": "Modelin aldıkları",
     "description": "Bağlamınız size verilen her yanıta, Shosai’nin talimatlarından sonra ve rolün isteminden önce eklenir.",
-    "system": "Sistem",
-    "user": "Kullanıcı",
-    "empty": "(boş — hiçbir şey gönderilmez)",
     "platform": "Shosai’nin talimatları",
-    "rolePrompt": "İstemler bölümündeki rol istemi",
-    "question": "sorunuz"
+    "platformHint": "Platformun genel kuralları",
+    "contextHint": "Burada yazdıklarınız",
+    "rolePrompt": "Rol istemi",
+    "rolePromptHint": "İstemler bölümünden",
+    "question": "Sorunuz",
+    "questionHint": "Leo’ya veya bir role sorduklarınız",
+    "empty": "Boş — hiçbir şey gönderilmez"
   },
   "models": {
     "intro": "Her rolde hangi modelin yanıt vereceğini seçin. Listede yalnızca aboneliğinize dahil modeller gösterilir.",

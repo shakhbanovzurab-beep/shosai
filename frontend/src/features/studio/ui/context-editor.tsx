@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { CircleAlert } from "lucide-react";
 import { useFormatter, useNow, useTranslations } from "use-intl";
 
@@ -62,17 +60,16 @@ function SaveStatus({
   );
 }
 
-type ContextEditorProps = { initialContent: string; savedAt: string | null };
+type ContextEditorProps = { draft: string; onDraftChange: (value: string) => void; savedAt: string | null };
 
 /** The text sent as the first system message of every request. Saves itself as you type. */
-export function ContextEditor({ initialContent, savedAt }: ContextEditorProps) {
+export function ContextEditor({ draft, onDraftChange, savedAt }: ContextEditorProps) {
   const t = useTranslations("studio");
-  const [draft, setDraft] = useState(initialContent);
   const autosave = useAutosave(saveContext);
   const tooLong = draft.length > CONTEXT_MAX_CHARS;
 
   const change = (value: string) => {
-    setDraft(value);
+    onDraftChange(value);
     // Over the limit stays local until it is trimmed back; the server would refuse it anyway.
     if (value.length <= CONTEXT_MAX_CHARS) autosave.schedule(value);
   };

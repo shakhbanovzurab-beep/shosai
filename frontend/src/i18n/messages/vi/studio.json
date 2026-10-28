@@ -51,14 +51,16 @@
     "savesAutomatically": "Tự động lưu"
   },
   "preview": {
-    "title": "Cách được gửi đi",
+    "title": "Những gì mô hình nhận được",
     "description": "Ngữ cảnh của bạn được đưa vào mọi câu trả lời dành cho bạn, sau hướng dẫn của Shosai và trước câu lệnh của vai trò.",
-    "system": "Hệ thống",
-    "user": "Người dùng",
-    "empty": "(trống — không gửi gì)",
     "platform": "Hướng dẫn của Shosai",
-    "rolePrompt": "câu lệnh của vai trò từ mục Câu lệnh",
-    "question": "câu hỏi của bạn"
+    "platformHint": "Các quy tắc chung của nền tảng",
+    "contextHint": "Những gì bạn viết ở đây",
+    "rolePrompt": "Câu lệnh của vai trò",
+    "rolePromptHint": "Từ mục Câu lệnh",
+    "question": "Câu hỏi của bạn",
+    "questionHint": "Những gì bạn hỏi Leo hoặc một vai trò",
+    "empty": "Trống — không gửi gì"
   },
   "models": {
     "intro": "Chọn mô hình trả lời cho từng vai trò. Danh sách chỉ hiển thị các mô hình có trong gói đăng ký của bạn.",

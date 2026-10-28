@@ -51,14 +51,16 @@
     "savesAutomatically": "자동으로 저장돼요"
   },
   "preview": {
-    "title": "전송 방식",
+    "title": "모델이 받는 내용",
     "description": "컨텍스트는 나에게 오는 모든 답변에 Shosai의 지침 다음, 역할 프롬프트 앞에 들어가요.",
-    "system": "시스템",
-    "user": "사용자",
-    "empty": "(비어 있음 — 아무것도 보내지 않아요)",
     "platform": "Shosai의 지침",
-    "rolePrompt": "프롬프트 탭의 역할 프롬프트",
-    "question": "내 질문"
+    "platformHint": "플랫폼의 공통 규칙",
+    "contextHint": "여기에 쓴 내용",
+    "rolePrompt": "역할 프롬프트",
+    "rolePromptHint": "프롬프트 탭에서",
+    "question": "내 질문",
+    "questionHint": "Leo나 역할에게 묻는 내용",
+    "empty": "비어 있음 — 아무것도 보내지 않아요"
   },
   "models": {
     "intro": "역할마다 답변할 모델을 선택해요. 목록에는 현재 구독에 포함된 모델만 표시돼요.",

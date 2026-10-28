@@ -51,14 +51,16 @@
     "savesAutomatically": "Wordt automatisch opgeslagen"
   },
   "preview": {
-    "title": "Hoe het wordt verstuurd",
+    "title": "Wat het model krijgt",
     "description": "Je context gaat mee in elk antwoord aan jou, na de instructies van Shosai en vóór de prompt van de rol.",
-    "system": "Systeem",
-    "user": "Gebruiker",
-    "empty": "(leeg: er wordt niets verstuurd)",
     "platform": "Instructies van Shosai",
-    "rolePrompt": "rolprompt uit Prompts",
-    "question": "je vraag"
+    "platformHint": "De algemene regels van het platform",
+    "contextHint": "Wat je hier schrijft",
+    "rolePrompt": "Rolprompt",
+    "rolePromptHint": "Uit het tabblad Prompts",
+    "question": "Je vraag",
+    "questionHint": "Wat je Leo of een rol vraagt",
+    "empty": "Leeg: er wordt niets verstuurd"
   },
   "models": {
     "intro": "Kies welk model in elke rol antwoordt. De lijst toont alleen de modellen in je abonnement.",
