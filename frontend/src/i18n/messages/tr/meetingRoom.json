@@ -38,7 +38,8 @@
     "react": "Tepkiler",
     "chat": "Sohbet",
     "unread": "{count, plural, one {# okunmamış mesaj} other {# okunmamış mesaj}}",
-    "people": "Katılımcılar"
+    "people": "Katılımcılar",
+    "board": "Çizim panosu"
   },
   "reactions": {
     "thumbsUp": "Beğen",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Bağlantı kesildi",
       "description": "Bağlantınızı kontrol edip yeniden katılın."
+    }
+  },
+  "board": {
+    "label": "Çizim panosu",
+    "readOnly": "Salt okunur: toplantı sona erdi",
+    "loading": "Çizim panosu açılıyor…",
+    "reload": "En son sürümü yükle",
+    "close": "Çizim panosunu kapat",
+    "save": {
+      "loading": "Çizim panosu açılıyor…",
+      "saved": "Kaydedildi",
+      "saving": "Kaydediliyor…",
+      "conflict": "Çizim panosunu başka biri kaydetti. Çizmeye devam etmek için en son sürümü yükleyin.",
+      "too_large": "Çizim panosu kaydetmek için çok büyük. Bazı görselleri veya şekilleri kaldırın.",
+      "failed": "Çizim panosu kaydedilemedi. Bağlantınızı kontrol edin."
     }
   }
 }

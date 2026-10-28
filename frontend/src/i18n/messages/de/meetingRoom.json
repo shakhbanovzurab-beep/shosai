@@ -38,7 +38,8 @@
     "react": "Reaktionen",
     "chat": "Chat",
     "unread": "{count, plural, one {# ungelesene Nachricht} other {# ungelesene Nachrichten}}",
-    "people": "Teilnehmer"
+    "people": "Teilnehmer",
+    "board": "Whiteboard"
   },
   "reactions": {
     "thumbsUp": "Daumen hoch",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Verbindung verloren",
       "description": "Prüfe deine Verbindung und tritt erneut bei."
+    }
+  },
+  "board": {
+    "label": "Whiteboard",
+    "readOnly": "Nur lesen: Das Meeting ist beendet",
+    "loading": "Whiteboard wird geöffnet…",
+    "reload": "Neueste laden",
+    "close": "Whiteboard schließen",
+    "save": {
+      "loading": "Whiteboard wird geöffnet…",
+      "saved": "Gespeichert",
+      "saving": "Wird gespeichert…",
+      "conflict": "Jemand anderes hat das Whiteboard gespeichert. Lade die neueste Version, um weiterzuzeichnen.",
+      "too_large": "Das Whiteboard ist zu groß zum Speichern. Entferne einige Bilder oder Formen.",
+      "failed": "Das Whiteboard konnte nicht gespeichert werden. Prüfe deine Verbindung."
     }
   }
 }

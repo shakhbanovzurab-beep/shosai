@@ -38,7 +38,8 @@
     "react": "Reactions",
     "chat": "Chat",
     "unread": "{count, plural, one {# unread message} other {# unread messages}}",
-    "people": "Participants"
+    "people": "Participants",
+    "board": "Board"
   },
   "reactions": {
     "thumbsUp": "Thumbs up",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Connection lost",
       "description": "Check your connection and rejoin."
+    }
+  },
+  "board": {
+    "label": "Board",
+    "readOnly": "Read only: the meeting has ended",
+    "loading": "Opening the board…",
+    "reload": "Load the latest",
+    "close": "Close the board",
+    "save": {
+      "loading": "Opening the board…",
+      "saved": "Saved",
+      "saving": "Saving…",
+      "conflict": "Someone else saved the board. Load the latest to keep drawing.",
+      "too_large": "The board is too large to save. Remove some images or shapes.",
+      "failed": "Couldn’t save the board. Check your connection."
     }
   }
 }

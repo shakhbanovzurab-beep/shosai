@@ -38,7 +38,8 @@
     "react": "Réactions",
     "chat": "Conversation",
     "unread": "{count, plural, one {# message non lu} many {# messages non lus} other {# messages non lus}}",
-    "people": "Participants"
+    "people": "Participants",
+    "board": "Tableau blanc"
   },
   "reactions": {
     "thumbsUp": "Pouce levé",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Connexion perdue",
       "description": "Vérifiez votre connexion et rejoignez à nouveau."
+    }
+  },
+  "board": {
+    "label": "Tableau blanc",
+    "readOnly": "Lecture seule : la réunion est terminée",
+    "loading": "Ouverture du tableau…",
+    "reload": "Charger la dernière version",
+    "close": "Fermer le tableau",
+    "save": {
+      "loading": "Ouverture du tableau…",
+      "saved": "Enregistré",
+      "saving": "Enregistrement…",
+      "conflict": "Quelqu’un d’autre a enregistré le tableau. Chargez la dernière version pour continuer à dessiner.",
+      "too_large": "Le tableau est trop volumineux pour être enregistré. Retirez des images ou des formes.",
+      "failed": "Impossible d’enregistrer le tableau. Vérifiez votre connexion."
     }
   }
 }

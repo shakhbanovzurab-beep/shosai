@@ -38,7 +38,8 @@
     "react": "Reações",
     "chat": "Chat",
     "unread": "{count, plural, one {# mensagem não lida} many {# mensagens não lidas} other {# mensagens não lidas}}",
-    "people": "Participantes"
+    "people": "Participantes",
+    "board": "Quadro"
   },
   "reactions": {
     "thumbsUp": "Joinha",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Conexão perdida",
       "description": "Verifique sua conexão e entre de novo."
+    }
+  },
+  "board": {
+    "label": "Quadro",
+    "readOnly": "Somente leitura: a reunião terminou",
+    "loading": "Abrindo o quadro…",
+    "reload": "Carregar a mais recente",
+    "close": "Fechar o quadro",
+    "save": {
+      "loading": "Abrindo o quadro…",
+      "saved": "Salvo",
+      "saving": "Salvando…",
+      "conflict": "Outra pessoa salvou o quadro. Carregue a versão mais recente para continuar desenhando.",
+      "too_large": "O quadro é grande demais para salvar. Remova algumas imagens ou formas.",
+      "failed": "Não foi possível salvar o quadro. Verifique sua conexão."
     }
   }
 }

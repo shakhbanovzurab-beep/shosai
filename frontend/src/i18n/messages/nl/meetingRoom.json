@@ -38,7 +38,8 @@
     "react": "Reacties",
     "chat": "Chat",
     "unread": "{count, plural, one {# ongelezen bericht} other {# ongelezen berichten}}",
-    "people": "Deelnemers"
+    "people": "Deelnemers",
+    "board": "Whiteboard"
   },
   "reactions": {
     "thumbsUp": "Duim omhoog",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Verbinding verloren",
       "description": "Controleer je verbinding en neem opnieuw deel."
+    }
+  },
+  "board": {
+    "label": "Whiteboard",
+    "readOnly": "Alleen lezen: de vergadering is afgelopen",
+    "loading": "Whiteboard openen…",
+    "reload": "Nieuwste laden",
+    "close": "Whiteboard sluiten",
+    "save": {
+      "loading": "Whiteboard openen…",
+      "saved": "Opgeslagen",
+      "saving": "Opslaan…",
+      "conflict": "Iemand anders heeft het whiteboard opgeslagen. Laad de nieuwste versie om verder te tekenen.",
+      "too_large": "Het whiteboard is te groot om op te slaan. Verwijder wat afbeeldingen of vormen.",
+      "failed": "Het whiteboard kon niet worden opgeslagen. Controleer je verbinding."
     }
   }
 }

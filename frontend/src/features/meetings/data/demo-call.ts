@@ -1,3 +1,4 @@
+import type { BoardSession } from "../domain/board";
 import { type CallPerson, initialsOf } from "../domain/call";
 import {
   type CallSession,
@@ -9,6 +10,7 @@ import {
 import { mergeChat } from "../domain/chat-log";
 import type { CallEnd } from "../domain/join";
 import { admitReaction, REACTIONS, type Reaction, shownReactions } from "../domain/reactions";
+import { DemoBoard } from "./demo-board";
 import { demoCrowd, demoPerson } from "./demo-people";
 import { demoCameraStream } from "./demo-video";
 
@@ -25,6 +27,7 @@ export class DemoCall implements CallSession {
   private readonly timers: number[] = [];
   private readonly videos = new Map<string, Video>();
   private screen: MediaStream | null = null;
+  private whiteboard: DemoBoard | undefined;
   private sent: number[] = [];
   private turn = 0;
 
@@ -80,13 +83,8 @@ export class DemoCall implements CallSession {
     return gate.admitted;
   }
 
-  async sendChat(text: string) {
-    this.say(this.setup.identity, this.setup.name, text);
-  }
-
-  async lowerHandOf(identity: string) {
-    this.patchPerson(identity, { hand: null });
-  }
+  sendChat = async (text: string) => this.say(this.setup.identity, this.setup.name, text);
+  lowerHandOf = async (identity: string) => this.patchPerson(identity, { hand: null });
 
   async remove(identity: string) {
     this.videos.get(identity)?.stop();
@@ -96,6 +94,11 @@ export class DemoCall implements CallSession {
 
   leave = () => this.finish("left");
   endForAll = async () => this.finish("ended");
+
+  board(): BoardSession {
+    this.whiteboard ??= new DemoBoard(this.setup.token, () => this.state.people);
+    return this.whiteboard;
+  }
 
   attach(identity: string, kind: VideoKind, element: HTMLVideoElement | null) {
     const stream = element ? this.streamOf(identity, kind) : null;
@@ -174,6 +177,7 @@ export class DemoCall implements CallSession {
   private finish(end: CallEnd) {
     for (const timer of this.timers) window.clearTimeout(timer);
     for (const video of this.videos.values()) video.stop();
+    this.whiteboard?.close();
     void this.stopScreen();
     this.update({ status: "ended", end });
   }

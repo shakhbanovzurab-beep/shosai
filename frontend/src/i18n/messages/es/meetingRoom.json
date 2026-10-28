@@ -38,7 +38,8 @@
     "react": "Reacciones",
     "chat": "Chat",
     "unread": "{count, plural, one {# mensaje sin leer} many {# mensajes sin leer} other {# mensajes sin leer}}",
-    "people": "Participantes"
+    "people": "Participantes",
+    "board": "Pizarra"
   },
   "reactions": {
     "thumbsUp": "Me gusta",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Se perdió la conexión",
       "description": "Revisa tu conexión y vuelve a unirte."
+    }
+  },
+  "board": {
+    "label": "Pizarra",
+    "readOnly": "Solo lectura: la reunión ha terminado",
+    "loading": "Abriendo la pizarra…",
+    "reload": "Cargar la más reciente",
+    "close": "Cerrar la pizarra",
+    "save": {
+      "loading": "Abriendo la pizarra…",
+      "saved": "Guardado",
+      "saving": "Guardando…",
+      "conflict": "Otra persona guardó la pizarra. Carga la versión más reciente para seguir dibujando.",
+      "too_large": "La pizarra es demasiado grande para guardarla. Quita algunas imágenes o formas.",
+      "failed": "No se pudo guardar la pizarra. Revisa tu conexión."
     }
   }
 }

@@ -38,7 +38,8 @@
     "react": "Reazioni",
     "chat": "Chat",
     "unread": "{count, plural, one {# messaggio non letto} many {# messaggi non letti} other {# messaggi non letti}}",
-    "people": "Partecipanti"
+    "people": "Partecipanti",
+    "board": "Whiteboard"
   },
   "reactions": {
     "thumbsUp": "Pollice in su",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Connessione persa",
       "description": "Controlla la connessione e rientra."
+    }
+  },
+  "board": {
+    "label": "Whiteboard",
+    "readOnly": "Sola lettura: la riunione è terminata",
+    "loading": "Apertura della whiteboard…",
+    "reload": "Carica la più recente",
+    "close": "Chiudi la whiteboard",
+    "save": {
+      "loading": "Apertura della whiteboard…",
+      "saved": "Salvato",
+      "saving": "Salvataggio…",
+      "conflict": "Qualcun altro ha salvato la whiteboard. Carica la versione più recente per continuare a disegnare.",
+      "too_large": "La whiteboard è troppo grande da salvare. Rimuovi alcune immagini o forme.",
+      "failed": "Impossibile salvare la whiteboard. Controlla la connessione."
     }
   }
 }

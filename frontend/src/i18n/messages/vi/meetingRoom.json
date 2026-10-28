@@ -38,7 +38,8 @@
     "react": "Biểu cảm",
     "chat": "Cuộc trò chuyện",
     "unread": "{count, plural, other {# tin nhắn chưa đọc}}",
-    "people": "Người tham gia"
+    "people": "Người tham gia",
+    "board": "Bảng trắng"
   },
   "reactions": {
     "thumbsUp": "Thích",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Mất kết nối",
       "description": "Hãy kiểm tra kết nối và tham gia lại."
+    }
+  },
+  "board": {
+    "label": "Bảng trắng",
+    "readOnly": "Chỉ xem: cuộc họp đã kết thúc",
+    "loading": "Đang mở bảng trắng…",
+    "reload": "Tải bản mới nhất",
+    "close": "Đóng bảng trắng",
+    "save": {
+      "loading": "Đang mở bảng trắng…",
+      "saved": "Đã lưu",
+      "saving": "Đang lưu…",
+      "conflict": "Người khác đã lưu bảng trắng. Hãy tải bản mới nhất để tiếp tục vẽ.",
+      "too_large": "Bảng trắng quá lớn để lưu. Hãy xóa bớt hình ảnh hoặc hình vẽ.",
+      "failed": "Không lưu được bảng trắng. Hãy kiểm tra kết nối."
     }
   }
 }

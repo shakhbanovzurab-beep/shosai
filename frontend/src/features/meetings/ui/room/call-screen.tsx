@@ -9,6 +9,7 @@ import { lastSeq, unreadCount } from "../../domain/chat-log";
 import { isReaction } from "../../domain/reactions";
 import { useCallSnapshot } from "../../model/call-session";
 import type { LocalMedia } from "../../model/local-media";
+import { BoardPanel } from "./board-panel";
 import { CallChat } from "./call-chat";
 import { CallControls } from "./call-controls";
 import { CallMarks } from "./call-marks";
@@ -27,6 +28,8 @@ export function CallScreen({ session, media, onRejoin }: CallScreenProps) {
   const [panel, setPanel] = useState<CallPanelKind | null>(null);
   const [pinned, setPinned] = useState<ReadonlySet<string>>(new Set());
   const [readSeq, setReadSeq] = useState(0);
+  const [boardOpen, setBoardOpen] = useState(false);
+  const board = session.board?.() ?? null;
 
   useEffect(() => {
     const leave = () => session.leave();
@@ -77,13 +80,17 @@ export function CallScreen({ session, media, onRejoin }: CallScreenProps) {
             {t("states.connecting")}
           </div>
         ) : null}
-        <CallStage
-          people={call.people}
-          session={session}
-          pinned={pinned}
-          onPin={togglePin}
-          onShowPeople={() => openPanel("people")}
-        />
+        {board && boardOpen ? (
+          <BoardPanel board={board} onClose={() => setBoardOpen(false)} />
+        ) : (
+          <CallStage
+            people={call.people}
+            session={session}
+            pinned={pinned}
+            onPin={togglePin}
+            onShowPeople={() => openPanel("people")}
+          />
+        )}
         <CallPanel
           panel={panel}
           onPanel={openPanel}
@@ -127,6 +134,8 @@ export function CallScreen({ session, media, onRejoin }: CallScreenProps) {
         onHand={(raised) => session.setHand(raised)}
         onReact={(emoji) => isReaction(emoji) && session.react(emoji)}
         onPanel={openPanel}
+        board={board ? boardOpen : null}
+        onBoard={setBoardOpen}
         onLeave={() => session.leave()}
         onEndForAll={() => void session.endForAll()}
       />

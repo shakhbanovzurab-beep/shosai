@@ -1,3 +1,4 @@
+import type { BoardSession } from "./board";
 import type { CallPerson, CallRole } from "./call";
 import type { ChatMessage } from "./chat-log";
 import type { CallEnd } from "./join";
@@ -44,6 +45,8 @@ export interface CallSession {
   endForAll(): Promise<void>;
   /** Показать видео человека в элементе; null — снять. */
   attach(identity: string, kind: VideoKind, element: HTMLVideoElement | null): void;
+  /** Доска звонка; нет — у этого звонка доски пока нет (на API она приходит шагом A11b). */
+  board?(): BoardSession;
 }
 
 /** С чем открывается звонок: вход по ссылке, своё имя и свои устройства из лобби. */

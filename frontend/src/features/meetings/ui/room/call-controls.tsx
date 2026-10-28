@@ -1,4 +1,4 @@
-import { Hand, MessageSquare, Mic, MicOff, MonitorUp, Users, Video, VideoOff } from "lucide-react";
+import { Hand, MessageSquare, Mic, MicOff, MonitorUp, PenLine, Users, Video, VideoOff } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,9 @@ type CallControlsProps = {
   onHand: (raised: boolean) => void;
   onReact: (emoji: string) => boolean;
   onPanel: (panel: CallPanelKind | null) => void;
+  /** Открыта ли доска; null — у звонка доски нет. */
+  board: boolean | null;
+  onBoard: (open: boolean) => void;
   onLeave: () => void;
   onEndForAll: () => void;
 };
@@ -62,6 +65,16 @@ export function CallControls(props: CallControlsProps) {
         <Hand aria-hidden="true" />
       </Toggle>
       <ReactionPicker onReact={props.onReact} />
+      {props.board === null ? null : (
+        <Toggle
+          variant="outline"
+          pressed={props.board}
+          onPressedChange={props.onBoard}
+          aria-label={t("controls.board")}
+        >
+          <PenLine aria-hidden="true" />
+        </Toggle>
+      )}
       <Toggle
         variant="outline"
         pressed={panel === "chat"}

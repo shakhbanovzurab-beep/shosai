@@ -38,7 +38,8 @@
     "react": "Reaksi",
     "chat": "Chat",
     "unread": "{count, plural, other {# pesan belum dibaca}}",
-    "people": "Peserta"
+    "people": "Peserta",
+    "board": "Papan tulis"
   },
   "reactions": {
     "thumbsUp": "Jempol",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "Koneksi terputus",
       "description": "Periksa koneksi Anda dan gabung lagi."
+    }
+  },
+  "board": {
+    "label": "Papan tulis",
+    "readOnly": "Hanya baca: rapat sudah berakhir",
+    "loading": "Membuka papan tulis…",
+    "reload": "Muat versi terbaru",
+    "close": "Tutup papan tulis",
+    "save": {
+      "loading": "Membuka papan tulis…",
+      "saved": "Tersimpan",
+      "saving": "Menyimpan…",
+      "conflict": "Orang lain menyimpan papan tulis. Muat versi terbaru untuk lanjut menggambar.",
+      "too_large": "Papan tulis terlalu besar untuk disimpan. Hapus beberapa gambar atau bentuk.",
+      "failed": "Papan tulis tidak dapat disimpan. Periksa koneksi Anda."
     }
   }
 }

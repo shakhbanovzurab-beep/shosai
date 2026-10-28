@@ -38,7 +38,8 @@
     "react": "表情回應",
     "chat": "對話",
     "unread": "{count, plural, other {# 則未讀訊息}}",
-    "people": "參與者"
+    "people": "參與者",
+    "board": "白板"
   },
   "reactions": {
     "thumbsUp": "讚",
@@ -153,6 +154,21 @@
     "lost": {
       "title": "連線中斷",
       "description": "請檢查連線後重新加入。"
+    }
+  },
+  "board": {
+    "label": "白板",
+    "readOnly": "僅供檢視：會議已結束",
+    "loading": "正在開啟白板…",
+    "reload": "載入最新版本",
+    "close": "關閉白板",
+    "save": {
+      "loading": "正在開啟白板…",
+      "saved": "已儲存",
+      "saving": "正在儲存…",
+      "conflict": "其他人已儲存白板。請載入最新版本以繼續繪製。",
+      "too_large": "白板太大，無法儲存。請移除部分圖片或圖形。",
+      "failed": "無法儲存白板。請檢查連線。"
     }
   }
 }
