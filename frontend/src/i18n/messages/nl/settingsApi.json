@@ -11,8 +11,6 @@
     "paymentsUnavailable": "Betalingen zijn nog niet gekoppeld. Zodra facturering live is, opent dit de beveiligde pagina van de provider.",
     "checkoutUnavailable": "Betalingen zijn nog niet gekoppeld. Zodra facturering live is, opent dit de betaalpagina van de provider.",
     "invoiceNotFound": "Factuur niet gevonden.",
-    "connectorNotFound": "Koppeling niet gevonden.",
-    "authorizationExpired": "De autorisatie is verlopen of al gebruikt. Probeer opnieuw te koppelen.",
     "dataKindUnknown": "Onbekend soort gegevens.",
     "dataItemNotFound": "Dat item bestaat niet meer.",
     "mcpNameRequired": "Geef de server een naam.",

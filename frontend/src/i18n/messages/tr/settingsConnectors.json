@@ -1,5 +1,5 @@
 {
-  "description": "Leo’nun uygulamalarınızda arama yapıp işlem yapabilmesi için onları bağlayın. Her uygulama OAuth 2.0 ile kendi sayfasında giriş yapmanızı sağlar; Leo şifrenizi hiçbir zaman görmez.",
+  "description": "Leo’nun uygulamalarınızda arama yapıp işlem yapabilmesi için onları bağlayın. Çoğu uygulama kendi sayfasında giriş yapmanızı sağlar; Leo şifrenizi hiçbir zaman görmez. Girdiğiniz uygulama şifresi veya anahtar şifrelenmiş olarak saklanır.",
   "columns": {
     "connector": "Bağlayıcı",
     "type": "Tür",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "E-posta",
+    "calendar": "Takvim",
     "files": "Dosyalar",
     "notes": "Notlar",
     "communication": "İletişim",
@@ -18,6 +19,46 @@
   "connected": "Bağlı",
   "options": "{name} seçenekleri, bağlı",
   "disconnect": "Bağlantıyı kes",
+  "reconnect": "Yeniden bağla",
+  "needsReconnect": "Kullanmaya devam etmek için yeniden bağlayın.",
+  "problems": {
+    "refresh_refused": "Erişimin süresi doldu. Kullanmaya devam etmek için yeniden bağlayın.",
+    "grant_revoked": "Erişim hesabınızdan kaldırıldı. Kullanmaya devam etmek için yeniden bağlayın.",
+    "scope_missing": "Bazı izinler eksik. Yeniden bağlayın ve hepsine izin verin.",
+    "admin_consent_required": "Önce şirketinizdeki bir yöneticinin Shosai’yi onaylaması gerekiyor.",
+    "imap_disabled": "E-posta ayarlarınızda IMAP’i açın, ardından yeniden bağlayın.",
+    "provider_subscription_required": "E-posta hizmetiniz diğer uygulamalara yalnızca ücretli bir abonelikle izin veriyor.",
+    "credentials_rejected": "Şifre veya anahtar artık kabul edilmiyor. Yenisini girin."
+  },
+  "refusals": {
+    "not_offered": "Bu uygulama şu anda bağlanamıyor.",
+    "not_connected": "Bu uygulama bağlı değil.",
+    "connect_unavailable": "Bağlanma şu anda kullanılamıyor. Birkaç dakika sonra tekrar deneyin.",
+    "credentials_rejected": "Bağlanamadı. Girdiklerinizi kontrol edip tekrar deneyin.",
+    "rate_limited": "Çok fazla deneme yapıldı. Bir dakika bekleyip tekrar deneyin."
+  },
+  "empty": {
+    "title": "Henüz bağlanacak uygulama yok",
+    "body": "Shosai’nin bir bölümü bir uygulamayı kullanabildiğinde uygulama burada görünür."
+  },
+  "disconnectDialog": {
+    "title": "{name} bağlantısı kesilsin mi?",
+    "body": "Leo ve Shosai’de {name} kullanan her şey onu hemen kullanmayı bırakır.",
+    "remains": "Hesabınız Shosai’nin erişimini göstermeye devam edebilir: aynı hesabın diğer uygulamaları bu erişimi kullanıyor veya hizmet onu geri alamıyor. Erişimi hesabın güvenlik ayarlarından kaldırabilirsiniz."
+  },
+  "credentials": {
+    "title": "{name} uygulamasını bağla",
+    "login": "E-posta veya kullanıcı adı",
+    "password": "Uygulama şifresi",
+    "apiKey": "API anahtarı",
+    "webhookUrl": "Hook URL’si",
+    "address": "Sunucu adresi",
+    "hint": {
+      "password": "Hesabınızın güvenlik ayarlarında bir uygulama şifresi oluşturun ve buraya girin. Ana şifreniz gerekmez.",
+      "api_key": "Uygulamanın ayarlarından bir API anahtarı kopyalayın. Kaydedilmeden önce kontrol edilir.",
+      "webhook": "Uygulamadaki hook URL’sini yapıştırın. Shosai olayları bu adrese gönderir."
+    }
+  },
   "toasts": {
     "connected": "{name} bağlandı",
     "notConnected": "{name} bağlanmadı",
@@ -40,6 +81,15 @@
       "body": "Bağlanırken bir sorun oluştu. Ayarlar bölümünden tekrar deneyin."
     },
     "back": "Panele dön"
+  },
+  "flowErrors": {
+    "authorization_expired": "Giriş çok uzun sürdü veya zaten kullanıldı. Yeniden bağlamayı deneyin.",
+    "scope_missing": "İzinlerin hepsi verilmedi. Tekrar deneyin ve hepsine izin verin.",
+    "admin_consent_required": "Önce şirketinizdeki bir yöneticinin Shosai’yi onaylaması gerekiyor.",
+    "provider_unavailable": "Hizmet yanıt vermedi. Birkaç dakika sonra tekrar deneyin.",
+    "not_offered": "Bu uygulama şu anda bağlanamıyor.",
+    "imap_disabled": "E-posta ayarlarınızda IMAP’i açın, ardından tekrar deneyin.",
+    "provider_subscription_required": "E-posta hizmetiniz diğer uygulamalara yalnızca ücretli bir abonelikle izin veriyor."
   },
   "consent": {
     "metaTitle": "Demo yetkilendirme",

@@ -11,8 +11,6 @@
     "paymentsUnavailable": "Pembayaran belum tersedia. Setelah sistem tagihan aktif, tombol ini akan membuka halaman aman milik penyedia.",
     "checkoutUnavailable": "Pembayaran belum tersedia. Setelah sistem tagihan aktif, tombol ini akan membuka halaman pembayaran milik penyedia.",
     "invoiceNotFound": "Faktur tidak ditemukan.",
-    "connectorNotFound": "Konektor tidak ditemukan.",
-    "authorizationExpired": "Otorisasi sudah kedaluwarsa atau sudah dipakai. Coba hubungkan lagi.",
     "dataKindUnknown": "Jenis data tidak dikenal.",
     "dataItemNotFound": "Item tersebut sudah tidak ada.",
     "mcpNameRequired": "Beri nama server.",

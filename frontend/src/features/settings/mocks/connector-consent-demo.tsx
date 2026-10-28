@@ -3,23 +3,21 @@ import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 
-import { getConnector } from "./demo-connectors";
-
 /**
- * Stand-in for a provider's OAuth consent screen while no backend is configured. It is plainly a demo
+ * Stand-in for a provider's OAuth consent screen in the chats mocks (Slack), while no backend is configured. It is plainly a demo
  * page in the app's own style and never imitates the provider's sign-in.
  */
 export function ConnectorConsentDemo({
-  connector,
+  app,
   callback,
 }: {
-  connector: string;
+  /** Название приложения на экране согласия; null — экран без названия. */
+  app: string | null;
   /** Куда вернуть решение: обратный адрес бэкенда, который подменяют моки. */
   callback: (decision: "allow" | "deny") => string;
 }) {
   const t = useTranslations("settingsConnectors");
   const common = useTranslations("common");
-  const app = getConnector(connector)?.name;
 
   return (
     <main className="flex min-h-dvh items-center justify-center bg-background p-6">

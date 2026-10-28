@@ -1,5 +1,5 @@
 {
-  "description": "Kết nối ứng dụng để Leo có thể tìm kiếm và thao tác trong đó. Mỗi ứng dụng đăng nhập cho bạn trên trang riêng bằng OAuth 2.0, nên Leo không bao giờ thấy mật khẩu của bạn.",
+  "description": "Kết nối ứng dụng để Leo có thể tìm kiếm và thao tác trong đó. Hầu hết ứng dụng đăng nhập cho bạn trên trang riêng, nên Leo không bao giờ thấy mật khẩu của bạn. Mật khẩu ứng dụng hoặc khóa bạn nhập được lưu ở dạng mã hóa.",
   "columns": {
     "connector": "Trình kết nối",
     "type": "Loại",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "Thư",
+    "calendar": "Lịch",
     "files": "Tệp",
     "notes": "Ghi chú",
     "communication": "Liên lạc",
@@ -18,6 +19,46 @@
   "connected": "Đã kết nối",
   "options": "Tùy chọn cho {name}, đã kết nối",
   "disconnect": "Ngắt kết nối",
+  "reconnect": "Kết nối lại",
+  "needsReconnect": "Hãy kết nối lại để tiếp tục sử dụng.",
+  "problems": {
+    "refresh_refused": "Quyền truy cập đã hết hạn. Hãy kết nối lại để tiếp tục sử dụng.",
+    "grant_revoked": "Quyền truy cập đã bị gỡ trong tài khoản của bạn. Hãy kết nối lại để tiếp tục sử dụng.",
+    "scope_missing": "Còn thiếu một số quyền. Hãy kết nối lại và cho phép tất cả.",
+    "admin_consent_required": "Quản trị viên của công ty bạn cần phê duyệt Shosai trước.",
+    "imap_disabled": "Hãy bật IMAP trong cài đặt thư, rồi kết nối lại.",
+    "provider_subscription_required": "Dịch vụ thư của bạn chỉ cho phép ứng dụng khác khi có gói đăng ký trả phí.",
+    "credentials_rejected": "Mật khẩu hoặc khóa không còn được chấp nhận. Hãy nhập cái mới."
+  },
+  "refusals": {
+    "not_offered": "Hiện không thể kết nối ứng dụng này.",
+    "not_connected": "Ứng dụng này chưa được kết nối.",
+    "connect_unavailable": "Hiện chưa thể kết nối. Hãy thử lại sau vài phút.",
+    "credentials_rejected": "Không thể kết nối. Hãy kiểm tra thông tin đã nhập và thử lại.",
+    "rate_limited": "Quá nhiều lần thử. Hãy đợi một phút rồi thử lại."
+  },
+  "empty": {
+    "title": "Chưa có ứng dụng nào để kết nối",
+    "body": "Ứng dụng sẽ xuất hiện ở đây khi một phần của Shosai có thể dùng chúng."
+  },
+  "disconnectDialog": {
+    "title": "Ngắt kết nối {name}?",
+    "body": "Leo và mọi thứ trong Shosai dùng {name} sẽ ngừng dùng ngay lập tức.",
+    "remains": "Tài khoản của bạn có thể vẫn hiển thị quyền truy cập của Shosai: các ứng dụng khác của cùng tài khoản đang dùng nó, hoặc dịch vụ không thể thu hồi. Bạn có thể gỡ quyền này trong cài đặt bảo mật của tài khoản."
+  },
+  "credentials": {
+    "title": "Kết nối {name}",
+    "login": "Email hoặc tên đăng nhập",
+    "password": "Mật khẩu ứng dụng",
+    "apiKey": "Khóa API",
+    "webhookUrl": "URL hook",
+    "address": "Địa chỉ máy chủ",
+    "hint": {
+      "password": "Tạo mật khẩu ứng dụng trong cài đặt bảo mật của tài khoản rồi nhập vào đây. Không cần mật khẩu chính của bạn.",
+      "api_key": "Sao chép khóa API từ cài đặt của ứng dụng. Khóa được kiểm tra trước khi lưu.",
+      "webhook": "Dán URL hook từ ứng dụng. Shosai sẽ gửi sự kiện đến đó."
+    }
+  },
   "toasts": {
     "connected": "Đã kết nối {name}",
     "notConnected": "Chưa kết nối {name}",
@@ -40,6 +81,15 @@
       "body": "Đã xảy ra sự cố khi kết nối. Hãy thử lại từ Cài đặt."
     },
     "back": "Quay lại bảng điều khiển"
+  },
+  "flowErrors": {
+    "authorization_expired": "Quá trình đăng nhập quá lâu hoặc đã được dùng. Hãy thử kết nối lại.",
+    "scope_missing": "Chưa cấp đủ quyền. Hãy thử lại và cho phép tất cả.",
+    "admin_consent_required": "Quản trị viên của công ty bạn cần phê duyệt Shosai trước.",
+    "provider_unavailable": "Dịch vụ không phản hồi. Hãy thử lại sau vài phút.",
+    "not_offered": "Hiện không thể kết nối ứng dụng này.",
+    "imap_disabled": "Hãy bật IMAP trong cài đặt thư, rồi thử lại.",
+    "provider_subscription_required": "Dịch vụ thư của bạn chỉ cho phép ứng dụng khác khi có gói đăng ký trả phí."
   },
   "consent": {
     "metaTitle": "Cấp quyền mô phỏng",

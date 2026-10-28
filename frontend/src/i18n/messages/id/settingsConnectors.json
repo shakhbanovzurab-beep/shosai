@@ -1,5 +1,5 @@
 {
-  "description": "Hubungkan aplikasi Anda agar Leo dapat mencari dan bertindak di dalamnya. Setiap aplikasi meminta Anda masuk di halamannya sendiri dengan OAuth 2.0, jadi Leo tidak pernah melihat kata sandi Anda.",
+  "description": "Hubungkan aplikasi Anda agar Leo dapat mencari dan bertindak di dalamnya. Sebagian besar aplikasi meminta Anda masuk di halamannya sendiri, jadi Leo tidak pernah melihat kata sandi Anda. Kata sandi aplikasi atau kunci yang Anda masukkan disimpan dalam bentuk terenkripsi.",
   "columns": {
     "connector": "Konektor",
     "type": "Jenis",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "Email",
+    "calendar": "Kalender",
     "files": "File",
     "notes": "Catatan",
     "communication": "Komunikasi",
@@ -18,6 +19,46 @@
   "connected": "Terhubung",
   "options": "Opsi untuk {name}, terhubung",
   "disconnect": "Putuskan koneksi",
+  "reconnect": "Hubungkan ulang",
+  "needsReconnect": "Hubungkan ulang untuk terus menggunakannya.",
+  "problems": {
+    "refresh_refused": "Akses sudah kedaluwarsa. Hubungkan ulang untuk terus menggunakannya.",
+    "grant_revoked": "Akses dihapus di akun Anda. Hubungkan ulang untuk terus menggunakannya.",
+    "scope_missing": "Beberapa izin belum diberikan. Hubungkan ulang dan izinkan semuanya.",
+    "admin_consent_required": "Admin di perusahaan Anda perlu menyetujui Shosai terlebih dahulu.",
+    "imap_disabled": "Aktifkan IMAP di pengaturan email Anda, lalu hubungkan ulang.",
+    "provider_subscription_required": "Layanan email Anda hanya mengizinkan aplikasi lain dengan langganan berbayar.",
+    "credentials_rejected": "Kata sandi atau kunci tidak diterima lagi. Masukkan yang baru."
+  },
+  "refusals": {
+    "not_offered": "Aplikasi ini tidak dapat dihubungkan sekarang.",
+    "not_connected": "Aplikasi ini tidak terhubung.",
+    "connect_unavailable": "Menghubungkan sedang tidak tersedia. Coba lagi dalam beberapa menit.",
+    "credentials_rejected": "Tidak dapat menghubungkan. Periksa yang Anda masukkan, lalu coba lagi.",
+    "rate_limited": "Terlalu banyak percobaan. Tunggu satu menit, lalu coba lagi."
+  },
+  "empty": {
+    "title": "Belum ada aplikasi untuk dihubungkan",
+    "body": "Aplikasi muncul di sini setelah ada bagian Shosai yang dapat menggunakannya."
+  },
+  "disconnectDialog": {
+    "title": "Putuskan koneksi {name}?",
+    "body": "Leo dan semua bagian Shosai yang menggunakan {name} langsung berhenti menggunakannya.",
+    "remains": "Akun Anda mungkin masih menampilkan akses Shosai: aplikasi lain dari akun yang sama menggunakannya, atau layanan tidak dapat mencabutnya. Anda bisa menghapusnya di pengaturan keamanan akun."
+  },
+  "credentials": {
+    "title": "Hubungkan {name}",
+    "login": "Email atau nama pengguna",
+    "password": "Kata sandi aplikasi",
+    "apiKey": "Kunci API",
+    "webhookUrl": "URL hook",
+    "address": "Alamat server",
+    "hint": {
+      "password": "Buat kata sandi aplikasi di pengaturan keamanan akun Anda, lalu masukkan di sini. Kata sandi utama Anda tidak diperlukan.",
+      "api_key": "Salin kunci API dari pengaturan aplikasi. Kunci diperiksa sebelum disimpan.",
+      "webhook": "Tempel URL hook dari aplikasi. Shosai akan mengirim peristiwa ke sana."
+    }
+  },
   "toasts": {
     "connected": "{name} terhubung",
     "notConnected": "{name} tidak terhubung",
@@ -40,6 +81,15 @@
       "body": "Terjadi masalah saat menghubungkan. Coba lagi dari Pengaturan."
     },
     "back": "Kembali ke dasbor"
+  },
+  "flowErrors": {
+    "authorization_expired": "Proses masuk terlalu lama atau sudah digunakan. Coba hubungkan lagi.",
+    "scope_missing": "Tidak semua izin diberikan. Coba lagi dan izinkan semuanya.",
+    "admin_consent_required": "Admin di perusahaan Anda perlu menyetujui Shosai terlebih dahulu.",
+    "provider_unavailable": "Layanan tidak merespons. Coba lagi dalam beberapa menit.",
+    "not_offered": "Aplikasi ini tidak dapat dihubungkan sekarang.",
+    "imap_disabled": "Aktifkan IMAP di pengaturan email Anda, lalu coba lagi.",
+    "provider_subscription_required": "Layanan email Anda hanya mengizinkan aplikasi lain dengan langganan berbayar."
   },
   "consent": {
     "metaTitle": "Otorisasi demo",

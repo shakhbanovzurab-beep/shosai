@@ -1,5 +1,5 @@
 {
-  "description": "Collega le tue app perché Leo possa cercare e agire al loro interno. Ogni app ti fa accedere dalla propria pagina con OAuth 2.0, quindi Leo non vede mai la tua password.",
+  "description": "Collega le tue app perché Leo possa cercare e agire al loro interno. La maggior parte delle app ti fa accedere dalla propria pagina, quindi Leo non vede mai la tua password. Una password per app o una chiave che inserisci viene salvata cifrata.",
   "columns": {
     "connector": "Connettore",
     "type": "Tipo",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "Posta",
+    "calendar": "Calendario",
     "files": "File",
     "notes": "Note",
     "communication": "Comunicazione",
@@ -18,6 +19,46 @@
   "connected": "Collegato",
   "options": "Opzioni per {name}, collegato",
   "disconnect": "Scollega",
+  "reconnect": "Ricollega",
+  "needsReconnect": "Ricollegala per continuare a usarla.",
+  "problems": {
+    "refresh_refused": "L’accesso è scaduto. Ricollegala per continuare a usarla.",
+    "grant_revoked": "L’accesso è stato rimosso dal tuo account. Ricollegala per continuare a usarla.",
+    "scope_missing": "Mancano alcune autorizzazioni. Ricollegala e concedile tutte.",
+    "admin_consent_required": "Un amministratore della tua azienda deve prima approvare Shosai.",
+    "imap_disabled": "Attiva IMAP nelle impostazioni della posta, poi ricollegala.",
+    "provider_subscription_required": "Il tuo servizio di posta accetta altre app solo con un abbonamento a pagamento.",
+    "credentials_rejected": "La password o la chiave non è più accettata. Inseriscine una nuova."
+  },
+  "refusals": {
+    "not_offered": "Questa app non può essere collegata ora.",
+    "not_connected": "Questa app non è collegata.",
+    "connect_unavailable": "Il collegamento non è disponibile ora. Riprova tra qualche minuto.",
+    "credentials_rejected": "Impossibile collegare l’app. Controlla quello che hai inserito e riprova.",
+    "rate_limited": "Troppi tentativi. Attendi un minuto e riprova."
+  },
+  "empty": {
+    "title": "Ancora nessuna app da collegare",
+    "body": "Le app compaiono qui quando una parte di Shosai può usarle."
+  },
+  "disconnectDialog": {
+    "title": "Scollegare {name}?",
+    "body": "Leo e tutto ciò che in Shosai usa {name} smettono subito di usarla.",
+    "remains": "Il tuo account potrebbe mostrare ancora l’accesso di Shosai: lo usano altre app dello stesso account, oppure il servizio non può revocarlo. Puoi rimuoverlo nelle impostazioni di sicurezza dell’account."
+  },
+  "credentials": {
+    "title": "Collega {name}",
+    "login": "Email o nome utente",
+    "password": "Password per app",
+    "apiKey": "Chiave API",
+    "webhookUrl": "URL dell’hook",
+    "address": "Indirizzo del server",
+    "hint": {
+      "password": "Crea una password per app nelle impostazioni di sicurezza del tuo account e inseriscila qui. La password principale non serve.",
+      "api_key": "Copia una chiave API dalle impostazioni dell’app. Viene verificata prima di essere salvata.",
+      "webhook": "Incolla l’URL dell’hook fornito dall’app. Shosai vi invierà gli eventi."
+    }
+  },
   "toasts": {
     "connected": "{name} collegato",
     "notConnected": "{name} non è stato collegato",
@@ -40,6 +81,15 @@
       "body": "Qualcosa è andato storto durante il collegamento. Riprova da Impostazioni."
     },
     "back": "Torna alla dashboard"
+  },
+  "flowErrors": {
+    "authorization_expired": "L’accesso ha richiesto troppo tempo o è già stato usato. Prova a collegarla di nuovo.",
+    "scope_missing": "Non sono state concesse tutte le autorizzazioni. Riprova e concedile tutte.",
+    "admin_consent_required": "Un amministratore della tua azienda deve prima approvare Shosai.",
+    "provider_unavailable": "Il servizio non ha risposto. Riprova tra qualche minuto.",
+    "not_offered": "Questa app non può essere collegata ora.",
+    "imap_disabled": "Attiva IMAP nelle impostazioni della posta, poi riprova.",
+    "provider_subscription_required": "Il tuo servizio di posta accetta altre app solo con un abbonamento a pagamento."
   },
   "consent": {
     "metaTitle": "Autorizzazione demo",

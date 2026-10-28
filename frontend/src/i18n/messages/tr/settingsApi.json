@@ -11,8 +11,6 @@
     "paymentsUnavailable": "Ödemeler henüz bağlı değil. Faturalandırma devreye girdiğinde bu adım sağlayıcının güvenli sayfasını açar.",
     "checkoutUnavailable": "Ödemeler henüz bağlı değil. Faturalandırma devreye girdiğinde bu adım sağlayıcının ödeme sayfasını açar.",
     "invoiceNotFound": "Fatura bulunamadı.",
-    "connectorNotFound": "Bağlayıcı bulunamadı.",
-    "authorizationExpired": "Yetkilendirmenin süresi doldu veya daha önce kullanıldı. Tekrar bağlanmayı deneyin.",
     "dataKindUnknown": "Bilinmeyen veri türü.",
     "dataItemNotFound": "Bu öğe artık mevcut değil.",
     "mcpNameRequired": "Sunucuya bir ad verin.",

@@ -1,5 +1,5 @@
 {
-  "description": "Connectez vos applications pour que Leo puisse y faire des recherches et y agir. Chaque application vous connecte sur sa propre page via OAuth 2.0 : Leo ne voit jamais votre mot de passe.",
+  "description": "Connectez vos applications pour que Leo puisse y faire des recherches et y agir. La plupart vous connectent sur leur propre page : Leo ne voit jamais votre mot de passe. Un mot de passe d’application ou une clé que vous saisissez est stocké chiffré.",
   "columns": {
     "connector": "Connecteur",
     "type": "Type",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "E-mail",
+    "calendar": "Agenda",
     "files": "Fichiers",
     "notes": "Notes",
     "communication": "Messagerie",
@@ -18,6 +19,46 @@
   "connected": "Connecté",
   "options": "Options pour {name}, connecté",
   "disconnect": "Déconnecter",
+  "reconnect": "Reconnecter",
+  "needsReconnect": "Reconnectez-la pour continuer à l’utiliser.",
+  "problems": {
+    "refresh_refused": "L’accès a expiré. Reconnectez-la pour continuer à l’utiliser.",
+    "grant_revoked": "L’accès a été retiré dans votre compte. Reconnectez-la pour continuer à l’utiliser.",
+    "scope_missing": "Certaines autorisations manquent. Reconnectez-la et autorisez-les toutes.",
+    "admin_consent_required": "Un administrateur de votre entreprise doit d’abord approuver Shosai.",
+    "imap_disabled": "Activez IMAP dans les paramètres de votre messagerie, puis reconnectez-la.",
+    "provider_subscription_required": "Votre messagerie n’accepte d’autres applications qu’avec un abonnement payant.",
+    "credentials_rejected": "Le mot de passe ou la clé n’est plus accepté. Saisissez-en un nouveau."
+  },
+  "refusals": {
+    "not_offered": "Cette application ne peut pas être connectée pour l’instant.",
+    "not_connected": "Cette application n’est pas connectée.",
+    "connect_unavailable": "La connexion n’est pas disponible pour l’instant. Réessayez dans quelques minutes.",
+    "credentials_rejected": "Impossible de connecter l’application. Vérifiez ce que vous avez saisi et réessayez.",
+    "rate_limited": "Trop de tentatives. Attendez une minute et réessayez."
+  },
+  "empty": {
+    "title": "Aucune application à connecter pour l’instant",
+    "body": "Les applications apparaissent ici dès qu’une partie de Shosai peut les utiliser."
+  },
+  "disconnectDialog": {
+    "title": "Déconnecter {name} ?",
+    "body": "Leo et tout ce qui, dans Shosai, utilise {name} cessent aussitôt de l’utiliser.",
+    "remains": "Votre compte peut encore afficher l’accès de Shosai : d’autres applications du même compte l’utilisent, ou le service ne peut pas le retirer. Vous pouvez le supprimer dans les paramètres de sécurité du compte."
+  },
+  "credentials": {
+    "title": "Connecter {name}",
+    "login": "E-mail ou identifiant",
+    "password": "Mot de passe d’application",
+    "apiKey": "Clé API",
+    "webhookUrl": "URL du hook",
+    "address": "Adresse du serveur",
+    "hint": {
+      "password": "Créez un mot de passe d’application dans les paramètres de sécurité de votre compte et saisissez-le ici. Votre mot de passe principal n’est pas nécessaire.",
+      "api_key": "Copiez une clé API depuis les paramètres de l’application. Elle est vérifiée avant d’être enregistrée.",
+      "webhook": "Collez l’URL du hook fournie par l’application. Shosai y enverra des événements."
+    }
+  },
   "toasts": {
     "connected": "{name} connecté",
     "notConnected": "{name} n’a pas été connecté",
@@ -40,6 +81,15 @@
       "body": "Un problème est survenu pendant la connexion. Réessayez depuis les paramètres."
     },
     "back": "Retour au tableau de bord"
+  },
+  "flowErrors": {
+    "authorization_expired": "La connexion a pris trop de temps ou a déjà été utilisée. Réessayez de connecter l’application.",
+    "scope_missing": "Toutes les autorisations n’ont pas été accordées. Réessayez et autorisez-les toutes.",
+    "admin_consent_required": "Un administrateur de votre entreprise doit d’abord approuver Shosai.",
+    "provider_unavailable": "Le service n’a pas répondu. Réessayez dans quelques minutes.",
+    "not_offered": "Cette application ne peut pas être connectée pour l’instant.",
+    "imap_disabled": "Activez IMAP dans les paramètres de votre messagerie, puis réessayez.",
+    "provider_subscription_required": "Votre messagerie n’accepte d’autres applications qu’avec un abonnement payant."
   },
   "consent": {
     "metaTitle": "Autorisation de démonstration",

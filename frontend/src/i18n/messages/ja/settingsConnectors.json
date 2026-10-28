@@ -1,5 +1,5 @@
 {
-  "description": "アプリを接続すると、Leo がその中で検索や操作をできるようになります。各アプリでは OAuth 2.0 を使って専用のページでログインするため、Leo がパスワードを見ることはありません。",
+  "description": "アプリを接続すると、Leo がその中で検索や操作をできるようになります。ほとんどのアプリは専用のページでログインするため、Leo がパスワードを見ることはありません。入力したアプリ パスワードやキーは暗号化して保存されます。",
   "columns": {
     "connector": "コネクタ",
     "type": "種類",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "メール",
+    "calendar": "カレンダー",
     "files": "ファイル",
     "notes": "ノート",
     "communication": "コミュニケーション",
@@ -18,6 +19,46 @@
   "connected": "接続済み",
   "options": "{name} のオプション（接続済み）",
   "disconnect": "接続を解除",
+  "reconnect": "再接続",
+  "needsReconnect": "引き続き使うには再接続してください。",
+  "problems": {
+    "refresh_refused": "アクセスの有効期限が切れました。引き続き使うには再接続してください。",
+    "grant_revoked": "アカウントでアクセスが削除されました。引き続き使うには再接続してください。",
+    "scope_missing": "一部の権限がありません。再接続してすべて許可してください。",
+    "admin_consent_required": "先に会社の管理者が Shosai を承認する必要があります。",
+    "imap_disabled": "メールの設定で IMAP をオンにしてから、再接続してください。",
+    "provider_subscription_required": "このメールサービスでは、有料のサブスクリプションがないと他のアプリを使えません。",
+    "credentials_rejected": "パスワードまたはキーが受け付けられなくなりました。新しいものを入力してください。"
+  },
+  "refusals": {
+    "not_offered": "このアプリは現在接続できません。",
+    "not_connected": "このアプリは接続されていません。",
+    "connect_unavailable": "現在、接続できません。数分後にもう一度お試しください。",
+    "credentials_rejected": "接続できませんでした。入力内容を確認して、もう一度お試しください。",
+    "rate_limited": "試行回数が多すぎます。1 分待ってからもう一度お試しください。"
+  },
+  "empty": {
+    "title": "接続できるアプリはまだありません",
+    "body": "Shosai のいずれかの機能でアプリを使えるようになると、ここに表示されます。"
+  },
+  "disconnectDialog": {
+    "title": "{name} の接続を解除しますか？",
+    "body": "Leo と、{name} を使う Shosai のすべての機能が、すぐに使用を停止します。",
+    "remains": "アカウントには引き続き Shosai のアクセスが表示される場合があります。同じアカウントの他のアプリが使っているか、サービス側で取り消せないためです。アカウントのセキュリティ設定で削除できます。"
+  },
+  "credentials": {
+    "title": "{name} を接続",
+    "login": "メールアドレスまたはログイン名",
+    "password": "アプリ パスワード",
+    "apiKey": "API キー",
+    "webhookUrl": "フック URL",
+    "address": "サーバーのアドレス",
+    "hint": {
+      "password": "アカウントのセキュリティ設定でアプリ パスワードを作成し、ここに入力してください。メインのパスワードは不要です。",
+      "api_key": "アプリの設定から API キーをコピーしてください。保存する前に確認されます。",
+      "webhook": "アプリのフック URL を貼り付けてください。Shosai がイベントを送信します。"
+    }
+  },
   "toasts": {
     "connected": "{name} を接続しました",
     "notConnected": "{name} は接続されませんでした",
@@ -40,6 +81,15 @@
       "body": "接続中に問題が発生しました。設定からもう一度お試しください。"
     },
     "back": "ダッシュボードに戻る"
+  },
+  "flowErrors": {
+    "authorization_expired": "ログインに時間がかかりすぎたか、すでに使用されています。もう一度接続してください。",
+    "scope_missing": "すべての権限が許可されませんでした。もう一度試して、すべて許可してください。",
+    "admin_consent_required": "先に会社の管理者が Shosai を承認する必要があります。",
+    "provider_unavailable": "サービスから応答がありませんでした。数分後にもう一度お試しください。",
+    "not_offered": "このアプリは現在接続できません。",
+    "imap_disabled": "メールの設定で IMAP をオンにしてから、もう一度お試しください。",
+    "provider_subscription_required": "このメールサービスでは、有料のサブスクリプションがないと他のアプリを使えません。"
   },
   "consent": {
     "metaTitle": "デモ認証",

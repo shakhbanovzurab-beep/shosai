@@ -11,8 +11,6 @@
     "paymentsUnavailable": "Zahlungen sind noch nicht angebunden. Sobald die Abrechnung aktiv ist, öffnet sich hier die sichere Seite des Anbieters.",
     "checkoutUnavailable": "Zahlungen sind noch nicht angebunden. Sobald die Abrechnung aktiv ist, öffnet sich hier der Bezahlvorgang des Anbieters.",
     "invoiceNotFound": "Rechnung nicht gefunden.",
-    "connectorNotFound": "Konnektor nicht gefunden.",
-    "authorizationExpired": "Die Autorisierung ist abgelaufen oder wurde bereits verwendet. Versuche erneut, die Verbindung herzustellen.",
     "dataKindUnknown": "Unbekannte Datenart.",
     "dataItemNotFound": "Dieser Eintrag existiert nicht mehr.",
     "mcpNameRequired": "Gib dem Server einen Namen.",

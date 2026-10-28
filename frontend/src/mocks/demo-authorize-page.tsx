@@ -5,14 +5,13 @@ import { ConnectorConsentDemo } from "@/features/settings/mocks/connector-consen
 import { useSearchParams } from "@/lib/navigation";
 
 /**
- * Обратный адрес бэкенда для решения: коннекторы настроек или установка Slack для командных чатов
- * (`flow=chats`, маршрут connectors `/v1/integrations/oauth/slack/callback`).
+ * Обратный адрес моков для решения: установка Slack для командных чатов (`flow=chats`, мок маршрута
+ * `/v1/integrations/oauth/slack/callback`). Коннекторы настроек идут на бэкенд, к провайдеру.
  */
-function callbackFor(flow: string | null, connector: string, state: string) {
+function callbackFor(connector: string, state: string) {
   return (decision: "allow" | "deny") => {
     const query = new URLSearchParams({ state, decision });
-    if (flow === "chats") return `/v1/integrations/oauth/${encodeURIComponent(connector)}/callback?${query}`;
-    return `/api/settings/connectors/${encodeURIComponent(connector)}/callback?${query}`;
+    return `/v1/integrations/oauth/${encodeURIComponent(connector)}/callback?${query}`;
   };
 }
 
@@ -25,8 +24,8 @@ export function Component() {
     <>
       <PageMeta title={t("consent.metaTitle")} />
       <ConnectorConsentDemo
-        connector={connector}
-        callback={callbackFor(params.get("flow"), connector, params.get("state") ?? "")}
+        app={connector === "slack" ? "Slack" : null}
+        callback={callbackFor(connector, params.get("state") ?? "")}
       />
     </>
   );

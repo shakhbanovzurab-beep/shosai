@@ -21,8 +21,6 @@ export type Problem =
   | "paymentsUnavailable"
   | "checkoutUnavailable"
   | "invoiceNotFound"
-  | "connectorNotFound"
-  | "authorizationExpired"
   | "dataKindUnknown"
   | "dataItemNotFound"
   | "mcpNameRequired"

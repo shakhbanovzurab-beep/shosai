@@ -9,11 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/navigation";
 
 import { OAUTH_MESSAGE_TYPE, type OAuthResultMessage, type OAuthStatus } from "../../domain/connectors-contract";
+import { describeFlowError } from "../../model/connector-actions";
 
 interface OAuthCallbackProps {
   readonly connector: string;
   readonly status: OAuthStatus;
-  /** The backend's own words for a failure, already in the interface language. */
+  /** Why the flow failed, as the backend's code (`authorization_expired`, `scope_missing`…). */
   readonly error: string | null;
 }
 
@@ -37,7 +38,9 @@ export function OAuthCallback({ connector, status, error }: OAuthCallbackProps) 
       <div className="flex max-w-sm flex-col items-center gap-3 text-center">
         <Icon className="size-10 text-muted-foreground" aria-hidden="true" />
         <h1 className="font-medium text-xl">{t(`callback.${status}.title`)}</h1>
-        <p className="text-muted-foreground text-sm">{error ?? t(`callback.${status}.body`)}</p>
+        <p className="text-muted-foreground text-sm">
+          {status === "error" ? describeFlowError(error, t) : t(`callback.${status}.body`)}
+        </p>
         <Button variant="outline" asChild>
           <Link href="/app">{t("callback.back")}</Link>
         </Button>

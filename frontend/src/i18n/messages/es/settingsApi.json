@@ -11,8 +11,6 @@
     "paymentsUnavailable": "Los pagos aún no están disponibles. Cuando se active la facturación, aquí se abrirá la página segura del proveedor.",
     "checkoutUnavailable": "Los pagos aún no están disponibles. Cuando se active la facturación, aquí se abrirá la página de pago del proveedor.",
     "invoiceNotFound": "No se encontró la factura.",
-    "connectorNotFound": "No se encontró el conector.",
-    "authorizationExpired": "La autorización caducó o ya se usó. Intenta conectar de nuevo.",
     "dataKindUnknown": "Tipo de datos desconocido.",
     "dataItemNotFound": "Ese elemento ya no existe.",
     "mcpNameRequired": "Ponle un nombre al servidor.",

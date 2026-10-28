@@ -1,5 +1,5 @@
 {
-  "description": "Verbinde deine Apps, damit Leo darin suchen und handeln kann. Jede App meldet dich auf ihrer eigenen Seite über OAuth 2.0 an, sodass Leo dein Passwort nie sieht.",
+  "description": "Verbinde deine Apps, damit Leo darin suchen und handeln kann. Die meisten Apps melden dich auf ihrer eigenen Seite an, sodass Leo dein Passwort nie sieht. Ein App-Passwort oder Schlüssel, den du eingibst, wird verschlüsselt gespeichert.",
   "columns": {
     "connector": "Konnektor",
     "type": "Typ",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "E-Mail",
+    "calendar": "Kalender",
     "files": "Dateien",
     "notes": "Notizen",
     "communication": "Kommunikation",
@@ -18,6 +19,46 @@
   "connected": "Verbunden",
   "options": "Optionen für {name}, verbunden",
   "disconnect": "Trennen",
+  "reconnect": "Neu verbinden",
+  "needsReconnect": "Verbinde neu, um es weiter zu nutzen.",
+  "problems": {
+    "refresh_refused": "Der Zugriff ist abgelaufen. Verbinde neu, um es weiter zu nutzen.",
+    "grant_revoked": "Der Zugriff wurde in deinem Konto entfernt. Verbinde neu, um es weiter zu nutzen.",
+    "scope_missing": "Einige Berechtigungen fehlen. Verbinde neu und erlaube alle.",
+    "admin_consent_required": "Ein Admin deines Unternehmens muss Shosai zuerst genehmigen.",
+    "imap_disabled": "Aktiviere IMAP in deinen E-Mail-Einstellungen und verbinde dann neu.",
+    "provider_subscription_required": "Dein E-Mail-Dienst lässt andere Apps nur mit einem kostenpflichtigen Abo zu.",
+    "credentials_rejected": "Das Passwort oder der Schlüssel wird nicht mehr akzeptiert. Gib einen neuen ein."
+  },
+  "refusals": {
+    "not_offered": "Diese App kann gerade nicht verbunden werden.",
+    "not_connected": "Diese App ist nicht verbunden.",
+    "connect_unavailable": "Verbinden ist gerade nicht möglich. Versuche es in ein paar Minuten erneut.",
+    "credentials_rejected": "Die Verbindung konnte nicht hergestellt werden. Prüfe deine Eingabe und versuche es erneut.",
+    "rate_limited": "Zu viele Versuche. Warte eine Minute und versuche es erneut."
+  },
+  "empty": {
+    "title": "Noch keine Apps zum Verbinden",
+    "body": "Apps erscheinen hier, sobald ein Teil von Shosai sie nutzen kann."
+  },
+  "disconnectDialog": {
+    "title": "{name} trennen?",
+    "body": "Leo und alles in Shosai, was {name} nutzt, hören sofort damit auf.",
+    "remains": "Dein Konto zeigt den Zugriff von Shosai eventuell weiter an: Andere Apps desselben Kontos nutzen ihn, oder der Dienst kann ihn nicht zurückziehen. Du kannst ihn in den Sicherheitseinstellungen des Kontos entfernen."
+  },
+  "credentials": {
+    "title": "{name} verbinden",
+    "login": "E-Mail oder Benutzername",
+    "password": "App-Passwort",
+    "apiKey": "API-Schlüssel",
+    "webhookUrl": "Hook-URL",
+    "address": "Serveradresse",
+    "hint": {
+      "password": "Erstelle in den Sicherheitseinstellungen deines Kontos ein App-Passwort und gib es hier ein. Dein Hauptpasswort wird nicht benötigt.",
+      "api_key": "Kopiere einen API-Schlüssel aus den Einstellungen der App. Er wird vor dem Speichern geprüft.",
+      "webhook": "Füge die Hook-URL aus der App ein. Shosai sendet Ereignisse an sie."
+    }
+  },
   "toasts": {
     "connected": "{name} verbunden",
     "notConnected": "{name} wurde nicht verbunden",
@@ -40,6 +81,15 @@
       "body": "Beim Verbinden ist etwas schiefgelaufen. Versuche es in den Einstellungen erneut."
     },
     "back": "Zurück zum Dashboard"
+  },
+  "flowErrors": {
+    "authorization_expired": "Die Anmeldung hat zu lange gedauert oder wurde schon verwendet. Versuche es erneut.",
+    "scope_missing": "Nicht alle Berechtigungen wurden erteilt. Versuche es erneut und erlaube alle.",
+    "admin_consent_required": "Ein Admin deines Unternehmens muss Shosai zuerst genehmigen.",
+    "provider_unavailable": "Der Dienst hat nicht geantwortet. Versuche es in ein paar Minuten erneut.",
+    "not_offered": "Diese App kann gerade nicht verbunden werden.",
+    "imap_disabled": "Aktiviere IMAP in deinen E-Mail-Einstellungen und versuche es dann erneut.",
+    "provider_subscription_required": "Dein E-Mail-Dienst lässt andere Apps nur mit einem kostenpflichtigen Abo zu."
   },
   "consent": {
     "metaTitle": "Demo-Autorisierung",

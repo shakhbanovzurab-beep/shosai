@@ -1,5 +1,5 @@
 {
-  "description": "連接你的應用程式，讓 Leo 可以在其中搜尋和執行動作。每個應用程式都會透過 OAuth 2.0 在自己的頁面讓你登入，因此 Leo 絕不會看到你的密碼。",
+  "description": "連接你的應用程式，讓 Leo 可以在其中搜尋和執行動作。大多數應用程式都會在自己的頁面讓你登入，因此 Leo 絕不會看到你的密碼。你輸入的應用程式密碼或金鑰會加密儲存。",
   "columns": {
     "connector": "連接器",
     "type": "類型",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "郵件",
+    "calendar": "日曆",
     "files": "檔案",
     "notes": "筆記",
     "communication": "通訊",
@@ -18,6 +19,46 @@
   "connected": "已連接",
   "options": "{name} 的選項，已連接",
   "disconnect": "中斷連接",
+  "reconnect": "重新連接",
+  "needsReconnect": "請重新連接以繼續使用。",
+  "problems": {
+    "refresh_refused": "存取權已過期。請重新連接以繼續使用。",
+    "grant_revoked": "你的帳號已移除存取權。請重新連接以繼續使用。",
+    "scope_missing": "缺少部分權限。請重新連接並全部允許。",
+    "admin_consent_required": "需要先由你公司的管理員核准 Shosai。",
+    "imap_disabled": "請在郵件設定中開啟 IMAP，然後重新連接。",
+    "provider_subscription_required": "你的郵件服務只允許付費訂閱用戶使用其他應用程式。",
+    "credentials_rejected": "密碼或金鑰已不再被接受。請輸入新的。"
+  },
+  "refusals": {
+    "not_offered": "目前無法連接這個應用程式。",
+    "not_connected": "這個應用程式尚未連接。",
+    "connect_unavailable": "目前無法連接。請在幾分鐘後再試一次。",
+    "credentials_rejected": "無法連接。請檢查你輸入的內容，然後再試一次。",
+    "rate_limited": "嘗試次數過多。請稍候一分鐘再試一次。"
+  },
+  "empty": {
+    "title": "還沒有可連接的應用程式",
+    "body": "當 Shosai 的某個部分可以使用應用程式時，它就會顯示在這裡。"
+  },
+  "disconnectDialog": {
+    "title": "要中斷與 {name} 的連接嗎？",
+    "body": "Leo 和 Shosai 中所有使用 {name} 的功能都會立即停止使用。",
+    "remains": "你的帳號可能仍會顯示 Shosai 的存取權：同一帳號的其他應用程式正在使用，或該服務無法撤銷。你可以在帳號的安全性設定中移除。"
+  },
+  "credentials": {
+    "title": "連接 {name}",
+    "login": "電子郵件或登入名稱",
+    "password": "應用程式密碼",
+    "apiKey": "API 金鑰",
+    "webhookUrl": "Hook 網址",
+    "address": "伺服器位址",
+    "hint": {
+      "password": "在帳號的安全性設定中建立應用程式密碼，並在這裡輸入。不需要你的主要密碼。",
+      "api_key": "從應用程式的設定中複製 API 金鑰。儲存前會先驗證。",
+      "webhook": "貼上應用程式的 Hook URL。Shosai 會將事件傳送到這個網址。"
+    }
+  },
   "toasts": {
     "connected": "已連接 {name}",
     "notConnected": "未連接 {name}",
@@ -40,6 +81,15 @@
       "body": "連接時發生問題。請從「設定」再試一次。"
     },
     "back": "返回資訊主頁"
+  },
+  "flowErrors": {
+    "authorization_expired": "登入時間過長，或已經使用過。請再次嘗試連接。",
+    "scope_missing": "並未授予所有權限。請再試一次並全部允許。",
+    "admin_consent_required": "需要先由你公司的管理員核准 Shosai。",
+    "provider_unavailable": "服務沒有回應。請在幾分鐘後再試一次。",
+    "not_offered": "目前無法連接這個應用程式。",
+    "imap_disabled": "請在郵件設定中開啟 IMAP，然後再試一次。",
+    "provider_subscription_required": "你的郵件服務只允許付費訂閱用戶使用其他應用程式。"
   },
   "consent": {
     "metaTitle": "示範授權",

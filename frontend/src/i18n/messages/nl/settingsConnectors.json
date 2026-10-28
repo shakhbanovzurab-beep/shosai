@@ -1,5 +1,5 @@
 {
-  "description": "Koppel je apps zodat Leo erin kan zoeken en er acties in kan uitvoeren. Je logt bij elke app in op de eigen pagina van die app met OAuth 2.0, dus Leo ziet je wachtwoord nooit.",
+  "description": "Koppel je apps zodat Leo erin kan zoeken en er acties in kan uitvoeren. Bij de meeste apps log je in op hun eigen pagina, dus Leo ziet je wachtwoord nooit. Een app-wachtwoord of sleutel die je invoert, wordt versleuteld opgeslagen.",
   "columns": {
     "connector": "Koppeling",
     "type": "Soort",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "E-mail",
+    "calendar": "Agenda",
     "files": "Bestanden",
     "notes": "Notities",
     "communication": "Communicatie",
@@ -18,6 +19,46 @@
   "connected": "Gekoppeld",
   "options": "Opties voor {name}, gekoppeld",
   "disconnect": "Ontkoppelen",
+  "reconnect": "Opnieuw koppelen",
+  "needsReconnect": "Koppel opnieuw om het te blijven gebruiken.",
+  "problems": {
+    "refresh_refused": "De toegang is verlopen. Koppel opnieuw om het te blijven gebruiken.",
+    "grant_revoked": "De toegang is verwijderd in je account. Koppel opnieuw om het te blijven gebruiken.",
+    "scope_missing": "Er ontbreken toestemmingen. Koppel opnieuw en sta ze allemaal toe.",
+    "admin_consent_required": "Een beheerder van je bedrijf moet Shosai eerst goedkeuren.",
+    "imap_disabled": "Zet IMAP aan in je e-mailinstellingen en koppel daarna opnieuw.",
+    "provider_subscription_required": "Je e-maildienst laat andere apps alleen toe met een betaald abonnement.",
+    "credentials_rejected": "Het wachtwoord of de sleutel wordt niet meer geaccepteerd. Voer een nieuwe in."
+  },
+  "refusals": {
+    "not_offered": "Deze app kan nu niet worden gekoppeld.",
+    "not_connected": "Deze app is niet gekoppeld.",
+    "connect_unavailable": "Koppelen is nu niet mogelijk. Probeer het over een paar minuten opnieuw.",
+    "credentials_rejected": "Kan niet koppelen. Controleer wat je hebt ingevoerd en probeer het opnieuw.",
+    "rate_limited": "Te veel pogingen. Wacht een minuut en probeer het opnieuw."
+  },
+  "empty": {
+    "title": "Nog geen apps om te koppelen",
+    "body": "Apps verschijnen hier zodra een onderdeel van Shosai ze kan gebruiken."
+  },
+  "disconnectDialog": {
+    "title": "{name} ontkoppelen?",
+    "body": "Leo en alles in Shosai wat {name} gebruikt, stoppen er meteen mee.",
+    "remains": "Je account kan de toegang van Shosai nog tonen: andere apps van hetzelfde account gebruiken die, of de dienst kan die niet intrekken. Je kunt die verwijderen in de beveiligingsinstellingen van het account."
+  },
+  "credentials": {
+    "title": "{name} koppelen",
+    "login": "E-mailadres of gebruikersnaam",
+    "password": "App-wachtwoord",
+    "apiKey": "API-sleutel",
+    "webhookUrl": "Hook-URL",
+    "address": "Serveradres",
+    "hint": {
+      "password": "Maak een app-wachtwoord aan in de beveiligingsinstellingen van je account en voer het hier in. Je hoofdwachtwoord is niet nodig.",
+      "api_key": "Kopieer een API-sleutel uit de instellingen van de app. Die wordt gecontroleerd voordat hij wordt opgeslagen.",
+      "webhook": "Plak de hook-URL uit de app. Shosai stuurt er gebeurtenissen naartoe."
+    }
+  },
   "toasts": {
     "connected": "{name} gekoppeld",
     "notConnected": "{name} is niet gekoppeld",
@@ -40,6 +81,15 @@
       "body": "Er ging iets mis bij het koppelen. Probeer het opnieuw via Instellingen."
     },
     "back": "Terug naar het dashboard"
+  },
+  "flowErrors": {
+    "authorization_expired": "Het inloggen duurde te lang of is al gebruikt. Probeer opnieuw te koppelen.",
+    "scope_missing": "Niet alle toestemmingen zijn gegeven. Probeer het opnieuw en sta ze allemaal toe.",
+    "admin_consent_required": "Een beheerder van je bedrijf moet Shosai eerst goedkeuren.",
+    "provider_unavailable": "De dienst reageerde niet. Probeer het over een paar minuten opnieuw.",
+    "not_offered": "Deze app kan nu niet worden gekoppeld.",
+    "imap_disabled": "Zet IMAP aan in je e-mailinstellingen en probeer het daarna opnieuw.",
+    "provider_subscription_required": "Je e-maildienst laat andere apps alleen toe met een betaald abonnement."
   },
   "consent": {
     "metaTitle": "Demo-autorisatie",

@@ -5,10 +5,9 @@ import * as React from "react";
 import { toast } from "sonner";
 import { useTranslations } from "use-intl";
 
-import { apiErrorDescription } from "@/lib/api/error-description";
-
-import { settingsApi } from "../api/settings-api";
+import { connectorsApi } from "../api/connectors-api";
 import { type Connector, OAUTH_MESSAGE_TYPE, type OAuthResultMessage } from "../domain/connectors-contract";
+import { describeConnectorFailure, describeFlowError } from "./connector-actions";
 import { connectorsResource } from "./settings-resources";
 
 const POPUP_WIDTH = 520;
@@ -28,14 +27,9 @@ function isOAuthMessage(data: unknown): data is OAuthResultMessage {
   return typeof data === "object" && data !== null && (data as { type?: unknown }).type === OAUTH_MESSAGE_TYPE;
 }
 
-const replace = (connector: Connector) =>
-  connectorsResource.update((data) => ({
-    connectors: data.connectors.map((c) => (c.id === connector.id ? connector : c)),
-  }));
-
 /**
- * Runs a connector's OAuth 2.0 consent in a popup and reports the outcome. The popup opens right on the
- * click (browsers block popups opened later) and gets the consent URL once the backend returns it.
+ * Runs an app's OAuth consent in a popup — to connect it or to reconnect it — and reports the outcome. The popup
+ * opens right on the click (browsers block popups opened later) and gets the consent URL once the backend returns it.
  */
 export function useConnectorOAuth() {
   const t = useTranslations("settingsConnectors");
@@ -58,7 +52,7 @@ export function useConnectorOAuth() {
       const name = connector.name;
       if (event.data.status === "connected") toast.success(t("toasts.connected", { name }));
       else if (event.data.status === "denied") toast(t("toasts.notConnected", { name }));
-      else toast.error(t("toasts.connectFailed", { name }), { description: event.data.error ?? undefined });
+      else toast.error(t("toasts.connectFailed", { name }), { description: describeFlowError(event.data.error, t) });
       void connectorsResource.refresh();
     };
     // Closing the popup without finishing counts as a cancel.
@@ -77,15 +71,9 @@ export function useConnectorOAuth() {
     setPendingId(connector.id);
     const popup = openCenteredPopup();
     try {
-      const { connector: updated, authorize_url: authorizeUrl } = await settingsApi.setConnected(connector.id, true);
-      if (!authorizeUrl) {
-        popup?.close();
-        replace(updated);
-        setPendingId(null);
-        return;
-      }
+      const authorizeUrl = await connectorsApi.authorize(connector.id);
       if (!popup) {
-        // Popups are blocked: run the consent in this tab; /oauth/callback brings the user back.
+        // Popups are blocked: run the consent in this tab; /oauth/callback shows the outcome and leads back.
         window.location.assign(authorizeUrl);
         return;
       }
@@ -95,20 +83,11 @@ export function useConnectorOAuth() {
     } catch (error) {
       popup?.close();
       setPendingId(null);
-      toast.error(t("toasts.connectFailed", { name: connector.name }), { description: apiErrorDescription(error) });
+      toast.error(t("toasts.connectFailed", { name: connector.name }), {
+        description: describeConnectorFailure(error, t),
+      });
     }
   };
 
-  const disconnect = async (connector: Connector) => {
-    replace({ ...connector, connected: false, account: null });
-    try {
-      replace((await settingsApi.setConnected(connector.id, false)).connector);
-      toast.success(t("toasts.disconnected", { name: connector.name }));
-    } catch (error) {
-      replace(connector);
-      toast.error(t("toasts.disconnectFailed", { name: connector.name }), { description: apiErrorDescription(error) });
-    }
-  };
-
-  return { pendingId, connect, disconnect };
+  return { pendingId, connect };
 }

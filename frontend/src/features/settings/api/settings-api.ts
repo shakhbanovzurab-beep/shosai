@@ -10,7 +10,6 @@ import type {
   TopUpResponse,
   Usage,
 } from "../domain/billing-contract";
-import type { ConnectorsResponse, ConnectorUpdateResponse } from "../domain/connectors-contract";
 import type { McpServer, McpServerDraft, McpServersResponse } from "../domain/mcp-contract";
 import type { SettingsPatch, UserSettings } from "../domain/settings-contract";
 
@@ -30,7 +29,4 @@ export const settingsApi = {
   addMcp: (draft: McpServerDraft) => request<McpServer>("/mcp", jsonBody("POST", draft)),
   setMcpEnabled: (id: string, enabled: boolean) => request<McpServer>(at("/mcp", id), jsonBody("PATCH", { enabled })),
   removeMcp: (id: string) => request<void>(at("/mcp", id), { method: "DELETE" }),
-  listConnectors: () => request<ConnectorsResponse>("/connectors"),
-  setConnected: (id: string, connected: boolean) =>
-    request<ConnectorUpdateResponse>(at("/connectors", id), jsonBody("PATCH", { connected })),
 };

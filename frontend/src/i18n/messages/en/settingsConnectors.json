@@ -1,5 +1,5 @@
 {
-  "description": "Connect your apps so Leo can search and act in them. Each app signs you in on its own page with OAuth 2.0, so Leo never sees your password.",
+  "description": "Connect your apps so Leo can search and act in them. Most apps sign you in on their own page, so Leo never sees your password. An app password or key you enter is stored encrypted.",
   "columns": {
     "connector": "Connector",
     "type": "Type",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "Mail",
+    "calendar": "Calendar",
     "files": "Files",
     "notes": "Notes",
     "communication": "Communication",
@@ -18,6 +19,46 @@
   "connected": "Connected",
   "options": "Options for {name}, connected",
   "disconnect": "Disconnect",
+  "reconnect": "Reconnect",
+  "needsReconnect": "Reconnect to keep using it.",
+  "problems": {
+    "refresh_refused": "Access expired. Reconnect to keep using it.",
+    "grant_revoked": "Access was removed in your account. Reconnect to keep using it.",
+    "scope_missing": "Some permissions are missing. Reconnect and allow them all.",
+    "admin_consent_required": "An admin at your company needs to approve Shosai first.",
+    "imap_disabled": "Turn on IMAP in your mail settings, then reconnect.",
+    "provider_subscription_required": "Your mail service lets other apps in only with a paid subscription.",
+    "credentials_rejected": "The password or key is no longer accepted. Enter a new one."
+  },
+  "refusals": {
+    "not_offered": "This app can’t be connected right now.",
+    "not_connected": "This app isn’t connected.",
+    "connect_unavailable": "Connecting isn’t available right now. Try again in a few minutes.",
+    "credentials_rejected": "Couldn’t connect. Check what you entered and try again.",
+    "rate_limited": "Too many tries. Wait a minute and try again."
+  },
+  "empty": {
+    "title": "No apps to connect yet",
+    "body": "Apps appear here once a part of Shosai can use them."
+  },
+  "disconnectDialog": {
+    "title": "Disconnect {name}?",
+    "body": "Leo and everything in Shosai that uses {name} stop using it at once.",
+    "remains": "Your account may still list Shosai’s access: other apps of the same account use it, or the service can’t withdraw it. You can remove it in the account’s security settings."
+  },
+  "credentials": {
+    "title": "Connect {name}",
+    "login": "Email or login",
+    "password": "App password",
+    "apiKey": "API key",
+    "webhookUrl": "Hook URL",
+    "address": "Server address",
+    "hint": {
+      "password": "Create an app password in your account’s security settings and enter it here. Your main password isn’t needed.",
+      "api_key": "Copy an API key from the app’s settings. It’s checked before it’s saved.",
+      "webhook": "Paste the hook URL from the app. Shosai sends events to it."
+    }
+  },
   "toasts": {
     "connected": "{name} connected",
     "notConnected": "{name} wasn’t connected",
@@ -40,6 +81,15 @@
       "body": "Something went wrong while connecting. Try again from Settings."
     },
     "back": "Back to the dashboard"
+  },
+  "flowErrors": {
+    "authorization_expired": "The sign-in took too long or was already used. Try connecting again.",
+    "scope_missing": "Some permissions weren’t granted. Try again and allow them all.",
+    "admin_consent_required": "An admin at your company needs to approve Shosai first.",
+    "provider_unavailable": "The service didn’t respond. Try again in a few minutes.",
+    "not_offered": "This app can’t be connected right now.",
+    "imap_disabled": "Turn on IMAP in your mail settings, then try again.",
+    "provider_subscription_required": "Your mail service lets other apps in only with a paid subscription."
   },
   "consent": {
     "metaTitle": "Demo authorization",

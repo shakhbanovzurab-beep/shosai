@@ -1,5 +1,5 @@
 {
-  "description": "Conecta tus apps para que Leo pueda buscar y actuar en ellas. Cada app te pide iniciar sesión en su propia página con OAuth 2.0, así que Leo nunca ve tu contraseña.",
+  "description": "Conecta tus apps para que Leo pueda buscar y actuar en ellas. La mayoría de las apps te piden iniciar sesión en su propia página, así que Leo nunca ve tu contraseña. La contraseña de app o la clave que ingreses se guarda cifrada.",
   "columns": {
     "connector": "Conector",
     "type": "Tipo",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "Correo",
+    "calendar": "Calendario",
     "files": "Archivos",
     "notes": "Notas",
     "communication": "Comunicación",
@@ -18,6 +19,46 @@
   "connected": "Conectado",
   "options": "Opciones de {name}, conectado",
   "disconnect": "Desconectar",
+  "reconnect": "Volver a conectar",
+  "needsReconnect": "Vuelve a conectarla para seguir usándola.",
+  "problems": {
+    "refresh_refused": "El acceso caducó. Vuelve a conectarla para seguir usándola.",
+    "grant_revoked": "Se quitó el acceso en tu cuenta. Vuelve a conectarla para seguir usándola.",
+    "scope_missing": "Faltan algunos permisos. Vuelve a conectarla y permítelos todos.",
+    "admin_consent_required": "Un administrador de tu empresa tiene que aprobar Shosai primero.",
+    "imap_disabled": "Activa IMAP en la configuración de tu correo y vuelve a conectarla.",
+    "provider_subscription_required": "Tu servicio de correo solo admite otras apps con una suscripción de pago.",
+    "credentials_rejected": "La contraseña o la clave ya no se acepta. Ingresa una nueva."
+  },
+  "refusals": {
+    "not_offered": "Esta app no se puede conectar ahora.",
+    "not_connected": "Esta app no está conectada.",
+    "connect_unavailable": "Ahora no se puede conectar. Inténtalo de nuevo en unos minutos.",
+    "credentials_rejected": "No se pudo conectar. Revisa lo que ingresaste e inténtalo de nuevo.",
+    "rate_limited": "Demasiados intentos. Espera un minuto e inténtalo de nuevo."
+  },
+  "empty": {
+    "title": "Aún no hay apps para conectar",
+    "body": "Las apps aparecen aquí cuando alguna parte de Shosai puede usarlas."
+  },
+  "disconnectDialog": {
+    "title": "¿Desconectar {name}?",
+    "body": "Leo y todo lo que en Shosai usa {name} dejarán de usarlo al instante.",
+    "remains": "Puede que tu cuenta siga mostrando el acceso de Shosai: lo usan otras apps de la misma cuenta o el servicio no puede retirarlo. Puedes quitarlo en la configuración de seguridad de la cuenta."
+  },
+  "credentials": {
+    "title": "Conectar {name}",
+    "login": "Correo o usuario",
+    "password": "Contraseña de app",
+    "apiKey": "Clave de API",
+    "webhookUrl": "URL del hook",
+    "address": "Dirección del servidor",
+    "hint": {
+      "password": "Crea una contraseña de app en la configuración de seguridad de tu cuenta e ingrésala aquí. No hace falta tu contraseña principal.",
+      "api_key": "Copia una clave de API de la configuración de la app. Se comprueba antes de guardarla.",
+      "webhook": "Pega la URL del hook de la app. Shosai le enviará eventos."
+    }
+  },
   "toasts": {
     "connected": "{name} conectado",
     "notConnected": "No se conectó {name}",
@@ -40,6 +81,15 @@
       "body": "Algo salió mal durante la conexión. Inténtalo de nuevo desde Configuración."
     },
     "back": "Volver al panel"
+  },
+  "flowErrors": {
+    "authorization_expired": "El inicio de sesión tardó demasiado o ya se usó. Intenta conectar de nuevo.",
+    "scope_missing": "No se concedieron todos los permisos. Inténtalo de nuevo y permítelos todos.",
+    "admin_consent_required": "Un administrador de tu empresa tiene que aprobar Shosai primero.",
+    "provider_unavailable": "El servicio no respondió. Inténtalo de nuevo en unos minutos.",
+    "not_offered": "Esta app no se puede conectar ahora.",
+    "imap_disabled": "Activa IMAP en la configuración de tu correo e inténtalo de nuevo.",
+    "provider_subscription_required": "Tu servicio de correo solo admite otras apps con una suscripción de pago."
   },
   "consent": {
     "metaTitle": "Autorización de demostración",

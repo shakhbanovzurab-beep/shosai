@@ -11,8 +11,6 @@
     "paymentsUnavailable": "Payments aren’t connected yet. This opens the provider’s secure page once billing is live.",
     "checkoutUnavailable": "Payments aren’t connected yet. This opens the provider’s checkout once billing is live.",
     "invoiceNotFound": "Invoice not found.",
-    "connectorNotFound": "Connector not found.",
-    "authorizationExpired": "The authorization expired or was already used. Try connecting again.",
     "dataKindUnknown": "Unknown kind of data.",
     "dataItemNotFound": "That item no longer exists.",
     "mcpNameRequired": "Give the server a name.",

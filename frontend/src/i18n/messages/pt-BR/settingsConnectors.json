@@ -1,5 +1,5 @@
 {
-  "description": "Conecte seus apps para que o Leo possa pesquisar e agir neles. Cada app faz seu login na própria página com OAuth 2.0, então o Leo nunca vê sua senha.",
+  "description": "Conecte seus apps para que o Leo possa pesquisar e agir neles. A maioria dos apps faz seu login na própria página, então o Leo nunca vê sua senha. A senha de app ou a chave que você digitar fica guardada criptografada.",
   "columns": {
     "connector": "Conector",
     "type": "Tipo",
@@ -7,6 +7,7 @@
   },
   "categories": {
     "mail": "E-mail",
+    "calendar": "Agenda",
     "files": "Arquivos",
     "notes": "Notas",
     "communication": "Comunicação",
@@ -18,6 +19,46 @@
   "connected": "Conectado",
   "options": "Opções de {name}, conectado",
   "disconnect": "Desconectar",
+  "reconnect": "Reconectar",
+  "needsReconnect": "Reconecte para continuar usando.",
+  "problems": {
+    "refresh_refused": "O acesso expirou. Reconecte para continuar usando.",
+    "grant_revoked": "O acesso foi removido na sua conta. Reconecte para continuar usando.",
+    "scope_missing": "Faltam algumas permissões. Reconecte e permita todas.",
+    "admin_consent_required": "Um administrador da sua empresa precisa aprovar o Shosai primeiro.",
+    "imap_disabled": "Ative o IMAP nas configurações do seu e-mail e reconecte.",
+    "provider_subscription_required": "Seu serviço de e-mail só aceita outros apps com uma assinatura paga.",
+    "credentials_rejected": "A senha ou a chave não é mais aceita. Digite uma nova."
+  },
+  "refusals": {
+    "not_offered": "Este app não pode ser conectado agora.",
+    "not_connected": "Este app não está conectado.",
+    "connect_unavailable": "A conexão não está disponível agora. Tente de novo em alguns minutos.",
+    "credentials_rejected": "Não foi possível conectar. Confira o que você digitou e tente de novo.",
+    "rate_limited": "Muitas tentativas. Aguarde um minuto e tente de novo."
+  },
+  "empty": {
+    "title": "Nenhum app para conectar ainda",
+    "body": "Os apps aparecem aqui quando alguma parte do Shosai puder usá-los."
+  },
+  "disconnectDialog": {
+    "title": "Desconectar {name}?",
+    "body": "O Leo e tudo no Shosai que usa {name} param de usá-lo na hora.",
+    "remains": "Sua conta ainda pode mostrar o acesso do Shosai: outros apps da mesma conta o usam, ou o serviço não consegue retirá-lo. Você pode removê-lo nas configurações de segurança da conta."
+  },
+  "credentials": {
+    "title": "Conectar {name}",
+    "login": "E-mail ou login",
+    "password": "Senha de app",
+    "apiKey": "Chave de API",
+    "webhookUrl": "URL do hook",
+    "address": "Endereço do servidor",
+    "hint": {
+      "password": "Crie uma senha de app nas configurações de segurança da sua conta e digite aqui. Sua senha principal não é necessária.",
+      "api_key": "Copie uma chave de API nas configurações do app. Ela é verificada antes de ser salva.",
+      "webhook": "Cole a URL do hook do app. O Shosai vai enviar eventos para ela."
+    }
+  },
   "toasts": {
     "connected": "{name} conectado",
     "notConnected": "{name} não foi conectado",
@@ -40,6 +81,15 @@
       "body": "Algo deu errado durante a conexão. Tente novamente em Configurações."
     },
     "back": "Voltar ao painel"
+  },
+  "flowErrors": {
+    "authorization_expired": "O login demorou demais ou já foi usado. Tente conectar de novo.",
+    "scope_missing": "Nem todas as permissões foram concedidas. Tente de novo e permita todas.",
+    "admin_consent_required": "Um administrador da sua empresa precisa aprovar o Shosai primeiro.",
+    "provider_unavailable": "O serviço não respondeu. Tente de novo em alguns minutos.",
+    "not_offered": "Este app não pode ser conectado agora.",
+    "imap_disabled": "Ative o IMAP nas configurações do seu e-mail e tente de novo.",
+    "provider_subscription_required": "Seu serviço de e-mail só aceita outros apps com uma assinatura paga."
   },
   "consent": {
     "metaTitle": "Autorização de demonstração",

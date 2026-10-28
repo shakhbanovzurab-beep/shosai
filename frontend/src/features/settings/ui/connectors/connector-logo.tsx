@@ -1,4 +1,4 @@
-import { Blocks, Cloud, Hash, type LucideIcon, Mail } from "lucide-react";
+import { Blocks, CalendarDays, Cloud, Hash, KeyRound, type LucideIcon, Mail } from "lucide-react";
 import {
   type SimpleIcon as Brand,
   siConfluence,
@@ -6,18 +6,27 @@ import {
   siGithub,
   siGitlab,
   siGmail,
+  siGooglecalendar,
   siGoogledrive,
   siHubspot,
   siJira,
+  siMaildotru,
   siNotion,
+  siZapier,
 } from "simple-icons";
 
 import { SimpleIcon } from "@/components/simple-icon";
 
-// simple-icons has no Microsoft, Slack or Yandex Disk marks, so those use neutral glyphs.
+// simple-icons has no Microsoft, Slack, Yandex, CalDAV, Attio or Affinity marks, so those use neutral glyphs.
 const LOGOS: Record<string, Brand | LucideIcon> = {
   gmail: siGmail,
+  google_calendar: siGooglecalendar,
   outlook: Mail,
+  outlook_calendar: CalendarDays,
+  yandex_mail: Mail,
+  yandex_calendar: CalendarDays,
+  mailru_mail: siMaildotru,
+  caldav: CalendarDays,
   google_drive: siGoogledrive,
   dropbox: siDropbox,
   yandex_disk: Cloud,
@@ -28,6 +37,8 @@ const LOGOS: Record<string, Brand | LucideIcon> = {
   gitlab: siGitlab,
   jira: siJira,
   hubspot: siHubspot,
+  affinity: KeyRound,
+  zapier: siZapier,
 };
 
 /** The app's mark in a small tile, like Claude's connector list; unknown apps get a generic glyph. */

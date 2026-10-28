@@ -1,42 +1,70 @@
+import type { components } from "@/lib/api/generated/schema";
+
 /*
- * ---------- Connectors (OAuth 2.0) ----------
- * GET /settings/connectors, PATCH /settings/connectors/{id}
- *
- * Connecting is the OAuth 2.0 authorization code flow with PKCE, run by the backend:
- * 1. PATCH { connected: true } → the backend creates `state` and a PKCE verifier and returns the
- *    provider's consent URL as `authorize_url` (the connector stays disconnected for now).
- * 2. The app opens that URL in a popup; the user approves or denies on the provider's page.
- * 3. The provider redirects to the backend's callback with `code` and `state`; the backend checks
- *    `state`, exchanges the code for tokens, stores them, and redirects the popup to
- *    `{APP_URL}/oauth/callback?connector={id}&status=connected` (or `status=error&error=<message>`,
- *    `status=denied`).
- * 4. That page posts an `OAuthResultMessage` to the app and closes; the app reloads the connectors.
- * PATCH { connected: false } revokes the tokens with the provider and forgets them.
+ * Settings › Connectors на `/v1/connectors*` (план connectors §3.7): каталог предложенных приложений и подключения
+ * человека. OAuth ведёт бэкенд: `POST /v1/connectors/{app}/authorize` отдаёт страницу согласия провайдера и ставит
+ * cookie-привязку браузера; провайдер возвращает на обратный адрес бэкенда, тот — на `/oauth/callback` с `status` и
+ * кодом `error`, а страница сообщает итог окну-хозяину. Пароль приложения, ключ или адрес хука уходят в
+ * `POST /v1/connectors/{app}/credentials`; `DELETE /v1/connectors/{app}` отключает.
  */
 
-export const CONNECTOR_CATEGORIES = ["mail", "files", "notes", "communication", "tasks", "crm"] as const;
+export type Connector = components["schemas"]["ConnectorOut"];
+export type ConnectorsResponse = components["schemas"]["ConnectorsOut"];
+export type ConnectorCredentials = components["schemas"]["ConnectorCredentialsIn"];
+export type ConnectorAuth = Connector["auth"];
+
+export const CONNECTOR_CATEGORIES = ["mail", "calendar", "files", "notes", "communication", "tasks", "crm"] as const;
 export type ConnectorCategory = (typeof CONNECTOR_CATEGORIES)[number];
 
-/** An app Leo can read from and act in once the user connects their account. */
-export type Connector = {
-  id: string;
-  name: string;
-  category: ConnectorCategory;
-  connected: boolean;
-  /** The connected account, e.g. an email address; null while disconnected or unknown. */
-  account: string | null;
-};
+export const isConnectorCategory = (value: string): value is ConnectorCategory =>
+  CONNECTOR_CATEGORIES.some((category) => category === value);
 
-export type ConnectorsResponse = { connectors: Connector[] };
+/** Почему подключение ждёт человека — каждый код кабинет называет словами. */
+export const CONNECTOR_PROBLEMS = [
+  "refresh_refused",
+  "grant_revoked",
+  "scope_missing",
+  "admin_consent_required",
+  "imap_disabled",
+  "provider_subscription_required",
+  "credentials_rejected",
+] as const;
+export type ConnectorProblem = (typeof CONNECTOR_PROBLEMS)[number];
 
-export type ConnectorUpdate = { connected: boolean };
+/** Почему поток OAuth кончился ошибкой (`/oauth/callback?status=error&error=<код>`). */
+export const FLOW_ERRORS = [
+  "authorization_expired",
+  "scope_missing",
+  "admin_consent_required",
+  "provider_unavailable",
+  "not_offered",
+  "imap_disabled",
+  "provider_subscription_required",
+] as const;
+export type FlowError = (typeof FLOW_ERRORS)[number];
 
-/** `authorize_url` is set when connecting needs the provider's consent screen (always, for OAuth). */
-export type ConnectorUpdateResponse = { connector: Connector; authorize_url: string | null };
+/** Отказы маршрутов коннекторов, которые кабинет называет сам; остальное — текст сервера и id запроса. */
+export const CONNECTOR_REFUSALS = [
+  "not_offered",
+  "not_connected",
+  "connect_unavailable",
+  "credentials_rejected",
+  "rate_limited",
+] as const;
+export type ConnectorRefusal = (typeof CONNECTOR_REFUSALS)[number];
+
+const known =
+  <T extends string>(codes: readonly T[]) =>
+  (value: string | null | undefined): T | null =>
+    codes.find((code) => code === value) ?? null;
+
+export const connectorProblemOf = known(CONNECTOR_PROBLEMS);
+export const flowErrorOf = known(FLOW_ERRORS);
+export const connectorRefusalOf = known(CONNECTOR_REFUSALS);
 
 export type OAuthStatus = "connected" | "denied" | "error";
 
-/** Posted by `/oauth/callback` to the window that opened the consent popup. */
+/** Posted by `/oauth/callback` to the window that opened the consent popup; `error` is a flow error's code. */
 export type OAuthResultMessage = {
   type: typeof OAUTH_MESSAGE_TYPE;
   connector: string;

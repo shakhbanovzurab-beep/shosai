@@ -11,8 +11,6 @@
     "paymentsUnavailable": "支払い機能はまだ利用できません。請求機能が有効になると、プロバイダの安全なページが開きます。",
     "checkoutUnavailable": "支払い機能はまだ利用できません。請求機能が有効になると、プロバイダの決済ページが開きます。",
     "invoiceNotFound": "請求書が見つかりません。",
-    "connectorNotFound": "コネクタが見つかりません。",
-    "authorizationExpired": "認証の有効期限が切れているか、すでに使用されています。もう一度接続してください。",
     "dataKindUnknown": "不明な種類のデータです。",
     "dataItemNotFound": "その項目は見つかりません。削除された可能性があります。",
     "mcpNameRequired": "サーバーの名前を入力してください。",

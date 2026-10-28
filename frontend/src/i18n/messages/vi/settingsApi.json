@@ -11,8 +11,6 @@
     "paymentsUnavailable": "Thanh toán chưa được kết nối. Khi tính năng thanh toán hoạt động, thao tác này sẽ mở trang bảo mật của nhà cung cấp.",
     "checkoutUnavailable": "Thanh toán chưa được kết nối. Khi tính năng thanh toán hoạt động, thao tác này sẽ mở trang thanh toán của nhà cung cấp.",
     "invoiceNotFound": "Không tìm thấy hóa đơn.",
-    "connectorNotFound": "Không tìm thấy trình kết nối.",
-    "authorizationExpired": "Lượt cấp quyền đã hết hạn hoặc đã được sử dụng. Hãy thử kết nối lại.",
     "dataKindUnknown": "Không rõ loại dữ liệu.",
     "dataItemNotFound": "Mục này không còn tồn tại.",
     "mcpNameRequired": "Hãy đặt tên cho máy chủ.",

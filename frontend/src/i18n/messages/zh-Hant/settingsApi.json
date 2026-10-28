@@ -11,8 +11,6 @@
     "paymentsUnavailable": "付款功能尚未啟用。帳單功能上線後，這裡會開啟服務供應商的安全付款頁面。",
     "checkoutUnavailable": "付款功能尚未啟用。帳單功能上線後，這裡會開啟服務供應商的結帳頁面。",
     "invoiceNotFound": "找不到發票。",
-    "connectorNotFound": "找不到連接器。",
-    "authorizationExpired": "授權已過期或已使用過。請再次嘗試連接。",
     "dataKindUnknown": "無法辨識的資料類型。",
     "dataItemNotFound": "這個項目已不存在。",
     "mcpNameRequired": "請為伺服器命名。",

@@ -1,115 +1,106 @@
 "use client";
 
-import { Check, ChevronDown, Unplug } from "lucide-react";
+import { Blocks } from "lucide-react";
 import { useTranslations } from "use-intl";
 
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
-import { Spinner } from "@/components/ui/spinner";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 
-import type { Connector } from "../../domain/connectors-contract";
+import { type Connector, connectorProblemOf, isConnectorCategory } from "../../domain/connectors-contract";
 import { connectorsResource } from "../../model/settings-resources";
-import { useConnectorOAuth } from "../../model/use-connector-oauth";
 import { SectionState } from "../section-state";
+import { ConnectorActionsProvider } from "./connector-actions-context";
 import { ConnectorLogo } from "./connector-logo";
+import { ConnectorStatus } from "./connector-status";
 
-interface ConnectorStatusProps {
-  readonly connector: Connector;
-  readonly isPending: boolean;
-  readonly isBusy: boolean;
-  readonly onConnect: (connector: Connector) => void;
-  readonly onDisconnect: (connector: Connector) => void;
-}
-
-function ConnectorStatus({ connector, isPending, isBusy, onConnect, onDisconnect }: ConnectorStatusProps) {
+function ConnectorName({ connector }: { connector: Connector }) {
   const t = useTranslations("settingsConnectors");
-  if (isPending) {
-    return (
-      <Button variant="outline" size="sm" disabled>
-        <Spinner data-icon="inline-start" />
-        {t("connecting")}
-      </Button>
-    );
-  }
-  if (!connector.connected) {
-    return (
-      <Button variant="outline" size="sm" disabled={isBusy} onClick={() => onConnect(connector)}>
-        {t("connect")}
-      </Button>
-    );
-  }
+  const problem = connector.status === "needs_reconnect" ? connectorProblemOf(connector.problem) : null;
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" aria-label={t("options", { name: connector.name })}>
-          <Check data-icon="inline-start" />
-          {t("connected")}
-          <ChevronDown data-icon="inline-end" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44">
-        <DropdownMenuItem variant="destructive" onSelect={() => onDisconnect(connector)}>
-          <Unplug />
-          {t("disconnect")}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex items-center gap-3">
+      <ConnectorLogo id={connector.id} />
+      <div className="flex min-w-0 flex-col">
+        <span className="font-medium">{connector.name}</span>
+        {connector.account ? (
+          <span dir="auto" className="truncate text-muted-foreground text-xs">
+            {connector.account}
+          </span>
+        ) : null}
+        {connector.status === "needs_reconnect" ? (
+          <span className="text-destructive text-xs">
+            {problem === null ? t("needsReconnect") : t(`problems.${problem}`)}
+          </span>
+        ) : null}
+      </div>
+    </div>
   );
 }
 
-/** Apps Leo can use, connected through each provider's OAuth 2.0 consent; laid out like Claude's list. */
+function NoConnectors() {
+  const t = useTranslations("settingsConnectors");
+  return (
+    <Empty className="border">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <Blocks />
+        </EmptyMedia>
+        <EmptyTitle>{t("empty.title")}</EmptyTitle>
+        <EmptyDescription>{t("empty.body")}</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  );
+}
+
+function ConnectorRow({ connector }: { connector: Connector }) {
+  const t = useTranslations("settingsConnectors");
+  const category = connector.category;
+  return (
+    <TableRow>
+      <TableCell className="whitespace-normal">
+        <ConnectorName connector={connector} />
+      </TableCell>
+      <TableCell className="text-muted-foreground">
+        {isConnectorCategory(category) ? t(`categories.${category}`) : null}
+      </TableCell>
+      <TableCell>
+        <ConnectorStatus connector={connector} />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+/** The apps Leo and the rest of Shosai can use, connected once through the provider's consent or a given secret. */
 export function ConnectorsSection() {
   const t = useTranslations("settingsConnectors");
   const state = usePollingResource(connectorsResource);
-  const { pendingId, connect, disconnect } = useConnectorOAuth();
 
   return (
     <div className="flex flex-col gap-4">
       <p className="text-muted-foreground text-sm">{t("description")}</p>
       <SectionState state={state} onRetry={() => void connectorsResource.refresh()}>
-        {({ connectors }) => (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-start">{t("columns.connector")}</TableHead>
-                <TableHead className="w-36 text-start">{t("columns.type")}</TableHead>
-                <TableHead className="w-40 text-start">{t("columns.status")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {connectors.map((connector) => (
-                <TableRow key={connector.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <ConnectorLogo id={connector.id} />
-                      <div className="flex min-w-0 flex-col">
-                        <span className="font-medium">{connector.name}</span>
-                        {connector.account ? (
-                          <span dir="auto" className="truncate text-muted-foreground text-xs">
-                            {connector.account}
-                          </span>
-                        ) : null}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{t(`categories.${connector.category}`)}</TableCell>
-                  <TableCell>
-                    <ConnectorStatus
-                      connector={connector}
-                      isPending={pendingId === connector.id}
-                      isBusy={pendingId !== null}
-                      onConnect={(c) => void connect(c)}
-                      onDisconnect={(c) => void disconnect(c)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
+        {({ items }) =>
+          items.length === 0 ? (
+            <NoConnectors />
+          ) : (
+            <ConnectorActionsProvider>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-start">{t("columns.connector")}</TableHead>
+                    <TableHead className="w-36 text-start">{t("columns.type")}</TableHead>
+                    <TableHead className="w-44 text-start">{t("columns.status")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {items.map((connector) => (
+                    <ConnectorRow key={connector.id} connector={connector} />
+                  ))}
+                </TableBody>
+              </Table>
+            </ConnectorActionsProvider>
+          )
+        }
       </SectionState>
     </div>
   );
