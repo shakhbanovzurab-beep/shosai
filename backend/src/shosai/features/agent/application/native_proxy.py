@@ -1,11 +1,13 @@
 """The native model proxy: a shipped client's conversation or screenshots, answered by the
-standard model as a stream (agent plan §1.1, §3.3; step 14).
+model of the person's Studio role as a stream (agent plan §1.1, §3.3, step 14, studio step 11b).
 
 macOS and Windows 1.4.5 call it when their realtime connection is down. A request is the
 person's like a Leo turn and is refused before anything is sent: `consent_required` (403) in
 the Russian home without consent to cross-border transfer, `token_limit` (402) once the plan's
-standard tokens are spent, `rate_limited` (429) past 30 a minute, `model_unavailable` (503)
-with no model set. The call goes through the provider port, which holds the person's two
+standard tokens are spent, `rate_limited` (429) past 30 a minute, `model_role_unconfigured`
+(503) when the role has no default and no `AGENT_STANDARD_MODEL` stands in, `model_unavailable`
+(503) with neither. The model is studio's route of the role, and the prompt carries studio's
+layers (`proxy_studio.py`). The call goes through the provider port, which holds the person's two
 streams, the input caps and the spend ceilings and records its cost. A task of the proxy's own
 reads the answer from the provider to its end, so a client that leaves mid-answer leaves the
 call to finish and its cost row to be written. The proxy waits up to 20 s for the first piece:
@@ -39,11 +41,19 @@ from shosai.core.web.rate_limit import RateLimitedError
 from shosai.features.agent.application.preferences import preferences_of
 from shosai.features.agent.application.proxy_requests import (
     ChatAsk,
+    Tuning,
     VisionAsk,
+    chat_frame,
     chat_request,
+    vision_frame,
     vision_request,
 )
-from shosai.features.agent.application.token_admission import standard_tokens
+from shosai.features.agent.application.proxy_studio import (
+    StudioLayers,
+    studio_layers,
+    system_messages,
+)
+from shosai.features.agent.application.turn_route import studio_route
 from shosai.features.agent.domain.preferences import answer_language
 from shosai.features.agent.domain.proxy_words import answer_stopped
 from shosai.features.agent.infrastructure.person_records import AgentSettingsRecord
@@ -53,6 +63,7 @@ from shosai.features.agent.infrastructure.proxy_metrics import (
     ProxyRoute,
 )
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER, CONSENT_READER, Principal
+from shosai.features.studio.contracts import ModelRole, PromptRole, ResolvedRoute
 
 PROXY_LIMIT: Final = RateLimit("agent.proxy", 30, timedelta(minutes=1), 10)
 PROXY_DEADLINE: Final = timedelta(minutes=5)
@@ -115,10 +126,18 @@ class ProxyAnswer:
 
 @dataclass(frozen=True, slots=True)
 class Admitted:
-    """A person let through: their consent to transfer and their answer language."""
+    """A person let through: their consent, their answer language, studio's route of the
+    role — none is the legacy standard model — and studio's layers."""
 
     consent: bool
     language: str
+    resolved: ResolvedRoute | None = None
+    layers: StudioLayers = field(default_factory=StudioLayers)
+
+    def tuning(self) -> Tuning | None:
+        """The role's output limit and temperature, with studio's route."""
+        resolved = self.resolved
+        return None if resolved is None else Tuning(resolved.max_tokens, resolved.temperature)
 
 
 class NativeProxy:
@@ -136,10 +155,13 @@ class NativeProxy:
         # Задачи, читающие ответы провайдера до конца: сильные ссылки, пока они идут.
         self._readers: set[asyncio.Task[None]] = set()
 
-    async def chat(self, principal: Principal, ask: ChatAsk) -> ProxyAnswer:
-        """The conversation's answer, under way."""
-        admitted = await self._admitted(principal, ProxyRoute.CHAT)
-        request = chat_request(ask, admitted.language)
+    async def chat(
+        self, principal: Principal, ask: ChatAsk, role: PromptRole = PromptRole.LIVE_ANSWERS
+    ) -> ProxyAnswer:
+        """The conversation's answer in the role, under way."""
+        admitted = await self._admitted(principal, ProxyRoute.CHAT, role)
+        system = system_messages(chat_frame(admitted.language), role, admitted.layers)
+        request = chat_request(ask, system, admitted.tuning())
         if request is None:
             self._metrics.ended(ProxyRoute.CHAT, ProxyOutcome.REFUSED)
             raise AppError("conversation_empty", HTTPStatus.BAD_REQUEST)
@@ -150,27 +172,35 @@ class NativeProxy:
         if not ask.frames:
             self._metrics.ended(ProxyRoute.VISION, ProxyOutcome.REFUSED)
             raise AppError("no_valid_image", HTTPStatus.BAD_REQUEST)
-        admitted = await self._admitted(principal, ProxyRoute.VISION)
-        request = vision_request(ask, admitted.language)
+        role = PromptRole.SCREENSHOTS
+        admitted = await self._admitted(principal, ProxyRoute.VISION, role)
+        system = system_messages(vision_frame(ask, admitted.language), role, admitted.layers)
+        request = vision_request(ask, system, admitted.tuning())
         return await self._answer(principal, admitted, request, ProxyRoute.VISION)
 
-    async def _admitted(self, principal: Principal, route: ProxyRoute) -> Admitted:
+    async def _admitted(
+        self, principal: Principal, route: ProxyRoute, role: PromptRole
+    ) -> Admitted:
         try:
-            return await self._admission(principal)
+            return await self._admission(principal, role)
         except AppError:
             self._metrics.ended(route, ProxyOutcome.REFUSED)
             raise
 
-    async def _admission(self, principal: Principal) -> Admitted:
+    async def _admission(self, principal: Principal, role: PromptRole) -> Admitted:
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
             consent = await self._ports.get(CONSENT_READER).cross_border(session, principal.user_id)
             stored = await session.get(AgentSettingsRecord, principal.user_id)
             profile = await self._ports.get(ACCOUNT_PROFILE_READER).profile(
                 session, principal.user_id
             )
+            layers = await studio_layers(self._ports, session, principal.user_id, role)
         if principal.home is Home.RU and not consent:
             raise AppError("consent_required", HTTPStatus.FORBIDDEN)
-        await standard_tokens(self._ports, principal)
+        resolved, _ = await studio_route(
+            (self._ports, self._transactions), principal,
+            (ModelRole(role.value), None, frozenset()), legacy=self._route() is not None,
+        )  # fmt: skip
         try:
             verdict = await self._limiter.check(self._limit, str(principal.user_id))
         except REDIS_FAILURES as error:
@@ -178,18 +208,21 @@ class NativeProxy:
         if not verdict.allowed:
             raise RateLimitedError(verdict.retry_after)
         interface = profile.language if profile is not None else None
-        return Admitted(consent, answer_language(preferences_of(stored), interface))
+        language = answer_language(preferences_of(stored), interface)
+        return Admitted(consent, language, resolved, layers)
 
     async def _answer(
         self, principal: Principal, admitted: Admitted, request: ChatRequest, route: ProxyRoute
     ) -> ProxyAnswer:
-        chosen = self._route()
+        resolved = admitted.resolved
+        chosen = resolved.route if resolved is not None else self._route()
         if chosen is None:
             self._metrics.ended(route, ProxyOutcome.REFUSED)
             raise AppError("model_unavailable", HTTPStatus.SERVICE_UNAVAILABLE)
         context = CallContext(
             effect_key=f"{FEATURES[route]}:{new_id()}", feature=FEATURES[route],
-            call_class=CallClass.STANDARD, origin=CallOrigin.INTERACTIVE,
+            call_class=resolved.call_class if resolved is not None else CallClass.STANDARD,
+            origin=CallOrigin.INTERACTIVE,
             scope=principal.scope(), cross_border_consent=admitted.consent,
             deadline=PROXY_DEADLINE,
         )  # fmt: skip

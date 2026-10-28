@@ -29,6 +29,7 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.native_proxy import NativeProxy, ProxyAnswer
 from shosai.features.agent.application.proxy_requests import ChatAsk, VisionAsk
+from shosai.features.agent.application.proxy_studio import PROXY_ROLES
 from shosai.features.agent.domain.proxy_input import Said, frames
 from shosai.features.identity.contracts import Principal, bearer_principal
 
@@ -50,7 +51,10 @@ class ProxyMessageIn(BaseModel):
 class ProxyChatRequest(BaseModel):
     """A live conversation to answer briefly."""
 
-    role: str = Field(default=RESPONSES, description="responses — the only role served.")
+    role: str = Field(
+        default=RESPONSES,
+        description="responses (live answers), coding or system_design — a Studio role each.",
+    )
     messages: list[ProxyMessageIn] = Field(max_length=MAX_MESSAGES)
     temperature: float | None = Field(default=None, description="Held to 0–2.")
     max_tokens: int | None = Field(
@@ -92,14 +96,15 @@ def build_native_proxy_router(proxy: NativeProxy, ports: PortDirectory) -> APIRo
     async def chat_answer(
         body: ProxyChatRequest, principal: person, response: Response
     ) -> ProxyAnswer:
-        if body.role != RESPONSES:
+        role = PROXY_ROLES.get(body.role)
+        if role is None:
             raise AppError("role_not_supported", HTTPStatus.BAD_REQUEST)
         ask = ChatAsk(
             tuple(Said(message.role, message.content) for message in body.messages),
             body.temperature,
             body.max_tokens,
         )
-        answer = await proxy.chat(principal, ask)
+        answer = await proxy.chat(principal, ask, role)
         response.headers["X-Model"] = answer.model
         return answer
 

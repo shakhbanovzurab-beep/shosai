@@ -8394,7 +8394,7 @@ export interface components {
         ProxyChatRequest: {
             /**
              * Role
-             * @description responses — the only role served.
+             * @description responses (live answers), coding or system_design — a Studio role each.
              * @default responses
              */
             role: string;

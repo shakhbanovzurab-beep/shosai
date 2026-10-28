@@ -88,6 +88,33 @@ def tier_of(route: TurnRoute | None) -> str:
     return route.tier if route is not None else STANDARD_TIER
 
 
+async def studio_route(
+    parts: tuple[PortDirectory, HomeTransactions],
+    principal: Principal,
+    call: tuple[ModelRole, str | None, frozenset[ModelCapability]],
+    *,
+    legacy: bool,
+) -> tuple[ResolvedRoute | None, str]:
+    """Studio's route of a role for the person and billing's route of its tokens; no route is
+    the legacy `AGENT_STANDARD_MODEL`, when studio is absent or the role is not configured."""
+    ports, transactions = parts
+    role, chosen, needs = call
+    routes = ports.all(MODEL_ROUTES)
+    if not routes:
+        return None, (await standard_tokens(ports, principal)).value
+    plan = await ports.get(ENTITLEMENTS).snapshot(principal.home, principal.user_id)
+    person = RoutePerson(principal.home, principal.user_id, plan)
+    try:
+        async with transactions.begin(principal.scope(), read_only=True) as session:
+            resolved = await routes[0].route(session, person, role, chosen, needs)
+    except ModelRoleUnconfiguredError:
+        if not legacy:
+            raise
+        log.warning("Модель роли — AGENT_STANDARD_MODEL: у роли нет умолчания", role=role.value)
+        return None, (await standard_tokens(ports, principal)).value
+    return resolved, resolved.token_route.value
+
+
 async def leo_route(
     parts: tuple[PortDirectory, HomeTransactions],
     principal: Principal,
@@ -96,23 +123,10 @@ async def leo_route(
     pictures: bool,
     legacy: bool,
 ) -> tuple[TurnRoute | None, str]:
-    """Studio's route of the turn and billing's route of its tokens; no route is the legacy
-    `AGENT_STANDARD_MODEL`, when studio is absent or the role is not configured yet."""
-    ports, transactions = parts
-    routes = ports.all(MODEL_ROUTES)
-    if not routes:
-        return None, (await standard_tokens(ports, principal)).value
-    plan = await ports.get(ENTITLEMENTS).snapshot(principal.home, principal.user_id)
-    person = RoutePerson(principal.home, principal.user_id, plan)
+    """Studio's route of Leo's turn, as the task carries it, and its tokens' route."""
     chosen = None if leo_model == AUTO else leo_model
-    try:
-        async with transactions.begin(principal.scope(), read_only=True) as session:
-            resolved = await routes[0].route(
-                session, person, ModelRole.LEO, chosen, PICTURES if pictures else frozenset()
-            )
-    except ModelRoleUnconfiguredError:
-        if not legacy:
-            raise
-        log.warning("Ход Leo на AGENT_STANDARD_MODEL: у роли leo нет умолчания в каталоге")
-        return None, (await standard_tokens(ports, principal)).value
-    return TurnRoute.of(resolved), resolved.token_route.value
+    needs = PICTURES if pictures else frozenset()
+    resolved, tokens = await studio_route(
+        parts, principal, (ModelRole.LEO, chosen, needs), legacy=legacy
+    )
+    return (TurnRoute.of(resolved) if resolved is not None else None), tokens

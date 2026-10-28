@@ -62,8 +62,9 @@ async def test_the_clients_bodies_reach_the_model_under_the_proxy_s_rules(
     assert (mac.status_code, win.status_code) == (200, 200)
     sent = proxy_bench.model.calls
     assert [m.role for m in sent[0].messages] == [Role.SYSTEM, Role.SYSTEM, Role.USER]
-    assert sent[0].messages[0].parts == (TextPart(PROXY_RESPONSES),)
-    assert "(English)" in str(sent[0].messages[1].parts[0])
+    # Рамка языка, затем промт роли «Ответы в эфире» — встроенный, пока у человека нет своего.
+    assert "(English)" in str(sent[0].messages[0].parts[0])
+    assert sent[0].messages[1].parts == (TextPart(PROXY_RESPONSES),)
     assert sent[1].messages[-1].parts == (TextPart("Цена?"),)
     assert (sent[1].max_output_tokens, sent[1].temperature) == (4096, None)
 
@@ -76,7 +77,7 @@ async def test_every_refusal_comes_before_the_stream_with_a_detail_string(
 
     unsigned = await post(CHAT, json=MACOS)
     no_consent = await post(CHAT, json=MACOS, headers=bearer((Home.RU, stranger)))
-    other_role = await post(CHAT, json=MACOS | {"role": "coding"}, headers=bearer((HOME, person)))
+    other_role = await post(CHAT, json=MACOS | {"role": "recap"}, headers=bearer((HOME, person)))
     empty = await post(CHAT, json={"messages": []}, headers=bearer((HOME, person)))
     no_image = await post(VISION, json={"images": ["%%%"]}, headers=bearer((HOME, person)))
     proxy_bench.turns.terms.route = TokenRoute.STOP

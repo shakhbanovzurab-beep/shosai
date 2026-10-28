@@ -98,3 +98,8 @@ Every table is personal by nature: row-level security admits the person's own ro
 - `domain/feedback.py` — a rating of an answer; a rated turn kept as an evaluation case only with `improve_models` consent and no workspace source, the name masked, a year at most (AG-D13).
 
 Core's tool contract gained, for this slice (ADR 0068): `ToolResult.sources` and `.artifacts` (`core/agent_tools/sources.py`), `ToolSpec.step_detail` and a write's `ToolSpec.previews` — its wording of the preview keys in the 16 languages, rendered by `core/agent_tools/previews.py` into the card's title and rows.
+
+## Desktop answers on studio (studio step 11b)
+
+- The native proxy (`/v1/ai/chat/stream`, `/v1/ai/vision`) answers in the person's Studio role: `responses` as `live_answers`, `coding` as `code`, `system_design` as itself, screenshots as `screenshots` (`application/proxy_studio.py`); another role is 400 `role_not_supported`. The model is studio's route of the role (billing asked inside it), the output limit and temperature the role's Studio settings; until the role has a default, `AGENT_STANDARD_MODEL` stands in with the client's own bounds.
+- The system messages: the language frame with the published platform layer, then the person's own words about themselves, then their prompt for the role or the built-in one (`PROXY_RESPONSES`, `PROXY_CODE`, `PROXY_SYSTEM_DESIGN`; the screenshots' rules are their frame), with the skills it appends wrapped as `skill:user` under a line that keeps the rules above higher (Leo §8.5).
