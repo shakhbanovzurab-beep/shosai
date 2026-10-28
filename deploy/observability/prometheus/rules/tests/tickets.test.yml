@@ -550,3 +550,25 @@ tests:
       - eval_time: 44m
         alertname: RecordingEgressLost
         exp_alerts: []
+
+  # Подписки LiveKit (meetings A15b): 70 % от 180 на ядро.
+  - interval: 1m
+    input_series:
+      - series: 'livekit_track_subscribed_total{job="livekit",instance="livekit:6789",kind="VIDEO",node_id="n"}'
+        values: "10x5 200x20 10x20"
+      - series: 'livekit_track_subscribed_total{job="livekit",instance="livekit:6789",kind="AUDIO",node_id="n"}'
+        values: "5x45"
+      - series: 'go_sched_gomaxprocs_threads{job="livekit",instance="livekit:6789"}'
+        values: "1x45"
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: LiveKitSubscriptionsHigh
+        exp_alerts:
+          - exp_labels: {severity: ticket, instance: "livekit:6789"}
+            exp_annotations:
+              summary: "Сервер звонков близок к пределу"
+              description: "Подписок на дорожки 10 минут больше 70 % того, что держит узел. Ещё немного — и у людей начнёт рваться видео."
+              runbook: docs/runbooks/alerts.md#livekit-subscriptions-high
+      - eval_time: 40m
+        alertname: LiveKitSubscriptionsHigh
+        exp_alerts: []

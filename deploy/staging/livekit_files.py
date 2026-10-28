@@ -21,6 +21,10 @@ from pathlib import Path
 
 # Единственный публичный IPv4 этой машины (MR-D14): его LiveKit объявляет клиентам в ICE и TURN/UDP.
 NODE_IP = "129.101.125.250"
+# IPv4 сети плоскости (compose.yaml, networks.plane): только с её адреса LiveKit собирает кандидаты ICE,
+# и тот заменяется на NODE_IP. Без фильтра он объявлял бы и свой адрес IPv6 из fd42::/64 — внутреннюю
+# адресацию, до которой клиенты снаружи не дойдут.
+PLANE_IPV4 = "172.30.42.0/24"
 # Предел памяти контейнера livekit в compose.yaml: от него экран администратора считает долю памяти.
 LIVEKIT_MEMORY_LIMIT_MB = 512
 # Потолки staging (MR-D14): 4 участника звонка, одна видеозапись за раз, не длиннее 30 минут.
@@ -100,6 +104,7 @@ def server_config(
             "udp_port": RTC_UDP_PORT,
             "node_ip": NODE_IP,
             "use_external_ip": False,
+            "ips": {"includes": [PLANE_IPV4]},
         },
         "turn": {
             "enabled": True,

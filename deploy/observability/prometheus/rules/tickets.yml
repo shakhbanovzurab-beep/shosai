@@ -261,6 +261,20 @@ groups:
           description: 'Egress 5 минут держит больше 90 % своего лимита памяти. Если он в него упрётся, идущая запись оборвётся.'
           runbook: docs/runbooks/alerts.md#egress-memory-high
 
+      # Ёмкость узла — 180 подписок на ядро (§1.3 плана). Ядра — GOMAXPROCS LiveKit: на машине без
+      # лимита CPU это число ядер; в контейнере с дробным лимитом Go держит не меньше 2.
+      - alert: LiveKitSubscriptionsHigh
+        expr: |
+          sum by (instance) (livekit_track_subscribed_total{job="livekit"})
+            > 0.7 * 180 * max by (instance) (go_sched_gomaxprocs_threads{job="livekit"})
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Сервер звонков близок к пределу'
+          description: 'Подписок на дорожки 10 минут больше 70 % того, что держит узел. Ещё немного — и у людей начнёт рваться видео.'
+          runbook: docs/runbooks/alerts.md#livekit-subscriptions-high
+
       - alert: LiveKitWebhooksRejected
         expr: |
           sum(increase(shosai_meetings_webhook_verifications_total{outcome="rejected"}[15m]))

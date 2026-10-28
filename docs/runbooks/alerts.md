@@ -366,7 +366,7 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Look.** `docker compose ps livekit egress livekit-redis` in `/srv/shosai`; `docker compose logs --tail 100 livekit`; the edge's error log in Loki (`{service="edge"} |= "rtc"`); `openssl s_client -connect turn.shosai.tech:443 -servername turn.shosai.tech </dev/null` for the certificate's names.
 
-**Fix.** LiveKit down: `docker compose up -d livekit` (calls in progress are already gone). Both probes failing with the cabinet up: the certificate lacks the names — `sh /srv/shosai/deploy/certificate.sh expand /srv/shosai`. Only `turn_tls`: the edge's `SHOSAI_TURN_SERVER_NAME` is empty — re-render the environment ([staging runbook](staging.md#change-a-setting-or-a-secret)).
+**Fix.** LiveKit down: `docker compose up -d livekit`, then `docker compose restart egress` so egress joins its network namespace again (calls in progress are already gone). Both probes failing with the cabinet up: the certificate lacks the names — `sh /srv/shosai/deploy/certificate.sh expand /srv/shosai`. Only `turn_tls`: the edge's `SHOSAI_TURN_SERVER_NAME` is empty — re-render the environment ([staging runbook](staging.md#change-a-setting-or-a-secret)).
 
 <a id="livekit-memory-high"></a>
 ### LiveKitMemoryHigh
@@ -375,7 +375,7 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Look.** The admin's LiveKit screen (rooms, participants, tracks); `livekit_participant_total` and `livekit_room_total` in Prometheus; whether rooms stay open after their people left (the sweep, `shosai_meetings_sweep_rooms_total`).
 
-**Fix.** More calls than staging's ceiling allows means the ceiling is not applied: check `MEETINGS_ROOM_PARTICIPANTS_CEILING`. Memory growing with few rooms: a LiveKit leak — restart it between calls (`docker compose restart livekit`) and record the version. A real need: raise the limit and `GOMEMLIMIT` together in `deploy/staging/compose.yaml` and `MEETINGS_LIVEKIT_MEMORY_LIMIT_MB` in `livekit_files.py`.
+**Fix.** More calls than staging's ceiling allows means the ceiling is not applied: check `MEETINGS_ROOM_PARTICIPANTS_CEILING`. Memory growing with few rooms: a LiveKit leak — restart it between calls (`docker compose restart livekit`, then `docker compose restart egress`) and record the version. A real need: raise the limit and `GOMEMLIMIT` together in `deploy/staging/compose.yaml` and `MEETINGS_LIVEKIT_MEMORY_LIMIT_MB` in `livekit_files.py`.
 
 <a id="egress-memory-high"></a>
 ### EgressMemoryHigh
@@ -385,6 +385,15 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 **Look.** `livekit_egress_proc_rss_bytes` for the processes inside it; the running recording's preset (A7b measured ≤ 434 MiB at 540p 15 fps).
 
 **Fix.** A preset heavier than 540p 15 fps: return to it. Memory left after recordings ended: `docker compose restart egress` when no recording runs (`MEETINGS_RECORDINGS_CONCURRENT` is 1 on staging).
+
+<a id="livekit-subscriptions-high"></a>
+### LiveKitSubscriptionsHigh
+
+**Means.** LiveKit has held more track subscriptions than 70% of its node's capacity for 10 minutes — 180 per core (meetings plan §1.3), the cores being LiveKit's `GOMAXPROCS`. Beyond the capacity forwarding falls behind and video stutters for everyone on the node.
+
+**Look.** The admin's LiveKit screen: rooms, participants and tracks per node; `livekit_track_subscribed_total` by `kind`; whether video plays only for the people speaking (MR-D2) or every tile subscribes.
+
+**Fix.** A few large calls: expected — more cores for LiveKit. Every tile subscribing to video: the cabinet's visible-tiles rule regressed (A10). On staging the threshold is never reached: its ceiling is 4 participants.
 
 <a id="livekit-webhooks-rejected"></a>
 ### LiveKitWebhooksRejected

@@ -146,7 +146,8 @@ sudo -u deploy docker compose logs --tail 100 livekit
 curl -fsS https://rtc.shosai.tech/                 # LiveKit answers OK through the edge
 ```
 
-- **LiveKit is not part of a release.** `release.sh` swaps the roles and the edge, never LiveKit: recreating it ends every call in progress. Its image, limits or configuration change by editing `deploy/staging/compose.yaml` or `livekit_files.py`, installing and rendering them («Change a setting or a secret»), then `sudo -u deploy docker compose up -d livekit livekit-redis egress` at a time with no calls (the admin's LiveKit screen shows the rooms).
+- **LiveKit is not part of a release.** `release.sh` swaps the roles and the edge, never LiveKit: recreating it ends every call in progress. Its image, limits or configuration change by editing `deploy/staging/compose.yaml` or `livekit_files.py`, installing and rendering them («Change a setting or a secret»), then `sudo -u deploy docker compose up -d --force-recreate livekit egress` at a time with no calls (the admin's LiveKit screen shows the rooms; `livekit_room_total` in Prometheus is 0). A change of `secrets/livekit.yaml` alone is invisible to Compose, so it needs the recreate too.
+- **Egress follows LiveKit.** Egress lives in LiveKit's network namespace, joined when egress starts. After LiveKit restarts, restart egress as well, after it: `sudo -u deploy docker compose restart livekit && sudo -u deploy docker compose restart egress`. Restarting both in one command may start egress first, in the old namespace, where it reaches nothing (found 2026-10-28); check with `docker exec shosai-staging-egress-1 wget -qO- http://127.0.0.1:7880` — it answers `OK`.
 - **The keys** are `LIVEKIT_API_KEY` and `LIVEKIT_API_SECRET` in `/root/shosai/.env`; `render-env.py` writes them into LiveKit's, egress's and the backend's files together. After a change recreate `livekit`, `egress` and the roles in one go, or webhooks fail verification (`LiveKitWebhooksRejected`).
 - **Release order.** The edge and the roles start without LiveKit: the edge resolves `livekit` on each connection, and the backend answers call routes with 503 `video_unavailable` until LiveKit answers. LiveKit's webhooks reach `api` on the plane's network (`http://api:8000/v1/livekit/webhook`), so a release's handover of `api` loses none.
 
@@ -164,6 +165,7 @@ The host has no firewall, neither its own nor in the provider's panel: whatever 
 | UDP 30000–30099 | LiveKit: TURN relay ports |
 | TCP 22 | `sshd`: the owner's and the release key's access |
 | TCP 10050 | `zabbix_agentd`, the provider's monitoring agent (found 2026-10-27, not Shosai's) |
+| UDP 68, UDP 546 | `systemd-networkd`'s DHCP clients (IPv4 and IPv6): the host's own address leases, not services |
 
 LiveKit's media ports are published on IPv4 only: LiveKit advertises the host's IPv4 (`node_ip`), and `shosai.tech` has no AAAA record. LiveKit's API and metrics (7880, 6789), egress (8080, 9090), every Redis, Valkey, Qdrant, PgBouncer and the observability stack listen only on the plane's network or on loopback.
 
@@ -177,7 +179,7 @@ nmap -Pn -p- --min-rate 2000 shosai.tech
 sudo nmap -Pn -sU -p 3478,7882,30000-30099 shosai.tech
 ```
 
-The `ss` list must hold exactly the ports of the table (each LiveKit port appears as `docker-proxy`). An external TCP scan must find only 22, 80, 443, 7881 and 10050; UDP answers depend on the protocol, so open ports there show as `open|filtered`.
+The `ss` list must hold exactly the ports of the table (each LiveKit port appears as `docker-proxy`; on 2026-10-28 the 103 LiveKit ports added 103 `docker-proxy` processes, about 530 MB). An external TCP scan must find only 22, 80, 443, 7881 and 10050; UDP answers depend on the protocol, so open ports there show as `open|filtered`.
 
 ## Observability
 
