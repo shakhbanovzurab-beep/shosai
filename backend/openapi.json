@@ -15506,6 +15506,950 @@
         }
       }
     },
+    "/v1/meetings/broadcasts": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Create Meeting Broadcast",
+        "description": "Create a broadcast with its own link; the stage gathers before it starts.",
+        "operationId": "create_meeting_broadcast_v1_meetings_broadcasts_post",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again.",
+              "title": "Idempotency-Key"
+            },
+            "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewBroadcast"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BroadcastOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/broadcasts/{broadcast_id}/start": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Start Meeting Broadcast",
+        "description": "Put your broadcast on air.",
+        "operationId": "start_meeting_broadcast_v1_meetings_broadcasts__broadcast_id__start_post",
+        "parameters": [
+          {
+            "name": "broadcast_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Broadcast Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BroadcastOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/broadcasts/{broadcast_id}/end": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "End Meeting Broadcast",
+        "description": "End your broadcast for everyone; its link stops working.",
+        "operationId": "end_meeting_broadcast_v1_meetings_broadcasts__broadcast_id__end_post",
+        "parameters": [
+          {
+            "name": "broadcast_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Broadcast Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BroadcastOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/live/{token}/join": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Join Meeting Broadcast",
+        "description": "Open a broadcast by its link: the stage, the audience, the waiting room or why not.",
+        "operationId": "join_meeting_broadcast_v1_meetings_live__token__join_post",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiveJoinIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveTicketOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/live/{token}/knock": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Knock Meeting Broadcast",
+        "description": "Ask whether the waiting room let you in.",
+        "operationId": "knock_meeting_broadcast_v1_meetings_live__token__knock_post",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiveKnockIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveTicketOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/live/{token}/state": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Get Meeting Broadcast State",
+        "description": "The broadcast's state: the stage, the viewers and, for the host, the queues.",
+        "operationId": "get_meeting_broadcast_state_v1_meetings_live__token__state_get",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveStateOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/live/{token}/chat": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Send Meeting Broadcast Message",
+        "description": "Send a message to the broadcast's chat.",
+        "operationId": "send_meeting_broadcast_message_v1_meetings_live__token__chat_post",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again.",
+              "title": "Idempotency-Key"
+            },
+            "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again."
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiveChatIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveChatMessageOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "List Meeting Broadcast Messages",
+        "description": "The broadcast's messages after a number, oldest first.",
+        "operationId": "list_meeting_broadcast_messages_v1_meetings_live__token__chat_get",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "The last `seq` you hold; 0 for all.",
+              "default": 0,
+              "title": "After"
+            },
+            "description": "The last `seq` you hold; 0 for all."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveChatPageOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/live/{token}/hand": {
+      "put": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Put Meeting Broadcast Hand",
+        "description": "Raise or lower your hand to ask to speak.",
+        "operationId": "put_meeting_broadcast_hand_v1_meetings_live__token__hand_put",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiveHandIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/live/{token}/hands/{principal}": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Answer Meeting Broadcast Hand",
+        "description": "Invite the hand's viewer to the stage, or decline the hand.",
+        "operationId": "answer_meeting_broadcast_hand_v1_meetings_live__token__hands__principal__post",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "principal",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Principal"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiveInviteIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/live/{token}/admissions/{knock_id}": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Answer Meeting Broadcast Knock",
+        "description": "Let a knock in, or turn it away.",
+        "operationId": "answer_meeting_broadcast_knock_v1_meetings_live__token__admissions__knock_id__post",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "knock_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Knock Id"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiveAdmitIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/live/{token}/members/{principal}": {
+      "patch": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Patch Meeting Broadcast Member",
+        "description": "Take a speaker off air or back, or name or unname a co-host.",
+        "operationId": "patch_meeting_broadcast_member_v1_meetings_live__token__members__principal__patch",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "principal",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Principal"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiveSeatIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Delete Meeting Broadcast Member",
+        "description": "Take someone off the stage; they keep watching.",
+        "operationId": "delete_meeting_broadcast_member_v1_meetings_live__token__members__principal__delete",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "principal",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Principal"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/live/{token}/stage": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Step On Meeting Broadcast Stage",
+        "description": "Take the place on the stage the host invited you to.",
+        "operationId": "step_on_meeting_broadcast_stage_v1_meetings_live__token__stage_post",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/admin/livekit/overview": {
       "get": {
         "tags": [
@@ -18995,6 +19939,64 @@
         ],
         "title": "BoardsOut",
         "description": "The person's boards."
+      },
+      "BroadcastEntry": {
+        "type": "string",
+        "enum": [
+          "stage",
+          "audience",
+          "wait",
+          "not_live",
+          "full",
+          "ended"
+        ],
+        "title": "BroadcastEntry",
+        "description": "What the broadcast's link answers someone."
+      },
+      "BroadcastOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "link": {
+            "type": "string",
+            "title": "Link",
+            "description": "The link the stage and the audience open."
+          },
+          "state": {
+            "$ref": "#/components/schemas/BroadcastState"
+          },
+          "waiting_room": {
+            "type": "boolean",
+            "title": "Waiting Room"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "link",
+          "state",
+          "waiting_room"
+        ],
+        "title": "BroadcastOut",
+        "description": "The host's broadcast and its link."
+      },
+      "BroadcastState": {
+        "type": "string",
+        "enum": [
+          "scheduled",
+          "live",
+          "ended"
+        ],
+        "title": "BroadcastState",
+        "description": "Where a broadcast stands."
       },
       "CallOut": {
         "properties": {
@@ -22824,6 +23826,186 @@
         "title": "LimitsBody",
         "description": "What a plan includes: null is unlimited, 0 is not included."
       },
+      "LiveAdmitIn": {
+        "properties": {
+          "admitted": {
+            "type": "boolean",
+            "title": "Admitted"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "admitted"
+        ],
+        "title": "LiveAdmitIn",
+        "description": "Let the knock in, or turn it away."
+      },
+      "LiveChatIn": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "LiveChatIn",
+        "description": "A message's text, 1 to 2 000 characters once trimmed."
+      },
+      "LiveChatMessageOut": {
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "title": "Seq"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "from_stage": {
+            "type": "boolean",
+            "title": "From Stage"
+          },
+          "mine": {
+            "type": "boolean",
+            "title": "Mine"
+          },
+          "sent_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Sent At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "seq",
+          "author",
+          "text",
+          "from_stage",
+          "mine",
+          "sent_at"
+        ],
+        "title": "LiveChatMessageOut",
+        "description": "A message of the broadcast; the stage's are marked."
+      },
+      "LiveChatPageOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/LiveChatMessageOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "LiveChatPageOut",
+        "description": "Messages after a number; a non-null `next_cursor` is the `after` of the next page."
+      },
+      "LiveHandIn": {
+        "properties": {
+          "raised": {
+            "type": "boolean",
+            "title": "Raised"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "raised"
+        ],
+        "title": "LiveHandIn",
+        "description": "Raise or lower your hand."
+      },
+      "LiveHandOut": {
+        "properties": {
+          "principal": {
+            "type": "string",
+            "title": "Principal"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          },
+          "invited": {
+            "type": "boolean",
+            "title": "Invited"
+          }
+        },
+        "type": "object",
+        "required": [
+          "principal",
+          "name",
+          "at",
+          "invited"
+        ],
+        "title": "LiveHandOut",
+        "description": "A viewer asking to speak."
+      },
+      "LiveInviteIn": {
+        "properties": {
+          "invite": {
+            "type": "boolean",
+            "title": "Invite"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "invite"
+        ],
+        "title": "LiveInviteIn",
+        "description": "Invite the hand's viewer to the stage, or decline the hand."
+      },
+      "LiveJoinIn": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "LiveJoinIn",
+        "description": "A guest's name; a signed-in person comes under their profile's name."
+      },
       "LiveKitDeviceOut": {
         "properties": {
           "os": {
@@ -23414,6 +24596,311 @@
         "type": "object",
         "title": "LiveKitWebhookOut",
         "description": "The event is taken; the call server does not send it again."
+      },
+      "LiveKnockIn": {
+        "properties": {
+          "knock": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Knock"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "knock"
+        ],
+        "title": "LiveKnockIn",
+        "description": "The knock the waiting room gave."
+      },
+      "LiveKnockOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "at"
+        ],
+        "title": "LiveKnockOut",
+        "description": "A viewer waiting to be let in."
+      },
+      "LiveMemberOut": {
+        "properties": {
+          "principal": {
+            "type": "string",
+            "title": "Principal"
+          },
+          "identity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Identity"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "role": {
+            "$ref": "#/components/schemas/StageRole"
+          },
+          "on_air": {
+            "type": "boolean",
+            "title": "On Air"
+          }
+        },
+        "type": "object",
+        "required": [
+          "principal",
+          "identity",
+          "name",
+          "role",
+          "on_air"
+        ],
+        "title": "LiveMemberOut",
+        "description": "A place on the stage; `identity` is its session now, null when nobody holds it."
+      },
+      "LiveSeatIn": {
+        "properties": {
+          "on_air": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "On Air"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "cohost",
+                  "speaker"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "LiveSeatIn",
+        "description": "What changes about a place: on air or not, co-host or speaker."
+      },
+      "LiveStateOut": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/BroadcastState"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StageRole"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/LiveMemberOut"
+            },
+            "type": "array",
+            "title": "Members"
+          },
+          "viewers": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Viewers",
+            "description": "Null when LiveKit does not answer."
+          },
+          "waiting_room": {
+            "type": "boolean",
+            "title": "Waiting Room"
+          },
+          "hands": {
+            "items": {
+              "$ref": "#/components/schemas/LiveHandOut"
+            },
+            "type": "array",
+            "title": "Hands"
+          },
+          "admissions": {
+            "items": {
+              "$ref": "#/components/schemas/LiveKnockOut"
+            },
+            "type": "array",
+            "title": "Admissions"
+          },
+          "hand": {
+            "type": "string",
+            "enum": [
+              "down",
+              "raised",
+              "invited"
+            ],
+            "title": "Hand"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "title",
+          "role",
+          "members",
+          "viewers",
+          "waiting_room",
+          "hands",
+          "admissions",
+          "hand",
+          "started_at"
+        ],
+        "title": "LiveStateOut",
+        "description": "The broadcast as its reader sees it; the queues only for the host and co-hosts."
+      },
+      "LiveTicketOut": {
+        "properties": {
+          "entry": {
+            "$ref": "#/components/schemas/BroadcastEntry"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StageRole"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "waiting_room": {
+            "type": "boolean",
+            "title": "Waiting Room"
+          },
+          "identity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Identity"
+          },
+          "livekit_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Livekit Url"
+          },
+          "livekit_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Livekit Token"
+          },
+          "room_pass": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Room Pass"
+          },
+          "knock": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Knock",
+            "description": "Ask again with it while `entry` is `wait`."
+          }
+        },
+        "type": "object",
+        "required": [
+          "entry",
+          "title",
+          "role",
+          "waiting_room",
+          "identity",
+          "livekit_url",
+          "livekit_token",
+          "room_pass",
+          "knock"
+        ],
+        "title": "LiveTicketOut",
+        "description": "What the link answers: where to go and, when let in, the passes."
       },
       "LoginRequest": {
         "properties": {
@@ -24926,6 +26413,27 @@
         ],
         "title": "MyNotesOut",
         "description": "The person's own notes; null before they have written any."
+      },
+      "NewBroadcast": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 400,
+            "title": "Title"
+          },
+          "waiting_room": {
+            "type": "boolean",
+            "title": "Waiting Room",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "NewBroadcast",
+        "description": "A broadcast's title and whether viewers wait to be let in."
       },
       "NewRoom": {
         "properties": {
@@ -29687,6 +31195,16 @@
         ],
         "title": "Stage",
         "description": "One stage of a run."
+      },
+      "StageRole": {
+        "type": "string",
+        "enum": [
+          "host",
+          "cohost",
+          "speaker"
+        ],
+        "title": "StageRole",
+        "description": "A part on the stage; the audience has none."
       },
       "StageStatus": {
         "type": "string",

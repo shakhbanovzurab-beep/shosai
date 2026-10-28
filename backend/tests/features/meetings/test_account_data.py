@@ -11,7 +11,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.meetings.application.account_data import PERSONAL_ROWS, MeetingsAccountData
 from shosai.features.meetings.infrastructure.room_records import RoomRecord
-from tests.features.meetings.room_kit import add_room, room_row
+from tests.features.meetings.room_kit import add_broadcast, add_room, room_row
 from tests.harness.database_access import DatabaseAccess
 
 
@@ -32,6 +32,8 @@ async def test_personal_rooms_are_exported_moved_and_erased_and_a_workspaces_sta
     person, org = uuid.uuid4(), uuid.uuid4()
     personal = await add_room(homes, room_row(person, None, title="Планёрка"))
     workspace = await add_room(homes, room_row(person, org))
+    for room in (personal, workspace):
+        await add_broadcast(homes, room)
     handler = MeetingsAccountData(homes.transactions)
     russian, european = AccountRef(person, Home.RU), AccountRef(person, Home.EU)
 

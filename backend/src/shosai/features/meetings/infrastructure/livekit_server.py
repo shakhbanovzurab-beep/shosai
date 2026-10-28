@@ -21,7 +21,7 @@ from livekit.api.access_token import AccessToken, TokenVerifier, VideoGrants
 from livekit.api.livekit_api import LiveKitAPI
 from livekit.api.twirp_client import ServerError
 from livekit.protocol.egress import ListEgressRequest, StopEgressRequest
-from livekit.protocol.models import DataPacket
+from livekit.protocol.models import DataPacket, ParticipantPermission
 from livekit.protocol.room import (
     CreateRoomRequest,
     DeleteRoomRequest,
@@ -46,7 +46,7 @@ from shosai.features.meetings.application.video_server import (
     VideoUnavailableError,
 )
 from shosai.features.meetings.domain.calls import DEPARTURE_TIMEOUT, EMPTY_TIMEOUT
-from shosai.features.meetings.domain.joining import LIVEKIT_TOKEN_TTL
+from shosai.features.meetings.domain.joining import LIVEKIT_TOKEN_TTL, Grants
 from shosai.features.meetings.infrastructure.livekit_egress import composite, report_of
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
 from shosai.features.meetings.infrastructure.livekit_signatures import verified_webhook
@@ -156,6 +156,16 @@ class LiveKitServer:
         )
         return await self._found("set_attributes", self._client.room.update_participant(request))
 
+    async def set_grants(self, room_name: str, identity: str, grants: Grants) -> bool:
+        """Change a connected session's rights: a viewer to the stage and back, off air."""
+        permission = ParticipantPermission(
+            can_subscribe=True, can_publish=grants.can_publish,
+            can_publish_data=grants.can_publish_data,
+            can_update_metadata=grants.can_update_own_metadata, hidden=grants.hidden,
+        )  # fmt: skip
+        request = UpdateParticipantRequest(room=room_name, identity=identity, permission=permission)
+        return await self._found("set_grants", self._client.room.update_participant(request))
+
     def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
         """A pass for one session, valid for the join's 10 minutes."""
         grants = VideoGrants(
@@ -233,11 +243,11 @@ class LiveKitServer:
                 raise VideoUnavailableError from error
             if error.code == NOT_FOUND:
                 # Комнаты уже нет — обычный ответ, решает вызывающий; не авария.
-                self._metrics.called(operation, NOT_FOUND, self._since(started))
+                self._metrics.called(operation, NOT_FOUND, _since(started))
                 raise
             self._failed(operation, started, "refused", error.code)
             raise
-        self._metrics.called(operation, "ok", self._since(started))
+        self._metrics.called(operation, "ok", _since(started))
         return answer
 
     async def _found(self, operation: str, call: Awaitable[object]) -> bool:
@@ -249,15 +259,16 @@ class LiveKitServer:
             raise
         return True
 
-    @staticmethod
-    def _since(started: float) -> float:
-        return asyncio.get_running_loop().time() - started
-
     def _failed(self, operation: str, started: float, outcome: str, reason: str) -> None:
-        self._metrics.called(operation, outcome, self._since(started))
+        self._metrics.called(operation, outcome, _since(started))
         log.warning(
             "LiveKit не выполнил вызов", operation=operation, outcome=outcome, reason=reason
         )
+
+
+def _since(started: float) -> float:
+    """Seconds since a moment of the running loop's clock."""
+    return asyncio.get_running_loop().time() - started
 
 
 @asynccontextmanager

@@ -57,6 +57,7 @@ from shosai.features.meetings.domain.rooms import ClosedBy, Room, room_ceiling
 from shosai.features.meetings.domain.wire import RoomMarks, device_attributes, room_metadata
 from shosai.features.meetings.infrastructure.room_passes import PassHolder, RoomPasses
 from shosai.features.meetings.infrastructure.room_records import RoomBanRecord, RoomRecord
+from shosai.features.meetings.infrastructure.stream_records import StreamRecord
 
 # Потолок, который не ограничивает: для отказов, решаемых до чтения SFU.
 CEILING_MAX: Final = 1_000_000
@@ -167,7 +168,11 @@ class JoinDesk:
         scope = TenancyScope(found.home, found.owner_id, found.org_id)
         async with self._transactions.begin(scope, read_only=True) as session:
             record = await session.get(RoomRecord, found.room_id)
-            if record is None:
+            # Комната трансляции — не звонок: её ссылка ведёт в эфир, а не в разговор.
+            broadcast = await session.scalar(
+                select(StreamRecord.id).where(StreamRecord.room_id == found.room_id)
+            )
+            if record is None or broadcast is not None:
                 raise JoinRefusedError(JoinRefusal.NOT_FOUND)
             room = room_of(record)
             banned = await session.scalar(

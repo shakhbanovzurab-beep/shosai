@@ -96,27 +96,30 @@ broadcast" where there are no mocks (`broadcasts` in `config/unserved-slices.ts`
 
 | Method | Path | Who | Body | Response |
 | ------ | ---- | --- | ---- | -------- |
-| `POST` | `/v1/meetings/broadcasts` + `Idempotency-Key` | a paid plan | `{title, waiting_room}` | `201 {id, title, link, state}` |
-| `POST` | `/v1/meetings/broadcasts/{id}/start`, `…/end` | the host | — | `{state}` |
+| `POST` | `/v1/meetings/broadcasts` + `Idempotency-Key` | a paid plan | `{title, waiting_room}` | `201 {id, title, link, state, waiting_room}` |
+| `POST` | `/v1/meetings/broadcasts/{id}/start`, `…/end` | the host | — | the same |
 | `POST` | `/v1/meetings/live/{token}/join` | anyone with the link | `{name?}` | a ticket |
 | `POST` | `/v1/meetings/live/{token}/knock` | a viewer in the waiting room | `{knock}` | a ticket |
 | `GET`  | `/v1/meetings/live/{token}/state` | the pass | — | the broadcast's state |
-| `POST`/`GET` | `/v1/meetings/live/{token}/chat` | the pass | `{text}` + `Idempotency-Key` / `?after=` | as the call's chat, with `from_stage` |
-| `PUT`  | `/v1/meetings/live/{token}/hand` | a viewer | `{raised}` | `{hand}` |
-| `POST` | `/v1/meetings/live/{token}/hands/{id}`, `…/admissions/{id}` | the host or a co-host | `{invite}` / `{admitted}` | `204` |
-| `PATCH`/`DELETE` | `/v1/meetings/live/{token}/members/{principal}` | the host or a co-host (`role` only the host) | `{on_air?, role?}` | the member |
-| `POST` | `/v1/meetings/live/{token}/stage` | an invited viewer | — | a ticket with the stage's LiveKit token |
+| `POST`/`GET` | `/v1/meetings/live/{token}/chat` | the pass | `{text}` + `Idempotency-Key` / `?after=` | `{seq, author, text, from_stage, mine, sent_at}` / a page |
+| `PUT`  | `/v1/meetings/live/{token}/hand` | a viewer | `{raised}` | `204` |
+| `POST` | `/v1/meetings/live/{token}/hands/{principal}` | the host or a co-host | `{invite}` | `204` |
+| `POST` | `/v1/meetings/live/{token}/admissions/{knock}` | the host or a co-host | `{admitted}` | `204` |
+| `PATCH`/`DELETE` | `/v1/meetings/live/{token}/members/{principal}` | the host or a co-host (`role` only the host) | `{on_air?, role?}` | `204` |
+| `POST` | `/v1/meetings/live/{token}/stage` | an invited viewer | — | `204`; LiveKit changes the session's rights |
 
-- **A ticket**: `{entry, title, role, waiting_room, identity, livekit_url, livekit_token, broadcast_pass, knock}` —
+- **A ticket**: `{entry, title, role, waiting_room, identity, livekit_url, livekit_token, room_pass, knock}` —
   `entry` is `stage`, `audience`, `wait`, `not_live`, `full` or `ended`; the LiveKit token and pass come only with
   `stage` and `audience`, `knock` only with `wait`. The stage gets in before the start; the audience only live.
-- **The state**: `{status, title, members: [{principal, identity, name, role, on_air}], viewers, waiting_room,
-  hands, admissions, hand, started_at}` — `viewers` is null when LiveKit does not answer; `hands` and `admissions`
+- **The state**: `{status, title, role, members: [{principal, identity, name, role, on_air}], viewers,
+  waiting_room, hands: [{principal, name, at, invited}], admissions: [{id, name, at}], hand, started_at}` — `viewers` is null when LiveKit does not answer; `hands` and `admissions`
   are filled only for the host and co-hosts; `hand` is the viewer's own: `down`, `raised` or `invited`.
 - **Limits**: 100 viewers (`409 full`), 10 speakers besides the host (`409 stage_full`); chat 5 messages per 10 s for
   the audience and 20 for the stage; a knock lives 10 minutes, a raised hand 20.
 - **Pushes**: the server publishes `{v: 1, kind}` on topic `stream` — `state` when the stage, the queues or the
-  status change, `chat` for a message — and the clients read the state again after a reconnect.
+  status change, `chat` for a message, `ended` before the end — and the clients read the state again after a
+  reconnect. Errors: `not_allowed` (403), `on_stage`, `not_invited`, `stage_full`, `chat_closed`,
+  `broadcast_not_live` and `broadcast_ended` (409), `hand_not_found`, `knock_not_found`, `member_not_found` (404).
 
 ## What clients read from LiveKit
 

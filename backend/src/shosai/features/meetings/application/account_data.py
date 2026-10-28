@@ -1,7 +1,8 @@
 """Meetings' handler of a person's data: their personal rooms and what each room keeps.
 
 A person's rows are the rooms they opened in Personal, with their calls, bans, the chat of a
-call still open, their recordings' rows and their boards. A room opened in a workspace is
+call still open, their recordings' rows, their boards and their broadcasts with their stage,
+bans and chat. A room opened in a workspace is
 the workspace's (nfr-16): it is neither exported nor moved with the person, and the
 workspace's own declaration covers it. Erasing deletes the person's personal rooms, and what
 hangs on them goes by the database's cascades; a repeat deletes nothing more. A recording's
@@ -36,6 +37,12 @@ from shosai.features.meetings.infrastructure.room_records import (
     RoomCallRecord,
     RoomRecord,
 )
+from shosai.features.meetings.infrastructure.stream_records import (
+    StreamBanRecord,
+    StreamChatMessageRecord,
+    StreamMemberRecord,
+    StreamRecord,
+)
 
 OWNER: Final = "meetings"
 OWNER_COLUMN: Final = "owner_id"
@@ -47,6 +54,10 @@ MODELS: Final[tuple[type[ModelBase], ...]] = (
     RoomChatMessageRecord,
     RoomRecordingRecord,
     RoomWhiteboardRecord,
+    StreamRecord,
+    StreamMemberRecord,
+    StreamBanRecord,
+    StreamChatMessageRecord,
 )
 KEYS: Final[Mapping[type[ModelBase], str]] = {
     RoomRecord: "id",
@@ -55,6 +66,10 @@ KEYS: Final[Mapping[type[ModelBase], str]] = {
     RoomChatMessageRecord: "id",
     RoomRecordingRecord: "id",
     RoomWhiteboardRecord: "room_id",
+    StreamRecord: "id",
+    StreamMemberRecord: "id",
+    StreamBanRecord: "id",
+    StreamChatMessageRecord: "id",
 }
 ACCOUNT_DATA: Final = AccountDataSpec(
     OWNER, tuple(TableCoverage(model.__tablename__, Treatment.ERASE) for model in MODELS)

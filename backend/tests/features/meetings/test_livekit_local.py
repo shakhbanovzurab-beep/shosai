@@ -14,6 +14,8 @@ from typing import Final
 
 import aiohttp
 import pytest
+from livekit.api.livekit_api import LiveKitAPI
+from livekit.protocol.room import ListParticipantsRequest
 from livekit.protocol.rtc import SignalResponse
 from prometheus_client import CollectorRegistry
 from pydantic import SecretStr
@@ -25,7 +27,8 @@ from shosai.features.meetings.application.video_server import (
     VideoServer,
     VideoUnavailableError,
 )
-from shosai.features.meetings.domain.joining import IN_CALL
+from shosai.features.meetings.domain.broadcasts import AUDIENCE, ON_STAGE, SPEAKERS_MAX, VIEWERS_MAX
+from shosai.features.meetings.domain.joining import IN_CALL, Grants
 from shosai.features.meetings.domain.principals import Principal, new_identity
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
 from shosai.features.meetings.infrastructure.livekit_server import open_video_server
@@ -163,3 +166,57 @@ async def test_a_reliable_packet_reaches_the_room_and_a_missing_room_is_unavaila
     # LiveKit отвечает 503 «no response from servers» на комнату, которой нет ни на одном узле.
     with pytest.raises(VideoUnavailableError):
         await sfu.publish("r-00000000deadbeef", "chat", b'{"v":1}')
+
+
+def staged_pass(sfu: VideoServer, room_name: str, grants: Grants) -> SessionPass:
+    """A broadcast session's pass with its part's rights."""
+    request = PassRequest(room_name, new_identity(Principal.new_guest()), "Гость", grants)
+    return sfu.session_pass(request, datetime.now(UTC))
+
+
+async def permissions(room_name: str) -> dict[str, tuple[bool, bool]]:
+    """Each session's `hidden` and `can_publish`, as LiveKit itself reports them."""
+    settings = local_settings()
+    api = LiveKitAPI(
+        str(settings.livekit_api_url), settings.livekit_api_key, os.environ[SECRET_VARIABLE]
+    )
+    try:
+        answer = await api.room.list_participants(ListParticipantsRequest(room=room_name))
+    finally:
+        await api.aclose()
+    return {
+        item.identity: (item.permission.hidden, item.permission.can_publish)
+        for item in answer.participants
+    }
+
+
+async def test_a_broadcasts_audience_is_hidden_and_a_viewer_steps_onto_the_stage_in_session(
+    sfu: VideoServer, room_name: str
+) -> None:
+    await sfu.create_room(RoomSpec(room_name, VIEWERS_MAX + SPEAKERS_MAX + 1, "{}"))
+    viewers = [staged_pass(sfu, room_name, AUDIENCE) for _ in range(3)]
+    host = staged_pass(sfu, room_name, ON_STAGE)
+
+    async with aiohttp.ClientSession() as http:
+        sockets = [await join(http, issued) for issued in viewers]
+        try:
+            for socket in sockets:
+                await socket.receive(timeout=SIGNAL_TIMEOUT)
+            async with await join(http, host) as host_socket:
+                first = await host_socket.receive(timeout=SIGNAL_TIMEOUT)
+                answer = SignalResponse.FromString(first.data)
+                listed = [person.identity for person in await sfu.participants(room_name)]
+                own = answer.join.participant.identity
+                viewer = next(identity for identity in listed if identity != own)
+                before = await permissions(room_name)
+                stepped = await sfu.set_grants(room_name, viewer, ON_STAGE)
+                after = await permissions(room_name)
+        finally:
+            for socket in sockets:
+                await socket.close()
+
+    assert len(listed) == 4
+    assert list(answer.join.other_participants) == []
+    assert sorted(before.values()) == [(False, True), (True, False), (True, False), (True, False)]
+    assert stepped
+    assert after[viewer] == (False, True)

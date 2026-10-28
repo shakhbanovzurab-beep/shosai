@@ -211,6 +211,10 @@ class VideoServer(Protocol):
         """Set a session's attributes, an empty value removing one; False when it is gone."""
         ...
 
+    async def set_grants(self, room_name: str, identity: str, grants: Grants) -> bool:
+        """Change what a connected session may do; False when it is gone."""
+        ...
+
     def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
         """A pass for one session, valid for the join's 10 minutes."""
         ...

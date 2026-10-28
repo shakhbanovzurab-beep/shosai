@@ -19,6 +19,12 @@ from shosai.features.meetings.infrastructure.room_records import (
     RoomCallRecord,
     RoomRecord,
 )
+from shosai.features.meetings.infrastructure.stream_records import (
+    StreamBanRecord,
+    StreamChatMessageRecord,
+    StreamMemberRecord,
+    StreamRecord,
+)
 from tests.harness.database_access import DatabaseAccess
 
 GUEST = "guest-0123456789ab"
@@ -71,3 +77,31 @@ async def add_room(
             )
         )  # fmt: skip
     return room
+
+
+async def add_broadcast(
+    homes: DatabaseAccess, room: RoomRecord, *, home: Home = Home.RU
+) -> StreamRecord:
+    """Make the room a broadcast's, with the owner as its host, a ban and a message."""
+    owned = {"owner_id": room.owner_id, "org_id": room.org_id}
+    stream = StreamRecord(id=uuid.uuid4(), room_id=room.id, title="Эфир", **owned)
+    async with homes.transactions.begin(TenancyScope(home, room.owner_id, room.org_id)) as session:
+        session.add(stream)
+        await session.flush()
+        session.add_all(
+            [
+                StreamMemberRecord(
+                    id=uuid.uuid4(), stream_id=stream.id, principal=str(room.owner_id),
+                    display_name="Ведущий", role="host", **owned,
+                ),
+                StreamBanRecord(
+                    id=uuid.uuid4(), stream_id=stream.id, principal=GUEST,
+                    banned_by=str(room.owner_id), **owned,
+                ),
+                StreamChatMessageRecord(
+                    id=uuid.uuid4(), stream_id=stream.id, seq=1, principal=GUEST, author="Гость",
+                    body="Здравствуйте", **owned,
+                ),
+            ]
+        )  # fmt: skip
+    return stream

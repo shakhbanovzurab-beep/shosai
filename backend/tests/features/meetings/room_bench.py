@@ -48,6 +48,7 @@ from shosai.features.meetings.application.video_server import (
 from shosai.features.meetings.channels.http.chat import build_chat_router
 from shosai.features.meetings.channels.http.joining import build_joining_router
 from shosai.features.meetings.channels.http.rooms import build_rooms_router
+from shosai.features.meetings.domain.joining import Grants
 from shosai.features.meetings.infrastructure.room_passes import RoomPasses
 from shosai.features.workspaces.contracts import MEMBERSHIP_READER
 from tests.core.web.probe_app import build_probe_app, client_of
@@ -71,6 +72,7 @@ class SfuDouble:
     published: list[tuple[str, str, bytes]] = field(default_factory=list)
     egress_reports: dict[str, EgressReport] = field(default_factory=dict)
     targets: dict[str, BucketTarget] = field(default_factory=dict)
+    grants: dict[str, Grants] = field(default_factory=dict)
     up: bool = True
 
     def _answering(self) -> None:
@@ -143,9 +145,16 @@ class SfuDouble:
                 return True
         return False
 
-    def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
-        """A readable pass: the room and the identity."""
+    async def set_grants(self, room_name: str, identity: str, grants: Grants) -> bool:
+        """Remember a session's new rights."""
         self._answering()
+        self.grants[identity] = grants
+        return any(item.identity == identity for item in self.sessions.get(room_name, []))
+
+    def session_pass(self, request: PassRequest, now: datetime) -> SessionPass:
+        """A readable pass: the room and the identity; the rights are remembered."""
+        self._answering()
+        self.grants[request.identity] = request.grants
         token = f"{request.room_name}|{request.identity}"
         return SessionPass(
             token=token, url="wss://rtc.example", expires_at=now + timedelta(minutes=10)

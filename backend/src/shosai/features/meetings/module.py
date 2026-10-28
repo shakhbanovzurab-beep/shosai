@@ -8,7 +8,7 @@ account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`, t
 join with its room passes in Valkey and their renewal, removal with bans, hands and the
 account's rooms. Step A5 added LiveKit's webhook, calls and the sweep of each home; A6 the
 call's chat; A7 its video recording. Step A8 added the admin's LiveKit screen over LiveKit's
-API and Prometheus, A13 Leo's `meetings` toolset and A11b the room's board.
+API and Prometheus, A13 Leo's `meetings` toolset, A11b the room's board and A12b broadcasts.
 """
 
 from collections.abc import AsyncIterator
@@ -30,6 +30,10 @@ from shosai.features.meetings.application.admin_actions import AdminRoomActions
 from shosai.features.meetings.application.admin_views import ServerFacts
 from shosai.features.meetings.application.admin_watch import LiveKitWatch
 from shosai.features.meetings.application.board import Boards
+from shosai.features.meetings.application.broadcast_chat import BroadcastChat
+from shosai.features.meetings.application.broadcast_entry import BroadcastDoor
+from shosai.features.meetings.application.broadcast_stage import BroadcastStage
+from shosai.features.meetings.application.broadcasts import Broadcasts
 from shosai.features.meetings.application.calls import Calls
 from shosai.features.meetings.application.chat import Chat
 from shosai.features.meetings.application.joining import JoinDesk
@@ -43,14 +47,17 @@ from shosai.features.meetings.channels.agent_specs import SPECS
 from shosai.features.meetings.channels.agent_tools import MeetingTools
 from shosai.features.meetings.channels.http.admin_livekit import build_admin_livekit_router
 from shosai.features.meetings.channels.http.board import build_board_router
+from shosai.features.meetings.channels.http.broadcasts import build_broadcasts_router
 from shosai.features.meetings.channels.http.chat import build_chat_router
 from shosai.features.meetings.channels.http.joining import build_joining_router
+from shosai.features.meetings.channels.http.live import build_live_router, build_live_stage_router
 from shosai.features.meetings.channels.http.recording import build_recording_router
 from shosai.features.meetings.channels.http.rooms import build_rooms_router
 from shosai.features.meetings.channels.http.webhook import build_webhook_router
 from shosai.features.meetings.channels.subscriptions import subscriptions
 from shosai.features.meetings.channels.tasks import PERIODIC_JOBS, task_handlers
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
+from shosai.features.meetings.infrastructure.broadcast_queues import BroadcastQueues
 from shosai.features.meetings.infrastructure.livekit_load import open_sfu_metrics
 from shosai.features.meetings.infrastructure.livekit_metrics import LiveKitMetrics
 from shosai.features.meetings.infrastructure.livekit_server import open_video_server
@@ -98,6 +105,13 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
             memory_limit_mb=meetings.meetings_livekit_memory_limit_mb,
         )
         origin = str(services.settings.email.public_base_url)
+        queues = BroadcastQueues(services.valkey)
+        door = BroadcastDoor(transactions, (desk, server, passes, queues))
+        stage = BroadcastStage(transactions, (server, queues))
+        broadcast_chat = BroadcastChat(
+            transactions, (services.effects, services.rate_limiter, server)
+        )
+        check = PassCheck(transactions, passes)
         yield FeatureParts(
             http_routers=(
                 build_rooms_router((book, removals), ports, origin),
@@ -111,6 +125,13 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     desk, PassCheck(transactions, passes), ports, services.rate_limiter
                 ),
                 build_board_router(boards, PassCheck(transactions, passes)),
+                build_broadcasts_router(
+                    Broadcasts(transactions, (services.effects, ports, server, desk)), ports, origin
+                ),
+                build_live_router(
+                    (door, stage, broadcast_chat), desk, check, (ports, services.rate_limiter)
+                ),
+                build_live_stage_router((door, stage), desk, check),
                 build_admin_livekit_router(
                     LiveKitWatch(server, load, facts),
                     AdminRoomActions(transactions, (server, passes, ports), calls.find),

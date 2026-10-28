@@ -3780,6 +3780,254 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/broadcasts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Meeting Broadcast
+         * @description Create a broadcast with its own link; the stage gathers before it starts.
+         */
+        post: operations["create_meeting_broadcast_v1_meetings_broadcasts_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/broadcasts/{broadcast_id}/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start Meeting Broadcast
+         * @description Put your broadcast on air.
+         */
+        post: operations["start_meeting_broadcast_v1_meetings_broadcasts__broadcast_id__start_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/broadcasts/{broadcast_id}/end": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * End Meeting Broadcast
+         * @description End your broadcast for everyone; its link stops working.
+         */
+        post: operations["end_meeting_broadcast_v1_meetings_broadcasts__broadcast_id__end_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/live/{token}/join": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Join Meeting Broadcast
+         * @description Open a broadcast by its link: the stage, the audience, the waiting room or why not.
+         */
+        post: operations["join_meeting_broadcast_v1_meetings_live__token__join_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/live/{token}/knock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Knock Meeting Broadcast
+         * @description Ask whether the waiting room let you in.
+         */
+        post: operations["knock_meeting_broadcast_v1_meetings_live__token__knock_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/live/{token}/state": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Meeting Broadcast State
+         * @description The broadcast's state: the stage, the viewers and, for the host, the queues.
+         */
+        get: operations["get_meeting_broadcast_state_v1_meetings_live__token__state_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/live/{token}/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Meeting Broadcast Messages
+         * @description The broadcast's messages after a number, oldest first.
+         */
+        get: operations["list_meeting_broadcast_messages_v1_meetings_live__token__chat_get"];
+        put?: never;
+        /**
+         * Send Meeting Broadcast Message
+         * @description Send a message to the broadcast's chat.
+         */
+        post: operations["send_meeting_broadcast_message_v1_meetings_live__token__chat_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/live/{token}/hand": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Put Meeting Broadcast Hand
+         * @description Raise or lower your hand to ask to speak.
+         */
+        put: operations["put_meeting_broadcast_hand_v1_meetings_live__token__hand_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/live/{token}/hands/{principal}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Answer Meeting Broadcast Hand
+         * @description Invite the hand's viewer to the stage, or decline the hand.
+         */
+        post: operations["answer_meeting_broadcast_hand_v1_meetings_live__token__hands__principal__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/live/{token}/admissions/{knock_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Answer Meeting Broadcast Knock
+         * @description Let a knock in, or turn it away.
+         */
+        post: operations["answer_meeting_broadcast_knock_v1_meetings_live__token__admissions__knock_id__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/live/{token}/members/{principal}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Meeting Broadcast Member
+         * @description Take someone off the stage; they keep watching.
+         */
+        delete: operations["delete_meeting_broadcast_member_v1_meetings_live__token__members__principal__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Patch Meeting Broadcast Member
+         * @description Take a speaker off air or back, or name or unname a co-host.
+         */
+        patch: operations["patch_meeting_broadcast_member_v1_meetings_live__token__members__principal__patch"];
+        trace?: never;
+    };
+    "/v1/meetings/live/{token}/stage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Step On Meeting Broadcast Stage
+         * @description Take the place on the stage the host invited you to.
+         */
+        post: operations["step_on_meeting_broadcast_stage_v1_meetings_live__token__stage_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/admin/livekit/overview": {
         parameters: {
             query?: never;
@@ -5009,6 +5257,39 @@ export interface components {
             items: components["schemas"]["BoardSummaryOut"][];
             incoming: components["schemas"]["IncomingOut"];
         };
+        /**
+         * BroadcastEntry
+         * @description What the broadcast's link answers someone.
+         * @enum {string}
+         */
+        BroadcastEntry: "stage" | "audience" | "wait" | "not_live" | "full" | "ended";
+        /**
+         * BroadcastOut
+         * @description The host's broadcast and its link.
+         */
+        BroadcastOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /**
+             * Link
+             * @description The link the stage and the audience open.
+             */
+            link: string;
+            state: components["schemas"]["BroadcastState"];
+            /** Waiting Room */
+            waiting_room: boolean;
+        };
+        /**
+         * BroadcastState
+         * @description Where a broadcast stands.
+         * @enum {string}
+         */
+        BroadcastState: "scheduled" | "live" | "ended";
         /**
          * CallOut
          * @description The call going on in a room.
@@ -6670,6 +6951,94 @@ export interface components {
             room_participants?: number | null;
         };
         /**
+         * LiveAdmitIn
+         * @description Let the knock in, or turn it away.
+         */
+        LiveAdmitIn: {
+            /** Admitted */
+            admitted: boolean;
+        };
+        /**
+         * LiveChatIn
+         * @description A message's text, 1 to 2 000 characters once trimmed.
+         */
+        LiveChatIn: {
+            /** Text */
+            text: string;
+        };
+        /**
+         * LiveChatMessageOut
+         * @description A message of the broadcast; the stage's are marked.
+         */
+        LiveChatMessageOut: {
+            /** Seq */
+            seq: number;
+            /** Author */
+            author: string;
+            /** Text */
+            text: string;
+            /** From Stage */
+            from_stage: boolean;
+            /** Mine */
+            mine: boolean;
+            /**
+             * Sent At
+             * Format: date-time
+             */
+            sent_at: string;
+        };
+        /**
+         * LiveChatPageOut
+         * @description Messages after a number; a non-null `next_cursor` is the `after` of the next page.
+         */
+        LiveChatPageOut: {
+            /** Items */
+            items: components["schemas"]["LiveChatMessageOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /**
+         * LiveHandIn
+         * @description Raise or lower your hand.
+         */
+        LiveHandIn: {
+            /** Raised */
+            raised: boolean;
+        };
+        /**
+         * LiveHandOut
+         * @description A viewer asking to speak.
+         */
+        LiveHandOut: {
+            /** Principal */
+            principal: string;
+            /** Name */
+            name: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /** Invited */
+            invited: boolean;
+        };
+        /**
+         * LiveInviteIn
+         * @description Invite the hand's viewer to the stage, or decline the hand.
+         */
+        LiveInviteIn: {
+            /** Invite */
+            invite: boolean;
+        };
+        /**
+         * LiveJoinIn
+         * @description A guest's name; a signed-in person comes under their profile's name.
+         */
+        LiveJoinIn: {
+            /** Name */
+            name?: string | null;
+        };
+        /**
          * LiveKitDeviceOut
          * @description The device a session joined from, as its client declared it; null when not declared.
          */
@@ -6915,6 +7284,109 @@ export interface components {
              * @default true
              */
             ok: boolean;
+        };
+        /**
+         * LiveKnockIn
+         * @description The knock the waiting room gave.
+         */
+        LiveKnockIn: {
+            /** Knock */
+            knock: string;
+        };
+        /**
+         * LiveKnockOut
+         * @description A viewer waiting to be let in.
+         */
+        LiveKnockOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+        };
+        /**
+         * LiveMemberOut
+         * @description A place on the stage; `identity` is its session now, null when nobody holds it.
+         */
+        LiveMemberOut: {
+            /** Principal */
+            principal: string;
+            /** Identity */
+            identity: string | null;
+            /** Name */
+            name: string;
+            role: components["schemas"]["StageRole"];
+            /** On Air */
+            on_air: boolean;
+        };
+        /**
+         * LiveSeatIn
+         * @description What changes about a place: on air or not, co-host or speaker.
+         */
+        LiveSeatIn: {
+            /** On Air */
+            on_air?: boolean | null;
+            /** Role */
+            role?: ("cohost" | "speaker") | null;
+        };
+        /**
+         * LiveStateOut
+         * @description The broadcast as its reader sees it; the queues only for the host and co-hosts.
+         */
+        LiveStateOut: {
+            status: components["schemas"]["BroadcastState"];
+            /** Title */
+            title: string;
+            role: components["schemas"]["StageRole"] | null;
+            /** Members */
+            members: components["schemas"]["LiveMemberOut"][];
+            /**
+             * Viewers
+             * @description Null when LiveKit does not answer.
+             */
+            viewers: number | null;
+            /** Waiting Room */
+            waiting_room: boolean;
+            /** Hands */
+            hands: components["schemas"]["LiveHandOut"][];
+            /** Admissions */
+            admissions: components["schemas"]["LiveKnockOut"][];
+            /**
+             * Hand
+             * @enum {string}
+             */
+            hand: "down" | "raised" | "invited";
+            /** Started At */
+            started_at: string | null;
+        };
+        /**
+         * LiveTicketOut
+         * @description What the link answers: where to go and, when let in, the passes.
+         */
+        LiveTicketOut: {
+            entry: components["schemas"]["BroadcastEntry"];
+            /** Title */
+            title: string;
+            role: components["schemas"]["StageRole"] | null;
+            /** Waiting Room */
+            waiting_room: boolean;
+            /** Identity */
+            identity: string | null;
+            /** Livekit Url */
+            livekit_url: string | null;
+            /** Livekit Token */
+            livekit_token: string | null;
+            /** Room Pass */
+            room_pass: string | null;
+            /**
+             * Knock
+             * @description Ask again with it while `entry` is `wait`.
+             */
+            knock: string | null;
         };
         /**
          * LoginRequest
@@ -7602,6 +8074,19 @@ export interface components {
          */
         MyNotesOut: {
             notes: components["schemas"]["OwnNotesOut"] | null;
+        };
+        /**
+         * NewBroadcast
+         * @description A broadcast's title and whether viewers wait to be let in.
+         */
+        NewBroadcast: {
+            /** Title */
+            title: string;
+            /**
+             * Waiting Room
+             * @default false
+             */
+            waiting_room: boolean;
         };
         /**
          * NewRoom
@@ -9518,6 +10003,12 @@ export interface components {
          * @enum {string}
          */
         Stage: "intake" | "transcribe" | "align" | "findings" | "write_up";
+        /**
+         * StageRole
+         * @description A part on the stage; the audience has none.
+         * @enum {string}
+         */
+        StageRole: "host" | "cohost" | "speaker";
         /**
          * StageStatus
          * @description Where a stage stands.
@@ -19041,6 +19532,505 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["MeetingBoardPictureOut"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_meeting_broadcast_v1_meetings_broadcasts_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewBroadcast"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BroadcastOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    start_meeting_broadcast_v1_meetings_broadcasts__broadcast_id__start_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                broadcast_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BroadcastOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    end_meeting_broadcast_v1_meetings_broadcasts__broadcast_id__end_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                broadcast_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BroadcastOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    join_meeting_broadcast_v1_meetings_live__token__join_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LiveJoinIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveTicketOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    knock_meeting_broadcast_v1_meetings_live__token__knock_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LiveKnockIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveTicketOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_meeting_broadcast_state_v1_meetings_live__token__state_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveStateOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_meeting_broadcast_messages_v1_meetings_live__token__chat_get: {
+        parameters: {
+            query?: {
+                /** @description The last `seq` you hold; 0 for all. */
+                after?: number;
+                limit?: number;
+            };
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveChatPageOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    send_meeting_broadcast_message_v1_meetings_live__token__chat_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LiveChatIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveChatMessageOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    put_meeting_broadcast_hand_v1_meetings_live__token__hand_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LiveHandIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    answer_meeting_broadcast_hand_v1_meetings_live__token__hands__principal__post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                token: string;
+                principal: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LiveInviteIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    answer_meeting_broadcast_knock_v1_meetings_live__token__admissions__knock_id__post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                token: string;
+                knock_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LiveAdmitIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_meeting_broadcast_member_v1_meetings_live__token__members__principal__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                token: string;
+                principal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    patch_meeting_broadcast_member_v1_meetings_live__token__members__principal__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                token: string;
+                principal: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LiveSeatIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    step_on_meeting_broadcast_stage_v1_meetings_live__token__stage_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

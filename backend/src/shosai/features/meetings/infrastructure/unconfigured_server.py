@@ -18,6 +18,7 @@ from shosai.features.meetings.application.video_server import (
     VideoUnavailableError,
     WebhookRejectedError,
 )
+from shosai.features.meetings.domain.joining import Grants
 
 
 class UnconfiguredVideoServer:
@@ -54,6 +55,10 @@ class UnconfiguredVideoServer:
     async def set_attributes(
         self, room_name: str, identity: str, attributes: Mapping[str, str]
     ) -> bool:
+        """Calls are unavailable."""
+        raise VideoUnavailableError
+
+    async def set_grants(self, room_name: str, identity: str, grants: Grants) -> bool:
         """Calls are unavailable."""
         raise VideoUnavailableError
 
