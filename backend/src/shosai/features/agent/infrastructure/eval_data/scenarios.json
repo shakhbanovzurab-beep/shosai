@@ -1045,6 +1045,78 @@
         },
         "pauses": true
       }
+    },
+    {
+      "id": "studio_context",
+      "summary": "The person's own words in Studio: Leo loads Studio's tools, reads the words, sends the whole new text on a card, and nothing changes before the person approves it.",
+      "questions": {
+        "en": "In Studio, add to “About you” that I work from Berlin.",
+        "fr": "Dans Studio, ajoute à « À propos de vous » que je travaille depuis Berlin.",
+        "de": "Füge in Studio unter „Über dich“ hinzu, dass ich von Berlin aus arbeite.",
+        "ru": "Добавь в Studio в «О вас», что я работаю из Берлина.",
+        "nl": "Voeg in Studio bij ‘Over jou’ toe dat ik vanuit Berlijn werk.",
+        "it": "In Studio, aggiungi a “Su di te” che lavoro da Berlino.",
+        "es": "En Studio, añade a «Sobre ti» que trabajo desde Berlín.",
+        "pt-BR": "No Studio, acrescente em “Sobre você” que eu trabalho de Berlim.",
+        "ar": "في Studio، أضف إلى «نبذة عنك» أنني أعمل من برلين.",
+        "tr": "Studio’da “Hakkınızda” bölümüne Berlin’den çalıştığımı ekle.",
+        "ko": "Studio의 ‘내 소개’에 내가 베를린에서 일한다고 추가해 줘.",
+        "hi": "Studio में “आपके बारे में” में जोड़ दो कि मैं बर्लिन से काम करती हूँ।",
+        "vi": "Trong Studio, thêm vào “Về bạn” rằng tôi làm việc từ Berlin.",
+        "zh-Hant": "在 Studio 的「關於你」裡加上我在柏林工作。",
+        "ja": "Studio の「自分について」に、ベルリンから働いていると追加して。",
+        "id": "Di Studio, tambahkan ke “Tentang Anda” bahwa saya bekerja dari Berlin."
+      },
+      "fixtures": {
+        "studio.read_context": {
+          "output": {
+            "content": "I lead the design team at Acme. I prefer short answers with an example.",
+            "updated_at": "2026-10-20T09:00:00Z"
+          }
+        }
+      },
+      "about": "I lead the design team at Acme. I prefer short answers with an example.",
+      "script": [
+        {
+          "calls": [
+            {
+              "tool": "core.load_toolset",
+              "arguments": {
+                "name": "studio"
+              }
+            }
+          ]
+        },
+        {
+          "calls": [
+            {
+              "tool": "studio.read_context",
+              "arguments": {}
+            }
+          ]
+        },
+        {
+          "calls": [
+            {
+              "tool": "studio.update_context",
+              "arguments": {
+                "content": "I lead the design team at Acme. I prefer short answers with an example. I work from Berlin."
+              }
+            }
+          ]
+        },
+        {
+          "say": "I prepared the card with the new text; approve it and Studio will keep it."
+        }
+      ],
+      "expect": {
+        "calls": [
+          "core.load_toolset",
+          "studio.read_context",
+          "studio.update_context"
+        ],
+        "pauses": true
+      }
     }
   ]
 }

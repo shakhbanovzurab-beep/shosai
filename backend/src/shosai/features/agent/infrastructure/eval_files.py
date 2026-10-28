@@ -7,6 +7,7 @@ one — the new baseline to copy into `eval_data/`.
 """
 
 import json
+from collections.abc import Mapping
 from dataclasses import asdict
 from importlib.resources import files  # nosemgrep
 from pathlib import Path
@@ -19,6 +20,7 @@ from shosai.features.agent.domain.eval_report import (
     LiveBaseline,
     LiveCase,
     LiveSummary,
+    Quantiles,
 )
 
 DATA: Final = "eval_data"
@@ -75,6 +77,17 @@ def live_report_json(summary: LiveSummary, cases: list[LiveCase], problems: list
     return json.dumps(report, ensure_ascii=False, indent=2)
 
 
+def quantiles(measured: Quantiles | None) -> str:
+    """The quantiles for the report, or a dash when nothing was measured."""
+    return f"p50 {measured.p50}, p95 {measured.p95}" if measured is not None else "—"
+
+
+def counted(by_model: Mapping[str, Quantiles]) -> str:
+    """The provider's counts by answering model, or a dash when none said."""
+    parts = [f"`{model}` {quantiles(each)}" for model, each in by_model.items()]
+    return "; ".join(parts) or "—"
+
+
 def live_report_markdown(
     summary: LiveSummary, cases: list[LiveCase], problems: list[str], model: str
 ) -> str:
@@ -85,6 +98,10 @@ def live_report_markdown(
         f"Model: `{model}`. Cases: {summary.cases}. Model calls: {summary.cost.model_calls}, "
         f"input tokens (estimated): {summary.cost.input_tokens}, output tokens: "
         f"{summary.cost.output_tokens}, reported cost: ${summary.cost_usd:.4f}.",
+        "",
+        f"First round (L-N3: at most 12 000 input tokens p50, 20 000 p95): estimated "
+        f"{quantiles(summary.first_round)}; counted by the provider, by the model that "
+        f"answered: {counted(summary.first_round_reported)}.",
         "",
         "| Suite | Score |",
         "| --- | --- |",

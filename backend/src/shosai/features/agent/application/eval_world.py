@@ -21,6 +21,7 @@ from shosai.core.ports.keys import PortBinding
 from shosai.core.storage.port import ObjectStream
 from shosai.features.agent.application.eval_memory import EvalMemory
 from shosai.features.agent.application.eval_stage import EvalStage
+from shosai.features.agent.application.eval_studio import EvalStudio, StudioWords
 from shosai.features.agent.contracts.memory import PROFILE_FACTS
 from shosai.features.agent.domain.eval_cases import EvalSubject
 from shosai.features.billing.contracts import (
@@ -47,6 +48,7 @@ from shosai.features.notes.contracts import (
     MeetingStatus,
     TranscriptPage,
 )
+from shosai.features.studio.contracts import PROMPT_RESOLVER
 from shosai.features.tasks.contracts import (
     BOARD_READER,
     TASK_READER,
@@ -269,10 +271,11 @@ class EvalSpaces:
         return {}
 
 
-def world_bindings(stage: EvalStage) -> tuple[PortBinding[Any], ...]:
-    """Every port an evaluated turn reads, bound to the scenario's world."""
+def world_bindings(stage: EvalStage, words: StudioWords) -> tuple[PortBinding[Any], ...]:
+    """Every port an evaluated turn reads, bound to the scenario's world and the run's words."""
     terms, tasks, spaces = EvalTerms(), EvalTasks(stage), EvalSpaces()
     return (
+        PROMPT_RESOLVER.bind(EvalStudio(stage, words)),
         TOKEN_ALLOWANCE.bind(terms),
         ENTITLEMENTS.bind(terms),
         CONSENT_READER.bind(terms),

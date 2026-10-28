@@ -110,9 +110,11 @@ class RecordingModel:
         self.requests.append(request)
         usage: Usage | None = None
         called: tuple[ToolCall, ...] = ()
+        answered: str | None = None
         async for delta in self.inner.stream_chat(context, route, request):
             usage = delta.usage or usage
             called = delta.tool_calls or called
+            answered = delta.model.model if delta.model is not None else answered
             yield delta
         self.attempted.extend(dotted(call.name) for call in called)
         self.calls.append(
@@ -122,5 +124,7 @@ class RecordingModel:
                 input_tokens=input_tokens(request),
                 output_tokens=usage.output_tokens if usage is not None else 0,
                 cost_usd=usage.reported_cost_usd if usage is not None else None,
+                reported_input_tokens=usage.input_tokens if usage is not None else None,
+                model=answered,
             )
         )

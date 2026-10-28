@@ -22,7 +22,12 @@ from shosai.features.agent.application.eval_model import SCRIPTED, SCRIPTED_ROUT
 from shosai.features.agent.application.eval_runner import EvalRunner
 from shosai.features.agent.application.eval_suites import LiveSuite
 from shosai.features.agent.application.run_context import text_of
-from shosai.features.agent.domain.eval_report import LiveBaseline, live_regressions, summarize
+from shosai.features.agent.domain.eval_report import (
+    LiveBaseline,
+    Quantiles,
+    live_regressions,
+    summarize,
+)
 from shosai.features.agent.infrastructure.eval_files import live_report_markdown, load_scenarios
 from tests.features.agent.eval.conftest import eval_services
 from tests.harness.database_access import DatabaseAccess
@@ -88,6 +93,10 @@ async def test_the_live_suite_scores_each_case_and_compares_the_run_with_its_bas
         "language ja: tool choice 50.0% below the floor 60.0%",
     ]
     assert "`overdue_tasks` (ja): missing calls ['tasks.search']" in report
+    assert dict(summary.first_round_reported) == {SCRIPTED.model: Quantiles(10, 10)}
+    assert summary.first_round is not None
+    assert summary.first_round.p50 > 0
+    assert f"answered: `{SCRIPTED.model}` p50 10, p95 10." in report
 
 
 async def test_a_turn_the_platform_refuses_is_a_failed_case(
@@ -100,6 +109,15 @@ async def test_a_turn_the_platform_refuses_is_a_failed_case(
 
     assert case.tool_problems == ("turn refused: agent_busy",)
     assert case.judge is None
+    assert case.first_round is None
+    assert summarize([case]).first_round is None
+    assert summarize([case]).first_round_reported == {}
+
+
+def test_the_first_round_is_measured_by_nearest_rank() -> None:
+    assert Quantiles.of([]) is None
+    assert Quantiles.of([7]) == Quantiles(7, 7)
+    assert Quantiles.of(list(range(20, 0, -1))) == Quantiles(10, 19)
 
 
 async def test_the_judge_sees_the_card_a_paused_turn_proposed(eval_runner: EvalRunner) -> None:

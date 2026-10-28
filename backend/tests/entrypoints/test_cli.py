@@ -1,5 +1,7 @@
 """The `shosai` command line: one subcommand per role, a queue for a worker."""
 
+from pathlib import Path
+
 import pytest
 
 from shosai.core.tasks.queues import TaskQueue
@@ -54,6 +56,27 @@ def test_a_debug_switch_names_one_target_for_at_most_an_hour() -> None:
         with pytest.raises(SystemExit) as raised:
             parser.parse_args(argv)
         assert raised.value.code == USAGE_ERROR
+
+
+def test_an_evaluation_reads_the_person_s_words_and_the_layer_from_files(tmp_path: Path) -> None:
+    about, layer = tmp_path / "about.txt", tmp_path / "layer.txt"
+    about.write_text("I lead a design team.\n", "utf-8")
+    layer.write_text("Name the source of every fact.", "utf-8")
+    parser = build_parser()
+
+    evaluation = agent_eval_command(
+        parser.parse_args(["agent", "eval", "--about", str(about), "--platform-layer", str(layer)])
+    )
+    plain = agent_eval_command(parser.parse_args(["agent", "eval"]))
+    with pytest.raises(SystemExit) as raised:
+        parser.parse_args(["agent", "eval", "--about", str(tmp_path / "missing.txt")])
+
+    assert (evaluation.about, evaluation.platform_layer) == (
+        "I lead a design team.",
+        "Name the source of every fact.",
+    )
+    assert (plain.about, plain.platform_layer) == ("", "")
+    assert raised.value.code == USAGE_ERROR
 
 
 def test_an_evaluation_names_its_scenarios_languages_and_report() -> None:

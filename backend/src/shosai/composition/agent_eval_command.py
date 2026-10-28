@@ -8,6 +8,7 @@ for the change's record. The made-up people live in the development home only: t
 refuses any other environment, and erases each person after their run.
 """
 
+import argparse
 from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
@@ -30,6 +31,7 @@ from shosai.features.agent.application.eval_judge import Judge
 from shosai.features.agent.application.eval_model import SCRIPTED_ROUTE
 from shosai.features.agent.application.eval_runner import EvalRunner, EvalServices
 from shosai.features.agent.application.eval_stage import answered_specs
+from shosai.features.agent.application.eval_studio import StudioWords
 from shosai.features.agent.application.eval_suites import (
     LiveSuite,
     safety_problems,
@@ -77,6 +79,18 @@ class AgentEvalCommand:
     concurrency: int
     report: Path
     record: str | None
+    # «О себе» выдуманного человека и слой платформы для прогона; пусто — их нет.
+    about: str = ""
+    platform_layer: str = ""
+
+
+def words_file(value: str) -> str:
+    """A text file the engineer names, read whole; one that cannot be read is a usage error."""
+    try:
+        return Path(value).read_text("utf-8").strip()
+    except (OSError, UnicodeDecodeError) as error:
+        message = f"cannot read {value}: {error}"
+        raise argparse.ArgumentTypeError(message) from error
 
 
 async def run_agent_eval(environ: Mapping[str, str], command: AgentEvalCommand) -> int:
@@ -126,6 +140,7 @@ async def evaluate(platform: Platform, command: AgentEvalCommand) -> int:
             limiter=services.rate_limiter, outbox=services.outbox,
             erasers=services.ports.all(ACCOUNT_DATA_HANDLERS), specs=specs,
             tool_calls_at_once=max(pool - 1, 1),
+            studio=StudioWords(command.platform_layer, command.about),
         ),
         route,
     )  # fmt: skip

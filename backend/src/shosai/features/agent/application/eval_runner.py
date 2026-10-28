@@ -12,7 +12,7 @@ once: each person's turn is driven by its own engine.
 import asyncio
 from collections.abc import AsyncIterator, Callable, Sequence
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from functools import partial
 from typing import Any
@@ -40,6 +40,7 @@ from shosai.features.agent.application.action_proposal import ActionProposer
 from shosai.features.agent.application.eval_model import RecordingModel, tools_text
 from shosai.features.agent.application.eval_observe import observed_turn
 from shosai.features.agent.application.eval_stage import EvalStage, EvalTools, scenario_problems
+from shosai.features.agent.application.eval_studio import StudioWords
 from shosai.features.agent.application.eval_world import world_bindings
 from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.model_stream import DEFAULT_PACE, Pace
@@ -82,7 +83,8 @@ class EvalDataError(ValueError):
 @dataclass(frozen=True, slots=True)
 class EvalServices:
     """What the evaluation runs on: a home, Valkey, effect keys, the outbox, the slices'
-    tools, and the erasure handlers that take the made-up people away again."""
+    tools, the erasure handlers that take the made-up people away again, and the run's
+    Studio words."""
 
     transactions: HomeTransactions
     valkey: Redis
@@ -93,6 +95,7 @@ class EvalServices:
     specs: tuple[ToolSpec[Any, Any], ...]
     home: Home = Home.EU
     pace: Pace = DEFAULT_PACE
+    studio: StudioWords = field(default_factory=StudioWords)
     # Вызовов инструментов разом: ниже пула соединений процесса, как у воркера.
     tool_calls_at_once: int = 4
 
@@ -140,7 +143,7 @@ class EvalRunner:
         self._services = services
         self._stage = EvalStage()
         ports = PortDirectory()
-        ports.install(world_bindings(self._stage))
+        ports.install(world_bindings(self._stage, services.studio))
         transactions, valkey = services.transactions, services.valkey
         pages = ResultPages(transactions, ports)
         catalog = AgentToolCatalog()

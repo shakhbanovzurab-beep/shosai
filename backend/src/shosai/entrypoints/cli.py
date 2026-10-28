@@ -35,6 +35,7 @@ from shosai.composition.agent_eval_command import (
     AgentEvalCommand,
     default_report,
     run_agent_eval,
+    words_file,
 )
 from shosai.composition.ai_command import KillSwitchAction, KillSwitchCommand, run_kill_switch
 from shosai.composition.ai_rebuild import run_rebuild
@@ -151,6 +152,14 @@ def add_agent(roles: argparse._SubParsersAction[argparse.ArgumentParser]) -> Non
     )  # fmt: skip
     evaluation.add_argument("--report", type=Path, help="the report's directory")
     evaluation.add_argument("--record", metavar="REASON", help="also write the new baseline")
+    evaluation.add_argument(
+        "--about", type=words_file, metavar="FILE",
+        help="the made-up person's \"About you\" in every scenario without its own",
+    )  # fmt: skip
+    evaluation.add_argument(
+        "--platform-layer", type=words_file, metavar="FILE",
+        help="a platform layer for every turn of the run",
+    )  # fmt: skip
     add_cases(evaluation)
 
 
@@ -181,6 +190,8 @@ def agent_eval_command(arguments: argparse.Namespace) -> AgentEvalCommand:
         concurrency=arguments.concurrency,
         report=arguments.report or default_report(),
         record=arguments.record,
+        about=arguments.about or "",
+        platform_layer=arguments.platform_layer or "",
     )
 
 

@@ -7,9 +7,10 @@ at least the baseline's, and every language keeps the floor. The baselines are f
 the slice; each records why it was set, so a cost or a score that moved has its reason.
 """
 
+import math
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
 from typing import Final
@@ -20,6 +21,8 @@ from shosai.features.agent.domain.eval_cases import Strict
 from shosai.features.agent.domain.eval_checks import CostLine
 
 SUITE_DROP: Final = 0.03
+# Модель, которую провайдер не назвал.
+UNNAMED_MODEL: Final = "unnamed"
 SUITES: Final = ("tool_choice", "answers", "judge")
 
 
@@ -39,6 +42,37 @@ class JudgeGrade:
 
 
 @dataclass(frozen=True, slots=True)
+class FirstRound:
+    """A turn's first model call, the one L-N3 bounds: the input tokens agent estimates, and
+    those the provider counted with the model that answered, when it said."""
+
+    estimated: int
+    reported: int | None
+    model: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Quantiles:
+    """The median and the 95th percentile, by nearest rank."""
+
+    p50: int
+    p95: int
+
+    @classmethod
+    def of(cls, values: Sequence[int]) -> Quantiles | None:
+        """The quantiles of the values; none without values."""
+        if not values:
+            return None
+        ordered = sorted(values)
+        return cls(ordered[rank(len(ordered), 0.5)], ordered[rank(len(ordered), 0.95)])
+
+
+def rank(count: int, quantile: float) -> int:
+    """The nearest rank's index among `count` sorted values."""
+    return max(math.ceil(quantile * count) - 1, 0)
+
+
+@dataclass(frozen=True, slots=True)
 class LiveCase:
     """One scenario in one language, as the live suite saw it."""
 
@@ -51,6 +85,8 @@ class LiveCase:
     cost: CostLine
     cost_usd: Decimal | None
     answer: str
+    # None — ход отказан до первого вызова модели.
+    first_round: FirstRound | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -62,6 +98,10 @@ class LiveSummary:
     languages: Mapping[str, float]
     cost: CostLine
     cost_usd: Decimal
+    # Первый раунд по оценке агента и по счёту провайдера (L-N3: ≤ 12 K p50, ≤ 20 K p95).
+    first_round: Quantiles | None = None
+    # По ответившей модели: у моделей разные токенизаторы, и запасная отвечает при отказе.
+    first_round_reported: Mapping[str, Quantiles] = field(default_factory=dict)
 
 
 def share(passed: int, total: int) -> float:
@@ -90,7 +130,26 @@ def summarize(cases: Sequence[LiveCase]) -> LiveSummary:
         sum(case.cost.output_tokens for case in cases),
     )
     spent = sum((case.cost_usd for case in cases if case.cost_usd is not None), Decimal(0))
-    return LiveSummary(len(cases), scores, languages, cost, spent)
+    estimated, reported = first_rounds(cases)
+    return LiveSummary(
+        len(cases), scores, languages, cost, spent,
+        first_round=estimated, first_round_reported=reported,
+    )  # fmt: skip
+
+
+def first_rounds(
+    cases: Sequence[LiveCase],
+) -> tuple[Quantiles | None, dict[str, Quantiles]]:
+    """The first rounds' quantiles: agent's estimate, and the provider's count by the model
+    that answered."""
+    rounds = [case.first_round for case in cases if case.first_round is not None]
+    counted: dict[str, list[int]] = defaultdict(list)
+    for one in rounds:
+        if one.reported is not None:
+            counted[one.model or UNNAMED_MODEL].append(one.reported)
+    reported = {model: Quantiles.of(values) for model, values in sorted(counted.items())}
+    estimated = Quantiles.of([one.estimated for one in rounds])
+    return estimated, {model: each for model, each in reported.items() if each is not None}
 
 
 class Recorded(Strict):

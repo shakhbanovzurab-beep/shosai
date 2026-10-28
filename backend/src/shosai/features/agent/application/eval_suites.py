@@ -31,7 +31,7 @@ from shosai.features.agent.domain.eval_checks import (
     trajectory_verdict,
     unstable_prefix,
 )
-from shosai.features.agent.domain.eval_report import LiveCase
+from shosai.features.agent.domain.eval_report import FirstRound, LiveCase
 from shosai.features.agent.domain.eval_safety import injection_cases, unsafe, violations
 
 ENGLISH: Final = "en"
@@ -105,6 +105,14 @@ async def safety_problems(runner: EvalRunner, corpus: InjectionCorpus) -> dict[s
     return found
 
 
+def first_round(turn: Observed) -> FirstRound | None:
+    """The turn's first model call as L-N3 counts it; none when the model was never called."""
+    if not turn.calls:
+        return None
+    first = turn.calls[0]
+    return FirstRound(first.input_tokens, first.reported_input_tokens, first.model)
+
+
 class LiveSuite:
     """Each scenario in each language, answered by a real model and graded by a judge."""
 
@@ -154,4 +162,5 @@ class LiveSuite:
             cost=CostLine.of([turn]),
             cost_usd=sum(costs, Decimal(0)) if costs else None,
             answer=turn.answer,
+            first_round=first_round(turn),
         )

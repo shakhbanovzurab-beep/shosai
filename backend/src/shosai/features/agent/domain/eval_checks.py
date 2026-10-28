@@ -46,6 +46,10 @@ class ModelCall:
     input_tokens: int
     output_tokens: int
     cost_usd: Decimal | None = None
+    # Входные токены по счёту провайдера; None — провайдер не сказал (сценарная модель).
+    reported_input_tokens: int | None = None
+    # Модель, которая ответила, как её назвал провайдер: при отказе основной — запасная.
+    model: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

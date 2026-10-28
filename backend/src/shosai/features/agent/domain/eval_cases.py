@@ -24,6 +24,8 @@ TOOL_NAME: Final = re.compile(r"[a-z][a-z0-9_]*\.[a-z][a-z0-9_]*")
 PAYLOAD_SLOT: Final = "{payload}"
 # Метка, по которой проверка находит враждебный текст в контексте модели после экранирования.
 CANARY_PREFIX: Final = "EVAL-CANARY-"
+# Предел «О себе» в Studio: сценарий не пишет о человеке больше, чем позволит Studio.
+ABOUT_CHARACTERS: Final = 4_000
 
 
 class Strict(BaseModel):
@@ -121,6 +123,8 @@ class EvalScenario(Strict):
     subject: EvalSubject | None = None
     questions: dict[str, str]
     fixtures: dict[str, EvalFixture] = Field(default_factory=dict)
+    # Что человек написал о себе в Studio («О себе»): мир оценки отдаёт это в сегмент 4.
+    about: str = Field(default="", max_length=ABOUT_CHARACTERS)
     script: tuple[EvalRound, ...]
     expect: EvalExpectation
 
