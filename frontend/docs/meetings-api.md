@@ -69,7 +69,7 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
 | `GET`  | `/v1/meetings/rooms/{id}/chat?after={seq}&limit=` | —                       | `{items: ChatMessageOut[], next_cursor}` |
 | `GET`  | `/v1/meetings/rooms/{id}/board`              | —                            | `{elements, files, version, updated_at}` |
 | `PUT`  | `/v1/meetings/rooms/{id}/board`              | `{elements, files, version}` | `{version}` |
-| `POST` | `/v1/meetings/rooms/{id}/board/picture`      | `{size_bytes}`               | a presigned upload |
+| `POST` | `/v1/meetings/rooms/{id}/board/picture`      | `{size_bytes}`               | `{method, url, headers, expires_at}` |
 
 - **Chat** (MR-D11): `MeetingChatMessageOut` is `{id, seq, identity, author, text, sent_at}`. The text is 1–2 000
   characters (`422 text_required`, `422 text_too_long`); 20 messages per 10 seconds per person (`429` with
@@ -78,9 +78,13 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
   shows it once by `id`. After a reconnect the client reads what it missed with `after` = the last `seq` it holds
   (`0` for all); a non-null `next_cursor` is the `after` of the next page. The chat stays with the meeting's notes
   after the call; with notes off it is gone when the call ends.
-- **Board** (MR-D13, A11b): the scene with `version`; a stale `version` is `409 scene_stale` with the current one,
-  more than 20 000 elements, 4 MiB of elements or 8 MiB of images is `413 scene_too_large`. The picture is uploaded
-  into the owner's storage and replaced while the call goes on.
+- **Board** (MR-D13, A11b): `MeetingBoardOut` is the scene as the editor saved it, its `version` (0 and empty
+  before the first save) and `updated_at`. `PUT` needs a call going on (`409 no_live_call`); a stale `version` is
+  `409 scene_stale` with the current one in `params.version`; more than 20 000 elements, 4 MiB of elements or 8 MiB
+  of images is `413 scene_too_large`; 30 saves a minute per participant. `POST …/board/picture` answers a link to
+  `PUT` the board's PNG (at most 25 MiB, exactly `size_bytes`) with exactly the given headers, straight into the
+  owner's storage; each upload replaces the last, and when the call ends the last one becomes the owner's File
+  Manager file. `413 storage_limit` when the owner's storage has no room; 6 links a minute per participant.
 - **Broadcasts** (`/v1/meetings/broadcasts/*`, `/v1/meetings/live/{token}/*`) are specified with their screens (A12a).
 
 ## What clients read from LiveKit

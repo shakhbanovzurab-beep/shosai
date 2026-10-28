@@ -15302,6 +15302,210 @@
         }
       }
     },
+    "/v1/meetings/rooms/{room_id}/board": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Get Meeting Board",
+        "description": "The room's board: its scene and version.",
+        "operationId": "get_meeting_board_v1_meetings_rooms__room_id__board_get",
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Room Id"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeetingBoardOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Save Meeting Board",
+        "description": "Keep the scene made on the board's version.",
+        "operationId": "save_meeting_board_v1_meetings_rooms__room_id__board_put",
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Room Id"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MeetingBoardIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeetingBoardSavedOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/rooms/{room_id}/board/picture": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Upload Meeting Board Picture",
+        "description": "A link to upload the board's PNG into the room owner's storage.",
+        "operationId": "upload_meeting_board_picture_v1_meetings_rooms__room_id__board_picture_post",
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Room Id"
+            }
+          },
+          {
+            "name": "X-Room-Pass",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The room pass the join gave this session.",
+              "title": "X-Room-Pass"
+            },
+            "description": "The room pass the join gave this session."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MeetingBoardPictureIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeetingBoardPictureOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/admin/livekit/overview": {
       "get": {
         "tags": [
@@ -22399,6 +22603,7 @@
         "title": "JoinRoomOut",
         "description": "The room as the join page and the call show it."
       },
+      "JsonValue": {},
       "LayoutBody": {
         "properties": {
           "columns": {
@@ -23504,6 +23709,149 @@
         "type": "object",
         "title": "MePatch",
         "description": "The fields to change; a field left out keeps its value, `null` clears it."
+      },
+      "MeetingBoardIn": {
+        "properties": {
+          "elements": {
+            "items": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "array",
+            "title": "Elements",
+            "description": "At most 20000 elements."
+          },
+          "files": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Files"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Version",
+            "description": "The version the scene was made on."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "elements",
+          "files",
+          "version"
+        ],
+        "title": "MeetingBoardIn",
+        "description": "A scene to keep, made on the board's `version`."
+      },
+      "MeetingBoardOut": {
+        "properties": {
+          "elements": {
+            "items": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "array",
+            "title": "Elements",
+            "description": "The editor's elements, kept as sent."
+          },
+          "files": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Files",
+            "description": "The editor's images by their id."
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "elements",
+          "files",
+          "version",
+          "updated_at"
+        ],
+        "title": "MeetingBoardOut",
+        "description": "The room's scene as the editor saved it, with its version; 0 and empty before a save."
+      },
+      "MeetingBoardPictureIn": {
+        "properties": {
+          "size_bytes": {
+            "type": "integer",
+            "maximum": 26214400.0,
+            "minimum": 1.0,
+            "title": "Size Bytes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "size_bytes"
+        ],
+        "title": "MeetingBoardPictureIn",
+        "description": "The PNG's exact size in bytes."
+      },
+      "MeetingBoardPictureOut": {
+        "properties": {
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "headers": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Headers"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "method",
+          "url",
+          "headers",
+          "expires_at"
+        ],
+        "title": "MeetingBoardPictureOut",
+        "description": "A link to `PUT` the PNG to, with exactly these headers, until it expires."
+      },
+      "MeetingBoardSavedOut": {
+        "properties": {
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "version"
+        ],
+        "title": "MeetingBoardSavedOut",
+        "description": "The board's version after the save."
       },
       "MeetingCardOut": {
         "properties": {

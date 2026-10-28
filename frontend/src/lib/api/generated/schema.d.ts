@@ -3736,6 +3736,50 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/rooms/{room_id}/board": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Meeting Board
+         * @description The room's board: its scene and version.
+         */
+        get: operations["get_meeting_board_v1_meetings_rooms__room_id__board_get"];
+        /**
+         * Save Meeting Board
+         * @description Keep the scene made on the board's version.
+         */
+        put: operations["save_meeting_board_v1_meetings_rooms__room_id__board_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/rooms/{room_id}/board/picture": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload Meeting Board Picture
+         * @description A link to upload the board's PNG into the room owner's storage.
+         */
+        post: operations["upload_meeting_board_picture_v1_meetings_rooms__room_id__board_picture_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/admin/livekit/overview": {
         parameters: {
             query?: never;
@@ -6549,6 +6593,7 @@ export interface components {
              */
             recording: boolean;
         };
+        JsonValue: unknown;
         /**
          * LayoutBody
          * @description The whole layout of a board.
@@ -6971,6 +7016,83 @@ export interface components {
              * @default false
              */
             cross_border_warning_confirmed: boolean;
+        };
+        /**
+         * MeetingBoardIn
+         * @description A scene to keep, made on the board's `version`.
+         */
+        MeetingBoardIn: {
+            /**
+             * Elements
+             * @description At most 20000 elements.
+             */
+            elements: components["schemas"]["JsonValue"][];
+            /** Files */
+            files: {
+                [key: string]: components["schemas"]["JsonValue"];
+            };
+            /**
+             * Version
+             * @description The version the scene was made on.
+             */
+            version: number;
+        };
+        /**
+         * MeetingBoardOut
+         * @description The room's scene as the editor saved it, with its version; 0 and empty before a save.
+         */
+        MeetingBoardOut: {
+            /**
+             * Elements
+             * @description The editor's elements, kept as sent.
+             */
+            elements: components["schemas"]["JsonValue"][];
+            /**
+             * Files
+             * @description The editor's images by their id.
+             */
+            files: {
+                [key: string]: components["schemas"]["JsonValue"];
+            };
+            /** Version */
+            version: number;
+            /** Updated At */
+            updated_at: string | null;
+        };
+        /**
+         * MeetingBoardPictureIn
+         * @description The PNG's exact size in bytes.
+         */
+        MeetingBoardPictureIn: {
+            /** Size Bytes */
+            size_bytes: number;
+        };
+        /**
+         * MeetingBoardPictureOut
+         * @description A link to `PUT` the PNG to, with exactly these headers, until it expires.
+         */
+        MeetingBoardPictureOut: {
+            /** Method */
+            method: string;
+            /** Url */
+            url: string;
+            /** Headers */
+            headers: {
+                [key: string]: string;
+            };
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+        };
+        /**
+         * MeetingBoardSavedOut
+         * @description The board's version after the save.
+         */
+        MeetingBoardSavedOut: {
+            /** Version */
+            version: number;
         };
         /**
          * MeetingCardOut
@@ -18808,6 +18930,116 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PassOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_meeting_board_v1_meetings_rooms__room_id__board_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingBoardOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    save_meeting_board_v1_meetings_rooms__room_id__board_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MeetingBoardIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingBoardSavedOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    upload_meeting_board_picture_v1_meetings_rooms__room_id__board_picture_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description The room pass the join gave this session. */
+                "X-Room-Pass"?: string | null;
+            };
+            path: {
+                room_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MeetingBoardPictureIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingBoardPictureOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

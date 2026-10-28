@@ -26,6 +26,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shosai.core.db.model_base import ModelBase
+from shosai.features.meetings.domain.board import ELEMENTS_BYTES, ELEMENTS_MAX, FILES_BYTES
 from shosai.features.meetings.domain.chat import TEXT_MAX
 from shosai.features.meetings.domain.principals import NAME_MAX
 from shosai.features.meetings.domain.recordings import RecordingFailure, RecordingState
@@ -38,10 +39,6 @@ from shosai.features.meetings.infrastructure.room_records import (
 RECORDING_STATES: Final = ", ".join(f"'{state}'" for state in RecordingState)
 FAILURES: Final = ", ".join(f"'{failure}'" for failure in RecordingFailure)
 ACTIVE: Final = text("state IN ('starting', 'active', 'ending')")
-# Пределы доски (MR-D13): 20 000 элементов, 4 МиБ элементов и 8 МиБ картинок.
-BOARD_ELEMENTS_MAX: Final = 20_000
-BOARD_ELEMENTS_BYTES: Final = 4 * 1024 * 1024
-BOARD_FILES_BYTES: Final = 8 * 1024 * 1024
 
 
 class RoomChatMessageRecord(ModelBase):
@@ -116,13 +113,9 @@ class RoomWhiteboardRecord(ModelBase):
     __table_args__ = (
         CheckConstraint("jsonb_typeof(elements) = 'array'", name="elements_list"),
         CheckConstraint("jsonb_typeof(files) = 'object'", name="files_map"),
-        CheckConstraint(
-            f"jsonb_array_length(elements) <= {BOARD_ELEMENTS_MAX}", name="elements_count"
-        ),
-        CheckConstraint(
-            f"octet_length(elements::text) <= {BOARD_ELEMENTS_BYTES}", name="elements_size"
-        ),
-        CheckConstraint(f"octet_length(files::text) <= {BOARD_FILES_BYTES}", name="files_size"),
+        CheckConstraint(f"jsonb_array_length(elements) <= {ELEMENTS_MAX}", name="elements_count"),
+        CheckConstraint(f"octet_length(elements::text) <= {ELEMENTS_BYTES}", name="elements_size"),
+        CheckConstraint(f"octet_length(files::text) <= {FILES_BYTES}", name="files_size"),
         CheckConstraint("version >= 0", name="version_counted"),
         CheckConstraint(f"updated_by {PRINCIPAL_SHAPE}", name="updated_by_shape"),
     )

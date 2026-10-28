@@ -8,7 +8,7 @@ account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`, t
 join with its room passes in Valkey and their renewal, removal with bans, hands and the
 account's rooms. Step A5 added LiveKit's webhook, calls and the sweep of each home; A6 the
 call's chat; A7 its video recording. Step A8 added the admin's LiveKit screen over LiveKit's
-API and Prometheus, and A13 Leo's `meetings` toolset.
+API and Prometheus, A13 Leo's `meetings` toolset and A11b the room's board.
 """
 
 from collections.abc import AsyncIterator
@@ -29,6 +29,7 @@ from shosai.features.meetings.application.account_rooms import AccountRooms
 from shosai.features.meetings.application.admin_actions import AdminRoomActions
 from shosai.features.meetings.application.admin_views import ServerFacts
 from shosai.features.meetings.application.admin_watch import LiveKitWatch
+from shosai.features.meetings.application.board import Boards
 from shosai.features.meetings.application.calls import Calls
 from shosai.features.meetings.application.chat import Chat
 from shosai.features.meetings.application.joining import JoinDesk
@@ -41,6 +42,7 @@ from shosai.features.meetings.application.video_server import VideoUnavailableEr
 from shosai.features.meetings.channels.agent_specs import SPECS
 from shosai.features.meetings.channels.agent_tools import MeetingTools
 from shosai.features.meetings.channels.http.admin_livekit import build_admin_livekit_router
+from shosai.features.meetings.channels.http.board import build_board_router
 from shosai.features.meetings.channels.http.chat import build_chat_router
 from shosai.features.meetings.channels.http.joining import build_joining_router
 from shosai.features.meetings.channels.http.recording import build_recording_router
@@ -86,6 +88,7 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
             transactions, (server, ports, services.outbox), recording_limits(services)
         )
         sweep = Sweep(transactions, (server, calls, ports, metrics, recordings))
+        boards = Boards(transactions, (ports, services.rate_limiter, services.objects))
         desk = JoinDesk(
             transactions, (server, passes, ports), meetings.meetings_room_participants_ceiling
         )
@@ -107,13 +110,14 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 build_joining_router(
                     desk, PassCheck(transactions, passes), ports, services.rate_limiter
                 ),
+                build_board_router(boards, PassCheck(transactions, passes)),
                 build_admin_livekit_router(
                     LiveKitWatch(server, load, facts),
                     AdminRoomActions(transactions, (server, passes, ports), calls.find),
                     ports,
                 ),
             ),
-            task_handlers=task_handlers(AccountRooms(transactions, server), calls, sweep),
+            task_handlers=task_handlers(AccountRooms(transactions, server), calls, sweep, boards),
             agent_tools=MeetingTools(
                 transactions, (book, ActionItems(services.effects, services.outbox), server), origin
             ).bound(),
