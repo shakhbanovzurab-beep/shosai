@@ -7,7 +7,7 @@ The draft's callback paths answer a flow started on the draft with an expired au
 since no such flow exists in Shosai.
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from http import HTTPStatus
 from typing import Annotated, Final, Literal
 
@@ -16,7 +16,9 @@ from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from shosai.core.kernel.errors import AppError
+from shosai.core.kv.rate_limits import RateLimit, RateLimiter
 from shosai.core.ports.directory import PortDirectory
+from shosai.core.web.rate_limit import rate_limited
 from shosai.features.connectors.application.authorize import (
     COOKIE_NAME,
     COOKIE_PATH,
@@ -37,6 +39,7 @@ from shosai.features.identity.contracts import Principal, bearer_principal
 
 SEE_OTHER: Final = 303
 DRAFT_PROVIDERS: Final = ("google", "microsoft", "slack", "notion", "attio", "hubspot")
+AUTHORIZE_LIMIT: Final = RateLimit("connector_authorize", 10, timedelta(minutes=1), 10)
 
 
 class ConnectorAuthorizeIn(BaseModel):
@@ -96,13 +99,21 @@ def target_of(body: ConnectorAuthorizeIn) -> ReturnTarget:
         raise ReturnPathInvalidError from None
 
 
-def build_connect_router(flows: tuple[Authorizer, Completer], ports: PortDirectory) -> APIRouter:
+def build_connect_router(
+    flows: tuple[Authorizer, Completer], ports: PortDirectory, limiter: RateLimiter
+) -> APIRouter:
     """The authorize route, the provider callbacks and the draft's callback paths."""
     authorizer, completer = flows
     person = Annotated[Principal, Depends(bearer_principal(ports))]
     router = APIRouter(tags=["connectors"])
 
-    @router.post("/v1/connectors/{app}/authorize")
+    async def subject(principal: person) -> str:
+        return str(principal.user_id)
+
+    @router.post(
+        "/v1/connectors/{app}/authorize",
+        dependencies=[Depends(rate_limited(limiter, AUTHORIZE_LIMIT, subject))],
+    )
     async def authorize(
         app: Annotated[str, Path(max_length=32)],
         body: ConnectorAuthorizeIn,

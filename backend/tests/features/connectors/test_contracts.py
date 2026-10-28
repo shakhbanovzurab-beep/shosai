@@ -72,7 +72,7 @@ def test_errors_carry_codes_a_client_can_word() -> None:
         "needs_reconnect", 409, {"problem": "scope_missing"},
     )  # fmt: skip
     assert busy.retry_after_seconds == 3600
-    assert ProviderBusyError(0).params["retry_after"] == 1
+    assert ProviderBusyError(0).params["retry_after_seconds"] == 1
 
 
 def test_a_refusal_keeps_a_provider_code_only_when_it_is_a_code() -> None:

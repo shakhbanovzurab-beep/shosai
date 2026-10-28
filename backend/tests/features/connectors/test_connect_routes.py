@@ -6,8 +6,12 @@ from urllib.parse import parse_qs, urlsplit
 
 import httpx
 import pytest_asyncio
+from prometheus_client import CollectorRegistry
+from redis.asyncio import Redis
 
 from shosai.core.kernel.homes import Home
+from shosai.core.kv.metrics import KeyValueMetrics
+from shosai.core.kv.rate_limits import RateLimiter
 from shosai.features.connectors.channels.http.connect_routes import build_connect_router
 from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.billing.people_bench import bearer
@@ -17,10 +21,11 @@ __all__ = ["connect_bench"]
 
 
 @pytest_asyncio.fixture
-async def http(connect_bench: ConnectBench) -> AsyncIterator[httpx.AsyncClient]:
+async def http(connect_bench: ConnectBench, valkey: Redis) -> AsyncIterator[httpx.AsyncClient]:
     """The connect routes in the real shell, at Shosai's public address."""
+    limiter = RateLimiter(valkey, KeyValueMetrics(CollectorRegistry()))
     router = build_connect_router(
-        (connect_bench.authorizer, connect_bench.completer), connect_bench.ports
+        (connect_bench.authorizer, connect_bench.completer), connect_bench.ports, limiter
     )
     app = build_probe_app(extra=(router,)).app
     async with client_of(app, base_url="https://shosai.test") as client:

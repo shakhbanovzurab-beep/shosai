@@ -61,7 +61,7 @@ class ProviderBusyError(AppError):
     def __init__(self, retry_after_seconds: int) -> None:
         wait = max(1, min(retry_after_seconds, MAX_RETRY_AFTER_SECONDS))
         super().__init__(
-            "provider_busy", HTTPStatus.SERVICE_UNAVAILABLE, params={"retry_after": wait}
+            "provider_busy", HTTPStatus.SERVICE_UNAVAILABLE, params={"retry_after_seconds": wait}
         )
         self.retry_after_seconds = wait
 

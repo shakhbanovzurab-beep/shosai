@@ -13,6 +13,8 @@ revocation on erasure, the weekly key pass, a deleted workspace's installations,
 invariant monitors. Step 5 the provider transport behind `PROVIDER_ACCESS`: a session that
 injects and refreshes the token, keeps the provider's quotas, concurrency and `Retry-After`
 for every process, opens a provider's breaker only on its own failures, and retries reads.
+Step 6 the cabinet's routes — the list, a disconnect, connecting by a given secret, a scope
+picker's browse — and `CONNECTIONS` for consumers.
 """
 
 from collections.abc import AsyncIterator
@@ -26,7 +28,10 @@ from shosai.features.connectors.application.account_data import (
     ConnectorsAccountData,
 )
 from shosai.features.connectors.application.authorize import Authorizer, AuthorizeTools
+from shosai.features.connectors.application.cabinet_list import CabinetConnectors
 from shosai.features.connectors.application.callback import CallbackTools, Completer
+from shosai.features.connectors.application.credentials import Credentials, CredentialTools
+from shosai.features.connectors.application.disconnect import Disconnector
 from shosai.features.connectors.application.grant_tokens import GrantTokens, TokenTools
 from shosai.features.connectors.application.installation_audit import InstallationAudit
 from shosai.features.connectors.application.installations import WorkspaceInstallations
@@ -34,15 +39,18 @@ from shosai.features.connectors.application.key_rotation import KeyRotation
 from shosai.features.connectors.application.lifecycle_sweeps import DueGrants
 from shosai.features.connectors.application.offers import Offers
 from shosai.features.connectors.application.provider_access import ConnectorProviderAccess
+from shosai.features.connectors.application.registry import ConnectorRegistry
+from shosai.features.connectors.application.resources import Resources
 from shosai.features.connectors.application.revocation import GrantRevoker, RevokeTools
 from shosai.features.connectors.channels.http.connect_routes import build_connect_router
+from shosai.features.connectors.channels.http.connector_routes import build_connector_router
 from shosai.features.connectors.channels.subscriptions import subscriptions
 from shosai.features.connectors.channels.tasks import (
     DUE_SOURCES,
     PERIODIC_JOBS,
     connectors_task_handlers,
 )
-from shosai.features.connectors.contracts import INSTALLATIONS, PROVIDER_ACCESS
+from shosai.features.connectors.contracts import CONNECTIONS, INSTALLATIONS, PROVIDER_ACCESS
 from shosai.features.connectors.contracts.events import CONNECTOR_EVENTS
 from shosai.features.connectors.infrastructure.metrics import ConnectorsMetrics
 from shosai.features.connectors.infrastructure.oauth.flow_store import FlowStore
@@ -69,10 +77,9 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     registry = ProviderRegistry(configured_clients(settings))
     flows, audit = FlowStore(services.valkey), InstallationAudit(services.ports)
     metrics = ConnectorsMetrics(services.registry)
+    offers = Offers(services.ports, registry)
     async with open_connectors_http() as http:
-        authorize = AuthorizeTools(
-            Offers(services.ports, registry), registry, flows, base_url, sealing=keys is not None
-        )
+        authorize = AuthorizeTools(offers, registry, flows, base_url, sealing=keys is not None)
         authorizer = Authorizer(services.transactions, authorize)
         completer = Completer(
             services.transactions,
@@ -92,14 +99,28 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         access = ConnectorProviderAccess(
             services.transactions, registry, SessionParts(tokens, guards, http, metrics, tracer)
         )
+        # Проверки секретов и обзор ресурсов приносят шаги провайдеров; до них — пусто.
+        cabinet = (
+            CabinetConnectors(services.transactions, offers, registry),
+            Disconnector(services.transactions, services.outbox, registry),
+            Credentials(
+                services.transactions, CredentialTools(offers, {}, http, keys, services.outbox)
+            ),
+            Resources(services.transactions, access, {}),
+        )
+        limiter = services.rate_limiter
         yield FeatureParts(
-            http_routers=(build_connect_router((authorizer, completer), services.ports),),
+            http_routers=(
+                build_connect_router((authorizer, completer), services.ports, limiter),
+                build_connector_router(cabinet, services.ports, limiter),
+            ),
             task_handlers=connectors_task_handlers(lifecycle, services.tasks),
             subscriptions=subscriptions(services.outbox),
             due_sources=DUE_SOURCES,
             periodic_jobs=PERIODIC_JOBS,
             provides=(
                 ACCOUNT_DATA_HANDLERS.bind(ConnectorsAccountData(services.transactions, revoker)),
+                CONNECTIONS.bind(ConnectorRegistry(services.ports)),
                 INSTALLATIONS.bind(WorkspaceInstallations(authorizer, audit, services.outbox)),
                 PROVIDER_ACCESS.bind(access),
             ),

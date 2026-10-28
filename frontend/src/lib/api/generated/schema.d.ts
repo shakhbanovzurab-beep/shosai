@@ -2792,6 +2792,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/connectors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Connectors
+         * @description The apps you may connect and the ones you connected.
+         */
+        get: operations["list_connectors_v1_connectors_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/connectors/{app}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Disconnect
+         * @description Disconnect an app: everything that used it stops at once.
+         */
+        delete: operations["disconnect_v1_connectors__app__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/connectors/{app}/credentials": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Connect With Credentials
+         * @description Connect an app by an app password, an API key or a hook URL.
+         */
+        post: operations["connect_with_credentials_v1_connectors__app__credentials_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/connectors/{app}/resources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Browse Resources
+         * @description Places of a connected app: folders, spaces, repositories, channels.
+         */
+        get: operations["browse_resources_v1_connectors__app__resources_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/agent/settings": {
         parameters: {
             query?: never;
@@ -5683,6 +5763,8 @@ export interface components {
             /** Edited At */
             edited_at: string | null;
         };
+        /** @enum {string} */
+        ConnectorAuth: "oauth" | "password" | "api_key" | "webhook";
         /**
          * ConnectorAuthorizeIn
          * @description Where the cabinet wants the browser back: the popup's page or a cabinet path.
@@ -5709,6 +5791,86 @@ export interface components {
              * Format: date-time
              */
             expires_at: string;
+        };
+        /**
+         * ConnectorCredentialsIn
+         * @description A secret the person gives: exactly one of a password, a key or a hook URL.
+         */
+        ConnectorCredentialsIn: {
+            /** Login */
+            login?: string | null;
+            /** Password */
+            password?: string | null;
+            /** Api Key */
+            api_key?: string | null;
+            /** Webhook Url */
+            webhook_url?: string | null;
+            /** Address */
+            address?: string | null;
+        };
+        /**
+         * ConnectorOut
+         * @description One app of Settings > Connectors and the person's connection of it.
+         */
+        ConnectorOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Category */
+            category: string;
+            auth: components["schemas"]["ConnectorAuth"];
+            /** Connected */
+            connected: boolean;
+            /** Account */
+            account: string | null;
+            status: components["schemas"]["ConnectorState"];
+            /** Problem */
+            problem: string | null;
+            /** Connection Id */
+            connection_id: string | null;
+            /** Connected At */
+            connected_at: string | null;
+            /** Access Remains At Provider */
+            access_remains_at_provider: boolean;
+        };
+        /**
+         * ConnectorResourceOut
+         * @description One place at the provider.
+         */
+        ConnectorResourceOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Kind */
+            kind: string;
+            /** Parent Id */
+            parent_id: string | null;
+            /** Has Children */
+            has_children: boolean;
+            /** Url */
+            url: string | null;
+        };
+        /**
+         * ConnectorResourcesOut
+         * @description A page of places and the cursor of the next one.
+         */
+        ConnectorResourcesOut: {
+            /** Items */
+            items: components["schemas"]["ConnectorResourceOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** @enum {string} */
+        ConnectorState: "connected" | "needs_reconnect" | "not_connected";
+        /**
+         * ConnectorsOut
+         * @description The offered apps and the person's connections, in the catalogue's order.
+         */
+        ConnectorsOut: {
+            /** Items */
+            items: components["schemas"]["ConnectorOut"][];
         };
         /**
          * Consents
@@ -17381,6 +17543,144 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ConnectorAuthorizeOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_connectors_v1_connectors_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectorsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    disconnect_v1_connectors__app__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                app: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    connect_with_credentials_v1_connectors__app__credentials_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                app: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConnectorCredentialsIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectorOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    browse_resources_v1_connectors__app__resources_get: {
+        parameters: {
+            query: {
+                kind: string;
+                parent?: string | null;
+                q?: string | null;
+                cursor?: string | null;
+                limit?: number;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                app: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectorResourcesOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
