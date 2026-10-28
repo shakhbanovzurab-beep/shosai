@@ -1,8 +1,9 @@
 import "@excalidraw/excalidraw/index.css";
+import "./board-theme.css";
 
 import { useEffect, useRef, useState } from "react";
 
-import { CaptureUpdateAction, Excalidraw, getSceneVersion, reconcileElements } from "@excalidraw/excalidraw";
+import { CaptureUpdateAction, Excalidraw, getSceneVersion, MainMenu, reconcileElements } from "@excalidraw/excalidraw";
 import type { RemoteExcalidrawElement } from "@excalidraw/excalidraw/data/reconcile";
 import type { OrderedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import type {
@@ -25,8 +26,23 @@ import { BoardTools } from "./board-tools";
 /*
  * Холст доски — отдельный чанк страницы комнаты: Excalidraw грузится, только когда доску открыли. Сцена сервера и
  * правки соседей сливаются `reconcileElements` с тем, что уже на холсте; всякая новая сцена уходит в сессию доски,
- * которая решает, что разослать и что сохранить. Курсоры других — коллабораторы редактора.
+ * которая решает, что разослать и что сохранить. Курсоры других — коллабораторы редактора. Вид — стили кабинета
+ * (board-theme.css): своё меню без ссылок редактора, без библиотеки и ИИ, точечная сетка под прозрачным холстом.
  */
+
+// Шаг сетки — 20 единиц сцены; при отдалении он растёт впятеро, пока точки не разойдутся хотя бы на 12 px.
+const GRID_UNITS = 20;
+const GRID_MIN_PX = 12;
+const INITIAL_DATA = { appState: { viewBackgroundColor: "transparent" } };
+
+/** Сдвинуть точки сетки вслед за сценой: точка сцены (x, y) на экране — ((x + scrollX) · zoom, (y + scrollY) · zoom). */
+function placeGrid(surface: HTMLElement, scrollX: number, scrollY: number, zoom: number) {
+  let step = GRID_UNITS * zoom;
+  while (step < GRID_MIN_PX) step *= 5;
+  surface.style.setProperty("--board-grid-step", `${step}px`);
+  surface.style.setProperty("--board-grid-x", `${(scrollX * zoom) % step}px`);
+  surface.style.setProperty("--board-grid-y", `${(scrollY * zoom) % step}px`);
+}
 
 const elementsOf = (scene: BoardScene) => scene.elements as readonly OrderedExcalidrawElement[];
 
@@ -79,7 +95,15 @@ export default function BoardCanvas({ board }: { board: BoardSession }) {
     return board.stream(container.current);
   }, [api, board, streams]);
 
-  function changed(elements: readonly OrderedExcalidrawElement[], _state: AppState, files: BinaryFiles) {
+  useEffect(() => {
+    if (!api || !container.current) return;
+    const { scrollX, scrollY, zoom } = api.getAppState();
+    placeGrid(container.current, scrollX, scrollY, zoom.value);
+  }, [api]);
+
+  function changed(elements: readonly OrderedExcalidrawElement[], state: AppState, files: BinaryFiles) {
+    // Библиотеки на доске нет; палитра команд всё же умеет её открыть — тогда боковая панель сразу закрывается.
+    if (state.openSidebar?.tab === "library") api?.updateScene({ appState: { openSidebar: null } });
     const version = getSceneVersion(elements);
     if (version === known.current) return;
     known.current = version;
@@ -87,18 +111,39 @@ export default function BoardCanvas({ board }: { board: BoardSession }) {
   }
 
   return (
-    <div ref={container} className="size-full">
+    <div ref={container} className="board-surface size-full">
       <Excalidraw
         excalidrawAPI={setApi}
+        initialData={INITIAL_DATA}
         langCode={boardLanguage(language)}
         theme={theme}
         viewModeEnabled={readOnly}
         isCollaborating
+        aiEnabled={false}
         onChange={changed}
+        onScrollChange={(scrollX, scrollY, zoom) => {
+          if (container.current) placeGrid(container.current, scrollX, scrollY, zoom.value);
+        }}
         onPointerUpdate={({ pointer }) => board.pointer(pointer.x, pointer.y)}
         renderTopRightUI={() => (readOnly ? null : <BoardTools editor={api} />)}
-        UIOptions={{ canvasActions: { loadScene: false, saveToActiveFile: false, export: false } }}
-      />
+        UIOptions={{
+          canvasActions: {
+            loadScene: false,
+            saveToActiveFile: false,
+            export: false,
+            saveAsImage: false,
+            clearCanvas: false,
+            changeViewBackgroundColor: false,
+            toggleTheme: null,
+          },
+        }}
+      >
+        {/* Меню доски — поиск по холсту и сочетания клавиш; ссылок и настроек самого редактора в нём нет. */}
+        <MainMenu>
+          <MainMenu.DefaultItems.SearchMenu />
+          <MainMenu.DefaultItems.Help />
+        </MainMenu>
+      </Excalidraw>
     </div>
   );
 }

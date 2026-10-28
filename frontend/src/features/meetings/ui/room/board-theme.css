@@ -1,0 +1,117 @@
+/*
+ * Доска встречи в стилях кабинета: редактор берёт цвета, шрифт, рамки, тени и скругления из токенов темы, поэтому
+ * светлая, тёмная тема и пресеты кабинета меняют и его. Окна редактора выносятся в body с тем же классом
+ * `.excalidraw`, поэтому правила не привязаны к контейнеру доски; файл грузится только с чанком доски.
+ * В тёмной теме редактор вешает свои значения на `.excalidraw.theme--dark` — тот же селектор здесь стоит позже.
+ */
+
+.excalidraw,
+.excalidraw.theme--dark,
+.excalidraw-tooltip {
+  --ui-font: var(--font-sans), system-ui, sans-serif;
+  --border-radius-md: calc(var(--radius) - 2px);
+  --border-radius-lg: var(--radius);
+
+  --color-primary: var(--primary);
+  --color-primary-darker: color-mix(in oklch, var(--primary) 88%, var(--foreground));
+  --color-primary-darkest: color-mix(in oklch, var(--primary) 76%, var(--foreground));
+  --color-primary-hover: color-mix(in oklch, var(--primary) 90%, var(--background));
+  --color-primary-light: var(--accent);
+  --color-primary-light-darker: color-mix(in oklch, var(--accent) 85%, var(--foreground));
+  --color-brand-hover: var(--color-primary-hover);
+  --color-brand-active: var(--color-primary-darker);
+  --color-promo: var(--primary);
+  --color-selection: var(--ring);
+  --link-color: var(--foreground);
+  --focus-highlight-color: var(--ring);
+  --select-highlight-color: var(--ring);
+
+  --default-bg-color: var(--background);
+  --island-bg-color: var(--popover);
+  --sidebar-bg-color: var(--popover);
+  --popup-bg-color: var(--popover);
+  --popup-secondary-bg-color: var(--muted);
+  --popup-text-color: var(--popover-foreground);
+  --popup-text-inverted-color: var(--background);
+  --overlay-bg-color: color-mix(in oklch, var(--background) 80%, transparent);
+
+  --text-primary-color: var(--foreground);
+  --icon-fill-color: var(--foreground);
+  --keybinding-color: var(--muted-foreground);
+  --input-label-color: var(--muted-foreground);
+  --color-on-surface: var(--foreground);
+  --color-surface-lowest: var(--background);
+  --color-surface-low: var(--muted);
+  --color-surface-mid: var(--muted);
+  --color-surface-high: var(--accent);
+  --color-surface-primary-container: var(--accent);
+  --color-on-primary-container: var(--accent-foreground);
+  --button-hover-bg: var(--accent);
+  --button-active-bg: var(--accent);
+  --button-active-border: var(--ring);
+  --button-gray-1: var(--muted);
+  --button-gray-2: var(--border);
+  --button-gray-3: var(--muted-foreground);
+
+  --default-border-color: var(--border);
+  --dialog-border-color: var(--border);
+  --sidebar-border-color: var(--border);
+  --avatar-border-color: var(--background);
+  --input-bg-color: var(--background);
+  --input-border-color: var(--input);
+  --input-hover-bg-color: var(--accent);
+  --color-border-outline: var(--muted-foreground);
+  --color-border-outline-variant: var(--border);
+  --scrollbar-thumb: var(--border);
+  --scrollbar-thumb-hover: var(--muted-foreground);
+  --color-slider-track: var(--muted);
+  --color-slider-thumb: var(--primary);
+
+  --color-danger: var(--destructive);
+  --button-destructive-color: var(--destructive);
+  --button-destructive-bg-color: color-mix(in oklch, var(--destructive) 12%, var(--background));
+
+  /* Острова редактора — как панели кабинета: тонкая рамка и лёгкая тень вместо его мягкого ореола. */
+  --shadow-island: 0 0 0 1px var(--border), 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --modal-shadow: 0 10px 38px -10px rgb(0 0 0 / 0.25), 0 10px 20px -15px rgb(0 0 0 / 0.2);
+  --sidebar-shadow: none;
+}
+
+/*
+ * Сетка, как на досках Miro: светлые точки под сценой. Холст сцены прозрачен (viewBackgroundColor), а точки рисует
+ * фон корня редактора — не самого холста: в тёмной теме редактор инвертирует холст фильтром, и фон на нём стал бы
+ * светлым. Шаг и сдвиг задаёт доска при прокрутке и масштабе, поэтому сетка едет вместе со сценой.
+ */
+.board-surface {
+  --board-grid-step: 20px;
+  --board-grid-x: 0px;
+  --board-grid-y: 0px;
+  --board-grid-dot: color-mix(in oklch, var(--foreground) 18%, transparent);
+}
+
+/* Тот же вес, что у правила редактора, снимающего фон в тёмной теме, и позже него. */
+.board-surface > .excalidraw.excalidraw-container {
+  background-color: var(--background);
+  background-image: radial-gradient(circle, var(--board-grid-dot) 1px, transparent 1.5px);
+  background-size: var(--board-grid-step) var(--board-grid-step);
+  background-position: calc(var(--board-grid-x) - var(--board-grid-step) / 2)
+    calc(var(--board-grid-y) - var(--board-grid-step) / 2);
+}
+
+/*
+ * Библиотеки фигур на доске нет: ни кнопки, ни вкладки, ни «Добавить в библиотеку»; открытую из палитры команд
+ * доска сразу закрывает (board-canvas). Ниже — места, где редактор говорит о себе: ссылки справки, весь список
+ * шрифтов с его фирменным, встраивание чужих страниц и его заголовки в окне Mermaid — схему из Mermaid строит
+ * кнопка доски.
+ */
+.excalidraw .sidebar-trigger__label-element:has(.default-sidebar-trigger),
+.excalidraw .sidebar-tab-trigger[id$="-trigger-library"],
+.excalidraw .context-menu li[data-testid="addToLibrary"],
+.excalidraw .HelpDialog__header,
+.excalidraw [data-testid="font-family-show-fonts"],
+.excalidraw .dropdown-menu-item[data-testid="toolbar-embeddable"],
+.excalidraw .dropdown-menu-item[data-testid="toolbar-laser"] + div,
+.excalidraw .dialog-mermaid-title,
+.excalidraw .ttd-dialog-desc {
+  display: none;
+}
