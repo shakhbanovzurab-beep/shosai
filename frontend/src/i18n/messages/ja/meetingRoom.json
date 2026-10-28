@@ -1,0 +1,158 @@
+{
+  "metaTitle": "会議",
+  "untitled": "会議",
+  "marks": {
+    "label": "この会議",
+    "notes": "Leo がノートを作成中",
+    "recording": "レコーディング中"
+  },
+  "preview": {
+    "asking": "ほかの参加者に見えて聞こえるように、カメラとマイクを許可してください。",
+    "cameraOff": "カメラはオフです。",
+    "blocked": "ブラウザがカメラとマイクをブロックしました。サイトの設定で許可してから、もう一度お試しください。",
+    "none": "カメラもマイクも見つかりません。聞くだけ、チャットだけでも参加できます。",
+    "retry": "再試行"
+  },
+  "devices": {
+    "open": "デバイス",
+    "audio": "マイク",
+    "video": "カメラ",
+    "unnamed": "デバイス {index, number}"
+  },
+  "join": {
+    "loading": "会議を準備しています…",
+    "ready": "参加しますか？",
+    "notesHint": "Leo は会議のオーナーのためにノートを作成します。会議の全員にこのことが表示されます。",
+    "enter": "今すぐ参加",
+    "nameTitle": "お名前は？",
+    "nameLabel": "名前",
+    "nameHint": "この名前がほかの参加者に表示されます。",
+    "continue": "続ける"
+  },
+  "controls": {
+    "label": "会議の操作",
+    "mic": "マイク",
+    "camera": "カメラ",
+    "screen": "画面を共有",
+    "hand": "手を挙げる",
+    "react": "リアクション",
+    "chat": "チャット",
+    "unread": "{count, plural, other {未読メッセージ #件}}",
+    "people": "参加者"
+  },
+  "reactions": {
+    "thumbsUp": "いいね",
+    "heart": "ハート",
+    "laugh": "笑い",
+    "party": "お祝い",
+    "clap": "拍手",
+    "wow": "驚き",
+    "limited": "リアクションが多すぎます。数秒お待ちください。"
+  },
+  "header": {
+    "people": "{count, plural, other {参加者 #人}}"
+  },
+  "stage": {
+    "others": "{count, plural, other {ほか #人}}"
+  },
+  "panel": {
+    "chat": "チャット",
+    "people": "参加者",
+    "close": "閉じる"
+  },
+  "chat": {
+    "label": "メッセージ",
+    "empty": "まだメッセージはありません。",
+    "you": "自分",
+    "placeholder": "全員にメッセージ",
+    "send": "送信",
+    "sendFailed": "メッセージを送信できませんでした。もう一度お試しください。",
+    "keptWithNotes": "メッセージは会議のノートと一緒に保存されます。",
+    "goneAtEnd": "メッセージは会議の終了時に消えます。"
+  },
+  "people": {
+    "you": "{name}（自分）",
+    "host": "ホスト",
+    "muted": "マイクオフ",
+    "handRaised": "挙手中",
+    "lowerHand": "手を下げる",
+    "pin": "{name} を固定",
+    "unpin": "{name} の固定を解除",
+    "hands": "{count, plural, other {挙手 #人}}",
+    "everyone": "{count, plural, other {会議に #人}}",
+    "remove": "{name} を削除",
+    "removeTitle": "{name} を削除しますか？",
+    "removeDescription": "すべてのデバイスで退出し、この会議に再参加できなくなります。",
+    "removeConfirm": "削除"
+  },
+  "invite": {
+    "open": "招待",
+    "title": "ユーザーを招待",
+    "description": "このリンクを知っている人は誰でも会議に参加できます。",
+    "link": "会議のリンク",
+    "copy": "コピー",
+    "copied": "コピーしました"
+  },
+  "leave": {
+    "leave": "退出",
+    "more": "その他の退出方法",
+    "endForAll": "全員の会議を終了",
+    "confirmTitle": "全員の会議を終了しますか？",
+    "confirmDescription": "全員が退出し、リンクは使えなくなります。"
+  },
+  "states": {
+    "connecting": "参加しています…",
+    "reconnecting": "接続が切れました。再接続しています…",
+    "retry": "再試行",
+    "rejoin": "再参加",
+    "toMeetings": "会議へ移動"
+  },
+  "problems": {
+    "not_found": {
+      "title": "会議が見つかりません",
+      "description": "リンクを送った人に確認してください。"
+    },
+    "room_finished": {
+      "title": "この会議は終了しました",
+      "description": "このリンクはもう使えません。"
+    },
+    "removed": {
+      "title": "この会議には参加できません",
+      "description": "ホストによって削除されました。"
+    },
+    "room_full": {
+      "title": "会議は満員です",
+      "description": "誰かが退出したら、もう一度お試しください。"
+    },
+    "video_unavailable": {
+      "title": "現在、通話は利用できません",
+      "description": "1分後にもう一度お試しください。"
+    },
+    "rate_limited": {
+      "title": "試行回数が多すぎます",
+      "description": "1分待ってから、もう一度お試しください。"
+    },
+    "unknown": {
+      "title": "会議に参加できませんでした",
+      "description": "接続を確認して、もう一度お試しください。"
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "会議から退出しました",
+      "description": "会議が続いている間は再参加できます。"
+    },
+    "ended": {
+      "title": "会議は終了しました",
+      "description": "Leo のノートは準備ができたらノートに表示されます。"
+    },
+    "removed": {
+      "title": "会議から削除されました",
+      "description": "ホストによって削除されました。再参加はできません。"
+    },
+    "lost": {
+      "title": "接続が切れました",
+      "description": "接続を確認して再参加してください。"
+    }
+  }
+}

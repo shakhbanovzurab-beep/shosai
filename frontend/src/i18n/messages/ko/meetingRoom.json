@@ -1,0 +1,158 @@
+{
+  "metaTitle": "회의",
+  "untitled": "회의",
+  "marks": {
+    "label": "이 회의에서",
+    "notes": "Leo가 노트를 작성하는 중",
+    "recording": "녹화 중"
+  },
+  "preview": {
+    "asking": "다른 사람이 나를 보고 들을 수 있도록 카메라와 마이크를 허용해 주세요.",
+    "cameraOff": "카메라가 꺼져 있어요.",
+    "blocked": "브라우저가 카메라와 마이크를 차단했어요. 사이트 설정에서 허용한 후 다시 시도해 주세요.",
+    "none": "카메라나 마이크를 찾을 수 없어요. 듣기와 채팅만으로도 참여할 수 있어요.",
+    "retry": "다시 시도"
+  },
+  "devices": {
+    "open": "기기",
+    "audio": "마이크",
+    "video": "카메라",
+    "unnamed": "기기 {index, number}"
+  },
+  "join": {
+    "loading": "회의를 준비하는 중…",
+    "ready": "참여할 준비가 되셨나요?",
+    "notesHint": "Leo는 회의 소유자를 위해 노트를 작성해요. 회의의 모든 참석자에게 표시돼요.",
+    "enter": "지금 참여",
+    "nameTitle": "이름이 무엇인가요?",
+    "nameLabel": "이름",
+    "nameHint": "회의의 다른 참석자에게 이 이름이 표시돼요.",
+    "continue": "계속"
+  },
+  "controls": {
+    "label": "회의 제어",
+    "mic": "마이크",
+    "camera": "카메라",
+    "screen": "화면 공유",
+    "hand": "손 들기",
+    "react": "반응",
+    "chat": "채팅",
+    "unread": "{count, plural, other {읽지 않은 메시지 #개}}",
+    "people": "참석자"
+  },
+  "reactions": {
+    "thumbsUp": "좋아요",
+    "heart": "하트",
+    "laugh": "웃음",
+    "party": "축하",
+    "clap": "박수",
+    "wow": "놀람",
+    "limited": "반응이 너무 많아요. 몇 초 기다려 주세요."
+  },
+  "header": {
+    "people": "{count, plural, other {참석자 #명}}"
+  },
+  "stage": {
+    "others": "{count, plural, other {외 #명}}"
+  },
+  "panel": {
+    "chat": "채팅",
+    "people": "참석자",
+    "close": "닫기"
+  },
+  "chat": {
+    "label": "메시지",
+    "empty": "아직 메시지가 없어요.",
+    "you": "나",
+    "placeholder": "모두에게 메시지",
+    "send": "보내기",
+    "sendFailed": "메시지를 보내지 못했어요. 다시 시도해 주세요.",
+    "keptWithNotes": "메시지는 회의 노트와 함께 보관돼요.",
+    "goneAtEnd": "회의가 끝나면 메시지가 사라져요."
+  },
+  "people": {
+    "you": "{name}(나)",
+    "host": "호스트",
+    "muted": "마이크 꺼짐",
+    "handRaised": "손 듦",
+    "lowerHand": "손 내리기",
+    "pin": "{name} 고정",
+    "unpin": "{name} 고정 해제",
+    "hands": "{count, plural, other {손 든 사람 #명}}",
+    "everyone": "{count, plural, other {회의에 #명}}",
+    "remove": "{name} 내보내기",
+    "removeTitle": "{name}님을 내보낼까요?",
+    "removeDescription": "모든 기기에서 회의를 나가며 이 회의에 다시 참여할 수 없어요.",
+    "removeConfirm": "내보내기"
+  },
+  "invite": {
+    "open": "초대",
+    "title": "사람 초대",
+    "description": "이 링크가 있는 사람은 누구나 회의에 참여할 수 있어요.",
+    "link": "회의 링크",
+    "copy": "복사",
+    "copied": "링크를 복사했어요"
+  },
+  "leave": {
+    "leave": "나가기",
+    "more": "다른 나가기 방법",
+    "endForAll": "모두에게 종료",
+    "confirmTitle": "모두에게 회의를 종료할까요?",
+    "confirmDescription": "모두 나가고 링크는 더 이상 작동하지 않아요."
+  },
+  "states": {
+    "connecting": "참여하는 중…",
+    "reconnecting": "연결이 끊겼어요. 다시 연결하는 중…",
+    "retry": "다시 시도",
+    "rejoin": "다시 참여",
+    "toMeetings": "회의로 이동"
+  },
+  "problems": {
+    "not_found": {
+      "title": "회의를 찾을 수 없어요",
+      "description": "링크를 보낸 사람에게 확인해 주세요."
+    },
+    "room_finished": {
+      "title": "이 회의는 종료되었어요",
+      "description": "링크가 더 이상 작동하지 않아요."
+    },
+    "removed": {
+      "title": "이 회의에 참여할 수 없어요",
+      "description": "호스트가 나를 내보냈어요."
+    },
+    "room_full": {
+      "title": "회의 인원이 가득 찼어요",
+      "description": "누군가 나가면 다시 시도해 주세요."
+    },
+    "video_unavailable": {
+      "title": "지금은 통화를 사용할 수 없어요",
+      "description": "1분 후에 다시 시도해 주세요."
+    },
+    "rate_limited": {
+      "title": "시도 횟수가 너무 많아요",
+      "description": "1분 기다린 후 다시 시도해 주세요."
+    },
+    "unknown": {
+      "title": "회의에 참여하지 못했어요",
+      "description": "연결을 확인하고 다시 시도해 주세요."
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "회의에서 나갔어요",
+      "description": "회의가 진행 중인 동안 다시 참여할 수 있어요."
+    },
+    "ended": {
+      "title": "회의가 종료되었어요",
+      "description": "Leo의 노트가 준비되면 노트에 표시돼요."
+    },
+    "removed": {
+      "title": "회의에서 내보내졌어요",
+      "description": "호스트가 나를 내보냈어요. 다시 참여할 수 없어요."
+    },
+    "lost": {
+      "title": "연결이 끊겼어요",
+      "description": "연결을 확인하고 다시 참여해 주세요."
+    }
+  }
+}

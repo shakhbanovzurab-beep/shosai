@@ -1,0 +1,158 @@
+{
+  "metaTitle": "Meeting",
+  "untitled": "Meeting",
+  "marks": {
+    "label": "In this meeting",
+    "notes": "Leo is taking notes",
+    "recording": "Recording"
+  },
+  "preview": {
+    "asking": "Allow your camera and microphone so others can see and hear you.",
+    "cameraOff": "Your camera is off.",
+    "blocked": "Your browser blocked the camera and microphone. Allow them in the site settings, then try again.",
+    "none": "No camera or microphone found. You can still join to listen and chat.",
+    "retry": "Try again"
+  },
+  "devices": {
+    "open": "Devices",
+    "audio": "Microphone",
+    "video": "Camera",
+    "unnamed": "Device {index, number}"
+  },
+  "join": {
+    "loading": "Getting the meeting ready…",
+    "ready": "Ready to join?",
+    "notesHint": "Leo writes notes for the meeting’s owner. Everyone in the meeting sees this.",
+    "enter": "Join now",
+    "nameTitle": "What’s your name?",
+    "nameLabel": "Your name",
+    "nameHint": "Others in the meeting see this name.",
+    "continue": "Continue"
+  },
+  "controls": {
+    "label": "Meeting controls",
+    "mic": "Microphone",
+    "camera": "Camera",
+    "screen": "Share screen",
+    "hand": "Raise hand",
+    "react": "Reactions",
+    "chat": "Chat",
+    "unread": "{count, plural, one {# unread message} other {# unread messages}}",
+    "people": "Participants"
+  },
+  "reactions": {
+    "thumbsUp": "Thumbs up",
+    "heart": "Heart",
+    "laugh": "Laugh",
+    "party": "Celebrate",
+    "clap": "Applause",
+    "wow": "Wow",
+    "limited": "Too many reactions. Wait a few seconds."
+  },
+  "header": {
+    "people": "{count, plural, one {# participant} other {# participants}}"
+  },
+  "stage": {
+    "others": "{count, plural, one {# more} other {# more}}"
+  },
+  "panel": {
+    "chat": "Chat",
+    "people": "Participants",
+    "close": "Close"
+  },
+  "chat": {
+    "label": "Messages",
+    "empty": "No messages yet.",
+    "you": "You",
+    "placeholder": "Message everyone",
+    "send": "Send",
+    "sendFailed": "Couldn’t send the message. Try again.",
+    "keptWithNotes": "Messages are kept with the meeting’s notes.",
+    "goneAtEnd": "Messages disappear when the meeting ends."
+  },
+  "people": {
+    "you": "{name} (you)",
+    "host": "Host",
+    "muted": "Microphone off",
+    "handRaised": "Hand raised",
+    "lowerHand": "Lower hand",
+    "pin": "Pin {name}",
+    "unpin": "Unpin {name}",
+    "hands": "{count, plural, one {# raised hand} other {# raised hands}}",
+    "everyone": "{count, plural, one {# in the meeting} other {# in the meeting}}",
+    "remove": "Remove {name}",
+    "removeTitle": "Remove {name}?",
+    "removeDescription": "They leave on every device and can’t rejoin this meeting.",
+    "removeConfirm": "Remove"
+  },
+  "invite": {
+    "open": "Invite",
+    "title": "Invite people",
+    "description": "Anyone with this link can join the meeting.",
+    "link": "Meeting link",
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "leave": {
+    "leave": "Leave",
+    "more": "More ways to leave",
+    "endForAll": "End for everyone",
+    "confirmTitle": "End the meeting for everyone?",
+    "confirmDescription": "Everyone leaves and the link stops working."
+  },
+  "states": {
+    "connecting": "Joining…",
+    "reconnecting": "Connection lost. Reconnecting…",
+    "retry": "Try again",
+    "rejoin": "Rejoin",
+    "toMeetings": "Go to Meetings"
+  },
+  "problems": {
+    "not_found": {
+      "title": "Meeting not found",
+      "description": "Check the link with the person who sent it."
+    },
+    "room_finished": {
+      "title": "This meeting has ended",
+      "description": "The link no longer works."
+    },
+    "removed": {
+      "title": "You can’t join this meeting",
+      "description": "The host removed you from it."
+    },
+    "room_full": {
+      "title": "The meeting is full",
+      "description": "Try again when someone leaves."
+    },
+    "video_unavailable": {
+      "title": "Calls aren’t available right now",
+      "description": "Try again in a minute."
+    },
+    "rate_limited": {
+      "title": "Too many attempts",
+      "description": "Wait a minute, then try again."
+    },
+    "unknown": {
+      "title": "Couldn’t join the meeting",
+      "description": "Check your connection and try again."
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "You left the meeting",
+      "description": "You can rejoin while it’s going on."
+    },
+    "ended": {
+      "title": "The meeting has ended",
+      "description": "Leo’s notes appear in Notes when they’re ready."
+    },
+    "removed": {
+      "title": "You were removed from the meeting",
+      "description": "The host removed you. You can’t rejoin it."
+    },
+    "lost": {
+      "title": "Connection lost",
+      "description": "Check your connection and rejoin."
+    }
+  }
+}

@@ -32,6 +32,8 @@ export const standaloneRoutes: RouteObject[] = [
     ],
   },
   { path: "/oauth/callback", ...page(() => import("../pages/standalone/oauth-callback")) },
+  // Комната встречи: войти может и гость по ссылке, поэтому вне охраны панели (meetings A9).
+  { path: "/app/meet/:token", ...page(() => import("../pages/standalone/meet")) },
   { path: "/unauthorized", ...page(() => import("../pages/standalone/unauthorized")) },
   // Вход в админку — по адресу из сборки (ADR 0049); без него маршрута нет.
   ...(ADMIN_LOGIN_PATH

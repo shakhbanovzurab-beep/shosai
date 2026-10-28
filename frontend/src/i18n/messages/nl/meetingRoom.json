@@ -1,0 +1,158 @@
+{
+  "metaTitle": "Vergadering",
+  "untitled": "Vergadering",
+  "marks": {
+    "label": "In deze vergadering",
+    "notes": "Leo maakt notities",
+    "recording": "Opname loopt"
+  },
+  "preview": {
+    "asking": "Sta je camera en microfoon toe, zodat anderen je zien en horen.",
+    "cameraOff": "Je camera staat uit.",
+    "blocked": "Je browser heeft camera en microfoon geblokkeerd. Sta ze toe in de site-instellingen en probeer het opnieuw.",
+    "none": "Geen camera of microfoon gevonden. Je kunt toch deelnemen om te luisteren en te chatten.",
+    "retry": "Opnieuw proberen"
+  },
+  "devices": {
+    "open": "Apparaten",
+    "audio": "Microfoon",
+    "video": "Camera",
+    "unnamed": "Apparaat {index, number}"
+  },
+  "join": {
+    "loading": "Vergadering wordt voorbereid…",
+    "ready": "Klaar om deel te nemen?",
+    "notesHint": "Leo schrijft notities voor de eigenaar van de vergadering. Iedereen in de vergadering ziet dit.",
+    "enter": "Nu deelnemen",
+    "nameTitle": "Hoe heet je?",
+    "nameLabel": "Je naam",
+    "nameHint": "Andere deelnemers zien deze naam.",
+    "continue": "Doorgaan"
+  },
+  "controls": {
+    "label": "Bediening van de vergadering",
+    "mic": "Microfoon",
+    "camera": "Camera",
+    "screen": "Scherm delen",
+    "hand": "Hand opsteken",
+    "react": "Reacties",
+    "chat": "Chat",
+    "unread": "{count, plural, one {# ongelezen bericht} other {# ongelezen berichten}}",
+    "people": "Deelnemers"
+  },
+  "reactions": {
+    "thumbsUp": "Duim omhoog",
+    "heart": "Hart",
+    "laugh": "Lachen",
+    "party": "Feest",
+    "clap": "Applaus",
+    "wow": "Verbazing",
+    "limited": "Te veel reacties. Wacht een paar seconden."
+  },
+  "header": {
+    "people": "{count, plural, one {# deelnemer} other {# deelnemers}}"
+  },
+  "stage": {
+    "others": "{count, plural, one {nog #} other {nog #}}"
+  },
+  "panel": {
+    "chat": "Chat",
+    "people": "Deelnemers",
+    "close": "Sluiten"
+  },
+  "chat": {
+    "label": "Berichten",
+    "empty": "Nog geen berichten.",
+    "you": "Jij",
+    "placeholder": "Bericht aan iedereen",
+    "send": "Versturen",
+    "sendFailed": "Het bericht kon niet worden verstuurd. Probeer het opnieuw.",
+    "keptWithNotes": "Berichten worden bewaard bij de notities van de vergadering.",
+    "goneAtEnd": "Berichten verdwijnen als de vergadering eindigt."
+  },
+  "people": {
+    "you": "{name} (jij)",
+    "host": "Organisator",
+    "muted": "Microfoon uit",
+    "handRaised": "Hand opgestoken",
+    "lowerHand": "Hand laten zakken",
+    "pin": "{name} vastzetten",
+    "unpin": "{name} losmaken",
+    "hands": "{count, plural, one {# opgestoken hand} other {# opgestoken handen}}",
+    "everyone": "{count, plural, one {# in de vergadering} other {# in de vergadering}}",
+    "remove": "{name} verwijderen",
+    "removeTitle": "{name} verwijderen?",
+    "removeDescription": "Deze persoon verlaat de vergadering op alle apparaten en kan niet terugkomen.",
+    "removeConfirm": "Verwijderen"
+  },
+  "invite": {
+    "open": "Uitnodigen",
+    "title": "Mensen uitnodigen",
+    "description": "Iedereen met deze link kan deelnemen aan de vergadering.",
+    "link": "Link naar de vergadering",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd"
+  },
+  "leave": {
+    "leave": "Verlaten",
+    "more": "Meer manieren om te verlaten",
+    "endForAll": "Beëindigen voor iedereen",
+    "confirmTitle": "Vergadering beëindigen voor iedereen?",
+    "confirmDescription": "Iedereen verlaat de vergadering en de link werkt niet meer."
+  },
+  "states": {
+    "connecting": "Deelnemen…",
+    "reconnecting": "Verbinding verbroken. Opnieuw verbinden…",
+    "retry": "Opnieuw proberen",
+    "rejoin": "Opnieuw deelnemen",
+    "toMeetings": "Naar Vergaderingen"
+  },
+  "problems": {
+    "not_found": {
+      "title": "Vergadering niet gevonden",
+      "description": "Controleer de link bij degene die hem stuurde."
+    },
+    "room_finished": {
+      "title": "Deze vergadering is afgelopen",
+      "description": "De link werkt niet meer."
+    },
+    "removed": {
+      "title": "Je kunt niet deelnemen aan deze vergadering",
+      "description": "De organisator heeft je verwijderd."
+    },
+    "room_full": {
+      "title": "De vergadering is vol",
+      "description": "Probeer het opnieuw als iemand vertrekt."
+    },
+    "video_unavailable": {
+      "title": "Gesprekken zijn nu niet beschikbaar",
+      "description": "Probeer het over een minuut opnieuw."
+    },
+    "rate_limited": {
+      "title": "Te veel pogingen",
+      "description": "Wacht een minuut en probeer het opnieuw."
+    },
+    "unknown": {
+      "title": "Deelnemen is niet gelukt",
+      "description": "Controleer je verbinding en probeer het opnieuw."
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "Je hebt de vergadering verlaten",
+      "description": "Je kunt opnieuw deelnemen zolang hij bezig is."
+    },
+    "ended": {
+      "title": "De vergadering is afgelopen",
+      "description": "De notities van Leo verschijnen in Notities zodra ze klaar zijn."
+    },
+    "removed": {
+      "title": "Je bent uit de vergadering verwijderd",
+      "description": "De organisator heeft je verwijderd. Je kunt niet opnieuw deelnemen."
+    },
+    "lost": {
+      "title": "Verbinding verloren",
+      "description": "Controleer je verbinding en neem opnieuw deel."
+    }
+  }
+}

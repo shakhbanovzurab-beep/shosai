@@ -5,6 +5,7 @@
   "loadFailedHint": "請檢查網路連線，然後再試一次。",
   "newMeeting": "新會議",
   "actions": {
+    "startNow": "立即開始",
     "schedule": "在行事曆中安排",
     "upload": "上傳錄製內容"
   },
@@ -60,5 +61,6 @@
       "title": "還沒有過去的會議",
       "description": "已錄製的會議會連同 Leo 的摘要、任務和決策顯示在這裡。"
     }
-  }
+  },
+  "startFailed": "無法開始會議，請再試一次。"
 }

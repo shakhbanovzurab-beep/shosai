@@ -1,0 +1,158 @@
+{
+  "metaTitle": "Reunión",
+  "untitled": "Reunión",
+  "marks": {
+    "label": "En esta reunión",
+    "notes": "Leo está tomando notas",
+    "recording": "Grabando"
+  },
+  "preview": {
+    "asking": "Permite la cámara y el micrófono para que los demás te vean y te oigan.",
+    "cameraOff": "Tu cámara está apagada.",
+    "blocked": "Tu navegador bloqueó la cámara y el micrófono. Permítelos en la configuración del sitio e inténtalo de nuevo.",
+    "none": "No se encontró cámara ni micrófono. Puedes unirte igualmente para escuchar y chatear.",
+    "retry": "Reintentar"
+  },
+  "devices": {
+    "open": "Dispositivos",
+    "audio": "Micrófono",
+    "video": "Cámara",
+    "unnamed": "Dispositivo {index, number}"
+  },
+  "join": {
+    "loading": "Preparando la reunión…",
+    "ready": "¿Listo para unirte?",
+    "notesHint": "Leo escribe notas para el propietario de la reunión. Todos los participantes lo ven.",
+    "enter": "Unirse ahora",
+    "nameTitle": "¿Cómo te llamas?",
+    "nameLabel": "Tu nombre",
+    "nameHint": "Los demás participantes verán este nombre.",
+    "continue": "Continuar"
+  },
+  "controls": {
+    "label": "Controles de la reunión",
+    "mic": "Micrófono",
+    "camera": "Cámara",
+    "screen": "Compartir pantalla",
+    "hand": "Levantar la mano",
+    "react": "Reacciones",
+    "chat": "Chat",
+    "unread": "{count, plural, one {# mensaje sin leer} many {# mensajes sin leer} other {# mensajes sin leer}}",
+    "people": "Participantes"
+  },
+  "reactions": {
+    "thumbsUp": "Me gusta",
+    "heart": "Corazón",
+    "laugh": "Risa",
+    "party": "Celebrar",
+    "clap": "Aplausos",
+    "wow": "Asombro",
+    "limited": "Demasiadas reacciones. Espera unos segundos."
+  },
+  "header": {
+    "people": "{count, plural, one {# participante} many {# participantes} other {# participantes}}"
+  },
+  "stage": {
+    "others": "{count, plural, one {# más} many {# más} other {# más}}"
+  },
+  "panel": {
+    "chat": "Chat",
+    "people": "Participantes",
+    "close": "Cerrar"
+  },
+  "chat": {
+    "label": "Mensajes",
+    "empty": "Aún no hay mensajes.",
+    "you": "Tú",
+    "placeholder": "Mensaje para todos",
+    "send": "Enviar",
+    "sendFailed": "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+    "keptWithNotes": "Los mensajes se guardan con las notas de la reunión.",
+    "goneAtEnd": "Los mensajes desaparecen cuando termina la reunión."
+  },
+  "people": {
+    "you": "{name} (tú)",
+    "host": "Anfitrión",
+    "muted": "Micrófono apagado",
+    "handRaised": "Mano levantada",
+    "lowerHand": "Bajar la mano",
+    "pin": "Fijar a {name}",
+    "unpin": "Dejar de fijar a {name}",
+    "hands": "{count, plural, one {# mano levantada} many {# manos levantadas} other {# manos levantadas}}",
+    "everyone": "{count, plural, one {# en la reunión} many {# en la reunión} other {# en la reunión}}",
+    "remove": "Quitar a {name}",
+    "removeTitle": "¿Quitar a {name}?",
+    "removeDescription": "Sale en todos sus dispositivos y no puede volver a esta reunión.",
+    "removeConfirm": "Quitar"
+  },
+  "invite": {
+    "open": "Invitar",
+    "title": "Invitar a personas",
+    "description": "Cualquiera con este enlace puede unirse a la reunión.",
+    "link": "Enlace de la reunión",
+    "copy": "Copiar",
+    "copied": "Copiado"
+  },
+  "leave": {
+    "leave": "Salir",
+    "more": "Más formas de salir",
+    "endForAll": "Terminar para todos",
+    "confirmTitle": "¿Terminar la reunión para todos?",
+    "confirmDescription": "Todos salen y el enlace deja de funcionar."
+  },
+  "states": {
+    "connecting": "Uniéndote…",
+    "reconnecting": "Se perdió la conexión. Reconectando…",
+    "retry": "Reintentar",
+    "rejoin": "Volver a unirse",
+    "toMeetings": "Ir a Reuniones"
+  },
+  "problems": {
+    "not_found": {
+      "title": "No se encontró la reunión",
+      "description": "Confirma el enlace con quien te lo envió."
+    },
+    "room_finished": {
+      "title": "Esta reunión ha terminado",
+      "description": "El enlace ya no funciona."
+    },
+    "removed": {
+      "title": "No puedes unirte a esta reunión",
+      "description": "El anfitrión te quitó de ella."
+    },
+    "room_full": {
+      "title": "La reunión está llena",
+      "description": "Inténtalo de nuevo cuando alguien salga."
+    },
+    "video_unavailable": {
+      "title": "Las llamadas no están disponibles ahora",
+      "description": "Inténtalo de nuevo en un minuto."
+    },
+    "rate_limited": {
+      "title": "Demasiados intentos",
+      "description": "Espera un minuto e inténtalo de nuevo."
+    },
+    "unknown": {
+      "title": "No se pudo unir a la reunión",
+      "description": "Revisa tu conexión e inténtalo de nuevo."
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "Saliste de la reunión",
+      "description": "Puedes volver a unirte mientras sigue en curso."
+    },
+    "ended": {
+      "title": "La reunión ha terminado",
+      "description": "Las notas de Leo aparecerán en Notas cuando estén listas."
+    },
+    "removed": {
+      "title": "Te quitaron de la reunión",
+      "description": "El anfitrión te quitó. No puedes volver a unirte."
+    },
+    "lost": {
+      "title": "Se perdió la conexión",
+      "description": "Revisa tu conexión y vuelve a unirte."
+    }
+  }
+}

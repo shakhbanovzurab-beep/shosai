@@ -34,6 +34,14 @@ const scheduled = (now: Date): Draft[] => {
       joinUrl: "https://meet.google.com/whr-leob-eta",
       participants: people("Maya Chen", "Diego Alvarez", "Priya Nair", "Noah Kim", "Arham Khan"),
     }),
+    // Своя комната Shosai идёт сейчас: вход открывает её страницу в кабинете (meetings A9).
+    draft("m-shosai-standup", "Team standup", {
+      start: addMinutes(now, -6),
+      minutes: 20,
+      source: "shosai",
+      joinUrl: "/app/meet/team-standup",
+      participants: people("Elena Petrova", "Diego Alvarez", "Sofia Rossi"),
+    }),
     draft("m-design-review", "Design review: Meetings page", {
       start: addMinutes(liveStart, 90),
       minutes: 30,
@@ -45,7 +53,7 @@ const scheduled = (now: Date): Draft[] => {
       start: addMinutes(liveStart, 240),
       minutes: 60,
       source: "shosai",
-      joinUrl: "https://shosai.tech/room/fe-interview-7q2",
+      joinUrl: "/app/meet/fe-interview-7q2",
       participants: people("Noah Kim", "Arham Khan", "Elena Petrova"),
     }),
     draft("m-sprint-planning", "Sprint planning", {

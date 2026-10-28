@@ -1,0 +1,158 @@
+{
+  "metaTitle": "Toplantı",
+  "untitled": "Toplantı",
+  "marks": {
+    "label": "Bu toplantıda",
+    "notes": "Leo not alıyor",
+    "recording": "Kayıt yapılıyor"
+  },
+  "preview": {
+    "asking": "Başkalarının sizi görmesi ve duyması için kameraya ve mikrofona izin verin.",
+    "cameraOff": "Kameranız kapalı.",
+    "blocked": "Tarayıcınız kamerayı ve mikrofonu engelledi. Site ayarlarından izin verin ve tekrar deneyin.",
+    "none": "Kamera veya mikrofon bulunamadı. Yine de dinlemek ve sohbete yazmak için katılabilirsiniz.",
+    "retry": "Tekrar dene"
+  },
+  "devices": {
+    "open": "Cihazlar",
+    "audio": "Mikrofon",
+    "video": "Kamera",
+    "unnamed": "Cihaz {index, number}"
+  },
+  "join": {
+    "loading": "Toplantı hazırlanıyor…",
+    "ready": "Katılmaya hazır mısınız?",
+    "notesHint": "Leo toplantının sahibi için not yazıyor. Toplantıdaki herkes bunu görür.",
+    "enter": "Şimdi katıl",
+    "nameTitle": "Adınız nedir?",
+    "nameLabel": "Adınız",
+    "nameHint": "Toplantıdaki diğer kişiler bu adı görür.",
+    "continue": "Devam"
+  },
+  "controls": {
+    "label": "Toplantı denetimleri",
+    "mic": "Mikrofon",
+    "camera": "Kamera",
+    "screen": "Ekranı paylaş",
+    "hand": "El kaldır",
+    "react": "Tepkiler",
+    "chat": "Sohbet",
+    "unread": "{count, plural, one {# okunmamış mesaj} other {# okunmamış mesaj}}",
+    "people": "Katılımcılar"
+  },
+  "reactions": {
+    "thumbsUp": "Beğen",
+    "heart": "Kalp",
+    "laugh": "Kahkaha",
+    "party": "Kutlama",
+    "clap": "Alkış",
+    "wow": "Şaşkınlık",
+    "limited": "Çok fazla tepki. Birkaç saniye bekleyin."
+  },
+  "header": {
+    "people": "{count, plural, one {# katılımcı} other {# katılımcı}}"
+  },
+  "stage": {
+    "others": "{count, plural, one {# kişi daha} other {# kişi daha}}"
+  },
+  "panel": {
+    "chat": "Sohbet",
+    "people": "Katılımcılar",
+    "close": "Kapat"
+  },
+  "chat": {
+    "label": "Mesajlar",
+    "empty": "Henüz mesaj yok.",
+    "you": "Siz",
+    "placeholder": "Herkese mesaj",
+    "send": "Gönder",
+    "sendFailed": "Mesaj gönderilemedi. Tekrar deneyin.",
+    "keptWithNotes": "Mesajlar toplantının notlarıyla saklanır.",
+    "goneAtEnd": "Mesajlar toplantı bitince kaybolur."
+  },
+  "people": {
+    "you": "{name} (siz)",
+    "host": "Toplantı sahibi",
+    "muted": "Mikrofon kapalı",
+    "handRaised": "El kaldırdı",
+    "lowerHand": "Eli indir",
+    "pin": "{name} kişisini sabitle",
+    "unpin": "{name} kişisinin sabitlemesini kaldır",
+    "hands": "{count, plural, one {# kaldırılmış el} other {# kaldırılmış el}}",
+    "everyone": "{count, plural, one {toplantıda #} other {toplantıda #}}",
+    "remove": "{name} kişisini çıkar",
+    "removeTitle": "{name} çıkarılsın mı?",
+    "removeDescription": "Bu kişi tüm cihazlarında toplantıdan ayrılır ve bu toplantıya geri dönemez.",
+    "removeConfirm": "Çıkar"
+  },
+  "invite": {
+    "open": "Davet et",
+    "title": "Kişileri davet et",
+    "description": "Bu bağlantıya sahip herkes toplantıya katılabilir.",
+    "link": "Toplantı bağlantısı",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı"
+  },
+  "leave": {
+    "leave": "Ayrıl",
+    "more": "Ayrılmanın diğer yolları",
+    "endForAll": "Herkes için bitir",
+    "confirmTitle": "Toplantı herkes için bitirilsin mi?",
+    "confirmDescription": "Herkes ayrılır ve bağlantı çalışmaz hale gelir."
+  },
+  "states": {
+    "connecting": "Katılınıyor…",
+    "reconnecting": "Bağlantı koptu. Yeniden bağlanılıyor…",
+    "retry": "Tekrar dene",
+    "rejoin": "Yeniden katıl",
+    "toMeetings": "Toplantılara git"
+  },
+  "problems": {
+    "not_found": {
+      "title": "Toplantı bulunamadı",
+      "description": "Bağlantıyı gönderen kişiyle kontrol edin."
+    },
+    "room_finished": {
+      "title": "Bu toplantı sona erdi",
+      "description": "Bağlantı artık çalışmıyor."
+    },
+    "removed": {
+      "title": "Bu toplantıya katılamazsınız",
+      "description": "Toplantı sahibi sizi çıkardı."
+    },
+    "room_full": {
+      "title": "Toplantı dolu",
+      "description": "Biri ayrıldığında tekrar deneyin."
+    },
+    "video_unavailable": {
+      "title": "Aramalar şu anda kullanılamıyor",
+      "description": "Bir dakika sonra tekrar deneyin."
+    },
+    "rate_limited": {
+      "title": "Çok fazla deneme",
+      "description": "Bir dakika bekleyip tekrar deneyin."
+    },
+    "unknown": {
+      "title": "Toplantıya katılınamadı",
+      "description": "Bağlantınızı kontrol edip tekrar deneyin."
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "Toplantıdan ayrıldınız",
+      "description": "Toplantı sürerken yeniden katılabilirsiniz."
+    },
+    "ended": {
+      "title": "Toplantı sona erdi",
+      "description": "Leo’nun notları hazır olduğunda Notlar’da görünür."
+    },
+    "removed": {
+      "title": "Toplantıdan çıkarıldınız",
+      "description": "Toplantı sahibi sizi çıkardı. Yeniden katılamazsınız."
+    },
+    "lost": {
+      "title": "Bağlantı kesildi",
+      "description": "Bağlantınızı kontrol edip yeniden katılın."
+    }
+  }
+}

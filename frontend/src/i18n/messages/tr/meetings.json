@@ -5,6 +5,7 @@
   "loadFailedHint": "Bağlantınızı kontrol edip tekrar deneyin.",
   "newMeeting": "Yeni toplantı",
   "actions": {
+    "startNow": "Şimdi başlat",
     "schedule": "Takvim’de planla",
     "upload": "Kayıt yükle"
   },
@@ -60,5 +61,6 @@
       "title": "Henüz geçmiş toplantı yok",
       "description": "Kaydedilen toplantılar Leo’nun özeti, görevleri ve kararlarıyla birlikte burada görünür."
     }
-  }
+  },
+  "startFailed": "Toplantı başlatılamadı. Tekrar deneyin."
 }

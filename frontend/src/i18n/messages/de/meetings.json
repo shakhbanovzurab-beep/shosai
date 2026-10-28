@@ -5,6 +5,7 @@
   "loadFailedHint": "Prüfe deine Verbindung und versuche es erneut.",
   "newMeeting": "Neues Meeting",
   "actions": {
+    "startNow": "Jetzt starten",
     "schedule": "Im Kalender planen",
     "upload": "Aufnahme hochladen"
   },
@@ -60,5 +61,6 @@
       "title": "Noch keine vergangenen Meetings",
       "description": "Aufgenommene Meetings erscheinen hier mit der Zusammenfassung, den Aufgaben und Entscheidungen von Leo."
     }
-  }
+  },
+  "startFailed": "Das Meeting konnte nicht gestartet werden. Versuche es erneut."
 }

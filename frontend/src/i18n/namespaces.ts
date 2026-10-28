@@ -43,6 +43,7 @@ export const NAMESPACES = [
   "mail",
   "mailLeo",
   "memory",
+  "meetingRoom",
   "meetings",
   "notes",
   "notesNote",

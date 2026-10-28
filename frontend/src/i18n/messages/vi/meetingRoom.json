@@ -1,0 +1,158 @@
+{
+  "metaTitle": "Cuộc họp",
+  "untitled": "Cuộc họp",
+  "marks": {
+    "label": "Trong cuộc họp này",
+    "notes": "Leo đang ghi chú",
+    "recording": "Đang ghi"
+  },
+  "preview": {
+    "asking": "Hãy cho phép camera và micrô để mọi người thấy và nghe bạn.",
+    "cameraOff": "Camera của bạn đang tắt.",
+    "blocked": "Trình duyệt đã chặn camera và micrô. Hãy cho phép trong cài đặt trang web rồi thử lại.",
+    "none": "Không tìm thấy camera hoặc micrô. Bạn vẫn có thể tham gia để nghe và nhắn tin.",
+    "retry": "Thử lại"
+  },
+  "devices": {
+    "open": "Thiết bị",
+    "audio": "Micrô",
+    "video": "Camera",
+    "unnamed": "Thiết bị {index, number}"
+  },
+  "join": {
+    "loading": "Đang chuẩn bị cuộc họp…",
+    "ready": "Sẵn sàng tham gia?",
+    "notesHint": "Leo ghi chú cho chủ sở hữu cuộc họp. Mọi người trong cuộc họp đều thấy điều này.",
+    "enter": "Tham gia ngay",
+    "nameTitle": "Bạn tên là gì?",
+    "nameLabel": "Tên của bạn",
+    "nameHint": "Những người khác trong cuộc họp sẽ thấy tên này.",
+    "continue": "Tiếp tục"
+  },
+  "controls": {
+    "label": "Điều khiển cuộc họp",
+    "mic": "Micrô",
+    "camera": "Camera",
+    "screen": "Chia sẻ màn hình",
+    "hand": "Giơ tay",
+    "react": "Biểu cảm",
+    "chat": "Cuộc trò chuyện",
+    "unread": "{count, plural, other {# tin nhắn chưa đọc}}",
+    "people": "Người tham gia"
+  },
+  "reactions": {
+    "thumbsUp": "Thích",
+    "heart": "Trái tim",
+    "laugh": "Cười",
+    "party": "Ăn mừng",
+    "clap": "Vỗ tay",
+    "wow": "Ngạc nhiên",
+    "limited": "Quá nhiều biểu cảm. Hãy đợi vài giây."
+  },
+  "header": {
+    "people": "{count, plural, other {# người tham gia}}"
+  },
+  "stage": {
+    "others": "{count, plural, other {thêm #}}"
+  },
+  "panel": {
+    "chat": "Cuộc trò chuyện",
+    "people": "Người tham gia",
+    "close": "Đóng"
+  },
+  "chat": {
+    "label": "Tin nhắn",
+    "empty": "Chưa có tin nhắn.",
+    "you": "Bạn",
+    "placeholder": "Nhắn cho mọi người",
+    "send": "Gửi",
+    "sendFailed": "Không gửi được tin nhắn. Hãy thử lại.",
+    "keptWithNotes": "Tin nhắn được lưu cùng ghi chú của cuộc họp.",
+    "goneAtEnd": "Tin nhắn sẽ biến mất khi cuộc họp kết thúc."
+  },
+  "people": {
+    "you": "{name} (bạn)",
+    "host": "Người chủ trì",
+    "muted": "Micrô đang tắt",
+    "handRaised": "Đang giơ tay",
+    "lowerHand": "Hạ tay",
+    "pin": "Ghim {name}",
+    "unpin": "Bỏ ghim {name}",
+    "hands": "{count, plural, other {# người giơ tay}}",
+    "everyone": "{count, plural, other {# người trong cuộc họp}}",
+    "remove": "Xóa {name}",
+    "removeTitle": "Xóa {name}?",
+    "removeDescription": "Người này rời cuộc họp trên mọi thiết bị và không thể tham gia lại.",
+    "removeConfirm": "Xóa"
+  },
+  "invite": {
+    "open": "Mời",
+    "title": "Mời mọi người",
+    "description": "Bất kỳ ai có liên kết này đều có thể tham gia cuộc họp.",
+    "link": "Liên kết cuộc họp",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép"
+  },
+  "leave": {
+    "leave": "Rời đi",
+    "more": "Cách rời khác",
+    "endForAll": "Kết thúc cho mọi người",
+    "confirmTitle": "Kết thúc cuộc họp cho mọi người?",
+    "confirmDescription": "Mọi người sẽ rời đi và liên kết không còn hoạt động."
+  },
+  "states": {
+    "connecting": "Đang tham gia…",
+    "reconnecting": "Mất kết nối. Đang kết nối lại…",
+    "retry": "Thử lại",
+    "rejoin": "Tham gia lại",
+    "toMeetings": "Đến Cuộc họp"
+  },
+  "problems": {
+    "not_found": {
+      "title": "Không tìm thấy cuộc họp",
+      "description": "Hãy kiểm tra liên kết với người đã gửi."
+    },
+    "room_finished": {
+      "title": "Cuộc họp này đã kết thúc",
+      "description": "Liên kết không còn hoạt động."
+    },
+    "removed": {
+      "title": "Bạn không thể tham gia cuộc họp này",
+      "description": "Người chủ trì đã xóa bạn."
+    },
+    "room_full": {
+      "title": "Cuộc họp đã đủ người",
+      "description": "Hãy thử lại khi có người rời đi."
+    },
+    "video_unavailable": {
+      "title": "Hiện không thể gọi",
+      "description": "Hãy thử lại sau một phút."
+    },
+    "rate_limited": {
+      "title": "Quá nhiều lần thử",
+      "description": "Hãy đợi một phút rồi thử lại."
+    },
+    "unknown": {
+      "title": "Không thể tham gia cuộc họp",
+      "description": "Hãy kiểm tra kết nối và thử lại."
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "Bạn đã rời cuộc họp",
+      "description": "Bạn có thể tham gia lại khi cuộc họp còn diễn ra."
+    },
+    "ended": {
+      "title": "Cuộc họp đã kết thúc",
+      "description": "Ghi chú của Leo sẽ xuất hiện trong Ghi chú khi sẵn sàng."
+    },
+    "removed": {
+      "title": "Bạn đã bị xóa khỏi cuộc họp",
+      "description": "Người chủ trì đã xóa bạn. Bạn không thể tham gia lại."
+    },
+    "lost": {
+      "title": "Mất kết nối",
+      "description": "Hãy kiểm tra kết nối và tham gia lại."
+    }
+  }
+}

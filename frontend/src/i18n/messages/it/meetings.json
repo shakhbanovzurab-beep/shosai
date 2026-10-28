@@ -5,6 +5,7 @@
   "loadFailedHint": "Controlla la connessione e riprova.",
   "newMeeting": "Nuova riunione",
   "actions": {
+    "startNow": "Inizia ora",
     "schedule": "Pianifica in Calendario",
     "upload": "Carica una registrazione"
   },
@@ -60,5 +61,6 @@
       "title": "Ancora nessuna riunione passata",
       "description": "Qui compaiono le riunioni registrate con il riepilogo di Leo, le attività e le decisioni."
     }
-  }
+  },
+  "startFailed": "Impossibile iniziare la riunione. Riprova."
 }

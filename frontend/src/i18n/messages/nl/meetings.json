@@ -5,6 +5,7 @@
   "loadFailedHint": "Controleer je verbinding en probeer het opnieuw.",
   "newMeeting": "Nieuwe vergadering",
   "actions": {
+    "startNow": "Nu starten",
     "schedule": "Plannen in Agenda",
     "upload": "Opname uploaden"
   },
@@ -60,5 +61,6 @@
       "title": "Nog geen afgelopen vergaderingen",
       "description": "Opgenomen vergaderingen verschijnen hier met Leo’s samenvatting, taken en besluiten."
     }
-  }
+  },
+  "startFailed": "De vergadering kon niet worden gestart. Probeer het opnieuw."
 }

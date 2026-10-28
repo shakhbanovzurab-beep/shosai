@@ -1,0 +1,158 @@
+{
+  "metaTitle": "Riunione",
+  "untitled": "Riunione",
+  "marks": {
+    "label": "In questa riunione",
+    "notes": "Leo sta prendendo note",
+    "recording": "Registrazione in corso"
+  },
+  "preview": {
+    "asking": "Consenti fotocamera e microfono perché gli altri ti vedano e ti sentano.",
+    "cameraOff": "La tua fotocamera è spenta.",
+    "blocked": "Il browser ha bloccato fotocamera e microfono. Consentili nelle impostazioni del sito e riprova.",
+    "none": "Nessuna fotocamera o microfono trovati. Puoi comunque partecipare per ascoltare e scrivere in chat.",
+    "retry": "Riprova"
+  },
+  "devices": {
+    "open": "Dispositivi",
+    "audio": "Microfono",
+    "video": "Fotocamera",
+    "unnamed": "Dispositivo {index, number}"
+  },
+  "join": {
+    "loading": "Preparazione della riunione…",
+    "ready": "Pronto a partecipare?",
+    "notesHint": "Leo scrive note per il proprietario della riunione. Tutti i partecipanti lo vedono.",
+    "enter": "Partecipa ora",
+    "nameTitle": "Come ti chiami?",
+    "nameLabel": "Il tuo nome",
+    "nameHint": "Gli altri partecipanti vedranno questo nome.",
+    "continue": "Continua"
+  },
+  "controls": {
+    "label": "Controlli della riunione",
+    "mic": "Microfono",
+    "camera": "Fotocamera",
+    "screen": "Condividi schermo",
+    "hand": "Alza la mano",
+    "react": "Reazioni",
+    "chat": "Chat",
+    "unread": "{count, plural, one {# messaggio non letto} many {# messaggi non letti} other {# messaggi non letti}}",
+    "people": "Partecipanti"
+  },
+  "reactions": {
+    "thumbsUp": "Pollice in su",
+    "heart": "Cuore",
+    "laugh": "Risata",
+    "party": "Festa",
+    "clap": "Applausi",
+    "wow": "Stupore",
+    "limited": "Troppe reazioni. Attendi qualche secondo."
+  },
+  "header": {
+    "people": "{count, plural, one {# partecipante} many {# partecipanti} other {# partecipanti}}"
+  },
+  "stage": {
+    "others": "{count, plural, one {altri #} many {altri #} other {altri #}}"
+  },
+  "panel": {
+    "chat": "Chat",
+    "people": "Partecipanti",
+    "close": "Chiudi"
+  },
+  "chat": {
+    "label": "Messaggi",
+    "empty": "Ancora nessun messaggio.",
+    "you": "Tu",
+    "placeholder": "Messaggio a tutti",
+    "send": "Invia",
+    "sendFailed": "Impossibile inviare il messaggio. Riprova.",
+    "keptWithNotes": "I messaggi restano con le note della riunione.",
+    "goneAtEnd": "I messaggi spariscono al termine della riunione."
+  },
+  "people": {
+    "you": "{name} (tu)",
+    "host": "Organizzatore",
+    "muted": "Microfono spento",
+    "handRaised": "Mano alzata",
+    "lowerHand": "Abbassa la mano",
+    "pin": "Fissa {name}",
+    "unpin": "Sblocca {name}",
+    "hands": "{count, plural, one {# mano alzata} many {# mani alzate} other {# mani alzate}}",
+    "everyone": "{count, plural, one {# nella riunione} many {# nella riunione} other {# nella riunione}}",
+    "remove": "Rimuovi {name}",
+    "removeTitle": "Rimuovere {name}?",
+    "removeDescription": "Esce su tutti i dispositivi e non può rientrare in questa riunione.",
+    "removeConfirm": "Rimuovi"
+  },
+  "invite": {
+    "open": "Invita",
+    "title": "Invita persone",
+    "description": "Chiunque abbia questo link può partecipare alla riunione.",
+    "link": "Link della riunione",
+    "copy": "Copia",
+    "copied": "Copiato"
+  },
+  "leave": {
+    "leave": "Esci",
+    "more": "Altri modi per uscire",
+    "endForAll": "Termina per tutti",
+    "confirmTitle": "Terminare la riunione per tutti?",
+    "confirmDescription": "Escono tutti e il link smette di funzionare."
+  },
+  "states": {
+    "connecting": "Accesso in corso…",
+    "reconnecting": "Connessione persa. Riconnessione…",
+    "retry": "Riprova",
+    "rejoin": "Rientra",
+    "toMeetings": "Vai a Riunioni"
+  },
+  "problems": {
+    "not_found": {
+      "title": "Riunione non trovata",
+      "description": "Verifica il link con chi te l’ha inviato."
+    },
+    "room_finished": {
+      "title": "Questa riunione è terminata",
+      "description": "Il link non funziona più."
+    },
+    "removed": {
+      "title": "Non puoi partecipare a questa riunione",
+      "description": "L’organizzatore ti ha rimosso."
+    },
+    "room_full": {
+      "title": "La riunione è al completo",
+      "description": "Riprova quando qualcuno esce."
+    },
+    "video_unavailable": {
+      "title": "Le chiamate non sono disponibili ora",
+      "description": "Riprova tra un minuto."
+    },
+    "rate_limited": {
+      "title": "Troppi tentativi",
+      "description": "Attendi un minuto e riprova."
+    },
+    "unknown": {
+      "title": "Impossibile partecipare alla riunione",
+      "description": "Controlla la connessione e riprova."
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "Sei uscito dalla riunione",
+      "description": "Puoi rientrare finché è in corso."
+    },
+    "ended": {
+      "title": "La riunione è terminata",
+      "description": "Le note di Leo compariranno in Note quando saranno pronte."
+    },
+    "removed": {
+      "title": "Sei stato rimosso dalla riunione",
+      "description": "L’organizzatore ti ha rimosso. Non puoi rientrare."
+    },
+    "lost": {
+      "title": "Connessione persa",
+      "description": "Controlla la connessione e rientra."
+    }
+  }
+}

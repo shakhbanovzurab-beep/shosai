@@ -5,6 +5,7 @@
   "loadFailedHint": "Revisa tu conexión e inténtalo de nuevo.",
   "newMeeting": "Nueva reunión",
   "actions": {
+    "startNow": "Empezar ahora",
     "schedule": "Programar en Calendario",
     "upload": "Subir una grabación"
   },
@@ -60,5 +61,6 @@
       "title": "Aún no hay reuniones pasadas",
       "description": "Aquí aparecerán las reuniones grabadas con el resumen, las tareas y las decisiones de Leo."
     }
-  }
+  },
+  "startFailed": "No se pudo empezar la reunión. Inténtalo de nuevo."
 }

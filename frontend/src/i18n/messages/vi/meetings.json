@@ -5,6 +5,7 @@
   "loadFailedHint": "Hãy kiểm tra kết nối và thử lại.",
   "newMeeting": "Cuộc họp mới",
   "actions": {
+    "startNow": "Bắt đầu ngay",
     "schedule": "Lên lịch trong Lịch",
     "upload": "Tải bản ghi lên"
   },
@@ -60,5 +61,6 @@
       "title": "Chưa có cuộc họp nào đã qua",
       "description": "Các cuộc họp đã ghi sẽ xuất hiện ở đây cùng bản tóm tắt, công việc và quyết định từ Leo."
     }
-  }
+  },
+  "startFailed": "Không thể bắt đầu cuộc họp. Hãy thử lại."
 }

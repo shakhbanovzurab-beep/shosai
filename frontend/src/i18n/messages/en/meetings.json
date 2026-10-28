@@ -5,6 +5,7 @@
   "loadFailedHint": "Check your connection and try again.",
   "newMeeting": "New meeting",
   "actions": {
+    "startNow": "Start now",
     "schedule": "Schedule in Calendar",
     "upload": "Upload a recording"
   },
@@ -60,5 +61,6 @@
       "title": "No past meetings yet",
       "description": "Recorded meetings appear here with Leo’s summary, tasks and decisions."
     }
-  }
+  },
+  "startFailed": "Couldn’t start the meeting. Try again."
 }

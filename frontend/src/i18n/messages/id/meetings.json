@@ -5,6 +5,7 @@
   "loadFailedHint": "Periksa koneksi Anda dan coba lagi.",
   "newMeeting": "Rapat baru",
   "actions": {
+    "startNow": "Mulai sekarang",
     "schedule": "Jadwalkan di Kalender",
     "upload": "Unggah rekaman"
   },
@@ -60,5 +61,6 @@
       "title": "Belum ada rapat yang selesai",
       "description": "Rapat yang direkam muncul di sini beserta ringkasan, tugas, dan keputusan dari Leo."
     }
-  }
+  },
+  "startFailed": "Rapat tidak dapat dimulai. Coba lagi."
 }

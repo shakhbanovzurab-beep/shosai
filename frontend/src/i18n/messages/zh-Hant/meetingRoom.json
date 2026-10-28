@@ -1,0 +1,158 @@
+{
+  "metaTitle": "會議",
+  "untitled": "會議",
+  "marks": {
+    "label": "此會議中",
+    "notes": "Leo 正在做筆記",
+    "recording": "錄製中"
+  },
+  "preview": {
+    "asking": "請允許使用攝影機和麥克風，讓其他人看見並聽見你。",
+    "cameraOff": "你的攝影機已關閉。",
+    "blocked": "瀏覽器已封鎖攝影機和麥克風。請在網站設定中允許後再試一次。",
+    "none": "找不到攝影機或麥克風。你仍可加入會議收聽並傳送訊息。",
+    "retry": "再試一次"
+  },
+  "devices": {
+    "open": "裝置",
+    "audio": "麥克風",
+    "video": "攝影機",
+    "unnamed": "裝置 {index, number}"
+  },
+  "join": {
+    "loading": "正在準備會議…",
+    "ready": "準備好加入了嗎？",
+    "notesHint": "Leo 會為會議擁有者做筆記。會議中的所有人都會看到這項提示。",
+    "enter": "立即加入",
+    "nameTitle": "你叫什麼名字？",
+    "nameLabel": "你的名字",
+    "nameHint": "會議中的其他人會看到這個名字。",
+    "continue": "繼續"
+  },
+  "controls": {
+    "label": "會議控制項",
+    "mic": "麥克風",
+    "camera": "攝影機",
+    "screen": "分享畫面",
+    "hand": "舉手",
+    "react": "表情回應",
+    "chat": "對話",
+    "unread": "{count, plural, other {# 則未讀訊息}}",
+    "people": "參與者"
+  },
+  "reactions": {
+    "thumbsUp": "讚",
+    "heart": "愛心",
+    "laugh": "大笑",
+    "party": "慶祝",
+    "clap": "鼓掌",
+    "wow": "驚訝",
+    "limited": "表情回應太多了，請稍候幾秒。"
+  },
+  "header": {
+    "people": "{count, plural, other {# 位參與者}}"
+  },
+  "stage": {
+    "others": "{count, plural, other {另外 # 位}}"
+  },
+  "panel": {
+    "chat": "對話",
+    "people": "參與者",
+    "close": "關閉"
+  },
+  "chat": {
+    "label": "訊息",
+    "empty": "還沒有訊息。",
+    "you": "你",
+    "placeholder": "傳送訊息給所有人",
+    "send": "傳送",
+    "sendFailed": "無法傳送訊息，請再試一次。",
+    "keptWithNotes": "訊息會與會議筆記一起保存。",
+    "goneAtEnd": "會議結束時訊息會消失。"
+  },
+  "people": {
+    "you": "{name}（你）",
+    "host": "主持人",
+    "muted": "麥克風已關閉",
+    "handRaised": "已舉手",
+    "lowerHand": "放下手",
+    "pin": "釘選 {name}",
+    "unpin": "取消釘選 {name}",
+    "hands": "{count, plural, other {# 人舉手}}",
+    "everyone": "{count, plural, other {會議中有 # 人}}",
+    "remove": "移除 {name}",
+    "removeTitle": "要移除 {name} 嗎？",
+    "removeDescription": "對方會在所有裝置上離開會議，且無法再加入此會議。",
+    "removeConfirm": "移除"
+  },
+  "invite": {
+    "open": "邀請",
+    "title": "邀請其他人",
+    "description": "任何擁有此連結的人都能加入會議。",
+    "link": "會議連結",
+    "copy": "複製",
+    "copied": "已複製"
+  },
+  "leave": {
+    "leave": "離開",
+    "more": "其他離開方式",
+    "endForAll": "為所有人結束",
+    "confirmTitle": "要為所有人結束會議嗎？",
+    "confirmDescription": "所有人都會離開，連結也會失效。"
+  },
+  "states": {
+    "connecting": "正在加入…",
+    "reconnecting": "連線中斷，正在重新連線…",
+    "retry": "再試一次",
+    "rejoin": "重新加入",
+    "toMeetings": "前往會議"
+  },
+  "problems": {
+    "not_found": {
+      "title": "找不到會議",
+      "description": "請向傳送連結的人確認。"
+    },
+    "room_finished": {
+      "title": "此會議已結束",
+      "description": "此連結已失效。"
+    },
+    "removed": {
+      "title": "你無法加入此會議",
+      "description": "主持人已將你移除。"
+    },
+    "room_full": {
+      "title": "會議人數已滿",
+      "description": "有人離開時請再試一次。"
+    },
+    "video_unavailable": {
+      "title": "目前無法通話",
+      "description": "請一分鐘後再試一次。"
+    },
+    "rate_limited": {
+      "title": "嘗試次數過多",
+      "description": "請等一分鐘後再試一次。"
+    },
+    "unknown": {
+      "title": "無法加入會議",
+      "description": "請檢查連線後再試一次。"
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "你已離開會議",
+      "description": "會議進行期間可以重新加入。"
+    },
+    "ended": {
+      "title": "會議已結束",
+      "description": "Leo 的筆記準備好後會顯示在「筆記」中。"
+    },
+    "removed": {
+      "title": "你已被移出會議",
+      "description": "主持人已將你移除，無法再加入。"
+    },
+    "lost": {
+      "title": "連線中斷",
+      "description": "請檢查連線後重新加入。"
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "metaTitle": "Meeting",
+  "untitled": "Meeting",
+  "marks": {
+    "label": "In diesem Meeting",
+    "notes": "Leo macht Notizen",
+    "recording": "Aufnahme läuft"
+  },
+  "preview": {
+    "asking": "Erlaube Kamera und Mikrofon, damit andere dich sehen und hören.",
+    "cameraOff": "Deine Kamera ist aus.",
+    "blocked": "Dein Browser hat Kamera und Mikrofon blockiert. Erlaube sie in den Website-Einstellungen und versuche es erneut.",
+    "none": "Keine Kamera und kein Mikrofon gefunden. Du kannst trotzdem zuhören und chatten.",
+    "retry": "Erneut versuchen"
+  },
+  "devices": {
+    "open": "Geräte",
+    "audio": "Mikrofon",
+    "video": "Kamera",
+    "unnamed": "Gerät {index, number}"
+  },
+  "join": {
+    "loading": "Meeting wird vorbereitet…",
+    "ready": "Bereit zum Beitreten?",
+    "notesHint": "Leo schreibt Notizen für den Inhaber des Meetings. Alle im Meeting sehen das.",
+    "enter": "Jetzt beitreten",
+    "nameTitle": "Wie heißt du?",
+    "nameLabel": "Dein Name",
+    "nameHint": "Diesen Namen sehen die anderen im Meeting.",
+    "continue": "Weiter"
+  },
+  "controls": {
+    "label": "Meeting-Steuerung",
+    "mic": "Mikrofon",
+    "camera": "Kamera",
+    "screen": "Bildschirm teilen",
+    "hand": "Hand heben",
+    "react": "Reaktionen",
+    "chat": "Chat",
+    "unread": "{count, plural, one {# ungelesene Nachricht} other {# ungelesene Nachrichten}}",
+    "people": "Teilnehmer"
+  },
+  "reactions": {
+    "thumbsUp": "Daumen hoch",
+    "heart": "Herz",
+    "laugh": "Lachen",
+    "party": "Feiern",
+    "clap": "Applaus",
+    "wow": "Wow",
+    "limited": "Zu viele Reaktionen. Warte ein paar Sekunden."
+  },
+  "header": {
+    "people": "{count, plural, one {# Teilnehmer} other {# Teilnehmer}}"
+  },
+  "stage": {
+    "others": "{count, plural, one {# weitere} other {# weitere}}"
+  },
+  "panel": {
+    "chat": "Chat",
+    "people": "Teilnehmer",
+    "close": "Schließen"
+  },
+  "chat": {
+    "label": "Nachrichten",
+    "empty": "Noch keine Nachrichten.",
+    "you": "Du",
+    "placeholder": "Nachricht an alle",
+    "send": "Senden",
+    "sendFailed": "Die Nachricht konnte nicht gesendet werden. Versuche es erneut.",
+    "keptWithNotes": "Nachrichten werden mit den Notizen des Meetings gespeichert.",
+    "goneAtEnd": "Nachrichten verschwinden, wenn das Meeting endet."
+  },
+  "people": {
+    "you": "{name} (du)",
+    "host": "Gastgeber",
+    "muted": "Mikrofon aus",
+    "handRaised": "Hand gehoben",
+    "lowerHand": "Hand senken",
+    "pin": "{name} anheften",
+    "unpin": "{name} lösen",
+    "hands": "{count, plural, one {# gehobene Hand} other {# gehobene Hände}}",
+    "everyone": "{count, plural, one {# im Meeting} other {# im Meeting}}",
+    "remove": "{name} entfernen",
+    "removeTitle": "{name} entfernen?",
+    "removeDescription": "Die Person verlässt das Meeting auf allen Geräten und kann nicht zurückkehren.",
+    "removeConfirm": "Entfernen"
+  },
+  "invite": {
+    "open": "Einladen",
+    "title": "Personen einladen",
+    "description": "Mit diesem Link kann jeder dem Meeting beitreten.",
+    "link": "Meeting-Link",
+    "copy": "Kopieren",
+    "copied": "Kopiert"
+  },
+  "leave": {
+    "leave": "Verlassen",
+    "more": "Weitere Optionen zum Verlassen",
+    "endForAll": "Für alle beenden",
+    "confirmTitle": "Meeting für alle beenden?",
+    "confirmDescription": "Alle verlassen das Meeting und der Link funktioniert nicht mehr."
+  },
+  "states": {
+    "connecting": "Beitreten…",
+    "reconnecting": "Verbindung unterbrochen. Neu verbinden…",
+    "retry": "Erneut versuchen",
+    "rejoin": "Erneut beitreten",
+    "toMeetings": "Zu den Meetings"
+  },
+  "problems": {
+    "not_found": {
+      "title": "Meeting nicht gefunden",
+      "description": "Prüfe den Link mit der Person, die ihn geschickt hat."
+    },
+    "room_finished": {
+      "title": "Dieses Meeting ist beendet",
+      "description": "Der Link funktioniert nicht mehr."
+    },
+    "removed": {
+      "title": "Du kannst diesem Meeting nicht beitreten",
+      "description": "Der Gastgeber hat dich entfernt."
+    },
+    "room_full": {
+      "title": "Das Meeting ist voll",
+      "description": "Versuche es erneut, wenn jemand geht."
+    },
+    "video_unavailable": {
+      "title": "Anrufe sind gerade nicht verfügbar",
+      "description": "Versuche es in einer Minute erneut."
+    },
+    "rate_limited": {
+      "title": "Zu viele Versuche",
+      "description": "Warte eine Minute und versuche es dann erneut."
+    },
+    "unknown": {
+      "title": "Beitreten nicht möglich",
+      "description": "Prüfe deine Verbindung und versuche es erneut."
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "Du hast das Meeting verlassen",
+      "description": "Du kannst erneut beitreten, solange es läuft."
+    },
+    "ended": {
+      "title": "Das Meeting ist beendet",
+      "description": "Leos Notizen erscheinen in Notizen, sobald sie fertig sind."
+    },
+    "removed": {
+      "title": "Du wurdest aus dem Meeting entfernt",
+      "description": "Der Gastgeber hat dich entfernt. Du kannst nicht erneut beitreten."
+    },
+    "lost": {
+      "title": "Verbindung verloren",
+      "description": "Prüfe deine Verbindung und tritt erneut bei."
+    }
+  }
+}

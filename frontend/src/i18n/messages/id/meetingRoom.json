@@ -1,0 +1,158 @@
+{
+  "metaTitle": "Rapat",
+  "untitled": "Rapat",
+  "marks": {
+    "label": "Di rapat ini",
+    "notes": "Leo sedang mencatat",
+    "recording": "Sedang merekam"
+  },
+  "preview": {
+    "asking": "Izinkan kamera dan mikrofon agar orang lain bisa melihat dan mendengar Anda.",
+    "cameraOff": "Kamera Anda mati.",
+    "blocked": "Browser memblokir kamera dan mikrofon. Izinkan di pengaturan situs, lalu coba lagi.",
+    "none": "Kamera atau mikrofon tidak ditemukan. Anda tetap bisa bergabung untuk mendengarkan dan mengobrol.",
+    "retry": "Coba lagi"
+  },
+  "devices": {
+    "open": "Perangkat",
+    "audio": "Mikrofon",
+    "video": "Kamera",
+    "unnamed": "Perangkat {index, number}"
+  },
+  "join": {
+    "loading": "Menyiapkan rapat…",
+    "ready": "Siap bergabung?",
+    "notesHint": "Leo menulis catatan untuk pemilik rapat. Semua peserta rapat melihat ini.",
+    "enter": "Gabung sekarang",
+    "nameTitle": "Siapa nama Anda?",
+    "nameLabel": "Nama Anda",
+    "nameHint": "Peserta lain akan melihat nama ini.",
+    "continue": "Lanjutkan"
+  },
+  "controls": {
+    "label": "Kontrol rapat",
+    "mic": "Mikrofon",
+    "camera": "Kamera",
+    "screen": "Bagikan layar",
+    "hand": "Angkat tangan",
+    "react": "Reaksi",
+    "chat": "Chat",
+    "unread": "{count, plural, other {# pesan belum dibaca}}",
+    "people": "Peserta"
+  },
+  "reactions": {
+    "thumbsUp": "Jempol",
+    "heart": "Hati",
+    "laugh": "Tertawa",
+    "party": "Rayakan",
+    "clap": "Tepuk tangan",
+    "wow": "Kaget",
+    "limited": "Terlalu banyak reaksi. Tunggu beberapa detik."
+  },
+  "header": {
+    "people": "{count, plural, other {# peserta}}"
+  },
+  "stage": {
+    "others": "{count, plural, other {# lainnya}}"
+  },
+  "panel": {
+    "chat": "Chat",
+    "people": "Peserta",
+    "close": "Tutup"
+  },
+  "chat": {
+    "label": "Pesan",
+    "empty": "Belum ada pesan.",
+    "you": "Anda",
+    "placeholder": "Kirim pesan ke semua",
+    "send": "Kirim",
+    "sendFailed": "Pesan tidak terkirim. Coba lagi.",
+    "keptWithNotes": "Pesan disimpan bersama catatan rapat.",
+    "goneAtEnd": "Pesan hilang saat rapat berakhir."
+  },
+  "people": {
+    "you": "{name} (Anda)",
+    "host": "Tuan rumah",
+    "muted": "Mikrofon mati",
+    "handRaised": "Tangan terangkat",
+    "lowerHand": "Turunkan tangan",
+    "pin": "Sematkan {name}",
+    "unpin": "Lepas sematan {name}",
+    "hands": "{count, plural, other {# tangan terangkat}}",
+    "everyone": "{count, plural, other {# di rapat}}",
+    "remove": "Keluarkan {name}",
+    "removeTitle": "Keluarkan {name}?",
+    "removeDescription": "Orang ini keluar di semua perangkat dan tidak dapat kembali ke rapat ini.",
+    "removeConfirm": "Keluarkan"
+  },
+  "invite": {
+    "open": "Undang",
+    "title": "Undang orang",
+    "description": "Siapa pun yang punya tautan ini bisa bergabung ke rapat.",
+    "link": "Tautan rapat",
+    "copy": "Salin",
+    "copied": "Disalin"
+  },
+  "leave": {
+    "leave": "Keluar",
+    "more": "Cara lain untuk keluar",
+    "endForAll": "Akhiri untuk semua",
+    "confirmTitle": "Akhiri rapat untuk semua?",
+    "confirmDescription": "Semua orang keluar dan tautan tidak berfungsi lagi."
+  },
+  "states": {
+    "connecting": "Bergabung…",
+    "reconnecting": "Koneksi terputus. Menghubungkan ulang…",
+    "retry": "Coba lagi",
+    "rejoin": "Gabung lagi",
+    "toMeetings": "Ke Rapat"
+  },
+  "problems": {
+    "not_found": {
+      "title": "Rapat tidak ditemukan",
+      "description": "Periksa tautannya dengan orang yang mengirimnya."
+    },
+    "room_finished": {
+      "title": "Rapat ini sudah berakhir",
+      "description": "Tautannya tidak berfungsi lagi."
+    },
+    "removed": {
+      "title": "Anda tidak dapat bergabung ke rapat ini",
+      "description": "Tuan rumah mengeluarkan Anda."
+    },
+    "room_full": {
+      "title": "Rapat sudah penuh",
+      "description": "Coba lagi saat ada yang keluar."
+    },
+    "video_unavailable": {
+      "title": "Panggilan sedang tidak tersedia",
+      "description": "Coba lagi dalam satu menit."
+    },
+    "rate_limited": {
+      "title": "Terlalu banyak percobaan",
+      "description": "Tunggu satu menit, lalu coba lagi."
+    },
+    "unknown": {
+      "title": "Tidak dapat bergabung ke rapat",
+      "description": "Periksa koneksi Anda dan coba lagi."
+    }
+  },
+  "ends": {
+    "left": {
+      "title": "Anda keluar dari rapat",
+      "description": "Anda bisa bergabung lagi selama rapat berlangsung."
+    },
+    "ended": {
+      "title": "Rapat sudah berakhir",
+      "description": "Catatan Leo muncul di Catatan saat sudah siap."
+    },
+    "removed": {
+      "title": "Anda dikeluarkan dari rapat",
+      "description": "Tuan rumah mengeluarkan Anda. Anda tidak dapat bergabung lagi."
+    },
+    "lost": {
+      "title": "Koneksi terputus",
+      "description": "Periksa koneksi Anda dan gabung lagi."
+    }
+  }
+}

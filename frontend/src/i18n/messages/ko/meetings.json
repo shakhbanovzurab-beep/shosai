@@ -5,6 +5,7 @@
   "loadFailedHint": "연결을 확인하고 다시 시도해 주세요.",
   "newMeeting": "새 회의",
   "actions": {
+    "startNow": "지금 시작",
     "schedule": "캘린더에서 일정 잡기",
     "upload": "녹음 업로드"
   },
@@ -60,5 +61,6 @@
       "title": "아직 지난 회의가 없어요",
       "description": "녹음한 회의가 Leo의 요약, 작업, 결정 사항과 함께 여기에 표시돼요."
     }
-  }
+  },
+  "startFailed": "회의를 시작하지 못했어요. 다시 시도해 주세요."
 }

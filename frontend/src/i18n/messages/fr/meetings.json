@@ -5,6 +5,7 @@
   "loadFailedHint": "Vérifiez votre connexion et réessayez.",
   "newMeeting": "Nouvelle réunion",
   "actions": {
+    "startNow": "Démarrer maintenant",
     "schedule": "Planifier dans le calendrier",
     "upload": "Importer un enregistrement"
   },
@@ -60,5 +61,6 @@
       "title": "Aucune réunion passée pour l’instant",
       "description": "Les réunions enregistrées apparaissent ici avec le résumé, les tâches et les décisions de Leo."
     }
-  }
+  },
+  "startFailed": "Impossible de démarrer la réunion. Réessayez."
 }
