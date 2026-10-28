@@ -4,8 +4,9 @@ Editing a statement never rewrites it: the old fact closes and its successor —
 own words, confirmed — takes its place, and a retry with the same `Idempotency-Key` answers
 the first successor instead of failing on the closed fact. Editing a candidate accepts it.
 Accepting a candidate that proposes to replace a current fact closes that fact. Forgetting and
-turning down are idempotent. Forgetting everything ends every fact and candidate at once and
-empties the summary. Nothing here calls a model: a new statement's vector comes from the
+turning down are idempotent; the fact can be taken back for a day, then the hourly pass deletes
+it. Forgetting everything deletes every fact, candidate and trace and the summary at once.
+Nothing here calls a model: a new statement's vector comes from the
 embedding pass (step 4), and until then it is listed but not recalled.
 """
 
@@ -17,7 +18,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 from redis.asyncio import Redis
-from sqlalchemy import Update, delete, select, update
+from sqlalchemy import Update, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
@@ -39,6 +40,7 @@ from shosai.features.memory.application.fact_rows import (
     visible,
     write_back,
 )
+from shosai.features.memory.application.forgetting import forget_everything
 from shosai.features.memory.domain.facts import (
     EndReason,
     Fact,
@@ -53,7 +55,7 @@ from shosai.features.memory.domain.facts import (
 )
 from shosai.features.memory.infrastructure.metrics import CandidateAnswer, MemoryMetrics
 from shosai.features.memory.infrastructure.presence import TTL_SECONDS, has_memories_key
-from shosai.features.memory.infrastructure.records import MemoryFactRecord, MemorySummaryRecord
+from shosai.features.memory.infrastructure.records import MemoryFactRecord
 
 # Ключ клиента живёт сутки: повтор правки позже — уже новая правка.
 EDITS: Final = EffectScope("memory.fact_edits", keep=timedelta(days=1))
@@ -231,13 +233,9 @@ class FactChanges:
             self._metrics.answered(fact.source.value, CandidateAnswer.TURNED_DOWN)
 
     async def forget_all(self, principal: Principal) -> None:
-        """Every fact and candidate ends at once, and the summary is emptied."""
-        now = self._clock()
+        """Every fact, candidate, trace and the summary are deleted at once (MM-D9)."""
         async with self._transactions.begin(principal.scope()) as session:
-            await session.execute(self._end(principal.user_id, EndReason.FORGOT_ALL, now))
-            await session.execute(
-                delete(MemorySummaryRecord).where(MemorySummaryRecord.user_id == principal.user_id)
-            )
+            await forget_everything(session, principal.user_id)
         await self._valkey.delete(has_memories_key(principal.user_id))
 
     async def turn_down_imported(self, principal: Principal) -> None:

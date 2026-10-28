@@ -1,4 +1,4 @@
-"""Lifetimes of facts, the summary's shape and the box's changes (ADR 0071 MM-D3, MM-D4)."""
+"""Lifetimes of facts, the summary's shape and the box's changes (ADR 0071 MM-D3, MM-D4, MM-D9)."""
 
 from datetime import timedelta
 from uuid import uuid4
@@ -11,8 +11,10 @@ from shosai.features.memory.domain.lifetimes import (
     candidate_expired,
     erase_after_departure,
     erase_after_meeting_deleted,
+    leaves_trace,
     past_chat_retention,
     purgeable,
+    refusal_remembered,
 )
 from shosai.features.memory.domain.summary import (
     SummaryProblem,
@@ -45,13 +47,20 @@ def test_a_candidate_leaves_after_thirty_days_unless_carried_over() -> None:
     assert not candidate_expired(fact(), later)
 
 
-def test_an_ended_fact_is_purged_after_180_days() -> None:
+def test_an_ended_fact_goes_after_its_day_and_only_a_refusal_leaves_a_trace() -> None:
     forgotten = fact(status=FactStatus.FORGOTTEN, ended_reason=EndReason.FORGOT, ended_at=NOW)
+    declined = fact(status=FactStatus.FORGOTTEN, ended_reason=EndReason.TURNED_DOWN, ended_at=NOW)
+    faded = fact(status=FactStatus.FORGOTTEN, ended_reason=EndReason.EXPIRED, ended_at=NOW)
     superseded = fact(valid_to=NOW, superseded_by=uuid4())
-    for ended in (forgotten, superseded):
-        assert not purgeable(ended, NOW + timedelta(days=180))
-        assert purgeable(ended, NOW + timedelta(days=181))
+    for ended in (forgotten, declined, faded, superseded):
+        assert not purgeable(ended, NOW + timedelta(hours=24))
+        assert purgeable(ended, NOW + timedelta(hours=25))
     assert not purgeable(fact(), NOW + timedelta(days=9_000))
+    assert [leaves_trace(ended) for ended in (forgotten, declined, faded, superseded)] == [
+        True, True, False, False,
+    ]  # fmt: skip
+    assert refusal_remembered(NOW, NOW + timedelta(days=90))
+    assert not refusal_remembered(NOW, NOW + timedelta(days=91))
 
 
 def test_a_summary_in_shape_is_kept() -> None:

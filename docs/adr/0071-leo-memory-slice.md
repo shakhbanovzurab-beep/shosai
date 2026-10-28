@@ -1,6 +1,6 @@
 # ADR 0071 — The memory slice: candidates under the answer, calibrated auto-save, facts that follow their source
 
-- **Status:** accepted by the owner on 2026-10-27 ([memory plan](../plan/slices/memory.md) §2): MM-D2, MM-D3 and MM-D5 as written; MM-D1, MM-D4, MM-D6, MM-D7 and MM-D8 with the owner's amendments.
+- **Status:** accepted by the owner on 2026-10-27 ([memory plan](../plan/slices/memory.md) §2): MM-D2, MM-D3 and MM-D5 as written; MM-D1, MM-D4, MM-D6, MM-D7 and MM-D8 with the owner's amendments; MM-D9 decided by the owner on 2026-10-27 after staging.
 - **Packages:** `memory` (owner); agent (the amended `MemoryRecall` and `ProfileFacts`, a new `PersonWords` port, segment 4's boundary, the taint rule, the candidate's line in the panel); decisions (`memory.admit` in shadow, the person's answers as outcomes, the auto-save gate); notes (step 24 closed by memory's subscription); chats (facts from team chats); studio (the personal context takes the draft's personalization instructions); M1 (the draft's memory and personalization).
 - **Context documents:** [memory plan](../plan/slices/memory.md); [Leo architecture](../design/leo/ARCHITECTURE.md) §6.3–§6.4, §7, §10, §13; [ARCHITECTURE.md](../design/ARCHITECTURE.md) §8.1, §16.4; [ADR 0030](0030-leo-memory-v2.md); [ADR 0033](0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md); [ADR 0062](0062-team-chats-through-leo-on-demand.md); [ADR 0068](0068-leo-agent-slice.md) AG-D3; [ADR 0069](0069-decision-layer-slice.md).
 
@@ -26,6 +26,7 @@ ADR 0030 set memory's shape: admitted facts with provenance and supersession, ca
 6. **Embeddings (MM-D6, amended by the owner).** Exact nearest neighbours over the person's own current facts through a b-tree on the person, no HNSW; `halfvec(1024)`. **The model is `google/gemini-embedding-2`, the owner's decision of 2026-10-27**: 1 024 of its 128–3 072 Matryoshka dimensions, queries and stored statements with the model's task prefixes. No comparison of models; one measurement on it over a 16-language set within $0.5 (≈ $0.10 spent): recall@12 0.98–1.00 in every language, and no threshold that tells a rewording from a contradiction — so only the same words confirm a held fact, similarity ≥ 0.87 means the same subject (a candidate proposing a replacement), and recall keeps a floor of 0.55. **Knowledge uses the same model by default**, so one query embedding serves memory and knowledge search; a knowledge collection that keeps fewer dimensions takes the same vector's prefix.
 7. **Trust of a fact (MM-D7, amended by the owner).** Only facts the person confirmed — an explicit request, "Remember", their edit or a fact they added — leave the run's taint as it is. A fact saved automatically keeps its source's provenance and taint and marks the run at least external. Segment 4's facts are wrapped with a boundary computed as an HMAC with a server secret over the block: stable for the prompt cache while the facts are unchanged, impossible to guess.
 8. **The draft's memory at migration (MM-D8, amended by the owner).** Non-forgotten facts and procedures of people with memory on are carried: the ones the person asked for as active facts, the rest as candidates from "your earlier memory", which never join the daily candidates or the line under an answer and wait in a separate list in Settings › Memory; episodes are dropped.
+9. **Forgetting is for good (MM-D9, the owner's decision of 2026-10-27).** A forgotten, turned-down or replaced fact stays a day, while the person can restore it, then the hourly pass deletes it. What the person forgot or turned down leaves only a trace in `memory_refusals` — the vector, its model and the moment, never the text — so admission does not ask the same again for 90 days; a faded fact leaves none and may be learnt again. "Forget everything" deletes every fact, trace and the summary at once and leaves nothing. It replaces Leo §7.2's "soft forget, then purge after 180 days": a person who asks Leo to forget expects nothing to stay, and the export no longer lists forgotten text for half a year.
 
 ## Alternatives considered
 
@@ -52,6 +53,7 @@ ADR 0030 set memory's shape: admitted facts with provenance and supersession, ca
 - Decisions' step 10 gains the shadow on every statement and the online gate with its daily check.
 - Notes' step 24 needs no code in notes. Chats owes a disconnection event and a reader of its retention.
 - The target architecture's memory row and the Leo architecture's §6.3, §7, §10 and §13 are amended.
+- Forgotten text lives a day instead of 180; nothing is restored after that day, and a refusal is remembered 90 days instead of 180 (MM-D9).
 
 ## Revisit when
 

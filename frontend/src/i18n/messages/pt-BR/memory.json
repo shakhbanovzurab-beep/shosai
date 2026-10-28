@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Esquecer tudo",
     "title": "Esquecer tudo o que o Leo lembra?",
-    "description": "O Leo vai parar de usar {count, plural, one {# fato} many {os # de fatos} other {os # fatos}} na hora. Não dá para desfazer.",
+    "description": "O Leo vai excluir {count, plural, one {# fato} many {os # de fatos} other {os # fatos}} e o resumo da memória na hora. Não dá para desfazer.",
     "confirm": "Esquecer tudo",
     "done": "O Leo esqueceu tudo"
   },

@@ -5,7 +5,9 @@ Every table is personal by nature: row-level security admits the person's own ro
 fact and its vector change in one transaction and recall reads no TOAST (ADR 0033). Recall
 scans the person's own current facts exactly, through a b-tree on the person: no HNSW, whose
 graph filtered to one person loses results (MM-D6). PostgreSQL keeps every closed set, the
-statement's length and the rules that tie a fact's columns together.
+statement's length and the rules that tie a fact's columns together. A refusal's trace keeps
+no text: the vector of what the person forgot or turned down, its model and the moment, so
+admission does not ask the same again for 90 days (MM-D9).
 """
 
 from datetime import datetime
@@ -176,8 +178,25 @@ class MemorySummaryRecord(ModelBase):
     stale: Mapped[bool] = mapped_column(Boolean, server_default=false())
 
 
+class MemoryRefusalRecord(ModelBase):
+    """The trace of a fact the person forgot or turned down, without its text."""
+
+    __tablename__ = "memory_refusals"
+    __table_args__ = (Index("ix_memory_refusals_person", "user_id", "refused_at"),)
+
+    # Тот же id, что у забытого факта: повторный проход не пишет след дважды.
+    id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    user_id: Mapped[UUID] = mapped_column(Uuid)
+    embedding: Mapped[list[float]] = mapped_column(
+        HALFVEC(EMBEDDING_DIMENSIONS), deferred=True, deferred_raiseload=True
+    )
+    embedding_model: Mapped[str] = mapped_column(Text)
+    refused_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 MEMORY_MODELS: Final[tuple[type[ModelBase], ...]] = (
     MemoryFactRecord,
     MemorySettingsRecord,
     MemorySummaryRecord,
+    MemoryRefusalRecord,
 )

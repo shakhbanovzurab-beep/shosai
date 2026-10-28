@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "全部忘記",
     "title": "要讓 Leo 忘記所有記得的事嗎？",
-    "description": "Leo 會立即停止使用 {count, plural, other {# 則資訊}}。此操作無法復原。",
+    "description": "Leo 會立即刪除 {count, plural, other {# 則資訊}}和記憶摘要。此操作無法復原。",
     "confirm": "全部忘記",
     "done": "Leo 已全部忘記"
   },

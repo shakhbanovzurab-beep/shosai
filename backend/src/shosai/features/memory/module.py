@@ -30,6 +30,7 @@ from shosai.features.memory.application.fact_forgets import FactForgets
 from shosai.features.memory.application.fact_list import FactLists
 from shosai.features.memory.application.fact_restore import FactRestore
 from shosai.features.memory.application.fact_search import FactSearch
+from shosai.features.memory.application.forgetting import Forgetting
 from shosai.features.memory.application.invariants import MemoryInvariants
 from shosai.features.memory.application.meeting_recollection import MeetingRecollection
 from shosai.features.memory.application.recall import Recall
@@ -122,7 +123,11 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             turn_admission(admission),
             summary_writes(summaries),
             meeting_recollection(recollection),
-            *upkeep_ticks(upkeep, departures, MemoryInvariants(transactions, metrics)),
+            *upkeep_ticks(
+                upkeep,
+                departures,
+                (MemoryInvariants(transactions, metrics), Forgetting(transactions, metrics)),
+            ),
         ),
         subscriptions=(*subscriptions(services.tasks), *departure_subscriptions(departures)),
         periodic_jobs=PERIODIC_JOBS,

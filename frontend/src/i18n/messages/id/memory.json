@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Lupakan semuanya",
     "title": "Lupakan semua yang diingat Leo?",
-    "description": "Leo akan langsung berhenti menggunakan {count, plural, other {# fakta}}. Tindakan ini tidak dapat diurungkan.",
+    "description": "Leo akan langsung menghapus {count, plural, other {# fakta}} dan ringkasan memori. Tindakan ini tidak dapat diurungkan.",
     "confirm": "Lupakan semuanya",
     "done": "Leo melupakan semuanya"
   },

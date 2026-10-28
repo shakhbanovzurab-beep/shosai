@@ -5,20 +5,33 @@ later unless the membership comes back; a deleted workspace's facts go at once. 
 facts hide with the meeting and are erased when notes purges it. A team chat's facts go with
 the chat's disconnection and when their message passes the workspace's retention. A candidate
 unanswered for 30 days leaves, except those carried over from the draft, which wait for the
-person's review. Ended facts are kept 180 days — for "never ask again" and history — then
-purged.
+person's review.
+
+A forgotten, turned-down or replaced fact stays a day, while the person can take it back, then
+is deleted (the owner's decision of 2026-10-27, ADR 0071 MM-D9). What the person forgot or
+turned down leaves a trace without its text — the vector, its model and the moment — so the
+same thing is not asked again for 90 days; a faded fact leaves none and may be learnt again.
 """
 
 from datetime import datetime, timedelta
 from typing import Final
 
-from shosai.features.memory.domain.facts import Fact, FactStatus, MemorySource
+from shosai.features.memory.domain.facts import (
+    RESTORE_WINDOW,
+    EndReason,
+    Fact,
+    FactStatus,
+    MemorySource,
+)
 
 DEPARTURE_GRACE: Final = timedelta(days=7)
 # Удалённая встреча скрыта семь дней, потом notes её стирает; факты — вместе с ней.
 MEETING_PURGE_AFTER: Final = timedelta(days=7)
 CANDIDATE_LIFETIME: Final = timedelta(days=30)
-ENDED_KEPT: Final = timedelta(days=180)
+# Сколько помнится, что человек отказался: след без текста, чтобы не спрашивать снова.
+REFUSAL_KEPT: Final = timedelta(days=90)
+# Причины конца, после которых то же самое больше не спрашивают; угасший факт можно выучить снова.
+REFUSALS: Final = frozenset({EndReason.FORGOT, EndReason.TURNED_DOWN})
 CHAT_RETENTION_DAYS: Final = frozenset({30, 90, 365})
 
 
@@ -57,6 +70,16 @@ def ended_at(fact: Fact) -> datetime | None:
 
 
 def purgeable(fact: Fact, now: datetime) -> bool:
-    """An ended fact kept its 180 days."""
+    """An ended fact whose day to take it back has passed."""
     end = ended_at(fact)
-    return end is not None and now - end > ENDED_KEPT
+    return end is not None and now - end > RESTORE_WINDOW
+
+
+def leaves_trace(fact: Fact) -> bool:
+    """Whether deleting the ended fact keeps a trace of the person's refusal."""
+    return fact.status is FactStatus.FORGOTTEN and fact.ended_reason in REFUSALS
+
+
+def refusal_remembered(refused_at: datetime, now: datetime) -> bool:
+    """Whether a refusal is still remembered: the same thing is not asked again."""
+    return now - refused_at <= REFUSAL_KEPT

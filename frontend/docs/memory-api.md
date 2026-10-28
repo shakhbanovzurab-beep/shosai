@@ -37,8 +37,9 @@ and `thread_id` (a conversation's waiting candidates).
   "user_edit"`: the answer carries a new `id`, which replaces the old row. Every `PATCH` sends a fresh
   `Idempotency-Key`, so a retry answers the first result instead of failing on the closed fact.
 - **Forgetting** is sent at once; for five seconds the dialog's footer offers Undo, which calls `restore` (the
-  server brings a forgotten fact back for a day). A toast would be unreachable behind the modal. Forgetting
-  everything is confirmed first and cannot be undone.
+  server brings a forgotten fact back for a day, then deletes it and keeps only a text-less trace so the same
+  is not asked again). A toast would be unreachable behind the modal. Forgetting everything is confirmed
+  first, deletes every fact and the summary at once and cannot be undone (MM-D9).
 - **Pages and filters.** Candidates come first, then facts, newest first; `next_cursor` is null on the last
   page and "Show more" appends the next one. The kind and the words (`q`, sent when the person stops typing)
   are filtered by the server, so they cover the whole memory. `counts` (`active`, `candidates`, `imported`)

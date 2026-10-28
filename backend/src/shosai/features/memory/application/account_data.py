@@ -1,7 +1,9 @@
-"""Memory's handler of a person's data: their facts, their switch and their summary.
+"""Memory's handler of a person's data: their facts, their switch, their summary and the traces
+of their refusals.
 
 Every fact — current, waiting or ended — is the person's data: the export lists them with
-their kind, status, source and dates, never their vectors, which are derived; erasure deletes
+their kind, status, source and dates, and each refusal's trace with its moment, never their
+vectors, which are derived; erasure deletes
 every row and the "has memories" bit; a transfer copies the rows with their vectors, so the
 other home recalls them without a single embedding call. A repeat deletes or adds nothing.
 """
@@ -30,6 +32,7 @@ from shosai.features.memory.infrastructure.presence import has_memories_key
 from shosai.features.memory.infrastructure.records import (
     MEMORY_MODELS,
     MemoryFactRecord,
+    MemoryRefusalRecord,
     MemorySettingsRecord,
     MemorySummaryRecord,
 )
@@ -44,6 +47,7 @@ KEYS: Final[Mapping[type[ModelBase], str]] = {
     MemoryFactRecord: "id",
     MemorySettingsRecord: "user_id",
     MemorySummaryRecord: "user_id",
+    MemoryRefusalRecord: "id",
 }
 
 

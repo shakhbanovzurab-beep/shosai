@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Quên tất cả",
     "title": "Quên mọi thứ Leo ghi nhớ?",
-    "description": "Leo sẽ ngừng dùng {count, plural, other {# thông tin}} ngay lập tức. Bạn không thể hoàn tác.",
+    "description": "Leo sẽ xóa ngay {count, plural, other {# thông tin}} và bản tóm tắt bộ nhớ. Bạn không thể hoàn tác.",
     "confirm": "Quên tất cả",
     "done": "Leo đã quên tất cả"
   },

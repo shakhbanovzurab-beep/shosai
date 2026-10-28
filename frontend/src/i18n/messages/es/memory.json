@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Olvidar todo",
     "title": "¿Olvidar todo lo que recuerda Leo?",
-    "description": "Leo dejará de usar {count, plural, one {# dato} many {los # de datos} other {los # datos}} de inmediato. No se puede deshacer.",
+    "description": "Leo eliminará de inmediato {count, plural, one {# dato} many {los # de datos} other {los # datos}} y el resumen de la memoria. No se puede deshacer.",
     "confirm": "Olvidar todo",
     "done": "Leo olvidó todo"
   },

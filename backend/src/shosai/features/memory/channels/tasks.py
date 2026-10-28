@@ -29,6 +29,7 @@ from shosai.core.tasks.payloads import HomeTaskPayload
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.memory.application.departures import Departures
 from shosai.features.memory.application.embedding_pass import EmbeddingPass
+from shosai.features.memory.application.forgetting import Forgetting
 from shosai.features.memory.application.invariants import MemoryInvariants
 from shosai.features.memory.application.meeting_recollection import MeetingRecollection
 from shosai.features.memory.application.summaries import Summaries, SummaryQueue
@@ -114,11 +115,21 @@ CHECK_INVARIANT: Final = TaskDeclaration(
     retry=NO_RETRY,
     kind=TaskKind.TICK,
 )
+# Забытое, отклонённое и заменённое стирается, как только его уже нельзя вернуть (MM-D9).
+DELETE_ENDED: Final = TaskDeclaration(
+    name="memory.delete_ended",
+    queue=TaskQueue.DEFAULT,
+    payload=HomeTaskPayload,
+    deadline=timedelta(minutes=10),
+    retry=NO_RETRY,
+    kind=TaskKind.TICK,
+)
 PERIODIC_JOBS: Final = (
     PeriodicJob(EMBED_WAITING, every=timedelta(minutes=1)),
     PeriodicJob(UPKEEP, every=timedelta(minutes=10)),
     PeriodicJob(SETTLE_MARKS, every=timedelta(hours=1)),
     PeriodicJob(CHECK_INVARIANT, every=timedelta(hours=1)),
+    PeriodicJob(DELETE_ENDED, every=timedelta(hours=1)),
 )
 
 
@@ -180,9 +191,11 @@ def meeting_recollection(recollection: MeetingRecollection) -> TaskHandler[Meeti
 
 
 def upkeep_ticks(
-    upkeep: Upkeep, departures: Departures, invariants: MemoryInvariants
+    upkeep: Upkeep, departures: Departures, hourly: tuple[MemoryInvariants, Forgetting]
 ) -> tuple[TaskHandler[HomeTaskPayload], ...]:
-    """The upkeep's day, the settling of marks and the invariant's check of a home."""
+    """The upkeep's day, the settling of marks, the invariant's check of a home and the deletion
+    of what was forgotten."""
+    invariant, forgetting = hourly
 
     async def tend(payload: HomeTaskPayload) -> None:
         await upkeep.run(payload.home)
@@ -191,10 +204,14 @@ def upkeep_ticks(
         await departures.settle(payload.home)
 
     async def check(payload: HomeTaskPayload) -> None:
-        await invariants.check(payload.home)
+        await invariant.check(payload.home)
+
+    async def let_go(payload: HomeTaskPayload) -> None:
+        await forgetting.tidy(payload.home)
 
     return (
         TaskHandler(UPKEEP, tend),
         TaskHandler(SETTLE_MARKS, settle),
         TaskHandler(CHECK_INVARIANT, check),
+        TaskHandler(DELETE_ENDED, let_go),
     )

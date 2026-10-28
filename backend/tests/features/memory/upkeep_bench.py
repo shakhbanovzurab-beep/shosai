@@ -18,19 +18,20 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER, CONSENT_READER
 from shosai.features.memory.application.departures import Departures
 from shosai.features.memory.application.fact_list import FactLists
+from shosai.features.memory.application.forgetting import Forgetting
 from shosai.features.memory.application.invariants import MemoryInvariants
 from shosai.features.memory.application.summaries import Summaries
 from shosai.features.memory.application.summary_facts import SummaryFacts
 from shosai.features.memory.application.upkeep import Upkeep
 from shosai.features.memory.infrastructure.memory_model import MemoryModel
 from shosai.features.memory.infrastructure.metrics import MemoryMetrics, SummaryTrigger
-from shosai.features.memory.infrastructure.records import MemoryFactRecord
+from shosai.features.memory.infrastructure.records import MemoryFactRecord, MemoryRefusalRecord
 from shosai.features.memory.infrastructure.summary_model import SummaryModel
 from shosai.features.notes.contracts import MEETING_READER
 from shosai.features.workspaces.contracts import MEMBERSHIP_READER
 from tests.features.memory.admission_bench import CHAT
 from tests.features.memory.facts_api_bench import Meetings, Spaces
-from tests.features.memory.recall_bench import Consents
+from tests.features.memory.recall_bench import MODEL, Consents, axis
 from tests.features.memory.summary_bench import Languages, Writer
 from tests.harness.database_access import (
     DatabaseAccess,
@@ -56,6 +57,7 @@ class UpkeepBench:
     departures: Departures
     invariants: MemoryInvariants
     registry: CollectorRegistry
+    forgetting: Forgetting
 
     async def add(self, person: uuid.UUID, rows: Sequence[Mapping[str, object]]) -> list[uuid.UUID]:
         """Facts of the person in the Russian home, confirmed now unless the row says else."""
@@ -69,6 +71,23 @@ class UpkeepBench:
         async with self.homes.transactions.begin(TenancyScope(Home.RU, person)) as session:
             await session.execute(insert(MemoryFactRecord), values)
         return ids
+
+    async def trace(self, person: uuid.UUID, refused_at: datetime) -> uuid.UUID:
+        """A trace of a refusal of the person, at the moment given."""
+        trace_id = uuid.uuid4()
+        async with self.homes.transactions.begin(TenancyScope(Home.RU, person)) as session:
+            await session.execute(
+                insert(MemoryRefusalRecord),
+                [{"id": trace_id, "user_id": person, "embedding": axis(1),
+                  "embedding_model": MODEL, "refused_at": refused_at}],
+            )  # fmt: skip
+        return trace_id
+
+    async def traces(self, person: uuid.UUID) -> set[uuid.UUID]:
+        """The ids of the person's traces."""
+        scope = TenancyScope(Home.RU, person)
+        async with self.homes.transactions.begin(scope, read_only=True) as session:
+            return set(await session.scalars(select(MemoryRefusalRecord.id)))
 
     async def rows(self, person: uuid.UUID) -> dict[str, MemoryFactRecord]:
         """The person's rows by statement."""
@@ -116,5 +135,5 @@ async def upkeep_bench(
             homes, valkey, spaces, meetings, queued,
             Upkeep(transactions, (summaries, valkey, metrics)),
             Departures(transactions, (ports, metrics)),
-            MemoryInvariants(transactions, metrics), registry,
+            MemoryInvariants(transactions, metrics), registry, Forgetting(transactions, metrics),
         )  # fmt: skip

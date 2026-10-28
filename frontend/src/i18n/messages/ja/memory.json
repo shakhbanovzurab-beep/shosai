@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "すべて忘れる",
     "title": "Leo が覚えていることをすべて忘れさせますか？",
-    "description": "Leo は {count, plural, other {# 件の情報}}をすぐに使わなくなります。元に戻すことはできません。",
+    "description": "Leo は{count, plural, other {# 件の情報}}とメモリの要約をすぐに削除します。元に戻すことはできません。",
     "confirm": "すべて忘れる",
     "done": "Leo はすべて忘れました"
   },

@@ -3,8 +3,9 @@
 Each person who holds any fact is tended once a day, in their own transaction under their
 admission lock: current facts faded below the expiry level end as `expired` (pinned ones never
 fade). Candidates unanswered for 30 days end the same way, the draft's carried-over ones
-excepted. Facts ended or replaced more than 180 days ago are purged, and a stale summary of a
-person whose memory is on is queued for a rewrite. The day's cursor in Valkey says who was
+excepted. Ended facts past their day are deleted as the hourly pass does, traces of refusals
+older than 90 days are dropped, and a stale summary of a person whose memory is on is queued
+for a rewrite. The day's cursor in Valkey says who was
 served last, so the ticks of a day share the work and a repeated tick changes nothing: a
 person tended again finds nothing left to do. Vectors of an older model are the embedding
 pass's work.
@@ -18,7 +19,7 @@ from typing import Final
 from uuid import UUID
 
 from redis.asyncio import Redis
-from sqlalchemy import delete, func, or_, select, update
+from sqlalchemy import func, select, union, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
@@ -26,11 +27,12 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.memory.application.admission_writer import ADMISSION_LOCK_SPACE, person_key
 from shosai.features.memory.application.fact_rows import FACT, fact_of
+from shosai.features.memory.application.forgetting import TRACE, drop_old_traces, let_go
 from shosai.features.memory.application.summaries import Summaries
 from shosai.features.memory.application.switch import memory_on
 from shosai.features.memory.domain.decay import faded
 from shosai.features.memory.domain.facts import EndReason, FactStatus, MemorySource
-from shosai.features.memory.domain.lifetimes import CANDIDATE_LIFETIME, ENDED_KEPT
+from shosai.features.memory.domain.lifetimes import CANDIDATE_LIFETIME
 from shosai.features.memory.infrastructure.metrics import (
     CandidateAnswer,
     MemoryMetrics,
@@ -108,7 +110,8 @@ class Upkeep:
                 select(func.pg_advisory_xact_lock(ADMISSION_LOCK_SPACE, person_key(user_id)))
             )
             faded_ones, waited = await self._expire(session, user_id, now)
-            purged = await self._purge(session, user_id, now)
+            purged = await let_go(session, user_id, now)
+            purged += await drop_old_traces(session, user_id, now)
             on = await memory_on(session, user_id)
         expired = faded_ones + len(waited)
         for source in set(waited):
@@ -149,24 +152,12 @@ class Upkeep:
         waited = list(await session.scalars(expire.where(FACT.user_id == user_id, unanswered)))
         return len(faded_ones), waited
 
-    @staticmethod
-    async def _purge(session: AsyncSession, user_id: UUID, now: datetime) -> int:
-        """Delete the facts ended or replaced more than 180 days ago."""
-        horizon = now - ENDED_KEPT
-        old = or_(
-            (FACT.status == FactStatus.FORGOTTEN.value) & (FACT.ended_at < horizon),
-            FACT.valid_to < horizon,
-        )
-        purged = await session.scalars(
-            delete(FACT).where(FACT.user_id == user_id, old).returning(FACT.id)
-        )
-        return len(list(purged))
-
     async def _next(self, home: Home, after: UUID | None) -> list[UUID]:
-        """The next people of the home who hold any fact, through the sweep role."""
-        query = select(FACT.user_id).distinct().order_by(FACT.user_id).limit(BATCH)
+        """The next people of the home who hold any fact or trace, through the sweep role."""
+        held = union(select(FACT.user_id), select(TRACE.user_id)).subquery()
+        query = select(held.c.user_id).order_by(held.c.user_id).limit(BATCH)
         if after is not None:
-            query = query.where(FACT.user_id > after)
+            query = query.where(held.c.user_id > after)
         async with self._transactions.begin(
             TenancyScope(home), read_only=True, sweep=True
         ) as session:

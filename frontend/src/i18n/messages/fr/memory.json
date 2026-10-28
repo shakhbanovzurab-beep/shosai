@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Tout oublier",
     "title": "Oublier tout ce dont Leo se souvient ?",
-    "description": "Leo cessera aussitôt d’utiliser {count, plural, one {# information} many {les # d’informations} other {les # informations}}. Cette action est irréversible.",
+    "description": "Leo supprimera aussitôt {count, plural, one {# information} many {les # d’informations} other {les # informations}} et le résumé de la mémoire. Cette action est irréversible.",
     "confirm": "Tout oublier",
     "done": "Leo a tout oublié"
   },

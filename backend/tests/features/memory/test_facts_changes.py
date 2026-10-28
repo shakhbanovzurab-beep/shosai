@@ -1,6 +1,6 @@
 """The person's changes: an edit supersedes once per key, accept, forget, forget everything,
-the carried-over list and the switch (memory plan §3.3, step 3); each answer to a candidate is
-counted once, by its source (step 11)."""
+the carried-over list and the switch (memory plan §3.3, step 3); forgetting everything leaves
+nothing (MM-D9); each answer to a candidate is counted once, by its source (step 11)."""
 
 import uuid
 
@@ -13,9 +13,16 @@ from shosai.features.identity.contracts import Principal
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.infrastructure.metrics import CANDIDATES
 from shosai.features.memory.infrastructure.presence import has_memories_key
-from shosai.features.memory.infrastructure.records import MemoryFactRecord, MemorySummaryRecord
+from shosai.features.memory.infrastructure.records import (
+    EMBEDDING_DIMENSIONS as DIMENSIONS,
+)
+from shosai.features.memory.infrastructure.records import (
+    MemoryFactRecord,
+    MemoryRefusalRecord,
+    MemorySummaryRecord,
+)
 from tests.features.billing.people_bench import bearer
-from tests.features.memory.facts_api_bench import FactsBench
+from tests.features.memory.facts_api_bench import START, FactsBench
 
 URL = "/v1/agent/memory"
 
@@ -24,6 +31,12 @@ async def rows(bench: FactsBench, person: uuid.UUID) -> dict[uuid.UUID, MemoryFa
     """Every row of the person, ended ones too."""
     async with bench.homes.transactions.begin(TenancyScope(Home.RU, person), read_only=True) as s:
         return {row.id: row for row in await s.scalars(select(MemoryFactRecord))}
+
+
+async def traces(bench: FactsBench, person: uuid.UUID) -> int:
+    """How many traces of refusals the person has."""
+    async with bench.homes.transactions.begin(TenancyScope(Home.RU, person), read_only=True) as s:
+        return len(list(await s.scalars(select(MemoryRefusalRecord.id))))
 
 
 def counted(bench: FactsBench, source: str, answer: str) -> float | None:
@@ -123,13 +136,21 @@ async def test_forgetting_is_idempotent_and_never_reaches_another_persons_fact(
     assert (await rows(facts_bench, other))[theirs].status == "active"
 
 
-async def test_forgetting_everything_ends_every_fact_and_empties_the_summary(
+async def test_forgetting_everything_deletes_every_fact_trace_and_the_summary(
     facts_bench: FactsBench, valkey: Redis
 ) -> None:
     person = uuid.uuid4()
-    await facts_bench.add(person, [{}, {"status": "candidate"}, {"source_kind": "imported"}])
+    await facts_bench.add(
+        person,
+        [{}, {"status": "candidate"}, {"source_kind": "imported"},
+         {"status": "forgotten", "ended_reason": "forgot", "ended_at": START}],
+    )  # fmt: skip
     async with facts_bench.homes.transactions.begin(TenancyScope(Home.RU, person)) as session:
         session.add(MemorySummaryRecord(user_id=person, language="en"))
+        session.add(
+            MemoryRefusalRecord(id=uuid.uuid4(), user_id=person, embedding=[1.0] * DIMENSIONS,
+                                embedding_model="baai/bge-m3", refused_at=START)
+        )  # fmt: skip
     await valkey.set(has_memories_key(person), "1")
     headers = bearer((Home.RU, person))
 
@@ -140,9 +161,8 @@ async def test_forgetting_everything_ends_every_fact_and_empties_the_summary(
 
     assert done.status_code == 204
     assert listed["counts"] == {"active": 0, "candidates": 0, "imported": 0}
-    assert {row.ended_reason for row in (await rows(facts_bench, person)).values()} == {
-        "forgot_all"
-    }
+    assert await rows(facts_bench, person) == {}
+    assert await traces(facts_bench, person) == 0
     assert summary is None
     assert await valkey.exists(has_memories_key(person)) == 0
 

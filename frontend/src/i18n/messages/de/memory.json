@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Alles vergessen",
     "title": "Alles vergessen, was Leo sich merkt?",
-    "description": "Leo nutzt {count, plural, one {# Fakt} other {alle # Fakten}} sofort nicht mehr. Das lässt sich nicht rückgängig machen.",
+    "description": "Leo löscht {count, plural, one {# Fakt} other {alle # Fakten}} und die Gedächtnis-Zusammenfassung sofort. Das lässt sich nicht rückgängig machen.",
     "confirm": "Alles vergessen",
     "done": "Leo hat alles vergessen"
   },

@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Alles vergeten",
     "title": "Alles vergeten wat Leo onthoudt?",
-    "description": "Leo stopt meteen met het gebruik van {count, plural, one {# feit} other {alle # feiten}}. Dit kun je niet ongedaan maken.",
+    "description": "Leo verwijdert {count, plural, one {# feit} other {alle # feiten}} en de geheugensamenvatting meteen. Dit kun je niet ongedaan maken.",
     "confirm": "Alles vergeten",
     "done": "Leo is alles vergeten"
   },

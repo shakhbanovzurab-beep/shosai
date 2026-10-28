@@ -5,8 +5,9 @@ Similarity tells the subject, not the meaning (measured on `google/gemini-embedd
 contradiction of the same fact ("lives in Moscow" and "lives in Berlin") both do, up to 0.98.
 So only the same words after normalization confirm a fact the person holds; a statement on
 the subject of a current fact proposes to replace it, and the person — or the policy — says
-whether it does. A statement on the subject of one the person forgot or turned down is never
-asked again unless they ask for it now; one on the subject of a waiting candidate is not asked
+whether it does. A statement on the subject of one the person forgot or turned down in the last
+90 days — the fact itself for its first day, its trace after — is not asked again unless they
+ask for it now; one on the subject of a waiting candidate is not asked
 twice. Then, until the Decision Layer's `memory.admit` acts (MM-D1), the rule: what the person
 asked Leo to remember is saved as theirs, anything else waits as a candidate, at most three
 new ones a day. Once the policy acts, a confident statement that is not sensitive is saved
@@ -17,19 +18,18 @@ sensitive or doubtful ones wait. A meeting's statement always waits (MM-D5).
 import unicodedata
 from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import StrEnum
 from typing import Final
 from uuid import UUID
 
 from shosai.features.memory.domain.facts import (
     SPOKEN_SOURCES,
-    EndReason,
     Fact,
     FactKind,
-    FactStatus,
     MemorySource,
 )
+from shosai.features.memory.domain.lifetimes import leaves_trace, refusal_remembered
 
 # Ближе этого два разных факта не подходят ни на одном из 16 языков (замер, план §1.4).
 SAME_SUBJECT: Final = 0.87
@@ -38,10 +38,6 @@ NEIGHBOURS: Final = 5
 STATEMENTS_PER_TURN: Final = 3
 STATEMENTS_PER_MEETING: Final = 5
 PROBE_EVERY: Final = 20
-# Сколько помнится, что человек отказался: столько же, сколько хранится конец факта.
-REFUSALS_REMEMBERED: Final = timedelta(days=180)
-# Причины конца, после которых то же самое больше не спрашивают; угасший факт можно выучить снова.
-REFUSALS: Final = frozenset({EndReason.FORGOT, EndReason.TURNED_DOWN, EndReason.FORGOT_ALL})
 
 
 @dataclass(frozen=True, slots=True)
@@ -133,9 +129,14 @@ def on_subject(neighbours: Sequence[Neighbour]) -> list[Neighbour]:
 
 
 def before_judge(
-    statement: Statement, source: MemorySource, neighbours: Sequence[Neighbour], now: datetime
+    statement: Statement,
+    source: MemorySource,
+    neighbours: Sequence[Neighbour],
+    now: datetime,
+    refusal: float | None = None,
 ) -> Admit | None:
-    """A confirmation or a skip decided by the nearest facts alone, or None to go on."""
+    """A confirmation or a skip decided by the nearest facts alone, or None to go on;
+    `refusal` is the similarity of the nearest trace of a refusal still remembered."""
     for item in on_subject(neighbours):
         fact = item.fact
         if fact.current and same_words(fact.statement, statement.text):
@@ -144,6 +145,9 @@ def before_judge(
             return Admit(Admission.SKIPPED_PENDING, fact.id)
         if refused(fact, now) and not explicit_request(statement, source):
             return Admit(Admission.SKIPPED_FORGOTTEN, fact.id)
+    traced = refusal is not None and refusal >= SAME_SUBJECT
+    if traced and not explicit_request(statement, source):
+        return Admit(Admission.SKIPPED_FORGOTTEN)
     return None
 
 
@@ -155,10 +159,7 @@ def subject_fact(neighbours: Sequence[Neighbour]) -> UUID | None:
 def refused(fact: Fact, now: datetime) -> bool:
     """The person forgot or turned the fact down within the time that is remembered."""
     return (
-        fact.status is FactStatus.FORGOTTEN
-        and fact.ended_reason in REFUSALS
-        and fact.ended_at is not None
-        and now - fact.ended_at <= REFUSALS_REMEMBERED
+        leaves_trace(fact) and fact.ended_at is not None and refusal_remembered(fact.ended_at, now)
     )
 
 

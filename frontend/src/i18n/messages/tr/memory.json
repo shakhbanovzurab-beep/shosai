@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Her şeyi unut",
     "title": "Leo hatırladığı her şeyi unutsun mu?",
-    "description": "Leo {count, plural, one {# bilgiyi} other {# bilginin tümünü}} hemen kullanmayı bırakır. Bu işlem geri alınamaz.",
+    "description": "Leo {count, plural, one {# bilgiyi} other {# bilginin tümünü}} ve bellek özetini hemen siler. Bu işlem geri alınamaz.",
     "confirm": "Her şeyi unut",
     "done": "Leo her şeyi unuttu"
   },

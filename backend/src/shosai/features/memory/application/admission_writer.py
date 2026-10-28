@@ -1,7 +1,8 @@
 """Writing what a turn's or a meeting's statements became, under the person's lock (steps 5, 9).
 
 Each statement's nearest facts — current, waiting, and those the person forgot or turned down
-in the last 180 days — are read with the statement's vector, the rules decide, and the result
+in the last day — and the nearest trace of a refusal of the last 90 days are read with the
+statement's vector, the rules decide, and the result
 is written in one transaction that holds the person's admission lock, so two turns never
 count the same day's candidates twice. The switch is read again inside it: a fact is never
 written after the person turned memory off (§16.4).
@@ -23,8 +24,6 @@ from shosai.features.memory.application.fact_rows import FACT, TAINTS, fact_of, 
 from shosai.features.memory.application.switch import memory_on
 from shosai.features.memory.domain.admission import (
     NEIGHBOURS,
-    REFUSALS,
-    REFUSALS_REMEMBERED,
     Admission,
     Admit,
     Neighbour,
@@ -40,7 +39,14 @@ from shosai.features.memory.domain.facts import (
     Sensitivity,
     confirm_again,
 )
-from shosai.features.memory.infrastructure.records import MemoryFactRecord, MemorySummaryRecord
+from shosai.features.memory.domain.lifetimes import REFUSAL_KEPT, REFUSALS
+from shosai.features.memory.infrastructure.records import (
+    MemoryFactRecord,
+    MemoryRefusalRecord,
+    MemorySummaryRecord,
+)
+
+TRACE = MemoryRefusalRecord
 
 # Пространство ключей блокировок приёма памяти (ASCII «Mem»); второй ключ — id человека.
 ADMISSION_LOCK_SPACE: Final = 0x4D656D
@@ -122,8 +128,9 @@ class AdmissionWriter:
         outcomes: list[Admission] = []
         for item in found:
             near = await self._neighbours(session, user_id, item.vector, now)
+            refusal = await self._nearest_refusal(session, user_id, item.vector, now)
             today = await self._candidates_today(session, user_id, now)
-            admit = before_judge(item.statement, origin.source, near, now) or by_rule(
+            admit = before_judge(item.statement, origin.source, near, now, refusal) or by_rule(
                 item.statement, origin.source, today, subject_fact(near)
             )
             await self._apply(session, (user_id, origin, now), item, admit)
@@ -147,7 +154,7 @@ class AdmissionWriter:
         refused = and_(
             FACT.status == FactStatus.FORGOTTEN.value,
             FACT.ended_reason.in_(tuple(reason.value for reason in REFUSALS)),
-            FACT.ended_at >= now - REFUSALS_REMEMBERED,
+            FACT.ended_at >= now - REFUSAL_KEPT,
         )
         rows = (
             await session.execute(
@@ -159,6 +166,20 @@ class AdmissionWriter:
             )
         ).all()
         return [Neighbour(fact_of(row), 1 - float(gap)) for row, gap in rows]
+
+    async def _nearest_refusal(
+        self, session: AsyncSession, user_id: UUID, vector: Sequence[float], now: datetime
+    ) -> float | None:
+        """The similarity of the nearest trace of a refusal still remembered, if any."""
+        distance = TRACE.embedding.cosine_distance(vector)
+        gap = await session.scalar(
+            select(func.min(distance)).where(
+                TRACE.user_id == user_id,
+                TRACE.embedding_model == self._model,
+                TRACE.refused_at >= now - REFUSAL_KEPT,
+            )
+        )
+        return None if gap is None else 1 - float(gap)
 
     @staticmethod
     async def _candidates_today(session: AsyncSession, user_id: UUID, now: datetime) -> int:

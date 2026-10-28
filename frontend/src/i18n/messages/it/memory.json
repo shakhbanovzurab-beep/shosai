@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Dimentica tutto",
     "title": "Vuoi che Leo dimentichi tutto?",
-    "description": "Leo smetterà subito di usare {count, plural, one {# informazione} many {tutte le # di informazioni} other {tutte le # informazioni}}. Non si può annullare.",
+    "description": "Leo eliminerà subito {count, plural, one {# informazione} many {tutte le # di informazioni} other {tutte le # informazioni}} e il riepilogo della memoria. Non si può annullare.",
     "confirm": "Dimentica tutto",
     "done": "Leo ha dimenticato tutto"
   },

@@ -52,7 +52,7 @@
   "forgetAll": {
     "button": "Forget everything",
     "title": "Forget everything Leo remembers?",
-    "description": "Leo stops using {count, plural, one {# fact} other {all # facts}} at once. You can’t undo this.",
+    "description": "Leo deletes {count, plural, one {# fact} other {all # facts}} and the memory summary at once. You can’t undo this.",
     "confirm": "Forget everything",
     "done": "Leo forgot everything"
   },

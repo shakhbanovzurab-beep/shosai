@@ -1,8 +1,9 @@
 """Memory's upkeep, departures and invariant: the pass is idempotent per day and home, faded facts
-and unanswered candidates expire but the draft's never do, ended rows are purged after 180 days,
-a left workspace's facts vanish and are erased after 7 days unless the person is back, a deleted
-workspace's go at once, a deleted meeting's hide and return with it, and a fact written while
-memory is off is counted (memory step 8, MM-D4)."""
+and unanswered candidates expire but the draft's never do, ended rows go after their day and
+traces older than 90 days are dropped (MM-D9), a left workspace's facts vanish and are erased
+after 7 days unless the person is back, a deleted workspace's go at once, a deleted meeting's
+hide and return with it, and a fact written while memory is off is counted (memory step 8,
+MM-D4)."""
 
 import uuid
 from datetime import timedelta
@@ -13,17 +14,24 @@ from shosai.features.identity.contracts import Principal
 from shosai.features.memory.application.switch import MemorySwitch
 from shosai.features.memory.application.upkeep import cursor_key
 from shosai.features.memory.infrastructure.metrics import CANDIDATES, SummaryTrigger
+from tests.features.memory.recall_bench import MODEL, axis
 from tests.features.memory.upkeep_bench import NOW, UpkeepBench
 
 LONG_AGO = NOW - timedelta(days=200)
 GONE = NOW - timedelta(days=181)
 
 
-async def test_the_daily_pass_expires_purges_and_queues_once_a_day(
+async def test_the_daily_pass_expires_deletes_traces_and_queues_once_a_day(
     upkeep_bench: UpkeepBench,
 ) -> None:
     person = uuid.uuid4()
     await upkeep_bench.valkey.delete(cursor_key(Home.RU, NOW.date().isoformat()))
+    old_trace = await upkeep_bench.trace(person, NOW - timedelta(days=91))
+    lately, *_ = await upkeep_bench.add(
+        person,
+        [{"statement": "Forgotten lately", "status": "forgotten", "ended_reason": "forgot",
+          "ended_at": NOW - timedelta(days=10), "embedding": axis(1), "embedding_model": MODEL}],
+    )  # fmt: skip
     await upkeep_bench.add(
         person,
         [
@@ -38,8 +46,8 @@ async def test_the_daily_pass_expires_purges_and_queues_once_a_day(
             {"statement": "Forgotten long ago", "status": "forgotten", "ended_reason": "forgot",
              "ended_at": GONE},
             {"statement": "Replaced long ago", "valid_to": GONE, "superseded_by": uuid.uuid4()},
-            {"statement": "Forgotten lately", "status": "forgotten", "ended_reason": "forgot",
-             "ended_at": NOW - timedelta(days=10)},
+            {"statement": "Forgotten an hour ago", "status": "forgotten", "ended_reason": "forgot",
+             "ended_at": NOW - timedelta(hours=1)},
         ],
     )  # fmt: skip
 
@@ -54,8 +62,10 @@ async def test_the_daily_pass_expires_purges_and_queues_once_a_day(
     assert {name: (row.status, row.ended_reason) for name, row in rows.items()} == {
         "Faded goal": ("forgotten", "expired"), "Pinned goal": ("active", None),
         "Fresh": ("active", None), "Old guess": ("forgotten", "expired"),
-        "Carried over": ("candidate", None), "Forgotten lately": ("forgotten", "forgot"),
+        "Carried over": ("candidate", None), "Forgotten an hour ago": ("forgotten", "forgot"),
     }  # fmt: skip
+    assert await upkeep_bench.traces(person) == {lately}
+    assert old_trace not in await upkeep_bench.traces(person)
     assert (TenancyScope(Home.RU, person), SummaryTrigger.UPKEEP) in upkeep_bench.queued
     expired = {"source": "user_statement", "answer": "expired"}
     assert upkeep_bench.registry.get_sample_value(CANDIDATES, expired) == 1

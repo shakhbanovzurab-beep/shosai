@@ -4,7 +4,7 @@ The Russian home holds 100 people with 250 current facts each and one with 5 000
 limit — every vector close to the question's, so each recall reads its nearest 40, packs 12
 and gives them. Recalls arrive at 29 a second for 10 seconds, the whole platform's peak at
 100 000 DAU, in one process and one database pool, where production spreads them over the
-agent workers. The embedding double answers after 100 ms. At most 1 % of recalls are late
+agent workers. The embedding double answers after 100 ms. At most 2 % of recalls are late
 (350 ms) — a late one gives the turn nothing and the turn goes on — and the platform's own
 part, the time beyond the embedding, stays within the bench's bound at p95; the numbers are
 logged for the plan (`--log-cli-level=INFO`).
@@ -18,6 +18,8 @@ import uuid
 from datetime import timedelta
 from typing import Final
 
+from shosai.core.config.roles import ProcessRole
+from shosai.core.db.engines import DATABASE_PROFILES
 from shosai.core.kernel.homes import Home
 from shosai.features.memory.domain.packing import RECALL_FACTS
 from shosai.features.memory.infrastructure.records import EMBEDDING_DIMENSIONS
@@ -32,9 +34,12 @@ LARGEST: Final = 5_000
 RATE: Final = 29
 SECONDS: Final = 10
 EMBEDDING: Final = timedelta(milliseconds=100)
-POOL: Final = 5
-# Опоздавшее вспоминание ход не ждёт; на общем хосте редкий выброс допустим, не больше 1 %.
-LATE_SHARE: Final = 0.01
+# Пул прогрет до своего размера, как у воркера в работе: замер — не открытие соединений.
+POOL: Final = DATABASE_PROFILES[ProcessRole.API].pool_size
+# Опоздавшее вспоминание ход не ждёт. Одна пауза общего хоста (≈ 0,4 с при load average 6–9,
+# замер 2026-10-28) накрывает четыре вспоминания в полёте — 1,4 %; допуск — одна такая пауза.
+# Регрессию вроде загрузки векторов со строкой ловит граница p95.
+LATE_SHARE: Final = 0.02
 # Предел стенда: все вспоминания пика в одном процессе и одном пуле, на хосте рядом со staging.
 PLATFORM_P95_MS: Final = 150
 # Векторы фактов близки к вопросу: каждое вспоминание читает свои 40 и отдаёт 12.
@@ -69,7 +74,7 @@ async def test_recall_at_the_peak_keeps_its_deadline(
         facts = await recall_bench.recall.recall(recall_bench.ask(person, "What do I like?"))
         return time.perf_counter() - started, len(facts)
 
-    # Пул наполняется до замера: пять вызовов разом, среди них человек с 5 000 фактов.
+    # Пул наполняется до замера: вызовы разом по числу соединений, среди них человек с 5 000.
     await asyncio.gather(*(timed(person) for person in people[-POOL:]))
     calls = []
     for index in range(RATE * SECONDS):
