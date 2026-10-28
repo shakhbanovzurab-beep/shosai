@@ -7,7 +7,7 @@ series, so the monitors' `increase` sees the first event after a restart.
 
 from typing import Final
 
-from prometheus_client import CollectorRegistry, Counter, Gauge
+from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
 
 from shosai.core.kernel.homes import Home
 from shosai.features.connectors.domain.catalogue import App, Provider
@@ -20,6 +20,9 @@ REVOKE_FAILURES: Final = "shosai_connectors_revoke_failures_total"
 CLIENT_MISCONFIGURED: Final = "shosai_connectors_client_misconfigured_total"
 BROKEN: Final = "shosai_connectors_broken_total"
 UNDECRYPTABLE: Final = "shosai_connectors_undecryptable_secrets"
+CALLS: Final = "shosai_connectors_provider_requests_total"
+CALL_SECONDS: Final = "shosai_connectors_provider_request_seconds"
+CALL_BUCKETS: Final = (0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0, 30.0)
 
 
 class ConnectorsMetrics:
@@ -48,6 +51,14 @@ class ConnectorsMetrics:
         self._undecryptable = Gauge(
             UNDECRYPTABLE, "Secrets no key of the ring decrypts, per home", ["home"],
             registry=registry,
+        )  # fmt: skip
+        self._calls = Counter(
+            CALLS, "Calls to providers by provider, operation and outcome",
+            ["provider", "operation", "outcome"], registry=registry,
+        )  # fmt: skip
+        self._call_seconds = Histogram(
+            CALL_SECONDS, "Time of calls to providers, by provider and operation",
+            ["provider", "operation"], buckets=CALL_BUCKETS, registry=registry,
         )  # fmt: skip
         for provider in Provider:
             self._revoke_failures.labels(provider=provider.value)
@@ -80,3 +91,8 @@ class ConnectorsMetrics:
     def undecryptable(self, home: Home, count: int) -> None:
         """Set how many secrets of a home no key decrypts."""
         self._undecryptable.labels(home=home.value).set(count)
+
+    def called(self, provider: Provider, operation: str, outcome: str, seconds: float) -> None:
+        """Count one provider call by its outcome: a status class, busy or unavailable."""
+        self._calls.labels(provider=provider.value, operation=operation, outcome=outcome).inc()
+        self._call_seconds.labels(provider=provider.value, operation=operation).observe(seconds)

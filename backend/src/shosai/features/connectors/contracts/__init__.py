@@ -24,6 +24,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.keys import Cardinality, PortKey
 from shosai.features.connectors.contracts.provider import (
     ProviderBusyError,
@@ -120,8 +121,13 @@ class ConnectionRegistry(Protocol):
 class ProviderAccess(Protocol):
     """Opens authorized sessions on connections; never inside a database transaction."""
 
-    def open(self, home: Home, connection_id: UUID) -> AbstractAsyncContextManager[ProviderSession]:
-        """A session on one connection of the home; `NotConnectedError` when there is none."""
+    def open(
+        self, scope: TenancyScope, connection_id: UUID
+    ) -> AbstractAsyncContextManager[ProviderSession]:
+        """A session on a connection the scope may read; `NotConnectedError` when there is none.
+
+        A broken connection raises `NeedsReconnectError` at once, without a provider call.
+        """
         ...
 
 

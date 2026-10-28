@@ -133,6 +133,11 @@ class GrantTokens:
             # Состояние гранта уже записано обновлением; следующий заход — через час.
             log.info("Keep-alive гранта не удался", error=type(error).__name__)
 
+    async def revoked_at_provider(self, scope: TenancyScope, grant_id: UUID) -> None:
+        """A fresh token was refused: the grant is gone at the provider (`grant_revoked`)."""
+        async with self._transactions.begin(scope) as session:
+            await break_grant(session, self._tools.outbox, grant_id, Problem.GRANT_REVOKED)
+
     async def read(self, scope: TenancyScope, grant_id: UUID) -> HeldGrant:
         """The grant and its secrets; `NeedsReconnectError` when the grant does not work."""
         query = select(

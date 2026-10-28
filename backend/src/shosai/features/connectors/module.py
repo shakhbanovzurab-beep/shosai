@@ -10,7 +10,9 @@ and the draft's callback paths, which answer an expired authorization. Step 4 th
 lifecycle: one refresh at a time on a lease and a generation, keep-alive refreshes and
 revocations swept from due rows, a disconnect that revokes on the last app, the provider's
 revocation on erasure, the weekly key pass, a deleted workspace's installations, and three
-invariant monitors.
+invariant monitors. Step 5 the provider transport behind `PROVIDER_ACCESS`: a session that
+injects and refreshes the token, keeps the provider's quotas, concurrency and `Retry-After`
+for every process, opens a provider's breaker only on its own failures, and retries reads.
 """
 
 from collections.abc import AsyncIterator
@@ -31,6 +33,7 @@ from shosai.features.connectors.application.installations import WorkspaceInstal
 from shosai.features.connectors.application.key_rotation import KeyRotation
 from shosai.features.connectors.application.lifecycle_sweeps import DueGrants
 from shosai.features.connectors.application.offers import Offers
+from shosai.features.connectors.application.provider_access import ConnectorProviderAccess
 from shosai.features.connectors.application.revocation import GrantRevoker, RevokeTools
 from shosai.features.connectors.channels.http.connect_routes import build_connect_router
 from shosai.features.connectors.channels.subscriptions import subscriptions
@@ -39,16 +42,18 @@ from shosai.features.connectors.channels.tasks import (
     PERIODIC_JOBS,
     connectors_task_handlers,
 )
-from shosai.features.connectors.contracts import INSTALLATIONS
+from shosai.features.connectors.contracts import INSTALLATIONS, PROVIDER_ACCESS
 from shosai.features.connectors.contracts.events import CONNECTOR_EVENTS
 from shosai.features.connectors.infrastructure.metrics import ConnectorsMetrics
 from shosai.features.connectors.infrastructure.oauth.flow_store import FlowStore
 from shosai.features.connectors.infrastructure.providers.base import ProviderRegistry
 from shosai.features.connectors.infrastructure.providers.configured import configured_clients
 from shosai.features.connectors.infrastructure.store.records import CONNECTOR_MODELS
+from shosai.features.connectors.infrastructure.transport.guards import ProviderGuards
 from shosai.features.connectors.infrastructure.transport.http_client import (
     open_connectors_http,
 )
+from shosai.features.connectors.infrastructure.transport.session import SessionParts
 from shosai.features.connectors.objectives import MONITORS
 from shosai.features.connectors.settings import ConnectorsSettings
 
@@ -82,6 +87,11 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             metrics=metrics,
         )  # fmt: skip
         lifecycle = (DueGrants(services.transactions), tokens, revoker, rotation)
+        guards = ProviderGuards(services.valkey, services.rate_limiter)
+        tracer = services.tracer_provider.get_tracer("shosai.connectors")
+        access = ConnectorProviderAccess(
+            services.transactions, registry, SessionParts(tokens, guards, http, metrics, tracer)
+        )
         yield FeatureParts(
             http_routers=(build_connect_router((authorizer, completer), services.ports),),
             task_handlers=connectors_task_handlers(lifecycle, services.tasks),
@@ -91,6 +101,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             provides=(
                 ACCOUNT_DATA_HANDLERS.bind(ConnectorsAccountData(services.transactions, revoker)),
                 INSTALLATIONS.bind(WorkspaceInstallations(authorizer, audit, services.outbox)),
+                PROVIDER_ACCESS.bind(access),
             ),
         )
 

@@ -17,6 +17,7 @@ from urllib.parse import urlsplit
 from shosai.features.connectors.domain.catalogue import Provider
 
 MAX_CALL_TIMEOUT: Final = timedelta(seconds=60)
+AUTH_SCHEMES: Final = frozenset({"Bearer", "OAuth"})
 
 
 class TokenAuth(StrEnum):
@@ -123,6 +124,8 @@ class ProviderDescriptor:
     # Сколько вызовов одного аккаунта одновременно (Outlook: 4 на ящик); None — без предела.
     concurrency_per_account: int | None = None
     timeouts: Timeouts = field(default_factory=Timeouts)
+    # Схема заголовка Authorization: Bearer, у Яндекса — OAuth.
+    auth_scheme: str = "Bearer"
 
     def __post_init__(self) -> None:
         check_https(self.authorize_url)
@@ -136,6 +139,9 @@ class ProviderDescriptor:
             raise ValueError(message)
         if self.concurrency_per_account is not None and self.concurrency_per_account < 1:
             message = f"{self.client_key}: предел одновременных вызовов — положительный"
+            raise ValueError(message)
+        if self.auth_scheme not in AUTH_SCHEMES:
+            message = f"{self.client_key}: схема авторизации — {', '.join(sorted(AUTH_SCHEMES))}"
             raise ValueError(message)
         names = [limit.name for limit in self.limits]
         if len(names) != len(set(names)):
