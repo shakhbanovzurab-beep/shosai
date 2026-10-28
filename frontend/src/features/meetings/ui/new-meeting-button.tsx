@@ -15,13 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
 import { Spinner } from "@/components/ui/spinner";
-import { isServed } from "@/config/unserved-slices";
 import { Link, useRouter } from "@/lib/navigation";
 
 import { startMeeting } from "../model/start-meeting";
 import { NewBroadcastDialog } from "./broadcast/new-broadcast-dialog";
-
-const BROADCASTS_SERVED = isServed("broadcasts");
 
 /**
  * «Начать сейчас» открывает комнату Shosai и входит в неё; встречу на потом планирует «Календарь». Загрузка записи
@@ -71,12 +68,10 @@ export function NewMeetingButton() {
               {t("actions.schedule")}
             </Link>
           </DropdownMenuItem>
-          {BROADCASTS_SERVED ? (
-            <DropdownMenuItem onSelect={() => setBroadcasting(true)}>
-              <Radio />
-              {tb("new.menu")}
-            </DropdownMenuItem>
-          ) : null}
+          <DropdownMenuItem onSelect={() => setBroadcasting(true)}>
+            <Radio />
+            {tb("new.menu")}
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
       <NewBroadcastDialog open={broadcasting} onOpenChange={setBroadcasting} />

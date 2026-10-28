@@ -43,7 +43,11 @@ export function StudioScreen({ session, link, onLeft }: StudioScreenProps) {
     .map((person) => ({ ...person, hand: null }));
   const moderates = mayModerate(broadcast.role);
   const tabs = [
-    { kind: "chat" as const, count: 0, content: <BroadcastChat chat={broadcast.chat} onSend={session.sendChat} /> },
+    {
+      kind: "chat" as const,
+      count: 0,
+      content: <BroadcastChat chat={broadcast.chat} onSend={(text) => session.sendChat(text)} />,
+    },
     ...(moderates
       ? [
           {
@@ -53,7 +57,7 @@ export function StudioScreen({ session, link, onLeft }: StudioScreenProps) {
               <HandQueue
                 hands={broadcast.hands}
                 stageFull={stageIsFull(broadcast.members)}
-                onAnswer={session.answerHand}
+                onAnswer={(id, invite) => void session.answerHand(id, invite)}
               />
             ),
           },
@@ -64,7 +68,12 @@ export function StudioScreen({ session, link, onLeft }: StudioScreenProps) {
           {
             kind: "waiting" as const,
             count: broadcast.admissions.length,
-            content: <WaitingQueue admissions={broadcast.admissions} onAnswer={session.admit} />,
+            content: (
+              <WaitingQueue
+                admissions={broadcast.admissions}
+                onAnswer={(id, admitted) => void session.admit(id, admitted)}
+              />
+            ),
           },
         ]
       : []),

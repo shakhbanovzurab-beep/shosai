@@ -19,6 +19,9 @@ export function demoTicket(token: string, name: string | null): BroadcastTicket 
     role,
     waitingRoom: token === "studio" || token === "waiting",
     identity: identityOf(name ? "a1b2c3" : "d4e5f6"),
+    access: null,
+    knock: entry === "wait" ? "demo-knock" : null,
+    broadcastId: role === "host" ? "demo" : null,
   });
   if (token === "studio") return ticket("stage", "host");
   if (token === "speaker") return ticket("stage", "speaker");

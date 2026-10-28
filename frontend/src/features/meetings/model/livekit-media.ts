@@ -21,6 +21,14 @@ export async function publishLobbyTracks(local: LocalParticipant, media: CallSet
   ]);
 }
 
+/** Включить или выключить свою дорожку; у зрителя, вышедшего на сцену, её ещё нет — она создаётся. */
+export async function setOwnTrack(local: LocalParticipant, source: Track.Source, on: boolean) {
+  const track = local.getTrackPublication(source)?.track;
+  if (track) return void (await (on ? track.unmute() : track.mute()));
+  if (on && source === Track.Source.Microphone) await local.setMicrophoneEnabled(true);
+  if (on && source === Track.Source.Camera) await local.setCameraEnabled(true);
+}
+
 /** Звук участника — скрытым элементом страницы, пока на него есть подписка. */
 export function playAudio(track: RemoteTrack) {
   const element = track.attach();

@@ -113,6 +113,7 @@
     "waitingRoomHint": "Penonton menunggu sampai Anda atau co-host mengizinkan mereka masuk.",
     "create": "Buat",
     "cancel": "Batal",
-    "failed": "Siaran tidak dapat dibuat. Coba lagi."
+    "failed": "Siaran tidak dapat dibuat. Coba lagi.",
+    "notInPlan": "Siaran tersedia di paket berbayar."
   }
 }

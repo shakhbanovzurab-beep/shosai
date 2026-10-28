@@ -46,7 +46,7 @@ export function WatchScreen({ session, onLeft }: { session: BroadcastSession; on
   const chat = {
     kind: "chat" as const,
     count: 0,
-    content: <BroadcastChat chat={broadcast.chat} onSend={session.sendChat} />,
+    content: <BroadcastChat chat={broadcast.chat} onSend={(text) => session.sendChat(text)} />,
   };
   const togglePin = (identity: string) =>
     setPinned((current) => {

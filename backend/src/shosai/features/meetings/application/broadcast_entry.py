@@ -13,6 +13,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from http import HTTPStatus
+from uuid import UUID
 
 import structlog
 from sqlalchemy import select
@@ -69,6 +70,8 @@ class Ticket:
     livekit_token: str | None = None
     room_pass: str | None = None
     knock: str | None = None
+    # Только ведущему: id трансляции для начала и конца эфира.
+    broadcast_id: UUID | None = None
 
 
 class BroadcastDoor:
@@ -100,6 +103,8 @@ class BroadcastDoor:
         answer = entry(EntryFacts(state, role, stream.manual_admit, viewers))
         if answer is BroadcastEntry.WAIT:
             knock = await self._queues.knock(stream.id, entrant.principal.value, entrant.name)
+            # Ведущий видит новый стук сразу, а не при следующем чтении состояния.
+            await push(self._server, room.lk_room_name, "state")
             return self._ticket(stream, answer, None, knock=knock.id)
         if answer not in {BroadcastEntry.STAGE, BroadcastEntry.AUDIENCE}:
             return self._ticket(stream, answer, None)
@@ -211,7 +216,7 @@ class BroadcastDoor:
         return Ticket(
             entry=entry_kind, title=stream.title, role=role, waiting_room=stream.manual_admit,
             identity=identity, livekit_url=session.url, livekit_token=session.token,
-            room_pass=room_pass,
+            room_pass=room_pass, broadcast_id=stream.id if role is StageRole.HOST else None,
         )  # fmt: skip
 
     @staticmethod

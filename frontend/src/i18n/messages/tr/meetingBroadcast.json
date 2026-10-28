@@ -113,6 +113,7 @@
     "waitingRoomHint": "İzleyiciler, siz ya da bir yardımcı sunucu içeri alana kadar bekler.",
     "create": "Oluştur",
     "cancel": "İptal",
-    "failed": "Yayın oluşturulamadı. Tekrar deneyin."
+    "failed": "Yayın oluşturulamadı. Tekrar deneyin.",
+    "notInPlan": "Yayınlar ücretli planlarda bulunur."
   }
 }

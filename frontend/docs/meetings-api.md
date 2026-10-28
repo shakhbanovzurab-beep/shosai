@@ -108,9 +108,12 @@ broadcast" where there are no mocks (`broadcasts` in `config/unserved-slices.ts`
 | `PATCH`/`DELETE` | `/v1/meetings/live/{token}/members/{principal}` | the host or a co-host (`role` only the host) | `{on_air?, role?}` | `204` |
 | `POST` | `/v1/meetings/live/{token}/stage` | an invited viewer | — | `204`; LiveKit changes the session's rights |
 
-- **A ticket**: `{entry, title, role, waiting_room, identity, livekit_url, livekit_token, room_pass, knock}` —
+- **A ticket**: `{entry, title, role, waiting_room, identity, livekit_url, livekit_token, room_pass, knock,
+  broadcast_id}` — `broadcast_id` only for the host, to start and end it;
   `entry` is `stage`, `audience`, `wait`, `not_live`, `full` or `ended`; the LiveKit token and pass come only with
-  `stage` and `audience`, `knock` only with `wait`. The stage gets in before the start; the audience only live.
+  `stage` and `audience`, `knock` only with `wait` (a new knock is pushed as `state`). The stage gets in before the
+  start; the audience only live. Hidden viewers raise no events in the room, so the host and co-hosts read the state
+  every 20 s while live for the viewer count.
 - **The state**: `{status, title, role, members: [{principal, identity, name, role, on_air}], viewers,
   waiting_room, hands: [{principal, name, at, invited}], admissions: [{id, name, at}], hand, started_at}` — `viewers` is null when LiveKit does not answer; `hands` and `admissions`
   are filled only for the host and co-hosts; `hand` is the viewer's own: `down`, `raised` or `invited`.

@@ -24885,6 +24885,19 @@
             ],
             "title": "Knock",
             "description": "Ask again with it while `entry` is `wait`."
+          },
+          "broadcast_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Broadcast Id",
+            "description": "Only for the host: to start and end it."
           }
         },
         "type": "object",
@@ -24897,7 +24910,8 @@
           "livekit_url",
           "livekit_token",
           "room_pass",
-          "knock"
+          "knock",
+          "broadcast_id"
         ],
         "title": "LiveTicketOut",
         "description": "What the link answers: where to go and, when let in, the passes."

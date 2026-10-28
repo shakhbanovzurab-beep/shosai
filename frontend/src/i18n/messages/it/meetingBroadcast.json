@@ -113,6 +113,7 @@
     "waitingRoomHint": "Gli spettatori aspettano che tu o un co-host li ammettiate.",
     "create": "Crea",
     "cancel": "Annulla",
-    "failed": "Impossibile creare la diretta. Riprova."
+    "failed": "Impossibile creare la diretta. Riprova.",
+    "notInPlan": "Le dirette sono incluse nei piani a pagamento."
   }
 }

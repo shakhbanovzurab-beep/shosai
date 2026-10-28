@@ -113,6 +113,7 @@
     "waitingRoomHint": "Người xem chờ cho đến khi bạn hoặc đồng chủ trì cho họ vào.",
     "create": "Tạo",
     "cancel": "Hủy",
-    "failed": "Không tạo được buổi phát. Hãy thử lại."
+    "failed": "Không tạo được buổi phát. Hãy thử lại.",
+    "notInPlan": "Phát trực tiếp có trong các gói trả phí."
   }
 }

@@ -113,6 +113,7 @@
     "waitingRoomHint": "Os espectadores aguardam até você ou um coanfitrião admiti-los.",
     "create": "Criar",
     "cancel": "Cancelar",
-    "failed": "Não foi possível criar a transmissão. Tente de novo."
+    "failed": "Não foi possível criar a transmissão. Tente de novo.",
+    "notInPlan": "Transmissões fazem parte dos planos pagos."
   }
 }

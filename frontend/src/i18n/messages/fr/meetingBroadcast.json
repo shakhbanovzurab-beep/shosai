@@ -113,6 +113,7 @@
     "waitingRoomHint": "Les spectateurs attendent que vous ou un co-animateur les admettiez.",
     "create": "Créer",
     "cancel": "Annuler",
-    "failed": "Impossible de créer la diffusion. Réessayez."
+    "failed": "Impossible de créer la diffusion. Réessayez.",
+    "notInPlan": "Les diffusions sont incluses dans les forfaits payants."
   }
 }

@@ -22,6 +22,12 @@ export type BroadcastTicket = {
   role: StageRole | null;
   waitingRoom: boolean;
   identity: string;
+  /** Пропуски сессии — когда ссылка впустила: LiveKit и пропуск комнаты для маршрутов трансляции. */
+  access: { livekitUrl: string; livekitToken: string; roomPass: string } | null;
+  /** С ним зритель снова спрашивает о впуске, пока ждёт. */
+  knock: string | null;
+  /** Только у ведущего: начать и закончить эфир. */
+  broadcastId: string | null;
 };
 
 /** Человек на сцене; `onAir: false` — ведущий убрал его из эфира, не снимая со сцены. */

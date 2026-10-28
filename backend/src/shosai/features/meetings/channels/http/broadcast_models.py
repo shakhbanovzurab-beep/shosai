@@ -68,6 +68,7 @@ class LiveTicketOut(Out):
     livekit_token: str | None
     room_pass: str | None
     knock: str | None = Field(description="Ask again with it while `entry` is `wait`.")
+    broadcast_id: UUID | None = Field(description="Only for the host: to start and end it.")
 
 
 class LiveMemberOut(Out):
@@ -170,6 +171,7 @@ def ticket_out(ticket: Ticket) -> LiveTicketOut:
         entry=ticket.entry, title=ticket.title, role=ticket.role, waiting_room=ticket.waiting_room,
         identity=ticket.identity, livekit_url=ticket.livekit_url,
         livekit_token=ticket.livekit_token, room_pass=ticket.room_pass, knock=ticket.knock,
+        broadcast_id=ticket.broadcast_id,
     )  # fmt: skip
 
 

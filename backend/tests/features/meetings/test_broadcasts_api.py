@@ -55,11 +55,11 @@ async def test_the_stage_gets_in_before_the_start_and_the_audience_only_live_and
     viewer = await broadcast_bench.join(token, "Ли")
     as_call = await broadcast_bench.http.post(f"/v1/meetings/join/{token}", json={"name": "Ли"})
 
-    assert (stage["entry"], stage["role"]) == ("stage", "host")
+    assert (stage["entry"], stage["role"], stage["broadcast_id"]) == ("stage", "host", broadcast_id)
     assert broadcast_bench.sfu.grants[stage["identity"]] == ON_STAGE
     assert (early["entry"], early["room_pass"], early["livekit_token"]) == ("not_live", None, None)
     assert started.json()["state"] == "live"
-    assert (viewer["entry"], viewer["role"]) == ("audience", None)
+    assert (viewer["entry"], viewer["role"], viewer["broadcast_id"]) == ("audience", None, None)
     assert broadcast_bench.sfu.grants[viewer["identity"]] == AUDIENCE
     assert AUDIENCE.hidden
     assert not AUDIENCE.can_publish_data
@@ -94,6 +94,8 @@ async def test_the_waiting_room_lets_a_viewer_in_only_when_the_host_admits(
     )
 
     assert (waiting["entry"], still.json()["entry"]) == ("wait", "wait")
+    room_name = stage["livekit_token"].split("|")[0]
+    assert (room_name, "stream", b'{"v": 1, "kind": "state"}') in broadcast_bench.sfu.published
     assert [item["name"] for item in queue["admissions"]] == ["Ли"]
     assert admitted.status_code == 204
     assert (inside.json()["entry"], inside.json()["room_pass"] is not None) == ("audience", True)

@@ -113,6 +113,7 @@
     "waitingRoomHint": "Viewers wait until you or a co-host admit them.",
     "create": "Create",
     "cancel": "Cancel",
-    "failed": "The broadcast wasn’t created. Try again."
+    "failed": "The broadcast wasn’t created. Try again.",
+    "notInPlan": "Broadcasts come with paid plans."
   }
 }

@@ -113,6 +113,7 @@
     "waitingRoomHint": "Kijkers wachten tot jij of een co-host ze toelaat.",
     "create": "Maken",
     "cancel": "Annuleren",
-    "failed": "De livestream kon niet worden gemaakt. Probeer het opnieuw."
+    "failed": "De livestream kon niet worden gemaakt. Probeer het opnieuw.",
+    "notInPlan": "Livestreams horen bij de betaalde abonnementen."
   }
 }

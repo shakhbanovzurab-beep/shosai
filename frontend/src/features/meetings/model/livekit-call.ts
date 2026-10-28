@@ -13,7 +13,7 @@ import { lastSeq, mergeChat } from "../domain/chat-log";
 import type { Reaction } from "../domain/reactions";
 import { roomMetadataOf } from "../domain/room-metadata";
 import { LiveKitBoard } from "./livekit-board";
-import { endOf, incoming, publishLobbyTracks, stopTrack } from "./livekit-media";
+import { endOf, incoming, publishLobbyTracks, setOwnTrack, stopTrack } from "./livekit-media";
 import { callPeopleOf } from "./livekit-people";
 import { ReactionDesk } from "./livekit-reactions";
 import { TrackStage } from "./livekit-tracks";
@@ -32,6 +32,7 @@ export class LiveKitCall implements CallSession {
   private readonly listeners = new Set<() => void>();
   private readonly stage: TrackStage;
   private readonly reactions: ReactionDesk;
+  private readonly topics = new Map<string, (payload: Uint8Array, from: string | undefined) => void>();
   private whiteboard: LiveKitBoard | undefined;
   private state: CallSnapshot;
 
@@ -107,6 +108,12 @@ export class LiveKitCall implements CallSession {
   attach = (identity: string, kind: VideoKind, element: HTMLVideoElement | null) =>
     this.stage.attach(identity, kind, element);
 
+  /** Пакеты своего топика — для того, что строится поверх звонка (трансляция, A12c). */
+  onData(topic: string, listener: (payload: Uint8Array, from: string | undefined) => void) {
+    this.topics.set(topic, listener);
+    return () => this.topics.delete(topic);
+  }
+
   private listen() {
     const refresh = () => this.refresh();
     this.room
@@ -151,6 +158,7 @@ export class LiveKitCall implements CallSession {
     const { chat, reaction } = incoming(payload, participant?.identity, topic);
     if (chat) this.update({ chat: mergeChat(this.state.chat, [chat]) });
     if (reaction) this.reactions.receive(reaction.emoji, reaction.from);
+    if (topic) this.topics.get(topic)?.(payload, participant?.identity);
   }
 
   private async catchUp() {
@@ -167,8 +175,7 @@ export class LiveKitCall implements CallSession {
   }
 
   private async toggle(source: Track.Source, on: boolean) {
-    const track = this.room.localParticipant.getTrackPublication(source)?.track;
-    await (on ? track?.unmute() : track?.mute());
+    await setOwnTrack(this.room.localParticipant, source, on);
     this.refresh();
   }
 

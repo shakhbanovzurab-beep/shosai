@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import { toast } from "sonner";
 import { useTranslations } from "use-intl";
@@ -17,6 +17,7 @@ import { FieldDescription, FieldLabel } from "@/components/ui/field-text";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
+import { ApiError } from "@/lib/api/errors";
 import { useRouter } from "@/lib/navigation";
 
 import { createBroadcast } from "../../model/create-broadcast";
@@ -34,13 +35,21 @@ export function NewBroadcastDialog({ open, onOpenChange }: NewBroadcastDialogPro
   const [title, setTitle] = useState("");
   const [waitingRoom, setWaitingRoom] = useState(false);
   const [creating, setCreating] = useState(false);
+  // Один ключ на попытку создать: повтор после сбоя сети не создаст вторую трансляцию.
+  const key = useRef<string | null>(null);
 
   async function create() {
     if (title.trim() === "" || creating) return;
     setCreating(true);
-    const path = await createBroadcast(title.trim(), waitingRoom).catch(() => null);
+    const idempotencyKey = key.current ?? crypto.randomUUID();
+    key.current = idempotencyKey;
+    const path = await createBroadcast(title.trim(), waitingRoom, idempotencyKey).catch((error: unknown) =>
+      error instanceof ApiError && error.code === "broadcast_not_in_plan" ? "not_in_plan" : null,
+    );
     setCreating(false);
+    if (path === "not_in_plan") return void toast.error(t("new.notInPlan"));
     if (path === null) return void toast.error(t("new.failed"));
+    key.current = null;
     onOpenChange(false);
     router.push(path);
   }

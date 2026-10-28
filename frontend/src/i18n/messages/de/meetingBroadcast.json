@@ -113,6 +113,7 @@
     "waitingRoomHint": "Zuschauer warten, bis du oder ein Co-Moderator sie zulasst.",
     "create": "Erstellen",
     "cancel": "Abbrechen",
-    "failed": "Der Livestream konnte nicht erstellt werden. Versuche es erneut."
+    "failed": "Der Livestream konnte nicht erstellt werden. Versuche es erneut.",
+    "notInPlan": "Livestreams gibt es in den kostenpflichtigen Tarifen."
   }
 }

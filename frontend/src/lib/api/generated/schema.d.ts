@@ -7387,6 +7387,11 @@ export interface components {
              * @description Ask again with it while `entry` is `wait`.
              */
             knock: string | null;
+            /**
+             * Broadcast Id
+             * @description Only for the host: to start and end it.
+             */
+            broadcast_id: string | null;
         };
         /**
          * LoginRequest
