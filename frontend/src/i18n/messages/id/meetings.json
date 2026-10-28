@@ -27,7 +27,6 @@
   "liveBadge": "Berlangsung",
   "liveSince": "{minutes, plural, =0 {Baru dimulai · berakhir {end}} other {Dimulai # menit lalu · berakhir {end}}}",
   "recordingSince": "{minutes, plural, =0 {Perekaman baru dimulai} other {Merekam selama # mnt}}",
-  "inCallSince": "{minutes, plural, =0 {Baru dimulai} other {Dimulai # mnt lalu}}",
   "startsIn": "{minutes, plural, =0 {Dimulai sekarang} other {Dalam # menit}}",
   "join": "Gabung ke rapat",
   "openRecording": "Buka",

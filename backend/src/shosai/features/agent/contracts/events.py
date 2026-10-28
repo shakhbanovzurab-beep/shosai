@@ -2,7 +2,8 @@
 
 `agent.turn.completed` tells the slices that work after a turn — memory admits facts from it,
 proactive learns the person is active — which turn of which thread ended; each reads what it
-needs through its own contract.
+needs through its own contract. `agent.skill.removed` tells studio a person uninstalled a
+skill, so it leaves the person's prompts (ADR 0068 AG-D11).
 """
 
 from typing import ClassVar
@@ -19,3 +20,12 @@ class TurnCompleted(DomainEvent):
     thread_id: UUID
     run_id: UUID
     user_id: UUID
+
+
+class SkillRemoved(DomainEvent):
+    """A person uninstalled one of their skills; written in the uninstall's transaction."""
+
+    event_type: ClassVar[str] = "agent.skill.removed"
+    version: ClassVar[int] = 1
+    user_id: UUID
+    skill_id: UUID

@@ -16364,6 +16364,535 @@
           }
         }
       }
+    },
+    "/v1/studio/context": {
+      "get": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "Read Context",
+        "description": "The person's words about themselves.",
+        "operationId": "read_context_v1_studio_context_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioContext"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "Save Context",
+        "description": "Replace the person's context; it is stored trimmed.",
+        "operationId": "save_context_v1_studio_context_put",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudioContextUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioContext"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/studio/prompts": {
+      "get": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "List Prompts",
+        "description": "The person's prompts, the last changed first, and the prompt each role plays by.",
+        "operationId": "list_prompts_v1_studio_prompts_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioPrompts"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "Create Prompt",
+        "description": "Write a new prompt; a retry with the same key returns the same prompt.",
+        "operationId": "create_prompt_v1_studio_prompts_post",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again.",
+              "title": "Idempotency-Key"
+            },
+            "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudioPromptDraft"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioPrompt"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/studio/prompts/active": {
+      "put": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "Choose Prompt",
+        "description": "Choose the prompt a role plays by; null is the built-in prompt.",
+        "operationId": "choose_prompt_v1_studio_prompts_active_put",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudioActiveChoice"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioPrompts"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/studio/prompts/{prompt_id}": {
+      "patch": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "Edit Prompt",
+        "description": "Replace the given fields; a new role leaves the role the prompt served.",
+        "operationId": "edit_prompt_v1_studio_prompts__prompt_id__patch",
+        "parameters": [
+          {
+            "name": "prompt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Prompt Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudioPromptPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioPrompt"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "Delete Prompt",
+        "description": "Delete the prompt; a role that played by it goes back to the built-in prompt.",
+        "operationId": "delete_prompt_v1_studio_prompts__prompt_id__delete",
+        "parameters": [
+          {
+            "name": "prompt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Prompt Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/studio/models": {
+      "get": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "List Models",
+        "description": "The models on the person's plan and the settings of the five roles.",
+        "operationId": "list_models_v1_studio_models_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioModels"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/studio/models/roles/{role}": {
+      "put": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "Save Role Model",
+        "description": "Save which model fills the role and how it is called.",
+        "operationId": "save_role_model_v1_studio_models_roles__role__put",
+        "parameters": [
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PromptRole"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudioRoleModelUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioRoleModel"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -26063,6 +26592,18 @@
         "title": "PromoView",
         "description": "A promo code as the admin's list shows it; the status is judged on the business date."
       },
+      "PromptRole": {
+        "type": "string",
+        "enum": [
+          "live_answers",
+          "screenshots",
+          "code",
+          "system_design",
+          "notes"
+        ],
+        "title": "PromptRole",
+        "description": "A role that takes a person's prompt: every model role but Leo's."
+      },
       "ProposalOut": {
         "properties": {
           "id": {
@@ -29249,6 +29790,465 @@
         ],
         "title": "StorageOut",
         "description": "What the person holds against what the plan allows; a null limit is unlimited."
+      },
+      "StudioActiveChoice": {
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/PromptRole"
+          },
+          "prompt_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "role",
+          "prompt_id"
+        ],
+        "title": "StudioActiveChoice",
+        "description": "The prompt a role plays by from now on; null is the built-in prompt."
+      },
+      "StudioActivePrompts": {
+        "properties": {
+          "live_answers": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Live Answers"
+          },
+          "screenshots": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Screenshots"
+          },
+          "code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          },
+          "system_design": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "System Design"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "live_answers",
+          "screenshots",
+          "code",
+          "system_design",
+          "notes"
+        ],
+        "title": "StudioActivePrompts",
+        "description": "The prompt each role plays by; null is the built-in prompt."
+      },
+      "StudioContext": {
+        "properties": {
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "content",
+          "updated_at"
+        ],
+        "title": "StudioContext",
+        "description": "The person's words about themselves; empty with no time before the first save."
+      },
+      "StudioContextUpdate": {
+        "properties": {
+          "content": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Content"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "title": "StudioContextUpdate",
+        "description": "The context's new text, stored trimmed."
+      },
+      "StudioModel": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "tier": {
+            "$ref": "#/components/schemas/Tier"
+          },
+          "capabilities": {
+            "items": {
+              "$ref": "#/components/schemas/ModelCapability"
+            },
+            "type": "array",
+            "title": "Capabilities"
+          },
+          "supports_temperature": {
+            "type": "boolean",
+            "title": "Supports Temperature"
+          },
+          "supports_reasoning": {
+            "type": "boolean",
+            "title": "Supports Reasoning"
+          },
+          "max_output_tokens": {
+            "type": "integer",
+            "title": "Max Output Tokens"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "provider",
+          "name",
+          "tier",
+          "capabilities",
+          "supports_temperature",
+          "supports_reasoning",
+          "max_output_tokens"
+        ],
+        "title": "StudioModel",
+        "description": "A model the person's plan offers."
+      },
+      "StudioModels": {
+        "properties": {
+          "models": {
+            "items": {
+              "$ref": "#/components/schemas/StudioModel"
+            },
+            "type": "array",
+            "title": "Models"
+          },
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/StudioRoleModel"
+            },
+            "type": "array",
+            "title": "Roles"
+          }
+        },
+        "type": "object",
+        "required": [
+          "models",
+          "roles"
+        ],
+        "title": "StudioModels",
+        "description": "The models on the person's plan and the settings of the five roles."
+      },
+      "StudioPrompt": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "role": {
+            "$ref": "#/components/schemas/PromptRole"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "skill_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Skill Ids"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "role",
+          "content",
+          "skill_ids",
+          "updated_at"
+        ],
+        "title": "StudioPrompt",
+        "description": "A person's instructions for one role, with installed skills appended in order."
+      },
+      "StudioPromptDraft": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "title": "Name"
+          },
+          "role": {
+            "$ref": "#/components/schemas/PromptRole"
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 20000,
+            "title": "Content",
+            "default": ""
+          },
+          "skill_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Skill Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "role"
+        ],
+        "title": "StudioPromptDraft",
+        "description": "A new prompt: a name, a role, instructions and installed skills in order."
+      },
+      "StudioPromptPatch": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PromptRole"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "content": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          },
+          "skill_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "type": "array",
+                "maxItems": 20
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Skill Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "StudioPromptPatch",
+        "description": "The fields an edit replaces; a field left out stays."
+      },
+      "StudioPrompts": {
+        "properties": {
+          "prompts": {
+            "items": {
+              "$ref": "#/components/schemas/StudioPrompt"
+            },
+            "type": "array",
+            "title": "Prompts"
+          },
+          "active": {
+            "$ref": "#/components/schemas/StudioActivePrompts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "prompts",
+          "active"
+        ],
+        "title": "StudioPrompts",
+        "description": "The person's prompts, the last changed first, and the active ones."
+      },
+      "StudioRoleModel": {
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/PromptRole"
+          },
+          "model_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Id"
+          },
+          "temperature": {
+            "type": "number",
+            "title": "Temperature"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "title": "Max Tokens"
+          },
+          "reasoning": {
+            "type": "boolean",
+            "title": "Reasoning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "role",
+          "model_id",
+          "temperature",
+          "max_tokens",
+          "reasoning"
+        ],
+        "title": "StudioRoleModel",
+        "description": "The person's model in a role and how it is called; no model is the role's default."
+      },
+      "StudioRoleModelUpdate": {
+        "properties": {
+          "model_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Id"
+          },
+          "temperature": {
+            "type": "number",
+            "maximum": 2.0,
+            "minimum": 0.0,
+            "title": "Temperature"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "title": "Max Tokens"
+          },
+          "reasoning": {
+            "type": "boolean",
+            "title": "Reasoning"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "model_id",
+          "temperature",
+          "max_tokens",
+          "reasoning"
+        ],
+        "title": "StudioRoleModelUpdate",
+        "description": "A role's new settings, saved together."
       },
       "SubjectIn": {
         "properties": {

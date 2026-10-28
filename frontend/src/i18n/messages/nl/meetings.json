@@ -27,7 +27,6 @@
   "liveBadge": "Nu live",
   "liveSince": "{minutes, plural, =0 {Net begonnen · eindigt om {end}} one {# min geleden begonnen · eindigt om {end}} other {# min geleden begonnen · eindigt om {end}}}",
   "recordingSince": "{minutes, plural, =0 {Opname net gestart} one {Opname loopt # min} other {Opname loopt # min}}",
-  "inCallSince": "{minutes, plural, =0 {Net begonnen} one {# min geleden begonnen} other {# min geleden begonnen}}",
   "startsIn": "{minutes, plural, =0 {Begint nu} one {Over # min} other {Over # min}}",
   "join": "Deelnemen",
   "openRecording": "Openen",

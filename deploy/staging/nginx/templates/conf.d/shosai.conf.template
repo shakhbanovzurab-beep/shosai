@@ -116,24 +116,6 @@ server {
         try_files $uri /app/index.html;
     }
 
-    # Ссылки на встречу (meetings A10): канонический /meet/{token} и уже разосланные /j/ и /rooms/join/
-    # ведут на её страницу в кабинете, /live/{token} — на трансляцию; фрагмент браузер сохраняет сам.
-    # Ответ нейтрален и без чтения базы, не индексируется, а токен не уходит дальше в Referer.
-    # Фигурные скобки квантификатора — только в кавычках: иначе NGINX читает их как блок.
-    location ~ "^/(?:meet|j|rooms/join)/([A-Za-z0-9_-]{12,64})/?$" {
-        add_header X-Robots-Tag "noindex, nofollow" always;
-        add_header Referrer-Policy "no-referrer" always;
-        add_header Cache-Control "no-store" always;
-        return 302 /app/meet/$1;
-    }
-
-    location ~ "^/live/([A-Za-z0-9_-]{12,64})/?$" {
-        add_header X-Robots-Tag "noindex, nofollow" always;
-        add_header Referrer-Policy "no-referrer" always;
-        add_header Cache-Control "no-store" always;
-        return 302 /app/live/$1;
-    }
-
     # Пути кабинета вне /app/ (ADR 0021 §3; frontend/tooling/cabinet-paths.ts): его index.html.
     # Префиксы /app/ выше помечены ^~, поэтому сюда не попадают.
     location ~ ^/(app|admin|oauth/callback|unauthorized)(/|$) {

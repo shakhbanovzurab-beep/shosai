@@ -8,9 +8,6 @@ import type { WebDevice } from "../domain/web-device";
 export type JoinedRoom = components["schemas"]["JoinOut"];
 export type OwnedRoom = components["schemas"]["RoomOut"];
 
-// Своих звонков одновременно у человека немного; больше страницы раздел не показывает.
-const LIVE_ROOMS = 20;
-
 export const roomApi = {
   /** Вход по ссылке: гость называет себя, вошедший человек входит под именем профиля. */
   join: (token: string, name: string | null, device: WebDevice): Promise<JoinedRoom> =>
@@ -19,11 +16,6 @@ export const roomApi = {
         params: { path: { token } },
         body: { ...(name === null ? {} : { name }), device },
       }),
-    ),
-  /** Свои комнаты Личного пространства, где сейчас идёт звонок (Live раздела). */
-  live: (): Promise<OwnedRoom[]> =>
-    dataOf(apiClient.GET("/v1/meetings/rooms", { params: { query: { state: "live", limit: LIVE_ROOMS } } })).then(
-      (page) => page.items,
     ),
   /** «Новая встреча» сейчас: комната в Личном пространстве, один раз на ключ. */
   open: (idempotencyKey: string): Promise<OwnedRoom> =>

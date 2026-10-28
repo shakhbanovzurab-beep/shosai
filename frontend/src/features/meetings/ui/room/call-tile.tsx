@@ -57,7 +57,7 @@ export function CallTile({ person, session, pinned, onPin }: CallTileProps) {
         aria-pressed={pinned}
         aria-label={t(pinned ? "people.unpin" : "people.pin", { name: person.name })}
         onClick={onPin}
-        className="absolute end-2 top-2 opacity-0 pointer-coarse:opacity-100 transition-opacity focus-visible:opacity-100 group-hover:opacity-100 aria-pressed:opacity-100"
+        className="absolute end-2 top-2 opacity-0 transition-opacity focus-visible:opacity-100 group-hover:opacity-100 aria-pressed:opacity-100 pointer-coarse:opacity-100"
       >
         {pinned ? <PinOff aria-hidden="true" /> : <Pin aria-hidden="true" />}
       </Button>

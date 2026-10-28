@@ -214,14 +214,6 @@ def storage_origin(endpoint: str) -> str:
     return f"{parts.scheme}://{parts.netloc}"
 
 
-def rtc_origins(signal_url: str) -> str:
-    """LiveKit's signalling for the cabinet's CSP: its wss:// and https:// origins; empty without it."""
-    if not signal_url.startswith("wss://"):
-        return ""
-    host = signal_url.removeprefix("wss://").split("/", 1)[0]
-    return f"wss://{host} https://{host}"
-
-
 def probe_targets(source: dict[str, str], domain: str) -> str:
     """Prometheus file_sd targets: health through the edge and each home's database."""
     lines = [
@@ -336,7 +328,6 @@ def main(source_path: Path, target: Path) -> None:
             "SHOSAI_EDGE_IMAGE": images.get("SHOSAI_EDGE_IMAGE", "shosai-edge:staging"),
             "SHOSAI_SERVER_NAME": SERVER_NAME,
             "SHOSAI_CSP_STORAGE_ORIGINS": " ".join(origins),
-            "SHOSAI_CSP_RTC_ORIGINS": rtc_origins(source.get("LIVEKIT_URL", "")),
             **downloads,
         }),
         owner,

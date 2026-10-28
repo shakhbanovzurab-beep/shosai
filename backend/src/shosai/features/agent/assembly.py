@@ -116,7 +116,7 @@ def skill_store(
         SkillsDirectory(clients[1], services.cache, metrics),
         services.rate_limiter,
     )
-    return SkillStore(services.transactions, sources)
+    return SkillStore(services.transactions, sources, services.outbox)
 
 
 def platform_images(services: CoreServices, settings: AgentSettings) -> PlatformImages:

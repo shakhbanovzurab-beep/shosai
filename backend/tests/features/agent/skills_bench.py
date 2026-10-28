@@ -19,11 +19,14 @@ from redis.asyncio import Redis
 
 from shosai.core.cache.metrics import CacheMetrics
 from shosai.core.cache.redis_cache import RedisCache
+from shosai.core.events.catalog import EventTypes
+from shosai.core.events.outbox import EventOutbox
 from shosai.core.kv.metrics import KeyValueMetrics
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.skill_store import SkillStore
 from shosai.features.agent.channels.http.skills import build_skills_router
+from shosai.features.agent.contracts.events import SkillRemoved
 from shosai.features.agent.infrastructure.github_skills import GitHubSkills
 from shosai.features.agent.infrastructure.skill_metrics import SkillMetrics
 from shosai.features.agent.infrastructure.skills_directory import SkillsDirectory
@@ -129,7 +132,7 @@ async def skills_bench(
             SkillsDirectory(to_directory, cache, metrics),
             RateLimiter(valkey, KeyValueMetrics(registry)),
         )
-        store = SkillStore(homes.transactions, sources)
+        store = SkillStore(homes.transactions, sources, EventOutbox(EventTypes([SkillRemoved])))
         ports = PortDirectory()
         ports.install([AUTHENTICATOR.bind(BearerOfTheTest())])
         app = build_probe_app(extra=(build_skills_router(store, ports),)).app

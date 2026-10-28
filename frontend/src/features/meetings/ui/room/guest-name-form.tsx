@@ -25,6 +25,7 @@ export function GuestNameForm({ value, onChange, problem, pending, onSubmit }: G
   const valid = guestName(value) !== null;
   return (
     <form
+      aria-labelledby="join-title"
       className="flex flex-col gap-5"
       onSubmit={(event) => {
         event.preventDefault();

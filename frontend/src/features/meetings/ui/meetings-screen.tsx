@@ -11,7 +11,7 @@ import { SharedMeetingsList, SharedMeetingsNav } from "@/features/workspace/ui/p
 import { useNow } from "@/hooks/use-now";
 
 import { bucketMeetings, type MeetingsView } from "../domain/meeting";
-import { meetingsResource, ROOMS_SERVED, SCHEDULE_SERVED, useMeetings } from "../model/meetings-resource";
+import { MEETINGS_SERVED, meetingsResource, useMeetings } from "../model/meetings-resource";
 import { MeetingsContent } from "./meetings-content";
 import { MeetingsNav } from "./meetings-nav";
 import { NewMeetingButton } from "./new-meeting-button";
@@ -38,7 +38,7 @@ const sharedHref = (slug: string) => `/app/meetings?workspace=${encodeURICompone
 export function MeetingsScreen({ view: asked, sharedIn }: { view: MeetingsView; sharedIn: string | null }) {
   const t = useTranslations("meetings");
   // Без API meetings запланированных встреч нет: адрес «Предстоящих» открывает весь раздел.
-  const view = asked === "upcoming" && !SCHEDULE_SERVED ? "all" : asked;
+  const view = asked === "upcoming" && !MEETINGS_SERVED ? "all" : asked;
   const state = useMeetings();
   const now = useNow();
 
@@ -70,7 +70,7 @@ export function MeetingsScreen({ view: asked, sharedIn }: { view: MeetingsView; 
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 pb-16">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-semibold text-2xl tracking-tight">{t("title")}</h1>
-        {ROOMS_SERVED ? <NewMeetingButton /> : null}
+        {MEETINGS_SERVED ? <NewMeetingButton /> : null}
       </header>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[13rem_minmax(0,1fr)]">
         <aside className="flex min-w-0 flex-col gap-4">

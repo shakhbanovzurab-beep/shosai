@@ -27,7 +27,6 @@
   "liveBadge": "Canlı",
   "liveSince": "{minutes, plural, =0 {Yeni başladı · bitiş: {end}} one {# dk önce başladı · bitiş: {end}} other {# dk önce başladı · bitiş: {end}}}",
   "recordingSince": "{minutes, plural, =0 {Kayıt yeni başladı} one {# dk’dır kaydediliyor} other {# dk’dır kaydediliyor}}",
-  "inCallSince": "{minutes, plural, =0 {Yeni başladı} one {# dk önce başladı} other {# dk önce başladı}}",
   "startsIn": "{minutes, plural, =0 {Şimdi başlıyor} one {# dk sonra} other {# dk sonra}}",
   "join": "Toplantıya katıl",
   "openRecording": "Aç",

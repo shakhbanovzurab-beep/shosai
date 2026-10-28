@@ -4028,6 +4028,138 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/studio/context": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Context
+         * @description The person's words about themselves.
+         */
+        get: operations["read_context_v1_studio_context_get"];
+        /**
+         * Save Context
+         * @description Replace the person's context; it is stored trimmed.
+         */
+        put: operations["save_context_v1_studio_context_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/studio/prompts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Prompts
+         * @description The person's prompts, the last changed first, and the prompt each role plays by.
+         */
+        get: operations["list_prompts_v1_studio_prompts_get"];
+        put?: never;
+        /**
+         * Create Prompt
+         * @description Write a new prompt; a retry with the same key returns the same prompt.
+         */
+        post: operations["create_prompt_v1_studio_prompts_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/studio/prompts/active": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Choose Prompt
+         * @description Choose the prompt a role plays by; null is the built-in prompt.
+         */
+        put: operations["choose_prompt_v1_studio_prompts_active_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/studio/prompts/{prompt_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Prompt
+         * @description Delete the prompt; a role that played by it goes back to the built-in prompt.
+         */
+        delete: operations["delete_prompt_v1_studio_prompts__prompt_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Edit Prompt
+         * @description Replace the given fields; a new role leaves the role the prompt served.
+         */
+        patch: operations["edit_prompt_v1_studio_prompts__prompt_id__patch"];
+        trace?: never;
+    };
+    "/v1/studio/models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Models
+         * @description The models on the person's plan and the settings of the five roles.
+         */
+        get: operations["list_models_v1_studio_models_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/studio/models/roles/{role}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save Role Model
+         * @description Save which model fills the role and how it is called.
+         */
+        put: operations["save_role_model_v1_studio_models_roles__role__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -8029,6 +8161,12 @@ export interface components {
             created_at: string;
         };
         /**
+         * PromptRole
+         * @description A role that takes a person's prompt: every model role but Leo's.
+         * @enum {string}
+         */
+        PromptRole: "live_answers" | "screenshots" | "code" | "system_design" | "notes";
+        /**
          * ProposalOut
          * @description A card, in the person's language (`LeoProposal`).
          */
@@ -9431,6 +9569,170 @@ export interface components {
             leo_over_limit_since: string | null;
             /** Leo Removal At */
             leo_removal_at: string | null;
+        };
+        /**
+         * StudioActiveChoice
+         * @description The prompt a role plays by from now on; null is the built-in prompt.
+         */
+        StudioActiveChoice: {
+            role: components["schemas"]["PromptRole"];
+            /** Prompt Id */
+            prompt_id: string | null;
+        };
+        /**
+         * StudioActivePrompts
+         * @description The prompt each role plays by; null is the built-in prompt.
+         */
+        StudioActivePrompts: {
+            /** Live Answers */
+            live_answers: string | null;
+            /** Screenshots */
+            screenshots: string | null;
+            /** Code */
+            code: string | null;
+            /** System Design */
+            system_design: string | null;
+            /** Notes */
+            notes: string | null;
+        };
+        /**
+         * StudioContext
+         * @description The person's words about themselves; empty with no time before the first save.
+         */
+        StudioContext: {
+            /** Content */
+            content: string;
+            /** Updated At */
+            updated_at: string | null;
+        };
+        /**
+         * StudioContextUpdate
+         * @description The context's new text, stored trimmed.
+         */
+        StudioContextUpdate: {
+            /** Content */
+            content: string;
+        };
+        /**
+         * StudioModel
+         * @description A model the person's plan offers.
+         */
+        StudioModel: {
+            /** Id */
+            id: string;
+            /** Provider */
+            provider: string;
+            /** Name */
+            name: string;
+            tier: components["schemas"]["Tier"];
+            /** Capabilities */
+            capabilities: components["schemas"]["ModelCapability"][];
+            /** Supports Temperature */
+            supports_temperature: boolean;
+            /** Supports Reasoning */
+            supports_reasoning: boolean;
+            /** Max Output Tokens */
+            max_output_tokens: number;
+        };
+        /**
+         * StudioModels
+         * @description The models on the person's plan and the settings of the five roles.
+         */
+        StudioModels: {
+            /** Models */
+            models: components["schemas"]["StudioModel"][];
+            /** Roles */
+            roles: components["schemas"]["StudioRoleModel"][];
+        };
+        /**
+         * StudioPrompt
+         * @description A person's instructions for one role, with installed skills appended in order.
+         */
+        StudioPrompt: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            role: components["schemas"]["PromptRole"];
+            /** Content */
+            content: string;
+            /** Skill Ids */
+            skill_ids: string[];
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /**
+         * StudioPromptDraft
+         * @description A new prompt: a name, a role, instructions and installed skills in order.
+         */
+        StudioPromptDraft: {
+            /** Name */
+            name: string;
+            role: components["schemas"]["PromptRole"];
+            /**
+             * Content
+             * @default
+             */
+            content: string;
+            /** Skill Ids */
+            skill_ids?: string[];
+        };
+        /**
+         * StudioPromptPatch
+         * @description The fields an edit replaces; a field left out stays.
+         */
+        StudioPromptPatch: {
+            /** Name */
+            name?: string | null;
+            role?: components["schemas"]["PromptRole"] | null;
+            /** Content */
+            content?: string | null;
+            /** Skill Ids */
+            skill_ids?: string[] | null;
+        };
+        /**
+         * StudioPrompts
+         * @description The person's prompts, the last changed first, and the active ones.
+         */
+        StudioPrompts: {
+            /** Prompts */
+            prompts: components["schemas"]["StudioPrompt"][];
+            active: components["schemas"]["StudioActivePrompts"];
+        };
+        /**
+         * StudioRoleModel
+         * @description The person's model in a role and how it is called; no model is the role's default.
+         */
+        StudioRoleModel: {
+            role: components["schemas"]["PromptRole"];
+            /** Model Id */
+            model_id: string | null;
+            /** Temperature */
+            temperature: number;
+            /** Max Tokens */
+            max_tokens: number;
+            /** Reasoning */
+            reasoning: boolean;
+        };
+        /**
+         * StudioRoleModelUpdate
+         * @description A role's new settings, saved together.
+         */
+        StudioRoleModelUpdate: {
+            /** Model Id */
+            model_id: string | null;
+            /** Temperature */
+            temperature: number;
+            /** Max Tokens */
+            max_tokens: number;
+            /** Reasoning */
+            reasoning: boolean;
         };
         /**
          * SubjectIn
@@ -19072,6 +19374,311 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminPlatformPrompts"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_context_v1_studio_context_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudioContext"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    save_context_v1_studio_context_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StudioContextUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudioContext"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_prompts_v1_studio_prompts_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudioPrompts"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_prompt_v1_studio_prompts_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StudioPromptDraft"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudioPrompt"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    choose_prompt_v1_studio_prompts_active_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StudioActiveChoice"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudioPrompts"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_prompt_v1_studio_prompts__prompt_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                prompt_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    edit_prompt_v1_studio_prompts__prompt_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                prompt_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StudioPromptPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudioPrompt"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_models_v1_studio_models_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudioModels"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    save_role_model_v1_studio_models_roles__role__put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                role: components["schemas"]["PromptRole"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StudioRoleModelUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudioRoleModel"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

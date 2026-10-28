@@ -28,7 +28,6 @@ docker buildx build -f frontend/Dockerfile --secret id=cabinet_env,src=cabinet.e
 | `SHOSAI_API_UPSTREAM` | the `api` process, `host:port` | `api:8000` |
 | `SHOSAI_WS_UPSTREAM` | the `ws` gateway, `host:port` | `ws:8000` |
 | `SHOSAI_CSP_STORAGE_ORIGINS` | the buckets' origins, space-separated: avatars and exports load from them | empty |
-| `SHOSAI_CSP_RTC_ORIGINS` | LiveKit's signalling, `wss://` and `https://` of `LIVEKIT_URL`, rendered from it: the room page connects to it | empty (no calls) |
 | `SHOSAI_ROBOTS_TAG` | `X-Robots-Tag` of every answer | `noindex, nofollow` |
 
 What it serves:

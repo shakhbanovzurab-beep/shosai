@@ -1,6 +1,7 @@
 """The skills store behind Studio's dialog (agent step 15): a skill pinned to the commit its
 reference names, found by name for a skills.sh id, kept once per folder and twenty per person,
-updated at the default branch, removed by its owner only; a repository scanned, skills.sh
+updated at the default branch, removed by its owner only with `agent.skill.removed` in the
+same transaction; a repository scanned, skills.sh
 searched softly; GitHub's refusals as the store's codes; the skills read by id for studio."""
 
 import asyncio
@@ -12,6 +13,8 @@ from shosai.features.agent.infrastructure.person_records import AgentSkillRecord
 from shosai.features.identity.contracts import Principal
 from tests.features.agent.skills_bench import Repo, SkillsBench, skill_files
 from tests.features.billing.people_bench import bearer
+from tests.harness.connections import fetch_rows
+from tests.harness.run_slot import RunSlot
 
 HOME = Home.EU
 SKILLS = "/v1/agent/skills"
@@ -121,9 +124,10 @@ async def test_an_update_reads_the_default_branch_again(skills_bench: SkillsBenc
     assert updated.json()["id"] == made["id"]
 
 
-async def test_only_the_owner_removes_a_skill(skills_bench: SkillsBench) -> None:
+async def test_only_the_owner_removes_a_skill(skills_bench: SkillsBench, run_slot: RunSlot) -> None:
     kit(skills_bench)
-    owner, stranger = bearer((HOME, uuid.uuid4())), bearer((HOME, uuid.uuid4()))
+    person = uuid.uuid4()
+    owner, stranger = bearer((HOME, person)), bearer((HOME, uuid.uuid4()))
     body = {"reference": "acme/kit/skills/pdf"}
     made = (await skills_bench.http.post(SKILLS, json=body, headers=owner)).json()
 
@@ -132,3 +136,10 @@ async def test_only_the_owner_removes_a_skill(skills_bench: SkillsBench) -> None
     again = await skills_bench.http.delete(f"{SKILLS}/{made['id']}", headers=owner)
 
     assert (not_theirs.status_code, removed.status_code, again.status_code) == (404, 204, 404)
+    written = await fetch_rows(
+        run_slot.claimed.connections[HOME],
+        "SELECT event_type, payload FROM outbox_messages WHERE event_type = 'agent.skill.removed'",
+        (),
+    )
+    payloads = [(row["event_type"], row["payload"]) for row in written]
+    assert payloads == [("agent.skill.removed", {"user_id": str(person), "skill_id": made["id"]})]

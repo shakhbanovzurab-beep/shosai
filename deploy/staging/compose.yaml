@@ -94,8 +94,6 @@ services:
       SHOSAI_TLS_CERTIFICATE: /run/shosai-edge-tls/fullchain.pem
       SHOSAI_TLS_CERTIFICATE_KEY: /run/shosai-edge-tls/privkey.pem
       SHOSAI_CSP_STORAGE_ORIGINS: ${SHOSAI_CSP_STORAGE_ORIGINS:-}
-      # Сигнализация LiveKit для звонков: wss:// и https:// её адреса; пусто — звонков нет (meetings A10).
-      SHOSAI_CSP_RTC_ORIGINS: ${SHOSAI_CSP_RTC_ORIGINS:-}
       # Бакеты домов, из которых edge отдаёт скачивания с nosniff и песочницей (FL-D9).
       SHOSAI_DOWNLOAD_RU_ORIGIN: ${SHOSAI_DOWNLOAD_RU_ORIGIN:?бакет RU для скачивания не задан}
       SHOSAI_DOWNLOAD_EU_ORIGIN: ${SHOSAI_DOWNLOAD_EU_ORIGIN:?бакет EU для скачивания не задан}

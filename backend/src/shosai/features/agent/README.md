@@ -3,7 +3,7 @@
 Leo's core: a person's conversations with Leo in Personal and in each workspace, the run that answers a turn — reading through every slice's tools under the one access policy and naming each source with its space — and the Action Gateway, the only path by which Leo changes anything, after the person approves a card that says exactly what will change. The slice also owns Settings › Leo, the rating of answers, the skills store, the native model proxy of the shipped desktop clients and Leo in the admin panel. The cabinet's feature is `leo` (SLICE_MAP §4.3).
 
 - Plan: [docs/plan/slices/agent.md](../../../../../docs/plan/slices/agent.md). Decisions: AG-D1…AG-D14 in the plan and [ADR 0068](../../../../../docs/adr/0068-leo-agent-slice.md); the design is the [Leo architecture](../../../../../docs/design/leo/ARCHITECTURE.md) with ADR 0023–0033.
-- Public surface: `contracts` (`ActionProposals` for a slice's planned write without a model round; the ports agent needs — `TurnRouter`, `FrictionJudge`, `MemoryRecall`, `ProfileFacts` — and `SkillReader` for studio) and `contracts.events` (`agent.turn.completed`).
+- Public surface: `contracts` (`ActionProposals` for a slice's planned write without a model round; the ports agent needs — `TurnRouter`, `FrictionJudge`, `MemoryRecall`, `ProfileFacts` — and `SkillReader` for studio) and `contracts.events` (`agent.turn.completed`; `agent.skill.removed`, written in an uninstall's transaction, for studio to take the skill off the person's prompts).
 - Turns run on the dedicated `agent` queue's workers; the API admits, commits and streams them from the run's log in Valkey (AG-D12). LangGraph is only the frame of a turn (AG-D14).
 
 ## HTTP

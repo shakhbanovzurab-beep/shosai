@@ -78,7 +78,7 @@ from shosai.features.agent.channels.subscriptions import subscriptions
 from shosai.features.agent.channels.tasks import PERIODIC_JOBS, Handlers, task_handlers
 from shosai.features.agent.channels.web_tools import WEB_TOOLS
 from shosai.features.agent.contracts import ACTION_PROPOSALS, SKILL_READER
-from shosai.features.agent.contracts.events import TurnCompleted
+from shosai.features.agent.contracts.events import SkillRemoved, TurnCompleted
 from shosai.features.agent.contracts.memory import PERSON_WORDS
 from shosai.features.agent.contracts.voice import VOICE_TURNS
 from shosai.features.agent.infrastructure.feedback_metrics import FeedbackMetrics
@@ -205,7 +205,7 @@ AGENT = FeatureModule(
     name="agent",
     build=build,
     models=(*THREAD_MODELS, *RUN_MODELS, *PERSON_MODELS, *IMAGE_MODELS),
-    events=(TurnCompleted,),
+    events=(TurnCompleted, SkillRemoved),
     settings=(AgentSettings,),
     production_checks=(agent_model_set,),
     agent_tools=(*CORE_TOOLS, *WEB_TOOLS, *PLATFORM_TOOLS, *IMAGE_TOOLS),

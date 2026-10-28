@@ -4,7 +4,8 @@ A skill is installed from a reference: its repository's commit is pinned — the
 named, else the default branch's head — the skill's folder is found in the tree at that
 commit, and its SKILL.md read there. One row per repository and folder is kept by a unique key
 with `ON CONFLICT` (the draft checked first and raced), and at most 20 per person, counted under
-the person's lock. An update reads the skill again at the default branch's head. Installing,
+the person's lock. An update reads the skill again at the default branch's head; an uninstall
+writes `agent.skill.removed` in its transaction, so studio's prompts drop it. Installing,
 updating and scanning read GitHub, so they share a limit of 20 a minute per person; a search
 reads the directory, 60 a minute. Nothing here gates by plan: no screen states one. The body
 is the person's untrusted text: a prompt that carries it wraps it (studio, AG-D11).
@@ -22,12 +23,14 @@ from sqlalchemy import delete, func, select, update
 from sqlalchemy.dialects.postgresql import insert
 
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.ids import new_id
 from shosai.core.kv.connection import REDIS_FAILURES
 from shosai.core.kv.rate_limits import RateLimit, RateLimiter
 from shosai.core.web.rate_limit import RateLimitedError
 from shosai.features.agent.application.skill_errors import refused
+from shosai.features.agent.contracts.events import SkillRemoved
 from shosai.features.agent.domain.skill_sources import (
     SkillReference,
     SkillSourceError,
@@ -91,10 +94,12 @@ class SkillStore:
         self,
         transactions: HomeTransactions,
         sources: tuple[GitHubSkills, SkillsDirectory, RateLimiter],
+        outbox: EventOutbox,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
         self._github, self._directory, self._limiter = sources
+        self._outbox = outbox
         self._clock = clock
 
     async def listed(self, principal: Principal) -> list[AgentSkillRecord]:
@@ -158,13 +163,16 @@ class SkillStore:
         return kept
 
     async def uninstall(self, principal: Principal, skill_id: UUID) -> None:
-        """Remove the person's skill."""
+        """Remove the person's skill; studio's prompts drop it on the event."""
         async with self._transactions.begin(principal.scope()) as session:
             gone = await session.scalar(
                 delete(SKILL)
                 .where(SKILL.id == skill_id, SKILL.user_id == principal.user_id)
                 .returning(SKILL.id)
             )
+            if gone is not None:
+                event = SkillRemoved(user_id=principal.user_id, skill_id=skill_id)
+                await self._outbox.add(session, event)
         if gone is None:
             raise AppError("skill_not_found", HTTPStatus.NOT_FOUND)
 

@@ -207,7 +207,7 @@ class JoinDesk:
             return held[0].max_participants or self._platform_ceiling, present
         snapshot = await self._ports.get(ENTITLEMENTS).snapshot(found.home, found.owner_id)
         ceiling = room_ceiling(snapshot.limits.room_participants, self._platform_ceiling)
-        spec = RoomSpec(room.lk_room_name, ceiling, room_metadata(room.id, room.owner_id, marks))
+        spec = RoomSpec(room.lk_room_name, ceiling, room_metadata(room.id, marks))
         await self._server.create_room(spec)
         return ceiling, 0
 
