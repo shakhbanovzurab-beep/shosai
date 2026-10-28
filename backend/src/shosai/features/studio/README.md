@@ -32,3 +32,7 @@ How Shosai's AI behaves: which models people may choose and what each role runs 
 ## Leo on studio (step 11a)
 
 - Agent resolves a turn's model through `MODEL_ROUTES.route(leo)` at the turn's admission; `ResolvedRoute.token_route` carries billing's route of the call's tokens for the run's record. Settings › Leo's model is checked by `MODEL_CATALOGUE.refusal(person, model, leo)`. Leo's head takes `PROMPT_RESOLVER.platform_layer()` after the policy core and `personal_context()` in segment 4. Until an environment's `leo` role has a default, turns there keep `AGENT_STANDARD_MODEL` — the setting goes with step 11d.
+
+## Leo's studio toolset (step 13)
+
+- `studio.read_context` (read, no provenance: the person's own words) and `studio.update_context` (write: the whole new text, checked and frozen when proposed, shown on a card, applied once per item key through the Action Gateway, compensable, `ToolSpec.mcp = False` — an external agent never rewrites what Leo knows about the person). `channels/agent_tools.py`, `agent_tool_handlers.py`, the card's words in `agent_previews.py` in 16 languages.

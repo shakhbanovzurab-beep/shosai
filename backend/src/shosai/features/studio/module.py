@@ -13,7 +13,8 @@ in the snapshot. Step 8 the person's Studio on `/v1/studio/*` — the context, p
 their skills, the prompt per role, the models on the plan and the role settings — and the
 consumer that takes an uninstalled skill off the prompts. Step 10 the resolution for people:
 `MODEL_ROUTES` with billing's allowance inside the route, and `PROMPT_RESOLVER` with the
-platform layer, a person's role prompt and their context.
+platform layer, a person's role prompt and their context. Step 13 Leo's `studio` toolset:
+reading the person's "About you" and rewriting it on a card, never over MCP.
 """
 
 from collections.abc import AsyncIterator
@@ -21,6 +22,7 @@ from contextlib import asynccontextmanager
 
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.core.idempotency.action_items import ActionItems
 from shosai.features.studio.application.account_data import ACCOUNT_DATA, StudioAccountData
 from shosai.features.studio.application.ai_models_screen import AiModelsScreen
 from shosai.features.studio.application.catalogue_admin import CatalogueAdmin
@@ -32,6 +34,8 @@ from shosai.features.studio.application.person_settings import PersonSettings
 from shosai.features.studio.application.platform_prompts import PlatformPrompts
 from shosai.features.studio.application.platform_reader import PlatformPromptReader
 from shosai.features.studio.application.prompt_resolver import StudioPromptResolver
+from shosai.features.studio.channels.agent_tool_handlers import StudioTools
+from shosai.features.studio.channels.agent_tools import STUDIO_TOOLS
 from shosai.features.studio.channels.http.admin_ai_models import build_admin_ai_models_router
 from shosai.features.studio.channels.http.admin_platform_prompts import (
     build_admin_platform_prompts_router,
@@ -80,6 +84,9 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         ),
         task_handlers=(refresh_tick(refresh),),
         subscriptions=SUBSCRIPTIONS,
+        agent_tools=StudioTools(
+            services.transactions, ActionItems(services.effects, services.outbox)
+        ).bound(),
         periodic_jobs=PERIODIC_JOBS,
         provides=(
             ACCOUNT_DATA_HANDLERS.bind(StudioAccountData(services.transactions)),
@@ -96,5 +103,6 @@ STUDIO = FeatureModule(
     models=(*PLATFORM_MODELS, *PERSON_MODELS),
     events=STUDIO_EVENTS,
     settings=(StudioSettings,),
+    agent_tools=STUDIO_TOOLS,
     account_data=(ACCOUNT_DATA,),
 )

@@ -92,6 +92,8 @@ class ToolSpec[I: BaseModel, O: BaseModel]:
     step_detail: str | None = None
     # Формулировки ключей превью записи на 16 языках: по ним агент рисует карточку.
     previews: tuple[PreviewWording, ...] = ()
+    # Предлагается ли инструмент внешним агентам по MCP; запись в слова человека о себе — нет.
+    mcp: bool = True
 
     def __post_init__(self) -> None:
         for problem in _problems(self):
