@@ -15,7 +15,7 @@ chose a template or rewrote it, the recording leaves it as it is (MT-D3).
 import unicodedata
 from collections import Counter
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Final
 from uuid import UUID
@@ -29,6 +29,7 @@ from shosai.core.events.outbox import EventOutbox
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.notes.application.found_items import listed
 from shosai.features.notes.application.notes_model import NotesModel, Question
+from shosai.features.notes.application.notes_studio import NotesStudio, notes_studio
 from shosai.features.notes.application.pipeline import StageFailedError, StageWork
 from shosai.features.notes.application.stage_reads import (
     MEETING_GONE,
@@ -82,6 +83,7 @@ class Draft:
     findings: list[tuple[UUID, Finding]]
     closing: list[SpokenLine]
     consent: bool
+    studio: NotesStudio = field(default_factory=NotesStudio)
 
 
 def summary_text(answer: SummaryAnswer | None) -> str | None:
@@ -146,9 +148,15 @@ class WriteUpStage:
             archived = meeting.transcript_archive_key if summarised else None
             lines = await spoken_lines(session, meeting) if summarised and archived is None else []
             consent = summarised and await cross_border(session, self._ports, meeting.user_id)
+            # Модель зовёт только раздел итогов: без него studio не спрашивается.
+            studio = (
+                await notes_studio(self._ports, session, work.scope, legacy=self._model.legacy)
+                if summarised
+                else NotesStudio()
+            )
         if archived is not None:
             lines = await archived_spoken(self._archive, work.scope.home, archived)
-        return Draft(template_id, layout, findings_run, findings, lines, consent)
+        return Draft(template_id, layout, findings_run, findings, lines, consent, studio)
 
     async def _layout(
         self, session: AsyncSession, meeting: MeetingRecord, run_id: UUID
@@ -174,10 +182,13 @@ class WriteUpStage:
         room = self._budget - len(findings) - len(TRANSCRIPT_END_HEADER)
         closing = "\n".join(map(rendered, tail(draft.closing, room)))
         question = Question(
-            NotesCall.SUMMARY, 0, SUMMARY_INSTRUCTIONS.replace("<focus>", focus_of(plan)),
+            NotesCall.SUMMARY, 0,
+            draft.studio.styled(SUMMARY_INSTRUCTIONS.replace("<focus>", focus_of(plan))),
             f"{findings}\n\n{TRANSCRIPT_END_HEADER}\n{closing}", SUMMARY_TOKENS,
         )  # fmt: skip
-        return await self._model.ask(work, question, SummaryAnswer, consent=draft.consent)
+        return await self._model.ask(
+            work, question, SummaryAnswer, consent=draft.consent, studio=draft.studio
+        )
 
     async def _write(self, work: StageWork, draft: Draft, summary: str | None) -> None:
         now = self._clock()

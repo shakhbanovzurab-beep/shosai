@@ -17,10 +17,14 @@ from typing import Final
 import structlog
 from pydantic import BaseModel, ValidationError
 
-from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
+from shosai.core.ai.calls import CallContext, CallOrigin, ModelRoute
 from shosai.core.ai.port import AiProviders
 from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart
-from shosai.features.notes.application.pipeline import StageWork
+from shosai.features.notes.application.notes_studio import (
+    MODEL_ROLE_UNCONFIGURED,
+    NotesStudio,
+)
+from shosai.features.notes.application.pipeline import StageFailedError, StageWork
 from shosai.features.notes.domain.runs import effect_key
 from shosai.features.notes.infrastructure.notes_metrics import (
     AnswerOutcome,
@@ -64,27 +68,41 @@ def json_object_of[A: BaseModel](text: str, shape: type[A]) -> A | None:
 class NotesModel:
     """The notes' model behind the AI port, asked under a run's effect keys."""
 
-    def __init__(self, ai: AiProviders, route: ModelRoute, metrics: NotesMetrics) -> None:
+    def __init__(self, ai: AiProviders, route: ModelRoute | None, metrics: NotesMetrics) -> None:
         self._ai = ai
+        # NOTES_MODEL: отвечает, пока у роли notes нет умолчания в каталоге studio.
         self._route = route
         self._metrics = metrics
 
+    @property
+    def legacy(self) -> bool:
+        """Whether `NOTES_MODEL` stands in while the `notes` role has no default."""
+        return self._route is not None
+
     async def ask[A: BaseModel](
-        self, work: StageWork, question: Question, shape: type[A], *, consent: bool
+        self,
+        work: StageWork,
+        question: Question,
+        shape: type[A],
+        *,
+        consent: bool,
+        studio: NotesStudio | None = None,
     ) -> A | None:
         """The answer in its shape, asking once more when the first is unreadable."""
         messages = (
             _message(Role.SYSTEM, question.instructions),
             _message(Role.USER, question.data),
         )
-        first = await self._chat(work, (question, 2 * question.part), messages, consent=consent)
+        studio = studio or NotesStudio()
+        call = (studio, consent)
+        first = await self._chat(work, (question, 2 * question.part), messages, call)
         answer = json_object_of(first, shape)
         if answer is not None:
             self._metrics.answered(question.call, AnswerOutcome.READ)
             return answer
         retold = (_message(Role.ASSISTANT, first),) if first.strip() else ()
         again = (*messages, *retold, _message(Role.USER, ASK_AGAIN))
-        second = await self._chat(work, (question, 2 * question.part + 1), again, consent=consent)
+        second = await self._chat(work, (question, 2 * question.part + 1), again, call)
         answer = json_object_of(second, shape)
         if answer is not None:
             self._metrics.answered(question.call, AnswerOutcome.READ_AGAIN)
@@ -103,14 +121,17 @@ class NotesModel:
         work: StageWork,
         keyed: tuple[Question, int],
         messages: tuple[ChatMessage, ...],
-        *,
-        consent: bool,
+        call: tuple[NotesStudio, bool],
     ) -> str:
         question, part = keyed
+        studio, consent = call
+        route = studio.route or self._route
+        if route is None:
+            raise StageFailedError(MODEL_ROLE_UNCONFIGURED)
         context = CallContext(
             effect_key=effect_key(work.run_id, work.stage, part),
             feature=f"notes.{work.stage.value}",
-            call_class=CallClass.STANDARD,
+            call_class=studio.call_class,
             origin=CallOrigin.BACKGROUND,
             scope=work.scope,
             cross_border_consent=consent,
@@ -121,5 +142,5 @@ class NotesModel:
             max_output_tokens=question.max_output_tokens,
             temperature=TEMPERATURE,
         )
-        result = await self._ai.chat(context, self._route, request)
+        result = await self._ai.chat(context, route, request)
         return result.text

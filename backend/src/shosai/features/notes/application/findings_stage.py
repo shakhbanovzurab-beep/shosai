@@ -12,7 +12,7 @@ finds the run's findings written calls nothing and writes nothing (inv-8).
 
 import asyncio
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Final
 
@@ -30,6 +30,7 @@ from shosai.features.notes.application.found_items import (
     without_repeats,
 )
 from shosai.features.notes.application.notes_model import NotesModel, Question
+from shosai.features.notes.application.notes_studio import NotesStudio, notes_studio
 from shosai.features.notes.application.pipeline import StageFailedError, StageWork
 from shosai.features.notes.application.stage_reads import (
     MEETING_GONE,
@@ -68,6 +69,7 @@ class MeetingText:
     length_ms: int
     lines: list[SpokenLine]
     consent: bool
+    studio: NotesStudio = field(default_factory=NotesStudio)
 
 
 class FindingsStage:
@@ -104,7 +106,7 @@ class FindingsStage:
                     found.append(finding)
         findings = without_repeats(found)
         if len(parts) > 1 and len(findings) > 1:
-            findings = await self._merged(work, (text.consent, len(parts)), findings)
+            findings = await self._merged(work, (text, len(parts)), findings)
         lost = sum(answer is None for answer in answers)
         await self._write(work, findings)
         log.info(
@@ -124,18 +126,19 @@ class FindingsStage:
             archived = meeting.transcript_archive_key
             lines = await spoken_lines(session, meeting) if archived is None else []
             consent = await cross_border(session, self._ports, meeting.user_id)
+            studio = await notes_studio(self._ports, session, work.scope, legacy=self._model.legacy)
         if archived is not None:
             lines = await archived_spoken(self._archive, work.scope.home, archived)
         if not lines:
             raise StageFailedError(TRANSCRIPT_EMPTY)
         length = max(meeting.seconds * 1000, *(line.end_ms for line in lines))
-        return MeetingText(meeting.started_at, length, lines, consent)
+        return MeetingText(meeting.started_at, length, lines, consent, studio)
 
     async def _asked(
         self, work: StageWork, text: MeetingText, parts: Sequence[Sequence[SpokenLine]]
     ) -> list[FindingsAnswer | None]:
-        instructions = FINDINGS_INSTRUCTIONS.replace(
-            "<meeting_date>", text.started_at.date().isoformat()
+        instructions = text.studio.styled(
+            FINDINGS_INSTRUCTIONS.replace("<meeting_date>", text.started_at.date().isoformat())
         )
         questions = [
             Question(
@@ -148,7 +151,10 @@ class FindingsStage:
             for number, window in enumerate(parts)
         ]  # fmt: skip
         asked = await asyncio.gather(
-            *(self._model.ask(work, q, FindingsAnswer, consent=text.consent) for q in questions),
+            *(
+                self._model.ask(work, q, FindingsAnswer, consent=text.consent, studio=text.studio)
+                for q in questions
+            ),
             return_exceptions=True,
         )
         answers: list[FindingsAnswer | None] = []
@@ -160,14 +166,16 @@ class FindingsStage:
         return answers
 
     async def _merged(
-        self, work: StageWork, asked: tuple[bool, int], findings: list[Finding]
+        self, work: StageWork, asked: tuple[MeetingText, int], findings: list[Finding]
     ) -> list[Finding]:
         """The findings after the merging pass, asked as the part after the last window."""
-        consent, part = asked
+        text, part = asked
         question = Question(
             NotesCall.MERGE, part, MERGE_INSTRUCTIONS, listed(findings), MERGE_TOKENS
         )
-        answer = await self._model.ask(work, question, MergeAnswer, consent=consent)
+        answer = await self._model.ask(
+            work, question, MergeAnswer, consent=text.consent, studio=text.studio
+        )
         return list(findings) if answer is None else kept_by_merge(findings, answer.keep)
 
     async def _written(self, session: AsyncSession, work: StageWork) -> bool:

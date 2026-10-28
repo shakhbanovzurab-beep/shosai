@@ -4,7 +4,8 @@ The person's settings of the role are one row read in the caller's transaction; 
 and the defaults are the process's snapshot. The choice answers by the domain's rule, else
 the default with the reason, which is counted. Billing is asked inside the route: a frontier
 choice whose week is used up gives way to the default, and spent standard tokens stop the
-call with `token_limit`. A role whose defaults cannot answer is `model_role_unconfigured`
+call with `token_limit` — except in the background roles (notes), whose standard calls are
+not counted. A role whose defaults cannot answer is `model_role_unconfigured`
 (503), counted for its ticket. Leo's model is chosen in Settings > Leo and passed as `chosen`;
 its call settings are agent's.
 """
@@ -29,6 +30,7 @@ from shosai.features.studio.contracts import (
 from shosai.features.studio.domain.catalogue import CatalogueModel
 from shosai.features.studio.domain.model_settings import call_settings
 from shosai.features.studio.domain.roles import (
+    BACKGROUND_ROLES,
     LEO_SETTINGS,
     ModelCapability,
     ModelRole,
@@ -162,6 +164,8 @@ class StudioModelRoutes:
             if frontier.route is not TokenRoute.FALL_BACK:
                 return picked, frontier.route
             picked, fell_back = allowance_used(*call, catalogue), True
+        if call[0] in BACKGROUND_ROLES:
+            return picked, TokenRoute.FALL_BACK if fell_back else TokenRoute.WITHIN_ALLOWANCE
         standard = await allowance.decision(person.home, person.user_id, ModelTier.STANDARD)
         if standard.route is TokenRoute.STOP:
             limit = standard.reason or TokenLimit.STANDARD_DAY

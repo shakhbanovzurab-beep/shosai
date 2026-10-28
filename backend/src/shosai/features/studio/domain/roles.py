@@ -64,6 +64,9 @@ REQUIRED: Final[Mapping[ModelRole, frozenset[ModelCapability]]] = MappingProxyTy
 DEFAULT_REQUIRED: Final[Mapping[ModelRole, frozenset[ModelCapability]]] = MappingProxyType(
     {**REQUIRED, ModelRole.LEO: TEXT_AND_VISION}
 )
+# Заметки пишутся в фоне: их стандартные вызовы не считаются (F6-D6), лимит их не останавливает;
+# frontier-выбор считается в неделю человека и уступает умолчанию, когда она кончилась (ST-D5).
+BACKGROUND_ROLES: Final = frozenset({ModelRole.NOTES})
 # Ответы человеку берут его контекст; записи встреч читают коллеги — им контекст не идёт.
 CONTEXT_ROLES: Final = frozenset(ModelRole) - {ModelRole.NOTES}
 

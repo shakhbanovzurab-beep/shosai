@@ -5,7 +5,7 @@ Settings > Leo saves only a model the catalogue offers the person's plan."""
 
 import uuid
 from dataclasses import dataclass, field, replace
-from typing import Any
+from typing import Any, cast
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,6 +16,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.ports.keys import PortBinding
 from shosai.features.agent.application.preferences import AgentPreferences
+from shosai.features.agent.application.studio_context import voice_layers
 from shosai.features.agent.application.turn_route import leo_route
 from shosai.features.agent.infrastructure.prompts import POLICY
 from shosai.features.billing.contracts import (
@@ -236,3 +237,21 @@ async def test_settings_save_only_a_model_the_catalogue_offers(homes: DatabaseAc
     assert saved.leo_model == "flash"
     assert refused.value.code == "leo_model_unavailable"
     assert (kept.leo_model, kept.response_language) == ("flash", "ru")
+
+
+async def test_leo_s_voice_takes_the_layer_the_addendum_and_the_person_s_words() -> None:
+    @dataclass
+    class Voiced(Studio):
+        async def feature_prompt(self, feature: PlatformFeature) -> str:
+            """The voice mode's addendum."""
+            return "Speak in short sentences." if feature is PlatformFeature.VOICE_MODE else ""
+
+    ports = PortDirectory()
+    ports.install([PROMPT_RESOLVER.bind(Voiced())])
+
+    added = await voice_layers(ports, cast("AsyncSession", object()), uuid.uuid4())
+
+    assert added == (
+        f"{LAYER}\n\nSpeak in short sentences.\n\n"
+        "What the person wrote about themselves:\nI lead a design team."
+    )

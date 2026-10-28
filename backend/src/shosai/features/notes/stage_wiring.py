@@ -41,12 +41,12 @@ def route_of(model: str, fallback: str | None) -> ModelRoute:
 
 
 def notes_stages(services: CoreServices) -> dict[Stage, StageHandler]:
-    """The findings and write-up stages over the configured model; none without one."""
+    """The findings and write-up stages on studio's `notes` role; `NOTES_MODEL` stands in while
+    the role has no default (studio step 12)."""
     settings = services.settings.features.get(NotesSettings)
     metrics = NotesMetrics(services.registry)
-    if not settings.notes_model:
-        return {}
-    route = route_of(settings.notes_model, settings.notes_fallback_model)
+    legacy = settings.notes_model
+    route = route_of(legacy, settings.notes_fallback_model) if legacy else None
     model = NotesModel(services.ai, route, metrics)
     budget = transcript_budget(services.settings.ai_guards.ai_max_context_tokens)
     transactions, ports = services.transactions, services.ports

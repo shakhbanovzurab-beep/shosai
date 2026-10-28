@@ -122,7 +122,9 @@ async def test_spent_standard_tokens_stop_and_a_role_without_a_default_is_refuse
     )
 
     with pytest.raises(TokenLimitError) as stopped:
-        await routed(bench, person(), ModelRole.NOTES)
+        await routed(bench, person(), ModelRole.CODE)
+    # Заметки пишутся в фоне: их стандартный лимит не спрашивается и не останавливает.
+    notes = await routed(bench, person(), ModelRole.NOTES)
     with pytest.raises(ModelRoleUnconfiguredError):
         await routed(bench, person(), ModelRole.SYSTEM_DESIGN)
 
@@ -131,6 +133,8 @@ async def test_spent_standard_tokens_stop_and_a_role_without_a_default_is_refuse
         {"limit": "standard_weekly_tokens"},
     )
     assert bench.counted(UNCONFIGURED, studio_role="system_design") == 1
+    assert notes.token_route is TokenRoute.WITHIN_ALLOWANCE
+    assert bench.allowance.asked == [ModelTier.STANDARD]
 
 
 async def test_leo_takes_its_model_from_settings_and_a_picture_needs_vision(

@@ -32,6 +32,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.memory_context import memory_switches
 from shosai.features.agent.application.preferences import preferences_of
 from shosai.features.agent.application.run_work import RunWork
+from shosai.features.agent.application.studio_context import voice_layers
 from shosai.features.agent.application.threads import Threads
 from shosai.features.agent.application.token_admission import standard_tokens
 from shosai.features.agent.application.tool_offer import TurnOffer, TurnRouting
@@ -250,6 +251,7 @@ class AgentVoiceTurns:
             consent = await parts.ports.get(CONSENT_READER).cross_border(session, principal.user_id)
             preferences = preferences_of(await session.get(AgentSettingsRecord, principal.user_id))
             memory = await memory_switches(parts.ports, session, principal.user_id)
+            studio = await voice_layers(parts.ports, session, principal.user_id)
         if principal.home is Home.RU and not consent:
             raise AppError("consent_required", HTTPStatus.FORBIDDEN)
         if not preferences.switched_on(Switch.VOICE_MODE):
@@ -268,7 +270,8 @@ class AgentVoiceTurns:
         )  # fmt: skip
         async with parts.transactions.begin(principal.scope(), read_only=True) as session:
             offer = await parts.routing.offer(session, terms, cap=VOICE_TOOLS_CAP)
-        instruction = voice_instruction(language, fixed=preferences.response_language != AUTO)
+        own = voice_instruction(language, fixed=preferences.response_language != AUTO)
+        instruction = "\n\n".join(part for part in (own, studio) if part)
         talk = VoiceTalk(parts, principal, terms, offer, instruction, self._clock)
         talk.by_voice = await parts.approval.ready()
         return talk
