@@ -18,6 +18,7 @@ from typing import Final
 
 from opentelemetry.trace import Tracer
 
+from shosai.features.agent.application.turn_route import tier_of
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.budgets import Segment
 from shosai.features.agent.domain.endings import Ending
@@ -25,7 +26,6 @@ from shosai.features.agent.domain.runs import Channel
 from shosai.features.agent.infrastructure.run_metrics import RunMetrics
 from shosai.features.agent.infrastructure.turn_graph import ModelAnswer
 
-TIER: Final = "standard"
 MICRO: Final = Decimal(1_000_000)
 
 
@@ -95,8 +95,8 @@ class RunTelemetry:
         first = times.first_word(answer)
         overhead = times.overhead(now).total_seconds()
         seconds = None if first is None else first.total_seconds()
-        self.metrics.timed(payload.home, overhead, seconds, TIER)
+        self.metrics.timed(payload.home, overhead, seconds, tier_of(payload.route))
         if times.sizes:
             self.metrics.context(times.sizes)
         if answer is not None:
-            self.metrics.cost(TIER, micro_usd(answer) / 1_000_000)
+            self.metrics.cost(tier_of(payload.route), micro_usd(answer) / 1_000_000)

@@ -20,7 +20,7 @@ from shosai.core.ai.calls import CallClass, ModelRoute
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.keys import PortKey
-from shosai.features.billing.contracts import EntitlementSnapshot
+from shosai.features.billing.contracts import EntitlementSnapshot, TokenRoute
 from shosai.features.studio.domain.platform_layer import PlatformFeature
 from shosai.features.studio.domain.prompts import SkillText
 from shosai.features.studio.domain.roles import ModelCapability, ModelRole, PromptRole, Tier
@@ -64,7 +64,8 @@ class ResolvedRoute:
     """The models a call tries and what it is asked with.
 
     `model_id` is the catalogue id of the model that answers; `substitution` says why it is
-    not the person's choice. `temperature` is None for a model that takes none.
+    not the person's choice. `temperature` is None for a model that takes none. `token_route`
+    is billing's route of the call's tokens: within the allowance, from packs, or fallen back.
     """
 
     model_id: str
@@ -75,6 +76,7 @@ class ResolvedRoute:
     max_tokens: int
     reasoning: bool
     substitution: Substitution | None = None
+    token_route: TokenRoute = TokenRoute.WITHIN_ALLOWANCE
 
 
 @dataclass(frozen=True, slots=True)

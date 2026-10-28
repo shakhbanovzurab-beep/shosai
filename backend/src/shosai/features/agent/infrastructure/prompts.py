@@ -61,6 +61,8 @@ LANGUAGE: Final = "Write the answer in the language tagged {code} ({name})."
 SUMMARY: Final = "Summary of the earlier part of this conversation:\n{summary}"
 VOLATILE: Final = "Context for this message, from Shosai (the person did not write it):\n{context}"
 QUESTION: Final = "The person's message:\n{text}"
+# Слова человека о себе из Studio (studio §3.4): его собственный текст, не данные извне.
+PERSONAL_CONTEXT: Final = "What the person wrote about themselves:\n{context}"
 MEMORY_ON: Final = (
     "Memory is on: what the person tells you to remember is kept after this turn, and they can "
     "see and correct it in Settings."
@@ -203,7 +205,7 @@ VISION_TASK: Final = "Solve the task on the screenshot."
 VISION_FRAMES: Final = "The {count} screenshots show the same task: read them together."
 PROMPT_TEXTS: Final = (
     POLICY, OPERATOR_POLICY, *LENGTHS.values(), LANGUAGE, SUMMARY, VOLATILE, QUESTION,
-    MEMORY_ON, MEMORY_OFF, REMEMBERED, RECALLED, MEMORY_LINE,
+    PERSONAL_CONTEXT, MEMORY_ON, MEMORY_OFF, REMEMBERED, RECALLED, MEMORY_LINE,
     TITLE_TASK, SUMMARY_TASK,
     FIRST_QUESTION, CONCLUDE, LAST_ROUND, LOADABLE, UNKNOWN_TOOL, EXTRA_CALL, CUT_CALL,
     CUT_RESULT, SOURCES_NOTE, PROPOSED, CALL_PROPOSED, ONE_CHANGE, ACTION_NOTE, CALL_NOTE,

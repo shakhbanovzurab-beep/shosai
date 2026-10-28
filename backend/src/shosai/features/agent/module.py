@@ -31,6 +31,7 @@ from shosai.features.agent.application.feedback import Feedback
 from shosai.features.agent.application.fleet_presence import present_in_fleet
 from shosai.features.agent.application.history import History
 from shosai.features.agent.application.installed_skills import InstalledSkills
+from shosai.features.agent.application.leo_models import CatalogueLeoModels
 from shosai.features.agent.application.lost_runs import LostRuns
 from shosai.features.agent.application.memory_context import MemoryContext
 from shosai.features.agent.application.person_words import AgentPersonWords
@@ -130,7 +131,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """Settings > Leo, threads and their history, turns and runs, departures, and the
     handler of a person's data."""
     transactions, ports, valkey = services.transactions, services.ports, services.valkey
-    preferences, departures = AgentPreferences(transactions), Departures(transactions, ports)
+    preferences = AgentPreferences(transactions, CatalogueLeoModels(ports))
+    departures = Departures(transactions, ports)
     threads = Threads(transactions, (ports, services.effects))
     run_log, leases, fleet = RunLog(valkey), ThreadLeases(valkey), Fleet(valkey)
     tail, registry = LogTail(valkey, run_log), RunRegistry(leases, fleet)
@@ -153,6 +155,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         TurnParts(
             transactions, ports, services.effects, services.rate_limiter, services.tasks,
             run_log, leases, fleet, threads, frames,
+            legacy_route=settings.standard_route() is not None,
         )
     )  # fmt: skip
     streams = RunStreams(transactions, (run_log, tail), leases, metrics)

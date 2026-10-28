@@ -36,11 +36,12 @@ class Segment(StrEnum):
     QUESTION = "question"
 
 
+# Политика со слоем платформы и профиль с личным контекстом — по ST-D7 (ADR 0074).
 SEGMENT_CAPS: Final[dict[Segment, int]] = {
-    Segment.POLICY: 1_500,
+    Segment.POLICY: 2_500,
     Segment.TOOLS: 4_000,
     Segment.SKILL: 1_500,
-    Segment.PROFILE: 600,
+    Segment.PROFILE: 3_200,
     Segment.SUMMARY: 1_000,
     Segment.RECENT: 5_000,
     Segment.VOLATILE: 2_500,

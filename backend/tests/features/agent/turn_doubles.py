@@ -60,6 +60,8 @@ class ScriptedModel:
     calls: list[ChatRequest] = field(default_factory=list)
     # Кто платит каждый вызов: человек или платформенный счёт оператора.
     contexts: list[CallContext] = field(default_factory=list)
+    # Какие модели просил каждый вызов: маршрут studio или прежний стандартный.
+    routes: list[ModelRoute] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.gate.set()
@@ -68,7 +70,7 @@ class ScriptedModel:
         self, context: CallContext, route: ModelRoute, request: ChatRequest
     ) -> AsyncIterator[ChatDelta]:
         """The script, piece by piece."""
-        del route
+        self.routes.append(route)
         self.contexts.append(context)
         held = len(self.calls) < self.held_calls
         script = self.scripts[min(len(self.calls), len(self.scripts) - 1)] if self.scripts else None

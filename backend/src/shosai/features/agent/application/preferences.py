@@ -2,15 +2,16 @@
 
 Nothing is stored until the person changes something; a missing row reads as the defaults.
 A change is saved as given and answered whole, so the cabinet's optimistic toggle settles on
-what the server kept. A model must be one the plan offers — none before studio publishes
-its catalogue, so only `auto` is accepted (ADR 0068 AG-D4).
+what the server kept. A new model must be one studio's catalogue offers the person's plan for
+Leo (`MODEL_CATALOGUE`, studio step 11); `auto` is always accepted, and a model saved earlier
+does not block a change of another field — the turn's route gives way to the default then.
 """
 
-from collections.abc import Callable, Collection, Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import asdict, replace
 from datetime import UTC, datetime
 from http import HTTPStatus
-from typing import Final
+from typing import Protocol
 
 from sqlalchemy.dialects.postgresql import insert
 
@@ -18,6 +19,7 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.agent.domain.preferences import (
+    AUTO,
     PreferenceChanges,
     PreferenceRuleError,
     Preferences,
@@ -28,8 +30,22 @@ from shosai.features.agent.domain.preferences import (
 from shosai.features.agent.infrastructure.person_records import AgentSettingsRecord
 from shosai.features.identity.contracts import Principal
 
-# Каталог studio ещё не опубликован: модели по имени не предлагаются никому (AG-D4).
-NO_MODELS: Final[frozenset[str]] = frozenset()
+
+class LeoModels(Protocol):
+    """Whether the person may choose a model for Leo."""
+
+    async def offers(self, principal: Principal, model_id: str) -> bool:
+        """True when the person's plan offers the model for Leo."""
+        ...
+
+
+class NoModels:
+    """No model by name — only `auto` — where studio is not in the process."""
+
+    async def offers(self, principal: Principal, model_id: str) -> bool:
+        """Never."""
+        del principal, model_id
+        return False
 
 
 def preferences_of(record: AgentSettingsRecord | None) -> Preferences:
@@ -53,11 +69,11 @@ class AgentPreferences:
     def __init__(
         self,
         transactions: HomeTransactions,
-        models: Callable[[], Collection[str]] = lambda: NO_MODELS,
+        models: LeoModels | None = None,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._models = models
+        self._models = models or NoModels()
         self._clock = clock
 
     async def read(self, scope: TenancyScope) -> Preferences:
@@ -70,12 +86,20 @@ class AgentPreferences:
 
     async def change(self, principal: Principal, changes: PreferenceChanges) -> Preferences:
         """Apply the fields given, keep the others; refused as a whole when one breaks a rule."""
+        chosen = changes.get("leo_model")
+        offered = (
+            chosen is not None and chosen != AUTO and await self._models.offers(principal, chosen)
+        )
         async with self._transactions.begin(principal.scope()) as session:
             current = preferences_of(
                 await session.get(AgentSettingsRecord, principal.user_id, with_for_update=True)
             )
+            # Модель не меняется — сохранённая не мешает другим полям, даже если её уже нет.
+            models: tuple[str, ...] = (current.leo_model,)
+            if chosen is not None:
+                models = (chosen,) if offered else ()
             try:
-                wanted = check_preferences(replace(current, **changes), self._models())
+                wanted = check_preferences(replace(current, **changes), models)
             except PreferenceRuleError as error:
                 raise AppError(error.rule.value, HTTPStatus.UNPROCESSABLE_CONTENT) from error
             values = asdict(wanted) | {"updated_at": self._clock()}

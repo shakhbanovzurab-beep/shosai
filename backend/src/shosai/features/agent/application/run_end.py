@@ -23,8 +23,9 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.ids import new_id
 from shosai.features.agent.application.run_sources import kept
-from shosai.features.agent.application.run_telemetry import TIER, TurnTimes, micro_usd
+from shosai.features.agent.application.run_telemetry import TurnTimes, micro_usd
 from shosai.features.agent.application.run_work import RunWork
+from shosai.features.agent.application.turn_route import tier_of
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.contracts.events import TurnCompleted
 from shosai.features.agent.domain.budgets import estimate_tokens
@@ -219,7 +220,7 @@ def telemetry(
         "status": ending.status.value,
         "outcome_code": ending.code,
         "model": answer.model if answer is not None else None,
-        "tier": TIER,
+        "tier": tier_of(payload.route),
         "token_route": payload.token_route,
         "rounds": len(work.answers),
         "tool_calls": work.tool_calls,

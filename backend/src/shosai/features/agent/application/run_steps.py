@@ -23,7 +23,7 @@ from datetime import timedelta
 from uuid import UUID
 
 from shosai.core.agent_tools.provenance import Provenance
-from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
+from shosai.core.ai.calls import CallContext, CallOrigin, ModelRoute
 from shosai.core.ai.requests import ChatMessage, ChatRequest, ImagePart, ReasoningEffort, Role
 from shosai.features.agent.application.effort_judging import EffortJudging
 from shosai.features.agent.application.egress_answers import EgressAnswers, kept_call
@@ -37,6 +37,7 @@ from shosai.features.agent.application.run_work import RunWork
 from shosai.features.agent.application.tool_offer import TurnOffer
 from shosai.features.agent.application.tool_read_back import ResultReader
 from shosai.features.agent.application.tool_round import ToolRound
+from shosai.features.agent.application.turn_route import call_class_of
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.budgets import Segment, estimate_tokens, round_policy
 from shosai.features.agent.domain.operator import payer_of
@@ -186,7 +187,7 @@ class RunSteps:
         context = CallContext(
             effect_key=f"agent.turn:{payload.run_id}:{number}",
             feature="agent.turn",
-            call_class=CallClass.STANDARD,
+            call_class=call_class_of(payload.route),
             origin=CallOrigin.INTERACTIVE,
             scope=scope,
             platform_account=platform,

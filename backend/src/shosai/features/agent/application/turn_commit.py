@@ -71,6 +71,8 @@ class TurnParts:
     fleet: Fleet
     threads: Threads
     frames: TurnSaver
+    # Задан AGENT_STANDARD_MODEL: пока у роли leo нет умолчания в каталоге, ход отвечает им.
+    legacy_route: bool = False
 
 
 class TurnMade(BaseModel):

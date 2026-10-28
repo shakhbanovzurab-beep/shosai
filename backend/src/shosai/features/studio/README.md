@@ -28,3 +28,7 @@ How Shosai's AI behaves: which models people may choose and what each role runs 
 - **`PROMPT_RESOLVER`** (`application/prompt_resolver.py`): the platform layer and the addenda from the snapshot; the role's active prompt with its skills' ids in order in one statement, the bodies through agent's `SkillReader` in the same transaction (an uninstalled skill is absent), the skills past the budget left out in order and counted (`shosai_studio_skills_left_out_total`); the personal context one row.
 - **Billing** counts a person's background calls of the expensive class against their frontier week (ST-D5), so a frontier choice for notes is paid the same way as anywhere else.
 - **Tickets:** `StudioRoleUnconfigured` and `StudioSubstitutionsHigh` (more than 5 % of a role's resolutions in an hour, at least 20), with their runbooks.
+
+## Leo on studio (step 11a)
+
+- Agent resolves a turn's model through `MODEL_ROUTES.route(leo)` at the turn's admission; `ResolvedRoute.token_route` carries billing's route of the call's tokens for the run's record. Settings › Leo's model is checked by `MODEL_CATALOGUE.refusal(person, model, leo)`. Leo's head takes `PROMPT_RESOLVER.platform_layer()` after the policy core and `personal_context()` in segment 4. Until an environment's `leo` role has a default, turns there keep `AGENT_STANDARD_MODEL` — the setting goes with step 11d.

@@ -107,7 +107,7 @@ class StudioModelRoutes:
         catalogue = await self._snapshot.catalogue()
         try:
             picked = pick(role, choice, needs, catalogue, frontier_on_plan=frontier_on_plan(person))
-            picked = await self._within_allowance(person, (role, needs), catalogue, picked)
+            picked, tokens = await self._within_allowance(person, (role, needs), catalogue, picked)
         except RoleUnservedError as error:
             self._metrics.unconfigured(role)
             log.error("У роли нет модели по умолчанию, способной ответить", role=role.value)
@@ -132,6 +132,7 @@ class StudioModelRoutes:
             max_tokens=asked.max_tokens,
             reasoning=asked.reasoning,
             substitution=picked.substitution,
+            token_route=tokens,
         )
 
     @staticmethod
@@ -151,16 +152,18 @@ class StudioModelRoutes:
         call: tuple[ModelRole, frozenset[ModelCapability]],
         catalogue: Catalogue,
         picked: Pick,
-    ) -> Pick:
-        """The pick billing allows: a used-up frontier week falls back, spent tokens stop."""
+    ) -> tuple[Pick, TokenRoute]:
+        """The pick billing allows and its tokens' route: a used-up frontier week falls back,
+        spent standard tokens stop."""
         allowance = self._ports.get(TOKEN_ALLOWANCE)
+        fell_back = False
         if picked.model.tier is Tier.FRONTIER:
             frontier = await allowance.decision(person.home, person.user_id, ModelTier.FRONTIER)
             if frontier.route is not TokenRoute.FALL_BACK:
-                return picked
-            picked = allowance_used(*call, catalogue)
+                return picked, frontier.route
+            picked, fell_back = allowance_used(*call, catalogue), True
         standard = await allowance.decision(person.home, person.user_id, ModelTier.STANDARD)
         if standard.route is TokenRoute.STOP:
             limit = standard.reason or TokenLimit.STANDARD_DAY
             raise TokenLimitError(limit.value)
-        return picked
+        return picked, TokenRoute.FALL_BACK if fell_back else standard.route

@@ -43,13 +43,13 @@ from shosai.core.web.rate_limit import RateLimitedError
 from shosai.features.agent.application.memory_context import memory_switches
 from shosai.features.agent.application.preferences import preferences_of
 from shosai.features.agent.application.surface_digest import Subject
-from shosai.features.agent.application.token_admission import standard_tokens
 from shosai.features.agent.application.turn_commit import (
     TurnMade,
     TurnParts,
     abandon_turn,
     commit_turn,
 )
+from shosai.features.agent.application.turn_route import leo_route
 from shosai.features.agent.application.turn_task import RUN_TURN, TurnPayload, started_event
 from shosai.features.agent.domain.operator import OPERATOR_LANGUAGE, is_operator
 from shosai.features.agent.domain.preferences import Switch, answer_language
@@ -167,13 +167,15 @@ class TurnStarter:
         operator = is_operator(principal.user_id)
         if operator and request.attachments:
             raise AppError("attachments_not_allowed", HTTPStatus.UNPROCESSABLE_ENTITY)
-        route = (
-            OPERATOR_ROUTE
-            if operator
-            else (await standard_tokens(self._parts.ports, principal)).value
-        )
-        await self._within_rate(principal)
         preferences = preferences_of(stored)
+        if operator:
+            turn_route, route = None, OPERATOR_ROUTE
+        else:
+            turn_route, route = await leo_route(
+                (parts.ports, parts.transactions), principal, preferences.leo_model,
+                pictures=bool(request.attachments), legacy=parts.legacy_route,
+            )  # fmt: skip
+        await self._within_rate(principal)
         page, again = request.page, request.again
         language = OPERATOR_LANGUAGE if operator else answer_language(preferences, request.locale)
         leo = tuple(s.value for s in Switch if preferences.switched_on(s))
@@ -187,7 +189,7 @@ class TurnStarter:
             subject_kind=page.subject.kind if page.subject else None,
             subject_id=page.subject.subject_id if page.subject else None,
             switches_on=switches, attachments=request.attachments,
-            think_longer=request.think_longer,
+            think_longer=request.think_longer, route=turn_route,
         )  # fmt: skip
         return await self._admitted(
             principal, terms, (effect, question), supersede=request.supersede

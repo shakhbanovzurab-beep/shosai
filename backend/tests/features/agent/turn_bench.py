@@ -234,6 +234,7 @@ async def turn_bench(
             *(TURN_EFFORT_JUDGE.bind(judge) for judge in bench_doubles.efforts),
             *(INJECTION_JUDGE.bind(judge) for judge in bench_doubles.injections),
             *memory_bindings(bench_doubles.memories),
+            *bench_doubles.extra,
         ]
     )
     registry = CollectorRegistry()

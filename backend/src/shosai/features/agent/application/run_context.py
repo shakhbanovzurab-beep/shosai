@@ -27,9 +27,11 @@ from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.requests import ChatMessage, ChatRequest, Role, TextPart
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.agent.application.attachment_notes import attachments_block
-from shosai.features.agent.application.context_parts import UTC_ZONE, cap, person_of, zone_info
+from shosai.features.agent.application.context_parts import cap, person_of, zone_info
 from shosai.features.agent.application.history_text import said
 from shosai.features.agent.application.memory_context import MemoryContext, Recalling
+from shosai.features.agent.application.profile_segment import profile_segment
+from shosai.features.agent.application.studio_context import platform_layer
 from shosai.features.agent.application.surface_digest import Subject, subject_digest
 from shosai.features.agent.application.turn_task import TurnPayload
 from shosai.features.agent.domain.budgets import (
@@ -37,7 +39,7 @@ from shosai.features.agent.domain.budgets import (
     estimate_tokens,
     recent_window,
 )
-from shosai.features.agent.domain.context import clean_path, clip, now_line, page_line, profile_core
+from shosai.features.agent.domain.context import clean_path, clip, now_line, page_line
 from shosai.features.agent.domain.memory_text import MemoryBlock
 from shosai.features.agent.domain.operator import is_operator
 from shosai.features.agent.domain.runs import RunStatus
@@ -50,7 +52,6 @@ from shosai.features.agent.infrastructure.prompts import (
     QUESTION,
     SUMMARY,
     VOLATILE,
-    turn_instructions,
 )
 from shosai.features.agent.infrastructure.run_records import AgentRunRecord
 from shosai.features.agent.infrastructure.thread_records import (
@@ -58,7 +59,6 @@ from shosai.features.agent.infrastructure.thread_records import (
     AgentMessageRecord,
     AgentThreadRecord,
 )
-from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER
 
 MESSAGE = AgentMessageRecord
 MAX_OUTPUT_TOKENS: Final = 4_096
@@ -138,13 +138,14 @@ class ContextBuilder:
         recalling for the question beside the rest, to be awaited after the transaction."""
         user_id = person_of(payload)
         thread, question = await self._turn(session, payload, user_id)
-        core, zone, remembered = await self._core(session, payload, user_id)
+        core, zone, remembered = await profile_segment((self._ports, self.memory), session, payload)
         if labels is not None:
             labels.extend(remembered.tainting)
         # Сводка идёт после стабильной головы: кэш провайдера держит голову целиком.
         summary = SUMMARY.format(summary=clip(thread.summary, cap(5))) if thread.summary else ""
         policy = OPERATOR_POLICY if is_operator(user_id) else POLICY
-        head = "\n\n".join(part for part in (policy, core, summary) if part)
+        layer = await platform_layer(self._ports, user_id)
+        head = "\n\n".join(part for part in (policy, layer, core, summary) if part)
         token = boundary(secrets.token_bytes(BOUNDARY_BYTES))
         history = await self._recent(session, thread, question, token)
         earlier = next((text_of(m) for m in reversed(history) if m.role is Role.ASSISTANT), "")
@@ -158,7 +159,7 @@ class ContextBuilder:
         asked = asked if attached is None else f"{asked}\n\n{attached}"
         if sizes is not None:
             sizes |= {
-                Segment.POLICY: estimate_tokens(policy),
+                Segment.POLICY: estimate_tokens(policy) + estimate_tokens(layer),
                 Segment.PROFILE: estimate_tokens(core),
                 Segment.SUMMARY: estimate_tokens(summary),
                 Segment.RECENT: sum(estimate_tokens(text_of(message)) for message in history),
@@ -211,20 +212,6 @@ class ContextBuilder:
         if question is None:
             raise ThreadGoneError
         return thread, question
-
-    async def _core(
-        self, session: AsyncSession, payload: TurnPayload, user_id: UUID
-    ) -> tuple[str, str, MemoryBlock]:
-        """Segment 4 — the person, their zone, the answer's terms and memory — and the zone."""
-        profile = await self._ports.get(ACCOUNT_PROFILE_READER).profile(session, user_id)
-        zone = profile.timezone if profile is not None and profile.timezone else UTC_ZONE
-        core = profile_core(
-            profile.display_name if profile is not None else "",
-            zone,
-            turn_instructions(payload.language, payload.length),
-        )
-        remembered = await self.memory.profile(session, payload)
-        return "\n".join(part for part in (core, remembered.text) if part), zone, remembered
 
     async def _recent(
         self,

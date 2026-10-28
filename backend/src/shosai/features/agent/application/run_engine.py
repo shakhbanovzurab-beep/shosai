@@ -37,6 +37,7 @@ from shosai.features.agent.application.run_resumption import (
 from shosai.features.agent.application.run_steps import RunState, RunSteps
 from shosai.features.agent.application.run_telemetry import TurnTimes
 from shosai.features.agent.application.run_work import RunWork
+from shosai.features.agent.application.turn_route import turn_model_route
 from shosai.features.agent.application.turn_task import RunEmitter, TurnPayload
 from shosai.features.agent.domain.endings import (
     Ending,
@@ -91,7 +92,8 @@ class RunEngine:
         now = self._clock()
         times = TurnTimes(began=now if resumed else payload.started_at, picked_up=now)
         state = RunState(
-            payload, self._parts.route, times, AnswerBuffer(emitter.text, self._monotonic()),
+            payload, turn_model_route(payload.route, self._parts.route), times,
+            AnswerBuffer(emitter.text, self._monotonic()),
             RunWork(watch=injection_watch(self._parts.ports, payload)), emitter,
         )  # fmt: skip
         telemetry, registry = self._parts.telemetry, self._parts.registry
@@ -120,7 +122,7 @@ class RunEngine:
 
     async def _drive(self, state: RunState, run: ActiveRun, resumed: Resumed | None) -> Ending:
         if state.route is None:
-            log.error("Ход Leo без модели: не задан AGENT_STANDARD_MODEL")
+            log.error("Ход Leo без модели: нет маршрута studio и не задан AGENT_STANDARD_MODEL")
             return failed(RunFailure.MODEL_UNAVAILABLE)
         early = await self._early_end(state.payload)
         if early is not None:

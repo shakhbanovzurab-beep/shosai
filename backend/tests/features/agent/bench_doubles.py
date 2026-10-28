@@ -49,6 +49,8 @@ class BenchDoubles:
     injections: tuple[InjectionJudge, ...] = ()
     memories: tuple[MemoryPorts, ...] = ()
     efforts: tuple[EffortJudge, ...] = ()
+    # Порты других срезов, которые модуль подставляет сам (studio, тариф).
+    extra: tuple[PortBinding[Any], ...] = ()
 
 
 @pytest.fixture
@@ -93,6 +95,12 @@ def memory_doubles() -> tuple[MemoryPorts, ...]:
     return ()
 
 
+@pytest.fixture
+def extra_bindings() -> tuple[PortBinding[Any], ...]:
+    """No other slice's port: a module that wires studio or billing overrides it."""
+    return ()
+
+
 @dataclass(frozen=True, slots=True)
 class LeoDoubles:
     """The judges, the router and memory bound beside the rules."""
@@ -120,10 +128,13 @@ def leo_doubles(
 
 @pytest.fixture
 def bench_doubles(
-    probe_tools: ProbeTools, stream_silence: timedelta, leo_doubles: LeoDoubles
+    probe_tools: ProbeTools,
+    stream_silence: timedelta,
+    leo_doubles: LeoDoubles,
+    extra_bindings: tuple[PortBinding[Any], ...],
 ) -> BenchDoubles:
     """All of them together, for the bench."""
     return BenchDoubles(
         probe_tools, stream_silence, leo_doubles.judges, leo_doubles.routers,
-        leo_doubles.injections, leo_doubles.memories, leo_doubles.efforts,
+        leo_doubles.injections, leo_doubles.memories, leo_doubles.efforts, extra_bindings,
     )  # fmt: skip

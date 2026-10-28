@@ -19,6 +19,7 @@ from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration
 from shosai.core.tasks.payloads import HomeTaskPayload
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.agent.application.surface_digest import SubjectKind
+from shosai.features.agent.application.turn_route import TurnRoute
 from shosai.features.agent.domain.preferences import ResponseLength
 from shosai.features.agent.domain.stream import EventData, EventKind, StreamEvent, StreamLedger
 from shosai.features.agent.domain.threads import TurnKind
@@ -48,6 +49,8 @@ class TurnPayload(HomeTaskPayload):
     attachments: tuple[UUID, ...] = ()
     # «Думать дольше»: модель ответа рассуждает в полную силу, медленнее и дороже.
     think_longer: bool = False
+    # Маршрут studio для роли leo (шаг 11 studio); нет — AGENT_STANDARD_MODEL, как прежде.
+    route: TurnRoute | None = None
 
 
 RUN_TURN: Final = TaskDeclaration(
