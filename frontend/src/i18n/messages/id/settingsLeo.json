@@ -5,7 +5,8 @@
     "description": "Otomatis memilih model yang sesuai untuk setiap tugas. Model tercanggih memakai token model tercanggih mingguan Anda (lihat Penggunaan).",
     "label": "Model Leo",
     "auto": "Otomatis",
-    "autoHint": "Leo memilih per tugas"
+    "autoHint": "Leo memilih per tugas",
+    "gone": "Model yang dipilih tidak lagi ada di paket Anda, jadi Leo memilih modelnya sendiri."
   },
   "language": {
     "title": "Bahasa jawaban",

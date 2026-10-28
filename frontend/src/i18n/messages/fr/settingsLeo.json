@@ -5,7 +5,8 @@
     "description": "En mode automatique, Leo choisit un modèle adapté à chaque tâche. Les modèles de pointe utilisent votre quota hebdomadaire de jetons dédié (voir Utilisation).",
     "label": "Modèle de Leo",
     "auto": "Automatique",
-    "autoHint": "Leo choisit selon la tâche"
+    "autoHint": "Leo choisit selon la tâche",
+    "gone": "Le modèle choisi ne fait plus partie de votre forfait : Leo choisit lui-même le modèle."
   },
   "language": {
     "title": "Langue des réponses",

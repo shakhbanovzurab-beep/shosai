@@ -5,7 +5,8 @@
     "description": "Automatisch wählt für jede Aufgabe ein passendes Modell. Spitzenmodelle verbrauchen deine wöchentlichen Tokens für Spitzenmodelle (siehe Nutzung).",
     "label": "Leo-Modell",
     "auto": "Automatisch",
-    "autoHint": "Leo wählt je nach Aufgabe"
+    "autoHint": "Leo wählt je nach Aufgabe",
+    "gone": "Das gewählte Modell ist nicht mehr in deinem Tarif, daher wählt Leo das Modell selbst."
   },
   "language": {
     "title": "Antwortsprache",

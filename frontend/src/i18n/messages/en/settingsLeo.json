@@ -5,7 +5,8 @@
     "description": "Auto picks a fitting model for each task. Frontier models use your weekly frontier tokens (see Usage).",
     "label": "Leo model",
     "auto": "Auto",
-    "autoHint": "Leo picks per task"
+    "autoHint": "Leo picks per task",
+    "gone": "The chosen model is no longer on your plan, so Leo picks the model itself."
   },
   "language": {
     "title": "Response language",

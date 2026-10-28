@@ -5,7 +5,8 @@
     "description": "Automático elige un modelo adecuado para cada tarea. Los modelos de vanguardia usan tus tokens semanales de vanguardia (consulta Uso).",
     "label": "Modelo de Leo",
     "auto": "Automático",
-    "autoHint": "Leo elige según la tarea"
+    "autoHint": "Leo elige según la tarea",
+    "gone": "El modelo elegido ya no está en tu plan, así que Leo elige el modelo por sí mismo."
   },
   "language": {
     "title": "Idioma de las respuestas",

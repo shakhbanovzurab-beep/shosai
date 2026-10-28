@@ -5,7 +5,8 @@
     "description": "Met Automatisch kiest Leo per taak een passend model. De krachtigste modellen gebruiken je aparte wekelijkse tokens daarvoor (zie Gebruik).",
     "label": "Leo-model",
     "auto": "Automatisch",
-    "autoHint": "Leo kiest per taak"
+    "autoHint": "Leo kiest per taak",
+    "gone": "Het gekozen model zit niet meer in je abonnement, dus Leo kiest zelf het model."
   },
   "language": {
     "title": "Antwoordtaal",

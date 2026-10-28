@@ -5,7 +5,8 @@
     "description": "Tự động sẽ chọn mô hình phù hợp cho từng việc. Mô hình hàng đầu dùng token hằng tuần dành cho mô hình hàng đầu của bạn (xem Mức sử dụng).",
     "label": "Mô hình của Leo",
     "auto": "Tự động",
-    "autoHint": "Leo chọn theo từng việc"
+    "autoHint": "Leo chọn theo từng việc",
+    "gone": "Mô hình đã chọn không còn trong gói của bạn, nên Leo tự chọn mô hình."
   },
   "language": {
     "title": "Ngôn ngữ trả lời",

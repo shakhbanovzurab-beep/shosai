@@ -5,7 +5,8 @@
     "description": "Con Automatico, Leo sceglie il modello più adatto a ogni attività. I modelli di frontiera usano i tuoi token settimanali per i modelli di frontiera (vedi Utilizzo).",
     "label": "Modello di Leo",
     "auto": "Automatico",
-    "autoHint": "Leo sceglie in base all’attività"
+    "autoHint": "Leo sceglie in base all’attività",
+    "gone": "Il modello scelto non è più nel tuo piano, quindi Leo sceglie il modello da solo."
   },
   "language": {
     "title": "Lingua delle risposte",

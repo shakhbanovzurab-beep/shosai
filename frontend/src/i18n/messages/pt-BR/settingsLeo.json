@@ -5,7 +5,8 @@
     "description": "O modo Automático escolhe um modelo adequado para cada tarefa. Os modelos de ponta usam seus tokens semanais de modelos de ponta (veja Uso).",
     "label": "Modelo do Leo",
     "auto": "Automático",
-    "autoHint": "O Leo escolhe a cada tarefa"
+    "autoHint": "O Leo escolhe a cada tarefa",
+    "gone": "O modelo escolhido não está mais no seu plano, então o Leo escolhe o modelo sozinho."
   },
   "language": {
     "title": "Idioma das respostas",

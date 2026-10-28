@@ -5,7 +5,8 @@
     "description": "Otomatik seçenek her görev için uygun bir model seçer. En gelişmiş modeller, bu modellere ayrılan haftalık token sınırınızdan düşer (bkz. Kullanım).",
     "label": "Leo modeli",
     "auto": "Otomatik",
-    "autoHint": "Leo her görev için seçer"
+    "autoHint": "Leo her görev için seçer",
+    "gone": "Seçilen model artık planınızda yok, bu yüzden modeli Leo kendisi seçiyor."
   },
   "language": {
     "title": "Yanıt dili",
