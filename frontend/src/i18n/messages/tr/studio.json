@@ -33,18 +33,13 @@
       "name": "Notlar ve haritalar",
       "description": "Toplantı notlarının ve zihin haritasının yapay zekâ sürümü",
       "help": "Toplantı notlarının ve zihin haritasının yapay zekâ sürümü. İstem neyin tutulacağına karar verir: kararlar, takip görevleri, açık sorular."
-    },
-    "transcript": {
-      "name": "Transkript",
-      "description": "Gerçek zamanlı konuşmadan metne",
-      "help": "Gerçek zamanlı konuşmadan metne dönüştürme. Bir konuşma modeliyle çalışır ve istem kullanmaz."
     }
   },
   "autosave": {
     "saving": "Kaydediliyor…"
   },
   "context": {
-    "intro": "Sizinle ilgili kısa bir metin. Her model isteğine ilk sistem mesajı olarak eklenir. Ne kadar net olursa o kadar az ek soru alırsınız.",
+    "intro": "Sizinle ilgili kısa bir metin. Size verilen her yanıt bunu dikkate alır — Leo’nunki de, her rolünki de. İş arkadaşlarınızın okuduğu toplantı notlarında kullanılmaz. Ne kadar net olursa o kadar az ek soru alırsınız.",
     "loadFailed": "Bağlamınız yüklenemedi",
     "title": "Hakkınızda",
     "description": "Kim olduğunuz, ne üzerinde çalıştığınız ve nasıl yanıtlar istediğiniz. Somut bilgiler sıfatlardan daha işe yarar.",
@@ -57,10 +52,11 @@
   },
   "preview": {
     "title": "Nasıl gönderilir",
-    "description": "Kaydedilen sürüm her isteğin başında, rolün isteminden önce yer alır.",
+    "description": "Bağlamınız size verilen her yanıta, Shosai’nin talimatlarından sonra ve rolün isteminden önce eklenir.",
     "system": "Sistem",
     "user": "Kullanıcı",
     "empty": "(boş — hiçbir şey gönderilmez)",
+    "platform": "Shosai’nin talimatları",
     "rolePrompt": "İstemler bölümündeki rol istemi",
     "question": "sorunuz"
   },
@@ -68,6 +64,9 @@
     "intro": "Her rolde hangi modelin yanıt vereceğini seçin. Listede yalnızca aboneliğinize dahil modeller gösterilir.",
     "loadFailed": "Modeller yüklenemedi",
     "model": "Model",
+    "default": "Varsayılan",
+    "defaultHint": "Bu rolün modelini Shosai seçer",
+    "unavailable": "Seçilen model artık kullanımınızda değil, bu yüzden varsayılan model yanıt veriyor.",
     "temperature": "Sıcaklık",
     "maxTokens": "Maksimum token",
     "reasoning": "Akıl yürütme",

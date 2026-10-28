@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "Qualcosa nella richiesta non va. Ricarica la pagina e riprova.",
-  "contextTooLong": "Il contesto può contenere al massimo {max, plural, one {# carattere} many {# di caratteri} other {# caratteri}}. Accorcialo per salvare.",
-  "unknownRole": "Questo ruolo non esiste.",
-  "modelNotOnPlan": "Questo modello non è incluso nel tuo abbonamento.",
-  "modelCantDoRole": "{model} non può essere usato per {role}.",
-  "maxTokensRange": "Il numero massimo di token deve essere compreso tra {min, number} e {max, number}.",
-  "promptNameRequired": "Dai un nome al prompt.",
-  "promptNameTooLong": "Il nome è troppo lungo. Usa al massimo {max, plural, one {# carattere} many {# di caratteri} other {# caratteri}}.",
-  "promptTooLong": "Le istruzioni sono troppo lunghe. Usa al massimo {max, plural, one {# carattere} many {# di caratteri} other {# caratteri}}.",
-  "tooManySkills": "Un prompt può usare al massimo {max, plural, one {# skill} many {# di skill} other {# skill}}.",
-  "promptNotFound": "Prompt non trovato.",
-  "promptForOtherRole": "Questo prompt è scritto per un altro ruolo."
+  "validation_failed": "Qualcosa nella richiesta non va. Ricarica la pagina e riprova.",
+  "prompt_name_required": "Dai un nome al prompt.",
+  "prompt_not_found": "Prompt non trovato.",
+  "prompt_limit_reached": "Puoi conservare al massimo {max, plural, one {# prompt} many {# di prompt} other {# prompt}}. Eliminane uno per aggiungerne un altro.",
+  "prompt_over_budget": "Le istruzioni e le skill sono troppo lunghe per un ruolo: circa {tokens, number} su {max, number} token. Accorcia il testo o rimuovi una skill.",
+  "prompt_for_other_role": "Questo prompt è scritto per un altro ruolo.",
+  "skill_not_installed": "Una delle skill non è più installata. Scegli di nuovo le skill.",
+  "model_not_on_plan": "Questo modello non è incluso nel tuo abbonamento.",
+  "model_cant_do_role": "{model} non può essere usato per {role}.",
+  "max_tokens_range": "Il numero massimo di token deve essere compreso tra {min, number} e {max, number}.",
+  "entitlements_unavailable": "Impossibile verificare il tuo piano al momento. Riprova tra un minuto.",
+  "idempotency_key_reused": "Questa richiesta è già stata inviata con dati diversi. Riprova."
 }

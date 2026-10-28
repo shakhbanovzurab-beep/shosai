@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "Er klopt iets niet in het verzoek. Laad de pagina opnieuw en probeer het nog een keer.",
-  "contextTooLong": "De context mag maximaal {max, plural, one {# teken} other {# tekens}} lang zijn. Maak hem korter om op te slaan.",
-  "unknownRole": "Die rol bestaat niet.",
-  "modelNotOnPlan": "Dat model zit niet in je abonnement.",
-  "modelCantDoRole": "{model} kan niet worden gebruikt voor {role}.",
-  "maxTokensRange": "Max. tokens moet tussen {min, number} en {max, number} liggen.",
-  "promptNameRequired": "Geef de prompt een naam.",
-  "promptNameTooLong": "Die naam is te lang. Gebruik maximaal {max, plural, one {# teken} other {# tekens}}.",
-  "promptTooLong": "De instructies zijn te lang. Gebruik maximaal {max, plural, one {# teken} other {# tekens}}.",
-  "tooManySkills": "Een prompt kan maximaal {max, plural, one {# vaardigheid} other {# vaardigheden}} gebruiken.",
-  "promptNotFound": "Prompt niet gevonden.",
-  "promptForOtherRole": "Die prompt is voor een andere rol geschreven."
+  "validation_failed": "Er klopt iets niet in het verzoek. Laad de pagina opnieuw en probeer het nog een keer.",
+  "prompt_name_required": "Geef de prompt een naam.",
+  "prompt_not_found": "Prompt niet gevonden.",
+  "prompt_limit_reached": "Je kunt maximaal {max, plural, one {# prompt} other {# prompts}} bewaren. Verwijder er een om een nieuwe toe te voegen.",
+  "prompt_over_budget": "De instructies en vaardigheden zijn te lang voor één rol: ongeveer {tokens, number} van {max, number} tokens. Kort de tekst in of verwijder een vaardigheid.",
+  "prompt_for_other_role": "Die prompt is voor een andere rol geschreven.",
+  "skill_not_installed": "Een van de vaardigheden is niet meer geïnstalleerd. Kies de vaardigheden opnieuw.",
+  "model_not_on_plan": "Dat model zit niet in je abonnement.",
+  "model_cant_do_role": "{model} kan niet worden gebruikt voor {role}.",
+  "max_tokens_range": "Max. tokens moet tussen {min, number} en {max, number} liggen.",
+  "entitlements_unavailable": "Je abonnement kon nu niet worden gecontroleerd. Probeer het over een minuut opnieuw.",
+  "idempotency_key_reused": "Dit verzoek is al met andere gegevens verstuurd. Probeer het opnieuw."
 }

@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "Yêu cầu có điểm chưa đúng. Hãy tải lại trang và thử lại.",
-  "contextTooLong": "Ngữ cảnh chỉ được dài tối đa {max, plural, other {# ký tự}}. Hãy rút ngắn để lưu.",
-  "unknownRole": "Vai trò này không tồn tại.",
-  "modelNotOnPlan": "Mô hình này không có trong gói đăng ký của bạn.",
-  "modelCantDoRole": "Không thể dùng {model} cho {role}.",
-  "maxTokensRange": "Số token tối đa phải nằm trong khoảng từ {min, number} đến {max, number}.",
-  "promptNameRequired": "Hãy đặt tên cho câu lệnh.",
-  "promptNameTooLong": "Tên này quá dài. Hãy dùng tối đa {max, plural, other {# ký tự}}.",
-  "promptTooLong": "Hướng dẫn quá dài. Hãy dùng tối đa {max, plural, other {# ký tự}}.",
-  "tooManySkills": "Mỗi câu lệnh chỉ dùng được tối đa {max, plural, other {# kỹ năng}}.",
-  "promptNotFound": "Không tìm thấy câu lệnh.",
-  "promptForOtherRole": "Câu lệnh này được viết cho một vai trò khác."
+  "validation_failed": "Yêu cầu có điểm chưa đúng. Hãy tải lại trang và thử lại.",
+  "prompt_name_required": "Hãy đặt tên cho câu lệnh.",
+  "prompt_not_found": "Không tìm thấy câu lệnh.",
+  "prompt_limit_reached": "Bạn chỉ lưu được tối đa {max, plural, other {# câu lệnh}}. Hãy xóa một câu lệnh để thêm câu lệnh mới.",
+  "prompt_over_budget": "Hướng dẫn và kỹ năng quá dài cho một vai trò: khoảng {tokens, number}/{max, number} token. Hãy rút gọn văn bản hoặc bỏ bớt một kỹ năng.",
+  "prompt_for_other_role": "Câu lệnh này được viết cho một vai trò khác.",
+  "skill_not_installed": "Một trong các kỹ năng không còn được cài đặt. Hãy chọn lại kỹ năng.",
+  "model_not_on_plan": "Mô hình này không có trong gói đăng ký của bạn.",
+  "model_cant_do_role": "Không thể dùng {model} cho {role}.",
+  "max_tokens_range": "Số token tối đa phải nằm trong khoảng từ {min, number} đến {max, number}.",
+  "entitlements_unavailable": "Hiện không kiểm tra được gói của bạn. Hãy thử lại sau một phút.",
+  "idempotency_key_reused": "Yêu cầu này đã được gửi với dữ liệu khác. Hãy thử lại."
 }

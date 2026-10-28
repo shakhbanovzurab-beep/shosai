@@ -7,7 +7,7 @@ import { skillsApi } from "../api/skills-api";
 import { studioApi } from "../api/studio-api";
 
 export const contextResource = createPollingResource(studioApi.getContext);
-/** The subscription's models and each role's settings; also read by Settings › Leo and the admin panel. */
+/** Модели тарифа человека и настройки каждой роли. */
 export const modelsResource = createPollingResource(studioApi.listModels);
 export const promptsResource = createPollingResource(studioApi.listPrompts);
 export const skillsResource = createPollingResource(skillsApi.list);

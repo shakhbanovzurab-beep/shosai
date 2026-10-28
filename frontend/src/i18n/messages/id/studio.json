@@ -33,18 +33,13 @@
       "name": "Catatan & peta",
       "description": "Versi AI dari catatan rapat dan peta pikiran",
       "help": "Versi AI dari catatan rapat dan peta pikiran. Prompt menentukan apa yang disimpan: keputusan, tindak lanjut, pertanyaan terbuka."
-    },
-    "transcript": {
-      "name": "Transkrip",
-      "description": "Ucapan ke teks secara real time",
-      "help": "Ucapan ke teks secara real time. Berjalan dengan model suara dan tidak memakai prompt."
     }
   },
   "autosave": {
     "saving": "Menyimpan…"
   },
   "context": {
-    "intro": "Teks singkat tentang Anda — disisipkan sebagai pesan sistem pertama di setiap permintaan ke model. Makin tepat isinya, makin sedikit pertanyaan lanjutan yang Anda terima.",
+    "intro": "Teks singkat tentang Anda. Setiap jawaban untuk Anda memperhitungkannya — jawaban Leo maupun setiap peran. Teks ini tidak dipakai di catatan rapat, yang dibaca rekan kerja Anda. Makin tepat isinya, makin sedikit pertanyaan lanjutan yang Anda terima.",
     "loadFailed": "Tidak dapat memuat konteks Anda",
     "title": "Tentang Anda",
     "description": "Siapa Anda, apa yang Anda kerjakan, dan jawaban seperti apa yang Anda sukai. Fakta lebih berguna daripada kata sifat.",
@@ -57,10 +52,11 @@
   },
   "preview": {
     "title": "Cara pengirimannya",
-    "description": "Versi yang tersimpan membuka setiap permintaan, sebelum prompt peran.",
+    "description": "Konteks Anda masuk ke setiap jawaban untuk Anda, setelah instruksi Shosai dan sebelum prompt peran.",
     "system": "Sistem",
     "user": "Pengguna",
     "empty": "(kosong — tidak ada yang dikirim)",
+    "platform": "Instruksi Shosai",
     "rolePrompt": "prompt peran dari Prompt",
     "question": "pertanyaan Anda"
   },
@@ -68,6 +64,9 @@
     "intro": "Pilih model yang menjawab untuk setiap peran. Daftar ini hanya menampilkan model yang termasuk dalam langganan Anda.",
     "loadFailed": "Tidak dapat memuat model",
     "model": "Model",
+    "default": "Default",
+    "defaultHint": "Shosai memilih model untuk peran ini",
+    "unavailable": "Model yang dipilih tidak lagi tersedia untuk Anda, jadi model default yang menjawab.",
     "temperature": "Suhu",
     "maxTokens": "Token maksimum",
     "reasoning": "Penalaran",

@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "Há algo errado na solicitação. Recarregue a página e tente novamente.",
-  "contextTooLong": "O contexto pode ter no máximo {max, plural, one {# caractere} many {# de caracteres} other {# caracteres}}. Encurte o texto para salvar.",
-  "unknownRole": "Essa função não existe.",
-  "modelNotOnPlan": "Esse modelo não está incluído na sua assinatura.",
-  "modelCantDoRole": "O modelo {model} não pode ser usado na função {role}.",
-  "maxTokensRange": "O máximo de tokens deve estar entre {min, number} e {max, number}.",
-  "promptNameRequired": "Dê um nome ao prompt.",
-  "promptNameTooLong": "Esse nome é longo demais. Use no máximo {max, plural, one {# caractere} many {# de caracteres} other {# caracteres}}.",
-  "promptTooLong": "As instruções são longas demais. Use no máximo {max, plural, one {# caractere} many {# de caracteres} other {# caracteres}}.",
-  "tooManySkills": "Um prompt pode usar no máximo {max, plural, one {# habilidade} many {# de habilidades} other {# habilidades}}.",
-  "promptNotFound": "Prompt não encontrado.",
-  "promptForOtherRole": "Esse prompt foi escrito para outra função."
+  "validation_failed": "Há algo errado na solicitação. Recarregue a página e tente novamente.",
+  "prompt_name_required": "Dê um nome ao prompt.",
+  "prompt_not_found": "Prompt não encontrado.",
+  "prompt_limit_reached": "Você pode guardar no máximo {max, plural, one {# prompt} many {# de prompts} other {# prompts}}. Exclua um para adicionar outro.",
+  "prompt_over_budget": "As instruções e as habilidades são longas demais para uma função: cerca de {tokens, number} de {max, number} tokens. Encurte o texto ou remova uma habilidade.",
+  "prompt_for_other_role": "Esse prompt foi escrito para outra função.",
+  "skill_not_installed": "Uma das habilidades não está mais instalada. Escolha as habilidades de novo.",
+  "model_not_on_plan": "Esse modelo não está incluído na sua assinatura.",
+  "model_cant_do_role": "O modelo {model} não pode ser usado na função {role}.",
+  "max_tokens_range": "O máximo de tokens deve estar entre {min, number} e {max, number}.",
+  "entitlements_unavailable": "Não foi possível verificar seu plano agora. Tente de novo em um minuto.",
+  "idempotency_key_reused": "Esta solicitação já foi enviada com outros dados. Tente de novo."
 }

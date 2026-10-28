@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "La demande contient une erreur. Rechargez la page et réessayez.",
-  "contextTooLong": "Le contexte ne peut pas dépasser {max, plural, one {# caractère} many {# de caractères} other {# caractères}}. Raccourcissez-le pour l’enregistrer.",
-  "unknownRole": "Ce rôle n’existe pas.",
-  "modelNotOnPlan": "Ce modèle n’est pas inclus dans votre abonnement.",
-  "modelCantDoRole": "{model} ne peut pas être utilisé pour {role}.",
-  "maxTokensRange": "Le nombre maximal de jetons doit être compris entre {min, number} et {max, number}.",
-  "promptNameRequired": "Donnez un nom au prompt.",
-  "promptNameTooLong": "Ce nom est trop long. Utilisez au maximum {max, plural, one {# caractère} many {# de caractères} other {# caractères}}.",
-  "promptTooLong": "Les instructions sont trop longues. Utilisez au maximum {max, plural, one {# caractère} many {# de caractères} other {# caractères}}.",
-  "tooManySkills": "Un prompt peut utiliser au maximum {max, plural, one {# compétence} many {# de compétences} other {# compétences}}.",
-  "promptNotFound": "Prompt introuvable.",
-  "promptForOtherRole": "Ce prompt est conçu pour un autre rôle."
+  "validation_failed": "La demande contient une erreur. Rechargez la page et réessayez.",
+  "prompt_name_required": "Donnez un nom au prompt.",
+  "prompt_not_found": "Prompt introuvable.",
+  "prompt_limit_reached": "Vous pouvez conserver au maximum {max, plural, one {# prompt} many {# de prompts} other {# prompts}}. Supprimez-en un pour en ajouter un autre.",
+  "prompt_over_budget": "Les instructions et les compétences sont trop longues pour un rôle : environ {tokens, number} sur {max, number} tokens. Raccourcissez le texte ou retirez une compétence.",
+  "prompt_for_other_role": "Ce prompt est conçu pour un autre rôle.",
+  "skill_not_installed": "L’une des compétences n’est plus installée. Choisissez à nouveau les compétences.",
+  "model_not_on_plan": "Ce modèle n’est pas inclus dans votre abonnement.",
+  "model_cant_do_role": "{model} ne peut pas être utilisé pour {role}.",
+  "max_tokens_range": "Le nombre maximal de jetons doit être compris entre {min, number} et {max, number}.",
+  "entitlements_unavailable": "Votre forfait n’a pas pu être vérifié pour l’instant. Réessayez dans une minute.",
+  "idempotency_key_reused": "Cette requête a déjà été envoyée avec d’autres données. Réessayez."
 }

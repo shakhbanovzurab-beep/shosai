@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "هناك خطأ ما في الطلب. يرجى إعادة تحميل الصفحة ثم إعادة المحاولة.",
-  "contextTooLong": "الحد الأقصى لطول السياق {max, plural, zero {# حرف} one {حرف واحد} two {حرفان} few {# أحرف} many {# حرفًا} other {# حرف}}. يرجى اختصاره للحفظ.",
-  "unknownRole": "هذا الدور غير موجود.",
-  "modelNotOnPlan": "هذا النموذج غير متاح في الاشتراك الحالي.",
-  "modelCantDoRole": "لا يمكن استخدام {model} لدور «{role}».",
-  "maxTokensRange": "يجب أن يكون الحد الأقصى للرموز المميزة بين {min, number} و{max, number}.",
-  "promptNameRequired": "يرجى إدخال اسم للموجه.",
-  "promptNameTooLong": "الاسم طويل جدًا. الحد الأقصى {max, plural, zero {# حرف} one {حرف واحد} two {حرفان} few {# أحرف} many {# حرفًا} other {# حرف}}.",
-  "promptTooLong": "التعليمات طويلة جدًا. الحد الأقصى {max, plural, zero {# حرف} one {حرف واحد} two {حرفان} few {# أحرف} many {# حرفًا} other {# حرف}}.",
-  "tooManySkills": "الحد الأقصى لعدد المهارات في الموجه {max, plural, zero {# مهارة} one {مهارة واحدة} two {مهارتان} few {# مهارات} many {# مهارة} other {# مهارة}}.",
-  "promptNotFound": "لم يتم العثور على الموجه.",
-  "promptForOtherRole": "هذا الموجه مخصص لدور آخر."
+  "validation_failed": "هناك خطأ ما في الطلب. يرجى إعادة تحميل الصفحة ثم إعادة المحاولة.",
+  "prompt_name_required": "يرجى إدخال اسم للموجه.",
+  "prompt_not_found": "لم يتم العثور على الموجه.",
+  "prompt_limit_reached": "يمكنك الاحتفاظ بـ {max, plural, zero {# موجه} one {موجه واحد} two {موجهين} few {# موجهات} many {# موجهًا} other {# موجه}} كحد أقصى. قم بحذف موجه لإضافة آخر.",
+  "prompt_over_budget": "التعليمات والمهارات طويلة جدًا لدور واحد: نحو {tokens, number} من {max, number} رمزًا مميزًا. اختصر النص أو أزل مهارة.",
+  "prompt_for_other_role": "هذا الموجه مخصص لدور آخر.",
+  "skill_not_installed": "لم تعد إحدى المهارات مثبتة. اختر المهارات من جديد.",
+  "model_not_on_plan": "هذا النموذج غير متاح في الاشتراك الحالي.",
+  "model_cant_do_role": "لا يمكن استخدام {model} لدور «{role}».",
+  "max_tokens_range": "يجب أن يكون الحد الأقصى للرموز المميزة بين {min, number} و{max, number}.",
+  "entitlements_unavailable": "تعذر التحقق من خطتك الآن. يرجى إعادة المحاولة بعد دقيقة.",
+  "idempotency_key_reused": "أُرسل هذا الطلب من قبل ببيانات أخرى. يرجى إعادة المحاولة."
 }

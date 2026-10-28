@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "요청에 잘못된 부분이 있어요. 페이지를 새로고침한 후 다시 시도해 주세요.",
-  "contextTooLong": "{max, plural, other {컨텍스트는 최대 #자까지 입력할 수 있어요. 저장하려면 내용을 줄여 주세요.}}",
-  "unknownRole": "없는 역할이에요.",
-  "modelNotOnPlan": "현재 구독에 포함되지 않은 모델이에요.",
-  "modelCantDoRole": "{model}은(는) {role}에 사용할 수 없어요.",
-  "maxTokensRange": "최대 토큰은 {min, number}~{max, number} 사이여야 해요.",
-  "promptNameRequired": "프롬프트 이름을 입력해 주세요.",
-  "promptNameTooLong": "{max, plural, other {이름이 너무 길어요. 최대 #자까지 입력해 주세요.}}",
-  "promptTooLong": "{max, plural, other {지침이 너무 길어요. 최대 #자까지 입력해 주세요.}}",
-  "tooManySkills": "{max, plural, other {프롬프트에는 스킬을 최대 #개까지 사용할 수 있어요.}}",
-  "promptNotFound": "프롬프트를 찾을 수 없어요.",
-  "promptForOtherRole": "다른 역할용으로 작성된 프롬프트예요."
+  "validation_failed": "요청에 잘못된 부분이 있어요. 페이지를 새로고침한 후 다시 시도해 주세요.",
+  "prompt_name_required": "프롬프트 이름을 입력해 주세요.",
+  "prompt_not_found": "프롬프트를 찾을 수 없어요.",
+  "prompt_limit_reached": "{max, plural, other {프롬프트는 최대 #개까지 저장할 수 있어요.}} 새로 추가하려면 하나를 삭제하세요.",
+  "prompt_over_budget": "한 역할에 쓰기에는 지침과 스킬이 너무 길어요(약 {tokens, number}/{max, number} 토큰). 텍스트를 줄이거나 스킬을 빼 주세요.",
+  "prompt_for_other_role": "다른 역할용으로 작성된 프롬프트예요.",
+  "skill_not_installed": "스킬 중 하나가 더 이상 설치되어 있지 않아요. 스킬을 다시 선택하세요.",
+  "model_not_on_plan": "현재 구독에 포함되지 않은 모델이에요.",
+  "model_cant_do_role": "{model}은(는) {role}에 사용할 수 없어요.",
+  "max_tokens_range": "최대 토큰은 {min, number}~{max, number} 사이여야 해요.",
+  "entitlements_unavailable": "지금은 플랜을 확인할 수 없어요. 1분 후에 다시 시도해 주세요.",
+  "idempotency_key_reused": "이 요청은 다른 데이터로 이미 보냈어요. 다시 시도해 주세요."
 }

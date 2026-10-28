@@ -33,18 +33,13 @@
       "name": "Notes & maps",
       "description": "AI version of meeting notes and the mind map",
       "help": "The AI version of meeting notes and the mind map. The prompt decides what to keep: decisions, action items, open questions."
-    },
-    "transcript": {
-      "name": "Transcript",
-      "description": "Speech to text in real time",
-      "help": "Speech to text in real time. Runs on a speech model and takes no prompt."
     }
   },
   "autosave": {
     "saving": "Saving…"
   },
   "context": {
-    "intro": "A short text about you — it’s inserted as the first system message in every model request. The more precise it is, the fewer follow-up questions you’ll get.",
+    "intro": "A short text about you. Every answer to you takes it into account — Leo’s and each role’s. Meeting notes, which colleagues read, don’t use it. The more precise it is, the fewer follow-up questions.",
     "loadFailed": "Couldn’t load your context",
     "title": "About you",
     "description": "Who you are, what you work on and how you like answers. Facts beat adjectives.",
@@ -57,10 +52,11 @@
   },
   "preview": {
     "title": "How it’s sent",
-    "description": "The saved version opens every request, before the role’s prompt.",
+    "description": "Your context goes into every answer to you, after Shosai’s instructions and before the role’s prompt.",
     "system": "System",
     "user": "User",
     "empty": "(empty — nothing is sent)",
+    "platform": "Shosai’s instructions",
     "rolePrompt": "role prompt from Prompts",
     "question": "your question"
   },
@@ -68,6 +64,9 @@
     "intro": "Choose which model answers in each role. The list shows only the models on your subscription.",
     "loadFailed": "Couldn’t load models",
     "model": "Model",
+    "default": "Default",
+    "defaultHint": "Shosai picks the model for this role",
+    "unavailable": "The chosen model is no longer available to you, so the default answers.",
     "temperature": "Temperature",
     "maxTokens": "Max tokens",
     "reasoning": "Reasoning",

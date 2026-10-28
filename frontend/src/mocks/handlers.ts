@@ -15,7 +15,6 @@ import { handlers as leo } from "@/features/leo/mocks/handlers";
 import { handlers as mail } from "@/features/mail/mocks/handlers";
 import { handlers as meetings } from "@/features/meetings/mocks/handlers";
 import { handlers as settings } from "@/features/settings/mocks/handlers";
-import { handlers as studio } from "@/features/studio/mocks/handlers";
 import { handlers as support } from "@/features/support/mocks/handlers";
 import { handlers as upgrade } from "@/features/upgrade/mocks/handlers";
 import { handlers as workspace } from "@/features/workspace/mocks/handlers";
@@ -41,7 +40,6 @@ export const mockRoutes: readonly MockRoute[] = [
   ...mail,
   ...meetings,
   ...settings,
-  ...studio,
   ...support,
   ...upgrade,
   ...workspace,

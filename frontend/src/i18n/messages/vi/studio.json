@@ -33,18 +33,13 @@
       "name": "Ghi chú và sơ đồ",
       "description": "Phiên bản AI của ghi chú cuộc họp và sơ đồ tư duy",
       "help": "Phiên bản AI của ghi chú cuộc họp và sơ đồ tư duy. Câu lệnh quyết định nội dung cần giữ lại: quyết định, việc cần làm, câu hỏi còn bỏ ngỏ."
-    },
-    "transcript": {
-      "name": "Bản chép lời",
-      "description": "Chuyển giọng nói thành văn bản theo thời gian thực",
-      "help": "Chuyển giọng nói thành văn bản theo thời gian thực. Chạy trên mô hình giọng nói và không dùng câu lệnh."
     }
   },
   "autosave": {
     "saving": "Đang lưu…"
   },
   "context": {
-    "intro": "Một đoạn ngắn về bạn — được chèn làm thông điệp hệ thống đầu tiên trong mọi yêu cầu gửi đến mô hình. Càng chính xác, bạn càng ít bị hỏi lại.",
+    "intro": "Một đoạn ngắn về bạn. Mọi câu trả lời dành cho bạn đều cân nhắc đoạn này — của Leo và của từng vai trò. Đoạn này không được dùng trong ghi chú cuộc họp mà đồng nghiệp đọc. Càng chính xác, bạn càng ít bị hỏi lại.",
     "loadFailed": "Không thể tải ngữ cảnh của bạn",
     "title": "Về bạn",
     "description": "Bạn là ai, làm việc gì và thích câu trả lời như thế nào. Dữ kiện có giá trị hơn tính từ.",
@@ -57,10 +52,11 @@
   },
   "preview": {
     "title": "Cách được gửi đi",
-    "description": "Phiên bản đã lưu được đặt ở đầu mọi yêu cầu, trước câu lệnh của vai trò.",
+    "description": "Ngữ cảnh của bạn được đưa vào mọi câu trả lời dành cho bạn, sau hướng dẫn của Shosai và trước câu lệnh của vai trò.",
     "system": "Hệ thống",
     "user": "Người dùng",
     "empty": "(trống — không gửi gì)",
+    "platform": "Hướng dẫn của Shosai",
     "rolePrompt": "câu lệnh của vai trò từ mục Câu lệnh",
     "question": "câu hỏi của bạn"
   },
@@ -68,6 +64,9 @@
     "intro": "Chọn mô hình trả lời cho từng vai trò. Danh sách chỉ hiển thị các mô hình có trong gói đăng ký của bạn.",
     "loadFailed": "Không thể tải mô hình",
     "model": "Mô hình",
+    "default": "Mặc định",
+    "defaultHint": "Shosai chọn mô hình cho vai trò này",
+    "unavailable": "Mô hình đã chọn không còn dùng được với bạn, nên mô hình mặc định sẽ trả lời.",
     "temperature": "Nhiệt độ",
     "maxTokens": "Số token tối đa",
     "reasoning": "Suy luận",

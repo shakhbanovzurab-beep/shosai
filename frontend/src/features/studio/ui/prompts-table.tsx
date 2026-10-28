@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 import type { Prompt, PromptsResponse, Skill } from "../domain/contract";
 import { setPromptInUse } from "../model/prompt-actions";
+import { useProblemWords } from "../model/use-problem-words";
 
 const K = contextKit;
 
@@ -27,6 +28,7 @@ export function PromptsTable({ prompts, data, skills, actions }: PromptsTablePro
   const t = useTranslations("studioPrompts");
   const ts = useTranslations("studio");
   const tc = useTranslations("common");
+  const words = useProblemWords();
   const format = useFormatter();
   const skillNames = new Map(skills.map((s) => [s.id, s.name]));
 
@@ -99,7 +101,7 @@ export function PromptsTable({ prompts, data, skills, actions }: PromptsTablePro
                     <Pencil />
                     {t("menu.edit")}
                   </K.Item>
-                  <K.Item onSelect={() => void setPromptInUse(prompt, !inUse, t, ts)}>
+                  <K.Item onSelect={() => void setPromptInUse(prompt, !inUse, t, words)}>
                     {inUse ? <ZapOff /> : <Zap />}
                     {inUse ? t("menu.stopUsing") : t("menu.useFor", { role: roleName })}
                   </K.Item>

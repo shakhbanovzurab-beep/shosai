@@ -33,18 +33,13 @@
       "name": "Notas y mapas",
       "description": "Versión con IA de las notas de reunión y el mapa mental",
       "help": "La versión con IA de las notas de reunión y el mapa mental. El prompt decide qué conservar: decisiones, tareas de seguimiento, preguntas abiertas."
-    },
-    "transcript": {
-      "name": "Transcripción",
-      "description": "Voz a texto en tiempo real",
-      "help": "Voz a texto en tiempo real. Funciona con un modelo de voz y no usa prompt."
     }
   },
   "autosave": {
     "saving": "Guardando…"
   },
   "context": {
-    "intro": "Un texto breve sobre ti: se inserta como primer mensaje del sistema en cada solicitud al modelo. Cuanto más preciso sea, menos preguntas de seguimiento recibirás.",
+    "intro": "Un texto breve sobre ti. Cada respuesta que recibes lo tiene en cuenta: las de Leo y las de cada rol. No se usa en las notas de reuniones, que leen tus compañeros. Cuanto más preciso sea, menos preguntas de seguimiento recibirás.",
     "loadFailed": "No se pudo cargar tu contexto",
     "title": "Sobre ti",
     "description": "Quién eres, en qué trabajas y cómo prefieres las respuestas. Los datos valen más que los adjetivos.",
@@ -57,10 +52,11 @@
   },
   "preview": {
     "title": "Cómo se envía",
-    "description": "La versión guardada abre cada solicitud, antes del prompt del rol.",
+    "description": "Tu contexto va en cada respuesta que recibes, después de las instrucciones de Shosai y antes del prompt del rol.",
     "system": "Sistema",
     "user": "Usuario",
     "empty": "(vacío: no se envía nada)",
+    "platform": "Instrucciones de Shosai",
     "rolePrompt": "prompt del rol (pestaña Prompts de rol)",
     "question": "tu pregunta"
   },
@@ -68,6 +64,9 @@
     "intro": "Elige qué modelo responde en cada rol. La lista muestra solo los modelos incluidos en tu suscripción.",
     "loadFailed": "No se pudieron cargar los modelos",
     "model": "Modelo",
+    "default": "Predeterminado",
+    "defaultHint": "Shosai elige el modelo para este rol",
+    "unavailable": "El modelo elegido ya no está disponible para ti, así que responde el predeterminado.",
     "temperature": "Temperatura",
     "maxTokens": "Máximo de tokens",
     "reasoning": "Razonamiento",

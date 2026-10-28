@@ -33,18 +33,13 @@
       "name": "Notizen & Mindmaps",
       "description": "KI-Fassung der Meeting-Notizen und die Mindmap",
       "help": "Die KI-Fassung der Meeting-Notizen und die Mindmap. Der Prompt bestimmt, was festgehalten wird: Entscheidungen, To-dos, offene Fragen."
-    },
-    "transcript": {
-      "name": "Transkript",
-      "description": "Sprache in Text in Echtzeit",
-      "help": "Sprache in Text in Echtzeit. Läuft über ein Sprachmodell und nutzt keinen Prompt."
     }
   },
   "autosave": {
     "saving": "Wird gespeichert…"
   },
   "context": {
-    "intro": "Ein kurzer Text über dich – er wird bei jeder Modellanfrage als erste Systemnachricht eingefügt. Je genauer er ist, desto weniger Rückfragen bekommst du.",
+    "intro": "Ein kurzer Text über dich. Jede Antwort an dich berücksichtigt ihn – die von Leo und die jeder Rolle. In Meeting-Notizen, die deine Kolleginnen und Kollegen lesen, fließt er nicht ein. Je genauer er ist, desto weniger Rückfragen bekommst du.",
     "loadFailed": "Dein Kontext konnte nicht geladen werden",
     "title": "Über dich",
     "description": "Wer du bist, woran du arbeitest und wie du Antworten magst. Fakten sind besser als Adjektive.",
@@ -57,10 +52,11 @@
   },
   "preview": {
     "title": "So wird er gesendet",
-    "description": "Die gespeicherte Fassung steht am Anfang jeder Anfrage, vor dem Prompt der Rolle.",
+    "description": "Dein Kontext fließt in jede Antwort an dich ein – nach den Anweisungen von Shosai und vor dem Prompt der Rolle.",
     "system": "System",
     "user": "Nutzer",
     "empty": "(leer – es wird nichts gesendet)",
+    "platform": "Anweisungen von Shosai",
     "rolePrompt": "Rollen-Prompt aus Prompts",
     "question": "deine Frage"
   },
@@ -68,6 +64,9 @@
     "intro": "Wähle, welches Modell in jeder Rolle antwortet. Die Liste zeigt nur die Modelle aus deinem Abo.",
     "loadFailed": "Modelle konnten nicht geladen werden",
     "model": "Modell",
+    "default": "Standard",
+    "defaultHint": "Shosai wählt das Modell für diese Rolle",
+    "unavailable": "Das gewählte Modell steht dir nicht mehr zur Verfügung, daher antwortet das Standardmodell.",
     "temperature": "Temperatur",
     "maxTokens": "Max. Tokens",
     "reasoning": "Nachdenken",

@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 
-import { MIN_MAX_TOKENS, type ModelInfo, type RoleModelSettings } from "../domain/contract";
+import { MAX_MAX_TOKENS, MIN_MAX_TOKENS, type ModelInfo, type RoleModelSettings } from "../domain/contract";
 import type { RoleDefinition } from "../domain/roles";
 import { saveRoleSettings } from "../model/save-actions";
+import { useProblemWords } from "../model/use-problem-words";
 import { ModelPicker } from "./model-picker";
 
 function Unsupported() {
@@ -32,12 +33,17 @@ function Labelled({ label, htmlFor, children }: { label: string; htmlFor?: strin
 
 type RoleModelRowProps = { role: RoleDefinition; settings: RoleModelSettings; models: ModelInfo[] };
 
+// Пункт «По умолчанию» в списке моделей: модель роли выбирает Shosai, на сервер уходит null.
+const DEFAULT_CHOICE = "default";
+
 /** One role: which model fills it, and the temperature, output limit and reasoning it runs with. */
 export function RoleModelRow({ role, settings, models }: RoleModelRowProps) {
   const t = useTranslations("studio");
   const format = useFormatter();
+  const words = useProblemWords();
   const options = models.filter((m) => m.capabilities.includes(role.requires));
   const model = options.find((m) => m.id === settings.model_id);
+  const unavailable = settings.model_id !== null && model === undefined;
   // Only edits in progress live here; otherwise the saved settings are shown.
   const [draggedTemperature, setDraggedTemperature] = useState<number | null>(null);
   const [tokensDraft, setTokensDraft] = useState<string | null>(null);
@@ -45,11 +51,12 @@ export function RoleModelRow({ role, settings, models }: RoleModelRowProps) {
   const maxTokens = tokensDraft ?? String(settings.max_tokens);
   const id = `role-${role.id}`;
   const roleName = t(`roles.${role.id}.name`);
-  const save = (next: RoleModelSettings) => void saveRoleSettings(next, settings, t);
+  const save = (next: RoleModelSettings) => void saveRoleSettings(next, settings, words);
+  const defaultChoice = [{ id: DEFAULT_CHOICE, label: t("models.default"), hint: t("models.defaultHint") }];
 
   const commitMaxTokens = () => {
     const value = Number(maxTokens);
-    const limit = model?.max_output_tokens ?? 65536;
+    const limit = Math.min(model?.max_output_tokens ?? MAX_MAX_TOKENS, MAX_MAX_TOKENS);
     if (!Number.isInteger(value) || value < MIN_MAX_TOKENS || value > limit) {
       toast.error(t("models.maxTokensRange", { min: MIN_MAX_TOKENS, max: limit }));
     } else if (value !== settings.max_tokens) save({ ...settings, max_tokens: value });
@@ -63,13 +70,17 @@ export function RoleModelRow({ role, settings, models }: RoleModelRowProps) {
         <p className="text-muted-foreground text-sm">{t(`roles.${role.id}.description`)}</p>
       </div>
       <Labelled label={t("models.model")} htmlFor={`${id}-model`}>
-        <ModelPicker
-          id={`${id}-model`}
-          models={options}
-          value={settings.model_id}
-          onChange={(modelId) => save({ ...settings, model_id: modelId })}
-          label={t("models.modelFor", { role: roleName })}
-        />
+        <div className="flex w-full flex-col gap-1.5">
+          <ModelPicker
+            id={`${id}-model`}
+            models={options}
+            options={defaultChoice}
+            value={unavailable ? DEFAULT_CHOICE : (settings.model_id ?? DEFAULT_CHOICE)}
+            onChange={(choice) => save({ ...settings, model_id: choice === DEFAULT_CHOICE ? null : choice })}
+            label={t("models.modelFor", { role: roleName })}
+          />
+          {unavailable ? <p className="text-muted-foreground text-xs">{t("models.unavailable")}</p> : null}
+        </div>
       </Labelled>
       <Labelled label={t("models.temperature")}>
         {model?.supports_temperature === false ? (

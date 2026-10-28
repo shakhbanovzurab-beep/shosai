@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 
+import { toast } from "sonner";
 import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAutosave } from "@/hooks/use-autosave";
 
 import { PROMPT_CONTENT_MAX, PROMPT_NAME_MAX, type PromptDraft, type Skill } from "../domain/contract";
+import { studioProblemOf } from "../domain/studio-problems";
 import { createPrompt, savePromptDraft } from "../model/prompt-actions";
+import { describeStudioError } from "../model/studio-problem-words";
+import { useProblemWords } from "../model/use-problem-words";
 import { RoleSelect } from "./role-select";
 import { SkillPicker } from "./skill-picker";
 
@@ -33,9 +37,19 @@ function EditorForm({ editingId, initialDraft, skills, onClose }: EditorFormProp
   const t = useTranslations("studioPrompts");
   const ts = useTranslations("studio");
   const tc = useTranslations("common");
+  const words = useProblemWords();
   const [draft, setDraft] = useState(initialDraft);
   const [creating, startCreating] = useTransition();
-  const autosave = useAutosave((value) => savePromptDraft(editingId ?? "", JSON.parse(value) as PromptDraft));
+  // Ключ создания живёт, пока черновик тот же: повтор после сбоя сети отвечает тем же промтом.
+  const attempt = useRef<{ draft: string; key: string } | null>(null);
+  const autosave = useAutosave(
+    (value) => savePromptDraft(editingId ?? "", JSON.parse(value) as PromptDraft),
+    undefined,
+    (_retry, error) => {
+      if (studioProblemOf(error))
+        toast.error(t("editor.saveFailed"), { description: describeStudioError(error, words) });
+    },
+  );
 
   const set = <K extends keyof PromptDraft>(key: K, value: PromptDraft[K]) => {
     const next = { ...draft, [key]: value };
@@ -45,7 +59,9 @@ function EditorForm({ editingId, initialDraft, skills, onClose }: EditorFormProp
 
   const create = () =>
     startCreating(async () => {
-      if (await createPrompt(draft, t)) onClose();
+      const sent = JSON.stringify(draft);
+      if (attempt.current?.draft !== sent) attempt.current = { draft: sent, key: crypto.randomUUID() };
+      if (await createPrompt(draft, attempt.current.key, t, words)) onClose();
     });
 
   return (

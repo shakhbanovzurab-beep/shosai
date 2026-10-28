@@ -7,11 +7,11 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import type { StudioRole } from "../domain/contract";
-import { PROMPT_ROLES } from "../domain/roles";
+import { ROLES } from "../domain/roles";
 
 export type RoleFilterValue = StudioRole | "all";
 
-const VALUES: RoleFilterValue[] = ["all", ...PROMPT_ROLES.map((role) => role.id)];
+const VALUES: RoleFilterValue[] = ["all", ...ROLES.map((role) => role.id)];
 
 /** "All" or one role; hovering or focusing an option explains where that role is used. */
 export function RoleFilter({

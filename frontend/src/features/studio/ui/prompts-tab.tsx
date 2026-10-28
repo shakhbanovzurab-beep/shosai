@@ -12,9 +12,10 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { Prompt } from "../domain/contract";
-import { PROMPT_ROLES } from "../domain/roles";
+import { ROLES } from "../domain/roles";
 import { removePrompt } from "../model/prompt-actions";
 import { promptsResource, usePrompts, useSkills } from "../model/studio-resources";
+import { useProblemWords } from "../model/use-problem-words";
 import { type EditorTarget, PromptEditorDialog } from "./prompt-editor-dialog";
 import { type PromptRowActions, PromptsTable } from "./prompts-table";
 import { RoleFilter, type RoleFilterValue } from "./role-filter";
@@ -26,6 +27,7 @@ const draftOf = ({ name, role, content, skill_ids }: Prompt) => ({ name, role, c
 export function PromptsTab() {
   const t = useTranslations("studioPrompts");
   const tc = useTranslations("common");
+  const words = useProblemWords();
   const state = usePrompts();
   const skillsState = useSkills();
   const skills = skillsState.status === "ready" ? skillsState.data.skills : [];
@@ -38,7 +40,7 @@ export function PromptsTab() {
   const create = () =>
     setEditor({
       mode: "create",
-      draft: { name: "", role: role === "all" ? PROMPT_ROLES[0].id : role, content: "", skill_ids: [] },
+      draft: { name: "", role: role === "all" ? ROLES[0].id : role, content: "", skill_ids: [] },
     });
   const actions: PromptRowActions = {
     edit: (prompt) => setEditor({ mode: "edit", id: prompt.id, draft: draftOf(prompt) }),
@@ -110,7 +112,7 @@ export function PromptsTab() {
         title={t("delete.title", { name: deleting?.name ?? "" })}
         description={t("delete.description")}
         confirmLabel={tc("actions.delete")}
-        onConfirm={() => deleting && void removePrompt(deleting, t)}
+        onConfirm={() => deleting && void removePrompt(deleting, t, words)}
         onCancel={() => setDeleting(null)}
       />
     </div>

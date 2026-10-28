@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "Ada yang tidak benar dalam permintaan. Muat ulang halaman dan coba lagi.",
-  "contextTooLong": "Konteks boleh berisi paling banyak {max, plural, other {# karakter}}. Persingkat untuk menyimpan.",
-  "unknownRole": "Peran tersebut tidak ada.",
-  "modelNotOnPlan": "Model tersebut tidak termasuk dalam langganan Anda.",
-  "modelCantDoRole": "{model} tidak dapat dipakai untuk {role}.",
-  "maxTokensRange": "Token maksimum harus antara {min, number} dan {max, number}.",
-  "promptNameRequired": "Beri nama prompt.",
-  "promptNameTooLong": "Nama tersebut terlalu panjang. Gunakan paling banyak {max, plural, other {# karakter}}.",
-  "promptTooLong": "Instruksinya terlalu panjang. Gunakan paling banyak {max, plural, other {# karakter}}.",
-  "tooManySkills": "Satu prompt dapat memakai paling banyak {max, plural, other {# skill}}.",
-  "promptNotFound": "Prompt tidak ditemukan.",
-  "promptForOtherRole": "Prompt tersebut ditulis untuk peran lain."
+  "validation_failed": "Ada yang tidak benar dalam permintaan. Muat ulang halaman dan coba lagi.",
+  "prompt_name_required": "Beri nama prompt.",
+  "prompt_not_found": "Prompt tidak ditemukan.",
+  "prompt_limit_reached": "Anda dapat menyimpan paling banyak {max, plural, other {# prompt}}. Hapus satu untuk menambahkan yang baru.",
+  "prompt_over_budget": "Instruksi dan skill terlalu panjang untuk satu peran: sekitar {tokens, number} dari {max, number} token. Persingkat teks atau hapus satu skill.",
+  "prompt_for_other_role": "Prompt tersebut ditulis untuk peran lain.",
+  "skill_not_installed": "Salah satu skill tidak lagi terpasang. Pilih skill lagi.",
+  "model_not_on_plan": "Model tersebut tidak termasuk dalam langganan Anda.",
+  "model_cant_do_role": "{model} tidak dapat dipakai untuk {role}.",
+  "max_tokens_range": "Token maksimum harus antara {min, number} dan {max, number}.",
+  "entitlements_unavailable": "Paket Anda tidak dapat diperiksa saat ini. Coba lagi dalam satu menit.",
+  "idempotency_key_reused": "Permintaan ini sudah dikirim dengan data lain. Coba lagi."
 }

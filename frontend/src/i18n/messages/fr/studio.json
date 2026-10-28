@@ -33,18 +33,13 @@
       "name": "Notes et cartes mentales",
       "description": "Version IA des notes de réunion et de la carte mentale",
       "help": "La version IA des notes de réunion et de la carte mentale. Le prompt décide de ce qu’il faut garder : décisions, actions à mener, questions ouvertes."
-    },
-    "transcript": {
-      "name": "Transcription",
-      "description": "Transcription de la parole en temps réel",
-      "help": "Transcription de la parole en temps réel. Fonctionne avec un modèle de reconnaissance vocale et n’utilise pas de prompt."
     }
   },
   "autosave": {
     "saving": "Enregistrement…"
   },
   "context": {
-    "intro": "Un court texte sur vous, inséré comme premier message système dans chaque requête au modèle. Plus il est précis, moins vous aurez de questions complémentaires.",
+    "intro": "Un court texte sur vous. Chaque réponse qui vous est adressée en tient compte, celles de Leo comme celles de chaque rôle. Il n’est pas utilisé dans les notes de réunion, que lisent vos collègues. Plus il est précis, moins vous aurez de questions complémentaires.",
     "loadFailed": "Impossible de charger votre contexte",
     "title": "À propos de vous",
     "description": "Qui vous êtes, sur quoi vous travaillez et quelles réponses vous préférez. Les faits valent mieux que les adjectifs.",
@@ -57,10 +52,11 @@
   },
   "preview": {
     "title": "Ce qui est envoyé",
-    "description": "La version enregistrée ouvre chaque requête, avant le prompt du rôle.",
+    "description": "Votre contexte accompagne chaque réponse qui vous est adressée, après les instructions de Shosai et avant le prompt du rôle.",
     "system": "Système",
     "user": "Utilisateur",
     "empty": "(vide : rien n’est envoyé)",
+    "platform": "Instructions de Shosai",
     "rolePrompt": "prompt du rôle, depuis Prompts des rôles",
     "question": "votre question"
   },
@@ -68,6 +64,9 @@
     "intro": "Choisissez le modèle qui répond pour chaque rôle. La liste ne montre que les modèles inclus dans votre abonnement.",
     "loadFailed": "Impossible de charger les modèles",
     "model": "Modèle",
+    "default": "Par défaut",
+    "defaultHint": "Shosai choisit le modèle pour ce rôle",
+    "unavailable": "Le modèle choisi ne vous est plus disponible : c’est le modèle par défaut qui répond.",
     "temperature": "Température",
     "maxTokens": "Nombre maximal de jetons",
     "reasoning": "Raisonnement",

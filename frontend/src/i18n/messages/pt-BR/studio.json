@@ -33,18 +33,13 @@
       "name": "Notas e mapas",
       "description": "Versão por IA das notas de reunião e do mapa mental",
       "help": "A versão por IA das notas de reunião e do mapa mental. O prompt decide o que manter: decisões, próximos passos, questões em aberto."
-    },
-    "transcript": {
-      "name": "Transcrição",
-      "description": "Conversão de fala em texto em tempo real",
-      "help": "Conversão de fala em texto em tempo real. Funciona com um modelo de fala e não usa prompt."
     }
   },
   "autosave": {
     "saving": "Salvando…"
   },
   "context": {
-    "intro": "Um texto curto sobre você — ele é inserido como a primeira mensagem do sistema em cada solicitação ao modelo. Quanto mais preciso, menos perguntas de volta você recebe.",
+    "intro": "Um texto curto sobre você. Toda resposta para você leva esse texto em conta — as do Leo e as de cada função. Ele não vai para as notas de reunião, que seus colegas leem. Quanto mais preciso, menos perguntas de volta você recebe.",
     "loadFailed": "Não foi possível carregar seu contexto",
     "title": "Sobre você",
     "description": "Quem você é, no que trabalha e como prefere as respostas. Fatos valem mais que adjetivos.",
@@ -57,10 +52,11 @@
   },
   "preview": {
     "title": "Como é enviado",
-    "description": "A versão salva abre cada solicitação, antes do prompt da função.",
+    "description": "Seu contexto entra em toda resposta para você, depois das instruções do Shosai e antes do prompt da função.",
     "system": "Sistema",
     "user": "Usuário",
     "empty": "(vazio — nada é enviado)",
+    "platform": "Instruções do Shosai",
     "rolePrompt": "prompt da função, da aba Seus prompts",
     "question": "sua pergunta"
   },
@@ -68,6 +64,9 @@
     "intro": "Escolha qual modelo responde em cada função. A lista mostra apenas os modelos incluídos na sua assinatura.",
     "loadFailed": "Não foi possível carregar os modelos",
     "model": "Modelo",
+    "default": "Padrão",
+    "defaultHint": "O Shosai escolhe o modelo para esta função",
+    "unavailable": "O modelo escolhido não está mais disponível para você, então o padrão responde.",
     "temperature": "Temperatura",
     "maxTokens": "Máximo de tokens",
     "reasoning": "Raciocínio",

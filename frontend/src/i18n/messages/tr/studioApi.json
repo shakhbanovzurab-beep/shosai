@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "İstekte bir sorun var. Sayfayı yeniden yükleyip tekrar deneyin.",
-  "contextTooLong": "Bağlam en fazla {max, plural, one {# karakter} other {# karakter}} olabilir. Kaydetmek için kısaltın.",
-  "unknownRole": "Böyle bir rol yok.",
-  "modelNotOnPlan": "Bu model aboneliğinize dahil değil.",
-  "modelCantDoRole": "{model} modeli {role} rolünde kullanılamaz.",
-  "maxTokensRange": "Maksimum token {min, number} ile {max, number} arasında olmalıdır.",
-  "promptNameRequired": "İsteme bir ad verin.",
-  "promptNameTooLong": "Bu ad çok uzun. En fazla {max, plural, one {# karakter} other {# karakter}} kullanın.",
-  "promptTooLong": "Talimatlar çok uzun. En fazla {max, plural, one {# karakter} other {# karakter}} kullanın.",
-  "tooManySkills": "Bir istem en fazla {max, plural, one {# beceri} other {# beceri}} kullanabilir.",
-  "promptNotFound": "İstem bulunamadı.",
-  "promptForOtherRole": "Bu istem başka bir rol için yazılmış."
+  "validation_failed": "İstekte bir sorun var. Sayfayı yeniden yükleyip tekrar deneyin.",
+  "prompt_name_required": "İsteme bir ad verin.",
+  "prompt_not_found": "İstem bulunamadı.",
+  "prompt_limit_reached": "En fazla {max, plural, one {# istem} other {# istem}} saklayabilirsiniz. Yeni bir tane eklemek için birini silin.",
+  "prompt_over_budget": "Talimatlar ve beceriler bir rol için çok uzun: yaklaşık {tokens, number} / {max, number} token. Metni kısaltın veya bir beceriyi kaldırın.",
+  "prompt_for_other_role": "Bu istem başka bir rol için yazılmış.",
+  "skill_not_installed": "Becerilerden biri artık yüklü değil. Becerileri yeniden seçin.",
+  "model_not_on_plan": "Bu model aboneliğinize dahil değil.",
+  "model_cant_do_role": "{model} modeli {role} rolünde kullanılamaz.",
+  "max_tokens_range": "Maksimum token {min, number} ile {max, number} arasında olmalıdır.",
+  "entitlements_unavailable": "Planınız şu anda kontrol edilemedi. Bir dakika sonra tekrar deneyin.",
+  "idempotency_key_reused": "Bu istek başka verilerle zaten gönderildi. Tekrar deneyin."
 }

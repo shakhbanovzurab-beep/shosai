@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "リクエストに問題があります。ページを再読み込みして、もう一度お試しください。",
-  "contextTooLong": "コンテキストは {max, plural, other {# 文字}}以内にしてください。保存するには短くしてください。",
-  "unknownRole": "その役割は見つかりません。",
-  "modelNotOnPlan": "そのモデルは現在のサブスクリプションでは使用できません。",
-  "modelCantDoRole": "{model} は {role} には使用できません。",
-  "maxTokensRange": "最大トークン数は {min, number}～{max, number} の範囲で指定してください。",
-  "promptNameRequired": "プロンプトの名前を入力してください。",
-  "promptNameTooLong": "名前が長すぎます。{max, plural, other {# 文字}}以内にしてください。",
-  "promptTooLong": "指示が長すぎます。{max, plural, other {# 文字}}以内にしてください。",
-  "tooManySkills": "1 つのプロンプトで使用できるスキルは {max, plural, other {# 個}}までです。",
-  "promptNotFound": "プロンプトが見つかりません。",
-  "promptForOtherRole": "そのプロンプトは別の役割用です。"
+  "validation_failed": "リクエストに問題があります。ページを再読み込みして、もう一度お試しください。",
+  "prompt_name_required": "プロンプトの名前を入力してください。",
+  "prompt_not_found": "プロンプトが見つかりません。",
+  "prompt_limit_reached": "保存できるプロンプトは {max, plural, other {# 個}}までです。新しく追加するには、どれかを削除してください。",
+  "prompt_over_budget": "1 つの役割には指示とスキルが長すぎます（約 {tokens, number} / {max, number} トークン）。テキストを短くするか、スキルを外してください。",
+  "prompt_for_other_role": "そのプロンプトは別の役割用です。",
+  "skill_not_installed": "スキルの 1 つがインストールされていません。スキルを選び直してください。",
+  "model_not_on_plan": "そのモデルは現在のサブスクリプションでは使用できません。",
+  "model_cant_do_role": "{model} は {role} には使用できません。",
+  "max_tokens_range": "最大トークン数は {min, number}～{max, number} の範囲で指定してください。",
+  "entitlements_unavailable": "今はプランを確認できませんでした。1 分ほどしてからもう一度お試しください。",
+  "idempotency_key_reused": "このリクエストは別の内容ですでに送信されています。もう一度お試しください。"
 }

@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "Something in the request isn’t right. Reload the page and try again.",
-  "contextTooLong": "The context can be at most {max, plural, one {# character} other {# characters}} long. Shorten it to save.",
-  "unknownRole": "That role doesn’t exist.",
-  "modelNotOnPlan": "That model isn’t on your subscription.",
-  "modelCantDoRole": "{model} can’t be used for {role}.",
-  "maxTokensRange": "Max tokens must be between {min, number} and {max, number}.",
-  "promptNameRequired": "Give the prompt a name.",
-  "promptNameTooLong": "That name is too long. Use at most {max, plural, one {# character} other {# characters}}.",
-  "promptTooLong": "The instructions are too long. Use at most {max, plural, one {# character} other {# characters}}.",
-  "tooManySkills": "A prompt can use at most {max, plural, one {# skill} other {# skills}}.",
-  "promptNotFound": "Prompt not found.",
-  "promptForOtherRole": "That prompt is written for a different role."
+  "validation_failed": "Something in the request isn’t right. Reload the page and try again.",
+  "prompt_name_required": "Give the prompt a name.",
+  "prompt_not_found": "Prompt not found.",
+  "prompt_limit_reached": "You can keep at most {max, plural, one {# prompt} other {# prompts}}. Delete one to add another.",
+  "prompt_over_budget": "The instructions and skills are too long for one role: about {tokens, number} of {max, number} tokens. Shorten the text or remove a skill.",
+  "prompt_for_other_role": "That prompt is written for a different role.",
+  "skill_not_installed": "One of the skills is no longer installed. Pick the skills again.",
+  "model_not_on_plan": "That model isn’t on your subscription.",
+  "model_cant_do_role": "{model} can’t be used for {role}.",
+  "max_tokens_range": "Max tokens must be between {min, number} and {max, number}.",
+  "entitlements_unavailable": "Your plan couldn’t be checked just now. Try again in a minute.",
+  "idempotency_key_reused": "This request was already sent with other data. Try again."
 }

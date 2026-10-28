@@ -5,7 +5,7 @@ import { useTranslations } from "use-intl";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import type { StudioRole } from "../domain/contract";
-import { PROMPT_ROLES } from "../domain/roles";
+import { ROLES } from "../domain/roles";
 
 type RoleSelectProps = { id: string; value: StudioRole; onChange: (role: StudioRole) => void };
 
@@ -15,7 +15,7 @@ export function RoleSelect({ id, value, onChange }: RoleSelectProps) {
     <Select
       value={value}
       onValueChange={(next) => {
-        const role = PROMPT_ROLES.find((r) => r.id === next);
+        const role = ROLES.find((r) => r.id === next);
         if (role) onChange(role.id);
       }}
     >
@@ -24,7 +24,7 @@ export function RoleSelect({ id, value, onChange }: RoleSelectProps) {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {PROMPT_ROLES.map((role) => (
+          {ROLES.map((role) => (
             <SelectItem key={role.id} value={role.id}>
               {t(`roles.${role.id}.name`)}
             </SelectItem>

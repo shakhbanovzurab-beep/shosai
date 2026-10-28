@@ -1,14 +1,14 @@
 {
-  "invalidRequest": "Mit der Anfrage stimmt etwas nicht. Lade die Seite neu und versuche es erneut.",
-  "contextTooLong": "Der Kontext darf höchstens {max, plural, one {# Zeichen} other {# Zeichen}} lang sein. Kürze ihn, um zu speichern.",
-  "unknownRole": "Diese Rolle gibt es nicht.",
-  "modelNotOnPlan": "Dieses Modell ist in deinem Abo nicht enthalten.",
-  "modelCantDoRole": "{model} kann nicht für {role} verwendet werden.",
-  "maxTokensRange": "Max. Tokens muss zwischen {min, number} und {max, number} liegen.",
-  "promptNameRequired": "Gib dem Prompt einen Namen.",
-  "promptNameTooLong": "Der Name ist zu lang. Verwende höchstens {max, plural, one {# Zeichen} other {# Zeichen}}.",
-  "promptTooLong": "Die Anweisungen sind zu lang. Verwende höchstens {max, plural, one {# Zeichen} other {# Zeichen}}.",
-  "tooManySkills": "Ein Prompt kann höchstens {max, plural, one {# Skill} other {# Skills}} verwenden.",
-  "promptNotFound": "Prompt nicht gefunden.",
-  "promptForOtherRole": "Dieser Prompt ist für eine andere Rolle geschrieben."
+  "validation_failed": "Mit der Anfrage stimmt etwas nicht. Lade die Seite neu und versuche es erneut.",
+  "prompt_name_required": "Gib dem Prompt einen Namen.",
+  "prompt_not_found": "Prompt nicht gefunden.",
+  "prompt_limit_reached": "Du kannst höchstens {max, plural, one {# Prompt} other {# Prompts}} speichern. Lösche einen, um einen neuen hinzuzufügen.",
+  "prompt_over_budget": "Anweisungen und Skills sind für eine Rolle zu lang: etwa {tokens, number} von {max, number} Tokens. Kürze den Text oder entferne einen Skill.",
+  "prompt_for_other_role": "Dieser Prompt ist für eine andere Rolle geschrieben.",
+  "skill_not_installed": "Einer der Skills ist nicht mehr installiert. Wähle die Skills erneut aus.",
+  "model_not_on_plan": "Dieses Modell ist in deinem Abo nicht enthalten.",
+  "model_cant_do_role": "{model} kann nicht für {role} verwendet werden.",
+  "max_tokens_range": "Max. Tokens muss zwischen {min, number} und {max, number} liegen.",
+  "entitlements_unavailable": "Dein Tarif konnte gerade nicht geprüft werden. Versuche es in einer Minute erneut.",
+  "idempotency_key_reused": "Diese Anfrage wurde bereits mit anderen Daten gesendet. Versuche es erneut."
 }

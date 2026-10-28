@@ -1,53 +1,57 @@
 # Studio API
 
-The contract between the Studio screens (Context, Prompts, Models) and the FastAPI backend; the
-skills dialog is on the API already (see Skills below). The
-TypeScript types in `src/features/studio/domain/contract.ts` are the source of truth; Pydantic
-models should mirror them field for field (snake_case). Roles and what each needs are in
-`src/features/studio/domain/roles.ts`.
+The contract between the Studio screen (`/app/studio`: Context, Prompts, Models) and the backend's `studio` slice:
+the `/v1/studio/*` routes of the [studio plan](../../docs/plan/slices/studio.md) §3.5 ([ADR 0074](../../docs/adr/0074-studio-slice.md)),
+served since its step 8, and the skills dialog on the `agent` slice's `/v1/agent/skills*`. `api/` calls them through
+the generated client; `src/features/studio/domain/contract.ts` names the generated schemas of `backend/openapi.json`
+next to the limits the screens check. Refusals are the platform's envelope `{error: {code, request_id, params?}}`
+(ADR 0008), worded by the cabinet in the person's language from `domain/studio-problems.ts` (the `studioApi`
+catalog) and `domain/skill-problems.ts` (`studioSkills.problems`). Snake_case. Without a backend (`npm run dev`)
+Studio has no data; run the API and `npm run dev:api`.
 
-The browser calls Next.js route handlers under `/api/studio/*`, which forward to
-`${BACKEND_API_URL}/v1/studio/*` when `BACKEND_API_URL` is set (optional `BACKEND_API_KEY` is sent
-as a Bearer token), and otherwise answer from an in-memory demo in `src/features/studio/server/`
-(the route handlers live there too). Errors use FastAPI's `{"detail": "message"}`; the UI shows
-`detail` to the user.
+## Endpoints
 
-## Endpoints (prefix `/v1/studio`)
+| Method   | Path                              | Body                                                     | Response            |
+| -------- | --------------------------------- | -------------------------------------------------------- | ------------------- |
+| `GET`    | `/v1/studio/context`              | —                                                        | `StudioContext`     |
+| `PUT`    | `/v1/studio/context`              | `{content}` (≤ 4 000 characters)                         | `StudioContext`     |
+| `GET`    | `/v1/studio/prompts`              | —                                                        | `StudioPrompts`     |
+| `POST`   | `/v1/studio/prompts`              | `{name, role, content?, skill_ids?}` + `Idempotency-Key` | `201 StudioPrompt`  |
+| `PATCH`  | `/v1/studio/prompts/{id}`         | any of `name`, `role`, `content`, `skill_ids`            | `StudioPrompt`      |
+| `DELETE` | `/v1/studio/prompts/{id}`         | —                                                        | `204`               |
+| `PUT`    | `/v1/studio/prompts/active`       | `{role, prompt_id \| null}`                              | `StudioPrompts`     |
+| `GET`    | `/v1/studio/models`               | —                                                        | `StudioModels`      |
+| `PUT`    | `/v1/studio/models/roles/{role}`  | `{model_id \| null, temperature, max_tokens, reasoning}` | `StudioRoleModel`   |
 
-| Method   | Path                        | Body                                          | Response                    |
-| -------- | --------------------------- | --------------------------------------------- | --------------------------- |
-| `GET`    | `/context`                  | —                                             | `StudioContext`             |
-| `PUT`    | `/context`                  | `{"content": str}` (≤ 4,000 chars)            | `StudioContext`             |
-| `GET`    | `/prompts`                  | —                                             | `PromptsResponse`           |
-| `POST`   | `/prompts`                  | `PromptDraft` (name, role, content, skill_ids) | `201 Prompt`               |
-| `PATCH`  | `/prompts/{id}`             | part of `PromptDraft`                         | `Prompt`                    |
-| `DELETE` | `/prompts/{id}`             | —                                             | `204`                       |
-| `PUT`    | `/prompts/active`           | `{"role": StudioRole, "prompt_id": str\|null}` | `PromptsResponse`         |
-| `GET`    | `/models`                   | —                                             | `ModelsResponse`            |
-| `PUT`    | `/models/roles/{role}`      | `{"model_id", "temperature", "max_tokens", "reasoning"}` | `RoleModelSettings` |
+The roles are the five of Studio: `live_answers`, `screenshots`, `code`, `system_design`, `notes`. Live and recorded
+transcription are the platform's choice and have no role (ST-D2); Leo's own model is chosen in Settings › Leo.
 
-## Behaviour the UI relies on
+## Behaviour the screen relies on
 
-- **Context** is sent as the first system message of every model request, before the role's
-  prompt. Store it trimmed and return `updated_at`.
-- **Prompts** belong to the user. Each has a role, instructions and `skill_ids` (installed skills
-  appended to the instructions, in order). `active` maps every role to a prompt id or `null` (the
-  built-in default); reject a prompt whose role differs (422). Moving a prompt to another role, or
-  deleting it, resets a role that used it. The editor autosaves with `PATCH`.
-- **Skills** are served by the backend's `agent` slice since its step 15, on `/v1/agent/skills*`
-  (`GET` and `POST /v1/agent/skills`, `POST …/{id}/update`, `DELETE …/{id}`, `GET …/search?q=`,
-  `POST …/scan`), with the platform's error envelope; `api/skills-api.ts` calls them and
-  `domain/skill-problems.ts` lists the codes the dialog words (`studioSkills.problems`). A skill is
-  pinned to the commit its reference names (a link's ref, else the default branch's head);
-  `reference` is `owner/repo/path/to/folder`, and `POST` also takes skills.sh ids and links, whose
-  last segment is the skill's name. Installing a folder twice is 409 `skill_already_installed`;
-  twenty per person. `update` reads the default branch again. Search fails soft to an empty list;
-  scan lists up to 40 skills. Uninstalling does not touch the prompts' `skill_ids` until studio's
-  prompts are on the API (studio composes a prompt with the skills it still finds).
-- **Models.** `models` contains only what the user's subscription allows. Each has a `tier`
-  (`standard` or `frontier`); frontier models are the expensive ones and draw on the weekly frontier
-  allowance in Settings › Usage. A role can only take a
-  model with the capability it `requires` (`text`, `vision`, `speech_to_text`); otherwise 422.
-  `max_tokens` must be 256–`max_output_tokens`. Store `reasoning: false` when the model doesn't
-  support it; ignore `temperature` when it doesn't. The UI saves each change immediately and rolls
-  back if the PUT fails.
+- **Everything is the person's own.** Another person's prompt is `prompt_not_found` (404) on every route; lists show
+  only the person's rows.
+- **Context** — the person's words about themselves, stored trimmed; `{"content": "", "updated_at": null}` before
+  the first save. Every answer to the person takes it into account, after Shosai's instructions and before the
+  role's prompt; the notes of a meeting, which colleagues read, never do. The editor autosaves with `PUT`.
+- **Prompts.** A name of 1–80 characters, instructions of at most 20 000, at most 20 skills in order, at most 100
+  prompts a person (`prompt_limit_reached`, 409). A create takes an `Idempotency-Key`: the editor keeps one key for a
+  draft, so a retry after a lost answer returns the same prompt; the same key with another draft is
+  `idempotency_key_reused`. The skills must be ones the person installed (`skill_not_installed`), and the
+  instructions with them must fit the role's budget of 12 000 tokens (`prompt_over_budget` with `tokens` and `max`).
+  `active` maps every role to a prompt id or `null` (the built-in prompt); a prompt of another role is
+  `prompt_for_other_role`. Moving a prompt to another role, or deleting it, gives the role it served back its
+  built-in prompt. The editor autosaves with `PATCH` and names the reason when a save is refused.
+- **Skills** are agent's store (`GET`, `POST /v1/agent/skills`, `POST …/{id}/update`, `DELETE …/{id}`,
+  `GET …/search?q=`, `POST …/scan`): pinned to the commit their reference names, twenty a person. Uninstalling a
+  skill takes it off every prompt of the person (`agent.skill.removed`, studio's consumer); the prompts may show the
+  old id for a moment until the event is delivered.
+- **Models.** `models` holds only what the person's plan offers: usable models of the operator's catalogue,
+  frontier ones only on a plan with frontier models. Each has a `tier`; frontier models draw on the weekly frontier
+  allowance in Settings › Usage. `roles` holds the five roles; a role never set reads as its defaults (no model,
+  temperature 0.7, 4 096 output tokens, 8 192 for notes, reasoning off). `model_id: null` is the role's default,
+  chosen by Shosai. A role takes only a model on the plan (`model_not_on_plan`) that reads what the role needs —
+  a screenshot's model reads pictures (`model_cant_do_role` with `model` and `role`); `max_tokens` lies in
+  256…min(the model's limit, 32 768) (`max_tokens_range` with `min` and `max`); reasoning is stored off for a model
+  that cannot reason, and a temperature is ignored by one that takes none. A saved model the plan no longer offers
+  is shown as the default with a note: the default answers until the person picks again. The screen saves each
+  change at once and rolls back if the `PUT` is refused; an unreadable plan is `entitlements_unavailable` (503).
