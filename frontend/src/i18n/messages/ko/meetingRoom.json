@@ -162,6 +162,9 @@
     "loading": "화이트보드를 여는 중…",
     "reload": "최신 버전 불러오기",
     "close": "화이트보드 닫기",
+    "tools": {
+      "mermaid": "Mermaid 다이어그램"
+    },
     "save": {
       "loading": "화이트보드를 여는 중…",
       "saved": "저장됨",

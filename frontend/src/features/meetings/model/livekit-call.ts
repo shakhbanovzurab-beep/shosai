@@ -1,6 +1,7 @@
 import { type LocalTrackPublication, type RemoteParticipant, Room, RoomEvent, Track } from "livekit-client";
 
 import { callApi } from "../api/call-api";
+import type { BoardSession } from "../domain/board";
 import {
   type CallSession,
   type CallSetup,
@@ -11,6 +12,7 @@ import {
 import { lastSeq, mergeChat } from "../domain/chat-log";
 import type { Reaction } from "../domain/reactions";
 import { roomMetadataOf } from "../domain/room-metadata";
+import { LiveKitBoard } from "./livekit-board";
 import { endOf, incoming, publishLobbyTracks, stopTrack } from "./livekit-media";
 import { callPeopleOf } from "./livekit-people";
 import { ReactionDesk } from "./livekit-reactions";
@@ -19,14 +21,18 @@ import { TrackStage } from "./livekit-tracks";
 /*
  * Звонок на LiveKit (meetings A10). Видео подписывается только для плиток на сцене — остальные не стоят ни трафика,
  * ни ядра SFU (meetings §1.3); звук — от всех. Чат идёт через маршрут сервера и приходит пакетом `chat`,
- * реакции — пакетами `reaction`, рука — атрибутом участника.
+ * реакции — пакетами `reaction`, рука — атрибутом участника, доска — своей сессией (A11b).
  */
+
+// Уход не ждёт доску дольше 3 с: её последняя правка и картинка уходят, пока есть сеть.
+const BOARD_WAIT_MS = 3_000;
 
 export class LiveKitCall implements CallSession {
   private readonly room = new Room({ adaptiveStream: true, dynacast: true });
   private readonly listeners = new Set<() => void>();
   private readonly stage: TrackStage;
   private readonly reactions: ReactionDesk;
+  private whiteboard: LiveKitBoard | undefined;
   private state: CallSnapshot;
 
   constructor(private readonly setup: CallSetup) {
@@ -79,9 +85,22 @@ export class LiveKitCall implements CallSession {
 
   lowerHandOf = (identity: string) => callApi.lowerHand(this.roomId(), identity);
   remove = (identity: string) => callApi.remove(this.roomId(), identity);
-  leave = () => void this.room.disconnect();
+  leave = () => void this.settleBoard().then(() => this.room.disconnect());
 
-  endForAll = async () => void (await callApi.end(this.roomId()));
+  endForAll = async () => {
+    await this.settleBoard();
+    await callApi.end(this.roomId());
+  };
+
+  board(): BoardSession {
+    this.whiteboard ??= new LiveKitBoard({
+      room: this.room,
+      roomId: () => this.roomId(),
+      roomPass: this.setup.roomPass,
+      nameOf: (identity) => this.state.people.find((person) => person.identity === identity)?.name ?? identity,
+    });
+    return this.whiteboard;
+  }
 
   attach = (identity: string, kind: VideoKind, element: HTMLVideoElement | null) =>
     this.stage.attach(identity, kind, element);
@@ -110,7 +129,10 @@ export class LiveKitCall implements CallSession {
         this.update({ status: "connected" });
         void this.catchUp();
       })
-      .on(RoomEvent.Disconnected, (reason) => this.update({ status: "ended", end: endOf(reason) }));
+      .on(RoomEvent.Disconnected, (reason) => {
+        this.whiteboard?.end();
+        this.update({ status: "ended", end: endOf(reason) });
+      });
     for (const event of [
       RoomEvent.ParticipantDisconnected,
       RoomEvent.TrackMuted,
@@ -135,6 +157,11 @@ export class LiveKitCall implements CallSession {
       .catch(() => null);
     const missed = (page?.items ?? []).map((item) => ({ ...item, sentAt: item.sent_at }));
     this.update({ chat: mergeChat(this.state.chat, missed) });
+  }
+
+  private async settleBoard() {
+    const waited = new Promise<void>((resolve) => window.setTimeout(resolve, BOARD_WAIT_MS));
+    await Promise.race([this.whiteboard?.close(), waited]);
   }
 
   private async toggle(source: Track.Source, on: boolean) {

@@ -113,8 +113,15 @@ same principal are one person on two devices. Identities without `__` (egress) a
 | ----------- | -------- | ----------------- | ------- |
 | `chat`      | reliable | the server only   | `{v: 1, id, seq, identity, author, text, sent_at}` — dropped when it comes from a participant, or by `id` when already shown |
 | `reaction`  | lossy    | a participant     | `{v: 1, emoji}` — one of 👍 ❤️ 😂 🎉 👏 😮; at most 10 per 10 s per sender, enforced by the sender and again by every receiver; at most 40 on screen, each for 4 s |
-| `wb`        | reliable | a participant     | the board's patches, hello and catch-up (A11b) |
-| `wb.cursor` | lossy    | a participant     | the board's cursors, at most one per 60 ms per sender (A11b) |
+| `wb`        | reliable | a participant     | a text stream: `{v: 1, kind}` — `hello` on opening the board, `here` in reply, `bye` on closing it; `patch` and `scene` with `elements` (each with `id` and `version`) and `files` (data URLs only); `saved` with the board's `version` |
+| `wb.cursor` | lossy    | a participant     | `{v: 1, x, y}` in the scene's coordinates, at most one per 60 ms per sender |
+
+**The board** (A11b): patches go at most every 80 ms and carry only elements at versions peers have not seen,
+merged with `reconcileElements`. The saver — the lowest identity among those with the board open — answers a
+`hello` with the whole `scene`, saves 2.5 s after drawing pauses (a stale save merges the latest and saves again; a
+second one in a row waits for "Load the latest"), and uploads the PNG 30 s after the last change and on leaving.
+While LiveKit records, the saver publishes the board as a screen-share track named `board` at 10 fps for the
+recording; clients never show that track. Excalidraw's fonts come from `/app/wb/fonts/` (`tooling/board-fonts.ts`).
 
 ## Links
 

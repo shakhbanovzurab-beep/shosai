@@ -113,6 +113,13 @@ server {
         try_files $uri =404;
     }
 
+    # Шрифты доски встречи (meetings A11b): копии из пакета Excalidraw с хешем в имени, без запасной страницы.
+    location ^~ /app/wb/ {
+        include /tmp/nginx/shosai/security-headers.conf;
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
+        try_files $uri =404;
+    }
+
     location ^~ /app/ {
         include /tmp/nginx/shosai/security-headers.conf;
         add_header Cache-Control "no-cache" always;

@@ -10,11 +10,12 @@ const KB = 1024;
 // JS, который index.html загружает сразу (вход и modulepreload), и любой отдельный чанк — в gzip.
 const INITIAL_BUDGET = 220 * KB;
 const CHUNK_BUDGET = 170 * KB;
-// Доска встречи (MR-D13): Excalidraw — готовая сборка, её модули не делятся. Редактор грузится только при открытии
-// доски, WASM подбора шрифтов (chunk-EIO257PC сборки 0.18.1) — только при экспорте в SVG. Замер 2026-10-28:
-// 318 и 723 КБ gzip; обновление Excalidraw замеряет их заново.
+// Доска встречи (MR-D13): Excalidraw — готовая сборка, её модули не делятся. Редактор (`board-editor`, имя задаёт
+// vite.config.ts) грузится только при открытии доски или экспорте её картинки, WASM подбора шрифтов (chunk-EIO257PC
+// сборки 0.18.1) — только при экспорте в SVG. Замер 2026-10-28: 334 и 723 КБ gzip; обновление Excalidraw замеряет
+// их заново.
 const BOARD_BUDGETS: [RegExp, number][] = [
-  [/^assets\/board-canvas-[\w-]+\.js$/, 330 * KB],
+  [/^assets\/board-editor-[\w-]+\.js$/, 345 * KB],
   [/^assets\/chunk-EIO257PC-[\w-]+\.js$/, 740 * KB],
 ];
 const budgetOf = (name: string) => BOARD_BUDGETS.find(([pattern]) => pattern.test(name))?.[1] ?? CHUNK_BUDGET;

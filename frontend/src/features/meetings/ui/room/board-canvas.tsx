@@ -7,6 +7,7 @@ import type { RemoteExcalidrawElement } from "@excalidraw/excalidraw/data/reconc
 import type { OrderedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import type {
   AppState,
+  BinaryFileData,
   BinaryFiles,
   Collaborator,
   ExcalidrawImperativeAPI,
@@ -19,41 +20,46 @@ import { useUiLanguage } from "@/hooks/use-ui-language";
 import type { BoardScene, BoardSession } from "../../domain/board";
 import { boardLanguage } from "../../domain/board-languages";
 import { useBoardState } from "../../model/board-state";
+import { BoardTools } from "./board-tools";
 
 /*
- * Холст доски — отдельный чанк страницы комнаты: Excalidraw грузится, только когда доску открыли. Правки уходят в
- * сессию доски, чужие правки сливаются `reconcileElements`, курсоры других — его же коллабораторы.
+ * Холст доски — отдельный чанк страницы комнаты: Excalidraw грузится, только когда доску открыли. Сцена сервера и
+ * правки соседей сливаются `reconcileElements` с тем, что уже на холсте; всякая новая сцена уходит в сессию доски,
+ * которая решает, что разослать и что сохранить. Курсоры других — коллабораторы редактора.
  */
 
 const elementsOf = (scene: BoardScene) => scene.elements as readonly OrderedExcalidrawElement[];
 
+// Сцена из сети: для слияния её элементы «удалённые» (бренд типа Excalidraw), картинки добавляются к холсту.
+function merge(api: ExcalidrawImperativeAPI, scene: BoardScene) {
+  const files = Object.values(scene.files as BinaryFiles) as BinaryFileData[];
+  if (files.length > 0) api.addFiles(files);
+  const remote = elementsOf(scene) as readonly RemoteExcalidrawElement[];
+  const merged = reconcileElements(api.getSceneElementsIncludingDeleted(), remote, api.getAppState());
+  // Чужая правка не попадает в стек отмены: Ctrl+Z откатывает свою работу, а не соседа.
+  api.updateScene({ elements: merged, captureUpdate: CaptureUpdateAction.NEVER });
+}
+
 export default function BoardCanvas({ board }: { board: BoardSession }) {
   const [api, setApi] = useState<ExcalidrawImperativeAPI | null>(null);
-  const { readOnly, cursors } = useBoardState(board);
+  const { readOnly, cursors, streams } = useBoardState(board);
   const language = useUiLanguage();
   const theme = usePreferencesStore((state) => state.resolvedThemeMode);
-  // Версия сцены, которую доска уже знает: обновления курсоров и своих же правок не сохраняются заново.
+  const container = useRef<HTMLDivElement>(null);
+  // Версия сцены, которую доска уже знает: курсоры и выбор на холсте сцену не меняют и не рассылаются.
   const known = useRef(-1);
 
   useEffect(() => {
     if (!api) return;
     let live = true;
     void board.load().then((scene) => {
-      if (!live) return;
-      known.current = getSceneVersion(elementsOf(scene));
-      api.updateScene({ elements: elementsOf(scene), captureUpdate: CaptureUpdateAction.NEVER });
+      if (live) merge(api, scene);
     });
-    const stop = board.onRemote((scene) => {
-      const local = api.getSceneElementsIncludingDeleted();
-      // Чужая сцена пришла из сети: для слияния она «удалённая» (бренд типа Excalidraw).
-      const remote = elementsOf(scene) as readonly RemoteExcalidrawElement[];
-      const merged = reconcileElements(local, remote, api.getAppState());
-      known.current = getSceneVersion(merged);
-      api.updateScene({ elements: merged, captureUpdate: CaptureUpdateAction.NEVER });
-    });
+    const stop = board.onRemote((scene) => merge(api, scene));
     return () => {
       live = false;
       stop();
+      void board.close();
     };
   }, [api, board]);
 
@@ -68,6 +74,11 @@ export default function BoardCanvas({ board }: { board: BoardSession }) {
     api.updateScene({ collaborators });
   }, [api, cursors]);
 
+  useEffect(() => {
+    if (!api || !streams || !container.current) return;
+    return board.stream(container.current);
+  }, [api, board, streams]);
+
   function changed(elements: readonly OrderedExcalidrawElement[], _state: AppState, files: BinaryFiles) {
     const version = getSceneVersion(elements);
     if (version === known.current) return;
@@ -76,7 +87,7 @@ export default function BoardCanvas({ board }: { board: BoardSession }) {
   }
 
   return (
-    <div className="size-full">
+    <div ref={container} className="size-full">
       <Excalidraw
         excalidrawAPI={setApi}
         langCode={boardLanguage(language)}
@@ -85,6 +96,7 @@ export default function BoardCanvas({ board }: { board: BoardSession }) {
         isCollaborating
         onChange={changed}
         onPointerUpdate={({ pointer }) => board.pointer(pointer.x, pointer.y)}
+        renderTopRightUI={() => (readOnly ? null : <BoardTools editor={api} />)}
         UIOptions={{ canvasActions: { loadScene: false, saveToActiveFile: false, export: false } }}
       />
     </div>

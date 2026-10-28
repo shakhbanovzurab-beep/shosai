@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
 import type { BoardSession } from "../../domain/board";
+import { withBoardAssets } from "../../model/board-editor";
 import { useBoardState } from "../../model/board-state";
 
 // Excalidraw — отдельным чанком: страница комнаты без доски его не грузит.
-const BoardCanvas = lazy(() => import("./board-canvas"));
+const BoardCanvas = lazy(() => withBoardAssets(() => import("./board-canvas")));
 
 /** Доска на месте сцены: состояние сохранения, только чтение после звонка, закрыть. */
 export function BoardPanel({ board, onClose }: { board: BoardSession; onClose: () => void }) {

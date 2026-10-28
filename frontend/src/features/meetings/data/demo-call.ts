@@ -177,7 +177,7 @@ export class DemoCall implements CallSession {
   private finish(end: CallEnd) {
     for (const timer of this.timers) window.clearTimeout(timer);
     for (const video of this.videos.values()) video.stop();
-    this.whiteboard?.close();
+    this.whiteboard?.end();
     void this.stopScreen();
     this.update({ status: "ended", end });
   }

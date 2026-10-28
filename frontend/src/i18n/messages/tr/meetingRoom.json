@@ -162,6 +162,9 @@
     "loading": "Çizim panosu açılıyor…",
     "reload": "En son sürümü yükle",
     "close": "Çizim panosunu kapat",
+    "tools": {
+      "mermaid": "Mermaid diyagramı"
+    },
     "save": {
       "loading": "Çizim panosu açılıyor…",
       "saved": "Kaydedildi",

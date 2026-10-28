@@ -162,6 +162,9 @@
     "loading": "Abriendo la pizarra…",
     "reload": "Cargar la más reciente",
     "close": "Cerrar la pizarra",
+    "tools": {
+      "mermaid": "Diagrama Mermaid"
+    },
     "save": {
       "loading": "Abriendo la pizarra…",
       "saved": "Guardado",

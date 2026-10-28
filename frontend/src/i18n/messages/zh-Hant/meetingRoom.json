@@ -162,6 +162,9 @@
     "loading": "正在開啟白板…",
     "reload": "載入最新版本",
     "close": "關閉白板",
+    "tools": {
+      "mermaid": "Mermaid 圖表"
+    },
     "save": {
       "loading": "正在開啟白板…",
       "saved": "已儲存",

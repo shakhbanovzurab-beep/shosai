@@ -162,6 +162,9 @@
     "loading": "Abrindo o quadro…",
     "reload": "Carregar a mais recente",
     "close": "Fechar o quadro",
+    "tools": {
+      "mermaid": "Diagrama Mermaid"
+    },
     "save": {
       "loading": "Abrindo o quadro…",
       "saved": "Salvo",

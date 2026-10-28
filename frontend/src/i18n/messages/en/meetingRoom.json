@@ -162,6 +162,9 @@
     "loading": "Opening the board…",
     "reload": "Load the latest",
     "close": "Close the board",
+    "tools": {
+      "mermaid": "Mermaid diagram"
+    },
     "save": {
       "loading": "Opening the board…",
       "saved": "Saved",

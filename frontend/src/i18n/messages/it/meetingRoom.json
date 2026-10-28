@@ -162,6 +162,9 @@
     "loading": "Apertura della whiteboard…",
     "reload": "Carica la più recente",
     "close": "Chiudi la whiteboard",
+    "tools": {
+      "mermaid": "Diagramma Mermaid"
+    },
     "save": {
       "loading": "Apertura della whiteboard…",
       "saved": "Salvato",

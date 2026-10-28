@@ -26,7 +26,7 @@ export class DemoBoard implements BoardSession {
     private readonly token: string,
     people: () => CallPerson[],
   ) {
-    this.current = { save: "loading", readOnly: token === "readonly", cursors: [] };
+    this.current = { save: "loading", readOnly: token === "readonly", cursors: [], streams: false };
     let step = 0;
     this.timers.push(
       window.setInterval(() => {
@@ -73,17 +73,23 @@ export class DemoBoard implements BoardSession {
 
   async reload() {
     this.update({ save: "saved" });
-    return this.scene;
   }
 
-  // На моках свой курсор никуда не уходит и чужих правок не приходит: доска одна на вкладку.
+  // На моках свой курсор никуда не уходит, чужих правок не приходит и записи нет: доска одна на вкладку.
   pointer = () => undefined;
 
   onRemote = () => () => undefined;
 
-  close() {
+  stream = () => () => undefined;
+
+  async close() {
+    window.clearTimeout(this.saving);
+  }
+
+  end() {
     for (const timer of this.timers) window.clearInterval(timer);
     window.clearTimeout(this.saving);
+    this.update({ readOnly: true, cursors: [] });
   }
 
   private update(change: Partial<BoardState>) {

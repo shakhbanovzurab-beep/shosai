@@ -162,6 +162,9 @@
     "loading": "Đang mở bảng trắng…",
     "reload": "Tải bản mới nhất",
     "close": "Đóng bảng trắng",
+    "tools": {
+      "mermaid": "Sơ đồ Mermaid"
+    },
     "save": {
       "loading": "Đang mở bảng trắng…",
       "saved": "Đã lưu",

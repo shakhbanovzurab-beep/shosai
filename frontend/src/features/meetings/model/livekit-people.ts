@@ -1,5 +1,6 @@
-import { type Participant, Track } from "livekit-client";
+import { type Participant, Track, type TrackPublication } from "livekit-client";
 
+import { BOARD_TRACK } from "../domain/board-protocol";
 import { type CallPerson, peopleOf, principalOf } from "../domain/call";
 import type { VideoKind } from "../domain/call-session";
 
@@ -10,8 +11,15 @@ export const SOURCE_OF: Record<VideoKind, Track.Source> = {
   screen: Track.Source.ScreenShare,
 };
 
+/** Дорожка участника по источнику; доска во время записи — не его экран: у людей звонка есть сама доска. */
+export function publicationOf(participant: Participant, source: Track.Source): TrackPublication | undefined {
+  for (const publication of participant.trackPublications.values())
+    if (publication.source === source && publication.trackName !== BOARD_TRACK) return publication;
+  return undefined;
+}
+
 const live = (participant: Participant, source: Track.Source) => {
-  const publication = participant.getTrackPublication(source);
+  const publication = publicationOf(participant, source);
   return publication !== undefined && !publication.isMuted;
 };
 

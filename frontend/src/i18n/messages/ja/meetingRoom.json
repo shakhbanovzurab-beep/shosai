@@ -162,6 +162,9 @@
     "loading": "ホワイトボードを開いています…",
     "reload": "最新版を読み込む",
     "close": "ホワイトボードを閉じる",
+    "tools": {
+      "mermaid": "Mermaid 図"
+    },
     "save": {
       "loading": "ホワイトボードを開いています…",
       "saved": "保存済み",

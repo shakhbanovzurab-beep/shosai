@@ -5,7 +5,7 @@ export const BOARD_ELEMENTS_MAX = 20_000;
 export const BOARD_ELEMENTS_BYTES_MAX = 4 * 1024 * 1024;
 export const BOARD_FILES_BYTES_MAX = 8 * 1024 * 1024;
 /** Сохранение ждёт тишины рисования, чтобы не слать сцену на каждый штрих. */
-export const BOARD_SAVE_AFTER_MS = 1_500;
+export const BOARD_SAVE_AFTER_MS = 2_500;
 
 export type BoardScene = { elements: readonly unknown[]; files: Readonly<Record<string, unknown>> };
 
@@ -25,18 +25,25 @@ export function sceneTooLarge(scene: BoardScene): boolean {
   );
 }
 
-export type BoardState = { save: BoardSave; readOnly: boolean; cursors: BoardCursor[] };
+/** `streams` — этот участник показывает доску видеодорожкой: идёт запись, и доску сохраняет он. */
+export type BoardState = { save: BoardSave; readOnly: boolean; cursors: BoardCursor[]; streams: boolean };
 
-/** Доска звонка: загрузка, изменения, курсоры других; чужие правки приходят через `onRemote`. */
+/** Доска звонка: загрузка, изменения, курсоры других; чужие правки и свежая сцена приходят через `onRemote`. */
 export interface BoardSession {
   subscribe(listener: () => void): () => void;
   state(): BoardState;
+  /** Человек открыл доску: сцена, с которой она начинается. */
   load(): Promise<BoardScene>;
-  /** Своя правка: сцена сохраняется после паузы рисования. */
+  /** Сцена на холсте изменилась — своей правкой или слиянием чужой. */
   change(scene: BoardScene): void;
-  /** Взять свежую сцену после конфликта. */
-  reload(): Promise<BoardScene>;
+  /** Взять свежую сцену после конфликта; она приходит через `onRemote`. */
+  reload(): Promise<void>;
   pointer(x: number, y: number): void;
   onRemote(listener: (scene: BoardScene) => void): () => void;
-  close(): void;
+  /** Показывать холсты доски видеодорожкой, пока `streams`; функция останавливает показ. */
+  stream(container: HTMLElement): () => void;
+  /** Человек закрыл доску: остальные его больше не ждут, последняя правка сохраняется. */
+  close(): Promise<void>;
+  /** Звонок закончился: доска только для чтения. */
+  end(): void;
 }

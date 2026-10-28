@@ -7,9 +7,10 @@ import {
   Track,
 } from "livekit-client";
 
+import { BOARD_TRACK } from "../domain/board-protocol";
 import type { VideoKind } from "../domain/call-session";
 import { playAudio } from "./livekit-media";
-import { SOURCE_OF } from "./livekit-people";
+import { publicationOf, SOURCE_OF } from "./livekit-people";
 
 /*
  * Дорожки звонка по элементам страницы: видео подписывается только для плиток на сцене (meetings §1.3) и
@@ -34,7 +35,8 @@ export class TrackStage {
   attach(identity: string, kind: VideoKind, element: HTMLVideoElement | null) {
     const key = `${identity}/${kind}`;
     const own = identity === this.self ? this.room.localParticipant : undefined;
-    const publication = (own ?? this.room.remoteParticipants.get(identity))?.getTrackPublication(SOURCE_OF[kind]);
+    const participant = own ?? this.room.remoteParticipants.get(identity);
+    const publication = participant ? publicationOf(participant, SOURCE_OF[kind]) : undefined;
     const remote = own ? undefined : (publication as RemoteTrackPublication | undefined);
     window.clearTimeout(this.releases.get(key));
     if (!element) {
@@ -59,6 +61,7 @@ export class TrackStage {
   /** Новая дорожка: звук — всегда, видео — если его плитка уже на сцене. */
   want(publication: RemoteTrackPublication, participant: RemoteParticipant) {
     const key = `${participant.identity}/${kindOf(publication.source)}`;
+    if (publication.trackName === BOARD_TRACK) return;
     if (publication.kind === Track.Kind.Audio || this.elements.has(key)) publication.setSubscribed(true);
   }
 
@@ -71,6 +74,7 @@ export class TrackStage {
 
   /** Своя опубликованная дорожка — в элемент своей плитки. */
   showLocal(publication: LocalTrackPublication) {
+    if (publication.trackName === BOARD_TRACK) return;
     const element = this.elements.get(`${this.self}/${kindOf(publication.source)}`);
     if (element && publication.track) publication.track.attach(element);
   }

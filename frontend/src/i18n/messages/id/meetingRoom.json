@@ -162,6 +162,9 @@
     "loading": "Membuka papan tulis…",
     "reload": "Muat versi terbaru",
     "close": "Tutup papan tulis",
+    "tools": {
+      "mermaid": "Diagram Mermaid"
+    },
     "save": {
       "loading": "Membuka papan tulis…",
       "saved": "Tersimpan",

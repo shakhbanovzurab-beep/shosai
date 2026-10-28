@@ -162,6 +162,9 @@
     "loading": "Whiteboard openen…",
     "reload": "Nieuwste laden",
     "close": "Whiteboard sluiten",
+    "tools": {
+      "mermaid": "Mermaid-diagram"
+    },
     "save": {
       "loading": "Whiteboard openen…",
       "saved": "Opgeslagen",
