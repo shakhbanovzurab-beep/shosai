@@ -22,7 +22,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.kernel.errors import AppError
 from shosai.features.identity.contracts import Principal
 from shosai.features.tasks.application import clock_rules
-from shosai.features.tasks.application.board_access import owned_board
+from shosai.features.tasks.application.board_access import incoming_board, owned_board
 from shosai.features.tasks.application.placements import (
     CardSpot,
     board_columns,
@@ -79,10 +79,13 @@ async def checked_batch(
             raise rule_failure(error) from error
         await writes.admit(session, principal, clean)
         drafts.append(clean)
-    if batch.board_id is not None:
-        await owned_board(session, principal.user_id, batch.board_id)
-        await _room(session, principal.user_id, batch.board_id, len(drafts))
-    return replace(batch, drafts=tuple(drafts))
+    board_id = batch.board_id
+    if board_id is not None:
+        await owned_board(session, principal.user_id, board_id)
+        await _room(session, principal.user_id, board_id, len(drafts))
+    elif batch.workspace_id is None:
+        board_id = await _incoming_with_room(session, principal.user_id, len(drafts))
+    return replace(batch, drafts=tuple(drafts), board_id=board_id)
 
 
 async def make_batch(
@@ -121,8 +124,24 @@ async def _put_on_board(
     await raise_revisions(session, viewer, task_ids, now)
 
 
+async def _incoming_with_room(session: AsyncSession, viewer: UUID, adding: int) -> UUID | None:
+    """Where personal tasks go when Leo names no board: the incoming board while it has room
+    (no task stays off every board, the owner's rule of 2026-10-28); a full one leaves them
+    waiting for it."""
+    board_id = await incoming_board(session, viewer)
+    if board_id is None or await _held(session, viewer, board_id) + adding > BOARD_OPEN_CARDS_MAX:
+        return None
+    return board_id
+
+
 async def _room(session: AsyncSession, viewer: UUID, board_id: UUID, adding: int) -> None:
     """A board shows 1 000 open cards at most."""
+    if await _held(session, viewer, board_id) + adding > BOARD_OPEN_CARDS_MAX:
+        raise AppError("board_full", HTTPStatus.CONFLICT)
+
+
+async def _held(session: AsyncSession, viewer: UUID, board_id: UUID) -> int:
+    """The board's open cards."""
     held = await session.scalar(
         select(func.count())
         .select_from(TaskPlacementRecord)
@@ -133,8 +152,7 @@ async def _room(session: AsyncSession, viewer: UUID, board_id: UUID, adding: int
             TaskRecord.status != TaskStatus.DONE.value,
         )
     )
-    if (held or 0) + adding > BOARD_OPEN_CARDS_MAX:
-        raise AppError("board_full", HTTPStatus.CONFLICT)
+    return held or 0
 
 
 async def move_card(

@@ -57,7 +57,11 @@ class CreateTasks(Strict):
         default=None, description="The workspace they belong to; null for personal tasks."
     )
     board_id: UUID | None = Field(
-        default=None, description="The user's board to put them on, on top of its first column."
+        default=None,
+        description=(
+            "The user's board to put them on, on top of its first column; null puts personal "
+            "tasks on the board incoming tasks land on."
+        ),
     )
 
 

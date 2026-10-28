@@ -2,8 +2,9 @@
 
 A card whose task's status left its column's kind — the task was ticked in a workspace, in
 Today, by Leo — goes to the top of the first column of its status. The incoming board takes
-the open tasks that came to its person and sit on none of their boards, on top of the first
-column of their status, once: a task sits on at most one of a person's boards, and its
+the open tasks that came to its person or that they made and that sit on none of their
+boards, on top of the first column of their status, once: no open task stays off every board
+(the owner's rule of 2026-10-28), a task sits on at most one of a person's boards, and its
 stopwatch starts if the board starts it on arrival (§3.9). Both happen in the read's
 transaction under the board's lock and raise its revision, so the order the person sees
 next stays; realigning a card never acts on its stopwatch.
@@ -17,12 +18,13 @@ from uuid import UUID
 from sqlalchemy import ColumnElement, and_, exists, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.features.tasks.application.board_access import incoming_board
 from shosai.features.tasks.application.clock_rules import board_automations, start_landed
 from shosai.features.tasks.application.placements import CardSpot, board_columns, put_on_top
 from shosai.features.tasks.domain.boards import BOARD_OPEN_CARDS_MAX
 from shosai.features.tasks.domain.clocks import starts_on_arrival
 from shosai.features.tasks.domain.placement import BoardColumn, first_column_of, spot_for
-from shosai.features.tasks.domain.tasks import TaskSource, TaskStatus
+from shosai.features.tasks.domain.tasks import TaskStatus
 from shosai.features.tasks.infrastructure.board_records import (
     BoardRecord,
     TaskPlacementRecord,
@@ -33,16 +35,12 @@ PLACED = TaskPlacementRecord
 
 
 def waiting_for(viewer: UUID) -> ColumnElement[bool]:
-    """Open tasks that came to the person (TK-D4) and sit on none of their boards."""
+    """Open tasks that came to the person or that they made, on none of their boards."""
     return and_(
         TaskRecord.status != TaskStatus.DONE.value,
         or_(
             and_(TaskRecord.org_id.is_not(None), TaskRecord.assignee_user_id == viewer),
-            and_(
-                TaskRecord.org_id.is_(None),
-                TaskRecord.user_id == viewer,
-                TaskRecord.source == TaskSource.MEETING.value,
-            ),
+            and_(TaskRecord.org_id.is_(None), TaskRecord.user_id == viewer),
         ),
         ~exists().where(PLACED.user_id == viewer, PLACED.task_id == TaskRecord.id),
     )
@@ -110,3 +108,27 @@ async def _read(
     return columns, [
         (task_id, column_id, TaskStatus(status)) for task_id, column_id, status in rows
     ]
+
+
+async def landing_spots(
+    session: AsyncSession, viewer: UUID, task_ids: Sequence[UUID], readable: ColumnElement[bool]
+) -> dict[UUID, tuple[UUID, UUID]]:
+    """Where the next read of the incoming board puts each of these tasks that waits for it:
+    the board and the first column of the task's status."""
+    if not task_ids:
+        return {}
+    board_id = await incoming_board(session, viewer)
+    if board_id is None:
+        return {}
+    columns = await board_columns(session, board_id)
+    waiting = await session.execute(
+        select(TaskRecord.id, TaskRecord.status).where(
+            TaskRecord.id.in_(task_ids), readable, waiting_for(viewer)
+        )
+    )
+    spots = {}
+    for task_id, kind in waiting:
+        column = first_column_of(columns, TaskStatus(kind))
+        if column is not None:
+            spots[task_id] = (board_id, column.column_id)
+    return spots

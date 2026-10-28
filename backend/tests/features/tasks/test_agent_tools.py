@@ -105,6 +105,23 @@ async def test_a_found_task_says_where_its_card_sits_and_its_time(task_bench: Ta
     }  # fmt: skip
 
 
+async def test_a_task_waiting_for_the_incoming_board_reads_where_it_lands(
+    task_bench: TaskBench,
+) -> None:
+    me = uuid.uuid4()
+    board_id = await made(task_bench, me)
+    first = (await board(task_bench, me, board_id))["columns"][0]["title"]
+    await task_bench.task(me, title="Арендовать сервер")
+
+    found = await tools(task_bench).search(SearchTasks(), context(me))
+
+    assert found.output is not None
+    (one,) = found.output.tasks
+    assert one.on_board is not None
+    assert (str(one.on_board.board_id), one.on_board.board_name) == (board_id, "Работа")
+    assert one.on_board.column_title == first
+
+
 async def test_a_board_reads_its_columns_and_names_the_other_boards(task_bench: TaskBench) -> None:
     me = uuid.uuid4()
     first, second = await made(task_bench, me), await made(task_bench, me)

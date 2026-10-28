@@ -28,7 +28,7 @@ async def test_a_board_is_made_from_its_template_in_the_requests_language(
     assert [c["title"] for c in german["columns"]] == ["Zu erledigen", "In Arbeit", "Erledigt"]
     assert set(russian) == {"board", "stickers", "columns", "revision", "server_now"}
     assert russian["board"] | {"id": None, "created_at": None} == {
-        "id": None, "name": "Работа", "icon": "briefcase", "jira": None, "incoming": False,
+        "id": None, "name": "Работа", "icon": "briefcase", "jira": None, "incoming": True,
         "task_count": 0, "created_at": None,
     }  # fmt: skip
     assert [(s["id"], s["visible"]) for s in russian["stickers"]] == [
@@ -46,7 +46,7 @@ async def test_a_board_is_made_from_its_template_in_the_requests_language(
     }  # fmt: skip
 
 
-async def test_a_list_counts_what_boards_show_and_the_work_waiting_for_a_board(
+async def test_a_list_counts_what_boards_show_and_lands_waiting_work_on_the_first_board(
     task_bench: TaskBench,
 ) -> None:
     me, org = uuid.uuid4(), uuid.uuid4()
@@ -64,12 +64,15 @@ async def test_a_list_counts_what_boards_show_and_the_work_waiting_for_a_board(
         await task_bench.place_in(me, task, (uuid.UUID(board_id), uuid.UUID(columns[0])))
     await task_bench.task(me, org, assignee_user_id=me)
     await task_bench.task(me, source="meeting", source_meeting_id=uuid.uuid4())
+    # Задача, сделанная вручную, тоже не остаётся вне досок (правило владельца 2026-10-28).
+    await task_bench.task(me, title="Своя")
 
     listed = (await task_bench.call(me, "GET", "/v1/boards")).json()
     stranger = await task_bench.call(uuid.uuid4(), "GET", f"/v1/boards/{board_id}")
 
-    assert [item["task_count"] for item in listed["items"]] == [2]
-    assert listed["incoming"] == {"board_id": None, "open": 2}
+    assert [item["task_count"] for item in listed["items"]] == [5]
+    assert [item["incoming"] for item in listed["items"]] == [True]
+    assert listed["incoming"] == {"board_id": board_id, "open": 0}
     assert (stranger.status_code, code_of(stranger)) == (404, "board_not_found")
 
 

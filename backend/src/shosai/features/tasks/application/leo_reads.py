@@ -9,7 +9,7 @@ work or raising a revision; it holds open cards and those done in the last 30 da
 
 from collections import defaultdict
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, date, datetime, timedelta
 from enum import StrEnum
 from typing import Final
@@ -21,7 +21,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
-from shosai.features.tasks.application.board_access import shown
+from shosai.features.tasks.application.board_access import incoming_board, shown
+from shosai.features.tasks.application.landing import landing_spots
 from shosai.features.tasks.application.placements import board_columns
 from shosai.features.tasks.application.task_query import OPEN, StatusFilter, TaskQuery, filters_of
 from shosai.features.tasks.application.task_reads import zone_of
@@ -32,7 +33,6 @@ from shosai.features.tasks.infrastructure.board_records import (
     BoardColumnRecord,
     BoardRecord,
     TaskPlacementRecord,
-    TaskSettingsRecord,
 )
 from shosai.features.tasks.infrastructure.task_records import TASK_RESOURCE, TaskRecord
 from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
@@ -136,7 +136,8 @@ class LeoReads:
             )
             more, rows = len(rows) > search.limit, rows[: search.limit]
             context = await context_of(session, self._ports, viewer, rows, WITH_PLACEMENTS)
-            views = tuple(task_of(row, viewer, context) for row in rows)
+            found = tuple(task_of(row, viewer, context) for row in rows)
+            views = await _where_seen(session, viewer, found, self._readable(viewer))
             boards, columns = await _names(session, views)
         return Found(views, more, today, boards, columns)
 
@@ -269,7 +270,21 @@ async def _chosen(
 ) -> UUID | None:
     if board_id is not None:
         return board_id if board_id in boards else None
-    incoming = await session.scalar(
-        select(TaskSettingsRecord.incoming_board_id).where(TaskSettingsRecord.user_id == viewer)
-    )
+    incoming = await incoming_board(session, viewer)
     return incoming if incoming in boards else next(iter(boards), None)
+
+
+async def _where_seen(
+    session: AsyncSession,
+    viewer: UUID,
+    views: tuple[TaskView, ...],
+    readable: ColumnElement[bool],
+) -> tuple[TaskView, ...]:
+    """The tasks where the person sees them: a task waiting for the incoming board where its
+    next read puts it, so none reads as off every board."""
+    waiting = [view.card.id for view in views if view.placement is None]
+    spots = await landing_spots(session, viewer, waiting, readable)
+    return tuple(
+        replace(view, placement=spots[view.card.id]) if view.card.id in spots else view
+        for view in views
+    )

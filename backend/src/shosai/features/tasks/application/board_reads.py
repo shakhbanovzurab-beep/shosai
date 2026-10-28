@@ -14,7 +14,7 @@ from datetime import UTC, datetime
 from typing import Any, Final
 from uuid import UUID
 
-from sqlalchemy import ColumnElement, func, select
+from sqlalchemy import ColumnElement, and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
@@ -118,12 +118,16 @@ class BoardReads:
         """The board with its cards, set right first.
 
         Four statements when nothing moves — the transaction's settings, the board with the
-        person's incoming choice under its lock, the columns, the cards with their counts and
-        covers — as a Russian home is a 45 ms round trip from the plane (§3.11).
+        person's incoming board and whether work waits for it, under its lock, the columns, the
+        cards with their counts and covers — as a Russian home is a 45 ms round trip from the
+        plane (§3.11); the incoming board reads what lands only when something waits.
         """
         viewer, now = principal.user_id, self._clock()
         async with self._transactions.begin(principal.scope()) as session:
-            board, incoming, stickers = await board_and_incoming(session, viewer, board_id)
+            waits = and_(self.readable(viewer), waiting_for(viewer))
+            board, incoming, landing, stickers = await board_and_incoming(
+                session, viewer, board_id, waits
+            )
             columns = list(
                 await session.scalars(
                     select(BoardColumnRecord)
@@ -137,7 +141,7 @@ class BoardReads:
                 [(row.task.id, row.column_id, TaskStatus(row.task.status)) for row in rows],
             )
             rules = (self.readable(viewer), now)
-            if await reconcile(session, viewer, (board_id, incoming), rules, known):
+            if await reconcile(session, viewer, (board_id, landing), rules, known):
                 await session.refresh(board)
                 rows = await self._cards(session, viewer, board_id, now)
             view = await self._view(session, viewer, (board, incoming, columns), (rows, now))

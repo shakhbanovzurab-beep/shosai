@@ -102,7 +102,12 @@ class FoundTask(BaseModel):
     source: TaskSource = Field(description="Where it came from.")
     meeting_id: UUID | None = Field(description="The meeting it came from; null if none.")
     recurring: bool = Field(description="Whether it repeats on a schedule.")
-    on_board: OnBoard | None = Field(description="Where the user's card sits; null if on none.")
+    on_board: OnBoard | None = Field(
+        description=(
+            "Where the user sees the card; a new task shows where the board incoming tasks land "
+            "on puts it. Null only for a done task off the boards or while the user has none."
+        )
+    )
     time: TimeSpent = Field(description="Plan, fact and the stopwatch.")
 
 

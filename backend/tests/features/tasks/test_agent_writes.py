@@ -128,6 +128,24 @@ async def test_a_batch_is_made_whole_once_on_top_of_the_board(task_bench: TaskBe
     assert await task_bench.revision(me, uuid.UUID(board_id)) == before + 1
 
 
+async def test_personal_tasks_without_a_board_go_on_the_incoming_board(
+    task_bench: TaskBench,
+) -> None:
+    me = uuid.uuid4()
+    board_id = await made(task_bench, me)
+    tools = writes(task_bench)
+    args = CreateTasks.model_validate({"tasks": [{"title": "Установить Ubuntu"}]})
+
+    plan = planned(await tools.creates.plan(args, context(me)))
+    preview = await tools.creates.preview(plan, context(me))
+    made_ids = await tools.creates.execute(plan, context(me), "item-1")
+
+    assert plan.data["board_id"] == board_id
+    assert preview.params["board"] == "Работа"
+    assert made_ids.output is not None
+    assert cards_of(await board(task_bench, me, board_id), 0) == [str(made_ids.output.task_ids[0])]
+
+
 async def test_one_invalid_task_stops_the_whole_batch(task_bench: TaskBench) -> None:
     me = uuid.uuid4()
     args = CreateTasks.model_validate(
