@@ -87,6 +87,30 @@ def rule_failure(error: RoomRuleError) -> AppError:
     return AppError(error.code, status)
 
 
+async def open_room(
+    session: AsyncSession, principal: Principal, title: str | None, workspace_id: UUID | None
+) -> RoomRecord:
+    """A new open room of the person in the caller's transaction; the title already checked."""
+    record = RoomRecord(
+        id=new_id(), owner_id=principal.user_id, org_id=workspace_id, title=title,
+        lk_room_name=new_livekit_name(), invite_token=new_invite_token(),
+    )  # fmt: skip
+    session.add(record)
+    await session.flush()
+    log.info("Комната открыта", room_id=str(record.id), user_id=str(principal.user_id))
+    return record
+
+
+async def close_room(session: AsyncSession, record: RoomRecord, now: datetime) -> None:
+    """Close the owner's locked room for good; a closed room stays as it is."""
+    if record.state != RoomState.OPEN.value:
+        return
+    record.state, record.closed_at = RoomState.CLOSED.value, now
+    record.closed_by, record.updated_at = ClosedBy.OWNER.value, now
+    await session.flush()
+    log.info("Комната закрыта владельцем", room_id=str(record.id))
+
+
 class RoomBook:
     """The owner's rooms in their home."""
 
@@ -121,13 +145,7 @@ class RoomBook:
                 await self._member_of(session, principal, workspace_id)
 
             async def first() -> RoomMade:
-                record = RoomRecord(
-                    id=new_id(), owner_id=principal.user_id, org_id=workspace_id, title=clean,
-                    lk_room_name=new_livekit_name(), invite_token=new_invite_token(),
-                )  # fmt: skip
-                session.add(record)
-                await session.flush()
-                log.info("Комната открыта", room_id=str(record.id), user_id=str(principal.user_id))
+                record = await open_room(session, principal, clean, workspace_id)
                 return RoomMade(room_id=record.id)
 
             made = await self._effects.once(session, effect, RoomMade, first)
@@ -153,7 +171,7 @@ class RoomBook:
 
     async def change(self, principal: Principal, room_id: UUID, change: RoomChange) -> RoomView:
         """Rename the room or switch its notes; a closed room is not changed."""
-        space = await self._space_of(principal, room_id)
+        space = await self.space_of(principal, room_id)
         scope = TenancyScope(principal.home, principal.user_id, space)
         async with self._transactions.begin(scope) as session:
             record = await owned_room(session, principal.user_id, room_id, lock=True)
@@ -179,18 +197,13 @@ class RoomBook:
 
     async def end(self, principal: Principal, room_id: UUID) -> RoomView:
         """Close the room for good, then end its call in the SFU; a closed room answers as is."""
-        space = await self._space_of(principal, room_id)
+        space = await self.space_of(principal, room_id)
         scope = TenancyScope(principal.home, principal.user_id, space)
         async with self._transactions.begin(scope) as session:
             record = await owned_room(session, principal.user_id, room_id, lock=True)
-            if record.state == RoomState.OPEN.value:
-                now = self._clock()
-                record.state, record.closed_at = RoomState.CLOSED.value, now
-                record.closed_by, record.updated_at = ClosedBy.OWNER.value, now
-                await session.flush()
-                log.info("Комната закрыта владельцем", room_id=str(room_id))
+            await close_room(session, record, self._clock())
             view = await room_view(session, record)
-        await self._end_in_sfu(record.lk_room_name)
+        await self.end_in_sfu(record.lk_room_name)
         return view
 
     async def _member_of(
@@ -200,13 +213,15 @@ class RoomBook:
         if workspace_id not in {membership.org_id for membership in memberships}:
             raise AppError("workspace_not_found", HTTPStatus.NOT_FOUND)
 
-    async def _end_in_sfu(self, lk_room_name: str) -> None:
+    async def end_in_sfu(self, lk_room_name: str) -> None:
+        """End a closed room's call in the SFU; the sweep ends it if the SFU does not answer."""
         try:
             await self._server.delete_room(lk_room_name)
         except VideoUnavailableError:
             # Строка уже закрыта: обход сверит SFU с закрытыми комнатами (A5).
             log.warning("SFU не закончил комнату; её закончит обход", lk_room_name=lk_room_name)
 
-    async def _space_of(self, principal: Principal, room_id: UUID) -> UUID | None:
+    async def space_of(self, principal: Principal, room_id: UUID) -> UUID | None:
+        """The space of the person's room: a workspace, or None for Personal; `room_not_found`."""
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
             return (await owned_room(session, principal.user_id, room_id)).org_id

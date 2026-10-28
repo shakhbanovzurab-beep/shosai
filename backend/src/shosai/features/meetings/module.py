@@ -8,7 +8,7 @@ account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`, t
 join with its room passes in Valkey and their renewal, removal with bans, hands and the
 account's rooms. Step A5 added LiveKit's webhook, calls and the sweep of each home; A6 the
 call's chat; A7 its video recording. Step A8 added the admin's LiveKit screen over LiveKit's
-API and Prometheus.
+API and Prometheus, and A13 Leo's `meetings` toolset.
 """
 
 from collections.abc import AsyncIterator
@@ -18,6 +18,7 @@ from datetime import timedelta
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.core.health.probes import DependencyProbe
+from shosai.core.idempotency.action_items import ActionItems
 from shosai.core.kernel.homes import Home
 from shosai.features.meetings.application.account_data import (
     ACCOUNT_DATA,
@@ -37,6 +38,8 @@ from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.sweep import Sweep
 from shosai.features.meetings.application.video_server import VideoUnavailableError
+from shosai.features.meetings.channels.agent_specs import SPECS
+from shosai.features.meetings.channels.agent_tools import MeetingTools
 from shosai.features.meetings.channels.http.admin_livekit import build_admin_livekit_router
 from shosai.features.meetings.channels.http.chat import build_chat_router
 from shosai.features.meetings.channels.http.joining import build_joining_router
@@ -111,6 +114,9 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 ),
             ),
             task_handlers=task_handlers(AccountRooms(transactions, server), calls, sweep),
+            agent_tools=MeetingTools(
+                transactions, (book, ActionItems(services.effects, services.outbox), server), origin
+            ).bound(),
             periodic_jobs=PERIODIC_JOBS,
             subscriptions=subscriptions(services.tasks),
             probes=probes,
@@ -141,4 +147,5 @@ MEETINGS = FeatureModule(
     production_checks=(livekit_settings_safe,),
     settings=(LiveKitSettings, MeetingsSettings),
     account_data=(ACCOUNT_DATA,),
+    agent_tools=SPECS,
 )

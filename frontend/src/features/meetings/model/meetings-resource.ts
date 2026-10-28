@@ -7,6 +7,7 @@ import { isBusyCard, type MeetingCard } from "@/features/notes/domain/library";
 import { recentRecordings } from "@/features/notes/model/recent-notes";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource } from "@/lib/polling-resource";
+import { inDomain } from "@/lib/resource-domains";
 
 import { type OwnedRoom, roomApi } from "../api/room-api";
 import type { Meeting } from "../domain/meeting";
@@ -75,15 +76,18 @@ async function liveRooms(): Promise<Meeting[]> {
 }
 
 /**
- * Встречи раздела: записи «Заметок» и, пока у meetings нет API, их образцы. Опрашивается, пока запись идёт или
+ * Встречи раздела (домен `meetings`: его перечитывает и одобренное действие Leo): записи «Заметок» и, пока у meetings нет API, их образцы. Опрашивается, пока запись идёт или
  * её заметки пишутся, — так идущая встреча сама переходит в прошедшие с итогом Leo.
  */
-export const meetingsResource = createPollingResource(
-  async () => {
-    const [plans, recorded, rooms] = await Promise.all([scheduled(), recordings(), liveRooms()]);
-    return [...rooms, ...plans, ...recorded];
-  },
-  (meetings) => meetings.some((meeting) => meeting.recording?.busy === true || meeting.endless === true),
+export const meetingsResource = inDomain(
+  "meetings",
+  createPollingResource(
+    async () => {
+      const [plans, recorded, rooms] = await Promise.all([scheduled(), recordings(), liveRooms()]);
+      return [...rooms, ...plans, ...recorded];
+    },
+    (meetings) => meetings.some((meeting) => meeting.recording?.busy === true || meeting.endless === true),
+  ),
 );
 
 export const useMeetings = () => usePollingResource(meetingsResource);
