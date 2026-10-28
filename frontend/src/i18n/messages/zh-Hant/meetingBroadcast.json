@@ -1,0 +1,118 @@
+{
+  "metaTitle": "直播",
+  "connecting": "正在加入…",
+  "status": {
+    "scheduled": "尚未開始直播",
+    "live": "直播中",
+    "ended": "已結束"
+  },
+  "viewers": "{count, plural, other {# 位觀眾}}",
+  "viewersUnknown": "觀眾人數不明",
+  "roles": {
+    "host": "主持人",
+    "cohost": "共同主持人",
+    "speaker": "講者"
+  },
+  "lobby": {
+    "ready": "你在舞台上的角色：{role}",
+    "hint": "直播開始後，觀眾才看得到舞台。",
+    "enter": "上台"
+  },
+  "studio": {
+    "start": "開始直播",
+    "end": "結束直播",
+    "endTitle": "要為所有人結束直播嗎？",
+    "endDescription": "觀眾會離開，連結也會失效。",
+    "cancel": "取消",
+    "notLiveHint": "只有舞台上的人看得到這裡。準備好就開始吧。",
+    "leave": "離開直播",
+    "controls": "直播控制項",
+    "mic": "麥克風",
+    "camera": "攝影機",
+    "screen": "分享畫面",
+    "panel": "對話與觀眾"
+  },
+  "panel": {
+    "chat": "對話",
+    "hands": "舉手",
+    "waiting": "等候中",
+    "stage": "舞台",
+    "close": "關閉面板"
+  },
+  "hands": {
+    "empty": "沒有人舉手",
+    "invite": "邀請上台",
+    "decline": "拒絕",
+    "stageFull": "舞台已滿：除了主持人還有 10 位講者"
+  },
+  "waiting": {
+    "empty": "沒有人在等候",
+    "admit": "允許進入",
+    "deny": "拒絕"
+  },
+  "stage": {
+    "you": "你",
+    "offAir": "未上鏡",
+    "actions": "{name} 的動作",
+    "takeOffAir": "暫停上鏡",
+    "putOnAir": "重新上鏡",
+    "makeCohost": "設為共同主持人",
+    "removeCohost": "取消共同主持人",
+    "remove": "請下台"
+  },
+  "chat": {
+    "label": "直播對話",
+    "empty": "還沒有訊息",
+    "stageBadge": "舞台",
+    "you": "你",
+    "placeholder": "傳送訊息給所有人",
+    "send": "傳送",
+    "sendFailed": "無法傳送訊息，請再試一次。"
+  },
+  "watch": {
+    "raiseHand": "舉手",
+    "lowerHand": "放下手",
+    "handRaised": "你已舉手，主持人可以邀請你上台。",
+    "invited": "主持人邀請你上台",
+    "accept": "上台",
+    "notNow": "稍後再說",
+    "leave": "離開",
+    "emptyStage": "講者開始直播後，舞台會顯示在這裡",
+    "chat": "對話"
+  },
+  "outside": {
+    "not_live": {
+      "title": "直播尚未開始",
+      "description": "開始時再回來，連結不會改變。"
+    },
+    "wait": {
+      "title": "正在等候主持人讓你進入",
+      "description": "主持人允許後你就會進入，請保持這個頁面開啟。"
+    },
+    "full": {
+      "title": "直播人數已滿",
+      "description": "直播最多容納 100 位觀眾，請過幾分鐘再試一次。"
+    },
+    "ended": {
+      "title": "直播已結束",
+      "description": "感謝收看。"
+    },
+    "left": {
+      "title": "你已離開直播",
+      "description": "直播進行中時都可以回來。"
+    },
+    "tryAgain": "再試一次",
+    "rejoin": "重新加入"
+  },
+  "new": {
+    "menu": "新增直播",
+    "title": "新增直播",
+    "description": "最多 100 人觀看，最多 10 位講者和你一起上台。",
+    "nameLabel": "標題",
+    "waitingRoom": "等候室",
+    "waitingRoomHint": "觀眾會在等候室等待，直到你或共同主持人允許進入。",
+    "create": "建立",
+    "cancel": "取消",
+    "failed": "無法建立直播，請再試一次。"
+  }
+}

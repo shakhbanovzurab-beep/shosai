@@ -1,0 +1,118 @@
+{
+  "metaTitle": "Diffusion",
+  "connecting": "Connexion…",
+  "status": {
+    "scheduled": "Pas encore en direct",
+    "live": "En direct",
+    "ended": "Terminée"
+  },
+  "viewers": "{count, plural, one {# spectateur} many {# spectateurs} other {# spectateurs}}",
+  "viewersUnknown": "Nombre de spectateurs inconnu",
+  "roles": {
+    "host": "Animateur",
+    "cohost": "Co-animateur",
+    "speaker": "Intervenant"
+  },
+  "lobby": {
+    "ready": "Votre rôle sur scène : {role}",
+    "hint": "Le public ne voit la scène qu’une fois la diffusion lancée.",
+    "enter": "Monter sur scène"
+  },
+  "studio": {
+    "start": "Lancer la diffusion",
+    "end": "Terminer la diffusion",
+    "endTitle": "Terminer la diffusion pour tous ?",
+    "endDescription": "Le public part et le lien ne fonctionne plus.",
+    "cancel": "Annuler",
+    "notLiveHint": "Seule la scène voit ceci. Lancez la diffusion quand vous êtes prêt.",
+    "leave": "Quitter la diffusion",
+    "controls": "Commandes de la diffusion",
+    "mic": "Micro",
+    "camera": "Caméra",
+    "screen": "Partager l’écran",
+    "panel": "Conversation et public"
+  },
+  "panel": {
+    "chat": "Conversation",
+    "hands": "Mains",
+    "waiting": "Attente",
+    "stage": "Scène",
+    "close": "Fermer le panneau"
+  },
+  "hands": {
+    "empty": "Aucune main levée",
+    "invite": "Inviter sur scène",
+    "decline": "Refuser",
+    "stageFull": "La scène est complète : 10 intervenants en plus de l’animateur"
+  },
+  "waiting": {
+    "empty": "Personne n’attend",
+    "admit": "Admettre",
+    "deny": "Refuser"
+  },
+  "stage": {
+    "you": "vous",
+    "offAir": "Hors direct",
+    "actions": "Actions pour {name}",
+    "takeOffAir": "Retirer du direct",
+    "putOnAir": "Remettre en direct",
+    "makeCohost": "Nommer co-animateur",
+    "removeCohost": "Retirer le rôle de co-animateur",
+    "remove": "Retirer de la scène"
+  },
+  "chat": {
+    "label": "Conversation de la diffusion",
+    "empty": "Aucun message pour l’instant",
+    "stageBadge": "Scène",
+    "you": "Vous",
+    "placeholder": "Message à tous",
+    "send": "Envoyer",
+    "sendFailed": "Impossible d’envoyer le message. Réessayez."
+  },
+  "watch": {
+    "raiseHand": "Lever la main",
+    "lowerHand": "Baisser la main",
+    "handRaised": "Votre main est levée. L’animateur peut vous inviter sur scène.",
+    "invited": "L’animateur vous invite sur scène",
+    "accept": "Monter sur scène",
+    "notNow": "Pas maintenant",
+    "leave": "Quitter",
+    "emptyStage": "La scène apparaît ici dès qu’un intervenant est en direct",
+    "chat": "Conversation"
+  },
+  "outside": {
+    "not_live": {
+      "title": "La diffusion n’a pas encore commencé",
+      "description": "Revenez au début, le lien reste le même."
+    },
+    "wait": {
+      "title": "En attente de l’animateur",
+      "description": "Vous entrerez dès que l’animateur vous admettra. Gardez cette page ouverte."
+    },
+    "full": {
+      "title": "La diffusion est complète",
+      "description": "Elle accueille 100 spectateurs. Réessayez dans quelques minutes."
+    },
+    "ended": {
+      "title": "La diffusion est terminée",
+      "description": "Merci de l’avoir suivie."
+    },
+    "left": {
+      "title": "Vous avez quitté la diffusion",
+      "description": "Vous pouvez revenir tant qu’elle est en cours."
+    },
+    "tryAgain": "Réessayer",
+    "rejoin": "Rejoindre à nouveau"
+  },
+  "new": {
+    "menu": "Nouvelle diffusion",
+    "title": "Nouvelle diffusion",
+    "description": "Jusqu’à 100 personnes regardent, et jusqu’à 10 intervenants vous rejoignent sur scène.",
+    "nameLabel": "Titre",
+    "waitingRoom": "Salle d’attente",
+    "waitingRoomHint": "Les spectateurs attendent que vous ou un co-animateur les admettiez.",
+    "create": "Créer",
+    "cancel": "Annuler",
+    "failed": "Impossible de créer la diffusion. Réessayez."
+  }
+}

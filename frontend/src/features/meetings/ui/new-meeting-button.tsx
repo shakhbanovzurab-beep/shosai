@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-import { CalendarPlus, ChevronDown, Plus, Video } from "lucide-react";
+import { CalendarPlus, ChevronDown, Plus, Radio, Video } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "use-intl";
 
@@ -15,9 +15,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
 import { Spinner } from "@/components/ui/spinner";
+import { isServed } from "@/config/unserved-slices";
 import { Link, useRouter } from "@/lib/navigation";
 
 import { startMeeting } from "../model/start-meeting";
+import { NewBroadcastDialog } from "./broadcast/new-broadcast-dialog";
+
+const BROADCASTS_SERVED = isServed("broadcasts");
 
 /**
  * «Начать сейчас» открывает комнату Shosai и входит в неё; встречу на потом планирует «Календарь». Загрузка записи
@@ -25,8 +29,10 @@ import { startMeeting } from "../model/start-meeting";
  */
 export function NewMeetingButton() {
   const t = useTranslations("meetings");
+  const tb = useTranslations("meetingBroadcast");
   const router = useRouter();
   const [starting, setStarting] = useState(false);
+  const [broadcasting, setBroadcasting] = useState(false);
   // Один ключ на нажатие «Начать сейчас»: повтор после сбоя сети не создаст вторую комнату.
   const key = useRef<string | null>(null);
 
@@ -65,8 +71,15 @@ export function NewMeetingButton() {
               {t("actions.schedule")}
             </Link>
           </DropdownMenuItem>
+          {BROADCASTS_SERVED ? (
+            <DropdownMenuItem onSelect={() => setBroadcasting(true)}>
+              <Radio />
+              {tb("new.menu")}
+            </DropdownMenuItem>
+          ) : null}
         </DropdownMenuGroup>
       </DropdownMenuContent>
+      <NewBroadcastDialog open={broadcasting} onOpenChange={setBroadcasting} />
     </DropdownMenu>
   );
 }

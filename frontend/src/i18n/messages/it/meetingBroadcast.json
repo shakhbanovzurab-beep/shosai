@@ -1,0 +1,118 @@
+{
+  "metaTitle": "Diretta",
+  "connecting": "Accesso in corso…",
+  "status": {
+    "scheduled": "Non ancora in diretta",
+    "live": "In diretta",
+    "ended": "Terminata"
+  },
+  "viewers": "{count, plural, one {# spettatore} many {# spettatori} other {# spettatori}}",
+  "viewersUnknown": "Spettatori: numero sconosciuto",
+  "roles": {
+    "host": "Host",
+    "cohost": "Co-host",
+    "speaker": "Relatore"
+  },
+  "lobby": {
+    "ready": "Il tuo ruolo sul palco: {role}",
+    "hint": "Il pubblico vede il palco solo quando inizia la diretta.",
+    "enter": "Sali sul palco"
+  },
+  "studio": {
+    "start": "Avvia la diretta",
+    "end": "Termina la diretta",
+    "endTitle": "Terminare la diretta per tutti?",
+    "endDescription": "Il pubblico esce e il link smette di funzionare.",
+    "cancel": "Annulla",
+    "notLiveHint": "Lo vede solo il palco. Avvia quando sei pronto.",
+    "leave": "Esci dalla diretta",
+    "controls": "Controlli della diretta",
+    "mic": "Microfono",
+    "camera": "Fotocamera",
+    "screen": "Condividi schermo",
+    "panel": "Chat e pubblico"
+  },
+  "panel": {
+    "chat": "Chat",
+    "hands": "Mani",
+    "waiting": "In attesa",
+    "stage": "Palco",
+    "close": "Chiudi il pannello"
+  },
+  "hands": {
+    "empty": "Nessuna mano alzata",
+    "invite": "Invita sul palco",
+    "decline": "Rifiuta",
+    "stageFull": "Il palco è pieno: 10 relatori oltre all’host"
+  },
+  "waiting": {
+    "empty": "Nessuno in attesa",
+    "admit": "Ammetti",
+    "deny": "Rifiuta"
+  },
+  "stage": {
+    "you": "tu",
+    "offAir": "Fuori onda",
+    "actions": "Azioni per {name}",
+    "takeOffAir": "Togli dalla diretta",
+    "putOnAir": "Rimetti in diretta",
+    "makeCohost": "Rendi co-host",
+    "removeCohost": "Togli il ruolo di co-host",
+    "remove": "Togli dal palco"
+  },
+  "chat": {
+    "label": "Chat della diretta",
+    "empty": "Ancora nessun messaggio",
+    "stageBadge": "Palco",
+    "you": "Tu",
+    "placeholder": "Messaggio a tutti",
+    "send": "Invia",
+    "sendFailed": "Impossibile inviare il messaggio. Riprova."
+  },
+  "watch": {
+    "raiseHand": "Alza la mano",
+    "lowerHand": "Abbassa la mano",
+    "handRaised": "Hai alzato la mano. L’host può invitarti sul palco.",
+    "invited": "L’host ti invita sul palco",
+    "accept": "Sali sul palco",
+    "notNow": "Non ora",
+    "leave": "Esci",
+    "emptyStage": "Il palco appare qui quando un relatore è in diretta",
+    "chat": "Chat"
+  },
+  "outside": {
+    "not_live": {
+      "title": "La diretta non è ancora iniziata",
+      "description": "Torna quando inizia, il link resta lo stesso."
+    },
+    "wait": {
+      "title": "In attesa che l’host ti ammetta",
+      "description": "Entrerai appena l’host ti ammette. Tieni aperta questa pagina."
+    },
+    "full": {
+      "title": "La diretta è al completo",
+      "description": "Accoglie 100 spettatori. Riprova tra qualche minuto."
+    },
+    "ended": {
+      "title": "La diretta è terminata",
+      "description": "Grazie per aver guardato."
+    },
+    "left": {
+      "title": "Hai lasciato la diretta",
+      "description": "Puoi tornare finché è in corso."
+    },
+    "tryAgain": "Riprova",
+    "rejoin": "Rientra"
+  },
+  "new": {
+    "menu": "Nuova diretta",
+    "title": "Nuova diretta",
+    "description": "Guardano fino a 100 persone e fino a 10 relatori salgono sul palco con te.",
+    "nameLabel": "Titolo",
+    "waitingRoom": "Sala d’attesa",
+    "waitingRoomHint": "Gli spettatori aspettano che tu o un co-host li ammettiate.",
+    "create": "Crea",
+    "cancel": "Annulla",
+    "failed": "Impossibile creare la diretta. Riprova."
+  }
+}

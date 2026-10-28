@@ -1,0 +1,118 @@
+{
+  "metaTitle": "Livestream",
+  "connecting": "Beitreten…",
+  "status": {
+    "scheduled": "Noch nicht live",
+    "live": "Live",
+    "ended": "Beendet"
+  },
+  "viewers": "{count, plural, one {# Zuschauer} other {# Zuschauer}}",
+  "viewersUnknown": "Zuschauerzahl unbekannt",
+  "roles": {
+    "host": "Moderator",
+    "cohost": "Co-Moderator",
+    "speaker": "Sprecher"
+  },
+  "lobby": {
+    "ready": "Deine Rolle auf der Bühne: {role}",
+    "hint": "Das Publikum sieht die Bühne erst, wenn der Livestream beginnt.",
+    "enter": "Auf die Bühne"
+  },
+  "studio": {
+    "start": "Livestream starten",
+    "end": "Livestream beenden",
+    "endTitle": "Livestream für alle beenden?",
+    "endDescription": "Das Publikum verlässt ihn, und der Link funktioniert nicht mehr.",
+    "cancel": "Abbrechen",
+    "notLiveHint": "Nur die Bühne sieht das. Starte, wenn du bereit bist.",
+    "leave": "Livestream verlassen",
+    "controls": "Livestream-Steuerung",
+    "mic": "Mikrofon",
+    "camera": "Kamera",
+    "screen": "Bildschirm teilen",
+    "panel": "Chat und Publikum"
+  },
+  "panel": {
+    "chat": "Chat",
+    "hands": "Hände",
+    "waiting": "Warteraum",
+    "stage": "Bühne",
+    "close": "Bereich schließen"
+  },
+  "hands": {
+    "empty": "Keine gehobenen Hände",
+    "invite": "Auf die Bühne holen",
+    "decline": "Ablehnen",
+    "stageFull": "Die Bühne ist voll: 10 Sprecher außer dem Moderator"
+  },
+  "waiting": {
+    "empty": "Niemand wartet",
+    "admit": "Zulassen",
+    "deny": "Ablehnen"
+  },
+  "stage": {
+    "you": "du",
+    "offAir": "Nicht live",
+    "actions": "Aktionen für {name}",
+    "takeOffAir": "Aus dem Livestream nehmen",
+    "putOnAir": "In den Livestream holen",
+    "makeCohost": "Zum Co-Moderator machen",
+    "removeCohost": "Co-Moderator entfernen",
+    "remove": "Von der Bühne nehmen"
+  },
+  "chat": {
+    "label": "Chat des Livestreams",
+    "empty": "Noch keine Nachrichten",
+    "stageBadge": "Bühne",
+    "you": "Du",
+    "placeholder": "Nachricht an alle",
+    "send": "Senden",
+    "sendFailed": "Die Nachricht konnte nicht gesendet werden. Versuche es erneut."
+  },
+  "watch": {
+    "raiseHand": "Hand heben",
+    "lowerHand": "Hand senken",
+    "handRaised": "Deine Hand ist gehoben. Der Moderator kann dich auf die Bühne holen.",
+    "invited": "Der Moderator holt dich auf die Bühne",
+    "accept": "Auf die Bühne",
+    "notNow": "Nicht jetzt",
+    "leave": "Verlassen",
+    "emptyStage": "Hier erscheint die Bühne, sobald ein Sprecher live ist",
+    "chat": "Chat"
+  },
+  "outside": {
+    "not_live": {
+      "title": "Der Livestream hat noch nicht begonnen",
+      "description": "Komm zum Start wieder, der Link bleibt gleich."
+    },
+    "wait": {
+      "title": "Warte, bis der Moderator dich zulässt",
+      "description": "Du bist dabei, sobald der Moderator dich zulässt. Lass diese Seite geöffnet."
+    },
+    "full": {
+      "title": "Der Livestream ist voll",
+      "description": "Er fasst 100 Zuschauer. Versuche es in ein paar Minuten erneut."
+    },
+    "ended": {
+      "title": "Der Livestream ist beendet",
+      "description": "Danke fürs Zuschauen."
+    },
+    "left": {
+      "title": "Du hast den Livestream verlassen",
+      "description": "Du kannst zurückkommen, solange er läuft."
+    },
+    "tryAgain": "Erneut versuchen",
+    "rejoin": "Erneut beitreten"
+  },
+  "new": {
+    "menu": "Neuer Livestream",
+    "title": "Neuer Livestream",
+    "description": "Bis zu 100 Personen schauen zu, bis zu 10 Sprecher kommen zu dir auf die Bühne.",
+    "nameLabel": "Titel",
+    "waitingRoom": "Warteraum",
+    "waitingRoomHint": "Zuschauer warten, bis du oder ein Co-Moderator sie zulasst.",
+    "create": "Erstellen",
+    "cancel": "Abbrechen",
+    "failed": "Der Livestream konnte nicht erstellt werden. Versuche es erneut."
+  }
+}

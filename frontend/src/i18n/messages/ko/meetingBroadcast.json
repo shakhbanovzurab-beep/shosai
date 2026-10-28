@@ -1,0 +1,118 @@
+{
+  "metaTitle": "방송",
+  "connecting": "참여하는 중…",
+  "status": {
+    "scheduled": "방송 전",
+    "live": "방송 중",
+    "ended": "종료됨"
+  },
+  "viewers": "{count, plural, other {시청자 #명}}",
+  "viewersUnknown": "시청자 수 알 수 없음",
+  "roles": {
+    "host": "호스트",
+    "cohost": "공동 호스트",
+    "speaker": "발표자"
+  },
+  "lobby": {
+    "ready": "무대 역할: {role}",
+    "hint": "방송이 시작되어야 시청자가 무대를 볼 수 있어요.",
+    "enter": "무대에 오르기"
+  },
+  "studio": {
+    "start": "방송 시작",
+    "end": "방송 종료",
+    "endTitle": "모두에게 방송을 종료할까요?",
+    "endDescription": "시청자가 모두 나가고 링크가 더 이상 작동하지 않아요.",
+    "cancel": "취소",
+    "notLiveHint": "무대에 있는 사람만 볼 수 있어요. 준비되면 시작하세요.",
+    "leave": "방송 나가기",
+    "controls": "방송 컨트롤",
+    "mic": "마이크",
+    "camera": "카메라",
+    "screen": "화면 공유",
+    "panel": "채팅 및 시청자"
+  },
+  "panel": {
+    "chat": "채팅",
+    "hands": "손 들기",
+    "waiting": "대기 중",
+    "stage": "무대",
+    "close": "패널 닫기"
+  },
+  "hands": {
+    "empty": "손을 든 사람이 없어요",
+    "invite": "무대로 초대",
+    "decline": "거절",
+    "stageFull": "무대가 가득 찼어요. 호스트 외 발표자는 10명까지예요."
+  },
+  "waiting": {
+    "empty": "기다리는 사람이 없어요",
+    "admit": "입장 허용",
+    "deny": "거절"
+  },
+  "stage": {
+    "you": "나",
+    "offAir": "방송 제외",
+    "actions": "{name} 작업",
+    "takeOffAir": "방송에서 제외",
+    "putOnAir": "다시 방송에 포함",
+    "makeCohost": "공동 호스트로 지정",
+    "removeCohost": "공동 호스트 해제",
+    "remove": "무대에서 내리기"
+  },
+  "chat": {
+    "label": "방송 채팅",
+    "empty": "아직 메시지가 없어요",
+    "stageBadge": "무대",
+    "you": "나",
+    "placeholder": "모두에게 메시지",
+    "send": "보내기",
+    "sendFailed": "메시지를 보내지 못했어요. 다시 시도해 주세요."
+  },
+  "watch": {
+    "raiseHand": "손 들기",
+    "lowerHand": "손 내리기",
+    "handRaised": "손을 들었어요. 호스트가 무대로 초대할 수 있어요.",
+    "invited": "호스트가 무대로 초대했어요",
+    "accept": "무대에 오르기",
+    "notNow": "나중에",
+    "leave": "나가기",
+    "emptyStage": "발표자가 방송을 시작하면 여기에 무대가 보여요",
+    "chat": "채팅"
+  },
+  "outside": {
+    "not_live": {
+      "title": "아직 방송이 시작되지 않았어요",
+      "description": "시작하면 다시 오세요. 링크는 그대로예요."
+    },
+    "wait": {
+      "title": "호스트의 입장 허용을 기다리는 중이에요",
+      "description": "호스트가 허용하면 바로 참여해요. 이 페이지를 열어 두세요."
+    },
+    "full": {
+      "title": "방송 정원이 찼어요",
+      "description": "시청자는 100명까지예요. 몇 분 후에 다시 시도해 주세요."
+    },
+    "ended": {
+      "title": "방송이 끝났어요",
+      "description": "시청해 주셔서 감사해요."
+    },
+    "left": {
+      "title": "방송에서 나갔어요",
+      "description": "방송 중에는 다시 돌아올 수 있어요."
+    },
+    "tryAgain": "다시 시도",
+    "rejoin": "다시 참여"
+  },
+  "new": {
+    "menu": "새 방송",
+    "title": "새 방송",
+    "description": "최대 100명이 시청하고, 최대 10명의 발표자가 함께 무대에 올라요.",
+    "nameLabel": "제목",
+    "waitingRoom": "대기실",
+    "waitingRoomHint": "호스트나 공동 호스트가 입장을 허용할 때까지 시청자가 기다려요.",
+    "create": "만들기",
+    "cancel": "취소",
+    "failed": "방송을 만들지 못했어요. 다시 시도해 주세요."
+  }
+}

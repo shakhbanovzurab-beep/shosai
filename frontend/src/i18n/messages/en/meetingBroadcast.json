@@ -1,0 +1,118 @@
+{
+  "metaTitle": "Broadcast",
+  "connecting": "Joining…",
+  "status": {
+    "scheduled": "Not live yet",
+    "live": "Live",
+    "ended": "Ended"
+  },
+  "viewers": "{count, plural, one {# viewer} other {# viewers}}",
+  "viewersUnknown": "Viewers unknown",
+  "roles": {
+    "host": "Host",
+    "cohost": "Co-host",
+    "speaker": "Speaker"
+  },
+  "lobby": {
+    "ready": "You’re on the stage as {role}",
+    "hint": "The audience sees the stage only once the broadcast starts.",
+    "enter": "Go on stage"
+  },
+  "studio": {
+    "start": "Start broadcast",
+    "end": "End broadcast",
+    "endTitle": "End the broadcast for everyone?",
+    "endDescription": "The audience leaves and the link stops working.",
+    "cancel": "Cancel",
+    "notLiveHint": "Only the stage sees this. Start when you’re ready.",
+    "leave": "Leave the broadcast",
+    "controls": "Broadcast controls",
+    "mic": "Microphone",
+    "camera": "Camera",
+    "screen": "Share screen",
+    "panel": "Chat and audience"
+  },
+  "panel": {
+    "chat": "Chat",
+    "hands": "Hands",
+    "waiting": "Waiting",
+    "stage": "Stage",
+    "close": "Close the panel"
+  },
+  "hands": {
+    "empty": "No raised hands",
+    "invite": "Invite to the stage",
+    "decline": "Decline",
+    "stageFull": "The stage is full: 10 speakers besides the host"
+  },
+  "waiting": {
+    "empty": "No one is waiting",
+    "admit": "Admit",
+    "deny": "Deny"
+  },
+  "stage": {
+    "you": "you",
+    "offAir": "Off air",
+    "actions": "Actions for {name}",
+    "takeOffAir": "Take off air",
+    "putOnAir": "Put on air",
+    "makeCohost": "Make co-host",
+    "removeCohost": "Remove as co-host",
+    "remove": "Remove from the stage"
+  },
+  "chat": {
+    "label": "Broadcast chat",
+    "empty": "No messages yet",
+    "stageBadge": "Stage",
+    "you": "You",
+    "placeholder": "Message everyone",
+    "send": "Send",
+    "sendFailed": "The message wasn’t sent. Try again."
+  },
+  "watch": {
+    "raiseHand": "Raise hand",
+    "lowerHand": "Lower hand",
+    "handRaised": "Your hand is raised. The host can invite you to the stage.",
+    "invited": "The host invites you to the stage",
+    "accept": "Join the stage",
+    "notNow": "Not now",
+    "leave": "Leave",
+    "emptyStage": "The stage appears here once a speaker is on air",
+    "chat": "Chat"
+  },
+  "outside": {
+    "not_live": {
+      "title": "The broadcast hasn’t started yet",
+      "description": "Come back when it starts; the link stays the same."
+    },
+    "wait": {
+      "title": "Waiting for the host to let you in",
+      "description": "You’ll join as soon as the host admits you. Keep this page open."
+    },
+    "full": {
+      "title": "The broadcast is full",
+      "description": "It holds 100 viewers. Try again in a few minutes."
+    },
+    "ended": {
+      "title": "The broadcast has ended",
+      "description": "Thanks for watching."
+    },
+    "left": {
+      "title": "You left the broadcast",
+      "description": "You can come back while it’s on."
+    },
+    "tryAgain": "Try again",
+    "rejoin": "Rejoin"
+  },
+  "new": {
+    "menu": "New broadcast",
+    "title": "New broadcast",
+    "description": "Up to 100 people watch, and up to 10 speakers join you on the stage.",
+    "nameLabel": "Title",
+    "waitingRoom": "Waiting room",
+    "waitingRoomHint": "Viewers wait until you or a co-host admit them.",
+    "create": "Create",
+    "cancel": "Cancel",
+    "failed": "The broadcast wasn’t created. Try again."
+  }
+}

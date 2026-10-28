@@ -85,7 +85,38 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
   `PUT` the board's PNG (at most 25 MiB, exactly `size_bytes`) with exactly the given headers, straight into the
   owner's storage; each upload replaces the last, and when the call ends the last one becomes the owner's File
   Manager file. `413 storage_limit` when the owner's storage has no room; 6 links a minute per participant.
-- **Broadcasts** (`/v1/meetings/broadcasts/*`, `/v1/meetings/live/{token}/*`) are specified with their screens (A12a).
+- **Broadcasts**: see [Broadcasts](#broadcasts) below.
+
+## Broadcasts
+
+MR-D7, screens A12a (on mocks), routes A12b, wired in A12c. A broadcast is a stage — the host, co-hosts and at most
+10 speakers besides the host — and an audience of at most 100 viewers who publish nothing. The cabinet's page is
+`/app/live/{token}`; the stage gets the studio, the audience the viewer page. Until A12b the cabinet hides "New
+broadcast" where there are no mocks (`broadcasts` in `config/unserved-slices.ts`).
+
+| Method | Path | Who | Body | Response |
+| ------ | ---- | --- | ---- | -------- |
+| `POST` | `/v1/meetings/broadcasts` + `Idempotency-Key` | a paid plan | `{title, waiting_room}` | `201 {id, title, link, state}` |
+| `POST` | `/v1/meetings/broadcasts/{id}/start`, `…/end` | the host | — | `{state}` |
+| `POST` | `/v1/meetings/live/{token}/join` | anyone with the link | `{name?}` | a ticket |
+| `POST` | `/v1/meetings/live/{token}/knock` | a viewer in the waiting room | `{knock}` | a ticket |
+| `GET`  | `/v1/meetings/live/{token}/state` | the pass | — | the broadcast's state |
+| `POST`/`GET` | `/v1/meetings/live/{token}/chat` | the pass | `{text}` + `Idempotency-Key` / `?after=` | as the call's chat, with `from_stage` |
+| `PUT`  | `/v1/meetings/live/{token}/hand` | a viewer | `{raised}` | `{hand}` |
+| `POST` | `/v1/meetings/live/{token}/hands/{id}`, `…/admissions/{id}` | the host or a co-host | `{invite}` / `{admitted}` | `204` |
+| `PATCH`/`DELETE` | `/v1/meetings/live/{token}/members/{principal}` | the host or a co-host (`role` only the host) | `{on_air?, role?}` | the member |
+| `POST` | `/v1/meetings/live/{token}/stage` | an invited viewer | — | a ticket with the stage's LiveKit token |
+
+- **A ticket**: `{entry, title, role, waiting_room, identity, livekit_url, livekit_token, broadcast_pass, knock}` —
+  `entry` is `stage`, `audience`, `wait`, `not_live`, `full` or `ended`; the LiveKit token and pass come only with
+  `stage` and `audience`, `knock` only with `wait`. The stage gets in before the start; the audience only live.
+- **The state**: `{status, title, members: [{principal, identity, name, role, on_air}], viewers, waiting_room,
+  hands, admissions, hand, started_at}` — `viewers` is null when LiveKit does not answer; `hands` and `admissions`
+  are filled only for the host and co-hosts; `hand` is the viewer's own: `down`, `raised` or `invited`.
+- **Limits**: 100 viewers (`409 full`), 10 speakers besides the host (`409 stage_full`); chat 5 messages per 10 s for
+  the audience and 20 for the stage; a knock lives 10 minutes, a raised hand 20.
+- **Pushes**: the server publishes `{v: 1, kind}` on topic `stream` — `state` when the stage, the queues or the
+  status change, `chat` for a message — and the clients read the state again after a reconnect.
 
 ## What clients read from LiveKit
 

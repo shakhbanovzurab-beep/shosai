@@ -1,0 +1,118 @@
+{
+  "metaTitle": "Phát trực tiếp",
+  "connecting": "Đang tham gia…",
+  "status": {
+    "scheduled": "Chưa phát trực tiếp",
+    "live": "Trực tiếp",
+    "ended": "Đã kết thúc"
+  },
+  "viewers": "{count, plural, other {# người xem}}",
+  "viewersUnknown": "Chưa rõ số người xem",
+  "roles": {
+    "host": "Người chủ trì",
+    "cohost": "Đồng chủ trì",
+    "speaker": "Diễn giả"
+  },
+  "lobby": {
+    "ready": "Vai trò của bạn trên sân khấu: {role}",
+    "hint": "Khán giả chỉ thấy sân khấu khi buổi phát trực tiếp bắt đầu.",
+    "enter": "Lên sân khấu"
+  },
+  "studio": {
+    "start": "Bắt đầu phát",
+    "end": "Kết thúc buổi phát",
+    "endTitle": "Kết thúc buổi phát cho mọi người?",
+    "endDescription": "Khán giả sẽ rời đi và liên kết chia sẻ ngừng hoạt động.",
+    "cancel": "Hủy",
+    "notLiveHint": "Chỉ người trên sân khấu thấy phần này. Hãy bắt đầu khi bạn sẵn sàng.",
+    "leave": "Rời buổi phát",
+    "controls": "Điều khiển buổi phát",
+    "mic": "Micrô",
+    "camera": "Camera",
+    "screen": "Chia sẻ màn hình",
+    "panel": "Trò chuyện và khán giả"
+  },
+  "panel": {
+    "chat": "Trò chuyện",
+    "hands": "Giơ tay",
+    "waiting": "Đang chờ",
+    "stage": "Sân khấu",
+    "close": "Đóng bảng bên"
+  },
+  "hands": {
+    "empty": "Chưa ai giơ tay",
+    "invite": "Mời lên sân khấu",
+    "decline": "Từ chối",
+    "stageFull": "Sân khấu đã đủ: 10 diễn giả ngoài người chủ trì"
+  },
+  "waiting": {
+    "empty": "Không có ai đang chờ",
+    "admit": "Cho vào",
+    "deny": "Từ chối"
+  },
+  "stage": {
+    "you": "bạn",
+    "offAir": "Không phát",
+    "actions": "Thao tác cho {name}",
+    "takeOffAir": "Tạm ngừng phát",
+    "putOnAir": "Phát trở lại",
+    "makeCohost": "Đặt làm đồng chủ trì",
+    "removeCohost": "Bỏ vai trò đồng chủ trì",
+    "remove": "Mời xuống khỏi sân khấu"
+  },
+  "chat": {
+    "label": "Trò chuyện của buổi phát",
+    "empty": "Chưa có tin nhắn",
+    "stageBadge": "Sân khấu",
+    "you": "Bạn",
+    "placeholder": "Nhắn cho mọi người",
+    "send": "Gửi",
+    "sendFailed": "Không gửi được tin nhắn. Hãy thử lại."
+  },
+  "watch": {
+    "raiseHand": "Giơ tay",
+    "lowerHand": "Hạ tay",
+    "handRaised": "Bạn đã giơ tay. Người chủ trì có thể mời bạn lên sân khấu.",
+    "invited": "Người chủ trì mời bạn lên sân khấu",
+    "accept": "Lên sân khấu",
+    "notNow": "Để sau",
+    "leave": "Rời đi",
+    "emptyStage": "Sân khấu sẽ hiện ở đây khi có diễn giả đang phát",
+    "chat": "Trò chuyện"
+  },
+  "outside": {
+    "not_live": {
+      "title": "Buổi phát trực tiếp chưa bắt đầu",
+      "description": "Hãy quay lại khi bắt đầu, liên kết chia sẻ vẫn giữ nguyên."
+    },
+    "wait": {
+      "title": "Đang chờ người chủ trì cho bạn vào",
+      "description": "Bạn sẽ vào ngay khi người chủ trì cho phép. Hãy giữ trang này mở."
+    },
+    "full": {
+      "title": "Buổi phát đã đủ người",
+      "description": "Buổi phát nhận tối đa 100 người xem. Hãy thử lại sau vài phút."
+    },
+    "ended": {
+      "title": "Buổi phát trực tiếp đã kết thúc",
+      "description": "Cảm ơn bạn đã theo dõi."
+    },
+    "left": {
+      "title": "Bạn đã rời buổi phát",
+      "description": "Bạn có thể quay lại khi buổi phát vẫn đang diễn ra."
+    },
+    "tryAgain": "Thử lại",
+    "rejoin": "Tham gia lại"
+  },
+  "new": {
+    "menu": "Buổi phát mới",
+    "title": "Buổi phát mới",
+    "description": "Tối đa 100 người xem và tối đa 10 diễn giả cùng bạn lên sân khấu.",
+    "nameLabel": "Tiêu đề",
+    "waitingRoom": "Phòng chờ",
+    "waitingRoomHint": "Người xem chờ cho đến khi bạn hoặc đồng chủ trì cho họ vào.",
+    "create": "Tạo",
+    "cancel": "Hủy",
+    "failed": "Không tạo được buổi phát. Hãy thử lại."
+  }
+}

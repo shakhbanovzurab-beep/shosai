@@ -35,6 +35,7 @@ import type leoCards from "./messages/en/leoCards.json";
 import type leoVoice from "./messages/en/leoVoice.json";
 import type mail from "./messages/en/mail.json";
 import type mailLeo from "./messages/en/mailLeo.json";
+import type meetingBroadcast from "./messages/en/meetingBroadcast.json";
 import type meetingRoom from "./messages/en/meetingRoom.json";
 import type meetings from "./messages/en/meetings.json";
 import type memory from "./messages/en/memory.json";
@@ -120,6 +121,7 @@ export type Messages = {
   mail: typeof mail;
   mailLeo: typeof mailLeo;
   memory: typeof memory;
+  meetingBroadcast: typeof meetingBroadcast;
   meetingRoom: typeof meetingRoom;
   meetings: typeof meetings;
   notes: typeof notes;

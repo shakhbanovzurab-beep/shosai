@@ -1,0 +1,118 @@
+{
+  "metaTitle": "Siaran",
+  "connecting": "Bergabung…",
+  "status": {
+    "scheduled": "Belum siaran",
+    "live": "Langsung",
+    "ended": "Selesai"
+  },
+  "viewers": "{count, plural, other {# penonton}}",
+  "viewersUnknown": "Jumlah penonton tidak diketahui",
+  "roles": {
+    "host": "Host",
+    "cohost": "Co-host",
+    "speaker": "Pembicara"
+  },
+  "lobby": {
+    "ready": "Peran Anda di panggung: {role}",
+    "hint": "Penonton baru melihat panggung saat siaran dimulai.",
+    "enter": "Naik ke panggung"
+  },
+  "studio": {
+    "start": "Mulai siaran",
+    "end": "Akhiri siaran",
+    "endTitle": "Akhiri siaran untuk semua?",
+    "endDescription": "Penonton akan keluar dan link tidak berfungsi lagi.",
+    "cancel": "Batal",
+    "notLiveHint": "Hanya panggung yang melihat ini. Mulai saat Anda siap.",
+    "leave": "Keluar dari siaran",
+    "controls": "Kontrol siaran",
+    "mic": "Mikrofon",
+    "camera": "Kamera",
+    "screen": "Bagikan layar",
+    "panel": "Chat dan penonton"
+  },
+  "panel": {
+    "chat": "Chat",
+    "hands": "Tangan",
+    "waiting": "Menunggu",
+    "stage": "Panggung",
+    "close": "Tutup panel"
+  },
+  "hands": {
+    "empty": "Tidak ada yang mengangkat tangan",
+    "invite": "Undang ke panggung",
+    "decline": "Tolak",
+    "stageFull": "Panggung penuh: 10 pembicara selain host"
+  },
+  "waiting": {
+    "empty": "Tidak ada yang menunggu",
+    "admit": "Izinkan masuk",
+    "deny": "Tolak"
+  },
+  "stage": {
+    "you": "Anda",
+    "offAir": "Tidak tayang",
+    "actions": "Tindakan untuk {name}",
+    "takeOffAir": "Keluarkan dari siaran",
+    "putOnAir": "Tayangkan lagi",
+    "makeCohost": "Jadikan co-host",
+    "removeCohost": "Cabut peran co-host",
+    "remove": "Turunkan dari panggung"
+  },
+  "chat": {
+    "label": "Chat siaran",
+    "empty": "Belum ada pesan",
+    "stageBadge": "Panggung",
+    "you": "Anda",
+    "placeholder": "Kirim pesan ke semua",
+    "send": "Kirim",
+    "sendFailed": "Pesan tidak terkirim. Coba lagi."
+  },
+  "watch": {
+    "raiseHand": "Angkat tangan",
+    "lowerHand": "Turunkan tangan",
+    "handRaised": "Tangan Anda terangkat. Host bisa mengundang Anda ke panggung.",
+    "invited": "Host mengundang Anda ke panggung",
+    "accept": "Naik ke panggung",
+    "notNow": "Nanti saja",
+    "leave": "Keluar",
+    "emptyStage": "Panggung muncul di sini begitu ada pembicara yang tayang",
+    "chat": "Chat"
+  },
+  "outside": {
+    "not_live": {
+      "title": "Siaran belum dimulai",
+      "description": "Kembali saat siaran dimulai, link-nya tetap sama."
+    },
+    "wait": {
+      "title": "Menunggu host mengizinkan Anda masuk",
+      "description": "Anda akan bergabung begitu host mengizinkan. Biarkan halaman ini tetap terbuka."
+    },
+    "full": {
+      "title": "Siaran sudah penuh",
+      "description": "Siaran ini menampung 100 penonton. Coba lagi dalam beberapa menit."
+    },
+    "ended": {
+      "title": "Siaran sudah selesai",
+      "description": "Terima kasih sudah menonton."
+    },
+    "left": {
+      "title": "Anda keluar dari siaran",
+      "description": "Anda bisa kembali selama siaran masih berlangsung."
+    },
+    "tryAgain": "Coba lagi",
+    "rejoin": "Gabung lagi"
+  },
+  "new": {
+    "menu": "Siaran baru",
+    "title": "Siaran baru",
+    "description": "Hingga 100 orang menonton, dan hingga 10 pembicara naik ke panggung bersama Anda.",
+    "nameLabel": "Judul",
+    "waitingRoom": "Ruang tunggu",
+    "waitingRoomHint": "Penonton menunggu sampai Anda atau co-host mengizinkan mereka masuk.",
+    "create": "Buat",
+    "cancel": "Batal",
+    "failed": "Siaran tidak dapat dibuat. Coba lagi."
+  }
+}

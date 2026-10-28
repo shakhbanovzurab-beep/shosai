@@ -1,0 +1,118 @@
+{
+  "metaTitle": "Yayın",
+  "connecting": "Katılınıyor…",
+  "status": {
+    "scheduled": "Henüz yayında değil",
+    "live": "Canlı",
+    "ended": "Bitti"
+  },
+  "viewers": "{count, plural, one {# izleyici} other {# izleyici}}",
+  "viewersUnknown": "İzleyici sayısı bilinmiyor",
+  "roles": {
+    "host": "Sunucu",
+    "cohost": "Yardımcı sunucu",
+    "speaker": "Konuşmacı"
+  },
+  "lobby": {
+    "ready": "Sahnedeki rolünüz: {role}",
+    "hint": "İzleyiciler sahneyi ancak yayın başladığında görür.",
+    "enter": "Sahneye çık"
+  },
+  "studio": {
+    "start": "Yayını başlat",
+    "end": "Yayını bitir",
+    "endTitle": "Yayın herkes için bitirilsin mi?",
+    "endDescription": "İzleyiciler ayrılır ve bağlantı çalışmayı durdurur.",
+    "cancel": "İptal",
+    "notLiveHint": "Bunu yalnızca sahne görür. Hazır olduğunuzda başlatın.",
+    "leave": "Yayından ayrıl",
+    "controls": "Yayın kontrolleri",
+    "mic": "Mikrofon",
+    "camera": "Kamera",
+    "screen": "Ekranı paylaş",
+    "panel": "Sohbet ve izleyiciler"
+  },
+  "panel": {
+    "chat": "Sohbet",
+    "hands": "Eller",
+    "waiting": "Bekleyenler",
+    "stage": "Sahne",
+    "close": "Paneli kapat"
+  },
+  "hands": {
+    "empty": "Kaldırılmış el yok",
+    "invite": "Sahneye davet et",
+    "decline": "Reddet",
+    "stageFull": "Sahne dolu: sunucu dışında 10 konuşmacı"
+  },
+  "waiting": {
+    "empty": "Bekleyen yok",
+    "admit": "İçeri al",
+    "deny": "Reddet"
+  },
+  "stage": {
+    "you": "siz",
+    "offAir": "Yayın dışı",
+    "actions": "{name} için işlemler",
+    "takeOffAir": "Yayından çıkar",
+    "putOnAir": "Yayına geri al",
+    "makeCohost": "Yardımcı sunucu yap",
+    "removeCohost": "Yardımcı sunuculuğu kaldır",
+    "remove": "Sahneden indir"
+  },
+  "chat": {
+    "label": "Yayın sohbeti",
+    "empty": "Henüz mesaj yok",
+    "stageBadge": "Sahne",
+    "you": "Siz",
+    "placeholder": "Herkese mesaj",
+    "send": "Gönder",
+    "sendFailed": "Mesaj gönderilemedi. Tekrar deneyin."
+  },
+  "watch": {
+    "raiseHand": "El kaldır",
+    "lowerHand": "Eli indir",
+    "handRaised": "Eliniz kalkık. Sunucu sizi sahneye davet edebilir.",
+    "invited": "Sunucu sizi sahneye davet ediyor",
+    "accept": "Sahneye çık",
+    "notNow": "Şimdi değil",
+    "leave": "Ayrıl",
+    "emptyStage": "Bir konuşmacı yayına girdiğinde sahne burada görünür",
+    "chat": "Sohbet"
+  },
+  "outside": {
+    "not_live": {
+      "title": "Yayın henüz başlamadı",
+      "description": "Başladığında geri gelin, bağlantı aynı kalır."
+    },
+    "wait": {
+      "title": "Sunucunun sizi içeri almasını bekliyorsunuz",
+      "description": "Sunucu sizi içeri aldığı anda katılırsınız. Bu sayfayı açık tutun."
+    },
+    "full": {
+      "title": "Yayın dolu",
+      "description": "100 izleyici alabiliyor. Birkaç dakika sonra tekrar deneyin."
+    },
+    "ended": {
+      "title": "Yayın bitti",
+      "description": "İzlediğiniz için teşekkürler."
+    },
+    "left": {
+      "title": "Yayından ayrıldınız",
+      "description": "Yayın sürdüğü sürece geri dönebilirsiniz."
+    },
+    "tryAgain": "Tekrar dene",
+    "rejoin": "Yeniden katıl"
+  },
+  "new": {
+    "menu": "Yeni yayın",
+    "title": "Yeni yayın",
+    "description": "100 kişiye kadar izler, 10 konuşmacıya kadar sizinle sahneye çıkar.",
+    "nameLabel": "Başlık",
+    "waitingRoom": "Bekleme odası",
+    "waitingRoomHint": "İzleyiciler, siz ya da bir yardımcı sunucu içeri alana kadar bekler.",
+    "create": "Oluştur",
+    "cancel": "İptal",
+    "failed": "Yayın oluşturulamadı. Tekrar deneyin."
+  }
+}

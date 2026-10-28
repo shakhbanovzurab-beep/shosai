@@ -30,7 +30,7 @@ type RoomStateProps = {
 };
 
 /** Страница вместо звонка: что случилось и что можно сделать; вошедший человек возвращается во «Встречи». */
-function RoomState({ icon: Icon, title, description, action }: RoomStateProps) {
+export function RoomState({ icon: Icon, title, description, action }: RoomStateProps) {
   const t = useTranslations("meetingRoom");
   const signedIn = useSession().status === "signed-in";
   return (

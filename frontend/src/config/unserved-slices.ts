@@ -4,7 +4,8 @@
  * ошибкой. Скрываются только срезы из этого списка: ошибки построенных срезов показываются как обычно. Срез уходит
  * из списка в том же изменении, что приносит его API.
  */
-const UNSERVED_SLICES: ReadonlySet<string> = new Set(["calendar", "hubs"]);
+// `broadcasts` — трансляции meetings: экраны готовы на моках (A12a), API появится в A12b.
+const UNSERVED_SLICES: ReadonlySet<string> = new Set(["broadcasts", "calendar", "hubs"]);
 
 /** Работает ли кабинет на моках разработки (`npm run dev`): то же условие, что в main.tsx; в сборке — false. */
 export const MOCK_API = import.meta.env.DEV && import.meta.env.MODE !== "api";

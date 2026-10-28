@@ -1,0 +1,118 @@
+{
+  "metaTitle": "配信",
+  "connecting": "参加しています…",
+  "status": {
+    "scheduled": "配信前",
+    "live": "配信中",
+    "ended": "終了"
+  },
+  "viewers": "{count, plural, other {視聴者 #人}}",
+  "viewersUnknown": "視聴者数は不明",
+  "roles": {
+    "host": "ホスト",
+    "cohost": "共同ホスト",
+    "speaker": "登壇者"
+  },
+  "lobby": {
+    "ready": "ステージでの役割：{role}",
+    "hint": "視聴者がステージを見られるのは配信開始後です。",
+    "enter": "ステージに上がる"
+  },
+  "studio": {
+    "start": "配信を開始",
+    "end": "配信を終了",
+    "endTitle": "全員の配信を終了しますか？",
+    "endDescription": "視聴者は退出し、リンクは使えなくなります。",
+    "cancel": "キャンセル",
+    "notLiveHint": "ここはステージの人だけに表示されます。準備ができたら開始してください。",
+    "leave": "配信から退出",
+    "controls": "配信の操作",
+    "mic": "マイク",
+    "camera": "カメラ",
+    "screen": "画面を共有",
+    "panel": "チャットと視聴者"
+  },
+  "panel": {
+    "chat": "チャット",
+    "hands": "挙手",
+    "waiting": "待機中",
+    "stage": "ステージ",
+    "close": "パネルを閉じる"
+  },
+  "hands": {
+    "empty": "挙手はありません",
+    "invite": "ステージに招待",
+    "decline": "断る",
+    "stageFull": "ステージは満員です：ホスト以外の登壇者は 10 人まで"
+  },
+  "waiting": {
+    "empty": "待っている人はいません",
+    "admit": "入室を許可",
+    "deny": "断る"
+  },
+  "stage": {
+    "you": "自分",
+    "offAir": "配信外",
+    "actions": "{name} の操作",
+    "takeOffAir": "配信から外す",
+    "putOnAir": "配信に戻す",
+    "makeCohost": "共同ホストにする",
+    "removeCohost": "共同ホストを解除",
+    "remove": "ステージから降ろす"
+  },
+  "chat": {
+    "label": "配信チャット",
+    "empty": "まだメッセージはありません",
+    "stageBadge": "ステージ",
+    "you": "自分",
+    "placeholder": "全員にメッセージ",
+    "send": "送信",
+    "sendFailed": "メッセージを送信できませんでした。もう一度お試しください。"
+  },
+  "watch": {
+    "raiseHand": "手を挙げる",
+    "lowerHand": "手を下ろす",
+    "handRaised": "手を挙げています。ホストがステージに招待できます。",
+    "invited": "ホストがステージに招待しています",
+    "accept": "ステージに上がる",
+    "notNow": "今はしない",
+    "leave": "退出",
+    "emptyStage": "登壇者が配信を始めると、ここにステージが表示されます",
+    "chat": "チャット"
+  },
+  "outside": {
+    "not_live": {
+      "title": "配信はまだ始まっていません",
+      "description": "開始したらまたお越しください。リンクは変わりません。"
+    },
+    "wait": {
+      "title": "ホストの入室許可を待っています",
+      "description": "ホストが許可するとすぐに参加できます。このページを開いたままにしてください。"
+    },
+    "full": {
+      "title": "配信は満員です",
+      "description": "視聴者は 100 人までです。数分後にもう一度お試しください。"
+    },
+    "ended": {
+      "title": "配信は終了しました",
+      "description": "ご視聴ありがとうございました。"
+    },
+    "left": {
+      "title": "配信から退出しました",
+      "description": "配信中であれば戻れます。"
+    },
+    "tryAgain": "もう一度試す",
+    "rejoin": "再参加"
+  },
+  "new": {
+    "menu": "新しい配信",
+    "title": "新しい配信",
+    "description": "最大 100 人が視聴し、最大 10 人の登壇者があなたとステージに上がります。",
+    "nameLabel": "タイトル",
+    "waitingRoom": "待合室",
+    "waitingRoomHint": "あなたか共同ホストが許可するまで、視聴者は待合室で待ちます。",
+    "create": "作成",
+    "cancel": "キャンセル",
+    "failed": "配信を作成できませんでした。もう一度お試しください。"
+  }
+}

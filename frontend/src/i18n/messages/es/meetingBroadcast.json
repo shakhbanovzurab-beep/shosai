@@ -1,0 +1,118 @@
+{
+  "metaTitle": "Transmisión",
+  "connecting": "Uniéndote…",
+  "status": {
+    "scheduled": "Aún no en vivo",
+    "live": "En vivo",
+    "ended": "Terminada"
+  },
+  "viewers": "{count, plural, one {# espectador} many {# espectadores} other {# espectadores}}",
+  "viewersUnknown": "Espectadores: número desconocido",
+  "roles": {
+    "host": "Anfitrión",
+    "cohost": "Coanfitrión",
+    "speaker": "Ponente"
+  },
+  "lobby": {
+    "ready": "Tu rol en el escenario: {role}",
+    "hint": "El público ve el escenario solo cuando empieza la transmisión.",
+    "enter": "Subir al escenario"
+  },
+  "studio": {
+    "start": "Empezar la transmisión",
+    "end": "Terminar la transmisión",
+    "endTitle": "¿Terminar la transmisión para todos?",
+    "endDescription": "El público sale y el enlace deja de funcionar.",
+    "cancel": "Cancelar",
+    "notLiveHint": "Solo el escenario ve esto. Empieza cuando estés listo.",
+    "leave": "Salir de la transmisión",
+    "controls": "Controles de la transmisión",
+    "mic": "Micrófono",
+    "camera": "Cámara",
+    "screen": "Compartir pantalla",
+    "panel": "Chat y público"
+  },
+  "panel": {
+    "chat": "Chat",
+    "hands": "Manos",
+    "waiting": "En espera",
+    "stage": "Escenario",
+    "close": "Cerrar el panel"
+  },
+  "hands": {
+    "empty": "No hay manos levantadas",
+    "invite": "Invitar al escenario",
+    "decline": "Rechazar",
+    "stageFull": "El escenario está lleno: 10 ponentes además del anfitrión"
+  },
+  "waiting": {
+    "empty": "Nadie está esperando",
+    "admit": "Admitir",
+    "deny": "Rechazar"
+  },
+  "stage": {
+    "you": "tú",
+    "offAir": "Fuera del aire",
+    "actions": "Acciones para {name}",
+    "takeOffAir": "Sacar del aire",
+    "putOnAir": "Volver a poner al aire",
+    "makeCohost": "Hacer coanfitrión",
+    "removeCohost": "Quitar como coanfitrión",
+    "remove": "Quitar del escenario"
+  },
+  "chat": {
+    "label": "Chat de la transmisión",
+    "empty": "Aún no hay mensajes",
+    "stageBadge": "Escenario",
+    "you": "Tú",
+    "placeholder": "Mensaje para todos",
+    "send": "Enviar",
+    "sendFailed": "No se pudo enviar el mensaje. Inténtalo de nuevo."
+  },
+  "watch": {
+    "raiseHand": "Levantar la mano",
+    "lowerHand": "Bajar la mano",
+    "handRaised": "Levantaste la mano. El anfitrión puede invitarte al escenario.",
+    "invited": "El anfitrión te invita al escenario",
+    "accept": "Subir al escenario",
+    "notNow": "Ahora no",
+    "leave": "Salir",
+    "emptyStage": "El escenario aparece aquí cuando un ponente está en vivo",
+    "chat": "Chat"
+  },
+  "outside": {
+    "not_live": {
+      "title": "La transmisión aún no empezó",
+      "description": "Vuelve cuando empiece; el enlace es el mismo."
+    },
+    "wait": {
+      "title": "Esperando a que el anfitrión te admita",
+      "description": "Entrarás en cuanto el anfitrión te admita. Mantén esta página abierta."
+    },
+    "full": {
+      "title": "La transmisión está llena",
+      "description": "Admite 100 espectadores. Inténtalo de nuevo en unos minutos."
+    },
+    "ended": {
+      "title": "La transmisión terminó",
+      "description": "Gracias por verla."
+    },
+    "left": {
+      "title": "Saliste de la transmisión",
+      "description": "Puedes volver mientras siga en curso."
+    },
+    "tryAgain": "Reintentar",
+    "rejoin": "Volver a unirse"
+  },
+  "new": {
+    "menu": "Nueva transmisión",
+    "title": "Nueva transmisión",
+    "description": "Hasta 100 personas miran y hasta 10 ponentes suben contigo al escenario.",
+    "nameLabel": "Título",
+    "waitingRoom": "Sala de espera",
+    "waitingRoomHint": "Los espectadores esperan hasta que tú o un coanfitrión los admitan.",
+    "create": "Crear",
+    "cancel": "Cancelar",
+    "failed": "No se pudo crear la transmisión. Inténtalo de nuevo."
+  }
+}

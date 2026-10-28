@@ -1,0 +1,118 @@
+{
+  "metaTitle": "Livestream",
+  "connecting": "Deelnemen…",
+  "status": {
+    "scheduled": "Nog niet live",
+    "live": "Live",
+    "ended": "Afgelopen"
+  },
+  "viewers": "{count, plural, one {# kijker} other {# kijkers}}",
+  "viewersUnknown": "Aantal kijkers onbekend",
+  "roles": {
+    "host": "Host",
+    "cohost": "Co-host",
+    "speaker": "Spreker"
+  },
+  "lobby": {
+    "ready": "Je rol op het podium: {role}",
+    "hint": "Het publiek ziet het podium pas als de livestream begint.",
+    "enter": "Naar het podium"
+  },
+  "studio": {
+    "start": "Livestream starten",
+    "end": "Livestream beëindigen",
+    "endTitle": "Livestream voor iedereen beëindigen?",
+    "endDescription": "Het publiek vertrekt en de link werkt niet meer.",
+    "cancel": "Annuleren",
+    "notLiveHint": "Alleen het podium ziet dit. Start wanneer je klaar bent.",
+    "leave": "Livestream verlaten",
+    "controls": "Bediening van de livestream",
+    "mic": "Microfoon",
+    "camera": "Camera",
+    "screen": "Scherm delen",
+    "panel": "Chat en publiek"
+  },
+  "panel": {
+    "chat": "Chat",
+    "hands": "Handen",
+    "waiting": "Wachtend",
+    "stage": "Podium",
+    "close": "Paneel sluiten"
+  },
+  "hands": {
+    "empty": "Geen opgestoken handen",
+    "invite": "Op het podium uitnodigen",
+    "decline": "Weigeren",
+    "stageFull": "Het podium is vol: 10 sprekers naast de host"
+  },
+  "waiting": {
+    "empty": "Niemand wacht",
+    "admit": "Toelaten",
+    "deny": "Weigeren"
+  },
+  "stage": {
+    "you": "jij",
+    "offAir": "Niet live",
+    "actions": "Acties voor {name}",
+    "takeOffAir": "Uit de uitzending halen",
+    "putOnAir": "Weer live zetten",
+    "makeCohost": "Co-host maken",
+    "removeCohost": "Co-host-rol intrekken",
+    "remove": "Van het podium halen"
+  },
+  "chat": {
+    "label": "Chat van de livestream",
+    "empty": "Nog geen berichten",
+    "stageBadge": "Podium",
+    "you": "Jij",
+    "placeholder": "Bericht aan iedereen",
+    "send": "Versturen",
+    "sendFailed": "Het bericht kon niet worden verstuurd. Probeer het opnieuw."
+  },
+  "watch": {
+    "raiseHand": "Hand opsteken",
+    "lowerHand": "Hand laten zakken",
+    "handRaised": "Je hand is opgestoken. De host kan je op het podium uitnodigen.",
+    "invited": "De host nodigt je uit op het podium",
+    "accept": "Naar het podium",
+    "notNow": "Niet nu",
+    "leave": "Verlaten",
+    "emptyStage": "Het podium verschijnt hier zodra een spreker live is",
+    "chat": "Chat"
+  },
+  "outside": {
+    "not_live": {
+      "title": "De livestream is nog niet begonnen",
+      "description": "Kom terug als hij begint, de link blijft dezelfde."
+    },
+    "wait": {
+      "title": "Wachten tot de host je toelaat",
+      "description": "Je doet mee zodra de host je toelaat. Laat deze pagina open."
+    },
+    "full": {
+      "title": "De livestream is vol",
+      "description": "Er kunnen 100 kijkers in. Probeer het over een paar minuten opnieuw."
+    },
+    "ended": {
+      "title": "De livestream is afgelopen",
+      "description": "Bedankt voor het kijken."
+    },
+    "left": {
+      "title": "Je hebt de livestream verlaten",
+      "description": "Je kunt terugkomen zolang hij loopt."
+    },
+    "tryAgain": "Opnieuw proberen",
+    "rejoin": "Opnieuw deelnemen"
+  },
+  "new": {
+    "menu": "Nieuwe livestream",
+    "title": "Nieuwe livestream",
+    "description": "Tot 100 mensen kijken mee en tot 10 sprekers komen bij je op het podium.",
+    "nameLabel": "Titel",
+    "waitingRoom": "Wachtkamer",
+    "waitingRoomHint": "Kijkers wachten tot jij of een co-host ze toelaat.",
+    "create": "Maken",
+    "cancel": "Annuleren",
+    "failed": "De livestream kon niet worden gemaakt. Probeer het opnieuw."
+  }
+}
