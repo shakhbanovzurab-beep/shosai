@@ -3,9 +3,9 @@
 Only personal rows are the person's: a workspace's installation they made belongs to the
 workspace and stays when they leave or are erased (CN-D3). The export lists grants, the
 secrets' dates and connections, never a ciphertext; a transfer copies every row with its
-ciphertexts unchanged, since one key ring serves both homes; erasure deletes the person's
-personal rows. The provider's revocation before erasure comes with the grant lifecycle
-(plan step 4). A repeat deletes or adds nothing.
+ciphertexts unchanged, since one key ring serves both homes; erasure first asks each provider
+once to revoke the person's grants, then deletes the person's personal rows. A repeat deletes
+or adds nothing.
 """
 
 from collections.abc import AsyncIterator, Mapping
@@ -25,6 +25,7 @@ from shosai.core.db.person_rows import (
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.connectors.application.revocation import GrantRevoker
 from shosai.features.connectors.infrastructure.store.records import (
     CONNECTOR_MODELS,
     ConnectionRecord,
@@ -72,8 +73,10 @@ MOVED: Final = (_rows(GRANTS, "id"), _rows(SECRETS, "grant_id"), _rows(CONNECTIO
 class ConnectorsAccountData:
     """The `core.account_data_handlers` binding of connectors."""
 
-    def __init__(self, transactions: HomeTransactions) -> None:
+    def __init__(self, transactions: HomeTransactions, revoker: GrantRevoker | None = None) -> None:
+        # Без отзывающего (в тестах таблиц) стирание удаляет только строки.
         self._transactions = transactions
+        self._revoker = revoker
 
     @property
     def owner(self) -> str:
@@ -88,7 +91,13 @@ class ConnectorsAccountData:
             yield ExportFile(f"{rows.table.name}.jsonl", lines)
 
     async def erase(self, account: AccountRef) -> None:
-        """Delete the person's personal rows in their home."""
+        """Revoke the person's grants at their providers once, then delete their rows."""
+        if self._revoker is not None:
+            scope = TenancyScope(account.home, account.user_id)
+            query = select(GRANTS.c.id).where(GRANTS.c.user_id == account.user_id, personal(GRANTS))
+            async with self._transactions.begin(scope, read_only=True) as session:
+                grant_ids = list((await session.execute(query)).scalars().all())
+            await self._revoker.revoke_all(scope, grant_ids)
         await self.purge(account)
 
     async def copy(self, account: AccountRef, to_home: Home) -> None:

@@ -1,0 +1,51 @@
+{
+  "groups": [
+    {
+      "name": "connectors-invariants",
+      "rules": [
+        {
+          "alert": "ConnectorSecretUndecryptable",
+          "expr": "max(shosai_connectors_undecryptable_secrets) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "ADR 0075"
+          },
+          "annotations": {
+            "summary": "Секрет подключения не расшифровывается",
+            "description": "Еженедельная проверка нашла токены или пароли подключённых сервисов, которые не открывает ни один ключ кольца Fernet. Эти подключения больше не работают, а человек об этом не знает. Обычно это значит, что ключ убрали из FERNET_KEYS_PREVIOUS раньше, чем закончилась ротация.",
+            "runbook": "docs/runbooks/alerts.md#connector-secret-undecryptable",
+            "dashboard": "/d/invariant-monitors"
+          }
+        },
+        {
+          "alert": "ConnectorRefreshLost",
+          "expr": "sum(increase(shosai_connectors_refresh_lost_total[15m])) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "ADR 0075"
+          },
+          "annotations": {
+            "summary": "Новый токен подключения потерян",
+            "description": "Провайдер выдал новый refresh-токен, а записать его в базу не удалось. У таких провайдеров старый токен уже не работает, поэтому подключение сломается при следующем вызове, и человеку придётся подключить сервис заново.",
+            "runbook": "docs/runbooks/alerts.md#connector-refresh-lost",
+            "dashboard": "/d/invariant-monitors"
+          }
+        },
+        {
+          "alert": "ConnectorClientMisconfigured",
+          "expr": "sum(increase(shosai_connectors_client_misconfigured_total[15m])) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "ADR 0075"
+          },
+          "annotations": {
+            "summary": "Провайдер отверг приложение Shosai",
+            "description": "Провайдер ответил, что не знает приложение OAuth Shosai или его секрет. Каждое подключение к этому провайдеру перестанет работать при следующем обновлении токена. Чаще всего истёк секрет приложения, например в Microsoft Entra.",
+            "runbook": "docs/runbooks/alerts.md#connector-client-misconfigured",
+            "dashboard": "/d/invariant-monitors"
+          }
+        }
+      ]
+    }
+  ]
+}

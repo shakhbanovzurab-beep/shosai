@@ -80,12 +80,17 @@ class GrantRecord(ModelBase):
             name="account_label_length",
         ),
         CheckConstraint("consecutive_failures >= 0", name="failures_counted"),
+        CheckConstraint("(status = 'revoking') = (revoke_at IS NOT NULL)", name="revoke_due"),
         # Цель составного ключа подключений: приложение на гранте того же владельца.
         UniqueConstraint("id", "user_id", name="uq_connector_grants_id_user_id"),
         Index(
             "uq_connector_grants_personal_account",
             "user_id", "provider", "client_key", "external_account_id",
             unique=True, postgresql_where=text("org_id IS NULL"),
+        ),
+        Index(
+            "ix_connector_grants_revoke_due", "revoke_at", "id",
+            postgresql_where=text("status = 'revoking'"),
         ),
         Index(
             "uq_connector_grants_workspace_account",
@@ -108,6 +113,8 @@ class GrantRecord(ModelBase):
     problem: Mapped[str | None] = mapped_column(Text, nullable=True)
     consecutive_failures: Mapped[int] = mapped_column(Integer, server_default="0")
     last_failure_at: Mapped[datetime | None] = moment(nullable=True)
+    # Когда отзыв у провайдера наступает; есть ровно у отзываемого гранта.
+    revoke_at: Mapped[datetime | None] = moment(nullable=True)
     created_at: Mapped[datetime] = moment()
     updated_at: Mapped[datetime] = moment()
 
@@ -128,7 +135,7 @@ class GrantSecretRecord(ModelBase):
             name="fk_connector_grant_secrets_grant", ondelete="CASCADE",
         ),
         Index(
-            "ix_connector_grant_secrets_keepalive_at", "keepalive_at",
+            "ix_connector_grant_secrets_keepalive_due", "keepalive_at", "grant_id",
             postgresql_where=text("keepalive_at IS NOT NULL"),
         ),
     )  # fmt: skip

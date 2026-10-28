@@ -55,7 +55,9 @@ from shosai.features.connectors.infrastructure.oauth.tokens import (
 from shosai.features.connectors.infrastructure.providers.base import (
     AccountIdentity,
     ConfiguredClient,
+    HeldTokens,
     ProviderRegistry,
+    RevocationFailedError,
 )
 from shosai.features.identity.contracts import AUTHENTICATOR
 from shosai.features.workspaces.contracts import (
@@ -92,11 +94,19 @@ class DoubleProvider:
     # Права, которые провайдер «выдал», в его формате: стенд кладёт сюда запрошенные потоком.
     scopes: list[str] = field(default_factory=list)
     separator: str = " "
+    # Ответ на обновление: ok, refused (invalid_grant), client (invalid_client), down.
+    refresh_mode: str = "ok"
+    refreshes: int = 0
+    revoked: list[str] = field(default_factory=list)
+    # Сколько ближайших отзывов провайдер не подтвердит.
+    revoke_failures: int = 0
 
     def handle(self, request: httpx.Request) -> httpx.Response:
         """Answer a token request by its code."""
         self.sent.append(request)
         form = parse_qs(request.content.decode())
+        if form.get("grant_type") == ["refresh_token"]:
+            return self.refresh(form["refresh_token"][0])
         code = form.get("code", [""])[0]
         kind, _, account = code.partition(":")
         if kind == "down":
@@ -115,12 +125,28 @@ class DoubleProvider:
             body["scope"] = self.separator.join(scopes)
         return httpx.Response(200, json=body)
 
+    def refresh(self, token: str) -> httpx.Response:
+        """Answer a refresh by the mode the test set; a success rotates the refresh token."""
+        if self.refresh_mode == "down":
+            return httpx.Response(503, json={"error": "temporarily_unavailable"})
+        if self.refresh_mode in {"refused", "client"}:
+            code = "invalid_grant" if self.refresh_mode == "refused" else "invalid_client"
+            return httpx.Response(400 if code == "invalid_grant" else 401, json={"error": code})
+        self.refreshes += 1
+        round_ = self.refreshes
+        body = {
+            "access_token": f"access-r{round_}", "refresh_token": f"refresh-r{round_}",
+            "expires_in": 3600, "previous": token,
+        }  # fmt: skip
+        return httpx.Response(200, json=body)
+
 
 @dataclass(frozen=True, slots=True)
 class DoubleAdapter:
     """A provider adapter that reads the account from the token answer."""
 
     descriptor: ProviderDescriptor
+    provider: DoubleProvider
 
     def tokens(self, payload: Mapping[str, object], now: datetime) -> TokenSet:
         """The standard fields."""
@@ -136,6 +162,17 @@ class DoubleAdapter:
         """The double's admin-consent refusal."""
         del description
         return FlowError.ADMIN_CONSENT_REQUIRED if error == "consent_required" else None
+
+    async def revoke(
+        self, http: httpx.AsyncClient, credentials: ClientCredentials, tokens: HeldTokens
+    ) -> None:
+        """Record the revoked refresh token; refuse while the test asks it to."""
+        del http, credentials
+        if self.provider.revoke_failures > 0:
+            self.provider.revoke_failures -= 1
+            raise RevocationFailedError
+        token = tokens.refresh_token or tokens.access_token
+        self.provider.revoked.append("" if token is None else token.get_secret_value())
 
 
 @dataclass
@@ -187,6 +224,8 @@ class ConnectBench:
     workspaces: Workspaces
     homes: DatabaseAccess
     ports: PortDirectory
+    # Для жизненного цикла гранта: приложения, клиент дубля и outbox.
+    wiring: tuple[ProviderRegistry, httpx.AsyncClient, EventOutbox]
 
     async def start(
         self, person: tuple[Home, UUID], app: App, org_id: UUID | None = None
@@ -228,8 +267,8 @@ async def connect_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[C
     ])  # fmt: skip
     credentials = ClientCredentials("client-id", SecretStr("client-secret"))
     registry = ProviderRegistry({
-        "google": ConfiguredClient(DoubleAdapter(GOOGLE), credentials),
-        "slack": ConfiguredClient(DoubleAdapter(SLACK), credentials),
+        "google": ConfiguredClient(DoubleAdapter(GOOGLE, provider), credentials),
+        "slack": ConfiguredClient(DoubleAdapter(SLACK, provider), credentials),
     })  # fmt: skip
     flows = FlowStore(valkey)
     outbox = EventOutbox(EventTypes(list(CONNECTOR_EVENTS)))
@@ -241,4 +280,7 @@ async def connect_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[C
             homes.transactions,
             CallbackTools(flows, registry, http, keys, outbox, audit, BASE_URL),
         )
-        yield ConnectBench(authorizer, completer, provider, keys, workspaces, homes, ports)
+        yield ConnectBench(
+            authorizer, completer, provider, keys, workspaces, homes, ports,
+            (registry, http, outbox),
+        )  # fmt: skip

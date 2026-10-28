@@ -13,6 +13,7 @@ from datetime import datetime
 from typing import Protocol
 
 import httpx
+from pydantic import SecretStr
 
 from shosai.features.connectors.domain.catalogue import Provider
 from shosai.features.connectors.domain.descriptors import ProviderDescriptor
@@ -51,6 +52,27 @@ class ProviderAdapter(Protocol):
     def callback_error(self, error: str, description: str | None) -> FlowError | None:
         """The cabinet's code for a provider's own callback error; None for a refusal."""
         ...
+
+    async def revoke(
+        self, http: httpx.AsyncClient, credentials: ClientCredentials, tokens: HeldTokens
+    ) -> None:
+        """Revoke the grant at the provider; `RevocationFailedError` when it must be tried again.
+
+        A provider without a revocation for applications does nothing (plan §3.5).
+        """
+        ...
+
+
+@dataclass(frozen=True, slots=True)
+class HeldTokens:
+    """The tokens a grant holds, for its revocation."""
+
+    access_token: SecretStr | None
+    refresh_token: SecretStr | None
+
+
+class RevocationFailedError(Exception):
+    """The provider did not confirm the revocation; the task tries again."""
 
 
 @dataclass(frozen=True, slots=True)

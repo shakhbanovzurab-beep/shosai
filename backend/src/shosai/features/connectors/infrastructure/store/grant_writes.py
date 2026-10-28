@@ -123,6 +123,7 @@ async def upsert_grant(session: AsyncSession, draft: GrantDraft, secrets: Sealed
             "account_label": inserted.excluded.account_label, "granted_scopes": MERGED_SCOPES,
             "provider_meta": inserted.excluded.provider_meta, "auth_kind": draft.auth_kind.value,
             "status": GrantStatus.ACTIVE.value, "problem": None, "consecutive_failures": 0,
+            "revoke_at": None,
             "updated_at": func.now(),
         },
     ).returning(GrantRecord.id)  # fmt: skip
@@ -182,7 +183,12 @@ async def retire_if_orphaned(session: AsyncSession, grant_id: UUID) -> bool:
             GrantRecord.id == grant_id,
             ~exists().where(ConnectionRecord.grant_id == grant_id),
         )
-        .values(status=GrantStatus.REVOKING.value, problem=None, updated_at=func.now())
+        .values(
+            status=GrantStatus.REVOKING.value,
+            problem=None,
+            revoke_at=func.now(),
+            updated_at=func.now(),
+        )
         .returning(GrantRecord.id)
     )
     return (await session.execute(statement)).first() is not None

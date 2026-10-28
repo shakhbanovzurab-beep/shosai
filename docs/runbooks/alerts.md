@@ -200,6 +200,33 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Find the writer that did not read the switch under the person's admission lock, fix it with a test of the switch turned off between the task's start and its write, and release. Forget the facts for the people concerned (`status = 'forgotten'`, `ended_reason = 'forgot'`) — the person chose that nothing be remembered. The gauge returns to zero at the next hourly check.
 
+<a id="connector-secret-undecryptable"></a>
+### ConnectorSecretUndecryptable — ADR 0075
+
+**Means.** The weekly key pass (`connectors.rotate_keys`) found grant secrets in a home that no key of the Fernet ring opens. Those connections no longer work, and their people were not told.
+
+**Look.** `shosai_connectors_undecryptable_secrets` by `home`; the `workers-bulk` log line «Секрет гранта не расшифровывается ни одним ключом кольца». Compare `FERNET_KEY` and `FERNET_KEYS_PREVIOUS` of the release with the last key change.
+
+**Fix.** Put the removed key back into `FERNET_KEYS_PREVIOUS` and let the pass re-encrypt; remove an old key only after a full pass with `rotated=True` and zero lost. A ciphertext no key can ever open again is a lost grant: mark it `needs_reconnect` (`refresh_refused`) so the person is told. The gauge returns to zero at the next weekly pass.
+
+<a id="connector-refresh-lost"></a>
+### ConnectorRefreshLost — ADR 0075
+
+**Means.** A provider rotated a grant's refresh token and the new one could not be written (three attempts inside the refresh lease). At providers whose old token dies on rotation (Atlassian, Notion, GitLab, Yandex), that grant is lost; it breaks at its next use and its person must reconnect.
+
+**Look.** `shosai_connectors_refresh_lost_total`; the log lines «Новые токены не записаны» (the database error's class) and «Повёрнутый токен потерян» around the increase; the home's database health at that moment.
+
+**Fix.** Repair what blocked the write (the home's pool, a lock, the database). Nothing can recover the token: the grant breaks with `refresh_refused` at its next refresh and the person is told once. The page ends 15 minutes after the last increase.
+
+<a id="connector-client-misconfigured"></a>
+### ConnectorClientMisconfigured — ADR 0075
+
+**Means.** A provider's token endpoint refused Shosai's own OAuth application (`invalid_client`): its client id or secret is wrong, expired or revoked. Every grant of that application stops at its next refresh; no grant is marked broken, since the person cannot fix it.
+
+**Look.** `shosai_connectors_client_misconfigured_total` by `client` (the application's key, e.g. `microsoft`); the log line «Провайдер отверг приложение Shosai». Check the application's secret in the provider's console — an Entra client secret expires after at most 24 months.
+
+**Fix.** Issue a new secret, set `CONNECTORS_<KEY>_CLIENT_SECRET` and release. The page ends 15 minutes after the last increase.
+
 ## Tickets (§16.6)
 
 <a id="meeting-run-old"></a>
