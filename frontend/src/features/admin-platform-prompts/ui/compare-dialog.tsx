@@ -2,8 +2,6 @@
 
 import { type ReactNode, useId, useState } from "react";
 
-import { cn } from "cn";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,73 +16,62 @@ import {
 import { Field } from "@/components/ui/field";
 import { FieldLabel } from "@/components/ui/field-text";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 
-import { configToText, type DiffRow, diffLines } from "../domain/config-diff";
+import { configToText, diffLines } from "../domain/config-diff";
+import type { PlatformConfig } from "../domain/contract";
 import { formatDateTime } from "../domain/format";
 import { usePlatformPrompts } from "../model/platform-prompts-provider";
+import { useVersion, useVersions } from "../model/versions";
+import { DiffTable } from "./diff-table";
 
-/** "draft" or a version id. */
+/** "draft" или id версии. */
 type Side = string;
 
-function DiffCell({ text, tone }: { text: string | null; tone: "same" | "removed" | "added" }) {
-  return (
-    <div
-      className={cn(
-        "min-h-5 whitespace-pre-wrap break-words px-2 font-mono text-xs leading-5",
-        tone === "removed" && text !== null && "bg-destructive/10 text-destructive",
-        tone === "added" && text !== null && "bg-emerald-500/10 text-emerald-800 dark:text-emerald-300",
-        text === null && "bg-muted/40",
-      )}
-    >
-      {text === null ? null : (
-        <>
-          {tone === "same" ? null : <span className="sr-only">{tone === "removed" ? "Удалено: " : "Добавлено: "}</span>}
-          {text === "" ? " " : text}
-        </>
-      )}
-    </div>
-  );
+/** Конфигурация стороны сравнения: черновик и действующая версия уже здесь, остальные читаются по id. */
+function useSide(side: Side): { config: PlatformConfig | null; failed: boolean } {
+  const {
+    state: { config, published },
+  } = usePlatformPrompts();
+  let local: PlatformConfig | null = null;
+  if (side === "draft") local = config;
+  else if (side === published?.id) local = published.config;
+  const version = useVersion(local === null ? side : null);
+  return { config: local ?? version.data?.config ?? null, failed: version.isError };
 }
 
-function DiffTable({ rows, changesOnly }: { rows: DiffRow[]; changesOnly: boolean }) {
-  const visible = rows
-    .map((row, index) => ({ row, line: index + 1 }))
-    .filter(({ row }) => !changesOnly || row.kind === "changed");
-
-  if (visible.length === 0) {
-    return <p className="p-6 text-center text-muted-foreground text-sm">Различий нет — конфигурации совпадают.</p>;
+function SideDiff({ left, right, changesOnly }: { left: Side; right: Side; changesOnly: boolean }) {
+  const before = useSide(left);
+  const after = useSide(right);
+  if (before.failed || after.failed) {
+    return <p className="p-6 text-center text-destructive text-sm">Не удалось загрузить версию. Обновите страницу.</p>;
   }
-
-  return (
-    <div className="grid grid-cols-2 divide-x">
-      {visible.map(({ row, line }) => (
-        <div key={line} className="contents">
-          <DiffCell text={row.left} tone={row.kind === "same" ? "same" : "removed"} />
-          <DiffCell text={row.right} tone={row.kind === "same" ? "same" : "added"} />
-        </div>
-      ))}
-    </div>
-  );
+  if (before.config === null || after.config === null) {
+    return (
+      <div className="flex justify-center p-6" role="status" aria-label="Загрузка версии">
+        <Spinner />
+      </div>
+    );
+  }
+  const rows = diffLines(configToText(before.config), configToText(after.config));
+  return <DiffTable rows={rows} changesOnly={changesOnly} />;
 }
 
 function CompareBody({ initialLeft, initialRight }: { initialLeft: Side; initialRight: Side }) {
   const {
-    state: { config, versions },
+    state: { published },
   } = usePlatformPrompts();
+  const { versions } = useVersions();
   const [left, setLeft] = useState(initialLeft);
   const [right, setRight] = useState(initialRight);
   const [changesOnly, setChangesOnly] = useState(false);
   const ids = useId();
 
-  const configOf = (side: Side) =>
-    side === "draft" ? config : (versions.find((version) => version.id === side)?.config ?? config);
-  const rows = diffLines(configToText(configOf(left)), configToText(configOf(right)));
-  const changed = rows.filter((row) => row.kind === "changed").length;
-
+  const listed = published && !versions.some((version) => version.id === published.id) ? [published] : [];
   const options = [
     { id: "draft", label: "Черновик (текущий)" },
-    ...versions.map((version) => ({
+    ...[...listed, ...versions].map((version) => ({
       id: version.id,
       label: `Версия ${version.number} · ${formatDateTime(version.published_at)}`,
     })),
@@ -108,25 +95,20 @@ function CompareBody({ initialLeft, initialRight }: { initialLeft: Side; initial
         {picker(`${ids}-left`, "Было", left, setLeft)}
         {picker(`${ids}-right`, "Стало", right, setRight)}
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-        <span className="text-muted-foreground" aria-live="polite">
-          {changed === 0 ? "Без изменений" : `Изменённых строк: ${changed}`}
-        </span>
-        <Field orientation="horizontal" className="w-auto">
-          <Switch id={`${ids}-changes`} checked={changesOnly} onCheckedChange={setChangesOnly} size="sm" />
-          <FieldLabel htmlFor={`${ids}-changes`} className="font-normal text-xs">
-            Только изменения
-          </FieldLabel>
-        </Field>
-      </div>
+      <Field orientation="horizontal" className="w-auto self-end">
+        <Switch id={`${ids}-changes`} checked={changesOnly} onCheckedChange={setChangesOnly} size="sm" />
+        <FieldLabel htmlFor={`${ids}-changes`} className="font-normal text-xs">
+          Только изменения
+        </FieldLabel>
+      </Field>
       <div className="max-h-[60vh] overflow-auto rounded-lg border">
-        <DiffTable rows={rows} changesOnly={changesOnly} />
+        <SideDiff left={left} right={right} changesOnly={changesOnly} />
       </div>
     </>
   );
 }
 
-/** Side-by-side text comparison of any two of: the draft and the published versions. */
+/** Сравнение бок о бок любых двух: черновика и опубликованных версий. */
 export function CompareDialog({
   initialLeft,
   initialRight,
@@ -134,7 +116,7 @@ export function CompareDialog({
 }: {
   initialLeft: Side;
   initialRight: Side;
-  /** The button that opens the dialog. */
+  /** Кнопка, которая открывает окно. */
   children: ReactNode;
 }) {
   return (

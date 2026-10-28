@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 
-import { FEATURE_PROMPT_MAX, FEATURES, type FeatureId, type FeaturePrompt } from "../domain/contract";
+import { FEATURE_PROMPT_MAX, FEATURE_TOKENS, FEATURES, type FeatureId, type FeaturePrompt } from "../domain/contract";
 import { usePlatformPrompts } from "../model/platform-prompts-provider";
 import { PromptField } from "./prompt-field";
 
@@ -43,18 +43,19 @@ function FeatureCard({ id, label, description }: { id: FeatureId; label: string;
           value={prompt.content}
           onChange={(content) => change({ content })}
           maxChars={FEATURE_PROMPT_MAX}
-          placeholder="Инструкции, которые добавляются к системному промту, пока работает эта функция…"
+          tokenBudget={FEATURE_TOKENS}
+          placeholder="For example: Lead with the decisions, then the tasks with their owners."
           className={prompt.enabled ? "min-h-32" : "min-h-32 text-muted-foreground"}
         />
         {prompt.enabled ? null : (
-          <p className="text-muted-foreground text-xs">Пока выключено, функция работает только с системным промтом.</p>
+          <p className="text-muted-foreground text-xs">Пока выключено, функция работает без дополнения оператора.</p>
         )}
       </CardContent>
     </Card>
   );
 }
 
-/** Extra instructions added after the system prompt while a particular Leo feature runs. */
+/** Дополнения оператора к промтам функций, у которых свой вызов модели. */
 export function FeaturesSection() {
   return (
     <div className="grid gap-4 xl:grid-cols-2">

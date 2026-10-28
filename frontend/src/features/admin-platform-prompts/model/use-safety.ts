@@ -3,6 +3,7 @@
 import type { SafetyRules } from "../domain/contract";
 import { usePlatformPrompts } from "./platform-prompts-provider";
 
+/** Правила и запрещённые темы черновика с заменой части раздела. */
 export function useSafety() {
   const {
     state: { config },

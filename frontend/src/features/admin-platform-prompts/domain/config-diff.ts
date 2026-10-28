@@ -1,55 +1,19 @@
-import { LANGUAGES } from "@/lib/language";
-
-import { CONFIRM_ACTIONS, FEATURES, OVERRIDABLE_SETTINGS, type PlatformPromptConfig, TONES } from "./contract";
-
-/** JSON with sorted keys, so two configs compare equal whatever order their fields arrived in. */
-function canonical(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
-  if (value !== null && typeof value === "object") {
-    const entries = Object.entries(value).toSorted(([a], [b]) => (a < b ? -1 : 1));
-    return `{${entries.map(([key, item]) => `${JSON.stringify(key)}:${canonical(item)}`).join(",")}}`;
-  }
-  return JSON.stringify(value);
-}
-
-export const sameConfig = (a: PlatformPromptConfig, b: PlatformPromptConfig | null | undefined) =>
-  b != null && canonical(a) === canonical(b);
-
-const labelOf = <T extends { id: string; label: string }>(items: readonly T[], id: string) =>
-  items.find((item) => item.id === id)?.label ?? id;
+import { FEATURES, type PlatformConfig } from "./contract";
 
 const onOff = (enabled: boolean) => (enabled ? "вкл." : "выкл.");
 
-/** A readable plain-text rendering of a config, one fact per line, for the side-by-side comparison. */
-export function configToText(config: PlatformPromptConfig): string[] {
-  const { behavior, safety } = config;
-  const language =
-    behavior.language_policy === "user"
-      ? "язык пользователя"
-      : `фиксированный — ${LANGUAGES.find((l) => l.code === behavior.fixed_language)?.label ?? behavior.fixed_language}`;
+/** Конфигурация простым текстом, по факту на строку, — для сравнения версий бок о бок. */
+export function configToText(config: PlatformConfig): string[] {
+  const { safety } = config;
   const lines = [
     "## Системный промт",
     ...config.system_prompt.split("\n"),
-    "",
-    "## Поведение",
-    `Стиль ответов: ${labelOf(TONES, behavior.tone)}`,
-    `Язык ответов: ${language}`,
-    `Модель: ${behavior.default_model}`,
-    `Температура: ${behavior.temperature}`,
-    `Макс. токенов ответа: ${behavior.max_output_tokens}`,
-    `Веб-поиск: ${onOff(behavior.web_search)}`,
-    `Пользователи могут менять: ${
-      behavior.user_overrides.map((id) => labelOf(OVERRIDABLE_SETTINGS, id)).join(", ") || "ничего"
-    }`,
     "",
     "## Правила безопасности",
     ...safety.rules.map((rule, index) => `${index + 1}. [${onOff(rule.enabled)}] ${rule.text}`),
     "",
     "## Запрещённые темы",
     ...safety.blocked_topics.map((topic) => `- ${topic}`),
-    "",
-    "## Требуют подтверждения",
-    ...safety.confirm_actions.map((id) => `- ${labelOf(CONFIRM_ACTIONS, id)}`),
   ];
   for (const feature of FEATURES) {
     const prompt = config.features[feature.id];

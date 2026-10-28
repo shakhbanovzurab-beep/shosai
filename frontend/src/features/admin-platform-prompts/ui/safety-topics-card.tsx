@@ -11,14 +11,13 @@ import { Input } from "@/components/ui/input";
 
 import { TOPIC_MAX, TOPICS_LIMIT } from "../domain/contract";
 import { useSafety } from "../model/use-safety";
+import { NotEnglishHint } from "./not-english-hint";
 
 export function BlockedTopicsCard() {
   const { safety, set } = useSafety();
   const [text, setText] = useState("");
   const value = text.trim();
-  const duplicate = safety.blocked_topics.some(
-    (topic) => topic.toLocaleLowerCase("ru-RU") === value.toLocaleLowerCase("ru-RU"),
-  );
+  const duplicate = safety.blocked_topics.some((topic) => topic.toLowerCase() === value.toLowerCase());
   const full = safety.blocked_topics.length >= TOPICS_LIMIT;
 
   const add = (event: FormEvent<HTMLFormElement>) => {
@@ -32,7 +31,9 @@ export function BlockedTopicsCard() {
     <Card className="shadow-xs">
       <CardHeader>
         <CardTitle>Запрещённые темы</CardTitle>
-        <CardDescription>Leo вежливо отказывается их обсуждать и не ищет по ним в сети.</CardDescription>
+        <CardDescription>
+          Leo вежливо отказывается их обсуждать и не ищет по ним в сети. Темы пишутся по-английски.
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {safety.blocked_topics.length === 0 ? (
@@ -63,9 +64,10 @@ export function BlockedTopicsCard() {
             value={text}
             onChange={(event) => setText(event.currentTarget.value)}
             maxLength={TOPIC_MAX}
-            placeholder="Например: ставки и казино"
+            placeholder="For example: gambling and casinos"
             aria-label="Новая запрещённая тема"
             aria-invalid={duplicate}
+            lang="en"
             disabled={full}
           />
           <Button type="submit" variant="outline" disabled={!value || duplicate || full} className="shrink-0">
@@ -73,6 +75,7 @@ export function BlockedTopicsCard() {
           </Button>
         </form>
         {duplicate ? <p className="text-destructive text-xs">Такая тема уже есть.</p> : null}
+        <NotEnglishHint text={safety.blocked_topics.join(" ")} />
       </CardContent>
     </Card>
   );

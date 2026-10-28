@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 
 import { type GuardrailRule, RULE_MAX, RULES_LIMIT } from "../domain/contract";
 import { useSafety } from "../model/use-safety";
+import { NotEnglishHint } from "./not-english-hint";
 
 function moved<T>(items: T[], from: number, to: number) {
   const next = [...items];
@@ -40,9 +41,11 @@ function RuleRow({ rule, index, count }: { rule: GuardrailRule; index: number; c
           maxLength={RULE_MAX}
           aria-label={`Правило ${number}`}
           aria-invalid={empty}
+          lang="en"
           className={rule.enabled ? undefined : "text-muted-foreground line-through"}
         />
         {empty ? <p className="text-destructive text-xs">Пустое правило не будет опубликовано.</p> : null}
+        {rule.enabled ? <NotEnglishHint text={rule.text} /> : null}
       </div>
       <div className="flex shrink-0 items-center gap-1">
         <Switch
@@ -100,7 +103,7 @@ export function RulesCard() {
       <CardHeader>
         <CardTitle>Правила</CardTitle>
         <CardDescription>
-          Добавляются к системному промту сверху вниз. Выключенные правила хранятся, но не отправляются.
+          Идут после системного промта сверху вниз, по-английски. Выключенные правила хранятся, но не отправляются.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
@@ -126,8 +129,9 @@ export function RulesCard() {
             value={text}
             onChange={(event) => setText(event.currentTarget.value)}
             maxLength={RULE_MAX}
-            placeholder="Новое правило, например: не обещай сроки от имени компании"
+            placeholder="For example: Never promise delivery dates on the company's behalf."
             aria-label="Текст нового правила"
+            lang="en"
             disabled={full}
           />
           <Button type="submit" variant="outline" disabled={full || !text.trim()} className="shrink-0">

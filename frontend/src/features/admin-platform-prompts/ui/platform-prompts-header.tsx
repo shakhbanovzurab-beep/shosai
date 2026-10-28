@@ -7,10 +7,11 @@ import { usePlatformPrompts } from "../model/platform-prompts-provider";
 import { PublishDialog } from "./publish-dialog";
 import { SaveStatus } from "./save-status";
 
-/** The live version, the draft's save state and the publish action. */
+/** Действующая версия, состояние черновика и публикация. */
 export function PlatformPromptsHeader() {
   const {
     state: { published },
+    meta: { publishBlocker },
   } = usePlatformPrompts();
 
   return (
@@ -20,15 +21,18 @@ export function PlatformPromptsHeader() {
           {published ? (
             <>
               <Badge variant="secondary">Версия {published.number}</Badge>
-              <span className="text-muted-foreground">
-                опубликована {formatDateTime(published.published_at)} · {published.author}
-              </span>
+              <span className="text-muted-foreground">опубликована {formatDateTime(published.published_at)}</span>
             </>
           ) : (
             <Badge variant="outline">Ещё не опубликовано</Badge>
           )}
         </div>
         <SaveStatus />
+        {publishBlocker ? (
+          <p className="text-destructive text-xs" role="status">
+            Опубликовать нельзя: {publishBlocker}
+          </p>
+        ) : null}
       </div>
       <PublishDialog />
     </div>

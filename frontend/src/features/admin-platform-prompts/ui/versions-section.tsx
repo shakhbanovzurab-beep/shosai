@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 
-import { GitCompare, History, RotateCcw } from "lucide-react";
+import { History } from "lucide-react";
 
+import { LoadError } from "@/components/feedback";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,68 +15,40 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
+import { errorMessage } from "@/lib/errors";
 
-import type { PlatformPromptVersion } from "../domain/contract";
-import { formatDateTime } from "../domain/format";
+import type { VersionSummary } from "../domain/contract";
 import { usePlatformPrompts } from "../model/platform-prompts-provider";
-import { CompareDialog } from "./compare-dialog";
+import { useVersions } from "../model/versions";
+import { VersionRow } from "./version-row";
 
-function VersionRow({ version, onRestore }: { version: PlatformPromptVersion; onRestore: () => void }) {
-  const {
-    state: { published },
-    meta: { busy },
-  } = usePlatformPrompts();
-  const live = published?.id === version.id;
-
+function NoVersions() {
   return (
-    <li className="flex flex-col gap-3 py-3 sm:flex-row sm:items-start sm:justify-between">
-      <div className="flex min-w-0 flex-col gap-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="font-medium text-sm">Версия {version.number}</span>
-          {live ? <Badge>Опубликована</Badge> : null}
-          {version.restored_from === null ? null : (
-            <Badge variant="outline">Откат к версии {version.restored_from}</Badge>
-          )}
-        </div>
-        <p className="break-words text-sm">{version.comment}</p>
-        <p className="text-muted-foreground text-xs">
-          {version.author} · <time dateTime={version.published_at}>{formatDateTime(version.published_at)}</time>
-        </p>
-      </div>
-      <div className="flex shrink-0 gap-2">
-        <CompareDialog initialLeft={version.id} initialRight="draft">
-          <Button size="sm" variant="outline" aria-label={`Сравнить версию ${version.number} с черновиком`}>
-            <GitCompare data-icon="inline-start" />
-            Сравнить
-          </Button>
-        </CompareDialog>
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={live || busy}
-          onClick={onRestore}
-          aria-label={`Откатить к версии ${version.number}`}
-        >
-          <RotateCcw data-icon="inline-start" />
-          Откатить
-        </Button>
-      </div>
-    </li>
+    <Empty className="border border-dashed">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <History />
+        </EmptyMedia>
+        <EmptyTitle>Опубликованных версий пока нет</EmptyTitle>
+        <EmptyDescription>Опубликуйте черновик, чтобы слой платформы дошёл до Leo.</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 }
 
-/** Published versions, newest first, with comparison and rollback. */
+/** История публикаций, новые сверху, страницами; сравнение и откат. */
 export function VersionsSection() {
   const {
-    state: { versions },
     actions: { restore },
     meta: { hasUnpublishedChanges },
   } = usePlatformPrompts();
-  const [target, setTarget] = useState<PlatformPromptVersion | null>(null);
+  const history = useVersions();
+  const [target, setTarget] = useState<VersionSummary | null>(null);
 
   return (
     <Card className="shadow-xs">
@@ -83,31 +56,44 @@ export function VersionsSection() {
         <CardTitle>История публикаций</CardTitle>
         <CardDescription>Откат публикует копию выбранной версии как новую — история не переписывается.</CardDescription>
       </CardHeader>
-      <CardContent>
-        {versions.length === 0 ? (
-          <Empty className="border border-dashed">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <History />
-              </EmptyMedia>
-              <EmptyTitle>Опубликованных версий пока нет</EmptyTitle>
-              <EmptyDescription>Опубликуйте черновик, чтобы он применился ко всем пользователям.</EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        ) : (
+      <CardContent className="flex flex-col gap-3">
+        {history.isPending ? <Skeleton className="h-40 rounded-lg" role="status" aria-label="Загрузка версий" /> : null}
+        {history.isError ? (
+          <LoadError
+            title="Не удалось загрузить версии"
+            message={errorMessage(history.error) ?? "Попробуйте ещё раз."}
+            onRetry={() => void history.refetch()}
+            retryLabel="Повторить"
+          />
+        ) : null}
+        {history.isSuccess && history.versions.length === 0 ? <NoVersions /> : null}
+        {history.versions.length > 0 ? (
           <ul className="flex flex-col divide-y" aria-label="Версии">
-            {versions.map((version) => (
+            {history.versions.map((version) => (
               <VersionRow key={version.id} version={version} onRestore={() => setTarget(version)} />
             ))}
           </ul>
-        )}
+        ) : null}
+        {history.hasNextPage ? (
+          <Button
+            variant="outline"
+            size="sm"
+            className="self-center"
+            disabled={history.isFetchingNextPage}
+            onClick={() => void history.fetchNextPage()}
+          >
+            {history.isFetchingNextPage ? <Spinner data-icon="inline-start" /> : null}
+            Показать ещё
+          </Button>
+        ) : null}
       </CardContent>
       <AlertDialog open={target !== null} onOpenChange={(open) => (open ? undefined : setTarget(null))}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Откатить к версии {target?.number}?</AlertDialogTitle>
             <AlertDialogDescription>
-              Её настройки сразу станут действующими для всех пользователей и появятся в истории как новая версия.
+              Её настройки станут действующими для всех пользователей в течение минуты и появятся в истории как новая
+              версия.
               {hasUnpublishedChanges ? " Неопубликованные изменения черновика будут заменены." : null}
             </AlertDialogDescription>
           </AlertDialogHeader>

@@ -3,7 +3,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePlatformPrompts } from "../model/platform-prompts-provider";
-import { BehaviorSection } from "./behavior-section";
 import { FeaturesSection } from "./features-section";
 import { SafetySection } from "./safety-section";
 import { SystemPromptSection } from "./system-prompt-section";
@@ -11,16 +10,15 @@ import { VersionsSection } from "./versions-section";
 
 const TABS = [
   { id: "system", label: "Системный промт", panel: SystemPromptSection },
-  { id: "behavior", label: "Поведение", panel: BehaviorSection },
   { id: "safety", label: "Безопасность", panel: SafetySection },
   { id: "features", label: "Функции", panel: FeaturesSection },
   { id: "versions", label: "Версии", panel: VersionsSection },
 ] as const;
 
-/** The five parts of the platform configuration; every tab edits the same autosaved draft. */
+/** Части конфигурации платформы и история; все вкладки правят один черновик, который сохраняется сам. */
 export function PlatformPromptsTabs() {
   const {
-    state: { revision, versions },
+    state: { revision, published },
   } = usePlatformPrompts();
 
   return (
@@ -31,7 +29,7 @@ export function PlatformPromptsTabs() {
             <TabsTrigger key={tab.id} value={tab.id} className="flex-none px-3">
               {tab.label}
               {tab.id === "versions" ? (
-                <span className="text-muted-foreground text-xs tabular-nums">{versions.length}</span>
+                <span className="text-muted-foreground text-xs tabular-nums">{published?.number ?? 0}</span>
               ) : null}
             </TabsTrigger>
           ))}
@@ -39,7 +37,7 @@ export function PlatformPromptsTabs() {
       </div>
       {TABS.map(({ id, panel: Panel }) => (
         <TabsContent key={id} value={id}>
-          {/* A new revision (publish, rollback) remounts the panel so inputs holding their own text start fresh. */}
+          {/* Новая ревизия (публикация, откат) пересоздаёт панель, чтобы поля со своим текстом начались заново. */}
           <Panel key={revision} />
         </TabsContent>
       ))}

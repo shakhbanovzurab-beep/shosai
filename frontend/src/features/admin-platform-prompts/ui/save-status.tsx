@@ -7,7 +7,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { formatDateTime } from "../domain/format";
 import { usePlatformPrompts } from "../model/platform-prompts-provider";
 
-/** Where the draft stands: saving, saved, failed with a retry, or held back because a field is invalid. */
+/** Где черновик: сохраняется, сохранён, не сохранился (с повтором) или задержан из-за неверного поля. */
 export function SaveStatus() {
   const {
     state: { draftUpdatedAt },
@@ -45,7 +45,7 @@ export function SaveStatus() {
   return (
     <span className="flex items-center gap-1.5 text-muted-foreground text-xs" aria-live="polite">
       <CircleCheck className="size-3.5 shrink-0" aria-hidden="true" />
-      Черновик сохранён {formatDateTime(draftUpdatedAt)}
+      {draftUpdatedAt ? `Черновик сохранён ${formatDateTime(draftUpdatedAt)}` : "Черновик ещё не менялся"}
     </span>
   );
 }

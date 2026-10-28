@@ -2,35 +2,41 @@
 
 import { createContext, type ReactNode, use, useState } from "react";
 
-import { sameConfig } from "../domain/config-diff";
-import type { PlatformPromptConfig, PlatformPromptsState, PlatformPromptVersion } from "../domain/contract";
-import { configPatchSchema } from "../domain/schema";
+import { useQueryClient } from "@tanstack/react-query";
+
+import type { PlatformConfig, PlatformPromptsState, PlatformVersion, VersionSummary } from "../domain/contract";
+import { BUILT_IN, publishProblem, sameConfig } from "../domain/platform-layer";
+import { problemText } from "../domain/problems";
+import { configSchema } from "../domain/schema";
 import { persist, publishDraft, resetDraft, restoreVersion } from "./platform-prompts-actions";
 import { platformPromptsResource } from "./platform-prompts-store";
 import { type AutosaveStatus, useDraftAutosave } from "./use-draft-autosave";
+import { VERSIONS_KEY } from "./versions";
 
 type PlatformPromptsContextValue = {
   state: {
-    /** The draft as edited here; saved to the server automatically. */
-    config: PlatformPromptConfig;
-    published: PlatformPromptVersion | null;
-    versions: PlatformPromptVersion[];
-    draftUpdatedAt: string;
-    /** Bumped whenever the draft is replaced from outside (publish, rollback, discard), to reset local inputs. */
+    /** Черновик в том виде, в каком его правят здесь; сохраняется на сервер сам. */
+    config: PlatformConfig;
+    published: PlatformVersion | null;
+    /** Null — черновик ещё ни разу не сохраняли. */
+    draftUpdatedAt: string | null;
+    /** Растёт, когда черновик заменён снаружи (публикация, откат, отмена), чтобы поля со своим текстом сбросились. */
     revision: number;
   };
   actions: {
-    update: (change: (config: PlatformPromptConfig) => PlatformPromptConfig) => void;
+    update: (change: (config: PlatformConfig) => PlatformConfig) => void;
     retrySave: () => void;
     publish: (comment: string) => Promise<boolean>;
-    restore: (version: PlatformPromptVersion) => Promise<boolean>;
+    restore: (version: VersionSummary) => Promise<boolean>;
     discardChanges: () => Promise<boolean>;
   };
   meta: {
     saveStatus: AutosaveStatus;
     saveError: string | null;
-    /** Why the draft can't be saved as it stands, e.g. a prompt over its limit; null when it is valid. */
+    /** Почему черновик нельзя сохранить как есть, например промт длиннее лимита; null, если можно. */
     invalidReason: string | null;
+    /** Что не даст опубликовать черновик: неанглийский текст или выход за бюджет; null, если ничего. */
+    publishBlocker: string | null;
     hasUnpublishedChanges: boolean;
     busy: boolean;
   };
@@ -44,30 +50,33 @@ export function usePlatformPrompts() {
   return value;
 }
 
-/** Owns the editable draft for the whole screen; sections read and change it through `usePlatformPrompts`. */
+/** Держит редактируемый черновик всего экрана; разделы читают и меняют его через `usePlatformPrompts`. */
 export function PlatformPromptsProvider({ data, children }: { data: PlatformPromptsState; children: ReactNode }) {
+  const queryClient = useQueryClient();
   const [config, setConfig] = useState(data.draft.config);
   const [revision, setRevision] = useState(0);
   const [busy, setBusy] = useState(false);
   const autosave = useDraftAutosave(persist);
 
-  const validation = configPatchSchema.safeParse(config);
+  const validation = configSchema.safeParse(config);
   const invalidReason = validation.success ? null : (validation.error.issues[0]?.message ?? "Проверьте поля.");
+  const problem = publishProblem(config);
 
   const replace = (state: PlatformPromptsState) => {
     platformPromptsResource.update(() => state);
     setConfig(state.draft.config);
     setRevision((value) => value + 1);
+    void queryClient.invalidateQueries({ queryKey: VERSIONS_KEY });
   };
 
   const update: PlatformPromptsContextValue["actions"]["update"] = (change) => {
     const next = change(config);
     setConfig(next);
-    // An invalid draft stays local until it is fixed; the server would refuse it anyway.
-    if (configPatchSchema.safeParse(next).success) autosave.schedule(next);
+    // Неверный черновик остаётся здесь, пока его не исправят: сервер его всё равно не примет.
+    if (configSchema.safeParse(next).success) autosave.schedule(next);
   };
 
-  /** Runs one server action with the busy flag set, then swaps in the state it returns. */
+  /** Выполняет одно действие на сервере под флагом занятости и подставляет состояние, которое оно вернуло. */
   const runExclusive = (action: () => Promise<PlatformPromptsState | null>) => {
     setBusy(true);
     return action()
@@ -78,24 +87,19 @@ export function PlatformPromptsProvider({ data, children }: { data: PlatformProm
       });
   };
 
-  const publish = (comment: string) => runExclusive(() => publishDraft(autosave.flush, comment));
-  const restore = (version: PlatformPromptVersion) => runExclusive(() => restoreVersion(autosave.discard, version));
+  const publish = (comment: string) => runExclusive(() => publishDraft(autosave.flush, config, comment));
+  const restore = (version: VersionSummary) => runExclusive(() => restoreVersion(autosave.discard, config, version));
   const discardChanges = () => runExclusive(() => resetDraft(autosave.discard, data));
 
   const value: PlatformPromptsContextValue = {
-    state: {
-      config,
-      published: data.published,
-      versions: data.versions,
-      draftUpdatedAt: data.draft.updated_at,
-      revision,
-    },
+    state: { config, published: data.published, draftUpdatedAt: data.draft.updated_at, revision },
     actions: { update, retrySave: () => void autosave.flush(), publish, restore, discardChanges },
     meta: {
       saveStatus: autosave.status,
       saveError: autosave.error,
       invalidReason,
-      hasUnpublishedChanges: !sameConfig(config, data.published?.config),
+      publishBlocker: problem ? problemText(problem, config) : null,
+      hasUnpublishedChanges: !sameConfig(config, data.published?.config ?? BUILT_IN),
       busy,
     },
   };

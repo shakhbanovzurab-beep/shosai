@@ -2,48 +2,56 @@
 
 import { toast } from "sonner";
 
-import { apiErrorDescription } from "@/lib/api/error-description";
+import { ApiError } from "@/lib/api/errors";
 
 import { platformPromptsApi } from "../api/platform-prompts-api";
-import type { PlatformPromptConfig, PlatformPromptsState, PlatformPromptVersion } from "../domain/contract";
+import type { PlatformConfig, PlatformPromptsState, VersionSummary } from "../domain/contract";
 import { platformPromptsResource } from "./platform-prompts-store";
+import { problemOf } from "./problem-description";
 
-/** Saves the draft and keeps the loaded state in step with what the server stored. */
-export async function persist(config: PlatformPromptConfig) {
+/** Сохраняет черновик и держит загруженное состояние в согласии с тем, что сохранил сервер. */
+export async function persist(config: PlatformConfig) {
   const draft = await platformPromptsApi.saveDraft(config);
   platformPromptsResource.update((data) => ({ ...data, draft }));
 }
 
-/* Server actions with their toasts; each resolves to the new state, or null when it failed. */
+// «Публиковать нечего» значит, что действующую версию уже сменили — например, в другой вкладке: экран её перечитывает.
+function caughtUp(error: unknown) {
+  if (error instanceof ApiError && error.code === "nothing_to_publish") void platformPromptsResource.refresh();
+}
 
-export async function publishDraft(flush: () => Promise<boolean>, comment: string) {
+/* Действия на сервере с их тостами; каждое отдаёт новое состояние или null, если не вышло. */
+
+export async function publishDraft(flush: () => Promise<boolean>, config: PlatformConfig, comment: string) {
   if (!(await flush())) {
     toast.error("Черновик не сохранён", { description: "Повторите сохранение и попробуйте опубликовать снова." });
     return null;
   }
   try {
-    const state = await platformPromptsApi.publish({ comment });
-    toast.success("Версия опубликована", { description: "Новые настройки применяются ко всем пользователям." });
+    const state = await platformPromptsApi.publish(comment, crypto.randomUUID());
+    toast.success("Версия опубликована", { description: "Leo получит её во всех разговорах в течение минуты." });
     return state;
   } catch (error) {
-    toast.error("Не удалось опубликовать", { description: apiErrorDescription(error) });
+    caughtUp(error);
+    toast.error("Не удалось опубликовать", { description: problemOf(error, config) });
     return null;
   }
 }
 
-export async function restoreVersion(discard: () => Promise<void>, version: PlatformPromptVersion) {
+export async function restoreVersion(discard: () => Promise<void>, config: PlatformConfig, version: VersionSummary) {
   try {
     await discard();
-    const state = await platformPromptsApi.restore(version.id);
+    const state = await platformPromptsApi.restore(version.id, crypto.randomUUID());
     toast.success(`Восстановлена версия ${version.number}`, { description: "Она опубликована как новая версия." });
     return state;
   } catch (error) {
-    toast.error("Не удалось откатить", { description: apiErrorDescription(error) });
+    caughtUp(error);
+    toast.error("Не удалось откатить", { description: problemOf(error, config) });
     return null;
   }
 }
 
-/** Puts the published config back into the draft, without publishing anything. */
+/** Возвращает в черновик действующую конфигурацию, ничего не публикуя. */
 export async function resetDraft(discard: () => Promise<void>, data: PlatformPromptsState) {
   if (!data.published) return null;
   try {
@@ -52,7 +60,7 @@ export async function resetDraft(discard: () => Promise<void>, data: PlatformPro
     toast.success("Изменения отменены", { description: "Черновик совпадает с опубликованной версией." });
     return { ...data, draft };
   } catch (error) {
-    toast.error("Не удалось отменить изменения", { description: apiErrorDescription(error) });
+    toast.error("Не удалось отменить изменения", { description: problemOf(error, data.published.config) });
     return null;
   }
 }

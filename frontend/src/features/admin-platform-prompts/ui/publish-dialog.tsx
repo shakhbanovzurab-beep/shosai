@@ -23,16 +23,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { COMMENT_MAX } from "../domain/contract";
 import { usePlatformPrompts } from "../model/platform-prompts-provider";
 
-/** Publishing turns the draft into a numbered version that every user gets from their next message. */
+/** Публикация делает черновик очередной версией: Leo получает её во всех разговорах в течение минуты. */
 export function PublishDialog() {
   const {
     state: { published },
     actions: { publish },
-    meta: { hasUnpublishedChanges, invalidReason, busy },
+    meta: { hasUnpublishedChanges, invalidReason, publishBlocker, busy },
   } = usePlatformPrompts();
   const [open, setOpen] = useState(false);
   const [comment, setComment] = useState("");
-  const canPublish = hasUnpublishedChanges && !invalidReason && !busy;
+  const canPublish = hasUnpublishedChanges && !invalidReason && !publishBlocker && !busy;
   const nextNumber = (published?.number ?? 0) + 1;
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {

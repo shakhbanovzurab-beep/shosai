@@ -3,7 +3,6 @@ import { handlers as adminBilling } from "@/features/admin-billing/mocks/handler
 import { handlers as adminErrors } from "@/features/admin-errors/mocks/handlers";
 import { handlers as adminLivekit } from "@/features/admin-livekit/mocks/handlers";
 import { handlers as adminPlans } from "@/features/admin-plans/mocks/handlers";
-import { handlers as adminPlatformPrompts } from "@/features/admin-platform-prompts/mocks/handlers";
 import { handlers as adminSupport } from "@/features/admin-support/mocks/handlers";
 import { handlers as adminUsers } from "@/features/admin-users/mocks/handlers";
 import { handlers as adminWorkspaces } from "@/features/admin-workspaces/mocks/handlers";
@@ -29,7 +28,6 @@ export const mockRoutes: readonly MockRoute[] = [
   ...adminErrors,
   ...adminLivekit,
   ...adminPlans,
-  ...adminPlatformPrompts,
   ...adminSupport,
   ...adminUsers,
   ...adminWorkspaces,

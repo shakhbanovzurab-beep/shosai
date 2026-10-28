@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { usePlatformPrompts } from "../model/platform-prompts-provider";
 import { CompareDialog } from "./compare-dialog";
 
-/** Reminds that edits only reach users once published, with a look at the changes or a way back. */
+/** Напоминает, что правки доходят до пользователей только после публикации; даёт сравнить или вернуть. */
 export function UnpublishedBanner() {
   const {
     state: { published },
@@ -30,7 +30,7 @@ export function UnpublishedBanner() {
         <p>
           {published
             ? `Пользователи пока получают версию ${published.number}. Изменения сохраняются в черновик и применятся после публикации.`
-            : "Настройки ещё ни разу не публиковались — пользователи получают встроенные значения Leo."}
+            : "Слой платформы ещё ни разу не публиковался — Leo работает только по своей встроенной политике."}
         </p>
         {published ? (
           <div className="mt-2 flex flex-wrap gap-2">
