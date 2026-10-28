@@ -105,6 +105,40 @@
           "exp_alerts": []
         }
       ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_connectors_provider_quota_near_total",
+          "values": "0x10 1x50"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "ConnectorQuotaNear",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "ADR 0075"
+              },
+              "exp_annotations": {
+                "summary": "Квота приложения у провайдера почти исчерпана",
+                "description": "Провайдер ответил, что приложение Shosai израсходовало больше 80% своей квоты: у Atlassian это 65 000 очков в час на всех клиентов сразу. Когда квота кончится, провайдер начнёт отказывать всем подключениям, а не одному человеку.",
+                "runbook": "docs/runbooks/alerts.md#connector-quota-near",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "ConnectorQuotaNear",
+          "exp_alerts": []
+        }
+      ]
     }
   ]
 }

@@ -19,7 +19,7 @@ from shosai.features.connectors.contracts import (
 )
 from shosai.features.connectors.contracts.provider import ProviderUnavailableError
 from shosai.features.connectors.domain.catalogue import App
-from shosai.features.connectors.infrastructure.metrics import CALLS
+from shosai.features.connectors.infrastructure.metrics import CALLS, QUOTA_NEAR
 from shosai.features.connectors.infrastructure.store.records import ConnectionRecord
 from tests.features.connectors.connect_bench import connect_bench
 from tests.features.connectors.lifecycle_bench import lifecycle
@@ -159,3 +159,14 @@ async def test_a_stranger_s_connection_and_a_bad_call_are_refused(
             await session.request(ProviderCall("GET", "calendar.read", "http://api.test/data"))
         with pytest.raises(ValueError, match="операции"):
             await session.request(ProviderCall("GET", "Read", "https://api.test/data"))
+
+
+async def test_an_answer_near_the_application_s_quota_is_counted(transport: TransportBench) -> None:
+    scope, connection_id = await connection_of(transport)
+
+    async with transport.access.open(scope, connection_id) as session:
+        await session.request(get("/data"))
+        await session.request(get("/quota"))
+
+    sample = transport.counters.get_sample_value(QUOTA_NEAR, {"provider": "google"})
+    assert sample == 1

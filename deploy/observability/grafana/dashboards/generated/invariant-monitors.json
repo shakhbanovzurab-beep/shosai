@@ -1531,6 +1531,94 @@
         "w": 12,
         "h": 5
       },
+      "title": "Квота приложения у провайдера почти исчерпана",
+      "description": "Провайдер ответил, что приложение Shosai израсходовало больше 80% своей квоты: у Atlassian это 65 000 очков в час на всех клиентов сразу. Когда квота кончится, провайдер начнёт отказывать всем подключениям, а не одному человеку.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(increase(shosai_connectors_provider_quota_near_total[15m])) or vector(0)",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "нет данных",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#0ca30c",
+                "value": -1000000000000000.0
+              },
+              {
+                "color": "#d03b3b",
+                "value": 1e-09
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": -1000000000000000.0,
+                "to": 0,
+                "result": {
+                  "text": "нет ✓"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1e-09,
+                "to": 1000000000000000.0,
+                "result": {
+                  "text": "да ✗"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 18
+    },
+    {
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 45,
+        "w": 12,
+        "h": 5
+      },
       "title": "Действие Leo выполнено дважды",
       "description": "Почасовая проверка аудита нашла пункт одобренного действия Leo, который срез применил больше одного раза: например, две одинаковые задачи вместо одной. Ключ пункта должен был это исключить. Ид действий — в журнале проверки; посмотрите, какой срез исполнил пункт повторно.",
       "datasource": {
@@ -1609,12 +1697,12 @@
           "values": false
         }
       },
-      "id": 18
+      "id": 19
     },
     {
       "type": "stat",
       "gridPos": {
-        "x": 0,
+        "x": 12,
         "y": 45,
         "w": 12,
         "h": 5
@@ -1697,13 +1785,13 @@
           "values": false
         }
       },
-      "id": 19
+      "id": 20
     },
     {
       "type": "stat",
       "gridPos": {
-        "x": 12,
-        "y": 45,
+        "x": 0,
+        "y": 50,
         "w": 12,
         "h": 5
       },
@@ -1785,12 +1873,12 @@
           "values": false
         }
       },
-      "id": 20
+      "id": 21
     },
     {
       "type": "stat",
       "gridPos": {
-        "x": 0,
+        "x": 12,
         "y": 50,
         "w": 12,
         "h": 5
@@ -1873,13 +1961,13 @@
           "values": false
         }
       },
-      "id": 21
+      "id": 22
     },
     {
       "type": "stat",
       "gridPos": {
-        "x": 12,
-        "y": 50,
+        "x": 0,
+        "y": 55,
         "w": 12,
         "h": 5
       },
@@ -1961,7 +2049,7 @@
           "values": false
         }
       },
-      "id": 22
+      "id": 23
     }
   ]
 }

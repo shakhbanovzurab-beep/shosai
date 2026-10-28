@@ -14,7 +14,9 @@ invariant monitors. Step 5 the provider transport behind `PROVIDER_ACCESS`: a se
 injects and refreshes the token, keeps the provider's quotas, concurrency and `Retry-After`
 for every process, opens a provider's breaker only on its own failures, and retries reads.
 Step 6 the cabinet's routes — the list, a disconnect, connecting by a given secret, a scope
-picker's browse — and `CONNECTIONS` for consumers.
+picker's browse — and `CONNECTIONS` for consumers. Step 8 Atlassian: the Jira grant at its
+registered `/v1/jira/oauth/callback`, its sites, the weekly personal data report, and the
+quota alert.
 """
 
 from collections.abc import AsyncIterator
@@ -26,6 +28,10 @@ from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.connectors.application.account_data import (
     ACCOUNT_DATA,
     ConnectorsAccountData,
+)
+from shosai.features.connectors.application.atlassian_accounts import (
+    AtlassianAccounts,
+    ReportTools,
 )
 from shosai.features.connectors.application.authorize import Authorizer, AuthorizeTools
 from shosai.features.connectors.application.cabinet_list import CabinetConnectors
@@ -93,7 +99,10 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             services.transactions, keys, rotating=bool(crypto.fernet_keys_previous),
             metrics=metrics,
         )  # fmt: skip
-        lifecycle = (DueGrants(services.transactions), tokens, revoker, rotation)
+        accounts = AtlassianAccounts(
+            services.transactions, ReportTools(tokens, http, services.outbox, metrics)
+        )
+        lifecycle = (DueGrants(services.transactions), tokens, revoker, rotation, accounts)
         guards = ProviderGuards(services.valkey, services.rate_limiter)
         tracer = services.tracer_provider.get_tracer("shosai.connectors")
         access = ConnectorProviderAccess(

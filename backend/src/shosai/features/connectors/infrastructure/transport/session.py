@@ -5,7 +5,8 @@ fresh token means the grant is gone at the provider. A 429 — or a 503 with `Re
 stops that account for every process for the time named. A 5xx or a timeout counts toward the
 provider's breaker; a read is tried once more with jitter, a write never. Every other answer,
 4xx included, is the consumer's to read. Spans and metrics name the provider and the
-operation, never the URL, an id or a token.
+operation, never the URL, an id or a token; an answer saying 80% of the application's quota
+is used is counted for the provider's alert.
 """
 
 import asyncio
@@ -36,6 +37,7 @@ from shosai.features.connectors.domain.descriptors import LimitSubject, Provider
 from shosai.features.connectors.domain.states import Problem
 from shosai.features.connectors.infrastructure.metrics import ConnectorsMetrics
 from shosai.features.connectors.infrastructure.transport.guards import ProviderGuards
+from shosai.features.connectors.infrastructure.transport.quota import near_quota
 
 OPERATION: Final = re.compile(r"[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+")
 SAFE: Final = frozenset({"GET", "HEAD"})
@@ -116,6 +118,8 @@ class AuthorizedSession:
                     response = await self._authorized(call)
                 outcome = f"{response.status_code // 100}xx"
                 span.set_attribute("http.response.status_code", response.status_code)
+                if near_quota(response.headers):
+                    parts.metrics.quota_near(target.descriptor.provider)
                 return ProviderResponse(
                     response.status_code, dict(response.headers), response.content
                 )

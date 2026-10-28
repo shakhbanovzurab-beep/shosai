@@ -4,7 +4,8 @@
 `GET /v1/connectors/oauth/{provider}/callback` is the redirect URI each OAuth application
 registers: it answers 303 with a relative `Location` into the cabinet and clears the binder.
 The draft's callback paths answer a flow started on the draft with an expired authorization,
-since no such flow exists in Shosai.
+since no such flow exists in Shosai; `/v1/jira/oauth/callback` is Atlassian's registered
+redirect URI and finishes Atlassian flows (a draft's state is simply not found there).
 """
 
 from datetime import datetime, timedelta
@@ -24,6 +25,7 @@ from shosai.features.connectors.application.authorize import (
     COOKIE_PATH,
     Authorizer,
     ConnectRequest,
+    cookie_path,
 )
 from shosai.features.connectors.application.callback import Completer, ProviderAnswer
 from shosai.features.connectors.domain.catalogue import App, Provider
@@ -35,10 +37,12 @@ from shosai.features.connectors.domain.flows import (
     ReturnTarget,
     callback_location,
 )
+from shosai.features.connectors.infrastructure.providers.atlassian import ATLASSIAN
 from shosai.features.identity.contracts import Principal, bearer_principal
 
 SEE_OTHER: Final = 303
 DRAFT_PROVIDERS: Final = ("google", "microsoft", "slack", "notion", "attio", "hubspot")
+ATLASSIAN_CALLBACK: Final = cookie_path(ATLASSIAN)
 AUTHORIZE_LIMIT: Final = RateLimit("connector_authorize", 10, timedelta(minutes=1), 10)
 
 
@@ -130,6 +134,15 @@ def build_connect_router(
             authorize_url=handoff.authorize_url, expires_at=handoff.expires_at
         )
 
+    async def finish(
+        provider: Provider, query: CallbackQuery, binder: str | None, path: str = COOKIE_PATH
+    ) -> RedirectResponse:
+        answer = ProviderAnswer(query.state, query.code, query.error, query.error_description)
+        location = await completer.complete(provider, answer, binder)
+        redirect = RedirectResponse(location, status_code=SEE_OTHER)
+        redirect.delete_cookie(COOKIE_NAME, path=path, secure=True, httponly=True)
+        return redirect
+
     @router.get("/v1/connectors/oauth/{provider}/callback", include_in_schema=False)
     async def callback(
         provider: Provider,
@@ -137,11 +150,15 @@ def build_connect_router(
         binder: Annotated[str | None, Cookie(alias=COOKIE_NAME)] = None,
     ) -> RedirectResponse:
         """Finish a flow and send the browser back into the cabinet."""
-        answer = ProviderAnswer(query.state, query.code, query.error, query.error_description)
-        location = await completer.complete(provider, answer, binder)
-        redirect = RedirectResponse(location, status_code=SEE_OTHER)
-        redirect.delete_cookie(COOKIE_NAME, path=COOKIE_PATH, secure=True, httponly=True)
-        return redirect
+        return await finish(provider, query, binder)
+
+    @router.get(ATLASSIAN_CALLBACK, include_in_schema=False)
+    async def atlassian_callback(
+        query: Annotated[CallbackQuery, Query()],
+        binder: Annotated[str | None, Cookie(alias=COOKIE_NAME)] = None,
+    ) -> RedirectResponse:
+        """Finish an Atlassian flow at the redirect URI its application registered."""
+        return await finish(Provider.ATLASSIAN, query, binder, ATLASSIAN_CALLBACK)
 
     async def expired() -> RedirectResponse:
         """A flow that started on the draft: there is nothing to finish."""
@@ -156,7 +173,4 @@ def build_connect_router(
             f"/v1/integrations/oauth/{name}/callback", expired, methods=["GET"],
             include_in_schema=False,
         )  # fmt: skip
-    router.add_api_route(
-        "/v1/jira/oauth/callback", expired, methods=["GET"], include_in_schema=False
-    )
     return router

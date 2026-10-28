@@ -3,7 +3,8 @@
 The double answers by path: `/data` echoes the Authorization header, `/stale` refuses the
 first token and takes a refreshed one, `/gone` refuses every token, `/throttle` answers 429
 with `Retry-After: 7`, `/flaky` fails once with 502, `/down` answers 503 without a wait,
-`/slow` holds the answer until the test lets it go.
+`/slow` holds the answer until the test lets it go, `/quota` says 90% of the application's
+quota is used.
 """
 
 import asyncio
@@ -11,6 +12,7 @@ import json
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field, replace
 from datetime import timedelta
+from typing import Final
 
 import httpx
 import pytest_asyncio
@@ -37,6 +39,13 @@ from shosai.features.connectors.infrastructure.transport.session import SessionP
 from tests.features.connectors.connect_bench import GOOGLE, ConnectBench, DoubleAdapter
 from tests.features.connectors.lifecycle_bench import LifecycleBench
 
+# Ответы, не зависящие ни от токена, ни от числа вызовов.
+FIXED: Final[dict[str, tuple[int, dict[str, str]]]] = {
+    "/throttle": (429, {"Retry-After": "7"}),
+    "/down": (503, {}),
+    "/quota": (200, {"RateLimit-Policy": '"app";q=100;w=3600', "RateLimit": '"app";r=10;t=60'}),
+}
+
 
 @dataclass
 class ApiDouble:
@@ -53,12 +62,11 @@ class ApiDouble:
             return httpx.Response(200, json={"auth": auth})
         if path in {"/stale", "/gone"} and (path == "/gone" or auth.endswith("access-anna")):
             return httpx.Response(401, json={"error": "invalid_token"})
-        if path == "/throttle":
-            return httpx.Response(429, headers={"Retry-After": "7"})
+        if path in FIXED:
+            status, headers = FIXED[path]
+            return httpx.Response(status, headers=headers)
         if path == "/flaky" and self.calls.count(f"{request.method} {path}") == 1:
             return httpx.Response(502)
-        if path == "/down":
-            return httpx.Response(503)
         if path == "/slow":
             await self.released.wait()
         return httpx.Response(200, json={"auth": auth, "path": path})

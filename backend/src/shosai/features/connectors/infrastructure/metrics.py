@@ -5,6 +5,7 @@ key, a home — never an id, an account or an address. Counters start at zero fo
 series, so the monitors' `increase` sees the first event after a restart.
 """
 
+from collections.abc import Iterable
 from typing import Final
 
 from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
@@ -23,6 +24,9 @@ UNDECRYPTABLE: Final = "shosai_connectors_undecryptable_secrets"
 CALLS: Final = "shosai_connectors_provider_requests_total"
 CALL_SECONDS: Final = "shosai_connectors_provider_request_seconds"
 CALL_BUCKETS: Final = (0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0, 30.0)
+ACCOUNTS_REPORTED: Final = "shosai_connectors_accounts_reported_total"
+QUOTA_NEAR: Final = "shosai_connectors_provider_quota_near_total"
+REPORT_VERDICTS: Final = ("reported", "closed", "updated")
 
 
 class ConnectorsMetrics:
@@ -60,7 +64,18 @@ class ConnectorsMetrics:
             CALL_SECONDS, "Time of calls to providers, by provider and operation",
             ["provider", "operation"], buckets=CALL_BUCKETS, registry=registry,
         )  # fmt: skip
+        self._reported = Counter(
+            ACCOUNTS_REPORTED, "Accounts reported to a provider, and its verdicts on them",
+            ["provider", "verdict"], registry=registry,
+        )  # fmt: skip
+        self._quota_near = Counter(
+            QUOTA_NEAR, "Provider answers saying Shosai used 80% of its application's quota",
+            ["provider"], registry=registry,
+        )  # fmt: skip
+        for verdict in REPORT_VERDICTS:
+            self._reported.labels(provider=Provider.ATLASSIAN.value, verdict=verdict)
         for provider in Provider:
+            self._quota_near.labels(provider=provider.value)
             self._revoke_failures.labels(provider=provider.value)
             for outcome in RefreshOutcome:
                 self._refreshes.labels(provider=provider.value, outcome=outcome.value)
@@ -96,3 +111,13 @@ class ConnectorsMetrics:
         """Count one provider call by its outcome: a status class, busy or unavailable."""
         self._calls.labels(provider=provider.value, operation=operation, outcome=outcome).inc()
         self._call_seconds.labels(provider=provider.value, operation=operation).observe(seconds)
+
+    def reported(self, provider: Provider, accounts: int, verdicts: Iterable[str]) -> None:
+        """Count the accounts of one report and the provider's verdicts on them."""
+        self._reported.labels(provider=provider.value, verdict="reported").inc(accounts)
+        for verdict in verdicts:
+            self._reported.labels(provider=provider.value, verdict=verdict).inc()
+
+    def quota_near(self, provider: Provider) -> None:
+        """Count an answer that says the application's quota is at least 80% used."""
+        self._quota_near.labels(provider=provider.value).inc()

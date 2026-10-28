@@ -1,9 +1,12 @@
-"""Connectors' tasks (plan §3.5): sweeps of due grants, keep-alive, revocation, key rotation.
+"""Connectors' tasks (plan §3.5): sweeps of due grants, keep-alive, revocation, key rotation,
+and Atlassian's personal data report.
 
 The sweeps are ticks the scheduler queues per home; each due grant becomes a task in its
 owner's scope, which claims the grant before it works it, so a duplicate task does nothing.
 A grant task is not retried by the broker: its due time is the retry — the revocation moves
-it forward after a refusal, the keep-alive an hour after a failure.
+it forward after a refusal, the keep-alive an hour after a failure. The report runs every six
+days, inside Atlassian's seven-day cycle, as a task the broker retries while Atlassian is
+unavailable; reporting twice is harmless.
 """
 
 from datetime import timedelta
@@ -13,14 +16,27 @@ from uuid import UUID
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.schedule.jobs import DueRowSource, PeriodicJob
-from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration, TaskHandler, TaskKind
+from shosai.core.tasks.declaration import (
+    MAX_DELIVERIES,
+    NO_RETRY,
+    TRANSIENT_FAILURES,
+    RetryPolicy,
+    TaskDeclaration,
+    TaskHandler,
+    TaskKind,
+)
 from shosai.core.tasks.payloads import HomeTaskPayload
 from shosai.core.tasks.queues import TaskQueue
 from shosai.core.tasks.sender import TaskSender
+from shosai.features.connectors.application.atlassian_accounts import AtlassianAccounts
 from shosai.features.connectors.application.grant_tokens import GrantTokens
 from shosai.features.connectors.application.key_rotation import KeyRotation
 from shosai.features.connectors.application.lifecycle_sweeps import DueGrant, DueGrants
 from shosai.features.connectors.application.revocation import GrantRevoker
+from shosai.features.connectors.contracts.provider import (
+    ProviderBusyError,
+    ProviderUnavailableError,
+)
 
 
 class GrantTaskPayload(HomeTaskPayload):
@@ -54,7 +70,18 @@ DUE_SOURCES: Final = (
     DueRowSource(KEEPALIVE_SWEEP, every=timedelta(minutes=5)),
     DueRowSource(REVOKE_SWEEP, every=timedelta(seconds=30)),
 )
-PERIODIC_JOBS: Final = (PeriodicJob(ROTATE_KEYS, every=timedelta(days=7)),)
+REPORT_TICK: Final = _tick("connectors.report_accounts_due", timedelta(minutes=1))
+REPORT_ACCOUNTS: Final = TaskDeclaration(
+    name="connectors.report_accounts", queue=TaskQueue.BULK, payload=HomeTaskPayload,
+    deadline=timedelta(minutes=15),
+    retry=RetryPolicy(
+        MAX_DELIVERIES, (*TRANSIENT_FAILURES, ProviderUnavailableError, ProviderBusyError)
+    ),
+)  # fmt: skip
+PERIODIC_JOBS: Final = (
+    PeriodicJob(ROTATE_KEYS, every=timedelta(days=7)),
+    PeriodicJob(REPORT_TICK, every=timedelta(days=6)),
+)
 
 
 def grant_task(home: Home, due: DueGrant) -> GrantTaskPayload:
@@ -65,10 +92,11 @@ def grant_task(home: Home, due: DueGrant) -> GrantTaskPayload:
 
 
 def connectors_task_handlers(
-    parts: tuple[DueGrants, GrantTokens, GrantRevoker, KeyRotation], tasks: TaskSender
+    parts: tuple[DueGrants, GrantTokens, GrantRevoker, KeyRotation, AtlassianAccounts],
+    tasks: TaskSender,
 ) -> tuple[TaskHandler[Any], ...]:
     """The lifecycle's tasks bound to the process."""
-    due, tokens, revoker, rotation = parts
+    due, tokens, revoker, rotation, accounts = parts
 
     async def keepalive_due(payload: HomeTaskPayload) -> None:
         for grant in await due.keepalive(payload.home):
@@ -87,12 +115,20 @@ def connectors_task_handlers(
     async def rotate_keys(payload: HomeTaskPayload) -> None:
         await rotation.run(payload.home)
 
+    async def report_accounts_due(payload: HomeTaskPayload) -> None:
+        await tasks.send(REPORT_ACCOUNTS, HomeTaskPayload(home=payload.home))
+
+    async def report_accounts(payload: HomeTaskPayload) -> None:
+        await accounts.report(payload.home)
+
     return (
         TaskHandler(KEEPALIVE_SWEEP, keepalive_due),
         TaskHandler(REVOKE_SWEEP, revoke_due),
         TaskHandler(KEEP_ALIVE, keep_alive),
         TaskHandler(REVOKE_GRANT, revoke_grant),
         TaskHandler(ROTATE_KEYS, rotate_keys),
+        TaskHandler(REPORT_TICK, report_accounts_due),
+        TaskHandler(REPORT_ACCOUNTS, report_accounts),
     )
 
 

@@ -227,6 +227,15 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Issue a new secret, set `CONNECTORS_<KEY>_CLIENT_SECRET` and release. The page ends 15 minutes after the last increase.
 
+<a id="connector-quota-near"></a>
+### ConnectorQuotaNear — ADR 0075
+
+**Means.** A provider answered that Shosai's OAuth application has used at least 80% of its quota (the IETF `RateLimit` headers it sends past that mark). For Atlassian this is the app's 65 000 points an hour across every customer: once spent, Jira and Confluence refuse every connection until the hour turns.
+
+**Look.** `shosai_connectors_provider_quota_near_total` by `provider`; `shosai_connectors_provider_requests_total` by `operation` for the consumer that spends most (tasks' Jira sync, knowledge's Confluence sync); `outcome="busy"` for refusals that already started.
+
+**Fix.** Slow the heaviest sweep (its interval or batch), or ask the provider for a higher quota — Atlassian assigns a per-tenant pool after review. The page ends 15 minutes after the last increase.
+
 ## Tickets (§16.6)
 
 <a id="meeting-run-old"></a>

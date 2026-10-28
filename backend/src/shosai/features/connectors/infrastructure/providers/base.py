@@ -71,6 +71,10 @@ class HeldTokens:
     refresh_token: SecretStr | None
 
 
+class ProviderAnswerError(Exception):
+    """The provider answered something its adapter cannot read: the flow fails, nothing is kept."""
+
+
 class RevocationFailedError(Exception):
     """The provider did not confirm the revocation; the task tries again."""
 

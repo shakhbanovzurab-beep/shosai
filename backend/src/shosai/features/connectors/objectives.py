@@ -3,7 +3,9 @@
 A secret no key opens means a grant Shosai can no longer use and the person was not told; a
 rotated refresh token lost between the provider's answer and the commit means one grant
 broke without the person's doing; a refusal of Shosai's own application means every grant of
-it stops at its next refresh — an expired client secret, most often.
+it stops at its next refresh — an expired client secret, most often. An answer saying 80% of
+an application's quota is used — Atlassian's 65 000 points an hour, shared by every customer
+— warns before the provider starts refusing everyone.
 """
 
 from typing import Final
@@ -11,6 +13,7 @@ from typing import Final
 from shosai.core.observability.objectives import InvariantMonitor, NeverIncreases, StaysAtMost
 from shosai.features.connectors.infrastructure.metrics import (
     CLIENT_MISCONFIGURED,
+    QUOTA_NEAR,
     REFRESH_LOST,
     UNDECRYPTABLE,
 )
@@ -49,5 +52,16 @@ MONITORS: Final = (
             "токена. Чаще всего истёк секрет приложения, например в Microsoft Entra."
         ),
         condition=NeverIncreases(CLIENT_MISCONFIGURED),
+    ),
+    InvariantMonitor(
+        name="connector_quota_near",
+        invariant="ADR 0075",
+        summary="Квота приложения у провайдера почти исчерпана",
+        explanation=(
+            "Провайдер ответил, что приложение Shosai израсходовало больше 80% своей квоты: "
+            "у Atlassian это 65 000 очков в час на всех клиентов сразу. Когда квота кончится, "
+            "провайдер начнёт отказывать всем подключениям, а не одному человеку."
+        ),
+        condition=NeverIncreases(QUOTA_NEAR),
     ),
 )

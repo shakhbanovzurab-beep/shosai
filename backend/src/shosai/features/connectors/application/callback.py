@@ -54,6 +54,7 @@ from shosai.features.connectors.infrastructure.providers.base import (
     ACCESS_DENIED,
     AccountIdentity,
     ConfiguredClient,
+    ProviderAnswerError,
     ProviderRegistry,
 )
 from shosai.features.connectors.infrastructure.store.grant_writes import (
@@ -169,13 +170,13 @@ class Completer:
     async def _connect(self, flow: FlowRecord, client: ConfiguredClient, code: str) -> UUID:
         descriptor = client.adapter.descriptor
         endpoint = TokenEndpoint(self._tools.http, descriptor, client.credentials)
-        redirect = callback_uri(self._tools.base_url, descriptor.provider)
+        redirect = callback_uri(self._tools.base_url, descriptor)
         now = self._clock()
         try:
             payload = await endpoint.exchange(code, redirect, flow.verifier)
             tokens = client.adapter.tokens(payload, now)
             identity = await client.adapter.identify(self._tools.http, tokens)
-        except (TokenEndpointError, httpx.HTTPError) as error:
+        except (TokenEndpointError, ProviderAnswerError, httpx.HTTPError) as error:
             log.warning("Провайдер не выдал грант", app=flow.app.value, error=type(error).__name__)
             raise FlowFailedError(FlowError.PROVIDER_UNAVAILABLE) from None
         granted = tokens.scopes if tokens.scopes is not None else flow.scopes

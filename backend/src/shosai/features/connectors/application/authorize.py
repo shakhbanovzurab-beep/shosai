@@ -21,6 +21,7 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.connectors.application.offers import Offers
 from shosai.features.connectors.contracts import FlowCookie, Handoff
 from shosai.features.connectors.domain.catalogue import App, AuthKind, Owner, spec_of
+from shosai.features.connectors.domain.descriptors import ProviderDescriptor
 from shosai.features.connectors.domain.flows import (
     FLOW_LIFETIME,
     ReturnTarget,
@@ -45,6 +46,11 @@ from shosai.features.connectors.infrastructure.store.grant_writes import held_sc
 
 COOKIE_NAME: Final = "shosai_connect"
 COOKIE_PATH: Final = "/v1/connectors/oauth"
+
+
+def cookie_path(descriptor: ProviderDescriptor) -> str:
+    """Where the browser sends the binder back: the provider's own callback path, if it has one."""
+    return descriptor.redirect_path or COOKIE_PATH
 
 
 class NotOfferedError(AppError):
@@ -132,7 +138,7 @@ class Authorizer:
             raise ConnectUnavailableError from None
         query = AuthorizeQuery(
             client_id=client.credentials.client_id,
-            redirect_uri=callback_uri(self._tools.base_url, spec.provider), state=nonce,
+            redirect_uri=callback_uri(self._tools.base_url, descriptor), state=nonce,
             scopes=scopes, verifier=verifier,
         )  # fmt: skip
         url = authorize_url(descriptor, query)
@@ -140,5 +146,5 @@ class Authorizer:
         return Handoff(
             authorize_url=url,
             expires_at=self._clock() + FLOW_LIFETIME,
-            cookie=FlowCookie(COOKIE_NAME, binder, COOKIE_PATH, lifetime),
+            cookie=FlowCookie(COOKIE_NAME, binder, cookie_path(descriptor), lifetime),
         )

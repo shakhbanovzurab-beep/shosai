@@ -2,23 +2,25 @@
 
 The callback is `/v1/connectors/oauth/<provider>/callback` on Shosai's public address, the
 redirect URI each OAuth application registers; both Google applications of CN-D5 share
-Google's. The authorize URL names the client, the callback, the one-time state, the scopes
-in the provider's separator, the S256 challenge where the provider takes PKCE, and the
-descriptor's own parameters, which never override these.
+Google's. A provider whose application registered another path names it in its descriptor:
+Atlassian keeps the draft's `/v1/jira/oauth/callback`. The authorize URL names the client,
+the callback, the one-time state, the scopes in the provider's separator, the S256
+challenge where the provider takes PKCE, and the descriptor's own parameters, which never
+override these.
 """
 
 from collections.abc import Collection
 from dataclasses import dataclass
 from urllib.parse import urlencode, urlsplit
 
-from shosai.features.connectors.domain.catalogue import Provider
 from shosai.features.connectors.domain.descriptors import ProviderDescriptor
 from shosai.features.connectors.domain.flows import challenge_of
 
 
-def callback_uri(base_url: str, provider: Provider) -> str:
+def callback_uri(base_url: str, descriptor: ProviderDescriptor) -> str:
     """The redirect URI registered with the provider."""
-    return f"{base_url.rstrip('/')}/v1/connectors/oauth/{provider.value}/callback"
+    path = descriptor.redirect_path or f"/v1/connectors/oauth/{descriptor.provider.value}/callback"
+    return f"{base_url.rstrip('/')}{path}"
 
 
 @dataclass(frozen=True, slots=True)

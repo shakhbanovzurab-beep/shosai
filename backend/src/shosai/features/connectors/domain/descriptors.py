@@ -8,6 +8,7 @@ a provider changes nothing in it. Each provider's descriptor arrives with its st
 checked against the provider's recorded answers there.
 """
 
+import re
 from dataclasses import dataclass, field
 from datetime import timedelta
 from enum import StrEnum
@@ -18,6 +19,7 @@ from shosai.features.connectors.domain.catalogue import Provider
 
 MAX_CALL_TIMEOUT: Final = timedelta(seconds=60)
 AUTH_SCHEMES: Final = frozenset({"Bearer", "OAuth"})
+REDIRECT_PATH: Final = re.compile(r"/v1(/[a-z0-9_]+)+")
 
 
 class TokenAuth(StrEnum):
@@ -126,6 +128,8 @@ class ProviderDescriptor:
     timeouts: Timeouts = field(default_factory=Timeouts)
     # Схема заголовка Authorization: Bearer, у Яндекса — OAuth.
     auth_scheme: str = "Bearer"
+    # Свой путь обратного адреса, если его зарегистрировало приложение (Atlassian — путь черновика).
+    redirect_path: str | None = None
 
     def __post_init__(self) -> None:
         check_https(self.authorize_url)
@@ -142,6 +146,9 @@ class ProviderDescriptor:
             raise ValueError(message)
         if self.auth_scheme not in AUTH_SCHEMES:
             message = f"{self.client_key}: схема авторизации — {', '.join(sorted(AUTH_SCHEMES))}"
+            raise ValueError(message)
+        if self.redirect_path is not None and not REDIRECT_PATH.fullmatch(self.redirect_path):
+            message = f"{self.client_key}: обратный путь — /v1/… из букв, цифр, / и _"
             raise ValueError(message)
         names = [limit.name for limit in self.limits]
         if len(names) != len(set(names)):

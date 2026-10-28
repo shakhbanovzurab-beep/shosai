@@ -44,6 +44,20 @@
             "runbook": "docs/runbooks/alerts.md#connector-client-misconfigured",
             "dashboard": "/d/invariant-monitors"
           }
+        },
+        {
+          "alert": "ConnectorQuotaNear",
+          "expr": "sum(increase(shosai_connectors_provider_quota_near_total[15m])) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "ADR 0075"
+          },
+          "annotations": {
+            "summary": "Квота приложения у провайдера почти исчерпана",
+            "description": "Провайдер ответил, что приложение Shosai израсходовало больше 80% своей квоты: у Atlassian это 65 000 очков в час на всех клиентов сразу. Когда квота кончится, провайдер начнёт отказывать всем подключениям, а не одному человеку.",
+            "runbook": "docs/runbooks/alerts.md#connector-quota-near",
+            "dashboard": "/d/invariant-monitors"
+          }
         }
       ]
     }
