@@ -21,6 +21,7 @@
   "disconnect": "Déconnecter",
   "reconnect": "Reconnecter",
   "needsReconnect": "Reconnectez-la pour continuer à l’utiliser.",
+  "reconnectBy": "Reconnectez-la avant le {date}",
   "problems": {
     "refresh_refused": "L’accès a expiré. Reconnectez-la pour continuer à l’utiliser.",
     "grant_revoked": "L’accès a été retiré dans votre compte. Reconnectez-la pour continuer à l’utiliser.",

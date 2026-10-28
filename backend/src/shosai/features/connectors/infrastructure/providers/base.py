@@ -9,7 +9,7 @@ app whose application is missing is not offered (CN-D4).
 
 from collections.abc import Mapping
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Protocol
 
 import httpx
@@ -85,6 +85,8 @@ class ConfiguredClient:
 
     adapter: ProviderAdapter
     credentials: ClientCredentials
+    # Сколько живёт согласие независимо от использования: проект Google в Testing — 7 дней.
+    consent_lifetime: timedelta | None = None
 
 
 class ProviderRegistry:

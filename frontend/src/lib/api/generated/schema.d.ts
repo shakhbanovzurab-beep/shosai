@@ -5833,6 +5833,8 @@ export interface components {
             connected_at: string | null;
             /** Access Remains At Provider */
             access_remains_at_provider: boolean;
+            /** Reconnect By */
+            reconnect_by: string | null;
         };
         /**
          * ConnectorResourceOut

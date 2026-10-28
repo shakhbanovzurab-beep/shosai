@@ -21,6 +21,7 @@
   "disconnect": "Ontkoppelen",
   "reconnect": "Opnieuw koppelen",
   "needsReconnect": "Koppel opnieuw om het te blijven gebruiken.",
+  "reconnectBy": "Koppel opnieuw vóór {date}",
   "problems": {
     "refresh_refused": "De toegang is verlopen. Koppel opnieuw om het te blijven gebruiken.",
     "grant_revoked": "De toegang is verwijderd in je account. Koppel opnieuw om het te blijven gebruiken.",

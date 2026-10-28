@@ -21,6 +21,7 @@
   "disconnect": "中斷連接",
   "reconnect": "重新連接",
   "needsReconnect": "請重新連接以繼續使用。",
+  "reconnectBy": "請在 {date} 前重新連接",
   "problems": {
     "refresh_refused": "存取權已過期。請重新連接以繼續使用。",
     "grant_revoked": "你的帳號已移除存取權。請重新連接以繼續使用。",

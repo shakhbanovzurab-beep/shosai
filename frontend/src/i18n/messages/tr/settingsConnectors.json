@@ -21,6 +21,7 @@
   "disconnect": "Bağlantıyı kes",
   "reconnect": "Yeniden bağla",
   "needsReconnect": "Kullanmaya devam etmek için yeniden bağlayın.",
+  "reconnectBy": "{date} tarihine kadar yeniden bağlayın",
   "problems": {
     "refresh_refused": "Erişimin süresi doldu. Kullanmaya devam etmek için yeniden bağlayın.",
     "grant_revoked": "Erişim hesabınızdan kaldırıldı. Kullanmaya devam etmek için yeniden bağlayın.",

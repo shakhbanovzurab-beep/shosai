@@ -21,6 +21,7 @@
   "disconnect": "Ngắt kết nối",
   "reconnect": "Kết nối lại",
   "needsReconnect": "Hãy kết nối lại để tiếp tục sử dụng.",
+  "reconnectBy": "Hãy kết nối lại trước {date}",
   "problems": {
     "refresh_refused": "Quyền truy cập đã hết hạn. Hãy kết nối lại để tiếp tục sử dụng.",
     "grant_revoked": "Quyền truy cập đã bị gỡ trong tài khoản của bạn. Hãy kết nối lại để tiếp tục sử dụng.",

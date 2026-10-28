@@ -38,6 +38,8 @@ class ConnectorOut(BaseModel):
     connected_at: datetime | None
     # После отключения провайдер ещё покажет доступ Shosai: другие приложения гранта или нет отзыва.
     access_remains_at_provider: bool
+    # Согласие живёт фиксированный срок (проект Google в Testing): переподключить до этого момента.
+    reconnect_by: datetime | None
 
 
 class ConnectorsOut(BaseModel):
@@ -122,6 +124,7 @@ def connector_out(row: ConnectorRow) -> ConnectorOut:
         connection_id=None if view is None else view.id,
         connected_at=None if view is None else view.connected_at,
         access_remains_at_provider=row.access_remains_at_provider,
+        reconnect_by=row.reconnect_by,
     )  # fmt: skip
 
 

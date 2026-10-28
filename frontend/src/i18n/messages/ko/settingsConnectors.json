@@ -21,6 +21,7 @@
   "disconnect": "연결 해제",
   "reconnect": "다시 연결",
   "needsReconnect": "계속 사용하려면 다시 연결해 주세요.",
+  "reconnectBy": "{date}까지 다시 연결해 주세요",
   "problems": {
     "refresh_refused": "액세스가 만료됐어요. 계속 사용하려면 다시 연결해 주세요.",
     "grant_revoked": "계정에서 액세스가 삭제됐어요. 계속 사용하려면 다시 연결해 주세요.",

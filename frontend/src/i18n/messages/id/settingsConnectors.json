@@ -21,6 +21,7 @@
   "disconnect": "Putuskan koneksi",
   "reconnect": "Hubungkan ulang",
   "needsReconnect": "Hubungkan ulang untuk terus menggunakannya.",
+  "reconnectBy": "Hubungkan ulang sebelum {date}",
   "problems": {
     "refresh_refused": "Akses sudah kedaluwarsa. Hubungkan ulang untuk terus menggunakannya.",
     "grant_revoked": "Akses dihapus di akun Anda. Hubungkan ulang untuk terus menggunakannya.",

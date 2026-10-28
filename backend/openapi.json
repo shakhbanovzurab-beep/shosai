@@ -21524,6 +21524,18 @@
           "access_remains_at_provider": {
             "type": "boolean",
             "title": "Access Remains At Provider"
+          },
+          "reconnect_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reconnect By"
           }
         },
         "type": "object",
@@ -21538,7 +21550,8 @@
           "problem",
           "connection_id",
           "connected_at",
-          "access_remains_at_provider"
+          "access_remains_at_provider",
+          "reconnect_by"
         ],
         "title": "ConnectorOut",
         "description": "One app of Settings > Connectors and the person's connection of it."

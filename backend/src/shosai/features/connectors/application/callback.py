@@ -17,18 +17,22 @@ from uuid import UUID
 
 import httpx
 import structlog
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.crypto.key_ring import FernetKeyRing
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.connectors.application.health import break_connection
 from shosai.features.connectors.application.installation_audit import InstallationAudit
 from shosai.features.connectors.contracts.events import (
     ConnectionConnected,
     ConnectionRevoked,
     RevokeReason,
 )
-from shosai.features.connectors.domain.catalogue import AuthKind, Owner, Provider, spec_of
+from shosai.features.connectors.domain.catalogue import App, AuthKind, Owner, Provider, spec_of
+from shosai.features.connectors.domain.descriptors import ProviderDescriptor
 from shosai.features.connectors.domain.flows import (
     FlowError,
     Outcome,
@@ -39,6 +43,7 @@ from shosai.features.connectors.domain.flows import (
 )
 from shosai.features.connectors.domain.refresh import keepalive_at
 from shosai.features.connectors.domain.scopes import missing_scopes
+from shosai.features.connectors.domain.states import Problem
 from shosai.features.connectors.infrastructure.oauth.flow_store import (
     FlowRecord,
     FlowStore,
@@ -63,6 +68,7 @@ from shosai.features.connectors.infrastructure.store.grant_writes import (
     attach,
     upsert_grant,
 )
+from shosai.features.connectors.infrastructure.store.records import ConnectionRecord
 
 log = structlog.stdlib.get_logger(__name__)
 POPUP: Final = ReturnTarget(ReturnKind.POPUP)
@@ -182,23 +188,23 @@ class Completer:
         granted = tokens.scopes if tokens.scopes is not None else flow.scopes
         if missing_scopes(spec_of(flow.app), flow.owner, granted):
             raise FlowFailedError(FlowError.SCOPE_MISSING)
-        return await self._store(flow, descriptor.idle_expiry, (tokens, identity, granted), now)
+        return await self._store(flow, descriptor, (tokens, identity, granted), now)
 
     async def _store(
         self,
         flow: FlowRecord,
-        idle_expiry: timedelta | None,
+        descriptor: ProviderDescriptor,
         learned: tuple[TokenSet, AccountIdentity, frozenset[str]],
         now: datetime,
     ) -> UUID:
         tokens, identity, granted = learned
-        sealed = self._seal(tokens, idle_expiry, now)
+        sealed = self._seal(tokens, descriptor.idle_expiry, now)
         spec = spec_of(flow.app)
         draft = GrantDraft(
             user_id=flow.user_id, org_id=flow.org_id, provider=spec.provider,
             client_key=flow.client_key, auth_kind=AuthKind.OAUTH2,
             external_account_id=identity.external_account_id, account_label=identity.label,
-            scopes=granted, meta=identity.meta,
+            scopes=granted, meta=identity.meta, replace_scopes=descriptor.reports_granted_scopes,
         )  # fmt: skip
         scope = TenancyScope(flow.home, flow.user_id, flow.org_id)
         membership: UUID | None = None
@@ -224,12 +230,29 @@ class Completer:
                 app=flow.app, reconnected=attached.reconnected,
             ))  # fmt: skip
             await self._tools.outbox.add_all(session, events)
+            if descriptor.reports_granted_scopes:
+                await self._check_siblings(session, (grant_id, attached.connection_id), granted)
             if flow.owner is Owner.WORKSPACE and flow.org_id is not None:
                 await self._tools.audit.installed(
                     session, flow.org_id, (membership, attached.connection_id, flow.app)
                 )
         log.info("Приложение подключено", app=flow.app.value, reconnected=attached.reconnected)
         return attached.connection_id
+
+    async def _check_siblings(
+        self, session: AsyncSession, attached: tuple[UUID, UUID], granted: frozenset[str]
+    ) -> None:
+        """The grant's other apps whose boxes this consent left unticked now lack their scope."""
+        grant_id, connection_id = attached
+        siblings = await session.execute(
+            select(ConnectionRecord.id, ConnectionRecord.app, ConnectionRecord.org_id).where(
+                ConnectionRecord.grant_id == grant_id, ConnectionRecord.id != connection_id
+            )
+        )
+        for row in siblings:
+            owner = Owner.PERSON if row.org_id is None else Owner.WORKSPACE
+            if missing_scopes(spec_of(App(row.app)), owner, granted):
+                await break_connection(session, self._tools.outbox, row.id, Problem.SCOPE_MISSING)
 
     def _seal(
         self, tokens: TokenSet, idle_expiry: timedelta | None, now: datetime

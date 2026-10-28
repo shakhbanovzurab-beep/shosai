@@ -21,6 +21,7 @@
   "disconnect": "Desconectar",
   "reconnect": "Volver a conectar",
   "needsReconnect": "Vuelve a conectarla para seguir usándola.",
+  "reconnectBy": "Vuelve a conectarla antes del {date}",
   "problems": {
     "refresh_refused": "El acceso caducó. Vuelve a conectarla para seguir usándola.",
     "grant_revoked": "Se quitó el acceso en tu cuenta. Vuelve a conectarla para seguir usándola.",

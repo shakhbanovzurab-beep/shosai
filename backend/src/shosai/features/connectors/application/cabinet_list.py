@@ -3,11 +3,13 @@
 An app is listed when it is offered or when the person holds a connection of it, so a
 connection can always be disconnected. A connected app says whether the provider would still
 list Shosai's access after its disconnect: while other apps share its grant, or where the
-provider has no revocation for applications.
+provider has no revocation for applications. A connection whose application gives consents a
+fixed life (a Google project in Testing: seven days) says by when it must be reconnected.
 """
 
 from collections import Counter
 from dataclasses import dataclass
+from datetime import datetime
 from uuid import UUID
 
 from shosai.core.db.transactions import HomeTransactions
@@ -31,6 +33,7 @@ class ConnectorRow:
     spec: AppSpec
     connection: ConnectionView | None
     access_remains_at_provider: bool
+    reconnect_by: datetime | None = None
 
 
 class CabinetConnectors:
@@ -62,7 +65,9 @@ class CabinetConnectors:
                 continue
             found = by_app.get(app)
             view = None if found is None else found.view
-            rows.append(ConnectorRow(spec, view, self._remains(found, shared)))
+            rows.append(
+                ConnectorRow(spec, view, self._remains(found, shared), self._reconnect_by(found))
+            )
         return rows
 
     async def row(self, scope: TenancyScope, app: App) -> ConnectorRow:
@@ -79,3 +84,15 @@ class CabinetConnectors:
             return True
         client = self._registry.client(found.client_key)
         return client is None or client.adapter.descriptor.revocation.kind is RevocationKind.NONE
+
+    def _reconnect_by(self, found: ConnectionBinding | None) -> datetime | None:
+        if found is None:
+            return None
+        client = self._registry.client(found.client_key)
+        consent = found.view.provider_meta.get("consent_at")
+        if client is None or client.consent_lifetime is None or not isinstance(consent, str):
+            return None
+        try:
+            return datetime.fromisoformat(consent) + client.consent_lifetime
+        except ValueError:
+            return None

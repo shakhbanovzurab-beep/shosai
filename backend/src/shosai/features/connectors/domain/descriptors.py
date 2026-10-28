@@ -122,6 +122,9 @@ class ProviderDescriptor:
     idle_expiry: timedelta | None = None
     # Один токен на аккаунт со всеми правами: вход просит объединение прав (Яндекс, Atlassian).
     union_scopes: bool = False
+    # Ответ токена называет все права, выданные приложению (Google с include_granted_scopes):
+    # права гранта заменяются ответом, и приложение без своего права ждёт человека.
+    reports_granted_scopes: bool = False
     limits: tuple[ProviderLimit, ...] = ()
     # Сколько вызовов одного аккаунта одновременно (Outlook: 4 на ящик); None — без предела.
     concurrency_per_account: int | None = None

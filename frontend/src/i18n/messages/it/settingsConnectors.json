@@ -21,6 +21,7 @@
   "disconnect": "Scollega",
   "reconnect": "Ricollega",
   "needsReconnect": "Ricollegala per continuare a usarla.",
+  "reconnectBy": "Ricollegala entro il {date}",
   "problems": {
     "refresh_refused": "L’accesso è scaduto. Ricollegala per continuare a usarla.",
     "grant_revoked": "L’accesso è stato rimosso dal tuo account. Ricollegala per continuare a usarla.",

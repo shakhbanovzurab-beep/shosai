@@ -51,6 +51,8 @@ class GrantDraft:
     account_label: str | None
     scopes: frozenset[str]
     meta: Mapping[str, object]
+    # Права из ответа — все выданные: заменяют прежние, а не добавляются к ним.
+    replace_scopes: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -120,7 +122,10 @@ async def upsert_grant(session: AsyncSession, draft: GrantDraft, secrets: Sealed
     statement = inserted.on_conflict_do_update(
         index_elements=keys, index_where=where,
         set_={
-            "account_label": inserted.excluded.account_label, "granted_scopes": MERGED_SCOPES,
+            "account_label": inserted.excluded.account_label,
+            "granted_scopes": (
+                inserted.excluded.granted_scopes if draft.replace_scopes else MERGED_SCOPES
+            ),
             "provider_meta": inserted.excluded.provider_meta, "auth_kind": draft.auth_kind.value,
             "status": GrantStatus.ACTIVE.value, "problem": None, "consecutive_failures": 0,
             "revoke_at": None,
@@ -139,7 +144,17 @@ async def upsert_grant(session: AsyncSession, draft: GrantDraft, secrets: Sealed
     await session.execute(
         write.on_conflict_do_update(
             index_elements=["grant_id"],
-            set_={**sealed, "refresh_generation": GrantSecretRecord.refresh_generation + 1},
+            set_={
+                **sealed,
+                "refresh_generation": GrantSecretRecord.refresh_generation + 1,
+                # Ответ без нового refresh-токена оставляет прежний в силе (RFC 6749 §6).
+                "refresh_token_enc": func.coalesce(
+                    write.excluded.refresh_token_enc, GrantSecretRecord.refresh_token_enc
+                ),
+                "keepalive_at": func.coalesce(
+                    write.excluded.keepalive_at, GrantSecretRecord.keepalive_at
+                ),
+            },
         )
     )
     return grant_id

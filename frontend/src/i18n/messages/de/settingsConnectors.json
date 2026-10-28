@@ -21,6 +21,7 @@
   "disconnect": "Trennen",
   "reconnect": "Neu verbinden",
   "needsReconnect": "Verbinde neu, um es weiter zu nutzen.",
+  "reconnectBy": "Verbinde bis {date} neu",
   "problems": {
     "refresh_refused": "Der Zugriff ist abgelaufen. Verbinde neu, um es weiter zu nutzen.",
     "grant_revoked": "Der Zugriff wurde in deinem Konto entfernt. Verbinde neu, um es weiter zu nutzen.",

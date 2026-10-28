@@ -21,6 +21,7 @@
   "disconnect": "Disconnect",
   "reconnect": "Reconnect",
   "needsReconnect": "Reconnect to keep using it.",
+  "reconnectBy": "Reconnect by {date}",
   "problems": {
     "refresh_refused": "Access expired. Reconnect to keep using it.",
     "grant_revoked": "Access was removed in your account. Reconnect to keep using it.",

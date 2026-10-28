@@ -1,7 +1,7 @@
 "use client";
 
 import { Blocks } from "lucide-react";
-import { useTranslations } from "use-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -16,7 +16,10 @@ import { ConnectorStatus } from "./connector-status";
 
 function ConnectorName({ connector }: { connector: Connector }) {
   const t = useTranslations("settingsConnectors");
+  const format = useFormatter();
   const problem = connector.status === "needs_reconnect" ? connectorProblemOf(connector.problem) : null;
+  // Согласие тестового проекта Google живёт неделю: строка заранее говорит, до какого дня.
+  const reconnectBy = connector.status === "connected" ? connector.reconnect_by : null;
   return (
     <div className="flex items-center gap-3">
       <ConnectorLogo id={connector.id} />
@@ -25,6 +28,11 @@ function ConnectorName({ connector }: { connector: Connector }) {
         {connector.account ? (
           <span dir="auto" className="truncate text-muted-foreground text-xs">
             {connector.account}
+          </span>
+        ) : null}
+        {reconnectBy ? (
+          <span className="text-muted-foreground text-xs">
+            {t("reconnectBy", { date: format.dateTime(new Date(reconnectBy), "medium") })}
           </span>
         ) : null}
         {connector.status === "needs_reconnect" ? (
