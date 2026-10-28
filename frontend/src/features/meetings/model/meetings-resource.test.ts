@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { MeetingCard } from "@/features/notes/domain/library";
 
 import { meetingStatus } from "../domain/meeting";
-import { meetingOfRecording } from "./meetings-resource";
+import { meetingOfRecording, meetingOfRoom } from "./meetings-resource";
 
 const card = (patch: Partial<MeetingCard>): MeetingCard => ({
   id: "m-1",
@@ -50,5 +50,23 @@ describe("recordings in Meetings", () => {
     expect(writing.recap).toBeNull();
     expect(writing.recording?.busy).toBe(true);
     expect(writing.source).toBe("upload");
+  });
+});
+
+describe("own Shosai rooms in Meetings", () => {
+  it("shows a room with a call as live until the call ends, joined inside the cabinet", () => {
+    const meeting = meetingOfRoom({
+      id: "r-1",
+      title: null,
+      state: "open",
+      notes_on: true,
+      workspace_id: null,
+      link: "https://shosai.tech/meet/AbCdEf123456",
+      created_at: "2026-10-21T07:00:00Z",
+      closed_at: null,
+      call: { started_at: "2026-10-21T08:00:00Z", participants: 3 },
+    });
+    expect(meeting.joinUrl).toBe("/app/meet/AbCdEf123456");
+    expect(meetingStatus(meeting, LATER)).toBe("live");
   });
 });

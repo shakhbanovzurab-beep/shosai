@@ -71,6 +71,8 @@ export function useJoinFlow(token: string, media: LocalMedia) {
         marks: { notes: joined.room.notes_on, recording: joined.room.recording },
         link: `${window.location.origin}/meet/${token}`,
         livekit: { url: joined.livekit_url, token: joined.livekit_token },
+        roomPass: joined.room_pass,
+        roomId: joined.room_id,
         media: { mic: media.mic, camera: media.camera, stream: media.stream },
       });
       setFlow({ step: "call", session: call });

@@ -15,12 +15,13 @@ from shosai.features.meetings.domain.wire import (
 
 
 def test_the_metadata_carries_the_room_and_its_marks_but_not_the_home() -> None:
-    room_id = uuid.uuid4()
-    metadata = room_metadata(room_id, RoomMarks(notes=True, recording=False))
+    room_id, owner_id = uuid.uuid4(), uuid.uuid4()
+    metadata = room_metadata(room_id, owner_id, RoomMarks(notes=True, recording=False))
 
     assert json.loads(metadata) == {
         "v": 1,
         "room_id": str(room_id),
+        "owner": str(owner_id),
         "marks": {"notes": True, "recording": False},
     }
     assert "home" not in metadata

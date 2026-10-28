@@ -141,6 +141,8 @@ services:
       SHOSAI_TLS_CERTIFICATE: /run/shosai-edge-tls/edge.crt
       SHOSAI_TLS_CERTIFICATE_KEY: /run/shosai-edge-tls/edge.key
       SHOSAI_ROBOTS_TAG: "noindex, nofollow"
+      # Локальный LiveKit без TLS, а страница edge — по HTTPS: звонки проверяются через Vite (dev:api).
+      SHOSAI_CSP_RTC_ORIGINS: ""
       # Коллектор локального стека наблюдаемости (deploy/observability).
       SHOSAI_OTEL_TRACE: "on"
     volumes:

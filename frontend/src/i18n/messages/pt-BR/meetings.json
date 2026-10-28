@@ -27,6 +27,7 @@
   "liveBadge": "Ao vivo",
   "liveSince": "{minutes, plural, =0 {Começou agora · término: {end}} one {Começou há # min · término: {end}} many {Começou há # min · término: {end}} other {Começou há # min · término: {end}}}",
   "recordingSince": "{minutes, plural, =0 {A gravação acabou de começar} one {Gravando há # min} many {Gravando há # min} other {Gravando há # min}}",
+  "inCallSince": "{minutes, plural, =0 {Acabou de começar} one {Começou há # min} many {Começou há # min} other {Começou há # min}}",
   "startsIn": "{minutes, plural, =0 {Começando agora} one {Em # min} many {Em # min} other {Em # min}}",
   "join": "Entrar na reunião",
   "openRecording": "Abrir",

@@ -1,5 +1,11 @@
 import { type CallPerson, initialsOf } from "../domain/call";
-import type { CallSession, CallSetup, CallSnapshot, VideoKind } from "../domain/call-session";
+import {
+  type CallSession,
+  type CallSetup,
+  type CallSnapshot,
+  initialSnapshot,
+  type VideoKind,
+} from "../domain/call-session";
 import { mergeChat } from "../domain/chat-log";
 import type { CallEnd } from "../domain/join";
 import { admitReaction, REACTIONS, type Reaction, shownReactions } from "../domain/reactions";
@@ -34,18 +40,7 @@ export class DemoCall implements CallSession {
     };
     const others = Array.from({ length: demoCrowd(setup.token) }, (_, index) => demoPerson(index + 1));
     if (setup.role !== "owner" && others[0]) others[0] = { ...others[0], isOwner: true };
-    this.state = {
-      status: "connecting",
-      end: null,
-      title: setup.title,
-      role: setup.role,
-      marks: setup.marks,
-      self: setup.identity,
-      people: [self, ...others],
-      chat: [],
-      reactions: [],
-      link: setup.link,
-    };
+    this.state = { ...initialSnapshot(setup), people: [self, ...others] };
     this.schedule();
   }
 

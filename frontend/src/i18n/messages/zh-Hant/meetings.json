@@ -27,6 +27,7 @@
   "liveBadge": "進行中",
   "liveSince": "{minutes, plural, =0 {剛開始 · {end} 結束} other {# 分鐘前開始 · {end} 結束}}",
   "recordingSince": "{minutes, plural, =0 {剛開始錄音} other {已錄音 # 分鐘}}",
+  "inCallSince": "{minutes, plural, =0 {剛開始} other {# 分鐘前開始}}",
   "startsIn": "{minutes, plural, =0 {即將開始} other {# 分鐘後開始}}",
   "join": "加入會議",
   "openRecording": "開啟",

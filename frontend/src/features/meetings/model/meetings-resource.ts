@@ -8,13 +8,17 @@ import { recentRecordings } from "@/features/notes/model/recent-notes";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource } from "@/lib/polling-resource";
 
+import { type OwnedRoom, roomApi } from "../api/room-api";
 import type { Meeting } from "../domain/meeting";
+import { roomPathOf } from "./start-meeting";
 
+/** Свои комнаты Shosai отвечают (meetings A10): «Новая встреча» и идущие звонки. */
+export const ROOMS_SERVED = isServed("meetings");
 /**
- * Отвечает ли API слайса meetings: без него запланированные встречи (образцы meetings и calendar), фильтр
- * «Предстоящие» и «Новая встреча» не показываются — раздел состоит из записей «Заметок».
+ * Расписание — у «Календаря»: пока у него нет API, запланированных встреч, фильтра «Предстоящие» и плана дня нет —
+ * раздел состоит из идущих звонков и записей «Заметок».
  */
-export const MEETINGS_SERVED = isServed("meetings");
+export const SCHEDULE_SERVED = isServed("calendar");
 // Записи — страница библиотеки «Заметок»: идущие, «Недавние» и «Прошедшие» раздела.
 const RECORDINGS = 50;
 
@@ -44,7 +48,30 @@ async function recordings(): Promise<Meeting[]> {
 }
 
 async function scheduled(): Promise<Meeting[]> {
-  return MEETINGS_SERVED ? (await import("../data/demo-meetings")).demoMeetings() : [];
+  return SCHEDULE_SERVED ? (await import("../data/demo-meetings")).demoMeetings() : [];
+}
+
+/** Идущий звонок своей комнаты как встреча раздела: вход — её страница в кабинете. */
+export function meetingOfRoom(room: OwnedRoom): Meeting {
+  const start = room.call?.started_at ?? room.created_at;
+  return {
+    id: `room-${room.id}`,
+    title: room.title ?? "",
+    start,
+    end: start,
+    source: "shosai",
+    joinUrl: roomPathOf(room.link),
+    location: null,
+    participants: [],
+    recap: null,
+    recording: null,
+    endless: true,
+  };
+}
+
+// На моках идущая комната — среди образцов расписания; на API — свои комнаты со звонком.
+async function liveRooms(): Promise<Meeting[]> {
+  return ROOMS_SERVED && !MOCK_API ? (await roomApi.live()).map(meetingOfRoom) : [];
 }
 
 /**
@@ -53,10 +80,10 @@ async function scheduled(): Promise<Meeting[]> {
  */
 export const meetingsResource = createPollingResource(
   async () => {
-    const [plans, recorded] = await Promise.all([scheduled(), recordings()]);
-    return [...plans, ...recorded];
+    const [plans, recorded, rooms] = await Promise.all([scheduled(), recordings(), liveRooms()]);
+    return [...rooms, ...plans, ...recorded];
   },
-  (meetings) => meetings.some((meeting) => meeting.recording?.busy === true),
+  (meetings) => meetings.some((meeting) => meeting.recording?.busy === true || meeting.endless === true),
 );
 
 export const useMeetings = () => usePollingResource(meetingsResource);

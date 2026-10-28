@@ -5,7 +5,7 @@ import { useFormatter, useTranslations } from "use-intl";
 import { Link } from "@/lib/navigation";
 
 import { type MeetingsView, viewHref } from "../domain/meeting";
-import { MEETINGS_SERVED } from "../model/meetings-resource";
+import { SCHEDULE_SERVED } from "../model/meetings-resource";
 
 // Each filter's name is `views.<view>` in the catalog.
 // «Предстоящие» — запланированные встречи слайса meetings: без его API фильтра нет.
@@ -15,7 +15,7 @@ const FILTERS: { view: MeetingsView; icon: typeof LayoutList }[] = [
   { view: "live", icon: Radio },
   { view: "past", icon: History },
 ];
-const ITEMS = FILTERS.filter((item) => MEETINGS_SERVED || item.view !== "upcoming");
+const ITEMS = FILTERS.filter((item) => SCHEDULE_SERVED || item.view !== "upcoming");
 
 /** The filters: a column beside the meetings on wide screens, a scrollable row above them on narrow ones. */
 export function MeetingsNav({
