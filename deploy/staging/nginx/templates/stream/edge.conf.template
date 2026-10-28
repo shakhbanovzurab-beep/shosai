@@ -1,0 +1,18 @@
+# Порт 443 edge (meetings A14): разбор SNI без расшифровки. turn.<домен> уходит в TURN/TLS LiveKit
+# (stream-routes/turn.map и stream/turn.conf — только при заданном SHOSAI_TURN_SERVER_NAME), остальное — в HTTPS edge на
+# внутреннем 8444. Оба пути получают PROXY protocol: HTTPS восстанавливает по нему адрес клиента
+# для лимитов §4.3 и заголовков к бэкенду; к LiveKit заголовок снимает внутренний сервер turn.
+map $ssl_preread_server_name $shosai_tls_route {
+    hostnames;
+    include /tmp/nginx/stream-routes/*.map;
+    default 127.0.0.1:8444;
+}
+
+server {
+    listen 8443;
+    listen [::]:8443;
+    ssl_preread on;
+    proxy_protocol on;
+    proxy_pass $shosai_tls_route;
+    proxy_connect_timeout 5s;
+}

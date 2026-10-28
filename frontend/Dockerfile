@@ -54,6 +54,8 @@ ENV NGINX_ENVSUBST_OUTPUT_DIR=/tmp/nginx \
     SHOSAI_GRAFANA_UPSTREAM=grafana:3000 \
     SHOSAI_CSP_STORAGE_ORIGINS="" \
     SHOSAI_CSP_RTC_ORIGINS="" \
+    SHOSAI_TURN_SERVER_NAME="" \
+    SHOSAI_TURN_UPSTREAM=livekit:5349 \
     SHOSAI_ROBOTS_TAG="noindex, nofollow"
 # Пользователь nginx базового образа, без root: порты выше 1024, запись только в /tmp.
 USER 101:101

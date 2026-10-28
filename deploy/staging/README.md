@@ -29,6 +29,7 @@ docker buildx build -f frontend/Dockerfile --secret id=cabinet_env,src=cabinet.e
 | `SHOSAI_WS_UPSTREAM` | the `ws` gateway, `host:port` | `ws:8000` |
 | `SHOSAI_CSP_STORAGE_ORIGINS` | the buckets' origins, space-separated: avatars and exports load from them | empty |
 | `SHOSAI_CSP_RTC_ORIGINS` | LiveKit's signalling, `wss://` and `https://` of `LIVEKIT_URL`, rendered from it: the room page connects to it | empty (no calls) |
+| `SHOSAI_TURN_SERVER_NAME` | LiveKit's TURN/TLS name (`turn.shosai.tech`): the edge's port 443 reads the TLS SNI and passes this name to LiveKit's TURN (`SHOSAI_TURN_UPSTREAM`, `livekit:5349`), everything else to the HTTPS edge, which takes the client's address from the PROXY protocol (meetings A14) | empty (all of 443 is the HTTPS edge) |
 | `SHOSAI_ROBOTS_TAG` | `X-Robots-Tag` of every answer | `noindex, nofollow` |
 
 What it serves:

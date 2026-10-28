@@ -1,0 +1,2 @@
+# Строка карты SNI потока 443 (stream/edge.conf): имя TURN ведёт на внутренний сервер turn (A14).
+${SHOSAI_TURN_SERVER_NAME} 127.0.0.1:8446;
