@@ -102,7 +102,6 @@
 | Redis cache | plane | LRU cache only; losing it is harmless | container |
 | Qdrant | plane | Vector index: knowledge chunks and per-minute meeting windows. Payload: tenant, owner, access level, grantees. Derived; rebuilt from sources | 1 node |
 | LiveKit | plane | SFU, egress (video recording; each participant's audio track to a file for the notes and live to the WS gateway), embedded TURN; its own ephemeral Redis. Today on the one host with hard memory and CPU limits; the production machine is decided before launch ([ADR 0072](../adr/0072-meetings-slice.md)) | pinned versions |
-| Nango | plane | OAuth proxy for connectors; one instance per home, state in its home database | pinned versions |
 | PostgreSQL RU | Russia | Source of truth of the Russian home | managed, PgBouncer |
 | PostgreSQL EU | EU | Source of truth of the EU home; directory tables; platform tables and telemetry without an account (§6) | managed, PgBouncer |
 | S3 | per home | A bucket per home: files, recordings, exports, knowledge sources of that home; the platform's in the EU home's; lifecycle rules ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)). The EU home's bucket is in Russia (Timeweb `ru-1`) until the owner moves it to the EU before launch | — |
@@ -131,6 +130,7 @@
 | Valkey → Workers | task stream | task deadline; lease 120 s with extension | broker: 5 deliveries, then dead-letter with alert | provider semaphore: 292 runs in flight |
 | Workers → PostgreSQL (home) | SQL | statement 60 s | sweep of unfinished runs; ≤ 3 attempts per stage on every path | pool 5 per process per database |
 | API, Workers → AI | chat, Leo, search, analysis | connect 10 s; stream stall 45 s; 120 s per analysis call | one retry before the first byte; breaker per (provider, model) with fallback along the caller's route (F6-C16); stage ≤ 3 attempts with effect key | provider-wide semaphore in Redis; retry budget 20% |
+| API, Workers → connected providers | HTTPS, IMAP/SMTP, CalDAV with the person's grant (`connectors`' `ProviderSession`, [ADR 0075](../adr/0075-connections-on-own-oauth-core-without-nango.md)) | connect 3 s; read 15 s (downloads 60 s); token endpoint 10 s; outside any transaction | reads once with jitter; writes never, unless the provider takes an idempotency key; the provider's `Retry-After` shared by every process | the provider's quotas as GCRA limits per application, account or connection; a semaphore per provider; a breaker per provider counting only 5xx and timeouts |
 | API, Workers → Qdrant | search, indexing | search 2 s; write 60 s | search: none (fallback to PostgreSQL keyword search); indexing: cursor sweep | 32 queries per process, 4 per tenant |
 | Clients → S3 | presigned upload straight to the bucket; download through the edge, which streams the presigned object and adds `X-Content-Type-Options: nosniff` and `Content-Security-Policy: sandbox` ([ADR 0055](../adr/0055-object-key-layout-and-bucket-rules.md) point 8) | signature valid 15 min | client | size limit in the signature |
 | API → Payments | checkout, charge | 20 s, outside any transaction | reconciliation every minute by order id | intent committed before the call |
@@ -158,7 +158,7 @@
   - `tasks` — the one task store: boards, action items, workspace tasks, Jira;
   - `calendar` — calendars and events, two-way sync;
   - `mail` — mailboxes over connectors, Leo's triage and drafts;
-  - `connectors` — the registry of connected services: Nango and own OAuth grants;
+  - `connectors` — the registry of connected services and their grants, on Shosai's own OAuth core ([ADR 0075](../adr/0075-connections-on-own-oauth-core-without-nango.md));
   - `agent` — Leo;
   - `errands` — delayed Leo actions;
   - `decisions` — Leo's Decision Layer: versioned policies over Jev, also used by other domains;
@@ -456,7 +456,7 @@
    - every failed write is logged and counted — no silent `except`.
 6. **Pipeline retries:** the attempt limit applies on every re-entry path (redelivery, stale sweep, manual).
 7. **Account deletion:**
-   - one registry covers every table, every object-storage prefix and every external grant (Nango);
+   - one registry covers every table, every object-storage prefix and every external grant (`connectors`' OAuth grants, revoked at the provider where it allows, [ADR 0075](../adr/0075-connections-on-own-oauth-core-without-nango.md));
    - the deletion event carries only ids.
 8. **Object storage:**
    - explicit connect/read timeouts and a bounded retry policy;
@@ -604,7 +604,7 @@ Each of these counters must stay at zero; any non-zero value pages.
 - **Order:** expand-only migrations applied to both homes by one release → task consumers → API → WS (drain with `server.shutdown`, up to 600 s).
 - **Leo's turns across a release** ([ADR 0068](../adr/0068-leo-agent-slice.md)): the agent workers are handed over without a gap — the new one takes runs before the old one gets SIGTERM — and the old one finishes its runs within a 200 s stop grace; the API keeps its 30 s, and its clients resume their streams from the run's log on the new API.
 - **Restore:** quarterly drill per home; runbooks written.
-- **Pinned versions** for LiveKit, egress, coturn and Nango; they are updated by the common release.
+- **Pinned versions** for LiveKit, egress and coturn; they are updated by the common release.
 - **Companies:**
   - bank statement reconciliation hourly;
   - unmatched payments → operator queue;
@@ -689,7 +689,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Data | Redis, container | 8.10.2 | Local LRU cache |
 | Data | S3 Timeweb ru-1 | — | A bucket per data home; the EU home's moves to an EU provider before launch ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)) |
 | Realtime and integrations | LiveKit server, egress, coturn | v1.13.11, v1.15.0 (meetings A2); coturn pinned when added | Video rooms, recording, per-participant tracks to the ws gateway, TURN |
-| Realtime and integrations | Nango | pinned | OAuth proxy for connectors, one per data home |
+| Realtime and integrations | Own OAuth core of `connectors` (no Nango) | — | OAuth 2.0 with PKCE to every connected provider; tokens under core's Fernet key ring in the owner's home; refresh, revocation, provider limits, health ([ADR 0075](../adr/0075-connections-on-own-oauth-core-without-nango.md)) |
 | Realtime and integrations | Web Push (VAPID) | — | PWA notifications |
 | Realtime and integrations | SMTP (Timeweb), two mailboxes | — | Email: account mail from one mailbox, notifications and newsletters from the other; Mailpit 1.31.5 stands in locally |
 | Realtime and integrations | Cloudflare Turnstile | — | Form protection: registration, password reset, sign-in after failures ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)) |

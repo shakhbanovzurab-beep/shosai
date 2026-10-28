@@ -36,7 +36,7 @@ To reproduce step 1, run `alembic upgrade head` from a copy of the draft's `back
 2. **The draft has no companies.** Every row is personal. The v2 company tables (§7) start empty.
 3. **Identifiers are load-bearing.** Acquirer order ids are built from `transactions.id`, and the renewal key from `subscriptions.id`. Share links, invitation links, calendar URLs and webhooks embed ids and tokens. Every id and token is copied verbatim (R1).
 4. **Transcript lines have no `seq`.** v2 identity is `(session_id, seq)`. M1 derives `seq` from the draft order (T-1).
-5. **Secrets must travel with the data.** The JWT secret, the Fernet key ring, the Nango encryption key and the VAPID key pair are needed. Without them users are signed out, or every integration needs re-consent (R6, S-1, S-3).
+5. **Secrets must travel with the data.** The JWT secret, the Fernet key ring, the Nango encryption key (read once by `connectors`' import at cutover, [ADR 0075](../adr/0075-connections-on-own-oauth-core-without-nango.md)) and the VAPID key pair are needed. Without them users are signed out, or every integration needs re-consent (R6, S-1, S-3).
 6. **The draft leaves data behind on deletion.** Meeting audio, raw recognition output, knowledge-engine originals, exports, context files and external grants survive account deletion. v2's deletion registry covers them. What the draft left behind is not carried over (D-2).
 7. **The owner took ten decisions on 2026-10-01** (section 10). The main ones: existing accounts start in the RU home (U-1), and data without an owning account lives in the EU home (U-2, U-8).
 8. **Some knowledge documents may have no content anywhere.** Onyx-era uploads and vault notes kept only as a fingerprint have no bytes in our storage. M1 recovers what it can and lists the rest (T-4, U-11).
@@ -169,15 +169,15 @@ Two accounts whose emails normalise to the same value block the run (S-2).
 - **No directory entry:** their address is gone, so no HMAC can be computed.
 - **Home:** the home of their financial rows, which is RU under R2.
 
-**R6. Secrets travel with the data; M1 never decrypts.** Ciphertexts, hashes and plaintext link secrets are copied byte for byte. v2 must be configured with the draft's keys, under the same production-secret handling as its own:
+**R6. Secrets travel with the data; M1 never decrypts** — with one exception: Nango's tokens, which `connectors`' import decrypts in memory with `NANGO_ENCRYPTION_KEY` and re-encrypts under the Fernet ring, since Shosai has no Nango ([ADR 0075](../adr/0075-connections-on-own-oauth-core-without-nango.md), [connectors plan](slices/connectors.md) §6). Ciphertexts, hashes and plaintext link secrets are copied byte for byte. v2 must be configured with the draft's keys, under the same production-secret handling as its own:
 
 | Secret (setting) | Protects | Without it |
 |---|---|---|
 | `jwt_secret` (HS256) | Access and refresh tokens (`sub`, `typ`, `tv`, `fid`, `jti`); also social-login state, unsubscribe links, share tickets | Every user and every desktop client is signed out; unsubscribe and share-ticket links break |
-| `fernet_key`, `fernet_keys_previous` | `oauth_accounts.*_enc` (active key only, no ring); `recurring_payment_methods.rebill_id_ciphertext` (active key only); MCP, CalDAV, meeting-integration and knowledge-source ciphertexts (ring) | Saved cards cannot be charged; every OAuth, CalDAV, MCP and push integration needs re-consent |
-| `NANGO_ENCRYPTION_KEY` | All tokens in the `nango` schema; cannot be rotated | Every connector needs re-consent |
+| `fernet_key`, `fernet_keys_previous` | `oauth_accounts.*_enc` (active key only, no ring); `recurring_payment_methods.rebill_id_ciphertext` (active key only); MCP and knowledge-source ciphertexts (ring); CalDAV and meeting-integration ciphertexts (the draft decrypts them with the active key only — v2's ring holds it) | Saved cards cannot be charged; every OAuth, CalDAV, MCP and push integration needs re-consent |
+| `NANGO_ENCRYPTION_KEY` | All tokens in the `nango` schema; cannot be rotated; used only by the import at cutover, after Nango is stopped | Every Nango connection needs re-consent |
 | VAPID key pair | `proactive_push_subscriptions` | Every browser push subscription dies |
-| OAuth app credentials and redirect URIs (Google, Microsoft, Jira, Yandex, VK, Nango callback) | Refresh of existing grants | Re-consent |
+| OAuth app credentials (Google, Microsoft, Jira, Yandex, VK, and the applications registered in Nango: Notion, Slack, Dropbox, GitHub, GitLab, HubSpot, Attio) | Refresh of existing grants: a refresh token works only with the client that received it; the draft's applications stay production's, with Shosai's callback added ([connectors plan](slices/connectors.md) §5.1) | Re-consent |
 
 Draft access tokens carry no home claim. For their remaining life (≤ 30 minutes), `identity` resolves the home of such a token through the directory, and the next refresh issues a v2 token.
 
@@ -265,7 +265,7 @@ Anonymous telemetry has no owner either: `analytics_events` and `client_error_lo
 | Table | Content |
 |---|---|
 | `directory_entries` | R4 |
-| `nango` schema of the RU home | Copied whole, section 7.4 |
+| `nango` schema | Not copied: `connectors`' import reads its grants from the draft's copy, section 7.4 |
 
 These start empty: `directory_domains`, `organizations`, `memberships`, `resource_grants`, `org_invoices`, `org_audit_events`, `home_transfers`, `processed_events`, `schedule_runs`. A missed periodic interval runs once on start (§12).
 
@@ -283,7 +283,7 @@ These start empty: `directory_domains`, `organizations`, `memberships`, `resourc
 | `tasks` | 8 | 8 | 0 | 0 | 0 |
 | `calendar` | 8 | 6 | 1 | 0 | 1 |
 | `mail` | 2 | 2 | 0 | 0 | 0 |
-| `connectors` | 3 | 2 | 0 | 0 | 1 |
+| `connectors` | 3 | 0 | 3 | 0 | 0 |
 | `agent` | 2 | 1 | 1 | 0 | 0 |
 | `memory` | 2 | 1 | 1 | 0 | 0 |
 | `proactive` | 4 | 2 | 1 | 0 | 1 |
@@ -653,7 +653,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **Columns:** 9 of 12 move unchanged; exceptions:
   - `credential_ciphertext` — *moved*. Byte-for-byte; Fernet ring (R6).
   - `push_token_sha256` — *moved*. Verbatim: the raw Obsidian push token is not recoverable.
-  - `config` — *moved*. `integration` is a soft reference to a Nango integration key.
+  - `config` — *moved*. `integration` is a soft reference to a Nango integration key; v2 resolves it to the person's connection of that app (§5.11, ADR 0075).
 - **New in v2:** `org_id` — NULL (R3).
 - **New in v2:** `access` — The personal default defined by `workspaces`, if `knowledge` makes sources the company-shared collections (R3).
 
@@ -856,7 +856,8 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 - **Owner → home:** own `user_id`.
 - **Columns:** 10 of 11 move unchanged; exceptions:
-  - `caldav_password_enc` — *moved*. Byte-for-byte; Fernet (R6).
+  - `caldav_password_enc` — *moved* to `connectors` (ADR 0075): a `yandex_calendar` connection for a `caldav.yandex.ru` address, otherwise a `caldav` one, the ciphertext byte for byte in the grant's secrets (Fernet, R6); `caldav_url` and `caldav_username` go with it into the grant's `provider_meta`.
+  - `oauth_account_id` now names the connection whose id is the draft's `oauth_accounts.id` (§5.11).
 
 #### `calendar_sync_state` → `calendar_sync_state` · **moved**
 
@@ -900,25 +901,29 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 ### 5.11 `connectors`
 
-#### `oauth_accounts` → `oauth_accounts` · **moved**
+Revised on 2026-10-28 by [ADR 0075](../adr/0075-connections-on-own-oauth-core-without-nango.md) and the [connectors plan](slices/connectors.md) (CN-D2, CN-D10, §6): Shosai has no Nango; a connection is an app, a grant a provider account's consent shared by its apps; the targets are `connector_grants`, `connector_grant_secrets` and `connections` in the account's home.
+
+#### `oauth_accounts` → `connector_grants` + `connector_grant_secrets` + `connections` · **transformed**
 
 - **Owner → home:** own `user_id`.
-- **Columns:** 15 of 18 move unchanged; exceptions:
-  - `access_token_enc` — *moved*. Byte-for-byte; Fernet `fernet_key` without the previous-key ring (R6).
-  - `refresh_token_enc` — *moved*. Byte-for-byte.
-  - `id` — *moved*. Verbatim: `calendar_integrations` and `jira_links` reference it.
 - Integration grants (Google, Microsoft, Jira), not sign-in identities.
+- Each row → one grant (provider, external account, display name, scopes, `provider_metadata` → `provider_meta` with Jira's sites; the client key is the draft's application for that provider) and one connection (`google_calendar`, `outlook_calendar`, `jira`).
+- `id` — *moved* as the **connection's id**, so `calendar_integrations.oauth_account_id` stays valid.
+- `access_token_enc`, `refresh_token_enc` — *moved* byte for byte into the grant's secrets (Fernet, the draft's active key, which is in v2's ring, R6).
+- `status`: `active`, `refreshing` → active; `expired` → `needs_reconnect`; `revoked` → not carried.
 
-#### `connector_connections` → `connector_connections` · **moved**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** 7 of 8 move unchanged; exceptions:
-  - `connection_id` — *moved*. Verbatim: id inside the Nango schema (section 7.4).
-
-#### `meeting_integrations` → no v2 table · **dropped**
+#### `connector_connections` + the `nango` schema → `connector_grants` + `connector_grant_secrets` + `connections` · **transformed**
 
 - **Owner → home:** own `user_id`.
-- Push of notes and action items to Slack, Zapier, Notion through own OAuth apps. Dropped by the owner's decision SM-11 of the [slice map](SLICE_MAP.md) on 2026-10-13: the push becomes Leo and meeting actions over `connectors` (Nango), with approval; users who set up a push reconnect once. The rows and their ciphertexts are not carried.
+- Tokens are read from the draft's `nango` schema after Nango is stopped (section 7.4), decrypted in memory and re-encrypted under the Fernet ring; integration keys map to apps per the [connectors plan](slices/connectors.md) §6 (`google-drive-kb` and the deprecated `google-calendar` are not carried; `google-mail` arrives as `needs_reconnect`).
+- One grant per app and person; extra grants for one app are dropped, not revoked.
+- `id` — *moved* as the connection's id where one integration key becomes one connection; `connection_id` is not kept (no Nango in v2).
+
+#### `meeting_integrations` → `connector_grants` + `connector_grant_secrets` + `connections` · **transformed**
+
+- **Owner → home:** own `user_id`.
+- **Revised on 2026-10-28** (CN-D10 d; SM-11 revised): Notion, HubSpot (with its refresh token), Attio, Affinity (API key) and Zapier (hook URL) become grants and connections, ciphertexts byte for byte (the draft decrypted them with the active key only, which v2's ring holds); Slack's incoming-webhook URLs and the storage types that pointed at Nango (`google_drive`, `dropbox`, `yandex_disk`, carried through Nango) are not carried from this table.
+- `push_notes`, `push_action_items`, `target` — *dropped*: pushing a meeting result is Leo's proposal with approval.
 
 ### 5.12 `agent`
 
@@ -1372,13 +1377,13 @@ Overdue `scheduled` errands fire right after cutover. Duplicates are prevented b
 
 ### 7.4 Nango
 
-The `nango` schema in the production database holds the OAuth tokens and integration configurations of all connectors, encrypted with `NANGO_ENCRYPTION_KEY`. `connector_connections.connection_id` points into it. v2 runs one Nango per home with its state in that home's database (§4.2).
+The `nango` schema in the production database holds the OAuth tokens and integration configurations of all Nango connectors, encrypted with `NANGO_ENCRYPTION_KEY` (AES-256-GCM, an IV and a tag per row). `connector_connections.connection_id` points into it.
 
-*Following §4.2 and U-1:*
+*Revised on 2026-10-28 by [ADR 0075](../adr/0075-connections-on-own-oauth-core-without-nango.md): Shosai runs no Nango.*
 
-- The schema is copied unchanged into the RU home database. The RU Nango gets the same encryption key and the same public URL and callback (`https://whisperer.one/nango/oauth/callback`).
-- The EU Nango starts empty.
-- Moving an account RU → EU must move its Nango connections as a step of the transfer saga (`identity`, `connectors`). Otherwise transferred users re-consent.
+- The schema is **not copied** into v2. At cutover, after the draft is read-only **and Nango is stopped** (Nango refreshes every connection at least once a day and on every credentials read, and Atlassian's rotating tokens die on reuse), `connectors`' import reads `_nango_connections` and `_nango_configs` (each integration's client id) from the draft's copy, decrypts the tokens in memory and writes them as Shosai grants under the Fernet ring; nothing of them touches disk or logs ([connectors plan](slices/connectors.md) §6).
+- The grants keep refreshing because production uses the same OAuth applications that issued them (R6).
+- Nothing of Nango moves between homes: the connections are rows of the RU home (ADR 0004) and move with an account transfer like any other row.
 
 ### 7.5 Qdrant
 
@@ -1456,9 +1461,9 @@ Every risky item names a check. M1 runs it on every rehearsal and on the real ru
 |---|---|---|
 | S-1 | Users and desktop clients are signed out | Live `refresh_sessions` (`id`, `current_jti`, `prev_jti`, `expires_at`) and `users.token_version` are equal. On the rehearsal, a refresh token issued by the draft copy before `T0` rotates successfully in v2, and a draft access token is accepted until it expires |
 | S-2 | Sign-in finds the wrong home or no account | One directory entry per non-anonymised account. `email_hmac` is unique, so normalised-email collisions are zero. Each entry's home equals its user's home. A sign-in smoke test passes for a sample per home |
-| S-3 | A credential becomes unreadable | Every ciphertext column is byte-equal. Inside the v2 runtime, the count of rows whose ciphertext decrypts equals the row count, per column and per key ring (no plaintext leaves the process). Row counts of the `nango` schema are equal, and a Nango proxy call succeeds for a sample connection. A Web Push test succeeds for a sample subscription |
+| S-3 | A credential becomes unreadable | Every ciphertext column is byte-equal. Inside the v2 runtime, the count of rows whose ciphertext decrypts equals the row count, per column and per key ring (no plaintext leaves the process). Every grant the connectors import wrote decrypts, and one refresh per OAuth client succeeds after cutover (connectors plan §6). A Web Push test succeeds for a sample subscription |
 | S-4 | A public link stops working | `meeting_result_shares.token`, `rooms.invite_token`, `users.ical_token` and the password hashes are equal. On the rehearsal, a sample of each link type resolves |
-| S-5 | External callbacks stop arriving | `calendar_watch_channels` (`channel_id`, `client_state`, `resource_id`) are equal (draft Jira links are not carried, tasks TK-D8). The v2 routes for calendar notifications, acquirer webhooks and the Nango callback answer at the draft paths (checked against the D1 contract) |
+| S-5 | External callbacks stop arriving | `calendar_watch_channels` (`channel_id`, `client_state`, `resource_id`) are equal (draft Jira links are not carried, tasks TK-D8). The v2 routes for calendar notifications, acquirer webhooks and the draft's OAuth callback paths (an expired-authorization redirect, ADR 0075) answer at the draft paths (checked against the D1 contract) |
 | S-6 | MCP clients lose access | Equal `mcp_tokens.token_hash`. Equal sets of `mcp_registered_clients` and consented `mcp_oauth_clients`. A personal MCP token from the copy authenticates against v2 on the rehearsal |
 
 ### 8.7 Files

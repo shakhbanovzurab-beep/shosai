@@ -2,6 +2,7 @@
 
 - **Status:** accepted by the owner on 2026-10-01 (D4, decision FM-3 in [FEATURE_MAP.md](../plan/FEATURE_MAP.md#7-decisions-keep-merge-drop)).
 - **Amended** on 2026-10-13 by [ADR 0038](0038-feature-slices-derived-from-the-product.md) (slice map SM-11): meeting-result push no longer uses its own OAuth; it moves to `connectors` over Nango. Calendars (`calendar`) and Jira (`tasks`) keep their own OAuth as decided here.
+- **Superseded** on 2026-10-28 by [ADR 0075](0075-connections-on-own-oauth-core-without-nango.md): the owner dropped Nango; every grant, calendars and Jira included, lives on `connectors`' own OAuth core, which extends this ADR's own flows to every provider.
 - **Scope:** S12 Connectors and calendar, S01 (deletion registry), M1.
 
 ## Context

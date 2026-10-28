@@ -510,6 +510,7 @@ A domain slice declares its tools in `contracts.agent_tools` as `ToolSpec`s:
 About 14 toolsets, each owned by a slice:
 
 - meetings, notes, knowledge, people & commitments, calendar, mail, tasks, files, hubs;
+- connected services (`connected`, owned by `connectors`): list, live search and reading across the person's files, pages and code, and the meeting-result push through the Action Gateway ([ADR 0075](../../adr/0075-connections-on-own-oauth-core-without-nango.md));
 - web (egress);
 - reminders and errands;
 - Leo settings and memory;

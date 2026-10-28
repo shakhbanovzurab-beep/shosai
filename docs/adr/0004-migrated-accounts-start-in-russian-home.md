@@ -26,7 +26,7 @@ All draft data lives in Russia today: managed PostgreSQL in St Petersburg and a 
 - No data crosses a border at cutover, and the migration does not wait for the EU home.
 - Until their transfer, the primary data of people outside Russia stays in Russia, as it does in the draft. This is a temporary gap against nfr-4 for them. It is added to the legal review in §22.
 - S01 needs a flow that asks a migrated account for its country and starts the transfer.
-- The transfer saga moves the account's Nango connections as well (S12); otherwise transferred users reconnect their connectors.
+- The transfer saga moves the account's Nango connections as well (S12); otherwise transferred users reconnect their connectors. *Amended on 2026-10-28 by [ADR 0075](0075-connections-on-own-oauth-core-without-nango.md): there is no Nango; connections are rows of the home and move with the table registry.*
 - §6 states the rule for migrated accounts.
 
 ## Revisit when
