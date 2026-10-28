@@ -14,7 +14,7 @@ import {
   overviewSections,
   viewHref,
 } from "../domain/meeting";
-import { MEETINGS_SERVED } from "../model/meetings-resource";
+import { SCHEDULE_SERVED } from "../model/meetings-resource";
 import { LiveMeetingCard } from "./live-meeting-card";
 import { MeetingsEmpty } from "./meetings-empty";
 import { RecentMeetingCard } from "./recent-meeting-card";
@@ -74,7 +74,7 @@ function Overview({ buckets, now }: { buckets: MeetingBuckets; now: number }) {
   return (
     <div className="flex flex-col gap-8">
       {/* Без расписания (нет API meetings) «Сегодня» — только идущие записи: о плане дня раздел не знает. */}
-      {MEETINGS_SERVED || live.length > 0 ? (
+      {SCHEDULE_SERVED || live.length > 0 ? (
         <Section title={t("day.today")}>
           {live.length > 0 ? <LiveList meetings={live} now={now} /> : null}
           {laterToday.length > 0 ? <UpcomingList meetings={laterToday} now={now} /> : null}

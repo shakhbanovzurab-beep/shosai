@@ -27,6 +27,7 @@
   "liveBadge": "Live",
   "liveSince": "{minutes, plural, =0 {Just started · ends {end}} one {Started # min ago · ends {end}} other {Started # min ago · ends {end}}}",
   "recordingSince": "{minutes, plural, =0 {Recording just started} one {Recording for # min} other {Recording for # min}}",
+  "inCallSince": "{minutes, plural, =0 {Just started} one {Started # min ago} other {Started # min ago}}",
   "startsIn": "{minutes, plural, =0 {Starting now} one {In # min} other {In # min}}",
   "join": "Join meeting",
   "openRecording": "Open",

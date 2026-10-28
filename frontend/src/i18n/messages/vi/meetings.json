@@ -27,6 +27,7 @@
   "liveBadge": "Trực tiếp",
   "liveSince": "{minutes, plural, =0 {Vừa bắt đầu · kết thúc lúc {end}} other {Bắt đầu # phút trước · kết thúc lúc {end}}}",
   "recordingSince": "{minutes, plural, =0 {Vừa bắt đầu ghi} other {Đang ghi # phút}}",
+  "inCallSince": "{minutes, plural, =0 {Vừa bắt đầu} other {Bắt đầu # phút trước}}",
   "startsIn": "{minutes, plural, =0 {Đang bắt đầu} other {Sau # phút}}",
   "join": "Tham gia cuộc họp",
   "openRecording": "Mở",

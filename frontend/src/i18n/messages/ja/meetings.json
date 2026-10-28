@@ -27,6 +27,7 @@
   "liveBadge": "進行中",
   "liveSince": "{minutes, plural, =0 {開始したばかり · {end} に終了} other {# 分前に開始 · {end} に終了}}",
   "recordingSince": "{minutes, plural, =0 {レコーディングを開始しました} other {レコーディング中 · # 分}}",
+  "inCallSince": "{minutes, plural, =0 {開始したばかり} other {# 分前に開始}}",
   "startsIn": "{minutes, plural, =0 {まもなく開始} other {# 分後}}",
   "join": "会議に参加",
   "openRecording": "開く",

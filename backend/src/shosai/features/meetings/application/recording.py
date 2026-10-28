@@ -151,9 +151,8 @@ class Recordings:
                 .where(RoomRecordingRecord.id == record.id)
                 .values(egress_id=egress_id)
             )
-        await self._server.set_metadata(
-            lk_room_name, room_metadata(room_id, RoomMarks(notes=notes_on, recording=True))
-        )
+        marks = RoomMarks(notes=notes_on, recording=True)
+        await self._server.set_metadata(lk_room_name, room_metadata(room_id, person.user_id, marks))
         log.info("Запись звонка начата", room_id=str(room_id), recording_id=str(record.id))
         return record
 
@@ -202,7 +201,7 @@ class Recordings:
         if after not in ACTIVE_STATES:
             await self._server.set_metadata(
                 lk_room_name,
-                room_metadata(found.room_id, RoomMarks(notes=notes_on, recording=False)),
+                room_metadata(found.room_id, found.owner_id, RoomMarks(notes_on, recording=False)),
             )
 
     async def reconcile(self, home: Home, now: datetime) -> None:

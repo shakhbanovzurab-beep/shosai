@@ -3,14 +3,20 @@ import { ApiError } from "@/lib/api/errors";
 
 import type { CallSession, CallSetup } from "../domain/call-session";
 
-/**
- * Открыть звонок после лобби. На моках разработки — демо-звонок; к LiveKit кабинет подключается шагом A10, а до
- * него звонок недоступен так же, как при недоступном сервере видео.
- */
+/** Открыть звонок после лобби: на моках разработки — демо-звонок, иначе — LiveKit; не подключился — недоступен. */
 export async function openCall(setup: CallSetup): Promise<CallSession> {
   if (MOCK_API) {
     const { DemoCall } = await import("../data/demo-call");
     return new DemoCall(setup);
   }
-  throw new ApiError("video_unavailable", 503, "video_unavailable");
+  // livekit-client — отдельным чанком только страницы комнаты.
+  const { LiveKitCall } = await import("./livekit-call");
+  const call = new LiveKitCall(setup);
+  try {
+    await call.connect();
+  } catch {
+    call.leave();
+    throw new ApiError("video_unavailable", 503, "video_unavailable");
+  }
+  return call;
 }

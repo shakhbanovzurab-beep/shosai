@@ -29,6 +29,8 @@ export type Meeting = {
   recap: MeetingRecap | null;
   /** Null for a meeting that has no recording in Notes. */
   recording: MeetingRecording | null;
+  /** Звонок своей комнаты Shosai: идёт, пока не закончится; конца по плану у него нет. */
+  endless?: boolean;
 };
 
 export type MeetingStatus = "live" | "upcoming" | "past";
@@ -36,6 +38,7 @@ export type MeetingStatus = "live" | "upcoming" | "past";
 export function meetingStatus(meeting: Meeting, now: number): MeetingStatus {
   // Запись идёт, пока её не закончили, сколько бы она ни длилась; конец законченной уже прошёл.
   if (meeting.recording) return meeting.recording.live ? "live" : "past";
+  if (meeting.endless) return "live";
   if (Date.parse(meeting.end) <= now) return "past";
   return Date.parse(meeting.start) <= now ? "live" : "upcoming";
 }

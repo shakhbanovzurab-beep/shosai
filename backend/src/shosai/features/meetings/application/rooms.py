@@ -170,7 +170,7 @@ class RoomBook:
                         notes=change.notes_on, recording=await recording_on(session, room_id)
                     )
                     await self._server.set_metadata(
-                        record.lk_room_name, room_metadata(record.id, marks)
+                        record.lk_room_name, room_metadata(record.id, record.owner_id, marks)
                     )
                 record.notes_on = change.notes_on
             record.updated_at = self._clock()

@@ -56,5 +56,22 @@ export type CallSetup = {
   marks: CallMarks;
   link: string;
   livekit: { url: string; token: string };
+  /** Пропуск комнаты для её маршрутов (чат) и id комнаты — у владельца сразу, у остальных из метаданных. */
+  roomPass: string;
+  roomId: string | null;
   media: { mic: boolean; camera: boolean; stream: MediaStream | null };
 };
+
+/** Снимок только что открытого звонка: людей ещё нет, отметки — из входа. */
+export const initialSnapshot = (setup: CallSetup): CallSnapshot => ({
+  status: "connecting",
+  end: null,
+  title: setup.title,
+  role: setup.role,
+  marks: setup.marks,
+  self: setup.identity,
+  people: [],
+  chat: [],
+  reactions: [],
+  link: setup.link,
+});

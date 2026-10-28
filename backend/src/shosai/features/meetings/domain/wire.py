@@ -39,15 +39,18 @@ class RoomMarks:
     recording: bool
 
 
-def room_metadata(room_id: UUID, marks: RoomMarks) -> str:
-    """The SFU room's metadata: the room's id and its marks, as compact JSON.
+def room_metadata(room_id: UUID, owner_id: UUID, marks: RoomMarks) -> str:
+    """The SFU room's metadata: the room's id, its owner's principal and its marks, as JSON.
 
-    The owner's home is not in it: participants read the metadata, and where the owner's
-    data lives is not theirs to know. The webhook finds the room by its LiveKit name.
+    The owner's principal lets every client name the host, which a participant's own
+    attributes could not prove; it is already in the owner's identity whenever they are in
+    the call. The owner's home is not in it: where the owner's data lives is not the
+    participants' to know. The webhook finds the room by its LiveKit name.
     """
     body = {
         "v": METADATA_VERSION,
         "room_id": str(room_id),
+        "owner": str(owner_id),
         "marks": {"notes": marks.notes, "recording": marks.recording},
     }
     return json.dumps(body, separators=(",", ":"))

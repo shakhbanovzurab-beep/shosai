@@ -88,10 +88,12 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
 **Room metadata** — JSON set by the server, read by everyone, shown before joining too:
 
 ```json
-{ "v": 1, "room_id": "0199…", "marks": { "notes": true, "recording": false } }
+{ "v": 1, "room_id": "0199…", "owner": "0198…", "marks": { "notes": true, "recording": false } }
 ```
 
-`marks.notes` is "Leo is taking notes", `marks.recording` is "Recording". Metadata of another shape is ignored.
+`marks.notes` is "Leo is taking notes", `marks.recording` is "Recording". `owner` is the room owner's principal: the
+session whose identity carries it is the host — a participant's own attributes could not prove that. Clients take
+`room_id` for the call's routes from here. Metadata of another shape is ignored.
 
 **Participant attributes** — strings. `device.os`, `device.os_version`, `device.client`, `device.client_version` and
 `device.browser` are set by the server from the join's `device`. `hand` is set by the participant when they raise
