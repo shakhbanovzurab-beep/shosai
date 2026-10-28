@@ -13,7 +13,7 @@ import { BoardPanel } from "./board-panel";
 import { CallChat } from "./call-chat";
 import { CallControls } from "./call-controls";
 import { CallDuration } from "./call-duration";
-import { CallMarks } from "./call-marks";
+import { RecordingMark } from "./call-marks";
 import { CallPanel, type CallPanelKind } from "./call-panel";
 import { CallPeople } from "./call-people";
 import { CallStage } from "./call-stage";
@@ -68,10 +68,11 @@ export function CallScreen({ session, media, onRejoin }: CallScreenProps) {
   return (
     <div className="flex h-dvh flex-col bg-background">
       <header className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2">
-        <h1 dir="auto" className="truncate font-medium">
+        {/* Название и метка заметок — в лобби; в звонке шапка тихая: только запись, время и люди. */}
+        <h1 dir="auto" className="sr-only">
           {call.title ?? t("untitled")}
         </h1>
-        <CallMarks marks={call.marks} />
+        <RecordingMark recording={call.marks.recording} />
         <span className="ms-auto flex items-center gap-3 text-muted-foreground text-sm tabular-nums">
           <CallDuration startedAt={call.startedAt} />
           <span>{t("header.people", { count: call.people.length })}</span>
