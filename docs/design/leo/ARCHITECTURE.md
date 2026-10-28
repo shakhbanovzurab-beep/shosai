@@ -681,7 +681,7 @@ state changes ─┘   (ids)     (pure, features)        drop → record        
   - `mail.received` (`mail`, from connector sync);
   - `calendar.event_changed` (`calendar`), `tasks.task.due_changed`, `tasks.task.assigned` (`tasks`; `tasks.task.completed` and `tasks.task.deleted` withdraw a task's candidate, ADR 0059);
   - `commitments.due`, `commitments.topic_looped` (`commitments`);
-  - `connectors.broken` (`connectors`), `hubs.topic_looped` (`hubs`), `support.replied` (`support`), `errands.failed`;
+  - `connectors.connection.broken` (`connectors`), `hubs.topic_looped` (`hubs`), `support.replied` (`support`), `errands.failed`;
 - **time triggers** as rows in `proactive_triggers` (`run_at`, kind, subject), run by the scheduler with `FOR UPDATE SKIP LOCKED`, the same way as errands (§12). Calendar changes upsert the pre-meeting triggers; the morning brief is one row per user per day;
 - **user-state transitions** from Valkey — meeting ended, came online, focus ended — open a *moment*: the user's deferred queue is evaluated.
 

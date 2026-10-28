@@ -360,7 +360,7 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 - **Routes:** `/v1/connectors/*` (list, authorize, credentials, disconnect, resources, the Google Picker's settings); E `GET /v1/connectors/oauth/{provider}/callback` and the draft's callback paths per §3, the Jira one included (tasks TK-D8); the `/oauth/callback` cabinet page.
 - **Depends on:** identity (deletion registry), workspaces (core: installations' access and audit), notes (`MeetingReader` for the meeting-result push), F6.
 - **Provides:** `CONNECTIONS`, `PROVIDER_ACCESS` (tasks' Jira), `INSTALLATIONS` (chats' Slack), the capability ports (`MAILBOXES`, `CALENDARS`, `FILE_SOURCES`, `PAGE_SOURCES`, `CODE_HOSTS`, `CHAT_WORKSPACES`, `DESTINATIONS`, `RESOURCES`); consumers declare `ConnectorUse` and the catalogue offers only used apps (CN-D4).
-- **Emits:** `connectors.connected`, `connectors.broken`, `connectors.revoked`.
+- **Emits:** `connectors.connection.connected`, `connectors.connection.broken`, `connectors.connection.revoked` (core's three-part event names).
 - **Leo tools:** the `connected` toolset — list, search and read across the person's files, pages and code (read, `file:foreign`), destinations (read), share a meeting result to Notion, Slack, a CRM or a Zapier hook (W, Action Gateway, per §8 SM-11); mail and calendar actions stay with their slices (CN-D8).
 
 #### 14–18. Leo: agent, decisions, memory, proactive, errands
