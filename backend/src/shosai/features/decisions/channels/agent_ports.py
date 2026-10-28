@@ -17,6 +17,9 @@ its subject the action; the owner's bounded exception — approved only when an 
 version's answer in time found a clear yes, never from a shadow, a late answer or a fallback.
 It is ready only while an active version is in force, so until then Leo sends every card to
 the screen instead of asking for a yes no one could find.
+
+`EffortJudge`: a turn's question is asked as `turn.effort`, its subject the run; only an active
+version's sure "deep" raises the turn's reasoning, and a shadow's answer is only recorded.
 """
 
 from typing import Final
@@ -30,10 +33,12 @@ from shosai.features.agent.contracts import (
     InjectionPiece,
     RouteRequest,
 )
+from shosai.features.agent.contracts.effort import EffortRequest
 from shosai.features.agent.contracts.voice import VoiceApprovalFacts
 from shosai.features.decisions.contracts import (
     ACTION_FRICTION,
     CONTENT_INJECTION,
+    TURN_EFFORT,
     TURN_ROUTE,
     VOICE_APPROVAL,
     CardFacts,
@@ -42,11 +47,13 @@ from shosai.features.decisions.contracts import (
     DecisionCall,
     Decisions,
     DecisionSource,
+    EffortFacts,
     InjectionFinding,
     Subject,
     SubjectKind,
     TextFacts,
     ToolsetsCalled,
+    TurnEffort,
     TurnFacts,
     VoiceConsent,
     VoiceFacts,
@@ -155,3 +162,24 @@ class AgentVoiceApprovalJudge:
         outcome = await self._decisions.decide(VOICE_APPROVAL, call)
         given = outcome.value is VoiceConsent.GIVEN and outcome.source is DecisionSource.JEV
         return True if given else None
+
+
+class AgentEffortJudge:
+    """The agent's `EffortJudge` over `turn.effort`."""
+
+    def __init__(self, decisions: Decisions) -> None:
+        self._decisions = decisions
+
+    async def deep(self, request: EffortRequest) -> bool | None:
+        """True only when an active version's answer in time found careful reasoning needed."""
+        facts = EffortFacts(
+            question=request.question, previous=request.previous, section=request.section,
+            files=request.files, turn=request.turn,
+        )  # fmt: skip
+        call = DecisionCall(
+            request.scope, request.cross_border_consent, Subject(SubjectKind.RUN, request.run_id),
+            facts, TurnEffort.STANDARD, request.language,
+        )  # fmt: skip
+        outcome = await self._decisions.decide(TURN_EFFORT, call)
+        deep = outcome.value is TurnEffort.DEEP and outcome.source is DecisionSource.JEV
+        return True if deep else None

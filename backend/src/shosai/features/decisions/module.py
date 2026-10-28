@@ -21,6 +21,7 @@ import httpx
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.agent.contracts import FRICTION_JUDGE, INJECTION_JUDGE, TURN_ROUTER
+from shosai.features.agent.contracts.effort import TURN_EFFORT_JUDGE
 from shosai.features.agent.contracts.voice import VOICE_APPROVAL_JUDGE
 from shosai.features.decisions.application.asking import Asker
 from shosai.features.decisions.application.engine import DecisionEngine
@@ -28,6 +29,7 @@ from shosai.features.decisions.application.in_force import PoliciesInForce
 from shosai.features.decisions.application.recording import Recorder
 from shosai.features.decisions.application.reliability import ReliabilityPass
 from shosai.features.decisions.channels.agent_ports import (
+    AgentEffortJudge,
     AgentFrictionJudge,
     AgentInjectionJudge,
     AgentTurnRouter,
@@ -102,6 +104,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     TURN_ROUTER.bind(AgentTurnRouter(engine)),
                     INJECTION_JUDGE.bind(AgentInjectionJudge(engine)),
                     VOICE_APPROVAL_JUDGE.bind(AgentVoiceApprovalJudge(engine)),
+                    TURN_EFFORT_JUDGE.bind(AgentEffortJudge(engine)),
                 ),
             )
         finally:

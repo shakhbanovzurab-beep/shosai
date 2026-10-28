@@ -29,6 +29,7 @@ from shosai.features.decisions.domain.policies.content_injection import (
     InjectionFinding,
     TextFacts,
 )
+from shosai.features.decisions.domain.policies.turn_effort import EffortFacts, TurnEffort
 from shosai.features.decisions.domain.policies.turn_route import ToolsetCandidate, TurnFacts
 from shosai.features.decisions.domain.policies.voice_approval import VoiceConsent, VoiceFacts
 
@@ -36,6 +37,7 @@ __all__ = [
     "ACTION_FRICTION",
     "CONTENT_INJECTION",
     "DECISION_LAYER",
+    "TURN_EFFORT",
     "TURN_ROUTE",
     "VOICE_APPROVAL",
     "CardFacts",
@@ -46,6 +48,7 @@ __all__ = [
     "DecisionReason",
     "DecisionSource",
     "Decisions",
+    "EffortFacts",
     "InjectionFinding",
     "Outcome",
     "Subject",
@@ -53,6 +56,7 @@ __all__ = [
     "TextFacts",
     "ToolsetCandidate",
     "ToolsetsCalled",
+    "TurnEffort",
     "TurnFacts",
     "VoiceConsent",
     "VoiceFacts",
@@ -141,4 +145,6 @@ ACTION_FRICTION: Final = DecisionPoint[CardFacts, CardFriction, CardResolution](
 CONTENT_INJECTION: Final = DecisionPoint[TextFacts, InjectionFinding, None]("content.injection")
 # Согласие человека голосом (ограниченное исключение владельца): наблюдать нечего.
 VOICE_APPROVAL: Final = DecisionPoint[VoiceFacts, VoiceConsent, None]("voice.approval")
+# Сколько думать модели хода (ChatGPT «Auto», шаг агента 21): наблюдать нечего.
+TURN_EFFORT: Final = DecisionPoint[EffortFacts, TurnEffort, None]("turn.effort")
 DECISION_LAYER: Final = PortKey[Decisions]("decisions.layer")

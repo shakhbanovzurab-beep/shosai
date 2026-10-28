@@ -12,6 +12,8 @@ from typing import Final, Protocol
 
 from shosai.features.decisions.domain.examples import Label
 from shosai.features.decisions.infrastructure.generation_texts import (
+    EFFORT_DEEP,
+    EFFORT_LIGHT,
     FRICTION_MATCH,
     FRICTION_REACH,
     INJECTION_KINDS,
@@ -191,9 +193,43 @@ class VoiceBrief:
         return {"read_back": written.get("read_back"), "utterance": written.get("utterance")}
 
 
+class EffortBrief:
+    """Messages that need careful reasoning every other case, quick ones between, each kind in
+    turn, on pages, with files and in conversations that go on in a fixed rotation."""
+
+    batch = 8
+
+    def targets(self, count: int, offset: int) -> list[Target]:
+        """Deep every other case; the page, a file and the turn rotate apart from the kind."""
+        found = []
+        for index in range(offset, offset + count):
+            deep = index % 2 == 0
+            kinds = EFFORT_DEEP if deep else EFFORT_LIGHT
+            kind = kinds[(index // 2) % len(kinds)]
+            section = SECTIONS[index % len(SECTIONS)]
+            files, turn = int(index % 3 == 0), (index // 3) % 4
+            requirement = "; ".join(
+                (
+                    f"the message is {kind}",
+                    f"the user's page: {section or 'none'}",
+                    "a file is attached" if files else "no file is attached",
+                    "the first message" if turn == 0 else "the conversation goes on",
+                )
+            )
+            fixed = {"section": section, "files": files, "turn": turn}
+            found.append(Target(fixed, {"deliberate": deep}, requirement))
+        return found
+
+    def facts(self, target: Target, written: Mapping[str, object]) -> dict[str, object]:
+        """The fixed fields with the message and the previous answer's start."""
+        previous = written.get("previous") or "" if target.fixed.get("turn") else ""
+        return {**target.fixed, "question": written.get("question"), "previous": previous}
+
+
 BRIEFS: Final[Mapping[str, Brief]] = {
     "action.friction": FrictionBrief(),
     "turn.route": RouteBrief(),
     "content.injection": InjectionBrief(),
     "voice.approval": VoiceBrief(),
+    "turn.effort": EffortBrief(),
 }

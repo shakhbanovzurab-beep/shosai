@@ -25,8 +25,10 @@ from uuid import UUID
 from shosai.core.agent_tools.provenance import Provenance
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
 from shosai.core.ai.requests import ChatMessage, ChatRequest, ImagePart, ReasoningEffort, Role
+from shosai.features.agent.application.effort_judging import EffortJudging
 from shosai.features.agent.application.egress_answers import EgressAnswers, kept_call
 from shosai.features.agent.application.model_stream import AnswerBuffer, stream_answer
+from shosai.features.agent.application.page_toolsets import page_section
 from shosai.features.agent.application.run_context import PreparedContext, text_message
 from shosai.features.agent.application.run_earlier import earlier_work
 from shosai.features.agent.application.run_engine_parts import EngineParts
@@ -83,24 +85,30 @@ class RunSteps:
     async def context(self) -> None:
         """The question's attachments, then the policy, the recent conversation and the
         question with its images; the run's toolsets, ranked by a bound router while the
-        context is read when the rule leaves one out."""
+        context is read when the rule leaves one out, and its reasoning raised when a bound
+        judge surely finds the question needs it."""
         payload, sizes, run = self._run.payload, self._run.times.sizes, self._run
         images = await self._parts.attachments.read(payload, run.work, run.emitter)
         labels: list[tuple[Provenance, str]] = []
-        routing = self._parts.routing
+        routing, effort = self._parts.routing, EffortJudging(self._parts.ports)
         with self._parts.telemetry.context():
             async with self._parts.transactions.begin(payload.scope(), read_only=True) as session:
                 offer = await routing.offer(session, payload)
                 asked = await routing.ask(session, payload, offer)
+                judged = await effort.ask(session, payload, page_section(payload))
                 try:
                     prepared = await self._parts.context.prepare(
                         session, payload, sizes, labels, recall=True
                     )
                 except BaseException:
                     routing.drop(asked)
+                    effort.drop(judged)
                     raise
             await routing.settle(offer, asked)
+            raised = await effort.settle(judged)
             request = await self._recalled(prepared, sizes, labels)
+        if raised is not None:
+            request = replace(request, reasoning=raised)
         self._begin(with_images(request, images), offer, labels)
 
     async def _recalled(

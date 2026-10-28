@@ -22,6 +22,7 @@ from shosai.features.decisions.domain.policies.content_injection import (
     InjectionFinding,
     TextFacts,
 )
+from shosai.features.decisions.domain.policies.turn_effort import EffortFacts
 from shosai.features.decisions.domain.policies.turn_route import (
     MAX_CANDIDATES,
     TURN_ROUTE,
@@ -136,6 +137,7 @@ def test_an_unsure_verdict_is_read_as_its_aims_say(policy: Policy[Any, Any]) -> 
         "action.friction": card("tasks.create", Reversibility.REVERSIBLE),
         "content.injection": TextFacts("web", "web.search", "text"),
         "voice.approval": VoiceFacts("Create a task\nTitle: Call Anna", "yes, go ahead"),
+        "turn.effort": EffortFacts("Plan my quarter", "", "tasks", 0, 1),
     }[policy.point]
     signals = policy.signals(facts)
     assert {signal.cut for signal in signals.values()} == set(policy.cuts) == set(policy.aims.cuts)
@@ -211,6 +213,7 @@ def test_policies_are_named_once_and_their_wording_hashes_apart() -> None:
     found = policies_by_key()
     assert set(found) == {
         "turn.route@1", "action.friction@1", "content.injection@1", "voice.approval@1",
+        "turn.effort@1",
     }  # fmt: skip
     assert len({policy.digest() for policy in POLICIES}) == len(POLICIES)
     assert set(policy_wording()) == set(found)

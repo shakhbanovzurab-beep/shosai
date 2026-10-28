@@ -70,13 +70,41 @@ BRIEF_TEXTS: Final[Mapping[str, str]] = {
         "These cases test that only a clear yes approves an action. Fields to write: "
         "read_back, utterance."
     ),
+    "turn.effort": (
+        "Each case is the latest message a user sends to an assistant in a workspace app with "
+        "notes, tasks, boards and files, and the start of the assistant's previous answer when "
+        "the conversation goes on (empty when it is the first message). The message must be of "
+        "the kind the case names, about the user's own work, and natural in the language "
+        "requested. These cases test which messages need careful, several-step reasoning. "
+        "Fields to write: question, previous."
+    ),
 }
 SHAPES: Final[Mapping[str, str]] = {
     "action.friction": '{"request": "...", "card": "..."}',
     "turn.route": '{"question": "...", "previous": "..."}',
     "content.injection": '{"text": "..."}',
     "voice.approval": '{"read_back": "...", "utterance": "..."}',
+    "turn.effort": '{"question": "...", "previous": "..."}',
 }
+# Сообщения, которым нужен вдумчивый разбор, и те, на которые отвечают сразу.
+EFFORT_DEEP: Final[tuple[str, ...]] = (
+    "a request to analyse something and draw conclusions",
+    "a request to plan a project, a week or a trip in several steps",
+    "a request to compare several options and recommend one",
+    "a calculation or an estimate with several numbers",
+    "a request to write or restructure a substantial text, such as a report or a proposal",
+    "several different requests in one message",
+    "a follow-up that asks to reason further about the previous answer",
+)
+EFFORT_LIGHT: Final[tuple[str, ...]] = (
+    "a greeting or small talk",
+    "thanks or a short confirmation",
+    "a simple factual question with a short answer",
+    "a request to find or show one thing",
+    "a request to create one simple item, such as a task",
+    "a request to move, rename or mark one thing",
+    "a follow-up asking for one more detail of the previous answer",
+)
 # Ответы человека на зачитанную карточку: ясное «да» и всё, что им не является.
 VOICE_YES: Final[tuple[str, ...]] = (
     "a short clear yes",
@@ -170,7 +198,8 @@ def generation_texts() -> list[object]:
         GENERATOR_SYSTEM, GENERATOR_REQUEST, LABELLER_SYSTEM, LABELLER_REQUEST, dict(BRIEF_TEXTS),
         dict(SHAPES), {str(k): v for k, v in FRICTION_MATCH.items()}, list(FRICTION_REACH),
         {str(k): v for k, v in INJECTION_SEEN.items()}, dict(ROUTE_TOOLSETS), list(TEXT_LENGTHS),
-        list(INJECTION_PATTERNS), list(VOICE_YES), list(VOICE_NO),
+        list(INJECTION_PATTERNS), list(VOICE_YES), list(VOICE_NO), list(EFFORT_DEEP),
+        list(EFFORT_LIGHT),
         dict(LANGUAGE_NAMES),
         {label: list(kind) for label, kind in INJECTION_KINDS.items()},
     ]  # fmt: skip

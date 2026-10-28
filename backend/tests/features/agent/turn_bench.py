@@ -61,6 +61,7 @@ from shosai.features.agent.channels.http.callers import operator_mount, person_m
 from shosai.features.agent.channels.http.threads import build_threads_router
 from shosai.features.agent.channels.http.turns import build_turns_router
 from shosai.features.agent.contracts import FRICTION_JUDGE, INJECTION_JUDGE, TURN_ROUTER
+from shosai.features.agent.contracts.effort import TURN_EFFORT_JUDGE
 from shosai.features.agent.infrastructure.fleet import Fleet
 from shosai.features.agent.infrastructure.log_tail import LogTail
 from shosai.features.agent.infrastructure.run_log import RunLog
@@ -230,6 +231,7 @@ async def turn_bench(
             UPLOADS.bind(upload_bench.claims),
             *(FRICTION_JUDGE.bind(judge) for judge in bench_doubles.judges),
             *(TURN_ROUTER.bind(router) for router in bench_doubles.routers),
+            *(TURN_EFFORT_JUDGE.bind(judge) for judge in bench_doubles.efforts),
             *(INJECTION_JUDGE.bind(judge) for judge in bench_doubles.injections),
             *memory_bindings(bench_doubles.memories),
         ]

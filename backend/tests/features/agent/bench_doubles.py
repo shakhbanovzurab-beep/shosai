@@ -1,6 +1,6 @@
 """What the turn bench lets a test module change: the probe's tools, the stream's silence, the
-judges of a card's friction, the router of a turn's toolsets, the judge of injected text and
-memory's recall and profile core."""
+judges of a card's friction, the router of a turn's toolsets, the judge of injected text, the
+judge of a turn's effort and memory's recall and profile core."""
 
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -11,6 +11,7 @@ import pytest
 
 from shosai.core.ports.keys import PortBinding
 from shosai.features.agent.contracts import FrictionJudge, InjectionJudge, TurnRouter
+from shosai.features.agent.contracts.effort import EffortJudge
 from shosai.features.agent.contracts.memory import (
     MEMORY_RECALL,
     PROFILE_FACTS,
@@ -47,6 +48,7 @@ class BenchDoubles:
     routers: tuple[TurnRouter, ...] = ()
     injections: tuple[InjectionJudge, ...] = ()
     memories: tuple[MemoryPorts, ...] = ()
+    efforts: tuple[EffortJudge, ...] = ()
 
 
 @pytest.fixture
@@ -80,6 +82,12 @@ def injection_judges() -> tuple[InjectionJudge, ...]:
 
 
 @pytest.fixture
+def effort_judges() -> tuple[EffortJudge, ...]:
+    """No judge of a turn's effort: turns keep the tier's; a module that judges overrides it."""
+    return ()
+
+
+@pytest.fixture
 def memory_doubles() -> tuple[MemoryPorts, ...]:
     """No memory: turns are built without it; a module that recalls facts overrides it."""
     return ()
@@ -93,6 +101,7 @@ class LeoDoubles:
     routers: tuple[TurnRouter, ...]
     injections: tuple[InjectionJudge, ...]
     memories: tuple[MemoryPorts, ...]
+    efforts: tuple[EffortJudge, ...] = ()
 
 
 @pytest.fixture
@@ -101,9 +110,12 @@ def leo_doubles(
     turn_routers: tuple[TurnRouter, ...],
     injection_judges: tuple[InjectionJudge, ...],
     memory_doubles: tuple[MemoryPorts, ...],
+    effort_judges: tuple[EffortJudge, ...],
 ) -> LeoDoubles:
     """What a module binds beside the rules."""
-    return LeoDoubles(friction_judges, turn_routers, injection_judges, memory_doubles)
+    return LeoDoubles(
+        friction_judges, turn_routers, injection_judges, memory_doubles, effort_judges
+    )
 
 
 @pytest.fixture
@@ -113,5 +125,5 @@ def bench_doubles(
     """All of them together, for the bench."""
     return BenchDoubles(
         probe_tools, stream_silence, leo_doubles.judges, leo_doubles.routers,
-        leo_doubles.injections, leo_doubles.memories,
+        leo_doubles.injections, leo_doubles.memories, leo_doubles.efforts,
     )  # fmt: skip
