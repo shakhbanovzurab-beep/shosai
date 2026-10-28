@@ -15947,6 +15947,423 @@
           }
         }
       }
+    },
+    "/v1/admin/platform-prompts": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Platform Prompts",
+        "description": "The draft and the live version.",
+        "operationId": "platform_prompts_v1_admin_platform_prompts_get",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminPlatformPrompts"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/platform-prompts/draft": {
+      "patch": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Save Draft",
+        "description": "Replace the given sections of the draft; the last save wins.",
+        "operationId": "save_draft_v1_admin_platform_prompts_draft_patch",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminPlatformDraftPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminPlatformDraft"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/platform-prompts/publish": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Publish",
+        "description": "Publish the draft as the next version, checked for English and its budget.",
+        "operationId": "publish_v1_admin_platform_prompts_publish_post",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again.",
+              "title": "Idempotency-Key"
+            },
+            "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again."
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminPublish"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminPlatformPrompts"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/platform-prompts/versions": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Versions",
+        "description": "The versions, newest first, without their configs.",
+        "operationId": "versions_v1_admin_platform_prompts_versions_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page, at most the maximum.",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Items per page, at most the maximum."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The next_cursor of the previous page; absent for the first page.",
+              "title": "Cursor"
+            },
+            "description": "The next_cursor of the previous page; absent for the first page."
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_AdminPlatformVersionSummary_"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/platform-prompts/versions/{version_id}": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Version",
+        "description": "One version whole, for the compare dialog.",
+        "operationId": "version_v1_admin_platform_prompts_versions__version_id__get",
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminPlatformVersion"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/platform-prompts/versions/{version_id}/restore": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Restore",
+        "description": "Publish a copy of an old version as the next one; the draft becomes it.",
+        "operationId": "restore_v1_admin_platform_prompts_versions__version_id__restore_post",
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again.",
+              "title": "Idempotency-Key"
+            },
+            "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again."
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminRestore"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminPlatformPrompts"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -16327,6 +16744,43 @@
         "title": "AdminDailySpend",
         "description": "One business day's spend."
       },
+      "AdminFeaturePrompt": {
+        "properties": {
+          "content": {
+            "type": "string",
+            "maxLength": 8000,
+            "title": "Content"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "content",
+          "enabled"
+        ],
+        "title": "AdminFeaturePrompt",
+        "description": "The operator's addendum to a feature's prompt."
+      },
+      "AdminFeatures": {
+        "properties": {
+          "meeting_summary": {
+            "$ref": "#/components/schemas/AdminFeaturePrompt"
+          },
+          "voice_mode": {
+            "$ref": "#/components/schemas/AdminFeaturePrompt"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meeting_summary",
+          "voice_mode"
+        ],
+        "title": "AdminFeatures",
+        "description": "The addenda of the features with their own model call."
+      },
       "AdminOutsideCatalogue": {
         "properties": {
           "spend": {
@@ -16345,6 +16799,209 @@
         ],
         "title": "AdminOutsideCatalogue",
         "description": "This month's spend on models outside the catalogue."
+      },
+      "AdminPlatformConfig": {
+        "properties": {
+          "system_prompt": {
+            "type": "string",
+            "maxLength": 20000,
+            "title": "System Prompt"
+          },
+          "safety": {
+            "$ref": "#/components/schemas/AdminSafety"
+          },
+          "features": {
+            "$ref": "#/components/schemas/AdminFeatures"
+          }
+        },
+        "type": "object",
+        "required": [
+          "system_prompt",
+          "safety",
+          "features"
+        ],
+        "title": "AdminPlatformConfig",
+        "description": "The whole platform layer."
+      },
+      "AdminPlatformDraft": {
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/AdminPlatformConfig"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config",
+          "updated_at"
+        ],
+        "title": "AdminPlatformDraft",
+        "description": "The draft; `updated_at` is null before its first save."
+      },
+      "AdminPlatformDraftPatch": {
+        "properties": {
+          "system_prompt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "System Prompt"
+          },
+          "safety": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdminSafety"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "features": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdminFeatures"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "AdminPlatformDraftPatch",
+        "description": "The sections a save replaces whole; a section left out stays."
+      },
+      "AdminPlatformPrompts": {
+        "properties": {
+          "draft": {
+            "$ref": "#/components/schemas/AdminPlatformDraft"
+          },
+          "published": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdminPlatformVersion"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "draft",
+          "published"
+        ],
+        "title": "AdminPlatformPrompts",
+        "description": "The draft and the live version, null before the first publish."
+      },
+      "AdminPlatformVersion": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "number": {
+            "type": "integer",
+            "title": "Number"
+          },
+          "comment": {
+            "type": "string",
+            "title": "Comment"
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Published At"
+          },
+          "restored_from": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Restored From"
+          },
+          "config": {
+            "$ref": "#/components/schemas/AdminPlatformConfig"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "number",
+          "comment",
+          "published_at",
+          "restored_from",
+          "config"
+        ],
+        "title": "AdminPlatformVersion",
+        "description": "A version whole."
+      },
+      "AdminPlatformVersionSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "number": {
+            "type": "integer",
+            "title": "Number"
+          },
+          "comment": {
+            "type": "string",
+            "title": "Comment"
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Published At"
+          },
+          "restored_from": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Restored From"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "number",
+          "comment",
+          "published_at",
+          "restored_from"
+        ],
+        "title": "AdminPlatformVersionSummary",
+        "description": "A version without its config, for the history list."
       },
       "AdminProviderStatus": {
         "properties": {
@@ -16408,6 +17065,38 @@
         "title": "AdminProviderStatus",
         "description": "The OpenRouter key and balance."
       },
+      "AdminPublish": {
+        "properties": {
+          "comment": {
+            "type": "string",
+            "maxLength": 280,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Comment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "comment"
+        ],
+        "title": "AdminPublish",
+        "description": "What changed, in the operator's words."
+      },
+      "AdminRestore": {
+        "properties": {
+          "comment": {
+            "type": "string",
+            "maxLength": 280,
+            "title": "Comment",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "AdminRestore",
+        "description": "An optional comment; the screen words an empty one from `restored_from`."
+      },
       "AdminRoleDefault": {
         "properties": {
           "role": {
@@ -16467,6 +17156,62 @@
         ],
         "title": "AdminRoleDefaultBody",
         "description": "A role's new default and optional fallback."
+      },
+      "AdminSafety": {
+        "properties": {
+          "rules": {
+            "items": {
+              "$ref": "#/components/schemas/AdminSafetyRule"
+            },
+            "type": "array",
+            "maxItems": 50,
+            "title": "Rules"
+          },
+          "blocked_topics": {
+            "items": {
+              "type": "string",
+              "maxLength": 80,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Blocked Topics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rules",
+          "blocked_topics"
+        ],
+        "title": "AdminSafety",
+        "description": "The rules in order and the blocked topics."
+      },
+      "AdminSafetyRule": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Id"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 500,
+            "title": "Text"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "text",
+          "enabled"
+        ],
+        "title": "AdminSafetyRule",
+        "description": "One rule of the layer; a disabled rule is kept and not sent."
       },
       "AdminSession": {
         "properties": {
@@ -23611,6 +24356,34 @@
         ],
         "title": "OwnedStickerOut",
         "description": "A sticker of its owner, with the boards it is on and its usage."
+      },
+      "Page_AdminPlatformVersionSummary_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AdminPlatformVersionSummary"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "Page[AdminPlatformVersionSummary]"
       },
       "Page_AdminUser_": {
         "properties": {

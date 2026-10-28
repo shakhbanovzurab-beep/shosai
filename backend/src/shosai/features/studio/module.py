@@ -7,8 +7,9 @@ and its versions. Step 2 the tables — the platform's in the EU home, a person'
 and the handler of what studio holds of a person. Step 3a the catalogue: models added from
 OpenRouter's list, switched, retired, their tier decided, defaults per role under row locks,
 the process's snapshot and `MODEL_CATALOGUE`. Step 3b the daily refresh from OpenRouter's
-list. Step 4 Admin > AI models on `/v1/admin/ai-models*`. `MODEL_ROUTES` and
-`PROMPT_RESOLVER` are bound with the resolution (step 10).
+list. Step 4 Admin > AI models on `/v1/admin/ai-models*`. Step 6 the platform layer: its
+draft, publish, versions and restore on `/v1/admin/platform-prompts*`, and the published layer
+in the snapshot. `MODEL_ROUTES` and `PROMPT_RESOLVER` are bound with the resolution (step 10).
 """
 
 from collections.abc import AsyncIterator
@@ -21,7 +22,11 @@ from shosai.features.studio.application.ai_models_screen import AiModelsScreen
 from shosai.features.studio.application.catalogue_admin import CatalogueAdmin
 from shosai.features.studio.application.catalogue_refresh import CatalogueRefresh
 from shosai.features.studio.application.offers import CatalogueOffers
+from shosai.features.studio.application.platform_prompts import PlatformPrompts
 from shosai.features.studio.channels.http.admin_ai_models import build_admin_ai_models_router
+from shosai.features.studio.channels.http.admin_platform_prompts import (
+    build_admin_platform_prompts_router,
+)
 from shosai.features.studio.channels.tasks import PERIODIC_JOBS, refresh_tick
 from shosai.features.studio.contracts import MODEL_CATALOGUE
 from shosai.features.studio.contracts.events import STUDIO_EVENTS
@@ -48,8 +53,12 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         (services.ai_spend.reports, services.ai_spend.credits, services.ai_listing),
         services.settings.ai.openrouter_api_key,
     )
+    prompts = PlatformPrompts(services.transactions, (services.effects, snapshot))
     yield FeatureParts(
-        http_routers=(build_admin_ai_models_router((admin, screen), services.ports),),
+        http_routers=(
+            build_admin_ai_models_router((admin, screen), services.ports),
+            build_admin_platform_prompts_router(prompts, services.ports),
+        ),
         task_handlers=(refresh_tick(refresh),),
         periodic_jobs=PERIODIC_JOBS,
         provides=(

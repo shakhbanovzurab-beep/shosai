@@ -3908,6 +3908,126 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/platform-prompts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Platform Prompts
+         * @description The draft and the live version.
+         */
+        get: operations["platform_prompts_v1_admin_platform_prompts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/platform-prompts/draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Save Draft
+         * @description Replace the given sections of the draft; the last save wins.
+         */
+        patch: operations["save_draft_v1_admin_platform_prompts_draft_patch"];
+        trace?: never;
+    };
+    "/v1/admin/platform-prompts/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publish
+         * @description Publish the draft as the next version, checked for English and its budget.
+         */
+        post: operations["publish_v1_admin_platform_prompts_publish_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/platform-prompts/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Versions
+         * @description The versions, newest first, without their configs.
+         */
+        get: operations["versions_v1_admin_platform_prompts_versions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/platform-prompts/versions/{version_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Version
+         * @description One version whole, for the compare dialog.
+         */
+        get: operations["version_v1_admin_platform_prompts_versions__version_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/platform-prompts/versions/{version_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Restore
+         * @description Publish a copy of an old version as the next one; the draft becomes it.
+         */
+        post: operations["restore_v1_admin_platform_prompts_versions__version_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -4078,6 +4198,24 @@ export interface components {
             cost: number;
         };
         /**
+         * AdminFeaturePrompt
+         * @description The operator's addendum to a feature's prompt.
+         */
+        AdminFeaturePrompt: {
+            /** Content */
+            content: string;
+            /** Enabled */
+            enabled: boolean;
+        };
+        /**
+         * AdminFeatures
+         * @description The addenda of the features with their own model call.
+         */
+        AdminFeatures: {
+            meeting_summary: components["schemas"]["AdminFeaturePrompt"];
+            voice_mode: components["schemas"]["AdminFeaturePrompt"];
+        };
+        /**
          * AdminOutsideCatalogue
          * @description This month's spend on models outside the catalogue.
          */
@@ -4086,6 +4224,88 @@ export interface components {
             spend: number;
             /** Requests */
             requests: number;
+        };
+        /**
+         * AdminPlatformConfig
+         * @description The whole platform layer.
+         */
+        AdminPlatformConfig: {
+            /** System Prompt */
+            system_prompt: string;
+            safety: components["schemas"]["AdminSafety"];
+            features: components["schemas"]["AdminFeatures"];
+        };
+        /**
+         * AdminPlatformDraft
+         * @description The draft; `updated_at` is null before its first save.
+         */
+        AdminPlatformDraft: {
+            config: components["schemas"]["AdminPlatformConfig"];
+            /** Updated At */
+            updated_at: string | null;
+        };
+        /**
+         * AdminPlatformDraftPatch
+         * @description The sections a save replaces whole; a section left out stays.
+         */
+        AdminPlatformDraftPatch: {
+            /** System Prompt */
+            system_prompt?: string | null;
+            safety?: components["schemas"]["AdminSafety"] | null;
+            features?: components["schemas"]["AdminFeatures"] | null;
+        };
+        /**
+         * AdminPlatformPrompts
+         * @description The draft and the live version, null before the first publish.
+         */
+        AdminPlatformPrompts: {
+            draft: components["schemas"]["AdminPlatformDraft"];
+            published: components["schemas"]["AdminPlatformVersion"] | null;
+        };
+        /**
+         * AdminPlatformVersion
+         * @description A version whole.
+         */
+        AdminPlatformVersion: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Number */
+            number: number;
+            /** Comment */
+            comment: string;
+            /**
+             * Published At
+             * Format: date-time
+             */
+            published_at: string;
+            /** Restored From */
+            restored_from: number | null;
+            config: components["schemas"]["AdminPlatformConfig"];
+        };
+        /**
+         * AdminPlatformVersionSummary
+         * @description A version without its config, for the history list.
+         */
+        AdminPlatformVersionSummary: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Number */
+            number: number;
+            /** Comment */
+            comment: string;
+            /**
+             * Published At
+             * Format: date-time
+             */
+            published_at: string;
+            /** Restored From */
+            restored_from: number | null;
         };
         /**
          * AdminProviderStatus
@@ -4116,6 +4336,25 @@ export interface components {
             sync_error: string | null;
         };
         /**
+         * AdminPublish
+         * @description What changed, in the operator's words.
+         */
+        AdminPublish: {
+            /** Comment */
+            comment: string;
+        };
+        /**
+         * AdminRestore
+         * @description An optional comment; the screen words an empty one from `restored_from`.
+         */
+        AdminRestore: {
+            /**
+             * Comment
+             * @default
+             */
+            comment: string;
+        };
+        /**
          * AdminRoleDefault
          * @description A role's default and fallback.
          */
@@ -4135,6 +4374,28 @@ export interface components {
             model_id: string;
             /** Fallback Model Id */
             fallback_model_id?: string | null;
+        };
+        /**
+         * AdminSafety
+         * @description The rules in order and the blocked topics.
+         */
+        AdminSafety: {
+            /** Rules */
+            rules: components["schemas"]["AdminSafetyRule"][];
+            /** Blocked Topics */
+            blocked_topics: string[];
+        };
+        /**
+         * AdminSafetyRule
+         * @description One rule of the layer; a disabled rule is kept and not sent.
+         */
+        AdminSafetyRule: {
+            /** Id */
+            id: string;
+            /** Text */
+            text: string;
+            /** Enabled */
+            enabled: boolean;
         };
         /**
          * AdminSession
@@ -7226,6 +7487,13 @@ export interface components {
             /** Boards */
             boards: components["schemas"]["StickerBoardOut"][];
             usage: components["schemas"]["StickerUsageOut"];
+        };
+        /** Page[AdminPlatformVersionSummary] */
+        Page_AdminPlatformVersionSummary_: {
+            /** Items */
+            items: components["schemas"]["AdminPlatformVersionSummary"][];
+            /** Next Cursor */
+            next_cursor: string | null;
         };
         /** Page[AdminUser] */
         Page_AdminUser_: {
@@ -18591,6 +18859,219 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminConnectionCheck"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    platform_prompts_v1_admin_platform_prompts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPlatformPrompts"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    save_draft_v1_admin_platform_prompts_draft_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminPlatformDraftPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPlatformDraft"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    publish_v1_admin_platform_prompts_publish_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminPublish"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPlatformPrompts"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    versions_v1_admin_platform_prompts_versions_get: {
+        parameters: {
+            query?: {
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_AdminPlatformVersionSummary_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    version_v1_admin_platform_prompts_versions__version_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                version_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPlatformVersion"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    restore_v1_admin_platform_prompts_versions__version_id__restore_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                version_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminRestore"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPlatformPrompts"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
