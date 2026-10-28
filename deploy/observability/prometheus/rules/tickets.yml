@@ -186,6 +186,33 @@ groups:
           description: 'Цена модели предложила другой уровень, а решения нет. Пока его нет, модель считается в прежнем уровне — в лимитах людей и в расходах платформы. Подтвердите или отклоните предложение на экране AI-моделей.'
           runbook: docs/runbooks/alerts.md#studio-tier-proposal-waiting
 
+      - alert: StudioRoleUnconfigured
+        expr: |
+          sum by (studio_role) (increase(shosai_studio_role_unconfigured_total[15m])) > 0
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Роль {{ $labels.studio_role }} осталась без модели по умолчанию'
+          description: 'Запросы роли получают model_role_unconfigured (503): у неё нет умолчания и запасной модели, которые могут ответить. Назначьте роли умолчание на экране AI-моделей.'
+          runbook: docs/runbooks/alerts.md#studio-role-unconfigured
+
+      - alert: StudioSubstitutionsHigh
+        expr: |
+          (
+            sum by (studio_role, reason) (increase(shosai_studio_route_substitutions_total[1h]))
+              / on (studio_role) group_left
+            sum by (studio_role) (increase(shosai_studio_resolution_seconds_count[1h]))
+          ) > 0.05
+          and on (studio_role)
+          sum by (studio_role) (increase(shosai_studio_resolution_seconds_count[1h])) >= 20
+        for: 15m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'В роли {{ $labels.studio_role }} выбор людей часто не отвечает: {{ $labels.reason }}'
+          description: 'Больше 5 % разрешений роли за час отвечают моделью по умолчанию вместо выбранной людьми. Причина — в метке reason: модель выключена, убрана из каталога, не умеет нужного роли или не входит в тариф.'
+          runbook: docs/runbooks/alerts.md#studio-substitutions-high
+
   - name: tickets-targets
     rules:
       - alert: ScrapeTargetDown

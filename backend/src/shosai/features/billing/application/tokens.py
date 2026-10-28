@@ -1,14 +1,16 @@
 """A person's model tokens: counted from cost rows, spent from packs, read before a request.
 
 The tier follows the call class: an expensive call is a frontier one, a standard call a
-standard one; essential calls (meetings), Leo's background work and live sessions — Leo's
-voice counts against the plan's minutes instead (ADR 0070 LV-D7) — are not counted (F6-D6,
-Leo §5.4). `TokenSettlement` runs in the cost row's own transaction, once per row: it adds
-the row's tokens to the Monday week and, for standard, the day — both of the business
-calendar (ADR 0058) — then debits packs for what the row used past the frontier week's
-allowance, with the cost id as the debit's unique key. The week's row is locked by its
-update, so two settlements of a person never spend the same pack tokens. `TokenStanding`
-reads the use live and gives the agent the route of the next request (BL-D4).
+standard one; essential calls (meetings), Leo's standard background work and live sessions —
+Leo's voice counts against the plan's minutes instead (ADR 0070 LV-D7) — are not counted
+(F6-D6, Leo §5.4). A background call of the expensive class is the person's frontier choice
+running for them — their notes on a frontier model — and counts against their frontier week
+like an interactive one (studio ST-D5, ADR 0074). `TokenSettlement` runs in the cost row's
+own transaction, once per row: it adds the row's tokens to the Monday week and, for standard,
+the day — both of the business calendar (ADR 0058) — then debits packs for what the row used
+past the frontier week's allowance, with the cost id as the debit's unique key. The week's
+row is locked by its update, so two settlements of a person never spend the same pack tokens.
+`TokenStanding` reads the use live and gives the agent the route of the next request (BL-D4).
 """
 
 from collections.abc import Callable
@@ -44,10 +46,19 @@ from shosai.features.billing.infrastructure.token_records import (
 
 TIER_OF_CLASS: Final = {"expensive": ModelTier.FRONTIER, "standard": ModelTier.STANDARD}
 COUNTED_ORIGIN: Final = "interactive"
+# Фоновый вызов frontier — выбор самого человека (его заметки): считается в его неделю (ST-D5).
+FRONTIER_BACKGROUND_ORIGIN: Final = "background"
 WEEK: Final = "week"
 DAY: Final = "day"
 
 log = structlog.stdlib.get_logger(__name__)
+
+
+def counted(origin: str, tier: ModelTier) -> bool:
+    """Whether a call's tokens count against the person's allowance."""
+    return origin == COUNTED_ORIGIN or (
+        origin == FRONTIER_BACKGROUND_ORIGIN and tier is ModelTier.FRONTIER
+    )
 
 
 def week_of(moment: datetime, business: BusinessCalendar) -> date:
@@ -108,7 +119,7 @@ class TokenSettlement:
         """Count the row's tokens and pay for those past the frontier allowance with packs."""
         tier = TIER_OF_CLASS.get(cost.call_class)
         user_id = cost.user_id
-        if tier is None or user_id is None or cost.origin != COUNTED_ORIGIN or cost.tokens <= 0:
+        if tier is None or user_id is None or not counted(cost.origin, tier) or cost.tokens <= 0:
             return
         if cost.live:
             return

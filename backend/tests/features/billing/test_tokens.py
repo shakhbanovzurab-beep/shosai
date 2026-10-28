@@ -152,7 +152,7 @@ async def test_meetings_background_work_voice_and_last_week_s_rows_are_not_count
         business=MOSCOW,
     )
     await costs.write(row(person, now, 5000, call=("essential", "interactive")))
-    await costs.write(row(person, now, 5000, call=("expensive", "background")))
+    await costs.write(row(person, now, 5000, call=("standard", "background")))
     # Голос Leo считается минутами тарифа, не токенами (ADR 0070 LV-D7).
     await costs.record_many([row(person, now, 5000).model_copy(update={"kind": "voice"})])
     await costs.write(row(person, now, 10))
@@ -161,6 +161,25 @@ async def test_meetings_background_work_voice_and_last_week_s_rows_are_not_count
     decision = await standing.decision(*person, ModelTier.FRONTIER)
 
     assert decision.route is TokenRoute.WITHIN_ALLOWANCE
+
+
+async def test_a_frontier_choice_running_in_the_background_counts_against_the_week(
+    entitlements: EntitlementBench,
+) -> None:
+    person = await subscribed(entitlements, packs=0)
+    costs, now = writer(entitlements), entitlements.clock.now
+    standing = TokenStanding(
+        entitlements.homes.transactions,
+        entitlements.snapshots,
+        entitlements.clock,
+        business=MOSCOW,
+    )
+    # Заметки человека на выбранной им frontier-модели — фоновый вызов класса expensive (ST-D5).
+    await costs.write(row(person, now, 1200, call=("expensive", "background")))
+
+    decision = await standing.decision(*person, ModelTier.FRONTIER)
+
+    assert (decision.route, decision.reason) == (TokenRoute.FALL_BACK, TokenLimit.FRONTIER_WEEK)
 
 
 async def test_a_batch_of_a_person_s_rows_is_settled_under_their_row_level_security(

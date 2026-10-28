@@ -396,3 +396,36 @@ tests:
       - eval_time: 40h
         alertname: StudioTierProposalWaiting
         exp_alerts: []
+
+  - interval: 5m
+    input_series:
+      - series: 'shosai_studio_role_unconfigured_total{studio_role="notes"}'
+        values: "0 0 1 1+0x20"
+      - series: 'shosai_studio_resolution_seconds_count{studio_role="code"}'
+        values: "0+10x30"
+      - series: 'shosai_studio_route_substitutions_total{studio_role="code",reason="not_on_plan"}'
+        values: "0+1x30"
+      - series: 'shosai_studio_resolution_seconds_count{studio_role="notes"}'
+        values: "0+1x30"
+      - series: 'shosai_studio_route_substitutions_total{studio_role="notes",reason="disabled"}'
+        values: "0+1x30"
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: StudioRoleUnconfigured
+        exp_alerts:
+          - exp_labels: {severity: ticket, studio_role: notes}
+            exp_annotations:
+              summary: "Роль notes осталась без модели по умолчанию"
+              description: "Запросы роли получают model_role_unconfigured (503): у неё нет умолчания и запасной модели, которые могут ответить. Назначьте роли умолчание на экране AI-моделей."
+              runbook: docs/runbooks/alerts.md#studio-role-unconfigured
+      - eval_time: 90m
+        alertname: StudioRoleUnconfigured
+        exp_alerts: []
+      - eval_time: 90m
+        alertname: StudioSubstitutionsHigh
+        exp_alerts:
+          - exp_labels: {severity: ticket, studio_role: code, reason: not_on_plan}
+            exp_annotations:
+              summary: "В роли code выбор людей часто не отвечает: not_on_plan"
+              description: "Больше 5 % разрешений роли за час отвечают моделью по умолчанию вместо выбранной людьми. Причина — в метке reason: модель выключена, убрана из каталога, не умеет нужного роли или не входит в тариф."
+              runbook: docs/runbooks/alerts.md#studio-substitutions-high

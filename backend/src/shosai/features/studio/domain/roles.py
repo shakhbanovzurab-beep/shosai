@@ -92,3 +92,7 @@ def default_settings(role: PromptRole) -> RoleSettings:
     """The settings of a role the person never changed: reasoning off (draft `1c581580d`)."""
     tokens = NOTES_MAX_TOKENS if role is PromptRole.NOTES else DEFAULT_MAX_TOKENS
     return RoleSettings(None, DEFAULT_TEMPERATURE, tokens, reasoning=False)
+
+
+# Настройки вызова Leo — agent'а (ST-D1): маршрут отдаёт умолчания, рассуждение решает agent.
+LEO_SETTINGS: Final = RoleSettings(None, DEFAULT_TEMPERATURE, DEFAULT_MAX_TOKENS, reasoning=False)

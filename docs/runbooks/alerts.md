@@ -309,6 +309,20 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Admin › AI models: confirm or decline the proposal. A default cannot be made frontier: set another default first.
 
+<a id="studio-role-unconfigured"></a>
+### StudioRoleUnconfigured
+
+**Means.** A role's requests are refused with `model_role_unconfigured` (503) because neither its default nor its fallback can answer (`shosai_studio_role_unconfigured_total`, studio plan §3.3): no default was set, or both were switched off, retired or stopped reading what the role needs. People in that role get an error instead of an answer.
+
+**Fix.** Admin › AI models: set the role's default (a standard model that reads what the role needs) and a fallback. The ticket clears 15 minutes after the last refusal.
+
+<a id="studio-substitutions-high"></a>
+### StudioSubstitutionsHigh
+
+**Means.** Over an hour, more than 5 % of a role's resolutions (at least 20) answered with the role's default instead of the model people chose, for one `reason` (`shosai_studio_route_substitutions_total`, by `studio_role`): `disabled` or `not_listed` — the operator switched off or retired a model people use; `cant_do_role` — a model stopped reading what the role needs; `not_on_plan` — people kept a frontier choice after their plan lost frontier models; `frontier_allowance_used` — frontier weeks run out, as billing allows (BL-D4).
+
+**Fix.** For `disabled` and `not_listed`, switch the model back on or accept it: people keep the default until they pick again in Studio. For `cant_do_role`, check the model on the AI models screen. `not_on_plan` and `frontier_allowance_used` follow the plans; raise them with the owner if they last.
+
 <a id="scrape-target-down"></a>
 ### ScrapeTargetDown
 

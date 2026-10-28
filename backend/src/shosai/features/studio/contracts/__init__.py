@@ -46,6 +46,7 @@ __all__ = [
     "SkillText",
     "Substitution",
     "Tier",
+    "TokenLimitError",
 ]
 
 
@@ -116,6 +117,14 @@ class ModelRoleUnconfiguredError(AppError):
         )
 
 
+class TokenLimitError(AppError):
+    """The person's standard tokens are spent: the call stops with the limit that ran out
+    (billing BL-D4); a used-up frontier week does not stop, the default answers instead."""
+
+    def __init__(self, limit: str) -> None:
+        super().__init__("token_limit", HTTPStatus.PAYMENT_REQUIRED, params={"limit": limit})
+
+
 class ModelRoutes(Protocol):
     """The model of a role for a person, within their plan and allowance."""
 
@@ -128,8 +137,8 @@ class ModelRoutes(Protocol):
         needs: frozenset[ModelCapability] = frozenset(),
     ) -> ResolvedRoute:
         """The route; `chosen` is Leo's model from Settings > Leo, `needs` what this call
-        reads beyond the role (a picture). Raises `ModelRoleUnconfiguredError`, and billing's
-        `token_limit` when the person's standard tokens are spent."""
+        reads beyond the role (a picture). Raises `ModelRoleUnconfiguredError`, and
+        `TokenLimitError` when the person's standard tokens are spent."""
         ...
 
 
