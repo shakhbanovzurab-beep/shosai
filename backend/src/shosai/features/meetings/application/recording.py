@@ -7,20 +7,19 @@ egress writes the MP4 straight at the owner's File Manager key for the recording
 marks tell everyone it records. Reports move the row only forward; the first `complete` adopts
 the file into File Manager and publishes `meetings.recording.ready`; a failure keeps its code.
 The sweep stops a recording at its length limit and settles one whose webhook was lost.
+Each recording that ends is counted once by its outcome — `complete` or its failure's code —
+for the alerts on failing and lost egress (§3.7, A15c).
 """
 
-from collections.abc import Callable, Mapping
-from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
+from collections.abc import Callable
+from datetime import UTC, datetime
 from http import HTTPStatus
-from typing import Final
 from uuid import UUID
 
 import structlog
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from shosai.core.config.sections import StorageSettings
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.errors import AppError
@@ -32,6 +31,15 @@ from shosai.features.billing.contracts import ENTITLEMENTS
 from shosai.features.files.contracts.written_files import WRITTEN_FILES, WrittenFile
 from shosai.features.identity.contracts import Principal as Person
 from shosai.features.meetings.application.joining import FoundRoom
+from shosai.features.meetings.application.recording_rules import (
+    CONTENT_TYPE,
+    FAILURES,
+    REFUSAL_STATUS,
+    SETTLING,
+    STATES,
+    RecordingLimits,
+    recording_file_name,
+)
 from shosai.features.meetings.application.room_reads import live_call, owned_room
 from shosai.features.meetings.application.video_server import (
     BucketTarget,
@@ -43,7 +51,6 @@ from shosai.features.meetings.contracts.events import RecordingReady
 from shosai.features.meetings.domain.recordings import (
     ACTIVE_STATES,
     RecordingFailure,
-    RecordingRefusal,
     RecordingState,
     StartFacts,
     advanced,
@@ -51,46 +58,10 @@ from shosai.features.meetings.domain.recordings import (
 )
 from shosai.features.meetings.domain.wire import RoomMarks, room_metadata
 from shosai.features.meetings.infrastructure.call_records import RoomRecordingRecord
+from shosai.features.meetings.infrastructure.meetings_metrics import MeetingsMetrics
 from shosai.features.meetings.infrastructure.room_records import RoomRecord
 
-REFUSAL_STATUS: Final = {
-    RecordingRefusal.NOT_FOUND: HTTPStatus.NOT_FOUND,
-    RecordingRefusal.ROOM_CLOSED: HTTPStatus.CONFLICT,
-    RecordingRefusal.NO_LIVE_CALL: HTTPStatus.CONFLICT,
-    RecordingRefusal.NOT_IN_PLAN: HTTPStatus.FORBIDDEN,
-    RecordingRefusal.STORAGE_LIMIT: HTTPStatus.REQUEST_ENTITY_TOO_LARGE,
-    RecordingRefusal.ALREADY_RECORDING: HTTPStatus.CONFLICT,
-    RecordingRefusal.PLATFORM_BUSY: HTTPStatus.SERVICE_UNAVAILABLE,
-}
-# Статусы LiveKit: достигнутый предел LiveKit — целый файл, запись завершена.
-STATES: Final = {
-    "EGRESS_STARTING": RecordingState.STARTING,
-    "EGRESS_ACTIVE": RecordingState.ACTIVE,
-    "EGRESS_ENDING": RecordingState.ENDING,
-    "EGRESS_COMPLETE": RecordingState.COMPLETE,
-    "EGRESS_LIMIT_REACHED": RecordingState.COMPLETE,
-    "EGRESS_FAILED": RecordingState.FAILED,
-    "EGRESS_ABORTED": RecordingState.FAILED,
-}
-FAILURES: Final = {"EGRESS_ABORTED": RecordingFailure.EGRESS_ABORTED}
-CONTENT_TYPE: Final = "video/mp4"
-SETTLING: Final = timedelta(minutes=2)  # сколько ждать вебхука, прежде чем спросить SFU
 log = structlog.stdlib.get_logger(__name__)
-
-
-@dataclass(frozen=True, slots=True)
-class RecordingLimits:
-    """The platform's bounds and the buckets as egress reaches them."""
-
-    concurrent: int
-    length: timedelta
-    buckets: Mapping[Home, StorageSettings]
-    endpoints: Mapping[Home, str | None]
-
-
-def recording_file_name(title: str | None, started_at: datetime) -> str:
-    """The File Manager name of a recording: the room's title, or "Meeting", and its start."""
-    return f"{title or 'Meeting'} {started_at:%Y-%m-%d %H-%M}.mp4"
 
 
 class Recordings:
@@ -99,12 +70,12 @@ class Recordings:
     def __init__(
         self,
         transactions: HomeTransactions,
-        services: tuple[VideoServer, PortDirectory, EventOutbox],
+        services: tuple[VideoServer, PortDirectory, EventOutbox, MeetingsMetrics],
         limits: RecordingLimits,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._server, self._ports, self._outbox = services
+        self._server, self._ports, self._outbox, self._metrics = services
         self._limits = limits
         self._clock = clock
 
@@ -189,16 +160,17 @@ class Recordings:
             # Время конца — раньше состояния: проверка базы связывает конец с завершённой записью.
             if after not in ACTIVE_STATES:
                 record.ended_at = self._clock()
+            failure = None
             if after is RecordingState.FAILED:
-                record.error_code = FAILURES.get(
-                    report.status, RecordingFailure.EGRESS_FAILED
-                ).value
+                failure = FAILURES.get(report.status, RecordingFailure.EGRESS_FAILED)
+                record.error_code = failure.value
             record.state = after.value
             if after is RecordingState.COMPLETE:
                 await self._complete(session, found, record, report)
             room = await session.get_one(RoomRecord, record.room_id)
             lk_room_name, notes_on = room.lk_room_name, room.notes_on
         if after not in ACTIVE_STATES:
+            self._metrics.recording_ended(failure)
             await self._server.set_metadata(
                 lk_room_name,
                 room_metadata(found.room_id, found.owner_id, RoomMarks(notes_on, recording=False)),
@@ -281,12 +253,17 @@ class Recordings:
     ) -> RoomRecordingRecord:
         async with self._transactions.begin(scope) as session:
             record = await session.get_one(RoomRecordingRecord, recording_id, with_for_update=True)
-            after = advanced(RecordingState(record.state), state)
+            before = RecordingState(record.state)
+            after = advanced(before, state)
             if after is RecordingState.FAILED and record.error_code is None:
                 record.error_code = (failure or RecordingFailure.EGRESS_FAILED).value
                 record.ended_at = self._clock()
             record.state = after.value
-            return record
+            ended = after is RecordingState.FAILED and before is not RecordingState.FAILED
+            code = record.error_code or RecordingFailure.EGRESS_FAILED.value
+        if ended:
+            self._metrics.recording_ended(RecordingFailure(code))
+        return record
 
     def _target(self, home: Home, key: str | None) -> BucketTarget:
         bucket = self._limits.buckets[home]

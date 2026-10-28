@@ -395,6 +395,24 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Keys differ: re-render the environment and recreate `livekit` and the roles together. Forged posts from outside: nothing breaks — they are rejected; the edge's rate limit holds them.
 
+<a id="recordings-failing"></a>
+### RecordingsFailing
+
+**Means.** More than 5% of the recordings that ended in 15 minutes failed (`shosai_meetings_recordings_total` by `outcome`): people pressed Record and got no file.
+
+**Look.** The outcome label: `start_refused` — egress refused or was unreachable at the start (its CPU accounting, `cpu_cost`, against its limit; `docker compose ps egress`); `egress_failed` or `egress_aborted` — egress's own log (`docker compose logs --tail 200 egress`), often the bucket (credentials, endpoint) or Chrome; `egress_lost` — `RecordingEgressLost`.
+
+**Fix.** Egress down: `docker compose up -d egress`. A bucket error: the home's `HOME_*_S3_*` and `MEETINGS_EGRESS_S3_ENDPOINT_*` settings. Refusals at the start with egress up: its `cpu_cost` against its CPU limit (meetings plan §1.3).
+
+<a id="recording-egress-lost"></a>
+### RecordingEgressLost
+
+**Means.** The sweep found a recording that its row says is running but LiveKit no longer knows, with no end reported (§3.7: a recording active without egress). It was marked failed with `egress_lost`; its file will not come.
+
+**Look.** Whether egress or LiveKit restarted at that time (`docker compose ps`, their logs): recreating either drops what they held.
+
+**Fix.** Recreate LiveKit and egress only when no call or recording runs ([staging runbook](staging.md#calls-livekit)). Repeated losses without restarts: egress's log around the recording's start.
+
 <a id="scrape-target-down"></a>
 ### ScrapeTargetDown
 

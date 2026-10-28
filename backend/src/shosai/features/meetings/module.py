@@ -8,7 +8,8 @@ account data handler. Step A4 added the owner's rooms on `/v1/meetings/rooms`, t
 join with its room passes in Valkey and their renewal, removal with bans, hands and the
 account's rooms. Step A5 added LiveKit's webhook, calls and the sweep of each home; A6 the
 call's chat; A7 its video recording. Step A8 added the admin's LiveKit screen over LiveKit's
-API and Prometheus, A13 Leo's `meetings` toolset, A11b the room's board and A12b broadcasts.
+API and Prometheus, A13 Leo's `meetings` toolset, A11b the room's board and A12b broadcasts;
+A15c counts recordings by their outcome.
 """
 
 from collections.abc import AsyncIterator
@@ -38,7 +39,8 @@ from shosai.features.meetings.application.calls import Calls
 from shosai.features.meetings.application.chat import Chat
 from shosai.features.meetings.application.joining import JoinDesk
 from shosai.features.meetings.application.passes import PassCheck
-from shosai.features.meetings.application.recording import RecordingLimits, Recordings
+from shosai.features.meetings.application.recording import Recordings
+from shosai.features.meetings.application.recording_rules import RecordingLimits
 from shosai.features.meetings.application.removals import Removals
 from shosai.features.meetings.application.rooms import RoomBook
 from shosai.features.meetings.application.sweep import Sweep
@@ -92,7 +94,7 @@ async def build_meetings(services: CoreServices) -> AsyncIterator[FeatureParts]:
         metrics = MeetingsMetrics(services.registry)
         calls = Calls(transactions, (services.outbox, services.tasks))
         recordings = Recordings(
-            transactions, (server, ports, services.outbox), recording_limits(services)
+            transactions, (server, ports, services.outbox, metrics), recording_limits(services)
         )
         sweep = Sweep(transactions, (server, calls, ports, metrics, recordings))
         boards = Boards(transactions, (ports, services.rate_limiter, services.objects))

@@ -76,10 +76,12 @@ def test_the_draft_names_four_links_and_the_webhook() -> None:
 
 
 def test_the_webhook_is_served_where_livekit_posts_it(homes: DatabaseAccess) -> None:
-    server = SfuDouble()
-    recordings = Recordings(homes.transactions, (server, PortDirectory(), outbox_of()), LIMITS)
+    server, metrics = SfuDouble(), MeetingsMetrics(CollectorRegistry())
+    recordings = Recordings(
+        homes.transactions, (server, PortDirectory(), outbox_of(), metrics), LIMITS
+    )
     calls = calls_of(homes, SentTasks())
-    router = build_webhook_router(server, (calls, recordings), MeetingsMetrics(CollectorRegistry()))
+    router = build_webhook_router(server, (calls, recordings), metrics)
     app = build_probe_app(extra=(router,)).app
     routes: list[Json] = list(route_snapshot(app))
     candidate = Candidate(openapi=app.openapi(), routes=parse_routes(routes, "probe"))

@@ -517,3 +517,36 @@ tests:
       - eval_time: 44m
         alertname: LiveKitWebhooksRejected
         exp_alerts: []
+
+  # Записи звонков (meetings A15c): доля сбоев и потерянный egress.
+  - interval: 1m
+    input_series:
+      - series: 'shosai_meetings_recordings_total{outcome="complete",instance="api"}'
+        values: "0+1x45"
+      - series: 'shosai_meetings_recordings_total{outcome="egress_failed",instance="api"}'
+        values: "0x5 0+1x5 5x35"
+      - series: 'shosai_meetings_recordings_total{outcome="egress_lost",instance="workers"}'
+        values: "0x5 1x40"
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: RecordingsFailing
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "Записи звонков не сохраняются"
+              description: "Больше 5 % записей за 15 минут закончились сбоем: люди нажимают «Записать», а файла не получают."
+              runbook: docs/runbooks/alerts.md#recordings-failing
+      - eval_time: 40m
+        alertname: RecordingsFailing
+        exp_alerts: []
+      - eval_time: 10m
+        alertname: RecordingEgressLost
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "Запись звонка потеряна"
+              description: "Обход нашёл запись, которую сервер звонков уже не ведёт и о конце которой не сообщил: её файла не будет."
+              runbook: docs/runbooks/alerts.md#recording-egress-lost
+      - eval_time: 44m
+        alertname: RecordingEgressLost
+        exp_alerts: []

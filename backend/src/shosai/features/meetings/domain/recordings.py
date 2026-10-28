@@ -41,7 +41,7 @@ _RANK: Final = {
 
 
 class RecordingFailure(StrEnum):
-    """Why a recording failed; kept on the row and counted by the metric."""
+    """Why a recording failed; kept on the row and counted by `shosai_meetings_recordings_total`."""
 
     START_REFUSED = "start_refused"
     EGRESS_FAILED = "egress_failed"

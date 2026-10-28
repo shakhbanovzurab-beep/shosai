@@ -8,6 +8,7 @@ from datetime import timedelta
 from typing import Any
 
 import pytest
+from prometheus_client import CollectorRegistry
 from sqlalchemy import select, update
 
 from shosai.core.config.roles import ProcessRole
@@ -25,10 +26,12 @@ from shosai.features.files.contracts.written_files import WRITTEN_FILES
 from shosai.features.files.infrastructure.file_records import StorageFileRecord
 from shosai.features.identity.contracts import Principal as Person
 from shosai.features.meetings.application.joining import FoundRoom
-from shosai.features.meetings.application.recording import RecordingLimits, Recordings
+from shosai.features.meetings.application.recording import Recordings
+from shosai.features.meetings.application.recording_rules import RecordingLimits
 from shosai.features.meetings.application.video_server import EgressReport, RoomSpec
 from shosai.features.meetings.contracts.events import CallEnded, CallStarted, RecordingReady
 from shosai.features.meetings.infrastructure.call_records import RoomRecordingRecord
+from shosai.features.meetings.infrastructure.meetings_metrics import MeetingsMetrics
 from tests.features.meetings.room_bench import NOW, People, SfuDouble
 from tests.features.meetings.room_kit import add_room, room_row
 from tests.harness.database_access import (
@@ -67,7 +70,11 @@ LIMITS = RecordingLimits(
 
 
 def recordings_of(
-    homes: DatabaseAccess, sfu: SfuDouble, people: People, limits: RecordingLimits = LIMITS
+    homes: DatabaseAccess,
+    sfu: SfuDouble,
+    people: People,
+    limits: RecordingLimits = LIMITS,
+    registry: CollectorRegistry | None = None,
 ) -> Recordings:
     """The recordings over the slot's homes, the SFU double and the plan double."""
     ports = PortDirectory()
@@ -78,7 +85,13 @@ def recordings_of(
             WRITTEN_FILES.bind(WrittenFilesService(homes.transactions, ports, outbox)),
         ]
     )
-    return Recordings(homes.transactions, (sfu, ports, outbox), limits, lambda: NOW)
+    metrics = MeetingsMetrics(registry or CollectorRegistry())
+    return Recordings(homes.transactions, (sfu, ports, outbox, metrics), limits, lambda: NOW)
+
+
+def ended(registry: CollectorRegistry, outcome: str) -> float | None:
+    """How many recordings ended with this outcome, by the process's metric."""
+    return registry.get_sample_value("shosai_meetings_recordings_total", {"outcome": outcome})
 
 
 async def live_room(homes: DatabaseAccess, sfu: SfuDouble, owner: uuid.UUID) -> uuid.UUID:
@@ -98,9 +111,9 @@ def code_of(error: pytest.ExceptionInfo[AppError]) -> tuple[int, str]:
 async def test_a_paid_owner_records_into_their_file_key_and_the_file_lands_in_file_manager(
     homes: DatabaseAccess,
 ) -> None:
-    owner, sfu, people = uuid.uuid4(), SfuDouble(), People()
+    owner, sfu, people, registry = uuid.uuid4(), SfuDouble(), People(), CollectorRegistry()
     room_id = await live_room(homes, sfu, owner)
-    recordings = recordings_of(homes, sfu, people)
+    recordings = recordings_of(homes, sfu, people, registry=registry)
     person = Person(owner, Home.RU, 0)
 
     record = await recordings.start(person, room_id)
@@ -130,6 +143,8 @@ async def test_a_paid_owner_records_into_their_file_key_and_the_file_lands_in_fi
         (record.id, target.key, "video/mp4")
     ]
     assert json.loads(next(iter(sfu.metadata.values())))["marks"]["recording"] is False
+    # Повторный отчёт о конце запись не считает дважды.
+    assert ended(registry, "complete") == 1
 
 
 @pytest.mark.parametrize(
@@ -159,18 +174,20 @@ async def test_a_start_is_refused_in_the_domains_order(
 async def test_a_failed_egress_keeps_its_code(
     homes: DatabaseAccess,
 ) -> None:
-    owner, sfu, people = uuid.uuid4(), SfuDouble(), People()
+    owner, sfu, people, registry = uuid.uuid4(), SfuDouble(), People(), CollectorRegistry()
     room_id = await live_room(homes, sfu, owner)
-    recordings = recordings_of(homes, sfu, people)
+    recordings = recordings_of(homes, sfu, people, registry=registry)
     record = await recordings.start(Person(owner, Home.RU, 0), room_id)
     egress_id = next(iter(sfu.targets))
     found = FoundRoom(Home.RU, room_id, owner, None)
 
     await recordings.on_report(found, EgressReport(egress_id, "", "EGRESS_ABORTED"))
+    await recordings.on_report(found, EgressReport(egress_id, "", "EGRESS_FAILED"))
 
     async with homes.transactions.begin(TenancyScope(Home.RU, owner), read_only=True) as session:
         row = await session.get_one(RoomRecordingRecord, record.id)
     assert (row.state, row.error_code) == ("failed", "egress_aborted")
+    assert (ended(registry, "egress_aborted"), ended(registry, "egress_failed")) == (1, None)
 
 
 async def test_the_sweep_settles_a_lost_webhook_and_stops_a_recording_at_its_limit(
@@ -206,3 +223,27 @@ async def test_the_sweep_settles_a_lost_webhook_and_stops_a_recording_at_its_lim
         settled = await session.get_one(RoomRecordingRecord, lost.id)
     assert (settled.state, settled.file_id) == ("complete", lost.id)
     assert sfu.egress_reports[long_egress].status == "EGRESS_ENDING"
+
+
+async def test_a_recording_whose_egress_vanished_fails_as_lost_and_is_counted_once(
+    homes: DatabaseAccess, workers: DatabaseAccess
+) -> None:
+    owner, sfu, people, registry = uuid.uuid4(), SfuDouble(), People(), CollectorRegistry()
+    room_id = await live_room(homes, sfu, owner)
+    record = await recordings_of(homes, sfu, people).start(Person(owner, Home.RU, 0), room_id)
+    sfu.egress_reports.clear()
+    async with homes.transactions.begin(TenancyScope(Home.RU, owner)) as session:
+        await session.execute(
+            update(RoomRecordingRecord)
+            .where(RoomRecordingRecord.id == record.id)
+            .values(started_at=NOW - timedelta(minutes=3))
+        )
+    sweep = recordings_of(workers, sfu, people, registry=registry)
+
+    await sweep.reconcile(Home.RU, NOW)
+    await sweep.reconcile(Home.RU, NOW)
+
+    async with homes.transactions.begin(TenancyScope(Home.RU, owner), read_only=True) as session:
+        row = await session.get_one(RoomRecordingRecord, record.id)
+    assert (row.state, row.error_code) == ("failed", "egress_lost")
+    assert ended(registry, "egress_lost") == 1

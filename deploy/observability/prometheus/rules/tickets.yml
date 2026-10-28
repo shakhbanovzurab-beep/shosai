@@ -273,6 +273,28 @@ groups:
           description: 'Больше 1 % вебхуков LiveKit за 15 минут не прошли проверку подписи: звонки не открываются и не закрываются в Shosai, или кто-то шлёт поддельные события.'
           runbook: docs/runbooks/alerts.md#livekit-webhooks-rejected
 
+      - alert: RecordingsFailing
+        expr: |
+          sum(increase(shosai_meetings_recordings_total{outcome!="complete"}[15m]))
+            > 0.05 * sum(increase(shosai_meetings_recordings_total[15m]))
+          and sum(increase(shosai_meetings_recordings_total{outcome!="complete"}[15m])) >= 1
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Записи звонков не сохраняются'
+          description: 'Больше 5 % записей за 15 минут закончились сбоем: люди нажимают «Записать», а файла не получают.'
+          runbook: docs/runbooks/alerts.md#recordings-failing
+
+      # Запись, у которой пропал egress: строка говорит «идёт», а LiveKit её не знает (§3.7).
+      - alert: RecordingEgressLost
+        expr: sum(increase(shosai_meetings_recordings_total{outcome="egress_lost"}[30m])) >= 1
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Запись звонка потеряна'
+          description: 'Обход нашёл запись, которую сервер звонков уже не ведёт и о конце которой не сообщил: её файла не будет.'
+          runbook: docs/runbooks/alerts.md#recording-egress-lost
+
   - name: tickets-targets
     rules:
       - alert: ScrapeTargetDown
