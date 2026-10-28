@@ -29,7 +29,8 @@ docker buildx build -f frontend/Dockerfile --secret id=cabinet_env,src=cabinet.e
 | `SHOSAI_WS_UPSTREAM` | the `ws` gateway, `host:port` | `ws:8000` |
 | `SHOSAI_CSP_STORAGE_ORIGINS` | the buckets' origins, space-separated: avatars and exports load from them | empty |
 | `SHOSAI_CSP_RTC_ORIGINS` | LiveKit's signalling, `wss://` and `https://` of `LIVEKIT_URL`, rendered from it: the room page connects to it | empty (no calls) |
-| `SHOSAI_TURN_SERVER_NAME` | LiveKit's TURN/TLS name (`turn.shosai.tech`): the edge's port 443 reads the TLS SNI and passes this name to LiveKit's TURN (`SHOSAI_TURN_UPSTREAM`, `livekit:5349`), everything else to the HTTPS edge, which takes the client's address from the PROXY protocol (meetings A14) | empty (all of 443 is the HTTPS edge) |
+| `SHOSAI_TURN_SERVER_NAME` | LiveKit's TURN/TLS name (`turn.shosai.tech`): the edge's port 443 reads the TLS SNI and sends this name to an internal server that terminates TLS with the edge's certificate and passes plain TCP to LiveKit's TURN (`SHOSAI_TURN_UPSTREAM`, `livekit:5349`, `external_tls`); everything else goes to the HTTPS edge, which takes the client's address from the PROXY protocol (meetings A14, A15) | empty (all of 443 is the HTTPS edge) |
+| `SHOSAI_RTC_SERVER_NAME` | LiveKit's signalling name (`rtc.shosai.tech`): a server of the HTTPS edge that passes `/rtc…` (the client's WebSocket and its validation) and `/` (LiveKit's health) to `SHOSAI_RTC_UPSTREAM` (`livekit:7880`); LiveKit's server API `/twirp/` stays on the plane's network (meetings A15) | empty (no signalling server) |
 | `SHOSAI_ROBOTS_TAG` | `X-Robots-Tag` of every answer | `noindex, nofollow` |
 
 What it serves:
@@ -46,20 +47,20 @@ What it serves:
 
 ## The staging host
 
-Staging runs on the development machine (F4-D1) as the Compose project `shosai-staging` in `/srv/shosai`, owned by the user `deploy` (no password, member of `docker`). Only the edge publishes ports: 80 and 443.
+Staging runs on the development machine (F4-D1) as the Compose project `shosai-staging` in `/srv/shosai`, owned by the user `deploy` (no password, member of `docker`). The edge publishes 80 and 443, LiveKit its media ports (below); nothing else listens outside.
 
 | Path in `/srv/shosai` | What | From |
 |---|---|---|
 | `compose.yaml`, `deploy/pgbouncer/` | the plane | `compose.yaml`, `pgbouncer/` here |
 | `.env` | images and the edge's public settings (Compose interpolation) | `render-env.py`, then the release |
 | `.env.staging` | every long-running backend role's settings | `render-env.py` |
-| `secrets/` | the migrator's addresses, PgBouncer's users, Qdrant's key, Valkey and cache ACLs, the cabinet's build variables, and the secrets generated once for staging | `render-env.py` |
+| `secrets/` | the migrator's addresses, PgBouncer's users, Qdrant's key, Valkey and cache ACLs, the cabinet's build variables, LiveKit's and egress's configuration and their Redis ACL, and the secrets generated once for staging | `render-env.py` (LiveKit's files by `livekit_files.py`) |
 | `tls/shared/` | Timeweb's root, the internal CA and PgBouncer's certificate | `internal-tls.sh` |
 | `tls/edge/`, `letsencrypt/`, `acme/` | the edge's certificate, certbot's state, ACME challenges | `certificate.sh` |
 | `deploy/release.sh` | the deploy key's only command (owner root) | `release.sh` here |
 | `releases/` | the previous images, the release history, the release lock | `release.sh` |
 
-What runs: edge; `api`, `ws`, workers of the four queues and `scheduler` (384 MB each); PgBouncer of each home; Valkey (F4-D2: AOF, `noeviction`, ACL user, the fixed address 172.30.42.10 the gate admits); the cache; Qdrant. On 2026-10-15 the plane used about 1.5 GB. The network has IPv6 for the Russian home, whose cluster has a public IPv6 address only; dynamic addresses come from 172.30.42.128/25, so the fixed ones (edge .2, Valkey .10) stay free.
+What runs: edge; `api`, `ws`, workers of the four queues and `scheduler` (384 MB each); PgBouncer of each home; Valkey (F4-D2: AOF, `noeviction`, ACL user, the fixed address 172.30.42.10 the gate admits); the cache; Qdrant; calls — `livekit`, `livekit-redis` and `egress` (meetings A15, below). On 2026-10-15 the plane used about 1.5 GB. The network has IPv6 for the Russian home, whose cluster has a public IPv6 address only; dynamic addresses come from 172.30.42.128/25, so the fixed ones (edge .2, Valkey .10) stay free.
 
 **Databases.** Each home's managed PostgreSQL (Timeweb) holds the database `shosai` with a migrator and an application role, created in Timeweb's panel, and the sweep role `shosai_sweeper` ([ADR 0053](../../docs/adr/0053-workspaces-access-rls-invitations-and-deletion.md)): it cannot log in, the application role may switch to it inside a transaction but does not inherit it ([runbook](../../docs/runbooks/staging.md#database-roles)). Migrations from workspaces step 2 on grant it privileges and policies, so it must exist before such a release. Memory's migration `e8bc01bd5bb4` needs the `vector` extension, which is not trusted: it is enabled in each home's database by Timeweb's panel or support before such a release ([runbook](../../docs/runbooks/staging.md#the-vector-extension)). The application reaches PgBouncer over TLS with `sslmode=verify-full` against the internal CA; PgBouncer and the migrator reach the cluster with `verify-full` against Timeweb's root `CN=managed-service.timeweb.cloud` (`tls/timeweb-ca.crt`, SHA-256 `17:17:9B:AD:B9:92:FE:B0:38:42:6F:F3:1B:A6:6A:B7:FA:71:1F:09:2C:A2:27:05:BD:72:51:F3:01:1A:12:4D`, valid to 2040; both clusters present it). Migrations run on demand, so the migrator's password never lives in a long-running process.
 
@@ -83,6 +84,21 @@ docker compose up -d
 ```
 
 The certificate renews through `shosai-certificate.timer` (twice a day, `certificate.sh renew`), which copies it to `tls/edge` and reloads the edge.
+
+## Calls
+
+Meetings A15 ([plan](../../docs/plan/slices/meetings.md), ADR 0072 MR-D14): LiveKit runs in the plane, on this host only.
+
+| Service | Image | Limits | Outside |
+|---|---|---|---|
+| `livekit` | `livekit/livekit-server:v1.13.11`, uid 65534, read-only root | 512 MB (swap included), 1 CPU, `GOMEMLIMIT` 460 MiB | TCP 7881 (ICE), UDP 7882 (ICE), UDP 3478 (TURN), UDP 30000–30099 (TURN relay), IPv4 only |
+| `livekit-redis` | `redis:8.10.2-alpine`, no disk, ACL user | 64 MB, 0.25 CPU | — |
+| `egress` | `livekit/egress:v1.15.0` in LiveKit's network namespace, `SYS_ADMIN` for Chrome's sandbox | 1 GB, 1 CPU | — |
+
+- **Names.** `rtc.shosai.tech` (signalling) and `turn.shosai.tech` (TURN/TLS) point at this host and share 443 with the cabinet: the edge splits them by SNI and terminates TLS for both with its one certificate. LiveKit advertises `turns:turn.shosai.tech:443?transport=tcp` and `turn:129.101.125.250:3478?transport=udp` to clients.
+- **Files.** `render-env.py` writes, through `livekit_files.py`, `secrets/livekit.yaml` (uid 65534), `secrets/egress.yaml` (uid 1001) and `secrets/livekit-redis.acl` from `LIVEKIT_API_KEY` and `LIVEKIT_API_SECRET` in the owner's `.env` and a Redis password generated once; the backend's `LIVEKIT_*` and `MEETINGS_*` (ceiling 4, one recording, 30 minutes); the edge's names; Prometheus's targets `livekit:6789` and egress's `livekit:9090`; the probes of `rtc` and `turn`.
+- **Release.** `release.sh` never touches LiveKit: recreating it ends every call. Changes go through `docker compose up -d livekit livekit-redis egress` by hand ([runbook](../../docs/runbooks/staging.md#calls-livekit)).
+- **Set up, as root,** after the DNS records: the refresh commands above, then `sh /srv/shosai/deploy/certificate.sh expand /srv/shosai` for the two names and `docker compose up -d` in `/srv/shosai`.
 
 ## Observability
 

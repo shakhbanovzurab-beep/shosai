@@ -1,8 +1,15 @@
-# TURN/TLS LiveKit: принимает PROXY protocol от потока 443 и отдаёт LiveKit чистый TLS — его
-# TURN-сервер заголовка не понимает. Адрес LiveKit разрешается при каждом соединении, поэтому
-# edge стартует и тогда, когда LiveKit ещё не поднят.
+# TURN/TLS LiveKit: принимает PROXY protocol от потока 443, сам завершает TLS сертификатом edge и
+# отдаёт LiveKit открытый TCP — его TURN работает с external_tls (meetings A15). Так сертификат
+# один и продлевается перечитыванием edge, а не перезапуском LiveKit, который оборвал бы звонки.
+# Адрес LiveKit разрешается при каждом соединении, поэтому edge стартует и без LiveKit.
 server {
-    listen 127.0.0.1:8446 proxy_protocol;
+    listen 127.0.0.1:8446 ssl proxy_protocol;
+    ssl_certificate ${SHOSAI_TLS_CERTIFICATE};
+    ssl_certificate_key ${SHOSAI_TLS_CERTIFICATE_KEY};
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_session_tickets off;
+    ssl_handshake_timeout 10s;
     resolver ${SHOSAI_RESOLVER} valid=10s ipv6=off;
     set $shosai_turn_upstream ${SHOSAI_TURN_UPSTREAM};
     proxy_pass $shosai_turn_upstream;

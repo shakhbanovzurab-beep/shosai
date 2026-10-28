@@ -9,11 +9,12 @@ The owner's file keeps some draft-era names (`SMTP_USER`, `SMTP_TLS_MODE`, the `
 mailbox); this script maps them to the settings of `.env.example`, builds the database
 addresses with `sslmode=verify-full`, and generates the secrets that only staging uses
 (Valkey, the cache, Qdrant, unsubscribe links, the admin sign-in address, Grafana's admin
-password). It also writes the observability stack's files (F5 step 10): Alertmanager's bot,
-chat and heartbeat address, Grafana's password, the probe targets and the stack's `.env`.
-Generated secrets
-are kept in `secrets/generated.env` and reused on every later run, so rendering again never
-rotates them. No value is ever printed. Every written file is mode 600, owned by `deploy`.
+password, LiveKit's Redis). It writes LiveKit's files and the backend's call settings
+(`livekit_files.py`, meetings A15). It also writes the observability stack's files (F5 step
+10): Alertmanager's bot, chat and heartbeat address, Grafana's password, the probe targets
+and the stack's `.env`. Generated secrets are kept in `secrets/generated.env` and reused on
+every later run, so rendering again never rotates them. No value is ever printed. Every
+written file is mode 600, owned by `deploy`, except those a container's own user reads.
 """
 
 import hashlib
@@ -25,6 +26,15 @@ import sys
 from pathlib import Path
 from urllib.parse import quote, urlsplit
 
+from livekit_files import (
+    CallNames,
+    backend_settings,
+    edge_settings,
+    keys_of,
+    probe_lines,
+    write_livekit,
+)
+
 DEPLOY_USER = "deploy"
 # Статический адрес Valkey в сети плоскости: гейт пускает redis:// только на IP частной сети.
 VALKEY_ADDRESS = "172.30.42.10"
@@ -33,6 +43,7 @@ INTERNAL_CA = "/run/shosai-tls/internal-ca.crt"
 TIMEWEB_CA = "/run/shosai-tls/timeweb-ca.crt"
 STORAGE_ORIGIN_SCHEME = "https://"
 SERVER_NAME = "shosai.tech"
+CALLS = CallNames(SERVER_NAME)
 # Модель OpenRouter по умолчанию для заметок встреч, та же, что в .env.example.
 NOTES_MODEL = "google/gemini-3.8-flash"
 # Расшифровка записей сразу с говорящими (ADR 0073).
@@ -48,6 +59,7 @@ GENERATED = (
     "EMAIL_LINK_SECRET",
     "ADMIN_LOGIN_SEGMENT",
     "GRAFANA_ADMIN_PASSWORD",
+    "LIVEKIT_REDIS_PASSWORD",
 )
 # Пользователи процессов стека наблюдаемости в их образах: Alertmanager и Prometheus — nobody.
 NOBODY = (65534, 65534)
@@ -198,6 +210,7 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
         "AGENT_UTILITY_MODEL": AGENT_UTILITY_MODEL,
     }
     env |= {key: source[key] for key in COPIED if source.get(key)}
+    env |= backend_settings(CALLS, keys_of(source))
     for home in ("RU", "EU"):
         env[f"HOME_{home}_DATABASE_URL"] = database_url(
             source[f"HOME_{home}_APP_USER"], source[f"HOME_{home}_APP_PASSWORD"],
@@ -214,16 +227,8 @@ def storage_origin(endpoint: str) -> str:
     return f"{parts.scheme}://{parts.netloc}"
 
 
-def rtc_origins(signal_url: str) -> str:
-    """LiveKit's signalling for the cabinet's CSP: its wss:// and https:// origins; empty without it."""
-    if not signal_url.startswith("wss://"):
-        return ""
-    host = signal_url.removeprefix("wss://").split("/", 1)[0]
-    return f"wss://{host} https://{host}"
-
-
 def probe_targets(source: dict[str, str], domain: str) -> str:
-    """Prometheus file_sd targets: health through the edge and each home's database."""
+    """Prometheus file_sd targets: health through the edge, each home's database and calls."""
     lines = [
         "# Пробы staging (render-env.py): здоровье через edge и TCP к базе дома.",
         f'- targets: ["https://{domain}/v1/health"]',
@@ -237,6 +242,7 @@ def probe_targets(source: dict[str, str], domain: str) -> str:
             f'- targets: ["{address}"]',
             f"  labels: {{module: tcp_connect, probe: home_database, home: {home.lower()}}}",
         ]
+    lines += probe_lines(CALLS)
     return "\n".join(lines) + "\n"
 
 
@@ -336,12 +342,13 @@ def main(source_path: Path, target: Path) -> None:
             "SHOSAI_EDGE_IMAGE": images.get("SHOSAI_EDGE_IMAGE", "shosai-edge:staging"),
             "SHOSAI_SERVER_NAME": SERVER_NAME,
             "SHOSAI_CSP_STORAGE_ORIGINS": " ".join(origins),
-            "SHOSAI_CSP_RTC_ORIGINS": rtc_origins(source.get("LIVEKIT_URL", "")),
+            **edge_settings(CALLS),
             **downloads,
         }),
         owner,
     )  # fmt: skip
     write_observability(source, generated, target, owner)
+    write_livekit(CALLS, source, generated["LIVEKIT_REDIS_PASSWORD"], target, acl, write_private)
 
 
 if __name__ == "__main__":

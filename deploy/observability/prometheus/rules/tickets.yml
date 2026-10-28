@@ -20,6 +20,18 @@ groups:
           description: 'Диск {{ $labels.mountpoint }} заполнен больше чем на 80 %. Когда место кончится, сервис перестанет сохранять данные.'
           runbook: docs/runbooks/alerts.md#host-disk-filling
 
+      # На одной машине живут staging, его наблюдаемость и звонки (MR-D14): без памяти ядро убивает
+      # процессы, а под сильным давлением машина перезагружалась целиком.
+      - alert: HostMemoryLow
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.1
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Память сервера на исходе'
+          description: 'Свободной памяти меньше 10 % уже 10 минут. Когда она кончится, сервер начнёт останавливать службы, а под сильным давлением может перезагрузиться.'
+          runbook: docs/runbooks/alerts.md#host-memory-low
+
   - name: tickets-backend
     rules:
       - alert: DatabasePoolBusy
@@ -212,6 +224,54 @@ groups:
           summary: 'В роли {{ $labels.studio_role }} выбор людей часто не отвечает: {{ $labels.reason }}'
           description: 'Больше 5 % разрешений роли за час отвечают моделью по умолчанию вместо выбранной людьми. Причина — в метке reason: модель выключена, убрана из каталога, не умеет нужного роли или не входит в тариф.'
           runbook: docs/runbooks/alerts.md#studio-substitutions-high
+
+  # Звонки (meetings §3.7, A15): вход в звонок снаружи, память LiveKit и egress, подпись вебхуков.
+  - name: tickets-meetings
+    rules:
+      - alert: CallEntryFailing
+        expr: probe_success{probe=~"rtc_signal|turn_tls"} == 0
+        for: 3m
+        labels:
+          severity: ticket
+        annotations:
+          summary: '{{ if eq $labels.probe "turn_tls" }}Звонки недоступны в сетях, где закрыт UDP{{ else }}Звонки не подключаются{{ end }}'
+          description: '{{ if eq $labels.probe "turn_tls" }}Ретрансляция TURN на 443 3 минуты не принимает TLS: люди за строгими сетями не соединятся со звонком.{{ else }}Сигнализация LiveKit 3 минуты не отвечает через edge: новые люди не войдут в звонок.{{ end }}'
+          runbook: docs/runbooks/alerts.md#call-entry-failing
+
+      # Мягкий предел Go (GOMEMLIMIT) — 90 % жёсткого лимита контейнера: если процесс выше него,
+      # сборщик мусора уже не справляется, и до убийства по лимиту недалеко.
+      - alert: LiveKitMemoryHigh
+        expr: process_resident_memory_bytes{job="livekit"} > go_gc_gomemlimit_bytes{job="livekit"}
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Серверу звонков не хватает памяти'
+          description: 'LiveKit 10 минут держит больше памяти, чем ему отведено мягким пределом. Если он упрётся в жёсткий лимит, все идущие звонки оборвутся.'
+          runbook: docs/runbooks/alerts.md#livekit-memory-high
+
+      # Лимит памяти egress — 1 ГиБ и локально, и на staging (compose.dev.yaml, deploy/staging/compose.yaml).
+      - alert: EgressMemoryHigh
+        expr: livekit_egress_cgroup_memory_bytes{job="egress"} > 0.9 * 1073741824
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Записи звонка не хватает памяти'
+          description: 'Egress 5 минут держит больше 90 % своего лимита памяти. Если он в него упрётся, идущая запись оборвётся.'
+          runbook: docs/runbooks/alerts.md#egress-memory-high
+
+      - alert: LiveKitWebhooksRejected
+        expr: |
+          sum(increase(shosai_meetings_webhook_verifications_total{outcome="rejected"}[15m]))
+            > 0.01 * sum(increase(shosai_meetings_webhook_verifications_total[15m]))
+          and sum(increase(shosai_meetings_webhook_verifications_total{outcome="rejected"}[15m])) >= 3
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Сервис отклоняет события сервера звонков'
+          description: 'Больше 1 % вебхуков LiveKit за 15 минут не прошли проверку подписи: звонки не открываются и не закрываются в Shosai, или кто-то шлёт поддельные события.'
+          runbook: docs/runbooks/alerts.md#livekit-webhooks-rejected
 
   - name: tickets-targets
     rules:

@@ -3,7 +3,8 @@
 #   sh certificate.sh issue /srv/shosai   — первый выпуск: certbot сам слушает порт 80 (edge ещё нет);
 #   sh certificate.sh renew /srv/shosai   — продление через webroot работающего edge (таймер systemd);
 #   sh certificate.sh expand /srv/shosai  — добавить в сертификат новое имя через работающий edge.
-# Имена сертификата: домен и адрес Grafana (F5-D1), один сертификат на оба.
+# Имена сертификата: домен, адрес Grafana (F5-D1), сигнализация и TURN звонков (meetings A15) — один
+# сертификат на все: edge завершает TLS каждого из них, LiveKit своего сертификата не держит.
 # После выпуска или продления цепочка и ключ копируются в tls/edge для NGINX (uid 101), и edge
 # перечитывает конфигурацию. Адрес почты Let's Encrypt не передаётся: уведомлений он больше не шлёт.
 set -eu
@@ -11,6 +12,8 @@ action="${1:?issue, expand или renew}"
 target="${2:?каталог staging, например /srv/shosai}"
 domain="${SHOSAI_SERVER_NAME:-shosai.tech}"
 grafana="grafana.$domain"
+rtc="rtc.$domain"
+turn="turn.$domain"
 certbot_image="certbot/certbot:v5.8.0"
 install -d -m 755 "$target/acme" "$target/letsencrypt"
 install -d -m 750 -o 101 -g 101 "$target/tls/edge"
@@ -18,13 +21,13 @@ case "$action" in
   issue)
     docker run --rm -p 80:80 -v "$target/letsencrypt:/etc/letsencrypt" "$certbot_image" \
       certonly --standalone --non-interactive --agree-tos --register-unsafely-without-email \
-      --key-type ecdsa --cert-name "$domain" -d "$domain" -d "$grafana"
+      --key-type ecdsa --cert-name "$domain" -d "$domain" -d "$grafana" -d "$rtc" -d "$turn"
     ;;
   expand)
     docker run --rm -v "$target/letsencrypt:/etc/letsencrypt" -v "$target/acme:/var/www/acme" \
       "$certbot_image" certonly --webroot -w /var/www/acme --non-interactive --agree-tos \
       --register-unsafely-without-email --key-type ecdsa --expand \
-      --cert-name "$domain" -d "$domain" -d "$grafana"
+      --cert-name "$domain" -d "$domain" -d "$grafana" -d "$rtc" -d "$turn"
     ;;
   renew)
     docker run --rm -v "$target/letsencrypt:/etc/letsencrypt" -v "$target/acme:/var/www/acme" \

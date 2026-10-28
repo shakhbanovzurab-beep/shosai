@@ -429,3 +429,91 @@ tests:
               summary: "В роли code выбор людей часто не отвечает: not_on_plan"
               description: "Больше 5 % разрешений роли за час отвечают моделью по умолчанию вместо выбранной людьми. Причина — в метке reason: модель выключена, убрана из каталога, не умеет нужного роли или не входит в тариф."
               runbook: docs/runbooks/alerts.md#studio-substitutions-high
+
+  # Память сервера (meetings A15).
+  - interval: 1m
+    input_series:
+      - series: 'node_memory_MemAvailable_bytes{instance="node"}'
+        values: "50x5 5x20 50x20"
+      - series: 'node_memory_MemTotal_bytes{instance="node"}'
+        values: "100x45"
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: HostMemoryLow
+        exp_alerts:
+          - exp_labels: {severity: ticket, instance: node}
+            exp_annotations:
+              summary: "Память сервера на исходе"
+              description: "Свободной памяти меньше 10 % уже 10 минут. Когда она кончится, сервер начнёт останавливать службы, а под сильным давлением может перезагрузиться."
+              runbook: docs/runbooks/alerts.md#host-memory-low
+      - eval_time: 40m
+        alertname: HostMemoryLow
+        exp_alerts: []
+
+  # Звонки (meetings A15): вход снаружи, память LiveKit и egress, подпись вебхуков.
+  - interval: 1m
+    input_series:
+      - series: 'probe_success{probe="rtc_signal",instance="https://rtc"}'
+        values: "1x5 0x10 1x20"
+      - series: 'probe_success{probe="turn_tls",instance="turn:443"}'
+        values: "1x5 0x10 1x20"
+      - series: 'process_resident_memory_bytes{job="livekit",instance="livekit:6789"}'
+        values: "100x5 500x20 100x20"
+      - series: 'go_gc_gomemlimit_bytes{job="livekit",instance="livekit:6789"}'
+        values: "460x45"
+      - series: 'livekit_egress_cgroup_memory_bytes{job="egress",instance="livekit:9090"}'
+        values: "100000000x5 1000000000x20 100000000x20"
+      - series: 'shosai_meetings_webhook_verifications_total{outcome="accepted",instance="api"}'
+        values: "0+10x45"
+      - series: 'shosai_meetings_webhook_verifications_total{outcome="rejected",instance="api"}'
+        values: "0x5 0+1x10 10x30"
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: CallEntryFailing
+        exp_alerts:
+          - exp_labels: {severity: ticket, probe: rtc_signal, instance: "https://rtc"}
+            exp_annotations:
+              summary: "Звонки не подключаются"
+              description: "Сигнализация LiveKit 3 минуты не отвечает через edge: новые люди не войдут в звонок."
+              runbook: docs/runbooks/alerts.md#call-entry-failing
+          - exp_labels: {severity: ticket, probe: turn_tls, instance: "turn:443"}
+            exp_annotations:
+              summary: "Звонки недоступны в сетях, где закрыт UDP"
+              description: "Ретрансляция TURN на 443 3 минуты не принимает TLS: люди за строгими сетями не соединятся со звонком."
+              runbook: docs/runbooks/alerts.md#call-entry-failing
+      - eval_time: 30m
+        alertname: CallEntryFailing
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: LiveKitMemoryHigh
+        exp_alerts:
+          - exp_labels: {severity: ticket, job: livekit, instance: "livekit:6789"}
+            exp_annotations:
+              summary: "Серверу звонков не хватает памяти"
+              description: "LiveKit 10 минут держит больше памяти, чем ему отведено мягким пределом. Если он упрётся в жёсткий лимит, все идущие звонки оборвутся."
+              runbook: docs/runbooks/alerts.md#livekit-memory-high
+      - eval_time: 40m
+        alertname: LiveKitMemoryHigh
+        exp_alerts: []
+      - eval_time: 15m
+        alertname: EgressMemoryHigh
+        exp_alerts:
+          - exp_labels: {severity: ticket, job: egress, instance: "livekit:9090"}
+            exp_annotations:
+              summary: "Записи звонка не хватает памяти"
+              description: "Egress 5 минут держит больше 90 % своего лимита памяти. Если он в него упрётся, идущая запись оборвётся."
+              runbook: docs/runbooks/alerts.md#egress-memory-high
+      - eval_time: 40m
+        alertname: EgressMemoryHigh
+        exp_alerts: []
+      - eval_time: 14m
+        alertname: LiveKitWebhooksRejected
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "Сервис отклоняет события сервера звонков"
+              description: "Больше 1 % вебхуков LiveKit за 15 минут не прошли проверку подписи: звонки не открываются и не закрываются в Shosai, или кто-то шлёт поддельные события."
+              runbook: docs/runbooks/alerts.md#livekit-webhooks-rejected
+      - eval_time: 44m
+        alertname: LiveKitWebhooksRejected
+        exp_alerts: []

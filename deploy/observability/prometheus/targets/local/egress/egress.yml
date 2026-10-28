@@ -1,0 +1,3 @@
+# Egress локального окружения (compose.dev.yaml, профиль meetings-recording): живёт в сетевом
+# пространстве LiveKit, его метрики — на порту 9090 адреса livekit, только в сети Compose.
+- targets: ["livekit:9090"]

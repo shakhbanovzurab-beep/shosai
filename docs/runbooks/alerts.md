@@ -218,6 +218,15 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** `docker system df`; old images beyond the previous release; for a store's filesystem, shorten its retention or raise its cap (F5-D3).
 
+<a id="host-memory-low"></a>
+### HostMemoryLow
+
+**Means.** Less than 10% of the host's memory has been available for 10 minutes. Staging, its observability, LiveKit and the local development stack share this machine; under heavy pressure it has reset itself before.
+
+**Look.** `docker stats --no-stream` for the containers using the most; `free -m` for swap; the `node` dashboard in Grafana for when it started.
+
+**Fix.** A local development stack or a manual check left running: stop what you started. A container at its limit for good: its own ticket (`LiveKitMemoryHigh`, `EgressMemoryHigh`). Steady growth with every container within its limit: the host needs more memory, or the plane's limits are revisited (meetings plan §1.3).
+
 <a id="database-pool-busy"></a>
 ### DatabasePoolBusy
 
@@ -322,6 +331,42 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 **Means.** Over an hour, more than 5 % of a role's resolutions (at least 20) answered with the role's default instead of the model people chose, for one `reason` (`shosai_studio_route_substitutions_total`, by `studio_role`): `disabled` or `not_listed` — the operator switched off or retired a model people use; `cant_do_role` — a model stopped reading what the role needs; `not_on_plan` — people kept a frontier choice after their plan lost frontier models; `frontier_allowance_used` — frontier weeks run out, as billing allows (BL-D4).
 
 **Fix.** For `disabled` and `not_listed`, switch the model back on or accept it: people keep the default until they pick again in Studio. For `cant_do_role`, check the model on the AI models screen. `not_on_plan` and `frontier_allowance_used` follow the plans; raise them with the owner if they last.
+
+<a id="call-entry-failing"></a>
+### CallEntryFailing
+
+**Means.** A probe of a call's way in fails from inside the plane for 3 minutes (meetings A15): `rtc_signal` — `https://rtc.shosai.tech/` through the edge does not get LiveKit's answer, so nobody new joins a call; `turn_tls` — `turn.shosai.tech:443` does not accept TLS, so people behind networks that block UDP cannot connect.
+
+**Look.** `docker compose ps livekit egress livekit-redis` in `/srv/shosai`; `docker compose logs --tail 100 livekit`; the edge's error log in Loki (`{service="edge"} |= "rtc"`); `openssl s_client -connect turn.shosai.tech:443 -servername turn.shosai.tech </dev/null` for the certificate's names.
+
+**Fix.** LiveKit down: `docker compose up -d livekit` (calls in progress are already gone). Both probes failing with the cabinet up: the certificate lacks the names — `sh /srv/shosai/deploy/certificate.sh expand /srv/shosai`. Only `turn_tls`: the edge's `SHOSAI_TURN_SERVER_NAME` is empty — re-render the environment ([staging runbook](staging.md#change-a-setting-or-a-secret)).
+
+<a id="livekit-memory-high"></a>
+### LiveKitMemoryHigh
+
+**Means.** LiveKit's resident memory has been above its Go soft limit (`GOMEMLIMIT`, 90% of the container's hard limit) for 10 minutes: the garbage collector no longer keeps it down, and at the hard limit the kernel kills it with every call on it.
+
+**Look.** The admin's LiveKit screen (rooms, participants, tracks); `livekit_participant_total` and `livekit_room_total` in Prometheus; whether rooms stay open after their people left (the sweep, `shosai_meetings_sweep_rooms_total`).
+
+**Fix.** More calls than staging's ceiling allows means the ceiling is not applied: check `MEETINGS_ROOM_PARTICIPANTS_CEILING`. Memory growing with few rooms: a LiveKit leak — restart it between calls (`docker compose restart livekit`) and record the version. A real need: raise the limit and `GOMEMLIMIT` together in `deploy/staging/compose.yaml` and `MEETINGS_LIVEKIT_MEMORY_LIMIT_MB` in `livekit_files.py`.
+
+<a id="egress-memory-high"></a>
+### EgressMemoryHigh
+
+**Means.** Egress has held more than 90% of its 1 GiB limit for 5 minutes. A recording in progress dies if it reaches the limit.
+
+**Look.** `livekit_egress_proc_rss_bytes` for the processes inside it; the running recording's preset (A7b measured ≤ 434 MiB at 540p 15 fps).
+
+**Fix.** A preset heavier than 540p 15 fps: return to it. Memory left after recordings ended: `docker compose restart egress` when no recording runs (`MEETINGS_RECORDINGS_CONCURRENT` is 1 on staging).
+
+<a id="livekit-webhooks-rejected"></a>
+### LiveKitWebhooksRejected
+
+**Means.** More than 1% of LiveKit's webhooks in 15 minutes (and at least three) failed signature verification. Calls do not open and close in Shosai, or someone posts forged events to `/v1/livekit/webhook`.
+
+**Look.** The `api` logs for «Вебхук LiveKit отклонён» and its `reason` (`body_hash_mismatch`, or the verifier's error); whether LiveKit's `webhook.api_key` in `secrets/livekit.yaml` matches `LIVEKIT_API_KEY` in `.env.staging`.
+
+**Fix.** Keys differ: re-render the environment and recreate `livekit` and the roles together. Forged posts from outside: nothing breaks — they are rejected; the edge's rate limit holds them.
 
 <a id="scrape-target-down"></a>
 ### ScrapeTargetDown

@@ -5,6 +5,8 @@
 # tcp_connect — время соединения с базой дома; для российского дома это задержка канала (§16.6).
 # local_https_health — то же, что https_health, для локального edge с самоподписанным сертификатом;
 # на staging не используется.
+# tls_connect — соединение TLS с проверкой сертификата по имени цели: TURN/TLS звонков на 443
+# (meetings A15), где нет HTTP.
 
 modules:
   https_health:
@@ -34,3 +36,10 @@ modules:
     timeout: 5s
     tcp:
       preferred_ip_protocol: ip4
+
+  tls_connect:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: ip4
+      tls: true

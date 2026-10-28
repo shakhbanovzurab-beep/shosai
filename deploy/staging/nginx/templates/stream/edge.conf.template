@@ -1,7 +1,8 @@
-# Порт 443 edge (meetings A14): разбор SNI без расшифровки. turn.<домен> уходит в TURN/TLS LiveKit
-# (stream-routes/turn.map и stream/turn.conf — только при заданном SHOSAI_TURN_SERVER_NAME), остальное — в HTTPS edge на
-# внутреннем 8444. Оба пути получают PROXY protocol: HTTPS восстанавливает по нему адрес клиента
-# для лимитов §4.3 и заголовков к бэкенду; к LiveKit заголовок снимает внутренний сервер turn.
+# Порт 443 edge (meetings A14): разбор SNI без расшифровки. turn.<домен> уходит на внутренний сервер
+# TURN/TLS (stream-routes/turn.map и stream/turn.conf — только при заданном SHOSAI_TURN_SERVER_NAME),
+# остальное — в HTTPS edge на внутреннем 8444. Оба пути получают PROXY protocol: HTTPS восстанавливает
+# по нему адрес клиента для лимитов §4.3 и заголовков к бэкенду; сервер turn снимает его, завершает
+# TLS и отдаёт LiveKit открытый TCP (meetings A15).
 map $ssl_preread_server_name $shosai_tls_route {
     hostnames;
     include /tmp/nginx/stream-routes/*.map;

@@ -118,6 +118,11 @@ scrape_configs:
     file_sd_configs:
       - files: [/etc/prometheus/targets/livekit/*.yml]
 
+  # Egress (meetings A15): память и готовность записи; цели — как у LiveKit, свой каталог.
+  - job_name: egress
+    file_sd_configs:
+      - files: [/etc/prometheus/targets/egress/*.yml]
+
   # --- Пробы изнутри плоскости; внешние пробы — UptimeRobot (F5-D2) ---
   # Цели и модули — в файлах каталога targets: локальные лежат в репозитории, цели staging
   # (адреса баз домов) рендерятся на хосте.

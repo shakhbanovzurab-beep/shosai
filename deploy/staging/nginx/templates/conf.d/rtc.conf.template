@@ -1,0 +1,61 @@
+# Сигнализация LiveKit на своём имени (meetings A15). Блок есть, только когда задан
+# SHOSAI_RTC_SERVER_NAME: без него entrypoint (25-shosai-optional-servers.sh) удаляет этот файл.
+#   SHOSAI_RTC_SERVER_NAME   имя сигнализации (staging: rtc.shosai.tech);
+#   SHOSAI_RTC_UPSTREAM      HTTP LiveKit, host:port в сети плоскости (livekit:7880).
+# Наружу выходят только /rtc… — WebSocket сигнализации клиента и его проверка — и корень, которым
+# клиент проверяет связь, а проба — здоровье LiveKit. Серверный API LiveKit (/twirp/…) остаётся
+# в сети плоскости: им пользуется только бэкенд.
+
+# LiveKit — отдельная служба: edge стартует и тогда, когда её ещё нет.
+upstream shosai_rtc {
+    zone shosai_rtc 64k;
+    server ${SHOSAI_RTC_UPSTREAM} resolve;
+}
+
+server {
+    # Тот же поток SNI на 443, что и у кабинета (meetings A14).
+    listen 127.0.0.1:8444 ssl proxy_protocol;
+    set_real_ip_from 127.0.0.1;
+    real_ip_header proxy_protocol;
+    http2 on;
+    server_name ${SHOSAI_RTC_SERVER_NAME};
+
+    ssl_certificate ${SHOSAI_TLS_CERTIFICATE};
+    ssl_certificate_key ${SHOSAI_TLS_CERTIFICATE_KEY};
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_session_tickets off;
+
+    limit_req zone=shosai_per_ip burst=100 nodelay;
+    limit_conn shosai_conn_per_ip 100;
+
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Robots-Tag "noindex, nofollow" always;
+
+    location = / {
+        proxy_pass http://shosai_rtc;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        include /etc/nginx/shosai/proxy-headers.conf;
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 10s;
+    }
+
+    # Сигнализация живёт весь звонок: LiveKit шлёт пинги, поэтому долгий простой — обрыв, а не норма.
+    location ^~ /rtc {
+        proxy_pass http://shosai_rtc;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $shosai_connection_upgrade;
+        include /etc/nginx/shosai/proxy-headers.conf;
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_buffering off;
+    }
+
+    location / {
+        return 404;
+    }
+}

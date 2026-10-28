@@ -1,28 +1,31 @@
 # Staging Shosai на shosai.tech (F4, docs/plan/packages/F4-delivery-staging.md).
 #
 # Одна плоскость на машине разработки (F4-D1): edge, роли бэкенда, Valkey (F4-D2), кэш, Qdrant
-# и PgBouncer каждого дома перед управляемым PostgreSQL Timeweb (F4-D3). Каталог проекта —
-# /srv/shosai, владелец — пользователь deploy; секреты рендерит deploy/staging/render-env.py,
-# внутренний TLS — deploy/staging/internal-tls.sh. Снаружи открыты только 80 и 443 у edge.
+# и PgBouncer каждого дома перед управляемым PostgreSQL Timeweb (F4-D3), видеозвонки LiveKit
+# (meetings A15). Каталог проекта — /srv/shosai, владелец — пользователь deploy; секреты рендерит
+# deploy/staging/render-env.py, внутренний TLS — deploy/staging/internal-tls.sh. Снаружи открыты 80
+# и 443 у edge и порты медиа LiveKit (MR-D14).
 #
 #   cd /srv/shosai && docker compose up -d                      # плоскость
 #   docker compose --profile migrate run --rm migrate upgrade   # миграции обоих домов
 
 name: shosai-staging
 
+# Метки Compose в каждой строке журнала: по ним коллектор стека наблюдаемости узнаёт проект и
+# службу (deploy/observability/README.md, «Logs»).
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+    labels: "com.docker.compose.project,com.docker.compose.service"
+
 x-service-defaults: &service-defaults
   restart: unless-stopped
   read_only: true
   security_opt:
     - no-new-privileges:true
-  # Метки Compose в каждой строке журнала: по ним коллектор стека наблюдаемости узнаёт проект и
-  # службу (deploy/observability/README.md, «Logs»).
-  logging:
-    driver: json-file
-    options:
-      max-size: "10m"
-      max-file: "5"
-      labels: "com.docker.compose.project,com.docker.compose.service"
+  logging: *logging
   networks:
     - plane
 
@@ -98,6 +101,8 @@ services:
       SHOSAI_CSP_RTC_ORIGINS: ${SHOSAI_CSP_RTC_ORIGINS:-}
       # TURN/TLS LiveKit за общим 443 по SNI: имя TURN; пусто — весь 443 у HTTPS edge (meetings A14).
       SHOSAI_TURN_SERVER_NAME: ${SHOSAI_TURN_SERVER_NAME:-}
+      # Сигнализация LiveKit на своём имени того же 443 (meetings A15); пусто — сервера нет.
+      SHOSAI_RTC_SERVER_NAME: ${SHOSAI_RTC_SERVER_NAME:-}
       # Бакеты домов, из которых edge отдаёт скачивания с nosniff и песочницей (FL-D9).
       SHOSAI_DOWNLOAD_RU_ORIGIN: ${SHOSAI_DOWNLOAD_RU_ORIGIN:?бакет RU для скачивания не задан}
       SHOSAI_DOWNLOAD_EU_ORIGIN: ${SHOSAI_DOWNLOAD_EU_ORIGIN:?бакет EU для скачивания не задан}
@@ -260,6 +265,115 @@ services:
       resources:
         limits:
           memory: 192m
+
+  # Видеозвонки (meetings A15, ADR 0072 MR-D14): SFU LiveKit, его Redis и egress. Снаружи — только
+  # порты медиа и только по IPv4, который LiveKit объявляет клиентам: ICE/TCP 7881, ICE/UDP 7882,
+  # TURN/UDP 3478 и ретрансляция TURN 30000–30099. Сигнализацию (7880) и TURN/TLS принимает edge на
+  # 443 по именам rtc и turn; API и метрики LiveKit, egress и Redis видны только в сети плоскости.
+  # Лимиты жёсткие, память равна пределу свопа (§1.3 плана). Образ меняет человек, не release.sh:
+  # пересоздание LiveKit обрывает идущие звонки.
+  livekit:
+    <<: *service-defaults
+    image: livekit/livekit-server:v1.13.11
+    user: "65534:65534"
+    command: ["--config", "/run/shosai-livekit/livekit.yaml"]
+    environment:
+      # Мягкий предел памяти Go — 90 % жёсткого: сборщик мусора держит процесс под ним, а тикет
+      # LiveKitMemoryHigh приходит, когда удержать уже не удаётся.
+      GOMEMLIMIT: 460MiB
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./secrets/livekit.yaml:/run/shosai-livekit/livekit.yaml:ro
+    ports:
+      - "0.0.0.0:7881:7881/tcp"
+      - "0.0.0.0:7882:7882/udp"
+      - "0.0.0.0:3478:3478/udp"
+      - "0.0.0.0:30000-30099:30000-30099/udp"
+    depends_on:
+      livekit-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:7880"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 10s
+    stop_grace_period: 30s
+    memswap_limit: 512m
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: "1.0"
+
+  # Redis LiveKit — координатор SFU и egress, отдельный от Valkey плоскости и эфемерный.
+  livekit-redis:
+    <<: *service-defaults
+    image: redis:8.10.2-alpine
+    command:
+      - redis-server
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      - --maxmemory
+      - 48mb
+      - --maxmemory-policy
+      - noeviction
+      - --aclfile
+      - /run/shosai-acl/users.acl
+    tmpfs:
+      - /data
+    volumes:
+      - ./secrets/livekit-redis.acl:/run/shosai-acl/users.acl:ro
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --user healthcheck --pass '' --no-auth-warning ping | grep -qx PONG"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 10s
+    memswap_limit: 64m
+    deploy:
+      resources:
+        limits:
+          memory: 64m
+          cpus: "0.25"
+
+  # Egress — запись звонка в бакет дома владельца (A7). Живёт в сетевом пространстве LiveKit: сервер
+  # для него — localhost. Песочнице Chrome нужен SYS_ADMIN, корень записываемый: Chrome пишет профиль.
+  egress:
+    image: livekit/egress:v1.15.0
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    logging: *logging
+    network_mode: "service:livekit"
+    cap_add:
+      - SYS_ADMIN
+    shm_size: 512m
+    environment:
+      EGRESS_CONFIG_FILE: /run/shosai-egress/egress.yaml
+    volumes:
+      - ./secrets/egress.yaml:/run/shosai-egress/egress.yaml:ro
+    depends_on:
+      livekit:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 30s
+    memswap_limit: 1g
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
 
   qdrant:
     <<: *service-defaults

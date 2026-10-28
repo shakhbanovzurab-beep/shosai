@@ -133,7 +133,51 @@ Check, as the migrator: `SELECT extversion FROM pg_extension WHERE extname = 've
 
 ## TLS certificate
 
-`shosai-certificate.timer` renews it twice a day. Check: `systemctl list-timers shosai-certificate.timer` and `journalctl -u shosai-certificate.service`. Renew by hand: `sh /srv/shosai/deploy/certificate.sh renew /srv/shosai`.
+One certificate covers `shosai.tech`, `grafana.shosai.tech`, `rtc.shosai.tech` and `turn.shosai.tech`; the edge terminates TLS for all of them, LiveKit holds none. A new name is added with `sh /srv/shosai/deploy/certificate.sh expand /srv/shosai` once its DNS record points here. `shosai-certificate.timer` renews it twice a day. Check: `systemctl list-timers shosai-certificate.timer` and `journalctl -u shosai-certificate.service`. Renew by hand: `sh /srv/shosai/deploy/certificate.sh renew /srv/shosai`.
+
+## Calls (LiveKit)
+
+Calls run on this host (meetings A15, ADR 0072 MR-D14): `livekit`, `livekit-redis` and `egress` in the plane's Compose project. The edge takes signalling on `rtc.shosai.tech` and TURN/TLS on `turn.shosai.tech`, both on 443 by SNI; the media ports are LiveKit's own. Staging's ceilings: 4 participants in a call, one video recording at a time, 30 minutes long (`livekit_files.py`). Limits: LiveKit 512 MB and 1 CPU (`GOMEMLIMIT` 460 MiB), its Redis 64 MB, egress 1 GB and 1 CPU — memory equal to the swap limit, so nothing of LiveKit swaps.
+
+```bash
+cd /srv/shosai
+sudo -u deploy docker compose ps livekit livekit-redis egress
+sudo -u deploy docker compose logs --tail 100 livekit
+curl -fsS https://rtc.shosai.tech/                 # LiveKit answers OK through the edge
+```
+
+- **LiveKit is not part of a release.** `release.sh` swaps the roles and the edge, never LiveKit: recreating it ends every call in progress. Its image, limits or configuration change by editing `deploy/staging/compose.yaml` or `livekit_files.py`, installing and rendering them («Change a setting or a secret»), then `sudo -u deploy docker compose up -d livekit livekit-redis egress` at a time with no calls (the admin's LiveKit screen shows the rooms).
+- **The keys** are `LIVEKIT_API_KEY` and `LIVEKIT_API_SECRET` in `/root/shosai/.env`; `render-env.py` writes them into LiveKit's, egress's and the backend's files together. After a change recreate `livekit`, `egress` and the roles in one go, or webhooks fail verification (`LiveKitWebhooksRejected`).
+- **Release order.** The edge and the roles start without LiveKit: the edge resolves `livekit` on each connection, and the backend answers call routes with 503 `video_unavailable` until LiveKit answers. LiveKit's webhooks reach `api` on the plane's network (`http://api:8000/v1/livekit/webhook`), so a release's handover of `api` loses none.
+
+### Exposure (MR-D14)
+
+The host has no firewall, neither its own nor in the provider's panel: whatever listens on a public address is open to everyone. So exposure is decided by how each port is bound, and only these may listen outside:
+
+| Port | What |
+|---|---|
+| TCP 443 | the edge: the cabinet, Grafana, LiveKit's signalling (`rtc`) and TURN/TLS (`turn`), split by SNI |
+| TCP 80 | the edge: ACME challenges for certbot and the redirect to HTTPS |
+| TCP 7881 | LiveKit: ICE over TCP |
+| UDP 7882 | LiveKit: ICE over UDP, every call's media |
+| UDP 3478 | LiveKit: TURN over UDP |
+| UDP 30000–30099 | LiveKit: TURN relay ports |
+| TCP 22 | `sshd`: the owner's and the release key's access |
+| TCP 10050 | `zabbix_agentd`, the provider's monitoring agent (found 2026-10-27, not Shosai's) |
+
+LiveKit's media ports are published on IPv4 only: LiveKit advertises the host's IPv4 (`node_ip`), and `shosai.tech` has no AAAA record. LiveKit's API and metrics (7880, 6789), egress (8080, 9090), every Redis, Valkey, Qdrant, PgBouncer and the observability stack listen only on the plane's network or on loopback.
+
+Check after any change to a Compose file, and after each host reboot:
+
+```bash
+# Every socket listening on a non-loopback, non-private address.
+ss -Htlnup | awk '{print $1, $5, $7}' | grep -vE ' (127\.|\[::1\]|172\.|\[fd)' | sort -u
+# From another machine: TCP and the media's UDP ports.
+nmap -Pn -p- --min-rate 2000 shosai.tech
+sudo nmap -Pn -sU -p 3478,7882,30000-30099 shosai.tech
+```
+
+The `ss` list must hold exactly the ports of the table (each LiveKit port appears as `docker-proxy`). An external TCP scan must find only 22, 80, 443, 7881 and 10050; UDP answers depend on the protocol, so open ports there show as `open|filtered`.
 
 ## Observability
 
