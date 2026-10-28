@@ -17,7 +17,7 @@ from shosai.features.agent.domain.actions import ProposalOrigin
 from shosai.features.agent.module import AGENT
 
 
-def test_the_published_event_is_registered_and_named_for_the_slice() -> None:
+def test_the_published_events_are_registered_and_named_for_the_slice() -> None:
     declared = {
         value
         for value in vars(events).values()
@@ -25,7 +25,10 @@ def test_the_published_event_is_registered_and_named_for_the_slice() -> None:
     }
 
     assert set(AGENT.events) == declared
-    assert {event.event_type for event in AGENT.events} == {"agent.turn.completed"}
+    assert {event.event_type for event in AGENT.events} == {
+        "agent.turn.completed",
+        "agent.skill.removed",
+    }
     assert AGENT in FEATURES
 
 
