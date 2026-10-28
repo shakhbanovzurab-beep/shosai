@@ -38,7 +38,15 @@ export function CallScreen({ session, media, onRejoin }: CallScreenProps) {
   }, [session]);
 
   const self = call.people.find((person) => person.identity === call.self);
-  if (call.status === "ended" || !self) return <CallEnded end={call.end ?? "lost"} onRejoin={onRejoin} />;
+  if (call.status === "ended") return <CallEnded end={call.end ?? "lost"} onRejoin={onRejoin} />;
+  // Пока звонок не знает самого человека, он ещё подключается: это не обрыв.
+  if (!self)
+    return (
+      <div role="status" className="flex h-dvh items-center justify-center gap-2 bg-background text-sm">
+        <Spinner />
+        {t("states.connecting")}
+      </div>
+    );
 
   const unread = panel === "chat" ? 0 : unreadCount(call.chat, readSeq, call.self);
   const openPanel = (next: CallPanelKind | null) => {

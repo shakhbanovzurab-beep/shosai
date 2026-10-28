@@ -45,6 +45,8 @@ export class LiveKitCall implements CallSession {
   /** Подключиться и опубликовать свои дорожки из лобби; выключенные — сразу заглушены. */
   async connect() {
     await this.room.connect(this.setup.livekit.url, this.setup.livekit.token, { autoSubscribe: false });
+    // Люди звонка — сразу после подключения: публикация своих дорожек может занять время.
+    this.refresh();
     await publishLobbyTracks(this.room.localParticipant, this.setup.media);
     for (const participant of this.room.remoteParticipants.values()) this.stage.subscribeAudio(participant);
     await this.room.startAudio();
