@@ -18,6 +18,7 @@ from shosai.core.agent_tools.results import ToolErrorCode, ToolResult
 from shosai.core.agent_tools.spec import ToolEffect, ToolSpec
 from shosai.features.agent.application.result_pages import ResultPages
 from shosai.features.agent.domain import core_tools as tool_names
+from shosai.features.agent.domain.cabinet_pages import PAGE_LIST, is_cabinet_page
 from shosai.features.agent.domain.context import PATH_MAX, clean_path
 
 TOOLSET_NAME_MAX: Final = 40
@@ -71,7 +72,10 @@ class NavigateInput(Strict):
 
     to: str = Field(
         max_length=PATH_MAX,
-        description="A path of the Shosai web app, such as /app/notes or /app/kanban.",
+        description=(
+            "A page of the Shosai web app with its ids filled in, such as /app/kanban for "
+            "boards and every task, /app/notes for meetings' notes or /app/file-manager."
+        ),
     )
 
 
@@ -147,6 +151,9 @@ def core_tools(pages: ResultPages) -> tuple[AgentTool, ...]:
         path = clean_path(arguments.to)
         if path is None:
             return ToolResult.failed(ToolErrorCode.INVALID_ARGUMENTS, fields="to")
+        if not is_cabinet_page(path):
+            # Выдуманную страницу кабинет открыл бы как «не найдено»: модель выбирает из списка.
+            return ToolResult.failed(ToolErrorCode.NOT_FOUND, fields="to", pages=PAGE_LIST)
         return ToolResult(NavigateOutput(to=path))
 
     return (

@@ -117,7 +117,7 @@ ignored. Exactly one of `run.completed` and `run.failed` ends a run.
 | `text.delta` | `{text}` |
 | `sources` | `{sources: LeoSource[]}` — the whole list so far; its numbers never change within a run |
 | `artifact` | `LeoArtifact` |
-| `client.action` | `{navigate: {to}}` — a cabinet path, followed only if the cabinet knows the route |
+| `client.action` | `{navigate: {to}}` — one of the cabinet's pages: the server refuses any other path with the list of pages (`domain/cabinet_pages.py`, kept equal to the router by `leo-pages.test.ts`, 2026-10-28) |
 | `action.proposed` / `action.updated` | `{action: LeoProposal}`; `updated` also `{invalidates: string[]}` (query domains to refetch; the card carries the same since 2026-10-27) |
 | `run.paused` | `{action_id}` |
 | `run.completed` | `{message_id, outcome: answered \| stopped, truncated}` |

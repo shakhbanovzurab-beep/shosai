@@ -101,12 +101,16 @@ async def test_navigate_sends_the_cabinet_a_page_and_refuses_anything_else(
         turn_bench,
         calling(("core__navigate", '{"to": "/app/kanban?view=board"}')),
         calling(("core__navigate", '{"to": "https://example.com/app"}')),
+        # Страницы бэклога нет: модель её выдумала (отчёт владельца 2026-10-28).
+        calling(("core__navigate", '{"to": "/app/tasks"}')),
     )
+    refused = json.loads(text_of(turn_bench.model.calls[3].messages[-1]))
 
     assert [data for kind, _, data in events if kind == "client.action"] == [
         {"navigate": {"to": "/app/kanban"}}
     ]
-    assert codes(turn_bench.model.calls[2]) == [None, "invalid_arguments"]
+    assert codes(turn_bench.model.calls[3]) == [None, "invalid_arguments", "not_found"]
+    assert "/app/kanban (Kanban boards with all of the user's tasks)" in refused["error"]["pages"]
 
 
 async def test_the_model_is_asked_to_conclude_after_four_rounds_and_the_tenth_has_no_tools(

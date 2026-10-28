@@ -21,6 +21,7 @@ from shosai.core.agent_tools.results import TOOL_ERROR_TEXTS, ToolErrorCode
 from shosai.core.agent_tools.spec import ToolSpec
 from shosai.core.ai.errors import MODEL_TEXTS
 from shosai.features.agent.application.surface_digest import SUBJECT_TEXTS
+from shosai.features.agent.domain.cabinet_pages import CABINET_PAGES
 from shosai.features.agent.domain.context import CONTEXT_TEXTS
 from shosai.features.agent.infrastructure.eval_prompts import JUDGE_TEXTS
 from shosai.features.agent.infrastructure.prompts import PROMPT_TEXTS as AGENT_PROMPTS
@@ -84,6 +85,9 @@ MODEL_FACING_SOURCES: tuple[ModelFacingSource, ...] = (
     ModelFacingSource(owner="capture", name="voice tool failure", collect=lambda: VOICE_TEXTS),
     ModelFacingSource(owner="agent", name="Leo's context", collect=lambda: CONTEXT_TEXTS),
     ModelFacingSource(owner="agent", name="Leo's page subjects", collect=lambda: SUBJECT_TEXTS),
+    ModelFacingSource(
+        owner="agent", name="the cabinet's pages", collect=lambda: [dict(CABINET_PAGES)]
+    ),
     ModelFacingSource(owner="agent", name="the evaluation's judge", collect=lambda: JUDGE_TEXTS),
     ModelFacingSource(owner="decisions", name="Jev questions", collect=lambda: [policy_wording()]),
     ModelFacingSource(owner="decisions", name="dataset tools", collect=generation_texts),

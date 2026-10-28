@@ -192,7 +192,7 @@ Snake_case, ADR 0008 errors with codes the cabinet words, `{items, next_cursor}`
 | `text.delta` | `text` |
 | `sources` | `sources: LeoSource[]`, cumulative, numbered by position (AG-D1) |
 | `artifact` | `kind, ref, alt` and the kind's fields (`chat_digest`: `workspace_id, chat_id`, AG-R1; `chart` and `image` with step 16) |
-| `client.action` | `navigate {to}` — a cabinet path the client checks against its routes |
+| `client.action` | `navigate {to}` — one of the cabinet's pages; since 2026-10-28 (the model had invented `/app/tasks`) the server refuses any other path with the list of pages, and the cabinet's test keeps that list equal to its router |
 | `action.proposed`, `action.updated` | `action: LeoProposal`; `updated` also `invalidates[]`. Since 2026-10-27 every card carries `invalidates` once it has run — in the stream, the decision's answer and `/v1/agent/actions*` — so a decision outside a run's stream (a voice card, one whose log is gone) refreshes the screens too |
 | `run.paused` | `action_id` |
 | `run.completed` | `message_id, outcome answered \| stopped, truncated` — terminal |
