@@ -91,9 +91,8 @@ def test_a_response_body_that_is_not_json_is_a_refusal() -> None:
 
 
 def test_the_flow_cookie_is_http_only_secure_and_lax() -> None:
-    arguments = FlowCookie("shosai_connect", "binder", "/v1/connectors/oauth", 600)
+    header = FlowCookie("shosai_connect", "binder", "/v1/connectors/oauth", 600).header()
 
-    assert arguments.set_cookie_arguments() == {
-        "key": "shosai_connect", "value": "binder", "path": "/v1/connectors/oauth",
-        "max_age": 600, "httponly": True, "secure": True, "samesite": "lax",
-    }  # fmt: skip
+    assert header.startswith("shosai_connect=binder;")
+    for part in ("HttpOnly", "Max-Age=600", "Path=/v1/connectors/oauth", "SameSite=Lax", "Secure"):
+        assert part in header

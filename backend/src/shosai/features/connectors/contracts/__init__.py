@@ -16,6 +16,7 @@ from contextlib import AbstractAsyncContextManager
 from dataclasses import dataclass
 from datetime import datetime
 from http import HTTPStatus
+from http.cookies import SimpleCookie
 from typing import Final, Protocol
 from uuid import UUID
 
@@ -133,12 +134,17 @@ class FlowCookie:
     path: str
     max_age_seconds: int
 
-    def set_cookie_arguments(self) -> Mapping[str, object]:
-        """The keyword arguments of `Response.set_cookie` for this cookie."""
-        return {
-            "key": self.name, "value": self.value, "path": self.path,
-            "max_age": self.max_age_seconds, "httponly": True, "secure": True, "samesite": "lax",
-        }  # fmt: skip
+    def header(self) -> str:
+        """The `Set-Cookie` value: httpOnly, secure, `SameSite=Lax`, the callback's path only."""
+        jar = SimpleCookie()
+        jar[self.name] = self.value
+        morsel = jar[self.name]
+        morsel["path"] = self.path
+        morsel["max-age"] = str(self.max_age_seconds)
+        morsel["secure"] = True
+        morsel["httponly"] = True
+        morsel["samesite"] = "Lax"
+        return morsel.OutputString()
 
 
 @dataclass(frozen=True, slots=True)
@@ -153,16 +159,8 @@ class Handoff:
 class Installations(Protocol):
     """A workspace's installations of an app into a provider's tenant (chats' Slack)."""
 
-    async def begin(
-        self,
-        session: AsyncSession,
-        org_id: UUID,
-        admin_user_id: UUID,
-        app: App,
-        *,
-        reinstall_of: UUID | None = None,
-    ) -> Handoff:
-        """Start an installation by a workspace admin; the caller has checked the role."""
+    async def begin(self, home: Home, org_id: UUID, admin_user_id: UUID, app: App) -> Handoff:
+        """Start an installation by a workspace admin; the callback checks the role again."""
         ...
 
     async def remove(self, session: AsyncSession, org_id: UUID, connection_id: UUID) -> None:

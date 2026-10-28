@@ -11046,6 +11046,76 @@
         }
       }
     },
+    "/v1/connectors/{app}/authorize": {
+      "post": {
+        "tags": [
+          "connectors"
+        ],
+        "summary": "Authorize",
+        "description": "Start connecting an app: the provider's consent page and the browser binder.",
+        "operationId": "authorize_v1_connectors__app__authorize_post",
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 32,
+              "title": "App"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectorAuthorizeIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectorAuthorizeOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/agent/settings": {
       "get": {
         "tags": [
@@ -20944,6 +21014,55 @@
         ],
         "title": "CommentOut",
         "description": "A comment on a task."
+      },
+      "ConnectorAuthorizeIn": {
+        "properties": {
+          "return": {
+            "type": "string",
+            "enum": [
+              "popup",
+              "page"
+            ],
+            "title": "Return",
+            "default": "popup"
+          },
+          "return_path": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Return Path"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ConnectorAuthorizeIn",
+        "description": "Where the cabinet wants the browser back: the popup's page or a cabinet path."
+      },
+      "ConnectorAuthorizeOut": {
+        "properties": {
+          "authorize_url": {
+            "type": "string",
+            "title": "Authorize Url"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "authorize_url",
+          "expires_at"
+        ],
+        "title": "ConnectorAuthorizeOut",
+        "description": "The provider's consent page and when the flow expires."
       },
       "Consents-Input": {
         "properties": {

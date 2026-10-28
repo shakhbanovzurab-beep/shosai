@@ -126,13 +126,13 @@ def binder_matches(expected_digest: str, presented: str | None) -> bool:
 
 def callback_location(
     target: ReturnTarget,
-    app: str,
+    app: str | None,
     outcome: Outcome,
     *,
     error: FlowError | None = None,
     connection_id: str | None = None,
 ) -> str:
-    """The relative `Location` the provider callback answers with."""
+    """The relative `Location` the provider callback answers with; no app when none is known."""
     if (outcome is Outcome.ERROR) != (error is not None):
         message = "код ошибки бывает только у исхода error"
         raise ValueError(message)
@@ -144,7 +144,8 @@ def callback_location(
         if connection_id is not None and outcome is Outcome.CONNECTED:
             query["installation_id"] = connection_id
         return f"{CALLBACK_PAGE}?{urlencode(query)}"
-    query = {"connector": app, **query}
+    if app is not None:
+        query = {"connector": app, **query}
     if target.kind is ReturnKind.PAGE and target.path is not None:
         separator = "&" if "?" in target.path else "?"
         return f"{target.path}{separator}{urlencode(query)}"

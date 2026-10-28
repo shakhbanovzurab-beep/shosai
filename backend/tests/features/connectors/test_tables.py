@@ -6,7 +6,7 @@ import json
 import uuid
 
 import pytest
-from sqlalchemy import delete, insert, select, update
+from sqlalchemy import delete, func, insert, select, update
 from sqlalchemy.exc import DBAPIError
 
 from shosai.core.account_data.handlers import AccountRef
@@ -68,7 +68,8 @@ async def seed(homes: DatabaseAccess, scope: TenancyScope, row: dict[str, object
 async def count(homes: DatabaseAccess, scope: TenancyScope, model: type[ModelBase]) -> int:
     """The rows of a table the scope sees."""
     async with homes.transactions.begin(scope, read_only=True) as session:
-        return len((await session.execute(select(model))).all())
+        counted = await session.scalar(select(func.count()).select_from(model))
+        return int(counted or 0)
 
 
 async def test_a_personal_grant_is_its_person_s_alone(homes: DatabaseAccess) -> None:

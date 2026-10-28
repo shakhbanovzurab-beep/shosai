@@ -2772,6 +2772,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/connectors/{app}/authorize": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Authorize
+         * @description Start connecting an app: the provider's consent page and the browser binder.
+         */
+        post: operations["authorize_v1_connectors__app__authorize_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/agent/settings": {
         parameters: {
             query?: never;
@@ -5662,6 +5682,33 @@ export interface components {
             created_at: string;
             /** Edited At */
             edited_at: string | null;
+        };
+        /**
+         * ConnectorAuthorizeIn
+         * @description Where the cabinet wants the browser back: the popup's page or a cabinet path.
+         */
+        ConnectorAuthorizeIn: {
+            /**
+             * Return
+             * @default popup
+             * @enum {string}
+             */
+            return: "popup" | "page";
+            /** Return Path */
+            return_path?: string | null;
+        };
+        /**
+         * ConnectorAuthorizeOut
+         * @description The provider's consent page and when the flow expires.
+         */
+        ConnectorAuthorizeOut: {
+            /** Authorize Url */
+            authorize_url: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
         };
         /**
          * Consents
@@ -17297,6 +17344,43 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ClocksReply"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    authorize_v1_connectors__app__authorize_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                app: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConnectorAuthorizeIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectorAuthorizeOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
