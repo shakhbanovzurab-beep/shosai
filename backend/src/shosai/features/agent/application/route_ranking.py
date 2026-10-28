@@ -2,7 +2,7 @@
 
 The router is asked only when the rule cannot offer every toolset it fills the room with even
 for reading — while every toolset's reads fit, its writes are one `load_toolset` away and
-nothing is asked (DL-D3); today's catalog fits so, and no turn asks it. The person's
+nothing is asked (DL-D3); since meetings' toolset the catalog no longer fits so. The person's
 question, the start of the last answer and how many turns the thread had are read in one
 statement of the run's transaction; the router then runs while the context is read, and the
 first model request waits for it at most `ROUTE_WAIT`. A late, empty or absent answer leaves

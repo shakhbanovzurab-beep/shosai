@@ -1,8 +1,8 @@
 """A turn's toolsets ranked by a bound router beside the rule (decisions step 6; DL-D3).
 
 This module's archive (≈ 3 200 tokens) fits the room only before the others: in the fixed
-order the rule only names it, so the router is asked, and ranked first it is offered. Today's
-real catalog offers every toolset at least for reading, so no turn asks it.
+order the rule only names it, so the router is asked, and ranked first it is offered. Since
+meetings' toolset (meetings A13) the real catalog outgrows the room, so every turn asks it (DL-D3).
 """
 
 import asyncio
@@ -162,7 +162,7 @@ async def test_a_slow_router_is_not_waited_for_beyond_the_turn_s_wait(
     assert len(router.ends) == 1
 
 
-def test_today_s_catalog_offers_every_toolset_for_reading_so_no_turn_asks() -> None:
+def test_today_s_catalog_outgrows_the_room_so_the_router_ranks_what_is_left() -> None:
     specs = [spec for feature in FEATURES for spec in feature.agent_tools]
     sizes: Counter[str] = Counter()
     reads: Counter[str] = Counter()
@@ -179,8 +179,11 @@ def test_today_s_catalog_offers_every_toolset_for_reading_so_no_turn_asks() -> N
     facts = RouteFacts(tuple(ToolsetFacts(n, sizes[n], read_tokens=reads[n]) for n in sizes))
 
     chosen = route(facts)
+    left = set(candidates(facts)) - set(chosen.selected) - set(chosen.reading)
+    ranked = route(facts, tuple(sorted(left)))
 
-    assert set(candidates(facts)) <= set(chosen.selected) | set(chosen.reading)
+    assert left
+    assert left <= set(ranked.selected) | set(ranked.reading)
 
 
 def test_ranked_toolsets_fill_the_room_first_and_the_route_keeps_the_fixed_order() -> None:
