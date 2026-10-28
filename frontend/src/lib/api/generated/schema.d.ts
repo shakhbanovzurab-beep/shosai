@@ -6861,6 +6861,17 @@ export interface components {
             muted: boolean;
         };
         /**
+         * LiveKitWebhookOut
+         * @description The event is taken; the call server does not send it again.
+         */
+        LiveKitWebhookOut: {
+            /**
+             * Ok
+             * @default true
+             */
+            ok: boolean;
+        };
+        /**
          * LoginRequest
          * @description Address and password; the captcha token when the sign-in page shows one.
          */
@@ -18578,11 +18589,13 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["LiveKitWebhookOut"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

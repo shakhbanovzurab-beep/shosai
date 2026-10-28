@@ -71,3 +71,7 @@ Shosai's own video call on LiveKit (fr-10, fr-16). "New meeting" opens a room at
 
 - **`channels/agent_specs.py`, `agent_tools.py`, `agent_words.py`** (MR-D8): `meetings.list_live` reads the person's Personal rooms with a call going on — title, invite link, start, count, notes; `meetings.start_call` (compensable) opens a room in Personal as "New meeting" does and returns its invite link and page; `meetings.end_call` (irreversible) closes the planned room for good and then ends its call in the SFU. Both writes wait for the person's card (worded in 16 languages) and are applied once per item key through `ActionItems`; a room the person does not own reads as not found, a closed one as a conflict. The cabinet's section refreshes on the `meetings` domain.
 
+## The external contract (step A16)
+
+- **`tests/features/meetings/test_external_contract.py`** holds the slice's five external routes of the draft's baseline (D1, slice S06) to their contract: LiveKit's webhook is served at `POST /v1/livekit/webhook` and answers as the draft did, 200 with `{"ok": true}`; the four invitation paths `/meet/`, `/j/`, `/rooms/join/` and `/live/` are answered by the edge, whose redirects send each to the room's or the broadcast's page in the cabinet. Meetings has no WebSocket of its own, so there are no frames to hold to the draft's catalogue.
+

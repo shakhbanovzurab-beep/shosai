@@ -14869,8 +14869,15 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Successful Response"
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveKitWebhookOut"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error. The body is the error envelope; see `ErrorResponse`.",
@@ -23190,6 +23197,18 @@
         ],
         "title": "LiveKitTrackOut",
         "description": "A track a session publishes."
+      },
+      "LiveKitWebhookOut": {
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "title": "Ok",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "LiveKitWebhookOut",
+        "description": "The event is taken; the call server does not send it again."
       },
       "LoginRequest": {
         "properties": {

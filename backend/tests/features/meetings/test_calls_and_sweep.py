@@ -245,7 +245,7 @@ async def test_the_webhook_route_folds_a_signed_body_and_refuses_a_forged_one(
         )
 
     assert (forged.status_code, forged.json()["error"]["code"]) == (401, "webhook_rejected")
-    assert accepted.status_code == 204
+    assert (accepted.status_code, accepted.json()) == (200, {"ok": True})
     assert (await the_call(homes, owner)).lk_room_sid == SID
 
 
