@@ -1,7 +1,9 @@
 "use client";
 
-import { AudioLines, CircleAlert, Sparkles } from "lucide-react";
+import { AudioLines, CircleAlert } from "lucide-react";
 import { useTranslations } from "use-intl";
+
+import { ShosaiMark } from "@/components/shosai-mark";
 
 import type { MeetingPage } from "../domain/meeting-page";
 import { runFailureOf } from "../domain/problems";
@@ -23,7 +25,7 @@ export function NoteNotices({ note }: { readonly note: MeetingPage }) {
   if (note.notes === "processing")
     return (
       <p className={NOTICE} role="status">
-        <Sparkles aria-hidden="true" className="text-amber-600 dark:text-amber-400" />
+        <ShosaiMark className="text-amber-600 dark:text-amber-400" />
         {t("notices.writing")}
       </p>
     );

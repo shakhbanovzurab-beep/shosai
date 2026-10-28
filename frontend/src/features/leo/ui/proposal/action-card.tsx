@@ -3,9 +3,10 @@
 import type { KeyboardEvent, ReactNode } from "react";
 
 import { cn } from "cn";
-import { Clock, FileText, Globe, ListTodo, Mail, MessageSquare, ShieldAlert, Sparkles } from "lucide-react";
+import { Clock, FileText, Globe, ListTodo, Mail, MessageSquare, ShieldAlert } from "lucide-react";
 import { useFormatter, useNow, useTranslations } from "use-intl";
 
+import { ShosaiMark } from "@/components/shosai-mark";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,7 +28,7 @@ function ToolIcon({ tool }: { tool: string }) {
   if (family === "slack.") return <MessageSquare className="size-4" />;
   if (family === "tasks.") return <ListTodo className="size-4" />;
   if (family === "web.") return <Globe className="size-4" />;
-  return <Sparkles className="size-4" />;
+  return <ShosaiMark className="size-4" />;
 }
 
 export function ActionCardRoot({

@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import { Hand, MessageSquare, Mic, MicOff, MonitorUp, PenLine, Users, Video, VideoOff } from "lucide-react";
 import { useTranslations } from "use-intl";
 
@@ -26,11 +28,13 @@ type CallControlsProps = {
   /** Открыта ли доска; null — у звонка доски нет. */
   board: boolean | null;
   onBoard: (open: boolean) => void;
+  /** Запись встречи — только у владельца; у остальных слота нет. */
+  record?: ReactNode;
   onLeave: () => void;
   onEndForAll: () => void;
 };
 
-/** Панель звонка: свои микрофон, камера, экран и рука, реакции, чат, участники, приглашение и выход. */
+/** Панель звонка: свои микрофон, камера, экран, запись у владельца и рука, реакции, чат, участники, приглашение и выход. */
 export function CallControls(props: CallControlsProps) {
   const t = useTranslations("meetingRoom");
   const { self, panel } = props;
@@ -56,6 +60,7 @@ export function CallControls(props: CallControlsProps) {
       >
         <MonitorUp aria-hidden="true" />
       </Toggle>
+      {props.record}
       <Toggle
         variant="outline"
         pressed={self.hand !== null}

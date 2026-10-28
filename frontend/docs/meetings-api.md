@@ -41,6 +41,10 @@ below are the `code` the cabinet words through i18n. Times are ISO 8601 in UTC.
   `403 recording_not_in_plan`, `413 storage_limit`, `409 recording_active`, `503 recordings_busy` (with
   `Retry-After`). A recording stops at the platform's length limit (30 minutes on staging); the finished file lands
   in File Manager's Recordings. Everyone sees that recording is on through the room's marks.
+  **In the call** (`ui/room/record-control.tsx`) the owner's Record button calls these routes, waits up to 30 s for the
+  mark, and words every refusal above; the others get a "being recorded" notice when the mark turns on, and the call's
+  header shows how long the meeting has run — from the SFU room's creation time in LiveKit's join response, so a guest
+  sees it too.
 - `PATCH notes_on` turns Leo's notes off or on for the room from now; the mark changes for everyone.
 
 ## Joining (anyone with the link)

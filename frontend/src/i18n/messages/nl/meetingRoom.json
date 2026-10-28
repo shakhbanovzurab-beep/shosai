@@ -39,7 +39,21 @@
     "chat": "Chat",
     "unread": "{count, plural, one {# ongelezen bericht} other {# ongelezen berichten}}",
     "people": "Deelnemers",
-    "board": "Whiteboard"
+    "board": "Whiteboard",
+    "record": "Opname starten",
+    "stopRecording": "Opname stoppen"
+  },
+  "recording": {
+    "notice": "Deze vergadering wordt opgenomen",
+    "started": "De opname is gestart. Iedereen in de vergadering ziet dat er wordt opgenomen.",
+    "stopped": "Opname gestopt. Over een paar minuten staat hij in Bestandsbeheer.",
+    "notInPlan": "Opnemen hoort bij de betaalde abonnementen.",
+    "storageFull": "Je opslag is vol. Maak ruimte vrij om op te nemen.",
+    "busy": "Er worden nu te veel vergaderingen opgenomen. Probeer het over een paar minuten opnieuw.",
+    "noCall": "De vergadering is nog niet begonnen. Probeer het zo opnieuw.",
+    "notActive": "De opname is al gestopt.",
+    "startFailed": "De opname kon niet worden gestart. Probeer het opnieuw.",
+    "stopFailed": "De opname kon niet worden gestopt. Probeer het opnieuw."
   },
   "reactions": {
     "thumbsUp": "Duim omhoog",
@@ -51,7 +65,8 @@
     "limited": "Te veel reacties. Wacht een paar seconden."
   },
   "header": {
-    "people": "{count, plural, one {# deelnemer} other {# deelnemers}}"
+    "people": "{count, plural, one {# deelnemer} other {# deelnemers}}",
+    "duration": "Duur van de vergadering"
   },
   "stage": {
     "others": "{count, plural, one {nog #} other {nog #}}"

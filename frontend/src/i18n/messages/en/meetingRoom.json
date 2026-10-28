@@ -39,7 +39,21 @@
     "chat": "Chat",
     "unread": "{count, plural, one {# unread message} other {# unread messages}}",
     "people": "Participants",
-    "board": "Board"
+    "board": "Board",
+    "record": "Start recording",
+    "stopRecording": "Stop recording"
+  },
+  "recording": {
+    "notice": "This meeting is being recorded",
+    "started": "Recording started. Everyone in the meeting sees that it’s recorded.",
+    "stopped": "Recording stopped. It will appear in File Manager in a few minutes.",
+    "notInPlan": "Recording comes with paid plans.",
+    "storageFull": "Your storage is full. Free up space to record.",
+    "busy": "Too many meetings are being recorded right now. Try again in a few minutes.",
+    "noCall": "The meeting hasn’t started yet. Try again in a moment.",
+    "notActive": "The recording has already stopped.",
+    "startFailed": "Recording didn’t start. Try again.",
+    "stopFailed": "Recording didn’t stop. Try again."
   },
   "reactions": {
     "thumbsUp": "Thumbs up",
@@ -51,7 +65,8 @@
     "limited": "Too many reactions. Wait a few seconds."
   },
   "header": {
-    "people": "{count, plural, one {# participant} other {# participants}}"
+    "people": "{count, plural, one {# participant} other {# participants}}",
+    "duration": "Meeting duration"
   },
   "stage": {
     "others": "{count, plural, one {# more} other {# more}}"

@@ -40,3 +40,29 @@ export function demoCameraStream(identity: string, initials: string): { stream: 
     },
   };
 }
+
+type Video = { stream: MediaStream; stop: () => void };
+
+/** Камеры чужих людей демо-звонка: каждая рисуется, когда её впервые показывают, и гаснет вместе с человеком. */
+export class DemoVideos {
+  private readonly videos = new Map<string, Video>();
+
+  streamOf(identity: string, initials: string): MediaStream | null {
+    let video = this.videos.get(identity);
+    if (!video) {
+      video = demoCameraStream(identity, initials) ?? undefined;
+      if (video) this.videos.set(identity, video);
+    }
+    return video?.stream ?? null;
+  }
+
+  drop(identity: string) {
+    this.videos.get(identity)?.stop();
+    this.videos.delete(identity);
+  }
+
+  stopAll() {
+    for (const video of this.videos.values()) video.stop();
+    this.videos.clear();
+  }
+}

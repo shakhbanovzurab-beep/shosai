@@ -39,7 +39,21 @@
     "chat": "Cuộc trò chuyện",
     "unread": "{count, plural, other {# tin nhắn chưa đọc}}",
     "people": "Người tham gia",
-    "board": "Bảng trắng"
+    "board": "Bảng trắng",
+    "record": "Bắt đầu ghi",
+    "stopRecording": "Dừng ghi"
+  },
+  "recording": {
+    "notice": "Cuộc họp này đang được ghi lại",
+    "started": "Đã bắt đầu ghi. Mọi người trong cuộc họp đều thấy cuộc họp đang được ghi.",
+    "stopped": "Đã dừng ghi. Bản ghi sẽ xuất hiện trong Trình quản lý tệp sau vài phút.",
+    "notInPlan": "Tính năng ghi có trong các gói trả phí.",
+    "storageFull": "Bộ nhớ của bạn đã đầy. Hãy giải phóng dung lượng để ghi.",
+    "busy": "Hiện có quá nhiều cuộc họp đang được ghi. Hãy thử lại sau vài phút.",
+    "noCall": "Cuộc họp chưa bắt đầu. Hãy thử lại sau giây lát.",
+    "notActive": "Bản ghi đã dừng rồi.",
+    "startFailed": "Không bắt đầu ghi được. Hãy thử lại.",
+    "stopFailed": "Không dừng ghi được. Hãy thử lại."
   },
   "reactions": {
     "thumbsUp": "Thích",
@@ -51,7 +65,8 @@
     "limited": "Quá nhiều biểu cảm. Hãy đợi vài giây."
   },
   "header": {
-    "people": "{count, plural, other {# người tham gia}}"
+    "people": "{count, plural, other {# người tham gia}}",
+    "duration": "Thời lượng cuộc họp"
   },
   "stage": {
     "others": "{count, plural, other {thêm #}}"

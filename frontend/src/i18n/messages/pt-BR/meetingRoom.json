@@ -39,7 +39,21 @@
     "chat": "Chat",
     "unread": "{count, plural, one {# mensagem não lida} many {# mensagens não lidas} other {# mensagens não lidas}}",
     "people": "Participantes",
-    "board": "Quadro"
+    "board": "Quadro",
+    "record": "Iniciar gravação",
+    "stopRecording": "Parar gravação"
+  },
+  "recording": {
+    "notice": "Esta reunião está sendo gravada",
+    "started": "A gravação começou. Todos na reunião veem que ela está sendo gravada.",
+    "stopped": "Gravação encerrada. Ela vai aparecer no Gerenciador de arquivos em alguns minutos.",
+    "notInPlan": "A gravação faz parte dos planos pagos.",
+    "storageFull": "Seu armazenamento está cheio. Libere espaço para gravar.",
+    "busy": "Muitas reuniões estão sendo gravadas agora. Tente de novo em alguns minutos.",
+    "noCall": "A reunião ainda não começou. Tente de novo em instantes.",
+    "notActive": "A gravação já foi encerrada.",
+    "startFailed": "Não foi possível iniciar a gravação. Tente de novo.",
+    "stopFailed": "Não foi possível parar a gravação. Tente de novo."
   },
   "reactions": {
     "thumbsUp": "Joinha",
@@ -51,7 +65,8 @@
     "limited": "Reações demais. Aguarde alguns segundos."
   },
   "header": {
-    "people": "{count, plural, one {# participante} many {# participantes} other {# participantes}}"
+    "people": "{count, plural, one {# participante} many {# participantes} other {# participantes}}",
+    "duration": "Duração da reunião"
   },
   "stage": {
     "others": "{count, plural, one {mais #} many {mais #} other {mais #}}"

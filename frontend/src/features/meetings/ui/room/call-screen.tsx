@@ -12,12 +12,15 @@ import type { LocalMedia } from "../../model/local-media";
 import { BoardPanel } from "./board-panel";
 import { CallChat } from "./call-chat";
 import { CallControls } from "./call-controls";
+import { CallDuration } from "./call-duration";
 import { CallMarks } from "./call-marks";
 import { CallPanel, type CallPanelKind } from "./call-panel";
 import { CallPeople } from "./call-people";
 import { CallStage } from "./call-stage";
 import { ReactionsOverlay } from "./reactions-overlay";
+import { RecordControl } from "./record-control";
 import { CallEnded } from "./room-problem";
+import { useRecordingNotice } from "./use-recording-notice";
 
 type CallScreenProps = { session: CallSession; media: LocalMedia; onRejoin: () => void };
 
@@ -30,6 +33,7 @@ export function CallScreen({ session, media, onRejoin }: CallScreenProps) {
   const [readSeq, setReadSeq] = useState(0);
   const [boardOpen, setBoardOpen] = useState(false);
   const board = session.board?.() ?? null;
+  useRecordingNotice(call.marks.recording, call.role === "owner");
 
   useEffect(() => {
     const leave = () => session.leave();
@@ -68,8 +72,9 @@ export function CallScreen({ session, media, onRejoin }: CallScreenProps) {
           {call.title ?? t("untitled")}
         </h1>
         <CallMarks marks={call.marks} />
-        <span className="ms-auto text-muted-foreground text-sm tabular-nums">
-          {t("header.people", { count: call.people.length })}
+        <span className="ms-auto flex items-center gap-3 text-muted-foreground text-sm tabular-nums">
+          <CallDuration startedAt={call.startedAt} />
+          <span>{t("header.people", { count: call.people.length })}</span>
         </span>
       </header>
       {call.status === "reconnecting" ? (
@@ -144,6 +149,11 @@ export function CallScreen({ session, media, onRejoin }: CallScreenProps) {
         onPanel={openPanel}
         board={board ? boardOpen : null}
         onBoard={setBoardOpen}
+        record={
+          call.role === "owner" ? (
+            <RecordControl recording={call.marks.recording} onRecording={(on) => session.setRecording(on)} />
+          ) : null
+        }
         onLeave={() => session.leave()}
         onEndForAll={() => void session.endForAll()}
       />

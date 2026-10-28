@@ -39,7 +39,21 @@
     "chat": "Chat",
     "unread": "{count, plural, one {# messaggio non letto} many {# messaggi non letti} other {# messaggi non letti}}",
     "people": "Partecipanti",
-    "board": "Whiteboard"
+    "board": "Whiteboard",
+    "record": "Avvia registrazione",
+    "stopRecording": "Interrompi registrazione"
+  },
+  "recording": {
+    "notice": "Questa riunione viene registrata",
+    "started": "Registrazione avviata. Tutti nella riunione vedono che viene registrata.",
+    "stopped": "Registrazione interrotta. Comparirà in Gestione file tra qualche minuto.",
+    "notInPlan": "La registrazione è inclusa nei piani a pagamento.",
+    "storageFull": "Lo spazio di archiviazione è pieno. Libera spazio per registrare.",
+    "busy": "In questo momento si stanno registrando troppe riunioni. Riprova tra qualche minuto.",
+    "noCall": "La riunione non è ancora iniziata. Riprova tra un attimo.",
+    "notActive": "La registrazione è già stata interrotta.",
+    "startFailed": "Impossibile avviare la registrazione. Riprova.",
+    "stopFailed": "Impossibile interrompere la registrazione. Riprova."
   },
   "reactions": {
     "thumbsUp": "Pollice in su",
@@ -51,7 +65,8 @@
     "limited": "Troppe reazioni. Attendi qualche secondo."
   },
   "header": {
-    "people": "{count, plural, one {# partecipante} many {# partecipanti} other {# partecipanti}}"
+    "people": "{count, plural, one {# partecipante} many {# partecipanti} other {# partecipanti}}",
+    "duration": "Durata della riunione"
   },
   "stage": {
     "others": "{count, plural, one {altri #} many {altri #} other {altri #}}"

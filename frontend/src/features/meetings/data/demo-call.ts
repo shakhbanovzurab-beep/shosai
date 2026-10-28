@@ -12,20 +12,23 @@ import type { CallEnd } from "../domain/join";
 import { admitReaction, REACTIONS, type Reaction, shownReactions } from "../domain/reactions";
 import { DemoBoard } from "./demo-board";
 import { demoCrowd, demoPerson } from "./demo-people";
-import { demoCameraStream } from "./demo-video";
+import { DemoVideos } from "./demo-video";
 
 /*
- * Звонок на моках разработки: соединяется, люди говорят по очереди, кто-то поднимает руку, пишет в чат и
- * реагирует. Ссылка `flaky` показывает переподключение, `big` — звонок на 50. Свои камера и экран — настоящие.
+ * Звонок на моках разработки: идёт уже 7 минут, соединяется, люди говорят по очереди, кто-то поднимает руку, пишет
+ * в чат и реагирует; запись включается через миг. Ссылка `flaky` показывает переподключение, `big` — звонок на 50.
+ * Свои камера и экран — настоящие.
  */
 
-type Video = { stream: MediaStream; stop: () => void };
+const STARTED_AGO_MS = 7 * 60_000;
+// Сервер записи отвечает не сразу: метка появляется и снимается с задержкой, как у egress.
+const RECORDING_DELAY_MS = 900;
 
 export class DemoCall implements CallSession {
   private state: CallSnapshot;
   private readonly listeners = new Set<() => void>();
   private readonly timers: number[] = [];
-  private readonly videos = new Map<string, Video>();
+  private readonly videos = new DemoVideos();
   private screen: MediaStream | null = null;
   private whiteboard: DemoBoard | undefined;
   private sent: number[] = [];
@@ -43,7 +46,7 @@ export class DemoCall implements CallSession {
     };
     const others = Array.from({ length: demoCrowd(setup.token) }, (_, index) => demoPerson(index + 1));
     if (setup.role !== "owner" && others[0]) others[0] = { ...others[0], isOwner: true };
-    this.state = { ...initialSnapshot(setup), people: [self, ...others] };
+    this.state = { ...initialSnapshot(setup), people: [self, ...others], startedAt: Date.now() - STARTED_AGO_MS };
     this.schedule();
   }
 
@@ -87,13 +90,17 @@ export class DemoCall implements CallSession {
   lowerHandOf = async (identity: string) => this.patchPerson(identity, { hand: null });
 
   async remove(identity: string) {
-    this.videos.get(identity)?.stop();
-    this.videos.delete(identity);
+    this.videos.drop(identity);
     this.update({ people: this.state.people.filter((person) => person.identity !== identity) });
   }
 
   leave = () => this.finish("left");
   endForAll = async () => this.finish("ended");
+
+  async setRecording(on: boolean) {
+    const later = () => this.update({ marks: { ...this.state.marks, recording: on } });
+    this.timers.push(window.setTimeout(later, RECORDING_DELAY_MS));
+  }
 
   board(): BoardSession {
     this.whiteboard ??= new DemoBoard(this.setup.token, () => this.state.people);
@@ -108,13 +115,8 @@ export class DemoCall implements CallSession {
 
   private streamOf(identity: string, kind: VideoKind): MediaStream | null {
     if (identity === this.setup.identity) return kind === "screen" ? this.screen : this.setup.media.stream;
-    let video = this.videos.get(identity);
     const person = this.state.people.find((item) => item.identity === identity);
-    if (!video && person) {
-      video = demoCameraStream(identity, initialsOf(person.name)) ?? undefined;
-      if (video) this.videos.set(identity, video);
-    }
-    return video?.stream ?? null;
+    return person ? this.videos.streamOf(identity, initialsOf(person.name)) : null;
   }
 
   private schedule() {
@@ -176,7 +178,7 @@ export class DemoCall implements CallSession {
 
   private finish(end: CallEnd) {
     for (const timer of this.timers) window.clearTimeout(timer);
-    for (const video of this.videos.values()) video.stop();
+    this.videos.stopAll();
     this.whiteboard?.end();
     void this.stopScreen();
     this.update({ status: "ended", end });

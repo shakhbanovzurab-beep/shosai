@@ -39,7 +39,21 @@
     "chat": "Conversation",
     "unread": "{count, plural, one {# message non lu} many {# messages non lus} other {# messages non lus}}",
     "people": "Participants",
-    "board": "Tableau blanc"
+    "board": "Tableau blanc",
+    "record": "Démarrer l’enregistrement",
+    "stopRecording": "Arrêter l’enregistrement"
+  },
+  "recording": {
+    "notice": "Cette réunion est enregistrée",
+    "started": "L’enregistrement a commencé. Tous les participants voient que la réunion est enregistrée.",
+    "stopped": "Enregistrement arrêté. Il apparaîtra dans le Gestionnaire de fichiers d’ici quelques minutes.",
+    "notInPlan": "L’enregistrement est inclus dans les forfaits payants.",
+    "storageFull": "Votre espace de stockage est plein. Libérez de l’espace pour enregistrer.",
+    "busy": "Trop de réunions sont enregistrées en ce moment. Réessayez dans quelques minutes.",
+    "noCall": "La réunion n’a pas encore commencé. Réessayez dans un instant.",
+    "notActive": "L’enregistrement est déjà arrêté.",
+    "startFailed": "Impossible de démarrer l’enregistrement. Réessayez.",
+    "stopFailed": "Impossible d’arrêter l’enregistrement. Réessayez."
   },
   "reactions": {
     "thumbsUp": "Pouce levé",
@@ -51,7 +65,8 @@
     "limited": "Trop de réactions. Patientez quelques secondes."
   },
   "header": {
-    "people": "{count, plural, one {# participant} many {# participants} other {# participants}}"
+    "people": "{count, plural, one {# participant} many {# participants} other {# participants}}",
+    "duration": "Durée de la réunion"
   },
   "stage": {
     "others": "{count, plural, one {# de plus} many {# de plus} other {# de plus}}"

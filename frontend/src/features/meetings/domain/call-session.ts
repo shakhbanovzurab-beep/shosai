@@ -22,6 +22,8 @@ export type CallSnapshot = {
   reactions: ShownReaction[];
   /** Приглашение — ссылка на комнату. */
   link: string;
+  /** Когда началась встреча, мс эпохи, как её знает сервер звонков; null — пока не известно. */
+  startedAt: number | null;
 };
 
 export type VideoKind = "camera" | "screen";
@@ -43,6 +45,8 @@ export interface CallSession {
   leave(): void;
   /** Завершить встречу для всех (владелец). */
   endForAll(): Promise<void>;
+  /** Начать или остановить запись встречи (владелец); отказ сервера — ApiError, метку видят все. */
+  setRecording(on: boolean): Promise<void>;
   /** Показать видео человека в элементе; null — снять. */
   attach(identity: string, kind: VideoKind, element: HTMLVideoElement | null): void;
   /** Доска звонка; нет — у этого звонка доски пока нет (на API она приходит шагом A11b). */
@@ -77,4 +81,5 @@ export const initialSnapshot = (setup: CallSetup): CallSnapshot => ({
   chat: [],
   reactions: [],
   link: setup.link,
+  startedAt: null,
 });

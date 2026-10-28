@@ -39,7 +39,21 @@
     "chat": "對話",
     "unread": "{count, plural, other {# 則未讀訊息}}",
     "people": "參與者",
-    "board": "白板"
+    "board": "白板",
+    "record": "開始錄製",
+    "stopRecording": "停止錄製"
+  },
+  "recording": {
+    "notice": "這場會議正在錄製",
+    "started": "已開始錄製，會議中的每個人都會看到正在錄製。",
+    "stopped": "已停止錄製，幾分鐘後會出現在檔案管理中。",
+    "notInPlan": "錄製功能包含在付費方案中。",
+    "storageFull": "儲存空間已滿，請釋出空間後再錄製。",
+    "busy": "目前正在錄製的會議太多，請過幾分鐘再試一次。",
+    "noCall": "會議尚未開始，請稍後再試一次。",
+    "notActive": "錄製已經停止。",
+    "startFailed": "無法開始錄製，請再試一次。",
+    "stopFailed": "無法停止錄製，請再試一次。"
   },
   "reactions": {
     "thumbsUp": "讚",
@@ -51,7 +65,8 @@
     "limited": "表情回應太多了，請稍候幾秒。"
   },
   "header": {
-    "people": "{count, plural, other {# 位參與者}}"
+    "people": "{count, plural, other {# 位參與者}}",
+    "duration": "會議時長"
   },
   "stage": {
     "others": "{count, plural, other {另外 # 位}}"

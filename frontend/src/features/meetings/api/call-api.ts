@@ -41,4 +41,9 @@ export const callApi = {
     ),
   end: (roomId: string): Promise<unknown> =>
     dataOf(apiClient.POST("/v1/meetings/rooms/{room_id}/end", { params: { path: room(roomId) } })),
+  /** Запись встречи владельцем: файл ложится в его «Файлы», метку записи видят все. */
+  startRecording: (roomId: string): Promise<unknown> =>
+    dataOf(apiClient.POST("/v1/meetings/rooms/{room_id}/recording", { params: { path: room(roomId) } })),
+  stopRecording: (roomId: string): Promise<unknown> =>
+    dataOf(apiClient.DELETE("/v1/meetings/rooms/{room_id}/recording", { params: { path: room(roomId) } })),
 };

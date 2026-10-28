@@ -1,4 +1,4 @@
-import { type LocalTrackPublication, type RemoteParticipant, Room, RoomEvent, Track } from "livekit-client";
+import { type RemoteParticipant, Room, Track } from "livekit-client";
 
 import { callApi } from "../api/call-api";
 import type { BoardSession } from "../domain/board";
@@ -13,7 +13,8 @@ import { lastSeq, mergeChat } from "../domain/chat-log";
 import type { Reaction } from "../domain/reactions";
 import { roomMetadataOf } from "../domain/room-metadata";
 import { LiveKitBoard } from "./livekit-board";
-import { endOf, incoming, publishLobbyTracks, setOwnTrack, stopTrack } from "./livekit-media";
+import { listenToRoom, startedAtOf } from "./livekit-call-events";
+import { incoming, publishLobbyTracks, setOwnTrack } from "./livekit-media";
 import { callPeopleOf } from "./livekit-people";
 import { ReactionDesk } from "./livekit-reactions";
 import { TrackStage } from "./livekit-tracks";
@@ -40,7 +41,19 @@ export class LiveKitCall implements CallSession {
     this.state = initialSnapshot(setup);
     this.stage = new TrackStage(this.room, setup.identity);
     this.reactions = new ReactionDesk((reactions) => this.update({ reactions }));
-    this.listen();
+    listenToRoom(this.room, this.stage, {
+      refresh: () => this.refresh(),
+      receive: (payload, participant, topic) => this.receive(payload, participant, topic),
+      reconnecting: () => this.update({ status: "reconnecting" }),
+      reconnected: () => {
+        this.update({ status: "connected" });
+        void this.catchUp();
+      },
+      ended: (end) => {
+        this.whiteboard?.end();
+        this.update({ status: "ended", end });
+      },
+    });
   }
 
   /** Подключиться и опубликовать свои дорожки из лобби; выключенные — сразу заглушены. */
@@ -95,6 +108,11 @@ export class LiveKitCall implements CallSession {
     await callApi.end(this.roomId());
   };
 
+  // Метка записи приходит всем через метаданные комнаты, когда сервер записи её поставит или снимет.
+  setRecording = async (on: boolean) => {
+    await (on ? callApi.startRecording(this.roomId()) : callApi.stopRecording(this.roomId()));
+  };
+
   board(): BoardSession {
     this.whiteboard ??= new LiveKitBoard({
       room: this.room,
@@ -112,46 +130,6 @@ export class LiveKitCall implements CallSession {
   onData(topic: string, listener: (payload: Uint8Array, from: string | undefined) => void) {
     this.topics.set(topic, listener);
     return () => this.topics.delete(topic);
-  }
-
-  private listen() {
-    const refresh = () => this.refresh();
-    this.room
-      .on(RoomEvent.ParticipantConnected, (participant) => {
-        this.stage.subscribeAudio(participant);
-        refresh();
-      })
-      .on(RoomEvent.TrackPublished, (publication, participant) => this.stage.want(publication, participant))
-      .on(RoomEvent.TrackSubscribed, (track, _publication, participant) => {
-        this.stage.show(track, participant.identity);
-        refresh();
-      })
-      .on(RoomEvent.TrackUnsubscribed, stopTrack)
-      .on(RoomEvent.LocalTrackPublished, (publication: LocalTrackPublication) => {
-        this.stage.showLocal(publication);
-        refresh();
-      })
-      .on(RoomEvent.DataReceived, (payload, participant, _kind, topic) => this.receive(payload, participant, topic))
-      .on(RoomEvent.RoomMetadataChanged, refresh)
-      .on(RoomEvent.Reconnecting, () => this.update({ status: "reconnecting" }))
-      .on(RoomEvent.Reconnected, () => {
-        this.update({ status: "connected" });
-        void this.catchUp();
-      })
-      .on(RoomEvent.Disconnected, (reason) => {
-        this.whiteboard?.end();
-        this.update({ status: "ended", end: endOf(reason) });
-      });
-    for (const event of [
-      RoomEvent.ParticipantDisconnected,
-      RoomEvent.TrackMuted,
-      RoomEvent.TrackUnmuted,
-      RoomEvent.TrackUnpublished,
-      RoomEvent.ActiveSpeakersChanged,
-      RoomEvent.ParticipantAttributesChanged,
-      RoomEvent.ParticipantNameChanged,
-    ])
-      this.room.on(event, refresh);
   }
 
   private receive(payload: Uint8Array, participant: RemoteParticipant | undefined, topic: string | undefined) {
@@ -189,7 +167,7 @@ export class LiveKitCall implements CallSession {
     const metadata = roomMetadataOf(this.room.metadata);
     const { localParticipant, remoteParticipants } = this.room;
     const people = callPeopleOf(localParticipant, remoteParticipants.values(), metadata?.owner ?? null);
-    this.update({ people, marks: metadata?.marks ?? this.state.marks });
+    this.update({ people, marks: metadata?.marks ?? this.state.marks, startedAt: startedAtOf(this.room) });
   }
 
   private update(change: Partial<CallSnapshot>) {

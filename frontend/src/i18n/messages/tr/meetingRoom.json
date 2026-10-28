@@ -39,7 +39,21 @@
     "chat": "Sohbet",
     "unread": "{count, plural, one {# okunmamış mesaj} other {# okunmamış mesaj}}",
     "people": "Katılımcılar",
-    "board": "Çizim panosu"
+    "board": "Çizim panosu",
+    "record": "Kaydı başlat",
+    "stopRecording": "Kaydı durdur"
+  },
+  "recording": {
+    "notice": "Bu toplantı kaydediliyor",
+    "started": "Kayıt başladı. Toplantıdaki herkes kayıt yapıldığını görür.",
+    "stopped": "Kayıt durduruldu. Birkaç dakika içinde Dosya yöneticisinde görünecek.",
+    "notInPlan": "Kayıt, ücretli planlarda bulunur.",
+    "storageFull": "Depolama alanınız dolu. Kayıt yapmak için yer açın.",
+    "busy": "Şu anda çok fazla toplantı kaydediliyor. Birkaç dakika sonra tekrar deneyin.",
+    "noCall": "Toplantı henüz başlamadı. Birazdan tekrar deneyin.",
+    "notActive": "Kayıt zaten durduruldu.",
+    "startFailed": "Kayıt başlatılamadı. Tekrar deneyin.",
+    "stopFailed": "Kayıt durdurulamadı. Tekrar deneyin."
   },
   "reactions": {
     "thumbsUp": "Beğen",
@@ -51,7 +65,8 @@
     "limited": "Çok fazla tepki. Birkaç saniye bekleyin."
   },
   "header": {
-    "people": "{count, plural, one {# katılımcı} other {# katılımcı}}"
+    "people": "{count, plural, one {# katılımcı} other {# katılımcı}}",
+    "duration": "Toplantı süresi"
   },
   "stage": {
     "others": "{count, plural, one {# kişi daha} other {# kişi daha}}"

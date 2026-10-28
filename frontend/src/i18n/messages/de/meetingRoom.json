@@ -39,7 +39,21 @@
     "chat": "Chat",
     "unread": "{count, plural, one {# ungelesene Nachricht} other {# ungelesene Nachrichten}}",
     "people": "Teilnehmer",
-    "board": "Whiteboard"
+    "board": "Whiteboard",
+    "record": "Aufnahme starten",
+    "stopRecording": "Aufnahme beenden"
+  },
+  "recording": {
+    "notice": "Für dieses Meeting läuft eine Aufnahme",
+    "started": "Die Aufnahme läuft. Alle im Meeting sehen, dass eine Aufnahme läuft.",
+    "stopped": "Aufnahme beendet. Sie erscheint in wenigen Minuten im Dateimanager.",
+    "notInPlan": "Aufnahmen gibt es in den kostenpflichtigen Tarifen.",
+    "storageFull": "Dein Speicher ist voll. Gib Platz frei, um aufzunehmen.",
+    "busy": "Gerade laufen zu viele Aufnahmen. Versuche es in ein paar Minuten erneut.",
+    "noCall": "Das Meeting hat noch nicht begonnen. Versuche es gleich noch einmal.",
+    "notActive": "Die Aufnahme ist bereits beendet.",
+    "startFailed": "Die Aufnahme konnte nicht gestartet werden. Versuche es erneut.",
+    "stopFailed": "Die Aufnahme konnte nicht beendet werden. Versuche es erneut."
   },
   "reactions": {
     "thumbsUp": "Daumen hoch",
@@ -51,7 +65,8 @@
     "limited": "Zu viele Reaktionen. Warte ein paar Sekunden."
   },
   "header": {
-    "people": "{count, plural, one {# Teilnehmer} other {# Teilnehmer}}"
+    "people": "{count, plural, one {# Teilnehmer} other {# Teilnehmer}}",
+    "duration": "Dauer des Meetings"
   },
   "stage": {
     "others": "{count, plural, one {# weitere} other {# weitere}}"

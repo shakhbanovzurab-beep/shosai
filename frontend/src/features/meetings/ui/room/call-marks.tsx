@@ -1,11 +1,12 @@
-import { Circle, Sparkles } from "lucide-react";
+import { Circle } from "lucide-react";
 import { useTranslations } from "use-intl";
 
+import { ShosaiMark } from "@/components/shosai-mark";
 import { Badge } from "@/components/ui/badge";
 
 import type { CallMarks as Marks } from "../../domain/call-session";
 
-/** Что идёт на сервере в звонке — заметки Leo и запись; видят все участники ещё до входа (MR-D3, MR-D4). */
+/** Что идёт на сервере в звонке — заметки Leo (его знак — знак Shosai) и запись; видят все ещё до входа (MR-D3, MR-D4). */
 export function CallMarks({ marks }: { marks: Marks }) {
   const t = useTranslations("meetingRoom");
   if (!marks.notes && !marks.recording) return null;
@@ -14,7 +15,7 @@ export function CallMarks({ marks }: { marks: Marks }) {
       {marks.notes ? (
         <li>
           <Badge variant="secondary">
-            <Sparkles aria-hidden="true" />
+            <ShosaiMark />
             {t("marks.notes")}
           </Badge>
         </li>
@@ -22,7 +23,7 @@ export function CallMarks({ marks }: { marks: Marks }) {
       {marks.recording ? (
         <li>
           <Badge variant="destructive">
-            <Circle aria-hidden="true" className="fill-current" />
+            <Circle aria-hidden="true" className="fill-current motion-safe:animate-pulse" />
             {t("marks.recording")}
           </Badge>
         </li>

@@ -39,7 +39,21 @@
     "chat": "Chat",
     "unread": "{count, plural, other {# pesan belum dibaca}}",
     "people": "Peserta",
-    "board": "Papan tulis"
+    "board": "Papan tulis",
+    "record": "Mulai merekam",
+    "stopRecording": "Hentikan rekaman"
+  },
+  "recording": {
+    "notice": "Rapat ini sedang direkam",
+    "started": "Perekaman dimulai. Semua peserta melihat bahwa rapat sedang direkam.",
+    "stopped": "Perekaman dihentikan. Rekaman akan muncul di Pengelola file dalam beberapa menit.",
+    "notInPlan": "Perekaman tersedia di paket berbayar.",
+    "storageFull": "Penyimpanan Anda penuh. Kosongkan ruang untuk merekam.",
+    "busy": "Terlalu banyak rapat yang sedang direkam. Coba lagi dalam beberapa menit.",
+    "noCall": "Rapat belum dimulai. Coba lagi sebentar lagi.",
+    "notActive": "Perekaman sudah dihentikan.",
+    "startFailed": "Perekaman tidak dapat dimulai. Coba lagi.",
+    "stopFailed": "Perekaman tidak dapat dihentikan. Coba lagi."
   },
   "reactions": {
     "thumbsUp": "Jempol",
@@ -51,7 +65,8 @@
     "limited": "Terlalu banyak reaksi. Tunggu beberapa detik."
   },
   "header": {
-    "people": "{count, plural, other {# peserta}}"
+    "people": "{count, plural, other {# peserta}}",
+    "duration": "Durasi rapat"
   },
   "stage": {
     "others": "{count, plural, other {# lainnya}}"

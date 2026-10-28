@@ -39,7 +39,21 @@
     "chat": "채팅",
     "unread": "{count, plural, other {읽지 않은 메시지 #개}}",
     "people": "참석자",
-    "board": "화이트보드"
+    "board": "화이트보드",
+    "record": "녹화 시작",
+    "stopRecording": "녹화 중지"
+  },
+  "recording": {
+    "notice": "이 회의는 녹화되고 있어요",
+    "started": "녹화를 시작했어요. 회의 참석자 모두에게 녹화 중이라고 표시돼요.",
+    "stopped": "녹화를 중지했어요. 몇 분 후 파일 관리자에 표시돼요.",
+    "notInPlan": "녹화는 유료 플랜에 포함되어 있어요.",
+    "storageFull": "저장 공간이 가득 찼어요. 녹화하려면 공간을 확보해 주세요.",
+    "busy": "지금은 녹화 중인 회의가 너무 많아요. 몇 분 후에 다시 시도해 주세요.",
+    "noCall": "회의가 아직 시작되지 않았어요. 잠시 후 다시 시도해 주세요.",
+    "notActive": "녹화가 이미 중지되었어요.",
+    "startFailed": "녹화를 시작하지 못했어요. 다시 시도해 주세요.",
+    "stopFailed": "녹화를 중지하지 못했어요. 다시 시도해 주세요."
   },
   "reactions": {
     "thumbsUp": "좋아요",
@@ -51,7 +65,8 @@
     "limited": "반응이 너무 많아요. 몇 초 기다려 주세요."
   },
   "header": {
-    "people": "{count, plural, other {참석자 #명}}"
+    "people": "{count, plural, other {참석자 #명}}",
+    "duration": "회의 진행 시간"
   },
   "stage": {
     "others": "{count, plural, other {외 #명}}"
