@@ -19,6 +19,7 @@ registered `/v1/jira/oauth/callback`, its sites, the weekly personal data report
 quota alert. Step 9 Google's two applications. Step 10 the `CALENDARS` port with Google
 Calendar. Step 11 the `MAILBOXES` port with Gmail, offered to testers until CASA. Step 12
 `FILE_SOURCES` and the scope picker over Google Drive's `drive.file`, and the Picker's setup.
+Step 13 Microsoft's Entra application and Outlook Calendar on Graph.
 """
 
 from collections.abc import AsyncIterator
@@ -81,6 +82,7 @@ from shosai.features.connectors.infrastructure.providers.google_drive import (
     GoogleDrive,
     GoogleDriveResources,
 )
+from shosai.features.connectors.infrastructure.providers.outlook_calendar import OutlookCalendar
 from shosai.features.connectors.infrastructure.store.records import CONNECTOR_MODELS
 from shosai.features.connectors.infrastructure.transport.guards import ProviderGuards
 from shosai.features.connectors.infrastructure.transport.http_client import (
@@ -96,7 +98,15 @@ def capability_ports(
 ) -> tuple[PortBinding[Any], ...]:
     """The capability ports, each with the adapters of the providers built so far."""
     return (
-        CALENDARS.bind(ConnectorCalendars(access, {App.GOOGLE_CALENDAR: GoogleCalendar()})),
+        CALENDARS.bind(
+            ConnectorCalendars(
+                access,
+                {
+                    App.GOOGLE_CALENDAR: GoogleCalendar(),
+                    App.OUTLOOK_CALENDAR: OutlookCalendar(),
+                },
+            )
+        ),
         MAILBOXES.bind(ConnectorMailboxes(access, {App.GMAIL: Gmail()})),
         FILE_SOURCES.bind(ConnectorFileSources(access, {App.GOOGLE_DRIVE: drive})),
     )

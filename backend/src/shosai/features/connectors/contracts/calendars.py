@@ -1,22 +1,21 @@
 """`CALENDARS`: a connected calendar account as the calendar slice syncs it (plan §3.3).
 
-The calendar slice keeps its own events and sync state; through this port it lists the
+The calendar slice keeps its own events and sync state. Through this port it lists the
 account's calendars, reads events in a window for display, follows changes since a cursor
-(an expired cursor is `CalendarCursorExpiredError`, and the slice syncs from scratch), writes
-with the provider's etag (a stale one is `CalendarConflictError`), opens and stops push
-channels, and decodes a push notification's headers. Every call goes through the person's
-provider session, so quotas, `Retry-After` and refresh apply; no token is ever handed out.
+(an expired cursor is `CalendarCursorExpiredError` of `calendar_errors`, and the slice syncs
+from scratch), writes with the provider's etag (a stale one is `CalendarConflictError`),
+opens, renews and stops push channels, and decodes a push call's notifications. Every call
+goes through the person's provider session, so quotas, `Retry-After` and refresh apply, and
+no token is ever handed out.
 """
 
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from enum import StrEnum
-from http import HTTPStatus
 from typing import Final, Protocol
 from uuid import UUID
 
-from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.keys import PortKey
 
@@ -176,39 +175,12 @@ class CalendarNotification:
 
     channel_id: str
     token: str | None
-    # sync — канал открыт; exists — что-то изменилось; not_exists — ресурс удалён.
+    # Google: sync, exists, not_exists. Microsoft: created, updated, deleted — или событие жизни
+    # подписки: reauthorizationRequired, subscriptionRemoved, missed.
     state: str
     message_number: int | None = None
     resource_id: str | None = None
     extra: Mapping[str, str] = field(default_factory=dict)
-
-
-class CalendarCursorExpiredError(AppError):
-    """The provider forgot the sync cursor: the calendar is synced again from scratch."""
-
-    def __init__(self) -> None:
-        super().__init__("calendar_cursor_expired", HTTPStatus.GONE)
-
-
-class CalendarConflictError(AppError):
-    """The event changed at the provider since its etag was read."""
-
-    def __init__(self) -> None:
-        super().__init__("calendar_conflict", HTTPStatus.PRECONDITION_FAILED)
-
-
-class CalendarEventNotFoundError(AppError):
-    """No such event, or a calendar the account cannot see."""
-
-    def __init__(self) -> None:
-        super().__init__("calendar_event_not_found", HTTPStatus.NOT_FOUND)
-
-
-class CalendarUnsupportedError(AppError):
-    """The connection's app is not a calendar Shosai syncs."""
-
-    def __init__(self) -> None:
-        super().__init__("calendar_unsupported", HTTPStatus.NOT_FOUND)
 
 
 @dataclass(frozen=True, slots=True)
@@ -285,12 +257,23 @@ class Calendars(Protocol):
         """Open a push channel on one calendar."""
         ...
 
+    async def renew(
+        self, scope: TenancyScope, connection_id: UUID, channel: WatchChannel, until: datetime
+    ) -> WatchChannel | None:
+        """Extend a push channel; None for a provider that cannot, whose channel is watched
+        again (Google)."""
+        ...
+
     async def stop(self, scope: TenancyScope, connection_id: UUID, channel: WatchChannel) -> None:
         """Close a push channel; one already expired counts as closed."""
         ...
 
-    def notification(self, app: str, headers: Mapping[str, str]) -> CalendarNotification | None:
-        """A push notification's meaning, from its headers; None when it is not one."""
+    def notifications(
+        self, app: str, headers: Mapping[str, str], body: bytes
+    ) -> tuple[CalendarNotification, ...]:
+        """A push call's notifications: Google's one in its headers, Microsoft's batch in its
+        body; none when the call is not a notification. Microsoft's validation handshake
+        (`?validationToken=`) is answered by the receiving route itself."""
         ...
 
 

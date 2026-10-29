@@ -16,10 +16,12 @@ from http import HTTPStatus
 from typing import Any, Final
 from urllib.parse import quote
 
-from shosai.features.connectors.contracts.calendars import (
+from shosai.features.connectors.contracts.calendar_errors import (
     CalendarConflictError,
     CalendarCursorExpiredError,
     CalendarEventNotFoundError,
+)
+from shosai.features.connectors.contracts.calendars import (
     CalendarNotification,
     ChangesQuery,
     EventChanges,
@@ -191,6 +193,13 @@ class GoogleCalendar:
             resource if isinstance(resource, str) else None, expires_at,
         )  # fmt: skip
 
+    async def renew(
+        self, session: ProviderSession, channel: WatchChannel, until: datetime
+    ) -> WatchChannel | None:
+        """Google renews no channel: the calendar slice watches again before it expires."""
+        del session, channel, until
+        return None
+
     async def stop(self, session: ProviderSession, channel: WatchChannel) -> None:
         """Stop a channel; one Google no longer knows has stopped already."""
         response = await session.request(ProviderCall(
@@ -200,16 +209,19 @@ class GoogleCalendar:
         if response.status != HTTPStatus.NOT_FOUND:
             _checked(response)
 
-    def notification(self, headers: Mapping[str, str]) -> CalendarNotification | None:
-        """Google's push: the channel, its token, the resource's state and the message's number."""
+    def notifications(
+        self, headers: Mapping[str, str], body: bytes
+    ) -> tuple[CalendarNotification, ...]:
+        """Google's push, all in its headers: the channel, its token, the state, the number."""
+        del body
         lowered = {key.lower(): value for key, value in headers.items()}
         channel = lowered.get("x-goog-channel-id")
         state = lowered.get("x-goog-resource-state")
         if not channel or not state:
-            return None
+            return ()
         number = lowered.get("x-goog-message-number", "")
-        return CalendarNotification(
+        return (CalendarNotification(
             channel_id=channel, token=lowered.get("x-goog-channel-token"), state=state,
             message_number=int(number) if number.isdigit() else None,
             resource_id=lowered.get("x-goog-resource-id"),
-        )  # fmt: skip
+        ),)  # fmt: skip

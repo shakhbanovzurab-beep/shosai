@@ -3,15 +3,18 @@ calendar adapter of the connection's app (plan §3.3). Providers bring their ada
 their steps — Google Calendar (step 10), Outlook (13), CalDAV and Yandex (16)."""
 
 from collections.abc import Mapping
+from datetime import datetime
 from typing import Protocol
 from uuid import UUID
 
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.connectors.application.capability_sessions import CapabilitySessions
 from shosai.features.connectors.application.provider_access import ConnectorProviderAccess
+from shosai.features.connectors.contracts.calendar_errors import (
+    CalendarUnsupportedError,
+)
 from shosai.features.connectors.contracts.calendars import (
     CalendarNotification,
-    CalendarUnsupportedError,
     ChangesQuery,
     EventChanges,
     EventPage,
@@ -54,12 +57,20 @@ class CalendarAdapter(Protocol):
         """Open a push channel."""
         ...
 
+    async def renew(
+        self, session: ProviderSession, channel: WatchChannel, until: datetime
+    ) -> WatchChannel | None:
+        """Extend a push channel, or None."""
+        ...
+
     async def stop(self, session: ProviderSession, channel: WatchChannel) -> None:
         """Close a push channel."""
         ...
 
-    def notification(self, headers: Mapping[str, str]) -> CalendarNotification | None:
-        """A push notification from its headers."""
+    def notifications(
+        self, headers: Mapping[str, str], body: bytes
+    ) -> tuple[CalendarNotification, ...]:
+        """A push call's notifications."""
         ...
 
 
@@ -105,11 +116,21 @@ class ConnectorCalendars:
         """Open a push channel on one calendar."""
         return await self._sessions.run(scope, connection_id, lambda a, s: a.watch(s, request))
 
+    async def renew(
+        self, scope: TenancyScope, connection_id: UUID, channel: WatchChannel, until: datetime
+    ) -> WatchChannel | None:
+        """Extend a push channel, or None where the provider cannot."""
+        return await self._sessions.run(
+            scope, connection_id, lambda a, s: a.renew(s, channel, until)
+        )
+
     async def stop(self, scope: TenancyScope, connection_id: UUID, channel: WatchChannel) -> None:
         """Close a push channel."""
         await self._sessions.run(scope, connection_id, lambda a, s: a.stop(s, channel))
 
-    def notification(self, app: str, headers: Mapping[str, str]) -> CalendarNotification | None:
-        """A push notification's meaning; None for an app without calendars or a stray call."""
+    def notifications(
+        self, app: str, headers: Mapping[str, str], body: bytes
+    ) -> tuple[CalendarNotification, ...]:
+        """A push call's notifications; none for an app without calendars or a stray call."""
         adapter = self._sessions.adapter(app)
-        return None if adapter is None else adapter.notification(headers)
+        return () if adapter is None else adapter.notifications(headers, body)

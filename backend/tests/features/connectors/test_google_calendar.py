@@ -9,12 +9,14 @@ from sqlalchemy import select
 
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
-from shosai.features.connectors.contracts.calendars import (
-    AttendeeResponse,
-    CalendarAccess,
+from shosai.features.connectors.contracts.calendar_errors import (
     CalendarConflictError,
     CalendarCursorExpiredError,
     CalendarUnsupportedError,
+)
+from shosai.features.connectors.contracts.calendars import (
+    AttendeeResponse,
+    CalendarAccess,
     ChangesQuery,
     EventDraft,
     EventStatus,
@@ -124,28 +126,23 @@ async def test_channels_open_stop_quietly_when_expired_and_notifications_decode(
         scope, connection_id, WatchRequest(PRIMARY, "chan-1", hook, "tok", expires)
     )
     await calendar.calendars.stop(scope, connection_id, WatchChannel("gone-channel", "res-0", None))
-    notification = calendar.calendars.notification("google_calendar", {
+    (notification,) = calendar.calendars.notifications("google_calendar", {
         "X-Goog-Channel-ID": "chan-1", "X-Goog-Channel-Token": "tok",
         "X-Goog-Resource-State": "exists", "X-Goog-Message-Number": "7",
         "X-Goog-Resource-ID": "res-1",
-    })  # fmt: skip
+    }, b"")  # fmt: skip
 
     assert (channel.channel_id, channel.resource_id) == ("chan-1", "res-1")
-    assert (
-        channel.expires_at == datetime(2026, 10, 29, tzinfo=UTC) + timedelta(days=0)
-        or channel.expires_at
-    )
+    assert channel.expires_at == datetime(2026, 10, 29, tzinfo=UTC)
     assert calendar.api.stopped == ["gone-channel"]
-    assert notification is not None
     assert (notification.state, notification.token, notification.message_number) == (
         "exists",
         "tok",
         7,
     )
-    assert (
-        calendar.calendars.notification("google_calendar", {"X-Goog-Resource-State": "x"}) is None
-    )
-    assert calendar.calendars.notification("nango", {"X-Goog-Channel-ID": "c"}) is None
+    stray = {"X-Goog-Resource-State": "x"}
+    assert calendar.calendars.notifications("google_calendar", stray, b"") == ()
+    assert calendar.calendars.notifications("nango", {"X-Goog-Channel-ID": "c"}, b"") == ()
 
 
 async def test_the_account_s_calendars_a_window_and_a_non_calendar_app(

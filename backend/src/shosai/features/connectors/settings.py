@@ -39,6 +39,9 @@ class ConnectorsSettings(SettingsSection):
     # основного проекта Google; без них Диск подключается, но файлы выбрать нельзя.
     connectors_google_picker_api_key: str | None = None
     connectors_google_project_number: str | None = None
+    # Приложение Microsoft Entra (мультитенантное, common): почта и календарь Outlook.
+    connectors_microsoft_client_id: str | None = None
+    connectors_microsoft_client_secret: SecretStr | None = None
     # Публичный Gmail включается только после CASA; до того Gmail видят тестировщики владельца.
     connectors_gmail_public: bool = False
     connectors_gmail_tester_ids: AccountIds = ()
@@ -53,6 +56,9 @@ class ConnectorsSettings(SettingsSection):
             "google": (self.connectors_google_client_id, self.connectors_google_client_secret),
             "google_mail": (
                 self.connectors_google_mail_client_id, self.connectors_google_mail_client_secret
+            ),
+            "microsoft": (
+                self.connectors_microsoft_client_id, self.connectors_microsoft_client_secret
             ),
         }  # fmt: skip
         for name, (client_id, secret) in pairs.items():

@@ -22,6 +22,7 @@ from shosai.features.connectors.infrastructure.providers.google import (
     TESTING_LIFETIME,
     GoogleAdapter,
 )
+from shosai.features.connectors.infrastructure.providers.microsoft import MicrosoftAdapter
 from shosai.features.connectors.settings import ConnectorsSettings
 
 
@@ -53,6 +54,10 @@ def configured_clients(settings: ConnectorsSettings) -> Mapping[str, ConfiguredC
             GoogleAdapter(GOOGLE_MAIL),
             (s.connectors_google_mail_client_id, s.connectors_google_mail_client_secret),
             TESTING_LIFETIME if s.connectors_google_mail_testing else None,
+        ),
+        "microsoft": _client(
+            MicrosoftAdapter(),
+            (s.connectors_microsoft_client_id, s.connectors_microsoft_client_secret),
         ),
     }
     return {key: client for key, client in candidates.items() if client is not None}
