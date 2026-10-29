@@ -130,6 +130,8 @@ class GoogleBench:
     revoker: GrantRevoker
     homes: DatabaseAccess
     keys: FernetKeyRing
+    # Для сессий провайдера поверх стенда: приложения и outbox.
+    wiring: tuple[ProviderRegistry, EventOutbox]
 
     async def connect(self, person: Person, app: App, account: str = "anna") -> str:
         """Run the person's consent for the app; the callback's location."""
@@ -178,5 +180,5 @@ async def google(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[GoogleBe
             authorizer, completer, double, CabinetConnectors(homes.transactions, offers, registry),
             Disconnector(homes.transactions, outbox, registry),
             GrantRevoker(homes.transactions, RevokeTools(registry, http, keys, metrics)),
-            homes, keys,
+            homes, keys, (registry, outbox),
         )  # fmt: skip

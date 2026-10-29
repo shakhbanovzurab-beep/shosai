@@ -16,7 +16,8 @@ for every process, opens a provider's breaker only on its own failures, and retr
 Step 6 the cabinet's routes — the list, a disconnect, connecting by a given secret, a scope
 picker's browse — and `CONNECTIONS` for consumers. Step 8 Atlassian: the Jira grant at its
 registered `/v1/jira/oauth/callback`, its sites, the weekly personal data report, and the
-quota alert.
+quota alert. Step 9 Google's two applications; step 10 the `CALENDARS` port with Google
+Calendar.
 """
 
 from collections.abc import AsyncIterator
@@ -35,6 +36,7 @@ from shosai.features.connectors.application.atlassian_accounts import (
 )
 from shosai.features.connectors.application.authorize import Authorizer, AuthorizeTools
 from shosai.features.connectors.application.cabinet_list import CabinetConnectors
+from shosai.features.connectors.application.calendars import ConnectorCalendars
 from shosai.features.connectors.application.callback import CallbackTools, Completer
 from shosai.features.connectors.application.credentials import Credentials, CredentialTools
 from shosai.features.connectors.application.disconnect import Disconnector
@@ -57,11 +59,14 @@ from shosai.features.connectors.channels.tasks import (
     connectors_task_handlers,
 )
 from shosai.features.connectors.contracts import CONNECTIONS, INSTALLATIONS, PROVIDER_ACCESS
+from shosai.features.connectors.contracts.calendars import CALENDARS
 from shosai.features.connectors.contracts.events import CONNECTOR_EVENTS
+from shosai.features.connectors.domain.catalogue import App
 from shosai.features.connectors.infrastructure.metrics import ConnectorsMetrics
 from shosai.features.connectors.infrastructure.oauth.flow_store import FlowStore
 from shosai.features.connectors.infrastructure.providers.base import ProviderRegistry
 from shosai.features.connectors.infrastructure.providers.configured import configured_clients
+from shosai.features.connectors.infrastructure.providers.google_calendar import GoogleCalendar
 from shosai.features.connectors.infrastructure.store.records import CONNECTOR_MODELS
 from shosai.features.connectors.infrastructure.transport.guards import ProviderGuards
 from shosai.features.connectors.infrastructure.transport.http_client import (
@@ -132,6 +137,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 CONNECTIONS.bind(ConnectorRegistry(services.ports)),
                 INSTALLATIONS.bind(WorkspaceInstallations(authorizer, audit, services.outbox)),
                 PROVIDER_ACCESS.bind(access),
+                CALENDARS.bind(ConnectorCalendars(access, {App.GOOGLE_CALENDAR: GoogleCalendar()})),
             ),
         )
 
