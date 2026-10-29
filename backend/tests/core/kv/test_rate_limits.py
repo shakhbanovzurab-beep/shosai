@@ -86,6 +86,21 @@ async def test_subjects_do_not_share_an_allowance(valkey: Redis) -> None:
     assert (first.allowed, other.allowed, again.allowed) == (True, True, False)
 
 
+async def test_a_costly_request_takes_its_units_of_the_allowance(valkey: Redis) -> None:
+    limiter, _ = build_limiter(valkey)
+    limit = RateLimit("units", rate=100, period=timedelta(minutes=1), burst=100)
+    subject = str(uuid.uuid4())
+
+    heavy = await limiter.check(limit, subject, cost=60)
+    over = await limiter.check(limit, subject, cost=60)
+    light = await limiter.check(limit, subject, cost=40)
+
+    assert (heavy.allowed, over.allowed, light.allowed) == (True, False, True)
+    assert over.retry_after > timedelta(seconds=10)
+    with pytest.raises(ValueError, match="стоимость"):
+        await limiter.check(limit, subject, cost=101)
+
+
 async def test_one_interval_later_one_more_request_passes(valkey: Redis) -> None:
     limiter, _ = build_limiter(valkey)
     limit = RateLimit("probe", rate=20, period=timedelta(seconds=1), burst=1)

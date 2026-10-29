@@ -98,7 +98,7 @@ class Credentials:
         if (
             scope.user_id is None
             or probe is None
-            or app not in self._tools.offers.offered()
+            or app not in self._tools.offers.offered(scope.user_id)
             or probe.auth_kind not in spec.auth
         ):
             raise NotOfferedError

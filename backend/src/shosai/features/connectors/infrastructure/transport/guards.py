@@ -77,7 +77,7 @@ class ProviderGuards:
         self._outages = OutageLog("Valkey не ответил защитам вызовов провайдеров")
 
     async def admit(
-        self, descriptor: ProviderDescriptor, subjects: Mapping[LimitSubject, str]
+        self, descriptor: ProviderDescriptor, subjects: Mapping[LimitSubject, str], cost: int = 1
     ) -> None:
         """Refuse a call the provider asked to wait for, a broken provider, a quota spent."""
         provider = descriptor.provider.value
@@ -104,7 +104,7 @@ class ProviderGuards:
             rate = RateLimit(
                 f"conn_{provider}_{limit.name}", limit.requests, limit.period, limit.burst
             )
-            decision = await self._limiter.check(rate, subject)
+            decision = await self._limiter.check(rate, subject, min(cost, limit.burst))
             if not decision.allowed:
                 raise ProviderBusyError(max(1, int(decision.retry_after.total_seconds()) + 1))
 

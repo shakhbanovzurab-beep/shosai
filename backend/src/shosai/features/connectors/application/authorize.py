@@ -109,7 +109,7 @@ class Authorizer:
         spec = spec_of(request.app)
         owner = Owner.PERSON if request.org_id is None else Owner.WORKSPACE
         if (
-            request.app not in self._tools.offers.offered()
+            request.app not in self._tools.offers.offered(request.user_id)
             or owner not in spec.owners
             or spec.auth[0] is not AuthKind.OAUTH2
         ):

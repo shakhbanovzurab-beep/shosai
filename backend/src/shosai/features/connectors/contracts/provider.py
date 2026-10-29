@@ -45,6 +45,8 @@ class ProviderCall:
     params: Mapping[str, str] | None = None
     json_body: object | None = None
     headers: Mapping[str, str] | None = None
+    # Сколько единиц квоты провайдера стоит вызов (Gmail: получить письмо — 5, отправить — 100).
+    cost: int = 1
 
 
 class ProviderSession(Protocol):

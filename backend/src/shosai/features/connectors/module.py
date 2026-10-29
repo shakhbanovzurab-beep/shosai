@@ -17,7 +17,7 @@ Step 6 the cabinet's routes — the list, a disconnect, connecting by a given se
 picker's browse — and `CONNECTIONS` for consumers. Step 8 Atlassian: the Jira grant at its
 registered `/v1/jira/oauth/callback`, its sites, the weekly personal data report, and the
 quota alert. Step 9 Google's two applications; step 10 the `CALENDARS` port with Google
-Calendar.
+Calendar; step 11 the `MAILBOXES` port with Gmail, offered to testers until CASA.
 """
 
 from collections.abc import AsyncIterator
@@ -45,7 +45,8 @@ from shosai.features.connectors.application.installation_audit import Installati
 from shosai.features.connectors.application.installations import WorkspaceInstallations
 from shosai.features.connectors.application.key_rotation import KeyRotation
 from shosai.features.connectors.application.lifecycle_sweeps import DueGrants
-from shosai.features.connectors.application.offers import Offers
+from shosai.features.connectors.application.mailboxes import ConnectorMailboxes
+from shosai.features.connectors.application.offers import GmailAccess, Offers
 from shosai.features.connectors.application.provider_access import ConnectorProviderAccess
 from shosai.features.connectors.application.registry import ConnectorRegistry
 from shosai.features.connectors.application.resources import Resources
@@ -61,11 +62,13 @@ from shosai.features.connectors.channels.tasks import (
 from shosai.features.connectors.contracts import CONNECTIONS, INSTALLATIONS, PROVIDER_ACCESS
 from shosai.features.connectors.contracts.calendars import CALENDARS
 from shosai.features.connectors.contracts.events import CONNECTOR_EVENTS
+from shosai.features.connectors.contracts.mailboxes import MAILBOXES
 from shosai.features.connectors.domain.catalogue import App
 from shosai.features.connectors.infrastructure.metrics import ConnectorsMetrics
 from shosai.features.connectors.infrastructure.oauth.flow_store import FlowStore
 from shosai.features.connectors.infrastructure.providers.base import ProviderRegistry
 from shosai.features.connectors.infrastructure.providers.configured import configured_clients
+from shosai.features.connectors.infrastructure.providers.gmail import Gmail
 from shosai.features.connectors.infrastructure.providers.google_calendar import GoogleCalendar
 from shosai.features.connectors.infrastructure.store.records import CONNECTOR_MODELS
 from shosai.features.connectors.infrastructure.transport.guards import ProviderGuards
@@ -88,7 +91,10 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     registry = ProviderRegistry(configured_clients(settings))
     flows, audit = FlowStore(services.valkey), InstallationAudit(services.ports)
     metrics = ConnectorsMetrics(services.registry)
-    offers = Offers(services.ports, registry)
+    gmail = GmailAccess(
+        settings.connectors_gmail_public, frozenset(settings.connectors_gmail_tester_ids)
+    )
+    offers = Offers(services.ports, registry, gmail)
     async with open_connectors_http() as http:
         authorize = AuthorizeTools(offers, registry, flows, base_url, sealing=keys is not None)
         authorizer = Authorizer(services.transactions, authorize)
@@ -138,6 +144,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 INSTALLATIONS.bind(WorkspaceInstallations(authorizer, audit, services.outbox)),
                 PROVIDER_ACCESS.bind(access),
                 CALENDARS.bind(ConnectorCalendars(access, {App.GOOGLE_CALENDAR: GoogleCalendar()})),
+                MAILBOXES.bind(ConnectorMailboxes(access, {App.GMAIL: Gmail()})),
             ),
         )
 

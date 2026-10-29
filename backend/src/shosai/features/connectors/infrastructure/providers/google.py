@@ -68,7 +68,11 @@ GOOGLE: Final = ProviderDescriptor(
     # Calendar — 600 запросов в минуту на человека; Drive щедрее, предел общий для проекта.
     limits=(ProviderLimit("calls", LimitSubject.ACCOUNT, 600, timedelta(minutes=1), 100),),
 )  # fmt: skip
-GOOGLE_MAIL: Final = replace(GOOGLE, client_key="google_mail", limits=())
+# Gmail считает единицы квоты: 250 в секунду на человека; одновременно — не больше пяти вызовов.
+GOOGLE_MAIL: Final = replace(
+    GOOGLE, client_key="google_mail", concurrency_per_account=5,
+    limits=(ProviderLimit("units", LimitSubject.ACCOUNT, 15_000, timedelta(minutes=1), 1000),),
+)  # fmt: skip
 
 
 def openid_scopes(scopes: frozenset[str] | None) -> frozenset[str] | None:

@@ -7,11 +7,16 @@ start rather than leaving the apps silently unoffered. A Google project in Testi
 seven-day refresh tokens; "Shosai Mail" stays in Testing until CASA has a budget (CN-D5).
 """
 
-from typing import Self
+from typing import Annotated, Self
+from uuid import UUID
 
-from pydantic import HttpUrl, SecretStr, model_validator
+from pydantic import BeforeValidator, HttpUrl, SecretStr, model_validator
+from pydantic_settings import NoDecode
 
 from shosai.core.config.sections import SettingsSection
+from shosai.core.config.values import split_commas
+
+AccountIds = Annotated[tuple[UUID, ...], NoDecode, BeforeValidator(split_commas)]
 
 
 class ConnectorsSettings(SettingsSection):
@@ -30,6 +35,9 @@ class ConnectorsSettings(SettingsSection):
     connectors_google_mail_client_id: str | None = None
     connectors_google_mail_client_secret: SecretStr | None = None
     connectors_google_mail_testing: bool = True
+    # Публичный Gmail включается только после CASA; до того Gmail видят тестировщики владельца.
+    connectors_gmail_public: bool = False
+    connectors_gmail_tester_ids: AccountIds = ()
 
     @model_validator(mode="after")
     def applications_whole(self) -> Self:

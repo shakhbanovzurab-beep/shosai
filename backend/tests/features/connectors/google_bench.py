@@ -37,7 +37,7 @@ from shosai.features.connectors.application.callback import (
 )
 from shosai.features.connectors.application.disconnect import Disconnector
 from shosai.features.connectors.application.installation_audit import InstallationAudit
-from shosai.features.connectors.application.offers import Offers
+from shosai.features.connectors.application.offers import GmailAccess, Offers
 from shosai.features.connectors.application.revocation import GrantRevoker, RevokeTools
 from shosai.features.connectors.contracts import CONNECTOR_USES, ConnectorUses
 from shosai.features.connectors.contracts.events import CONNECTOR_EVENTS
@@ -167,7 +167,7 @@ async def google(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[GoogleBe
     })  # fmt: skip
     outbox = EventOutbox(EventTypes(list(CONNECTOR_EVENTS)))
     metrics = ConnectorsMetrics(CollectorRegistry())
-    flows, offers = FlowStore(valkey), Offers(ports, registry)
+    flows, offers = FlowStore(valkey), Offers(ports, registry, GmailAccess(public=True))
     authorizer = Authorizer(
         homes.transactions, AuthorizeTools(offers, registry, flows, BASE_URL, sealing=True)
     )

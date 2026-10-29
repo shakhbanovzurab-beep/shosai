@@ -47,7 +47,8 @@ def test_the_two_projects_share_google_s_rules_but_not_their_quotas() -> None:
     }  # fmt: skip
     assert GOOGLE.reports_granted_scopes
     assert not GOOGLE.rotating_refresh
-    assert GOOGLE_MAIL.limits == ()
+    assert [limit.name for limit in GOOGLE_MAIL.limits] == ["units"]
+    assert GOOGLE_MAIL.concurrency_per_account == 5
 
 
 def test_shosai_mail_is_in_testing_unless_the_deployment_says_otherwise() -> None:

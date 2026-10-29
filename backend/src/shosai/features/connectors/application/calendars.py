@@ -2,11 +2,12 @@
 calendar adapter of the connection's app (plan §3.3). Providers bring their adapters with
 their steps — Google Calendar (step 10), Outlook (13), CalDAV and Yandex (16)."""
 
-from collections.abc import Awaitable, Callable, Mapping
+from collections.abc import Mapping
 from typing import Protocol
 from uuid import UUID
 
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.connectors.application.capability_sessions import CapabilitySessions
 from shosai.features.connectors.application.provider_access import ConnectorProviderAccess
 from shosai.features.connectors.contracts.calendars import (
     CalendarNotification,
@@ -68,63 +69,47 @@ class ConnectorCalendars:
     def __init__(
         self, access: ConnectorProviderAccess, adapters: Mapping[App, CalendarAdapter]
     ) -> None:
-        self._access = access
-        self._adapters = adapters
-
-    async def _run[T](
-        self,
-        scope: TenancyScope,
-        connection_id: UUID,
-        call: Callable[[CalendarAdapter, ProviderSession], Awaitable[T]],
-    ) -> T:
-        async with self._access.open(scope, connection_id) as session:
-            adapter = self._adapters.get(session.connection.app)
-            if adapter is None:
-                raise CalendarUnsupportedError
-            return await call(adapter, session)
+        self._sessions = CapabilitySessions(access, adapters, CalendarUnsupportedError)
 
     async def calendars(
         self, scope: TenancyScope, connection_id: UUID
     ) -> tuple[RemoteCalendar, ...]:
         """The account's calendars."""
-        return await self._run(scope, connection_id, lambda a, s: a.calendars(s))
+        return await self._sessions.run(scope, connection_id, lambda a, s: a.calendars(s))
 
     async def window(
         self, scope: TenancyScope, connection_id: UUID, query: WindowQuery
     ) -> EventPage:
         """Occurrences of one calendar in a window."""
-        return await self._run(scope, connection_id, lambda a, s: a.window(s, query))
+        return await self._sessions.run(scope, connection_id, lambda a, s: a.window(s, query))
 
     async def changes(
         self, scope: TenancyScope, connection_id: UUID, query: ChangesQuery
     ) -> EventChanges:
         """One page of a sync pass."""
-        return await self._run(scope, connection_id, lambda a, s: a.changes(s, query))
+        return await self._sessions.run(scope, connection_id, lambda a, s: a.changes(s, query))
 
     async def write(
         self, scope: TenancyScope, connection_id: UUID, write: EventWrite
     ) -> RemoteEvent:
         """Create an event, or change one whose etag is current."""
-        return await self._run(scope, connection_id, lambda a, s: a.write(s, write))
+        return await self._sessions.run(scope, connection_id, lambda a, s: a.write(s, write))
 
     async def delete(self, scope: TenancyScope, connection_id: UUID, target: EventTarget) -> None:
         """Delete an event."""
-        await self._run(scope, connection_id, lambda a, s: a.delete(s, target))
+        await self._sessions.run(scope, connection_id, lambda a, s: a.delete(s, target))
 
     async def watch(
         self, scope: TenancyScope, connection_id: UUID, request: WatchRequest
     ) -> WatchChannel:
         """Open a push channel on one calendar."""
-        return await self._run(scope, connection_id, lambda a, s: a.watch(s, request))
+        return await self._sessions.run(scope, connection_id, lambda a, s: a.watch(s, request))
 
     async def stop(self, scope: TenancyScope, connection_id: UUID, channel: WatchChannel) -> None:
         """Close a push channel."""
-        await self._run(scope, connection_id, lambda a, s: a.stop(s, channel))
+        await self._sessions.run(scope, connection_id, lambda a, s: a.stop(s, channel))
 
     def notification(self, app: str, headers: Mapping[str, str]) -> CalendarNotification | None:
         """A push notification's meaning; None for an app without calendars or a stray call."""
-        try:
-            adapter = self._adapters.get(App(app))
-        except ValueError:
-            return None
+        adapter = self._sessions.adapter(app)
         return None if adapter is None else adapter.notification(headers)

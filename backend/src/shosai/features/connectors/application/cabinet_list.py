@@ -58,7 +58,7 @@ class CabinetConnectors:
             )
         by_app = {found.view.app: found for found in held}
         shared = Counter(found.grant_id for found in held)
-        offered = self._offers.offered()
+        offered = self._offers.offered(scope.user_id)
         rows = []
         for app, spec in CATALOGUE.items():
             if app not in offered and app not in by_app:

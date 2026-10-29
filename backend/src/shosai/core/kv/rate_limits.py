@@ -24,18 +24,20 @@ RATE_LIMIT_DEADLINE: Final = timedelta(milliseconds=50)
 MICROSECOND: Final = timedelta(microseconds=1)
 SUBJECT_DIGEST_BYTES: Final = 16
 # KEYS[1] — TAT в микросекундах; ARGV[1] — интервал между запросами, ARGV[2] — допуск
-# всплеска, оба в микросекундах. Ответ: {пропущен 0|1, ждать мкс, осталось запросов}.
+# всплеска, оба в микросекундах; ARGV[3] — стоимость запроса в единицах лимита (1 без неё).
+# Ответ: {пропущен 0|1, ждать мкс, осталось запросов}.
 # Числа пишутся через string.format: tostring в Lua дал бы 1.7e+15 и потерял точность.
 GCRA_SCRIPT: Final = """
 local clock = redis.call('TIME')
 local now = tonumber(clock[1]) * 1000000 + tonumber(clock[2])
 local interval = tonumber(ARGV[1])
 local tolerance = tonumber(ARGV[2])
+local cost = tonumber(ARGV[3] or '1')
 local tat = tonumber(redis.call('GET', KEYS[1]) or now)
 if tat < now then
   tat = now
 end
-local next_tat = tat + interval
+local next_tat = tat + interval * cost
 local allow_at = next_tat - tolerance
 if now < allow_at then
   return {0, allow_at - now, 0}
@@ -97,14 +99,18 @@ class RateLimiter:
         self._metrics = metrics
         self._outages = OutageLog("Valkey не ответил лимиту запросов: запрос пропущен")
 
-    async def check(self, limit: RateLimit, subject: str) -> RateDecision:
-        """Take one request from the subject's allowance, or say how long to wait."""
+    async def check(self, limit: RateLimit, subject: str, cost: int = 1) -> RateDecision:
+        """Take one request — `cost` units of the limit — from the subject's allowance, or say
+        how long to wait; a cost above the burst could never pass and is refused at once."""
+        if not 1 <= cost <= limit.burst:
+            message = f"стоимость запроса лимита {limit.name} — от 1 до {limit.burst}"
+            raise ValueError(message)
         interval = limit.interval // MICROSECOND
         tolerance = interval * limit.burst
         try:
             async with asyncio.timeout(RATE_LIMIT_DEADLINE.total_seconds()):
                 reply = await self._script(
-                    keys=[subject_key(limit, subject)], args=[interval, tolerance]
+                    keys=[subject_key(limit, subject)], args=[interval, tolerance, cost]
                 )
         except REDIS_FAILURES as error:
             self._metrics.count_rate_decision(limit.name, "failed_open")

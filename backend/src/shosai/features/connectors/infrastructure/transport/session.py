@@ -113,7 +113,7 @@ class AuthorizedSession:
             span.set_attribute("connectors.provider", target.descriptor.provider.value)
             span.set_attribute("connectors.operation", call.operation)
             try:
-                await parts.guards.admit(target.descriptor, subjects)
+                await parts.guards.admit(target.descriptor, subjects, call.cost)
                 async with parts.guards.slot(target.descriptor, str(target.grant_id)):
                     response = await self._authorized(call)
                 outcome = f"{response.status_code // 100}xx"
