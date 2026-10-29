@@ -4449,7 +4449,7 @@ export interface paths {
         };
         /**
          * Read Context
-         * @description The person's words about themselves.
+         * @description The person's words about themselves and the roles that take them.
          */
         get: operations["read_context_v1_studio_context_get"];
         /**
@@ -4457,6 +4457,26 @@ export interface paths {
          * @description Replace the person's context; it is stored trimmed.
          */
         put: operations["save_context_v1_studio_context_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/studio/context/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save Context Roles
+         * @description Choose the Studio roles whose answers take the person's context; the words stay.
+         */
+        put: operations["save_context_roles_v1_studio_context_roles_put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -10471,17 +10491,34 @@ export interface components {
         };
         /**
          * StudioContext
-         * @description The person's words about themselves; empty with no time before the first save.
+         * @description The person's words about themselves and the roles that take them; empty with no time,
+         *     for every role, before the first save.
          */
         StudioContext: {
             /** Content */
             content: string;
             /** Updated At */
             updated_at: string | null;
+            /**
+             * Roles
+             * @description The Studio roles whose answers take the context: "all" — every role, also one added later — or the roles named, possibly none. Leo always takes it.
+             */
+            roles: "all" | components["schemas"]["PromptRole"][];
+        };
+        /**
+         * StudioContextRolesUpdate
+         * @description The roles that take the context, replacing the person's choice; repeats are ignored.
+         */
+        StudioContextRolesUpdate: {
+            /**
+             * Roles
+             * @description The Studio roles whose answers take the context: "all" — every role, also one added later — or the roles named, possibly none. Leo always takes it.
+             */
+            roles: "all" | components["schemas"]["PromptRole"][];
         };
         /**
          * StudioContextUpdate
-         * @description The context's new text, stored trimmed.
+         * @description The context's new text, stored trimmed; the roles that take it stay.
          */
         StudioContextUpdate: {
             /** Content */
@@ -21121,6 +21158,41 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["StudioContextUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudioContext"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    save_context_roles_v1_studio_context_roles_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StudioContextRolesUpdate"];
             };
         };
         responses: {

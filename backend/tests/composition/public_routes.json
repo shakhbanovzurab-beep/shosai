@@ -289,6 +289,7 @@
     "PUT /v1/notes/{meeting_id}/my-notes",
     "PUT /v1/notes/{meeting_id}/share-link",
     "PUT /v1/studio/context",
+    "PUT /v1/studio/context/roles",
     "PUT /v1/studio/models/roles/{role}",
     "PUT /v1/studio/prompts/active",
     "PUT /v1/tasks/{task_id}/timer",

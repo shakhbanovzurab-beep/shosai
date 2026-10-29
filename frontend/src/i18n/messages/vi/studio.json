@@ -39,7 +39,7 @@
     "saving": "Đang lưu…"
   },
   "context": {
-    "intro": "Một đoạn ngắn về bạn. Mọi câu trả lời dành cho bạn đều cân nhắc đoạn này — của Leo và của từng vai trò. Đoạn này không được dùng trong ghi chú cuộc họp mà đồng nghiệp đọc. Càng chính xác, bạn càng ít bị hỏi lại.",
+    "intro": "Một đoạn ngắn về bạn. Leo luôn tính đến nó, còn những vai trò khác do bạn chọn. Càng chính xác, càng ít câu hỏi lại.",
     "loadFailed": "Không thể tải ngữ cảnh của bạn",
     "title": "Về bạn",
     "description": "Bạn là ai, làm việc gì và thích câu trả lời như thế nào. Dữ kiện có giá trị hơn tính từ.",
@@ -51,11 +51,17 @@
     "savesAutomatically": "Tự động lưu"
   },
   "preview": {
-    "title": "Những gì mô hình nhận được",
-    "description": "Ngữ cảnh của bạn được đưa vào mọi câu trả lời dành cho bạn, sau hướng dẫn của Shosai và trước câu lệnh của vai trò.",
+    "title": "Cách được gửi đi",
+    "description": "Chọn những câu trả lời nhận ngữ cảnh của bạn. Ngữ cảnh đứng sau hướng dẫn của Shosai và trước câu lệnh của vai trò.",
+    "rolesLabel": "Dùng ở đâu",
+    "all": "Tất cả",
+    "notesHint": "Đồng nghiệp đọc ghi chú",
+    "leoNote": "Leo trong cuộc trò chuyện luôn tính đến nó.",
+    "saveFailed": "Không lưu được nơi dùng ngữ cảnh của bạn",
     "platform": "Hướng dẫn của Shosai",
     "platformHint": "Các quy tắc chung của nền tảng",
     "contextHint": "Những gì bạn viết ở đây",
+    "contextNowhere": "Hiện chỉ cho Leo",
     "rolePrompt": "Câu lệnh của vai trò",
     "rolePromptHint": "Từ mục Câu lệnh",
     "question": "Câu hỏi của bạn",

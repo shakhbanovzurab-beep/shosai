@@ -60,9 +60,9 @@ class ContextUpdated(BaseModel):
 READ_CONTEXT: Final = ToolSpec(
     name="studio.read_context", toolset=TOOLSET,
     description=(
-        "Read what the user wrote about themselves in Studio's \"About you\": the words every"
-        " answer to them takes into account. Use it before changing it, or when the user asks"
-        " what Leo knows about them from Studio."
+        "Read what the user wrote about themselves in Studio's \"About you\": the words you and"
+        " the Studio roles they choose take into account. Use it before changing it, or when the"
+        " user asks what Leo knows about them from Studio."
     ),
     input=ReadContext, output=PersonalContext, effect=ToolEffect.READ,
     result_budget=3_000, timeout=timedelta(seconds=5),

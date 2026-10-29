@@ -83,3 +83,27 @@ async def test_the_personal_context_is_the_person_s_own_words(bench: Resolution)
         none = await bench.resolver.personal_context(session, stranger.user_id)
 
     assert (mine, none) == ("I lead a design team.", "")
+
+
+async def test_an_answer_in_a_role_takes_the_words_only_when_they_are_sent_there(
+    bench: Resolution,
+) -> None:
+    who = person()
+    scope = TenancyScope(who.home, who.user_id)
+    async with bench.catalogue.homes.transactions.begin(scope) as session:
+        session.add(
+            ContextRecord(user_id=who.user_id, content="Short answers.", all_roles=False,
+                          roles=["code"])
+        )  # fmt: skip
+
+    async with bench.catalogue.homes.transactions.begin(scope) as session:
+        found = {
+            role: await bench.resolver.personal_context(session, who.user_id, role)
+            for role in (PromptRole.CODE, PromptRole.NOTES, None)
+        }
+
+    assert found == {
+        PromptRole.CODE: "Short answers.",
+        PromptRole.NOTES: "",
+        None: "Short answers.",
+    }

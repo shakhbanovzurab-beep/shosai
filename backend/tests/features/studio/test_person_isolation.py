@@ -49,7 +49,7 @@ async def test_another_person_s_prompt_is_not_found_on_every_route(
     ] * 3
     assert listed["prompts"] == []
     assert set(listed["active"].values()) == {None}
-    assert context == {"content": "", "updated_at": None}
+    assert context == {"content": "", "updated_at": None, "roles": "all"}
     assert owners["prompts"][0]["name"] == "Mine"
     assert owners["active"]["notes"] == prompt_id
 

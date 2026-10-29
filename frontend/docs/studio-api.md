@@ -15,6 +15,7 @@ Studio has no data; run the API and `npm run dev:api`.
 | -------- | --------------------------------- | -------------------------------------------------------- | ------------------- |
 | `GET`    | `/v1/studio/context`              | —                                                        | `StudioContext`     |
 | `PUT`    | `/v1/studio/context`              | `{content}` (≤ 4 000 characters)                         | `StudioContext`     |
+| `PUT`    | `/v1/studio/context/roles`        | `{roles}`: `"all"` or a list of roles, possibly empty    | `StudioContext`     |
 | `GET`    | `/v1/studio/prompts`              | —                                                        | `StudioPrompts`     |
 | `POST`   | `/v1/studio/prompts`              | `{name, role, content?, skill_ids?}` + `Idempotency-Key` | `201 StudioPrompt`  |
 | `PATCH`  | `/v1/studio/prompts/{id}`         | any of `name`, `role`, `content`, `skill_ids`            | `StudioPrompt`      |
@@ -30,9 +31,13 @@ transcription are the platform's choice and have no role (ST-D2); Leo's own mode
 
 - **Everything is the person's own.** Another person's prompt is `prompt_not_found` (404) on every route; lists show
   only the person's rows.
-- **Context** — the person's words about themselves, stored trimmed; `{"content": "", "updated_at": null}` before
-  the first save. Every answer to the person takes it into account, after Shosai's instructions and before the
-  role's prompt; the notes of a meeting, which colleagues read, never do. The editor autosaves with `PUT`.
+- **Context** — the person's words about themselves, stored trimmed, and the roles that take them;
+  `{"content": "", "updated_at": null, "roles": "all"}` before the first save. An answer in a role takes the words
+  after Shosai's instructions and before the role's prompt when `roles` is `"all"` — also any role added later — or
+  names the role; Leo in chat always takes them. `notes` is a role like the others: the switch says colleagues read
+  the notes. The editor autosaves `content` with `PUT /v1/studio/context`, which keeps `roles`; the six switches of
+  "How it's sent" save `PUT /v1/studio/context/roles` at once and return the choice to what it was if refused
+  (ST-D2 as amended by the owner on 2026-10-29).
 - **Prompts.** A name of 1–80 characters, instructions of at most 20 000, at most 20 skills in order, at most 100
   prompts a person (`prompt_limit_reached`, 409). A create takes an `Idempotency-Key`: the editor keeps one key for a
   draft, so a retry after a lost answer returns the same prompt; the same key with another draft is

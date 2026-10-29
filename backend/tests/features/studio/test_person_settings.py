@@ -48,10 +48,36 @@ async def test_the_context_is_stored_trimmed_and_bounded(person_bench: PersonBen
     )
     after = (await person_bench.http.get("/v1/studio/context", headers=headers)).json()
 
-    assert before == {"content": "", "updated_at": None}
+    assert before == {"content": "", "updated_at": None, "roles": "all"}
     assert saved.json()["content"] == "I lead a design team."
     assert too_long.status_code == 422
     assert after == saved.json()
+
+
+async def test_the_roles_that_take_the_context_are_chosen_and_the_words_stay(
+    person_bench: PersonBench,
+) -> None:
+    headers = bearer(someone())
+    roles = "/v1/studio/context/roles"
+
+    first = await person_bench.http.put(
+        roles, json={"roles": ["code", "live_answers", "code"]}, headers=headers
+    )
+    worded = await person_bench.http.put(
+        "/v1/studio/context", json={"content": "I lead a design team."}, headers=headers
+    )
+    every = await person_bench.http.put(roles, json={"roles": "all"}, headers=headers)
+    none = await person_bench.http.put(roles, json={"roles": []}, headers=headers)
+    unknown = await person_bench.http.put(roles, json={"roles": ["leo"]}, headers=headers)
+    some = await person_bench.http.put(roles, json={"roles": "some"}, headers=headers)
+
+    assert (first.json()["content"], first.json()["roles"]) == ("", ["live_answers", "code"])
+    assert worded.json()["roles"] == ["live_answers", "code"]
+    assert every.json() | {"updated_at": None} == {
+        "content": "I lead a design team.", "updated_at": None, "roles": "all",
+    }  # fmt: skip
+    assert none.json()["roles"] == []
+    assert (code(unknown), code(some)) == ((422, "validation_error"),) * 2
 
 
 async def test_the_models_are_the_plan_s_and_unset_roles_read_as_defaults(

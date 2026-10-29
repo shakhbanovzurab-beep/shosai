@@ -39,7 +39,7 @@
     "saving": "Opslaan…"
   },
   "context": {
-    "intro": "Een korte tekst over jou. Elk antwoord aan jou houdt er rekening mee — dat van Leo en dat van elke rol. Vergadernotities, die je collega’s lezen, gebruiken hem niet. Hoe preciezer hij is, hoe minder vervolgvragen je krijgt.",
+    "intro": "Een korte tekst over jou. Leo houdt er altijd rekening mee, en jij kiest welke rollen ook. Hoe preciezer, hoe minder vervolgvragen.",
     "loadFailed": "Kan je context niet laden",
     "title": "Over jou",
     "description": "Wie je bent, waar je aan werkt en hoe je antwoorden het liefst krijgt. Feiten zeggen meer dan bijvoeglijke naamwoorden.",
@@ -51,11 +51,17 @@
     "savesAutomatically": "Wordt automatisch opgeslagen"
   },
   "preview": {
-    "title": "Wat het model krijgt",
-    "description": "Je context gaat mee in elk antwoord aan jou, na de instructies van Shosai en vóór de prompt van de rol.",
+    "title": "Hoe het wordt verstuurd",
+    "description": "Kies welke antwoorden je context krijgen. Hij komt na de instructies van Shosai en vóór de rolprompt.",
+    "rolesLabel": "Waar hij heen gaat",
+    "all": "Alle",
+    "notesHint": "Je collega’s lezen de notities",
+    "leoNote": "Leo in de chat houdt er altijd rekening mee.",
+    "saveFailed": "Kon niet opslaan waar je context heen gaat",
     "platform": "Instructies van Shosai",
     "platformHint": "De algemene regels van het platform",
     "contextHint": "Wat je hier schrijft",
+    "contextNowhere": "Nu alleen voor Leo",
     "rolePrompt": "Rolprompt",
     "rolePromptHint": "Uit het tabblad Prompts",
     "question": "Je vraag",

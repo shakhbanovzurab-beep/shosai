@@ -7,6 +7,7 @@ limits are the domain's; what a write checks beyond them answers studio's codes.
 
 from datetime import datetime
 from decimal import Decimal
+from typing import Annotated, Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -26,20 +27,40 @@ from shosai.features.studio.domain.roles import (
 )
 from shosai.features.studio.infrastructure.prompt_store import StoredPrompt
 
+ContextRolesField = Annotated[
+    Literal["all"] | list[PromptRole],
+    Field(
+        description=(
+            'The Studio roles whose answers take the context: "all" — every role, also one'
+            " added later — or the roles named, possibly none. Leo always takes it."
+        )
+    ),
+]
+
 
 class StudioContext(BaseModel):
-    """The person's words about themselves; empty with no time before the first save."""
+    """The person's words about themselves and the roles that take them; empty with no time,
+    for every role, before the first save."""
 
     content: str
     updated_at: datetime | None
+    roles: ContextRolesField
 
 
 class StudioContextUpdate(BaseModel):
-    """The context's new text, stored trimmed."""
+    """The context's new text, stored trimmed; the roles that take it stay."""
 
     model_config = ConfigDict(extra="forbid")
 
     content: str = Field(max_length=CONTEXT_MAX)
+
+
+class StudioContextRolesUpdate(BaseModel):
+    """The roles that take the context, replacing the person's choice; repeats are ignored."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    roles: ContextRolesField
 
 
 class StudioPrompt(BaseModel):
@@ -144,7 +165,9 @@ class StudioRoleModelUpdate(BaseModel):
 
 def context_view(context: PersonalContext) -> StudioContext:
     """The contract's context."""
-    return StudioContext(content=context.content, updated_at=context.updated_at)
+    return StudioContext(
+        content=context.content, updated_at=context.updated_at, roles=context.roles.wire()
+    )
 
 
 def prompt_view(prompt: StoredPrompt) -> StudioPrompt:

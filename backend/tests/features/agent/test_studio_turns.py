@@ -97,10 +97,12 @@ class Studio:
         del session, user_id, role
         return RolePrompt(None)
 
-    async def personal_context(self, session: AsyncSession, user_id: uuid.UUID) -> str:
-        """The person's words."""
+    async def personal_context(
+        self, session: AsyncSession, user_id: uuid.UUID, role: PromptRole | None = None
+    ) -> str:
+        """The person's words; Leo asks with no role and always takes them."""
         del session, user_id
-        return self.context
+        return self.context if role is None else ""
 
 
 @dataclass

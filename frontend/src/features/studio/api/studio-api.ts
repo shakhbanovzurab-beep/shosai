@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api/app-client";
 import { dataOf } from "@/lib/api/client";
 
 import type {
+  ContextRoles,
   ModelsResponse,
   Prompt,
   PromptDraft,
@@ -22,6 +23,8 @@ export const studioApi = {
   getContext: (): Promise<StudioContext> => dataOf(apiClient.GET("/v1/studio/context")),
   saveContext: (content: string): Promise<StudioContext> =>
     dataOf(apiClient.PUT("/v1/studio/context", { body: { content } })),
+  saveContextRoles: (roles: ContextRoles): Promise<StudioContext> =>
+    dataOf(apiClient.PUT("/v1/studio/context/roles", { body: { roles } })),
 
   listPrompts: (): Promise<PromptsResponse> => dataOf(apiClient.GET("/v1/studio/prompts")),
   createPrompt: (draft: PromptDraft, idempotencyKey: string): Promise<Prompt> =>

@@ -39,7 +39,7 @@
     "saving": "Wird gespeichert…"
   },
   "context": {
-    "intro": "Ein kurzer Text über dich. Jede Antwort an dich berücksichtigt ihn – die von Leo und die jeder Rolle. In Meeting-Notizen, die deine Kolleginnen und Kollegen lesen, fließt er nicht ein. Je genauer er ist, desto weniger Rückfragen bekommst du.",
+    "intro": "Ein kurzer Text über dich. Leo berücksichtigt ihn immer, und du wählst, welche Rollen auch. Je genauer er ist, desto weniger Rückfragen.",
     "loadFailed": "Dein Kontext konnte nicht geladen werden",
     "title": "Über dich",
     "description": "Wer du bist, woran du arbeitest und wie du Antworten magst. Fakten sind besser als Adjektive.",
@@ -51,11 +51,17 @@
     "savesAutomatically": "Wird automatisch gespeichert"
   },
   "preview": {
-    "title": "Was das Modell bekommt",
-    "description": "Dein Kontext fließt in jede Antwort an dich ein – nach den Anweisungen von Shosai und vor dem Prompt der Rolle.",
+    "title": "So wird er gesendet",
+    "description": "Wähle, welche Antworten deinen Kontext bekommen. Er kommt nach den Anweisungen von Shosai und vor dem Rollen-Prompt.",
+    "rolesLabel": "Wohin er geht",
+    "all": "Alle",
+    "notesHint": "Notizen lesen deine Kollegen",
+    "leoNote": "Leo im Chat berücksichtigt ihn immer.",
+    "saveFailed": "Konnte nicht speichern, wohin dein Kontext geht",
     "platform": "Anweisungen von Shosai",
     "platformHint": "Die allgemeinen Regeln der Plattform",
     "contextHint": "Was du hier schreibst",
+    "contextNowhere": "Gerade nur für Leo",
     "rolePrompt": "Rollen-Prompt",
     "rolePromptHint": "Aus dem Tab Prompts",
     "question": "Deine Frage",

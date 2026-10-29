@@ -39,7 +39,7 @@
     "saving": "正在儲存…"
   },
   "context": {
-    "intro": "一段關於你的簡短文字。給你的每個回答都會參考它，包括 Leo 和每個角色的回答。同事會閱讀的會議筆記不會使用它。寫得越精確，你需要回答的追問就越少。",
+    "intro": "關於你的簡短文字。Leo 一律會參考，其他角色由你選擇。寫得越精確，追問就越少。",
     "loadFailed": "無法載入你的背景資訊",
     "title": "關於你",
     "description": "你是誰、做什麼工作，以及你喜歡怎樣的回答。具體事實比形容詞更有用。",
@@ -51,11 +51,17 @@
     "savesAutomatically": "自動儲存"
   },
   "preview": {
-    "title": "模型會收到的內容",
-    "description": "你的背景資訊會加入給你的每個回答，位置在 Shosai 的指示之後、角色的提示詞之前。",
+    "title": "傳送方式",
+    "description": "選擇哪些回答會收到你的背景資訊。它放在 Shosai 的指示之後、角色提示詞之前。",
+    "rolesLabel": "用在哪裡",
+    "all": "全部",
+    "notesHint": "同事會閱讀筆記",
+    "leoNote": "對話中的 Leo 一律會參考它。",
+    "saveFailed": "無法儲存背景資訊的使用位置",
     "platform": "Shosai 的指示",
     "platformHint": "平台的通用規則",
     "contextHint": "你在這裡寫的內容",
+    "contextNowhere": "目前只給 Leo",
     "rolePrompt": "角色提示詞",
     "rolePromptHint": "來自「提示詞」分頁",
     "question": "你的問題",

@@ -39,7 +39,7 @@
     "saving": "Kaydediliyor…"
   },
   "context": {
-    "intro": "Sizinle ilgili kısa bir metin. Size verilen her yanıt bunu dikkate alır — Leo’nunki de, her rolünki de. İş arkadaşlarınızın okuduğu toplantı notlarında kullanılmaz. Ne kadar net olursa o kadar az ek soru alırsınız.",
+    "intro": "Sizin hakkınızda kısa bir metin. Leo bunu her zaman dikkate alır; başka hangi rollerin de kullanacağını siz seçersiniz. Ne kadar net olursa o kadar az ek soru gelir.",
     "loadFailed": "Bağlamınız yüklenemedi",
     "title": "Hakkınızda",
     "description": "Kim olduğunuz, ne üzerinde çalıştığınız ve nasıl yanıtlar istediğiniz. Somut bilgiler sıfatlardan daha işe yarar.",
@@ -51,11 +51,17 @@
     "savesAutomatically": "Otomatik olarak kaydedilir"
   },
   "preview": {
-    "title": "Modelin aldıkları",
-    "description": "Bağlamınız size verilen her yanıta, Shosai’nin talimatlarından sonra ve rolün isteminden önce eklenir.",
+    "title": "Nasıl gönderilir",
+    "description": "Bağlamınızın hangi yanıtlara ekleneceğini seçin. Shosai’nin talimatlarından sonra ve rol isteminden önce gelir.",
+    "rolesLabel": "Nereye gider",
+    "all": "Tümü",
+    "notesHint": "Notları iş arkadaşlarınız okur",
+    "leoNote": "Sohbetteki Leo bunu her zaman dikkate alır.",
+    "saveFailed": "Bağlamınızın nereye gideceği kaydedilemedi",
     "platform": "Shosai’nin talimatları",
     "platformHint": "Platformun genel kuralları",
     "contextHint": "Burada yazdıklarınız",
+    "contextNowhere": "Şimdilik yalnızca Leo",
     "rolePrompt": "Rol istemi",
     "rolePromptHint": "İstemler bölümünden",
     "question": "Sorunuz",

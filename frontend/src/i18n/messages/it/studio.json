@@ -39,7 +39,7 @@
     "saving": "Salvataggio…"
   },
   "context": {
-    "intro": "Un breve testo su di te. Ogni risposta che ricevi ne tiene conto: quelle di Leo e quelle di ogni ruolo. Non viene usato nelle note delle riunioni, che leggono i tuoi colleghi. Più è preciso, meno domande di chiarimento riceverai.",
+    "intro": "Un breve testo su di te. Leo ne tiene sempre conto, e scegli tu quali ruoli lo usano. Più è preciso, meno domande di chiarimento.",
     "loadFailed": "Impossibile caricare il contesto",
     "title": "Su di te",
     "description": "Chi sei, di cosa ti occupi e come preferisci le risposte. Meglio i fatti degli aggettivi.",
@@ -51,11 +51,17 @@
     "savesAutomatically": "Salvataggio automatico"
   },
   "preview": {
-    "title": "Cosa riceve il modello",
-    "description": "Il tuo contesto entra in ogni risposta che ricevi, dopo le istruzioni di Shosai e prima del prompt del ruolo.",
+    "title": "Come viene inviato",
+    "description": "Scegli quali risposte ricevono il tuo contesto. Arriva dopo le istruzioni di Shosai e prima del prompt del ruolo.",
+    "rolesLabel": "Dove va",
+    "all": "Tutti",
+    "notesHint": "I colleghi leggono le note",
+    "leoNote": "Leo in chat ne tiene sempre conto.",
+    "saveFailed": "Impossibile salvare dove va il tuo contesto",
     "platform": "Istruzioni di Shosai",
     "platformHint": "Le regole generali della piattaforma",
     "contextHint": "Quello che scrivi qui",
+    "contextNowhere": "Per ora solo Leo",
     "rolePrompt": "Prompt del ruolo",
     "rolePromptHint": "Dalla scheda Prompt",
     "question": "La tua domanda",

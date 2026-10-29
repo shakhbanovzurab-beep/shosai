@@ -39,7 +39,7 @@
     "saving": "Menyimpan…"
   },
   "context": {
-    "intro": "Teks singkat tentang Anda. Setiap jawaban untuk Anda memperhitungkannya — jawaban Leo maupun setiap peran. Teks ini tidak dipakai di catatan rapat, yang dibaca rekan kerja Anda. Makin tepat isinya, makin sedikit pertanyaan lanjutan yang Anda terima.",
+    "intro": "Teks singkat tentang Anda. Leo selalu memperhitungkannya, dan Anda memilih peran mana lagi yang memakainya. Makin tepat, makin sedikit pertanyaan lanjutan.",
     "loadFailed": "Tidak dapat memuat konteks Anda",
     "title": "Tentang Anda",
     "description": "Siapa Anda, apa yang Anda kerjakan, dan jawaban seperti apa yang Anda sukai. Fakta lebih berguna daripada kata sifat.",
@@ -51,11 +51,17 @@
     "savesAutomatically": "Disimpan otomatis"
   },
   "preview": {
-    "title": "Yang diterima model",
-    "description": "Konteks Anda masuk ke setiap jawaban untuk Anda, setelah instruksi Shosai dan sebelum prompt peran.",
+    "title": "Cara pengirimannya",
+    "description": "Pilih jawaban mana yang menerima konteks Anda. Konteks masuk setelah instruksi Shosai dan sebelum prompt peran.",
+    "rolesLabel": "Dipakai di mana",
+    "all": "Semua",
+    "notesHint": "Rekan kerja membaca catatan",
+    "leoNote": "Leo di chat selalu memperhitungkannya.",
+    "saveFailed": "Tidak dapat menyimpan tempat konteks Anda dipakai",
     "platform": "Instruksi Shosai",
     "platformHint": "Aturan umum platform",
     "contextHint": "Yang Anda tulis di sini",
+    "contextNowhere": "Untuk sekarang hanya Leo",
     "rolePrompt": "Prompt peran",
     "rolePromptHint": "Dari tab Prompt",
     "question": "Pertanyaan Anda",

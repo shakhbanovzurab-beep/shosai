@@ -177,8 +177,11 @@ class PromptResolver(Protocol):
         """The person's active prompt for the role with its skills, within the budget."""
         ...
 
-    async def personal_context(self, session: AsyncSession, user_id: UUID) -> str:
-        """The person's own words about themselves; empty when they wrote none."""
+    async def personal_context(
+        self, session: AsyncSession, user_id: UUID, role: PromptRole | None = None
+    ) -> str:
+        """The person's own words for an answer in the role — None is Leo's, which always takes
+        them — empty when they wrote none or keep them from the role (ST-D2 as amended)."""
         ...
 
 

@@ -4,7 +4,8 @@ The platform layer and the features' addenda come from the process's snapshot. A
 role prompt is one statement in the caller's transaction — the active prompt with its skills'
 ids in order — and the skills' bodies are agent's, read through `SkillReader` in the same
 transaction: a skill uninstalled since is absent. The skills that fit the role's budget are
-kept in the person's order, the rest left out and counted. The personal context is one row.
+kept in the person's order, the rest left out and counted. The personal context is one row, and
+an answer in a role takes it only when the person sends it there; Leo always does.
 """
 
 from uuid import UUID
@@ -62,6 +63,9 @@ class StudioPromptResolver:
             log.info("Навыки не вошли в бюджет промта", role=role.value, left=len(left))
         return RolePrompt(found.content, kept)
 
-    async def personal_context(self, session: AsyncSession, user_id: UUID) -> str:
-        """The person's own words about themselves; empty when they wrote none."""
-        return await context_of(session, user_id)
+    async def personal_context(
+        self, session: AsyncSession, user_id: UUID, role: PromptRole | None = None
+    ) -> str:
+        """The person's own words for an answer in the role, None being Leo's; empty when they
+        wrote none or keep them from the role."""
+        return await context_of(session, user_id, role)

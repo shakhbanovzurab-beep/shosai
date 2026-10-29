@@ -39,7 +39,7 @@
     "saving": "Salvando…"
   },
   "context": {
-    "intro": "Um texto curto sobre você. Toda resposta para você leva esse texto em conta — as do Leo e as de cada função. Ele não vai para as notas de reunião, que seus colegas leem. Quanto mais preciso, menos perguntas de volta você recebe.",
+    "intro": "Um texto curto sobre você. O Leo sempre o considera, e você escolhe quais funções também. Quanto mais preciso, menos perguntas de acompanhamento.",
     "loadFailed": "Não foi possível carregar seu contexto",
     "title": "Sobre você",
     "description": "Quem você é, no que trabalha e como prefere as respostas. Fatos valem mais que adjetivos.",
@@ -51,11 +51,17 @@
     "savesAutomatically": "Salvamento automático"
   },
   "preview": {
-    "title": "O que o modelo recebe",
-    "description": "Seu contexto entra em toda resposta para você, depois das instruções do Shosai e antes do prompt da função.",
+    "title": "Como é enviado",
+    "description": "Escolha quais respostas recebem seu contexto. Ele vem depois das instruções do Shosai e antes do prompt da função.",
+    "rolesLabel": "Para onde vai",
+    "all": "Todas",
+    "notesHint": "Seus colegas leem as notas",
+    "leoNote": "O Leo no chat sempre o considera.",
+    "saveFailed": "Não foi possível salvar para onde vai seu contexto",
     "platform": "Instruções do Shosai",
     "platformHint": "As regras gerais da plataforma",
     "contextHint": "O que você escreve aqui",
+    "contextNowhere": "Por enquanto, só o Leo",
     "rolePrompt": "Prompt da função",
     "rolePromptHint": "Da aba Seus prompts",
     "question": "Sua pergunta",

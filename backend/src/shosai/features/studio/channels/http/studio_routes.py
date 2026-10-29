@@ -24,6 +24,7 @@ from shosai.features.studio.channels.http.refusals import refused
 from shosai.features.studio.channels.http.studio_views import (
     StudioActiveChoice,
     StudioContext,
+    StudioContextRolesUpdate,
     StudioContextUpdate,
     StudioModels,
     StudioPrompt,
@@ -40,8 +41,32 @@ from shosai.features.studio.channels.http.studio_views import (
     role_view,
     settings_of,
 )
+from shosai.features.studio.domain.context_roles import ContextRoles
 from shosai.features.studio.domain.prompts import PromptDraft
 from shosai.features.studio.domain.roles import PromptRole
+
+
+def add_context_routes(router: APIRouter, settings: PersonSettings, ports: PortDirectory) -> None:
+    """The person's words about themselves and the roles that take them."""
+    person = Annotated[Principal, Depends(bearer_principal(ports))]
+
+    @router.get("/context")
+    async def read_context(principal: person) -> StudioContext:
+        """The person's words about themselves and the roles that take them."""
+        return context_view(await settings.context(principal))
+
+    @router.put("/context")
+    async def save_context(body: StudioContextUpdate, principal: person) -> StudioContext:
+        """Replace the person's context; it is stored trimmed."""
+        with refused():
+            return context_view(await settings.save_context(principal, body.content))
+
+    @router.put("/context/roles")
+    async def save_context_roles(
+        body: StudioContextRolesUpdate, principal: person
+    ) -> StudioContext:
+        """Choose the Studio roles whose answers take the person's context; the words stay."""
+        return context_view(await settings.save_roles(principal, ContextRoles.of(body.roles)))
 
 
 def build_studio_router(
@@ -51,17 +76,7 @@ def build_studio_router(
     prompts, settings = services
     router = APIRouter(prefix="/v1/studio", tags=["studio"])
     person = Annotated[Principal, Depends(bearer_principal(ports))]
-
-    @router.get("/context")
-    async def read_context(principal: person) -> StudioContext:
-        """The person's words about themselves."""
-        return context_view(await settings.context(principal))
-
-    @router.put("/context")
-    async def save_context(body: StudioContextUpdate, principal: person) -> StudioContext:
-        """Replace the person's context; it is stored trimmed."""
-        with refused():
-            return context_view(await settings.save_context(principal, body.content))
+    add_context_routes(router, settings, ports)
 
     @router.get("/prompts")
     async def list_prompts(principal: person) -> StudioPrompts:

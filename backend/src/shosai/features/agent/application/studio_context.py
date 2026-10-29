@@ -1,7 +1,8 @@
 """What studio adds to a Leo turn's head and to Leo's voice (studio plan §3.4, ADR 0074 ST-D7).
 
 Segment 1 takes the operator's published platform layer after the policy core; segment 4 takes
-the person's own words about themselves after the profile core and memory. Both are stable
+the person's own words about themselves after the profile core and memory — Leo takes them
+whichever Studio roles the person sends them to (ST-D2 as amended). Both are stable
 between turns and sit before the provider's cache breakpoint. Leo's voice takes the layer, the
 `voice_mode` addendum and the person's words after its own instruction. The operator's own
 turns take none of it: the layer is for people, and the operator has no Studio. Without studio

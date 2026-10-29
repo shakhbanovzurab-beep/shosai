@@ -2,9 +2,11 @@
 
 The model is studio's route of the `notes` role for the person the run works for — the owner
 of a live run, the person who asked for a rewrite; studio's rows admit only their own. The
-operator's `meeting_summary` addendum and the person's `notes` prompt, as a style block, go
-into the findings' and the write-up's instructions before the answer's format, which notes
-keep and place last; notes take no personal context (ST-D2), since colleagues read them.
+operator's `meeting_summary` addendum, the person's own words about themselves when they send
+them to notes (ST-D2 as amended by the owner on 2026-10-29), and the person's `notes` prompt, as
+a style block, go into the findings' and the write-up's instructions before the answer's
+format, which notes keep and place last. Colleagues read the notes, so the words only steer
+what matters to the person and are never quoted.
 Until the `notes` role has a default, the runs keep `NOTES_MODEL` (expand, then contract);
 without it a run fails `model_role_unconfigured`.
 """
@@ -20,7 +22,12 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.billing.contracts import ENTITLEMENTS
 from shosai.features.notes.application.pipeline import StageFailedError
-from shosai.features.notes.infrastructure.prompts import CONTRACT_START, GUIDANCE_BLOCK, STYLE_BLOCK
+from shosai.features.notes.infrastructure.prompts import (
+    CONTEXT_BLOCK,
+    CONTRACT_START,
+    GUIDANCE_BLOCK,
+    STYLE_BLOCK,
+)
 from shosai.features.studio.contracts import (
     MODEL_ROUTES,
     PROMPT_RESOLVER,
@@ -43,11 +50,13 @@ class NotesStudio:
     call_class: CallClass = CallClass.STANDARD
     guidance: str = ""
     style: str = ""
+    context: str = ""
 
     def styled(self, instructions: str) -> str:
         """The instructions with studio's blocks before the answer's format."""
         blocks = [
             *([GUIDANCE_BLOCK.format(text=self.guidance)] if self.guidance else []),
+            *([CONTEXT_BLOCK.format(text=self.context)] if self.context else []),
             *([STYLE_BLOCK.format(text=self.style)] if self.style else []),
         ]
         if not blocks:
@@ -67,6 +76,7 @@ async def notes_studio(
     resolver = resolvers[0]
     guidance = await resolver.feature_prompt(PlatformFeature.MEETING_SUMMARY)
     style = (await resolver.role_prompt(session, user_id, PromptRole.NOTES)).body or ""
+    context = await resolver.personal_context(session, user_id, PromptRole.NOTES)
     plan = await ports.get(ENTITLEMENTS).snapshot(scope.home, user_id)
     try:
         resolved = await routes[0].route(
@@ -76,5 +86,5 @@ async def notes_studio(
         if not legacy:
             raise StageFailedError(MODEL_ROLE_UNCONFIGURED) from error
         log.warning("Заметки на NOTES_MODEL: у роли notes нет умолчания в каталоге")
-        return NotesStudio(guidance=guidance, style=style)
-    return NotesStudio(resolved.route, resolved.call_class, guidance, style)
+        return NotesStudio(guidance=guidance, style=style, context=context)
+    return NotesStudio(resolved.route, resolved.call_class, guidance, style, context)

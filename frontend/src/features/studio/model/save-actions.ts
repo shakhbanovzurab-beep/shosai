@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 
 import { studioApi } from "../api/studio-api";
-import type { RoleModelSettings } from "../domain/contract";
+import type { ContextRoles, RoleModelSettings } from "../domain/contract";
 import { describeStudioError, type ProblemWords } from "./studio-problem-words";
 import { contextResource, modelsResource } from "./studio-resources";
 
@@ -9,6 +9,18 @@ import { contextResource, modelsResource } from "./studio-resources";
 export async function saveContext(content: string) {
   const saved = await studioApi.saveContext(content);
   contextResource.update(() => saved);
+}
+
+/** Куда подмешивать контекст — сразу на экране; если сервер отказал, выбор возвращается. */
+export async function saveContextRoles(next: ContextRoles, previous: ContextRoles, words: ProblemWords) {
+  const set = (roles: ContextRoles) => contextResource.update((data) => ({ ...data, roles }));
+  set(next);
+  try {
+    set((await studioApi.saveContextRoles(next)).roles);
+  } catch (error) {
+    set(previous);
+    toast.error(words.studio("preview.saveFailed"), { description: describeStudioError(error, words) });
+  }
 }
 
 /** Сохраняет настройки роли сразу: изменение видно мгновенно и откатывается, если сервер отказал. */

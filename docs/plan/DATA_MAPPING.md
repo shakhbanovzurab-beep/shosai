@@ -1038,7 +1038,7 @@ Amended on 2026-10-27 by the [studio plan](slices/studio.md) ([ADR 0074](../adr/
 #### `user_contexts` → `user_contexts` · **transformed**
 
 - **Owner → home:** own `user_id` (no FK).
-- **Columns:** `text` → `content`, trimmed; longer than 4 000 characters → its first 4 000, cut at the last paragraph or sentence boundary before the limit, and the full text becomes a file "About you (Whisperer).md" in the person's Files (ST-D6); memory's MM-D2 appends `leo_personalization.instructions` under the same rule. `roles` is not carried: the context goes to every answer given to the person and never to notes (ST-D2).
+- **Columns:** `text` → `content`, trimmed; longer than 4 000 characters → its first 4 000, cut at the last paragraph or sentence boundary before the limit, and the full text becomes a file "About you (Whisperer).md" in the person's Files (ST-D6); memory's MM-D2 appends `leo_personalization.instructions` under the same rule. `roles` → `all_roles` and `roles` (ST-D2 as amended by the owner on 2026-10-29): `responses` → `live_answers`, `coding` → `code`, `vision` → `screenshots`, `system_design` stays, `generation` → `notes`; `transcription` and `agent` are dropped (Leo always takes the context). A list naming all five becomes `all_roles`; any other keeps `all_roles` false with the roles named.
 
 #### `user_context_files` → files in the person's Files · **transformed**
 

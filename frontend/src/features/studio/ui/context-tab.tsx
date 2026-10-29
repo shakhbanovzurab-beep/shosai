@@ -7,18 +7,21 @@ import { useTranslations } from "use-intl";
 import { LoadError } from "@/components/feedback";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import type { ContextRoles } from "../domain/contract";
 import { contextResource, useStudioContext } from "../model/studio-resources";
 import { ContextEditor } from "./context-editor";
 import { SystemMessagePreview } from "./system-message-preview";
 import { TabIntro } from "./tab-intro";
 
+type WorkspaceProps = { initialContent: string; savedAt: string | null; roles: ContextRoles };
+
 /** Редактор и превью над одним черновиком: превью показывает текст, пока человек его пишет. */
-function ContextWorkspace({ initialContent, savedAt }: { initialContent: string; savedAt: string | null }) {
+function ContextWorkspace({ initialContent, savedAt, roles }: WorkspaceProps) {
   const [draft, setDraft] = useState(initialContent);
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
       <ContextEditor draft={draft} onDraftChange={setDraft} savedAt={savedAt} />
-      <SystemMessagePreview content={draft} />
+      <SystemMessagePreview content={draft} roles={roles} />
     </div>
   );
 }
@@ -39,7 +42,11 @@ export function ContextTab() {
         />
       ) : null}
       {state.status === "ready" ? (
-        <ContextWorkspace initialContent={state.data.content} savedAt={state.data.updated_at} />
+        <ContextWorkspace
+          initialContent={state.data.content}
+          savedAt={state.data.updated_at}
+          roles={state.data.roles}
+        />
       ) : null}
     </div>
   );

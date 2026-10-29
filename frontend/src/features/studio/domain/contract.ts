@@ -13,6 +13,8 @@ export type StudioRole = Schemas["PromptRole"];
 
 /** Слова человека о себе; учитываются в каждом ответе ему, кроме записей встреч. */
 export type StudioContext = Schemas["StudioContext"];
+/** Куда подмешивается контекст: «all» — во все роли, и в будущие тоже, либо в названные. */
+export type ContextRoles = StudioContext["roles"];
 export const CONTEXT_MAX_CHARS = 4000;
 
 /** Указания человека для одной роли, с установленными навыками по порядку. */

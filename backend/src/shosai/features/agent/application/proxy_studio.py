@@ -1,7 +1,8 @@
 """What studio adds to a desktop answer (studio plan §3.4, step 11b).
 
 A desktop answer's system messages, in order: the role's frame — the language rule — with the
-operator's platform layer after it, then the person's own words about themselves, then the
+operator's platform layer after it, then the person's own words about themselves when they send
+them to the role (ST-D2 as amended), then the
 person's prompt for the role or the built-in one, with the skills it appends, each wrapped as
 `skill:user` and placed under a line that keeps the rules above higher (Leo §8.5). The client's
 conversation follows. The proxy's roles are Studio's: `responses` answers as `live_answers`,
@@ -63,7 +64,7 @@ async def studio_layers(
         return StudioLayers()
     resolver = resolvers[0]
     layer = (await resolver.platform_layer()).text
-    context = await resolver.personal_context(session, user_id)
+    context = await resolver.personal_context(session, user_id, role)
     return StudioLayers(layer, context, await resolver.role_prompt(session, user_id, role))
 
 

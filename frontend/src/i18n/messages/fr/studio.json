@@ -39,7 +39,7 @@
     "saving": "Enregistrement…"
   },
   "context": {
-    "intro": "Un court texte sur vous. Chaque réponse qui vous est adressée en tient compte, celles de Leo comme celles de chaque rôle. Il n’est pas utilisé dans les notes de réunion, que lisent vos collègues. Plus il est précis, moins vous aurez de questions complémentaires.",
+    "intro": "Un court texte sur vous. Leo en tient toujours compte, et vous choisissez quels rôles aussi. Plus il est précis, moins il y a de questions de suivi.",
     "loadFailed": "Impossible de charger votre contexte",
     "title": "À propos de vous",
     "description": "Qui vous êtes, sur quoi vous travaillez et quelles réponses vous préférez. Les faits valent mieux que les adjectifs.",
@@ -51,11 +51,17 @@
     "savesAutomatically": "Enregistrement automatique"
   },
   "preview": {
-    "title": "Ce que reçoit le modèle",
-    "description": "Votre contexte accompagne chaque réponse qui vous est adressée, après les instructions de Shosai et avant le prompt du rôle.",
+    "title": "Ce qui est envoyé",
+    "description": "Choisissez les réponses qui reçoivent votre contexte. Il vient après les instructions de Shosai et avant le prompt du rôle.",
+    "rolesLabel": "Où il va",
+    "all": "Tous",
+    "notesHint": "Vos collègues lisent les notes",
+    "leoNote": "Leo dans la conversation en tient toujours compte.",
+    "saveFailed": "Impossible d’enregistrer où va votre contexte",
     "platform": "Instructions de Shosai",
     "platformHint": "Les règles générales de la plateforme",
     "contextHint": "Ce que vous écrivez ici",
+    "contextNowhere": "Pour l’instant, Leo seulement",
     "rolePrompt": "Prompt du rôle",
     "rolePromptHint": "Depuis l’onglet Prompts des rôles",
     "question": "Votre question",

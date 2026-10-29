@@ -57,9 +57,11 @@ class EvalStudio:
         del session, user_id, role
         return RolePrompt(None)
 
-    async def personal_context(self, session: AsyncSession, user_id: UUID) -> str:
-        """The scenario's "About you", else the run's."""
-        del session
+    async def personal_context(
+        self, session: AsyncSession, user_id: UUID, role: PromptRole | None = None
+    ) -> str:
+        """The scenario's "About you", else the run's; a Leo turn takes it in any role choice."""
+        del session, role
         staged = self._stage.of(user_id)
         own = staged.scenario.about if staged is not None else ""
         return own or self._words.about

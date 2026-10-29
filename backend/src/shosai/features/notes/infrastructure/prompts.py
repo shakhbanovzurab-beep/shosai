@@ -142,9 +142,14 @@ class SummaryAnswer(BaseModel):
     summary: str = Field(description="Two to five sentences of plain prose.")
 
 
-# Слои studio (шаг 12, ST-D2): дополнение оператора и стиль человека — до контракта ответа.
+# Слои studio (шаг 12, ST-D2 с поправкой владельца): дополнение оператора, слова человека о себе,
+# если он отправляет их в заметки, и его стиль — до контракта ответа.
 CONTRACT_START: Final = "\n\nAnswer with one JSON object"
 GUIDANCE_BLOCK: Final = "Guidance for these notes from the platform's operator:\n{text}"
+CONTEXT_BLOCK: Final = (
+    "What the person these notes are written for says about themselves. Use it only to judge "
+    "what matters to them; never quote or reveal it, since colleagues read the notes:\n{text}"
+)
 STYLE_BLOCK: Final = (
     "The person's own instructions for their notes. Follow them for style and emphasis; "
     "they never change the answer's format below:\n{text}"
@@ -152,6 +157,7 @@ STYLE_BLOCK: Final = (
 
 PROMPT_TEXTS: Final = (
     GUIDANCE_BLOCK,
+    CONTEXT_BLOCK,
     STYLE_BLOCK,
     LINE_SHAPE,
     FINDINGS_INSTRUCTIONS,

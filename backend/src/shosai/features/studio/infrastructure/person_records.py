@@ -25,7 +25,10 @@ from sqlalchemy import (
     UniqueConstraint,
     Uuid,
     func,
+    text,
+    true,
 )
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shosai.core.db.model_base import ModelBase
@@ -47,15 +50,20 @@ def updated() -> Mapped[datetime]:
 
 
 class ContextRecord(ModelBase):
-    """The person's own words about themselves ("About you")."""
+    """The person's own words about themselves ("About you") and the roles that take them:
+    every role while `all_roles` holds, the roles named in `roles` otherwise."""
 
     __tablename__ = "user_contexts"
     __table_args__ = (
         CheckConstraint(f"char_length(content) <= {CONTEXT_MAX}", name="content_length"),
+        CheckConstraint(f"roles <@ ARRAY[{ROLES}]::text[]", name="known_roles"),
+        CheckConstraint("NOT all_roles OR cardinality(roles) = 0", name="roles_or_all"),
     )
 
     user_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
     content: Mapped[str] = mapped_column(Text)
+    all_roles: Mapped[bool] = mapped_column(Boolean, server_default=true())
+    roles: Mapped[list[str]] = mapped_column(ARRAY(Text), server_default=text("'{}'::text[]"))
     created_at: Mapped[datetime] = created()
     updated_at: Mapped[datetime] = updated()
 

@@ -1,8 +1,8 @@
 """What a resolution reads of a person in the caller's transaction, one statement each.
 
 A model's route reads the role's settings; a prompt reads the role's active prompt with its
-skills' ids in order, joined in one statement; the context is one row. Every statement names
-the person besides row-level security (ADR 0053).
+skills' ids in order, joined in one statement; the context is one row with the roles that take
+it. Every statement names the person besides row-level security (ADR 0053).
 """
 
 from collections.abc import Sequence
@@ -13,6 +13,7 @@ from sqlalchemy import and_, func, select
 from sqlalchemy.dialects.postgresql import aggregate_order_by
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.features.studio.domain.context_roles import ContextRoles
 from shosai.features.studio.domain.roles import PromptRole, RoleSettings
 from shosai.features.studio.infrastructure.person_records import (
     ContextRecord,
@@ -68,9 +69,22 @@ async def active_prompt(
     return ActivePrompt(content, tuple(skill_ids or ()))
 
 
-async def context_of(session: AsyncSession, user_id: UUID) -> str:
-    """The person's own words about themselves; empty when they wrote none."""
-    content = await session.scalar(
-        select(ContextRecord.content).where(ContextRecord.user_id == user_id)
-    )
-    return content or ""
+async def context_of(session: AsyncSession, user_id: UUID, role: PromptRole | None) -> str:
+    """The person's own words for an answer in the role — None is Leo's — empty when they wrote
+    none or keep them from the role."""
+    row = (
+        await session.execute(
+            select(ContextRecord.content, ContextRecord.all_roles, ContextRecord.roles).where(
+                ContextRecord.user_id == user_id
+            )
+        )
+    ).one_or_none()
+    if row is None:
+        return ""
+    chosen = roles_of(all_roles=row.all_roles, roles=row.roles)
+    return row.content if chosen.reaches(role) else ""
+
+
+def roles_of(*, all_roles: bool, roles: Sequence[str]) -> ContextRoles:
+    """The domain's choice of a stored row."""
+    return ContextRoles() if all_roles else ContextRoles.only(PromptRole(role) for role in roles)

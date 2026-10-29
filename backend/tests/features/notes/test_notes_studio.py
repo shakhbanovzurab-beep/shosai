@@ -1,5 +1,6 @@
-"""A meeting's notes on studio (studio step 12, notes step 25): the operator's addendum and the
-person's style before the answer's format, which stays last whatever the style says; studio's
+"""A meeting's notes on studio (studio step 12, notes step 25): the operator's addendum, the
+person's own words when they send them to notes, and the person's style before the answer's
+format, which stays last whatever the style says; studio's
 route of the `notes` role, `NOTES_MODEL` standing in while the role has no default, and a run
 without either failing `model_role_unconfigured`."""
 
@@ -67,6 +68,8 @@ class Studio:
     """Studio's resolver and route as the test sets them."""
 
     configured: bool = True
+    # Роли, в которые человек отправляет свои слова; None — Leo, который получает их всегда.
+    sends_to: frozenset[PromptRole | None] = frozenset({None})
 
     async def platform_layer(self) -> PlatformLayer:
         """A published layer, which notes never take."""
@@ -83,10 +86,12 @@ class Studio:
         del session, user_id, role
         return RolePrompt("Write in bullets.")
 
-    async def personal_context(self, session: AsyncSession, user_id: uuid.UUID) -> str:
-        """Words notes must never take."""
+    async def personal_context(
+        self, session: AsyncSession, user_id: uuid.UUID, role: PromptRole | None = None
+    ) -> str:
+        """The person's words, for the roles they send them to."""
         del session, user_id
-        return "Never in notes."
+        return "I lead a design team." if role in self.sends_to else ""
 
     async def route(
         self,
@@ -128,17 +133,24 @@ def ports_of(studio: Studio) -> PortDirectory:
 NO_SESSION = cast("AsyncSession", object())
 
 
-async def test_a_run_takes_studio_s_route_and_blocks_and_never_the_context() -> None:
+async def test_a_run_takes_studio_s_route_blocks_and_the_words_sent_to_notes() -> None:
     scope = TenancyScope(Home.RU, uuid.uuid4())
+    to_notes = Studio(sends_to=frozenset({None, PromptRole.NOTES}))
 
-    found = await notes_studio(ports_of(Studio()), NO_SESSION, scope, legacy=False)
+    kept = await notes_studio(ports_of(Studio()), NO_SESSION, scope, legacy=False)
+    sent = await notes_studio(ports_of(to_notes), NO_SESSION, scope, legacy=False)
 
-    assert (found.route, found.guidance, found.style) == (
+    assert (kept.route, kept.guidance, kept.style, kept.context) == (
         ROUTE,
         "Lead with the decisions.",
         "Write in bullets.",
+        "",
     )
-    assert "Never in notes." not in found.styled(SUMMARY_INSTRUCTIONS)
+    styled = sent.styled(SUMMARY_INSTRUCTIONS)
+    assert "I lead a design team." not in kept.styled(SUMMARY_INSTRUCTIONS)
+    assert styled.index("Lead with the decisions.") < styled.index("I lead a design team.")
+    assert styled.index("I lead a design team.") < styled.index("Write in bullets.")
+    assert "never quote or reveal it" in styled
 
 
 async def test_without_a_default_the_legacy_model_stands_in_or_the_run_fails() -> None:

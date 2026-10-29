@@ -17953,7 +17953,7 @@
           "studio"
         ],
         "summary": "Read Context",
-        "description": "The person's words about themselves.",
+        "description": "The person's words about themselves and the roles that take them.",
         "operationId": "read_context_v1_studio_context_get",
         "parameters": [
           {
@@ -18027,6 +18027,66 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/StudioContextUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioContext"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/studio/context/roles": {
+      "put": {
+        "tags": [
+          "studio"
+        ],
+        "summary": "Save Context Roles",
+        "description": "Choose the Studio roles whose answers take the person's context; the words stay.",
+        "operationId": "save_context_roles_v1_studio_context_roles_put",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudioContextRolesUpdate"
               }
             }
           }
@@ -32612,15 +32672,59 @@
               }
             ],
             "title": "Updated At"
+          },
+          "roles": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "all"
+              },
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PromptRole"
+                },
+                "type": "array"
+              }
+            ],
+            "title": "Roles",
+            "description": "The Studio roles whose answers take the context: \"all\" — every role, also one added later — or the roles named, possibly none. Leo always takes it."
           }
         },
         "type": "object",
         "required": [
           "content",
-          "updated_at"
+          "updated_at",
+          "roles"
         ],
         "title": "StudioContext",
-        "description": "The person's words about themselves; empty with no time before the first save."
+        "description": "The person's words about themselves and the roles that take them; empty with no time,\nfor every role, before the first save."
+      },
+      "StudioContextRolesUpdate": {
+        "properties": {
+          "roles": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "all"
+              },
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PromptRole"
+                },
+                "type": "array"
+              }
+            ],
+            "title": "Roles",
+            "description": "The Studio roles whose answers take the context: \"all\" — every role, also one added later — or the roles named, possibly none. Leo always takes it."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "roles"
+        ],
+        "title": "StudioContextRolesUpdate",
+        "description": "The roles that take the context, replacing the person's choice; repeats are ignored."
       },
       "StudioContextUpdate": {
         "properties": {
@@ -32636,7 +32740,7 @@
           "content"
         ],
         "title": "StudioContextUpdate",
-        "description": "The context's new text, stored trimmed."
+        "description": "The context's new text, stored trimmed; the roles that take it stay."
       },
       "StudioModel": {
         "properties": {
