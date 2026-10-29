@@ -81,6 +81,7 @@
     "GET /v1/boards/jira/available",
     "GET /v1/boards/{board_id}",
     "GET /v1/connectors",
+    "GET /v1/connectors/google_drive/picker",
     "GET /v1/connectors/oauth/{provider}/callback",
     "GET /v1/connectors/{app}/resources",
     "GET /v1/files",

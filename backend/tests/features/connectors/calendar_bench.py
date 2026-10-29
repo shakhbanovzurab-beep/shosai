@@ -13,22 +13,14 @@ from urllib.parse import parse_qs, urlsplit
 
 import httpx
 import pytest_asyncio
-from opentelemetry.sdk.trace import TracerProvider
-from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
 from shosai.core.kernel.tenancy import TenancyScope
-from shosai.core.kv.metrics import KeyValueMetrics
-from shosai.core.kv.rate_limits import RateLimiter
 from shosai.features.connectors.application.calendars import ConnectorCalendars
-from shosai.features.connectors.application.grant_tokens import GrantTokens, TokenTools
-from shosai.features.connectors.application.provider_access import ConnectorProviderAccess
 from shosai.features.connectors.domain.catalogue import App
-from shosai.features.connectors.infrastructure.metrics import ConnectorsMetrics
 from shosai.features.connectors.infrastructure.providers.google_calendar import GoogleCalendar
-from shosai.features.connectors.infrastructure.transport.guards import ProviderGuards
-from shosai.features.connectors.infrastructure.transport.session import SessionParts
 from tests.features.connectors.google_bench import GoogleBench, Person
+from tests.features.connectors.provider_sessions import provider_access
 
 PRIMARY = "anna@gmail.com"
 SERIES = {
@@ -152,22 +144,7 @@ class CalendarBench:
 async def calendar(google: GoogleBench, valkey: Redis) -> AsyncIterator[CalendarBench]:
     """Google Calendar behind `CALENDARS`."""
     api = CalendarDouble()
-    registry, outbox = google.wiring
-
-    def route(request: httpx.Request) -> httpx.Response:
-        if request.url.host == "www.googleapis.com":
-            return api.handle(request)
-        return google.google.handle(request)
-
-    counters = CollectorRegistry()
-    metrics = ConnectorsMetrics(counters)
-    async with httpx.AsyncClient(transport=httpx.MockTransport(route)) as http:
-        tokens = GrantTokens(
-            google.homes.transactions, TokenTools(registry, http, google.keys, outbox, metrics)
-        )
-        guards = ProviderGuards(valkey, RateLimiter(valkey, KeyValueMetrics(counters)))
-        parts = SessionParts(tokens, guards, http, metrics, TracerProvider().get_tracer("t"))
-        access = ConnectorProviderAccess(google.homes.transactions, registry, parts)
+    async with provider_access(google, valkey, ("www.googleapis.com", api.handle)) as access:
         yield CalendarBench(
             ConnectorCalendars(access, {App.GOOGLE_CALENDAR: GoogleCalendar()}), api, google
         )

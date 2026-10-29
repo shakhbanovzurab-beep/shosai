@@ -35,6 +35,10 @@ class ConnectorsSettings(SettingsSection):
     connectors_google_mail_client_id: str | None = None
     connectors_google_mail_client_secret: SecretStr | None = None
     connectors_google_mail_testing: bool = True
+    # Google Picker в кабинете: браузерный ключ (ограничен Picker API и хостом кабинета) и номер
+    # основного проекта Google; без них Диск подключается, но файлы выбрать нельзя.
+    connectors_google_picker_api_key: str | None = None
+    connectors_google_project_number: str | None = None
     # Публичный Gmail включается только после CASA; до того Gmail видят тестировщики владельца.
     connectors_gmail_public: bool = False
     connectors_gmail_tester_ids: AccountIds = ()

@@ -16,16 +16,19 @@ for every process, opens a provider's breaker only on its own failures, and retr
 Step 6 the cabinet's routes — the list, a disconnect, connecting by a given secret, a scope
 picker's browse — and `CONNECTIONS` for consumers. Step 8 Atlassian: the Jira grant at its
 registered `/v1/jira/oauth/callback`, its sites, the weekly personal data report, and the
-quota alert. Step 9 Google's two applications; step 10 the `CALENDARS` port with Google
-Calendar; step 11 the `MAILBOXES` port with Gmail, offered to testers until CASA.
+quota alert. Step 9 Google's two applications. Step 10 the `CALENDARS` port with Google
+Calendar. Step 11 the `MAILBOXES` port with Gmail, offered to testers until CASA. Step 12
+`FILE_SOURCES` and the scope picker over Google Drive's `drive.file`, and the Picker's setup.
 """
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Any
 
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.crypto.key_ring import FernetKeyRing
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.core.ports.keys import PortBinding
 from shosai.features.connectors.application.account_data import (
     ACCOUNT_DATA,
     ConnectorsAccountData,
@@ -40,6 +43,7 @@ from shosai.features.connectors.application.calendars import ConnectorCalendars
 from shosai.features.connectors.application.callback import CallbackTools, Completer
 from shosai.features.connectors.application.credentials import Credentials, CredentialTools
 from shosai.features.connectors.application.disconnect import Disconnector
+from shosai.features.connectors.application.file_sources import ConnectorFileSources
 from shosai.features.connectors.application.grant_tokens import GrantTokens, TokenTools
 from shosai.features.connectors.application.installation_audit import InstallationAudit
 from shosai.features.connectors.application.installations import WorkspaceInstallations
@@ -47,12 +51,14 @@ from shosai.features.connectors.application.key_rotation import KeyRotation
 from shosai.features.connectors.application.lifecycle_sweeps import DueGrants
 from shosai.features.connectors.application.mailboxes import ConnectorMailboxes
 from shosai.features.connectors.application.offers import GmailAccess, Offers
+from shosai.features.connectors.application.picker import DrivePicker, PickerSetup
 from shosai.features.connectors.application.provider_access import ConnectorProviderAccess
 from shosai.features.connectors.application.registry import ConnectorRegistry
 from shosai.features.connectors.application.resources import Resources
 from shosai.features.connectors.application.revocation import GrantRevoker, RevokeTools
 from shosai.features.connectors.channels.http.connect_routes import build_connect_router
 from shosai.features.connectors.channels.http.connector_routes import build_connector_router
+from shosai.features.connectors.channels.http.picker_routes import build_picker_router
 from shosai.features.connectors.channels.subscriptions import subscriptions
 from shosai.features.connectors.channels.tasks import (
     DUE_SOURCES,
@@ -62,6 +68,7 @@ from shosai.features.connectors.channels.tasks import (
 from shosai.features.connectors.contracts import CONNECTIONS, INSTALLATIONS, PROVIDER_ACCESS
 from shosai.features.connectors.contracts.calendars import CALENDARS
 from shosai.features.connectors.contracts.events import CONNECTOR_EVENTS
+from shosai.features.connectors.contracts.files import FILE_SOURCES
 from shosai.features.connectors.contracts.mailboxes import MAILBOXES
 from shosai.features.connectors.domain.catalogue import App
 from shosai.features.connectors.infrastructure.metrics import ConnectorsMetrics
@@ -70,6 +77,10 @@ from shosai.features.connectors.infrastructure.providers.base import ProviderReg
 from shosai.features.connectors.infrastructure.providers.configured import configured_clients
 from shosai.features.connectors.infrastructure.providers.gmail import Gmail
 from shosai.features.connectors.infrastructure.providers.google_calendar import GoogleCalendar
+from shosai.features.connectors.infrastructure.providers.google_drive import (
+    GoogleDrive,
+    GoogleDriveResources,
+)
 from shosai.features.connectors.infrastructure.store.records import CONNECTOR_MODELS
 from shosai.features.connectors.infrastructure.transport.guards import ProviderGuards
 from shosai.features.connectors.infrastructure.transport.http_client import (
@@ -78,6 +89,17 @@ from shosai.features.connectors.infrastructure.transport.http_client import (
 from shosai.features.connectors.infrastructure.transport.session import SessionParts
 from shosai.features.connectors.objectives import MONITORS
 from shosai.features.connectors.settings import ConnectorsSettings
+
+
+def capability_ports(
+    access: ConnectorProviderAccess, drive: GoogleDrive
+) -> tuple[PortBinding[Any], ...]:
+    """The capability ports, each with the adapters of the providers built so far."""
+    return (
+        CALENDARS.bind(ConnectorCalendars(access, {App.GOOGLE_CALENDAR: GoogleCalendar()})),
+        MAILBOXES.bind(ConnectorMailboxes(access, {App.GMAIL: Gmail()})),
+        FILE_SOURCES.bind(ConnectorFileSources(access, {App.GOOGLE_DRIVE: drive})),
+    )
 
 
 @asynccontextmanager
@@ -119,20 +141,31 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         access = ConnectorProviderAccess(
             services.transactions, registry, SessionParts(tokens, guards, http, metrics, tracer)
         )
-        # Проверки секретов и обзор ресурсов приносят шаги провайдеров; до них — пусто.
+        drive = GoogleDrive()
+        picker = DrivePicker(
+            services.transactions,
+            PickerSetup(
+                settings.connectors_google_picker_api_key,
+                settings.connectors_google_project_number,
+            ),
+        )
+        # Проверки секретов и обзор ресурсов приносят шаги провайдеров.
         cabinet = (
             CabinetConnectors(services.transactions, offers, registry),
             Disconnector(services.transactions, services.outbox, registry),
             Credentials(
                 services.transactions, CredentialTools(offers, {}, http, keys, services.outbox)
             ),
-            Resources(services.transactions, access, {}),
+            Resources(
+                services.transactions, access, {App.GOOGLE_DRIVE: GoogleDriveResources(drive)}
+            ),
         )
         limiter = services.rate_limiter
         yield FeatureParts(
             http_routers=(
                 build_connect_router((authorizer, completer), services.ports, limiter),
                 build_connector_router(cabinet, services.ports, limiter),
+                build_picker_router(picker, services.ports),
             ),
             task_handlers=connectors_task_handlers(lifecycle, services.tasks),
             subscriptions=subscriptions(services.outbox),
@@ -143,8 +176,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 CONNECTIONS.bind(ConnectorRegistry(services.ports)),
                 INSTALLATIONS.bind(WorkspaceInstallations(authorizer, audit, services.outbox)),
                 PROVIDER_ACCESS.bind(access),
-                CALENDARS.bind(ConnectorCalendars(access, {App.GOOGLE_CALENDAR: GoogleCalendar()})),
-                MAILBOXES.bind(ConnectorMailboxes(access, {App.GMAIL: Gmail()})),
+                *capability_ports(access, drive),
             ),
         )
 

@@ -17,19 +17,12 @@ from urllib.parse import parse_qs, urlsplit
 
 import httpx
 import pytest_asyncio
-from opentelemetry.sdk.trace import TracerProvider
-from prometheus_client import CollectorRegistry
 from pydantic import SecretStr
 from redis.asyncio import Redis
 
-from shosai.core.kv.metrics import KeyValueMetrics
-from shosai.core.kv.rate_limits import RateLimiter
-from shosai.features.connectors.application.grant_tokens import GrantTokens, TokenTools
 from shosai.features.connectors.application.mailboxes import ConnectorMailboxes
-from shosai.features.connectors.application.provider_access import ConnectorProviderAccess
 from shosai.features.connectors.domain.catalogue import App
 from shosai.features.connectors.domain.descriptors import LimitSubject, ProviderLimit
-from shosai.features.connectors.infrastructure.metrics import ConnectorsMetrics
 from shosai.features.connectors.infrastructure.oauth.tokens import ClientCredentials
 from shosai.features.connectors.infrastructure.providers.base import (
     ConfiguredClient,
@@ -37,9 +30,8 @@ from shosai.features.connectors.infrastructure.providers.base import (
 )
 from shosai.features.connectors.infrastructure.providers.gmail import Gmail
 from shosai.features.connectors.infrastructure.providers.google import GOOGLE_MAIL, GoogleAdapter
-from shosai.features.connectors.infrastructure.transport.guards import ProviderGuards
-from shosai.features.connectors.infrastructure.transport.session import SessionParts
 from tests.features.connectors.google_bench import GoogleBench
+from tests.features.connectors.provider_sessions import provider_access
 
 QUOTA = 30
 LIMITED_MAIL = replace(
@@ -144,24 +136,11 @@ class GmailBench:
 async def gmail(google: GoogleBench, valkey: Redis) -> AsyncIterator[GmailBench]:
     """Gmail behind `MAILBOXES`, with a small quota."""
     api = GmailDouble()
-    _registry, outbox = google.wiring
     credentials = ClientCredentials("mail-client", SecretStr("mail-secret"))
     registry = ProviderRegistry(
         {"google_mail": ConfiguredClient(GoogleAdapter(LIMITED_MAIL), credentials)}
     )
-
-    def route(request: httpx.Request) -> httpx.Response:
-        if request.url.host == "gmail.googleapis.com":
-            return api.handle(request)
-        return google.google.handle(request)
-
-    counters = CollectorRegistry()
-    metrics = ConnectorsMetrics(counters)
-    async with httpx.AsyncClient(transport=httpx.MockTransport(route)) as http:
-        tokens = GrantTokens(
-            google.homes.transactions, TokenTools(registry, http, google.keys, outbox, metrics)
-        )
-        guards = ProviderGuards(valkey, RateLimiter(valkey, KeyValueMetrics(counters)))
-        parts = SessionParts(tokens, guards, http, metrics, TracerProvider().get_tracer("t"))
-        access = ConnectorProviderAccess(google.homes.transactions, registry, parts)
+    async with provider_access(
+        google, valkey, ("gmail.googleapis.com", api.handle), registry
+    ) as access:
         yield GmailBench(ConnectorMailboxes(access, {App.GMAIL: Gmail()}), api, google)

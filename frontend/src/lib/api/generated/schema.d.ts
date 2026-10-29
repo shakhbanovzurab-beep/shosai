@@ -2872,6 +2872,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/connectors/google_drive/picker": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Drive Picker
+         * @description Google's Picker for choosing the Drive files Shosai may read.
+         */
+        get: operations["drive_picker_v1_connectors_google_drive_picker_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/agent/settings": {
         parameters: {
             query?: never;
@@ -5835,6 +5855,18 @@ export interface components {
             access_remains_at_provider: boolean;
             /** Reconnect By */
             reconnect_by: string | null;
+        };
+        /**
+         * ConnectorPickerOut
+         * @description What the cabinet opens Google's Picker with.
+         */
+        ConnectorPickerOut: {
+            /** Developer Key */
+            developer_key: string;
+            /** App Id */
+            app_id: string;
+            /** Login Hint */
+            login_hint: string | null;
         };
         /**
          * ConnectorResourceOut
@@ -17683,6 +17715,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ConnectorResourcesOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    drive_picker_v1_connectors_google_drive_picker_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectorPickerOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

@@ -11423,6 +11423,56 @@
         }
       }
     },
+    "/v1/connectors/google_drive/picker": {
+      "get": {
+        "tags": [
+          "connectors"
+        ],
+        "summary": "Drive Picker",
+        "description": "Google's Picker for choosing the Drive files Shosai may read.",
+        "operationId": "drive_picker_v1_connectors_google_drive_picker_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectorPickerOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/agent/settings": {
       "get": {
         "tags": [
@@ -21555,6 +21605,37 @@
         ],
         "title": "ConnectorOut",
         "description": "One app of Settings > Connectors and the person's connection of it."
+      },
+      "ConnectorPickerOut": {
+        "properties": {
+          "developer_key": {
+            "type": "string",
+            "title": "Developer Key"
+          },
+          "app_id": {
+            "type": "string",
+            "title": "App Id"
+          },
+          "login_hint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Login Hint"
+          }
+        },
+        "type": "object",
+        "required": [
+          "developer_key",
+          "app_id",
+          "login_hint"
+        ],
+        "title": "ConnectorPickerOut",
+        "description": "What the cabinet opens Google's Picker with."
       },
       "ConnectorResourceOut": {
         "properties": {
