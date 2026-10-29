@@ -19,6 +19,7 @@
   "connected": "Terhubung",
   "options": "Opsi untuk {name}, terhubung",
   "disconnect": "Putuskan koneksi",
+  "chooseFiles": "Pilih file untuk Shosai",
   "reconnect": "Hubungkan ulang",
   "needsReconnect": "Hubungkan ulang untuk terus menggunakannya.",
   "reconnectBy": "Hubungkan ulang sebelum {date}",
@@ -36,7 +37,8 @@
     "not_connected": "Aplikasi ini tidak terhubung.",
     "connect_unavailable": "Menghubungkan sedang tidak tersedia. Coba lagi dalam beberapa menit.",
     "credentials_rejected": "Tidak dapat menghubungkan. Periksa yang Anda masukkan, lalu coba lagi.",
-    "rate_limited": "Terlalu banyak percobaan. Tunggu satu menit, lalu coba lagi."
+    "rate_limited": "Terlalu banyak percobaan. Tunggu satu menit, lalu coba lagi.",
+    "picker_unavailable": "Memilih file belum tersedia di sini."
   },
   "empty": {
     "title": "Belum ada aplikasi untuk dihubungkan",
@@ -65,7 +67,9 @@
     "notConnected": "{name} tidak terhubung",
     "connectFailed": "Tidak dapat menghubungkan {name}",
     "disconnected": "Koneksi {name} diputuskan",
-    "disconnectFailed": "Tidak dapat memutuskan koneksi {name}"
+    "disconnectFailed": "Tidak dapat memutuskan koneksi {name}",
+    "filesChosen": "Shosai kini dapat membaca file yang Anda pilih",
+    "pickerFailed": "Tidak dapat membuka pemilih file Google"
   },
   "callback": {
     "metaTitle": "Menghubungkan…",

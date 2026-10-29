@@ -107,7 +107,9 @@ async def drive(google: GoogleBench, valkey: Redis) -> AsyncIterator[DriveBench]
         CONNECTOR_USES.bind(ConnectorUses("knowledge", frozenset({App.GOOGLE_DRIVE}))),
         AUTHENTICATOR.bind(BearerOfTheTest()),
     ])  # fmt: skip
-    picker = DrivePicker(google.homes.transactions, PickerSetup("browser-key", "1234567890"))
+    picker = DrivePicker(
+        google.homes.transactions, PickerSetup("browser-key", "1234567890", "main-client")
+    )
     app = build_probe_app(extra=(build_picker_router(picker, ports),)).app
     async with (
         provider_access(google, valkey, ("www.googleapis.com", api.handle)) as access,
@@ -178,14 +180,17 @@ async def test_the_picker_s_setup_names_the_account_and_never_a_token(drive: Dri
 
     assert setup.status_code == 200
     assert setup.json() == {
-        "developer_key": "browser-key", "app_id": "1234567890", "login_hint": "anna@gmail.com",
+        "developer_key": "browser-key", "app_id": "1234567890", "client_id": "main-client",
+        "login_hint": "anna@gmail.com",
     }  # fmt: skip
     assert "access" not in setup.text
     assert (refused.status_code, refused.json()["error"]["code"]) == (404, "not_connected")
 
 
 async def test_an_unconfigured_picker_is_unavailable(drive: DriveBench) -> None:
-    picker = DrivePicker(drive.google.homes.transactions, PickerSetup(None, "1234567890"))
+    picker = DrivePicker(
+        drive.google.homes.transactions, PickerSetup(None, "1234567890", "main-client")
+    )
 
     with pytest.raises(PickerUnavailableError):
         await picker.config(TenancyScope(Home.RU, uuid.uuid4()))

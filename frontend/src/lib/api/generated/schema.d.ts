@@ -5865,6 +5865,8 @@ export interface components {
             developer_key: string;
             /** App Id */
             app_id: string;
+            /** Client Id */
+            client_id: string;
             /** Login Hint */
             login_hint: string | null;
         };

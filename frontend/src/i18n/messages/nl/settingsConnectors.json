@@ -19,6 +19,7 @@
   "connected": "Gekoppeld",
   "options": "Opties voor {name}, gekoppeld",
   "disconnect": "Ontkoppelen",
+  "chooseFiles": "Bestanden kiezen voor Shosai",
   "reconnect": "Opnieuw koppelen",
   "needsReconnect": "Koppel opnieuw om het te blijven gebruiken.",
   "reconnectBy": "Koppel opnieuw vóór {date}",
@@ -36,7 +37,8 @@
     "not_connected": "Deze app is niet gekoppeld.",
     "connect_unavailable": "Koppelen is nu niet mogelijk. Probeer het over een paar minuten opnieuw.",
     "credentials_rejected": "Kan niet koppelen. Controleer wat je hebt ingevoerd en probeer het opnieuw.",
-    "rate_limited": "Te veel pogingen. Wacht een minuut en probeer het opnieuw."
+    "rate_limited": "Te veel pogingen. Wacht een minuut en probeer het opnieuw.",
+    "picker_unavailable": "Bestanden kiezen is hier nog niet beschikbaar."
   },
   "empty": {
     "title": "Nog geen apps om te koppelen",
@@ -65,7 +67,9 @@
     "notConnected": "{name} is niet gekoppeld",
     "connectFailed": "Kan {name} niet koppelen",
     "disconnected": "{name} ontkoppeld",
-    "disconnectFailed": "Kan {name} niet ontkoppelen"
+    "disconnectFailed": "Kan {name} niet ontkoppelen",
+    "filesChosen": "Shosai kan de gekozen bestanden nu lezen",
+    "pickerFailed": "Kan de bestandskiezer van Google niet openen"
   },
   "callback": {
     "metaTitle": "Koppelen…",

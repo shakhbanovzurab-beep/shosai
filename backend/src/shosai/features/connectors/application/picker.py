@@ -1,7 +1,8 @@
 """Google's Picker in the cabinet (CN-D5, plan §3.7): the browser's own short `drive.file`
 token comes from Google Identity Services, so Shosai's server never hands a token to the
-browser; it gives only the Picker's browser key, the project's number and the account to
-pick from, so the person chooses with the account they connected."""
+browser; it gives only the Picker's browser key, the project's number, the main project's
+OAuth client id (public, as every browser sign-in's) and the account to pick from, so the
+person chooses with the account they connected."""
 
 from dataclasses import dataclass
 from http import HTTPStatus
@@ -28,6 +29,7 @@ class PickerSetup:
 
     api_key: str | None
     project_number: str | None
+    client_id: str | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -36,6 +38,7 @@ class PickerConfig:
 
     developer_key: str
     app_id: str
+    client_id: str
     login_hint: str | None
 
 
@@ -48,8 +51,10 @@ class DrivePicker:
 
     async def config(self, scope: TenancyScope) -> PickerConfig:
         """The Picker's setup; `not_connected` without a connected Drive."""
-        key, project = self._setup.api_key, self._setup.project_number
-        if key is None or project is None:
+        key, project, client = (
+            self._setup.api_key, self._setup.project_number, self._setup.client_id
+        )  # fmt: skip
+        if key is None or project is None or client is None:
             raise PickerUnavailableError
         if scope.user_id is None:
             raise NotConnectedError
@@ -60,4 +65,4 @@ class DrivePicker:
             )  # fmt: skip
         if not found:
             raise NotConnectedError
-        return PickerConfig(key, project, found[0].view.account_label)
+        return PickerConfig(key, project, client, found[0].view.account_label)

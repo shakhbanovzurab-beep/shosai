@@ -21616,6 +21616,10 @@
             "type": "string",
             "title": "App Id"
           },
+          "client_id": {
+            "type": "string",
+            "title": "Client Id"
+          },
           "login_hint": {
             "anyOf": [
               {
@@ -21632,6 +21636,7 @@
         "required": [
           "developer_key",
           "app_id",
+          "client_id",
           "login_hint"
         ],
         "title": "ConnectorPickerOut",

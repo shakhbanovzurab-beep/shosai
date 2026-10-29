@@ -19,6 +19,7 @@
   "connected": "مرتبط",
   "options": "خيارات {name}، مرتبط",
   "disconnect": "إلغاء الربط",
+  "chooseFiles": "اختيار ملفات لـ Shosai",
   "reconnect": "إعادة الربط",
   "needsReconnect": "يرجى إعادة الربط لمواصلة الاستخدام.",
   "reconnectBy": "يرجى إعادة الربط قبل {date}",
@@ -36,7 +37,8 @@
     "not_connected": "هذا التطبيق غير مرتبط.",
     "connect_unavailable": "الربط غير متاح الآن. يرجى إعادة المحاولة بعد بضع دقائق.",
     "credentials_rejected": "تعذر الربط. يرجى التحقق من البيانات المُدخلة ثم إعادة المحاولة.",
-    "rate_limited": "محاولات كثيرة جدًا. يرجى الانتظار دقيقة ثم إعادة المحاولة."
+    "rate_limited": "محاولات كثيرة جدًا. يرجى الانتظار دقيقة ثم إعادة المحاولة.",
+    "picker_unavailable": "اختيار الملفات غير متاح هنا بعد."
   },
   "empty": {
     "title": "لا توجد تطبيقات للربط بعد",
@@ -65,7 +67,9 @@
     "notConnected": "لم يتم ربط {name}",
     "connectFailed": "تعذر ربط {name}",
     "disconnected": "تم إلغاء ربط {name}",
-    "disconnectFailed": "تعذر إلغاء ربط {name}"
+    "disconnectFailed": "تعذر إلغاء ربط {name}",
+    "filesChosen": "يمكن لـ Shosai الآن قراءة الملفات المختارة",
+    "pickerFailed": "تعذر فتح أداة اختيار الملفات من Google"
   },
   "callback": {
     "metaTitle": "جارٍ الربط…",

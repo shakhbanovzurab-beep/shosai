@@ -19,6 +19,7 @@
   "connected": "Đã kết nối",
   "options": "Tùy chọn cho {name}, đã kết nối",
   "disconnect": "Ngắt kết nối",
+  "chooseFiles": "Chọn tệp cho Shosai",
   "reconnect": "Kết nối lại",
   "needsReconnect": "Hãy kết nối lại để tiếp tục sử dụng.",
   "reconnectBy": "Hãy kết nối lại trước {date}",
@@ -36,7 +37,8 @@
     "not_connected": "Ứng dụng này chưa được kết nối.",
     "connect_unavailable": "Hiện chưa thể kết nối. Hãy thử lại sau vài phút.",
     "credentials_rejected": "Không thể kết nối. Hãy kiểm tra thông tin đã nhập và thử lại.",
-    "rate_limited": "Quá nhiều lần thử. Hãy đợi một phút rồi thử lại."
+    "rate_limited": "Quá nhiều lần thử. Hãy đợi một phút rồi thử lại.",
+    "picker_unavailable": "Chưa thể chọn tệp ở đây."
   },
   "empty": {
     "title": "Chưa có ứng dụng nào để kết nối",
@@ -65,7 +67,9 @@
     "notConnected": "Chưa kết nối {name}",
     "connectFailed": "Không thể kết nối {name}",
     "disconnected": "Đã ngắt kết nối {name}",
-    "disconnectFailed": "Không thể ngắt kết nối {name}"
+    "disconnectFailed": "Không thể ngắt kết nối {name}",
+    "filesChosen": "Shosai giờ có thể đọc các tệp bạn đã chọn",
+    "pickerFailed": "Không thể mở trình chọn tệp của Google"
   },
   "callback": {
     "metaTitle": "Đang kết nối…",

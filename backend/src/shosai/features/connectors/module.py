@@ -102,6 +102,15 @@ def capability_ports(
     )
 
 
+def picker_setup(settings: ConnectorsSettings) -> PickerSetup:
+    """Google Picker's browser key, project number and the main project's OAuth client id."""
+    return PickerSetup(
+        settings.connectors_google_picker_api_key,
+        settings.connectors_google_project_number,
+        settings.connectors_google_client_id,
+    )
+
+
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """Connectors' parts for this process."""
@@ -142,13 +151,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             services.transactions, registry, SessionParts(tokens, guards, http, metrics, tracer)
         )
         drive = GoogleDrive()
-        picker = DrivePicker(
-            services.transactions,
-            PickerSetup(
-                settings.connectors_google_picker_api_key,
-                settings.connectors_google_project_number,
-            ),
-        )
+        picker = DrivePicker(services.transactions, picker_setup(settings))
         # Проверки секретов и обзор ресурсов приносят шаги провайдеров.
         cabinet = (
             CabinetConnectors(services.transactions, offers, registry),

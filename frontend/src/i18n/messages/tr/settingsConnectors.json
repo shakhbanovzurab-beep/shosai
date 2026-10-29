@@ -19,6 +19,7 @@
   "connected": "Bağlı",
   "options": "{name} seçenekleri, bağlı",
   "disconnect": "Bağlantıyı kes",
+  "chooseFiles": "Shosai için dosya seç",
   "reconnect": "Yeniden bağla",
   "needsReconnect": "Kullanmaya devam etmek için yeniden bağlayın.",
   "reconnectBy": "{date} tarihine kadar yeniden bağlayın",
@@ -36,7 +37,8 @@
     "not_connected": "Bu uygulama bağlı değil.",
     "connect_unavailable": "Bağlanma şu anda kullanılamıyor. Birkaç dakika sonra tekrar deneyin.",
     "credentials_rejected": "Bağlanamadı. Girdiklerinizi kontrol edip tekrar deneyin.",
-    "rate_limited": "Çok fazla deneme yapıldı. Bir dakika bekleyip tekrar deneyin."
+    "rate_limited": "Çok fazla deneme yapıldı. Bir dakika bekleyip tekrar deneyin.",
+    "picker_unavailable": "Dosya seçme burada henüz kullanılamıyor."
   },
   "empty": {
     "title": "Henüz bağlanacak uygulama yok",
@@ -65,7 +67,9 @@
     "notConnected": "{name} bağlanmadı",
     "connectFailed": "{name} bağlanamadı",
     "disconnected": "{name} bağlantısı kesildi",
-    "disconnectFailed": "{name} bağlantısı kesilemedi"
+    "disconnectFailed": "{name} bağlantısı kesilemedi",
+    "filesChosen": "Shosai artık seçtiğiniz dosyaları okuyabilir",
+    "pickerFailed": "Google dosya seçici açılamadı"
   },
   "callback": {
     "metaTitle": "Bağlanıyor…",

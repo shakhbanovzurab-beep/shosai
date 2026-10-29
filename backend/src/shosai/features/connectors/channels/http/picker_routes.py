@@ -16,6 +16,7 @@ class ConnectorPickerOut(BaseModel):
 
     developer_key: str
     app_id: str
+    client_id: str
     login_hint: str | None
 
 
@@ -30,7 +31,7 @@ def build_picker_router(picker: DrivePicker, ports: PortDirectory) -> APIRouter:
         config = await picker.config(principal.scope())
         return ConnectorPickerOut(
             developer_key=config.developer_key, app_id=config.app_id,
-            login_hint=config.login_hint,
+            client_id=config.client_id, login_hint=config.login_hint,
         )  # fmt: skip
 
     return router

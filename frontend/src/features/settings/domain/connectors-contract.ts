@@ -12,6 +12,10 @@ export type Connector = components["schemas"]["ConnectorOut"];
 export type ConnectorsResponse = components["schemas"]["ConnectorsOut"];
 export type ConnectorCredentials = components["schemas"]["ConnectorCredentialsIn"];
 export type ConnectorAuth = Connector["auth"];
+export type DrivePickerSetup = components["schemas"]["ConnectorPickerOut"];
+
+/** The app whose files the person chooses for Shosai in Google's Picker. */
+export const PICKER_APP = "google_drive";
 
 export const CONNECTOR_CATEGORIES = ["mail", "calendar", "files", "notes", "communication", "tasks", "crm"] as const;
 export type ConnectorCategory = (typeof CONNECTOR_CATEGORIES)[number];
@@ -50,6 +54,7 @@ export const CONNECTOR_REFUSALS = [
   "connect_unavailable",
   "credentials_rejected",
   "rate_limited",
+  "picker_unavailable",
 ] as const;
 export type ConnectorRefusal = (typeof CONNECTOR_REFUSALS)[number];
 

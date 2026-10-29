@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronDown, Ellipsis, Unplug } from "lucide-react";
+import { Check, ChevronDown, Ellipsis, FolderOpen, Unplug } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,8 @@ import {
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
 import { Spinner } from "@/components/ui/spinner";
 
-import type { Connector } from "../../domain/connectors-contract";
+import { type Connector, PICKER_APP } from "../../domain/connectors-contract";
+import { useDrivePicker } from "../../model/use-drive-picker";
 import { useConnectorActions } from "./connector-actions-context";
 
 function DisconnectItem({ connector }: { connector: Connector }) {
@@ -29,10 +30,25 @@ function DisconnectItem({ connector }: { connector: Connector }) {
   );
 }
 
+function ChooseFilesItem() {
+  const t = useTranslations("settingsConnectors");
+  const { choose } = useDrivePicker();
+  return (
+    <DropdownMenuGroup>
+      <DropdownMenuItem onSelect={() => void choose()}>
+        <FolderOpen />
+        {t("chooseFiles")}
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+  );
+}
+
 function ConnectedMenu({ connector }: { connector: Connector }) {
   const t = useTranslations("settingsConnectors");
+  const { prepare } = useDrivePicker();
+  const picks = connector.id === PICKER_APP;
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={(open) => (open && picks ? prepare() : undefined)}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" aria-label={t("options", { name: connector.name })}>
           <Check data-icon="inline-start" />
@@ -40,7 +56,8 @@ function ConnectedMenu({ connector }: { connector: Connector }) {
           <ChevronDown data-icon="inline-end" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44">
+      <DropdownMenuContent align="end" className="w-56">
+        {picks ? <ChooseFilesItem /> : null}
         <DisconnectItem connector={connector} />
       </DropdownMenuContent>
     </DropdownMenu>

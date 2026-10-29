@@ -19,6 +19,7 @@
   "connected": "연결됨",
   "options": "{name} 옵션, 연결됨",
   "disconnect": "연결 해제",
+  "chooseFiles": "Shosai용 파일 선택",
   "reconnect": "다시 연결",
   "needsReconnect": "계속 사용하려면 다시 연결해 주세요.",
   "reconnectBy": "{date}까지 다시 연결해 주세요",
@@ -36,7 +37,8 @@
     "not_connected": "이 앱은 연결되어 있지 않아요.",
     "connect_unavailable": "지금은 연결할 수 없어요. 몇 분 후에 다시 시도해 주세요.",
     "credentials_rejected": "연결하지 못했어요. 입력한 내용을 확인하고 다시 시도해 주세요.",
-    "rate_limited": "시도 횟수가 너무 많아요. 1분 후에 다시 시도해 주세요."
+    "rate_limited": "시도 횟수가 너무 많아요. 1분 후에 다시 시도해 주세요.",
+    "picker_unavailable": "아직 여기서는 파일을 선택할 수 없어요."
   },
   "empty": {
     "title": "아직 연결할 앱이 없어요",
@@ -65,7 +67,9 @@
     "notConnected": "{name}이(가) 연결되지 않았어요",
     "connectFailed": "{name}을(를) 연결하지 못했어요",
     "disconnected": "{name} 연결을 해제했어요",
-    "disconnectFailed": "{name} 연결을 해제하지 못했어요"
+    "disconnectFailed": "{name} 연결을 해제하지 못했어요",
+    "filesChosen": "이제 Shosai가 선택한 파일을 읽을 수 있어요",
+    "pickerFailed": "Google 파일 선택기를 열지 못했어요"
   },
   "callback": {
     "metaTitle": "연결 중…",

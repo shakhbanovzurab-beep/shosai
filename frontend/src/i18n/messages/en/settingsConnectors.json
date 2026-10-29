@@ -19,6 +19,7 @@
   "connected": "Connected",
   "options": "Options for {name}, connected",
   "disconnect": "Disconnect",
+  "chooseFiles": "Choose files for Shosai",
   "reconnect": "Reconnect",
   "needsReconnect": "Reconnect to keep using it.",
   "reconnectBy": "Reconnect by {date}",
@@ -36,7 +37,8 @@
     "not_connected": "This app isn’t connected.",
     "connect_unavailable": "Connecting isn’t available right now. Try again in a few minutes.",
     "credentials_rejected": "Couldn’t connect. Check what you entered and try again.",
-    "rate_limited": "Too many tries. Wait a minute and try again."
+    "rate_limited": "Too many tries. Wait a minute and try again.",
+    "picker_unavailable": "Choosing files isn’t available here yet."
   },
   "empty": {
     "title": "No apps to connect yet",
@@ -65,7 +67,9 @@
     "notConnected": "{name} wasn’t connected",
     "connectFailed": "Couldn’t connect {name}",
     "disconnected": "{name} disconnected",
-    "disconnectFailed": "Couldn’t disconnect {name}"
+    "disconnectFailed": "Couldn’t disconnect {name}",
+    "filesChosen": "Shosai can now read the files you chose",
+    "pickerFailed": "Couldn’t open Google’s file picker"
   },
   "callback": {
     "metaTitle": "Connecting…",

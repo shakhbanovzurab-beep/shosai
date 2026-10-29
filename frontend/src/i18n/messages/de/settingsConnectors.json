@@ -19,6 +19,7 @@
   "connected": "Verbunden",
   "options": "Optionen für {name}, verbunden",
   "disconnect": "Trennen",
+  "chooseFiles": "Dateien für Shosai auswählen",
   "reconnect": "Neu verbinden",
   "needsReconnect": "Verbinde neu, um es weiter zu nutzen.",
   "reconnectBy": "Verbinde bis {date} neu",
@@ -36,7 +37,8 @@
     "not_connected": "Diese App ist nicht verbunden.",
     "connect_unavailable": "Verbinden ist gerade nicht möglich. Versuche es in ein paar Minuten erneut.",
     "credentials_rejected": "Die Verbindung konnte nicht hergestellt werden. Prüfe deine Eingabe und versuche es erneut.",
-    "rate_limited": "Zu viele Versuche. Warte eine Minute und versuche es erneut."
+    "rate_limited": "Zu viele Versuche. Warte eine Minute und versuche es erneut.",
+    "picker_unavailable": "Die Dateiauswahl ist hier noch nicht verfügbar."
   },
   "empty": {
     "title": "Noch keine Apps zum Verbinden",
@@ -65,7 +67,9 @@
     "notConnected": "{name} wurde nicht verbunden",
     "connectFailed": "{name} konnte nicht verbunden werden",
     "disconnected": "{name} getrennt",
-    "disconnectFailed": "{name} konnte nicht getrennt werden"
+    "disconnectFailed": "{name} konnte nicht getrennt werden",
+    "filesChosen": "Shosai kann die ausgewählten Dateien jetzt lesen",
+    "pickerFailed": "Die Dateiauswahl von Google konnte nicht geöffnet werden"
   },
   "callback": {
     "metaTitle": "Wird verbunden…",

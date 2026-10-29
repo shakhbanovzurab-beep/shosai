@@ -19,6 +19,7 @@
   "connected": "已連接",
   "options": "{name} 的選項，已連接",
   "disconnect": "中斷連接",
+  "chooseFiles": "為 Shosai 選擇檔案",
   "reconnect": "重新連接",
   "needsReconnect": "請重新連接以繼續使用。",
   "reconnectBy": "請在 {date} 前重新連接",
@@ -36,7 +37,8 @@
     "not_connected": "這個應用程式尚未連接。",
     "connect_unavailable": "目前無法連接。請在幾分鐘後再試一次。",
     "credentials_rejected": "無法連接。請檢查你輸入的內容，然後再試一次。",
-    "rate_limited": "嘗試次數過多。請稍候一分鐘再試一次。"
+    "rate_limited": "嘗試次數過多。請稍候一分鐘再試一次。",
+    "picker_unavailable": "這裡目前還無法選擇檔案。"
   },
   "empty": {
     "title": "還沒有可連接的應用程式",
@@ -65,7 +67,9 @@
     "notConnected": "未連接 {name}",
     "connectFailed": "無法連接 {name}",
     "disconnected": "已中斷與 {name} 的連接",
-    "disconnectFailed": "無法中斷與 {name} 的連接"
+    "disconnectFailed": "無法中斷與 {name} 的連接",
+    "filesChosen": "Shosai 現在可以讀取你選擇的檔案",
+    "pickerFailed": "無法開啟 Google 的檔案選擇器"
   },
   "callback": {
     "metaTitle": "正在連接…",
